@@ -8,4 +8,4 @@ WORKDIR /srv/cull
 ADD cull_idle_servers.py /srv/cull/cull_idle_servers.py
 
 ENTRYPOINT ["python", "cull_idle_servers.py"]
-CMD ["--timeout=3600", "--cull_every=600", "--url=http://{{ servicenet_ip }}:8081/hub"]
+CMD ["--timeout=3600", "--cull_every=600", "--url=http://10.7.252.46:80/hub"]
