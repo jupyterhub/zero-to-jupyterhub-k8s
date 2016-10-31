@@ -32,7 +32,7 @@ spec:
       spec:
         containers:
         - name: hub-proxy-container
-          image: yuvipanda/simplehub:v1.4
+          image: derrickmar24/jhub
           env:
           - name: POD_NAMESPACE
             valueFrom:
