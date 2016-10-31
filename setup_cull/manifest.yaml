@@ -1,25 +1,11 @@
-apiVersion: extensions/v1beta1
-kind: Deployment
+kind: ConfigMap
+apiVersion: v1
 metadata:
-  name: hub-proxy-deployment
-spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        name: hub-proxy-pod
-    spec:
-      containers:
-      - name: hub-proxy-container
-        image: yuvipanda/simplehub:v1.3
-        env:
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        ports:
-          - containerPort: 8000
-            name: hub-proxy-port
+  name: hub-config
+data:
+  # Used to authenticate the hub to the proxy. This string was generated with `pwgen 64`.
+  # Please generate a new one for your own deployment!
+  auth.configproxy-token: 5166c5fe58744ffd9ab4ec3f37c2c7b5b05b3c14d7dd7da58ae406ab7e61d349
 ---
 apiVersion: v1
 kind: Service
@@ -33,3 +19,61 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cull
+spec:
+  selector:
+    name: cull-pod
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hub-proxy-deployment
+spec:
+    replicas: 1
+    template:
+      metadata:
+        labels:
+          name: hub-proxy-pod
+      spec:
+        containers:
+        - name: hub-proxy-container
+          image: yuvipanda/simplehub:v1.3
+          env:
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          ports:
+            - containerPort: 8000
+              name: hub-proxy-port
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: cull-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: cull-pod
+    spec:
+      containers:
+        - name: cull-container
+          image: allanlwu/jhub-cull
+          env:
+          - name: JPY_API_TOKEN
+            valueFrom:
+              fieldRef:
+                fieldPath: auth.configproxy-token
+          ports:
+            - containerPort: 8081
+              name: cull
