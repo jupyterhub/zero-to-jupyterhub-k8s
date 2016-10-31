@@ -72,8 +72,9 @@ spec:
           env:
           - name: JPY_API_TOKEN
             valueFrom:
-              fieldRef:
-                fieldPath: auth.configproxy-token
+              configMapKeyRef:
+                name: hub-config
+                key: auth.configproxy-token
           ports:
             - containerPort: 8081
               name: cull
