@@ -1,11 +1,10 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: hub-config
+  name: cull-config
 data:
-  # Used to authenticate the hub to the proxy. This string was generated with `pwgen 64`.
-  # Please generate a new one for your own deployment!
-  auth.configproxy-token: 5166c5fe58744ffd9ab4ec3f37c2c7b5b05b3c14d7dd7da58ae406ab7e61d349
+  # Used to authenticate the culler to the hub. This string was generated with `openssl rand -hex 32`.
+  auth.jhub-token.cull: 13fdff1305cd883e49223908186a63294922dadb59b5d1122473041f160c4b03
 ---
 apiVersion: v1
 kind: Service
@@ -19,18 +18,6 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8000
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: cull
-spec:
-  selector:
-    name: cull-pod
-  ports:
-    - protocol: TCP
-      port: 8081
-      targetPort: 8081
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -51,6 +38,11 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
+          - name: CULL_JHUB_TOKEN
+            valueFrom:
+              configMapKeyRef:
+                name: cull-config
+                value: auth.jhub-token.cull
           ports:
             - containerPort: 8000
               name: hub-proxy-port
@@ -69,12 +61,18 @@ spec:
       containers:
         - name: cull-container
           image: allanlwu/jhub-cull
+          command:
+            - /bin/sh
+            - -c
+          args:
+            - python
+            - /srv/cull/cull_idle_servers.py
+            - --timeout=3600
+            - --cull_every=600
+            - --url=http://${HUB_PROXY_SERVICE_HOST}:${HUB_PROXY_SERVICE_PORT}/hub
           env:
           - name: JPY_API_TOKEN
             valueFrom:
               configMapKeyRef:
-                name: hub-config
-                key: auth.configproxy-token
-          ports:
-            - containerPort: 8081
-              name: cull
+                name: cull-config
+                key: auth.jhub-token.cull

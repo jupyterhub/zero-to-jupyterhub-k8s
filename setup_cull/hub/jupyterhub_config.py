@@ -29,3 +29,7 @@ c.KubeSpawner.hub_ip_connect = '{host}:{port}'.format(
 
 # Do not use any authentication at all
 c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
+
+c.JupyterHub.api_tokens = {
+  os.environ['CULL_JHUB_TOKEN']: 'cull',
+}
