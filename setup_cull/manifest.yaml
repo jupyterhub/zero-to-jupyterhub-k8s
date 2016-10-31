@@ -60,7 +60,7 @@ spec:
     spec:
       containers:
         - name: cull-container
-          image: allanlwu/jhub-cull
+          image: derrickmar24/jhub-cull
           command:
             - /bin/sh
             - -c
