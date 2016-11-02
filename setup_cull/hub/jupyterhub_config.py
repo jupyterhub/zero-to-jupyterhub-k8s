@@ -33,3 +33,5 @@ c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
 c.JupyterHub.api_tokens = {
   os.environ['CULL_JHUB_TOKEN']: 'cull',
 }
+
+c.Authenticator.admin_users = {'cull', 'derrickmar1215'}
