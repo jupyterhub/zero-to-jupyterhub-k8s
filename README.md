@@ -1,6 +1,8 @@
 JupyterHub on Kubernetes for Data 8
 =======
 
+[![Build Status](https://travis-ci.org/data-8/jupyterhub-k8s.svg?branch=master)](https://travis-ci.org/data-8/jupyterhub-k8s)
+
 This repo contains the Kubernetes config, container images, and docs for Data
 8's deployment of JupyterHub on Kubernetes. This is a major work in progress
 and is not ready for the real world yet.
