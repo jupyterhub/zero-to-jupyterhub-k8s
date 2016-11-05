@@ -30,13 +30,13 @@ help:
 # This is a simple check that is used to prevent accidental pushes since
 # Travis should be building our images.
 environment-check:
-	test -e ~/.docker-stacks-builder
+	test -e ~/.jhub-k8s-images-builder
 
 refresh/%: ## pull the latest image from Docker Hub for a stack
 # skip if error: a stack might not be on dockerhub yet
 	-docker pull $(DHUB_ORG)/$(IMAGE_PREFIX)$(notdir $@):latest
 
-refresh-all: $(ALL_IMAGES:%=refresh/%) ## refresh all stacks
+refresh-all: $(ALL_IMAGES:%=refresh/%) ## refresh all images
 
 build/%: DARGS?=
 build/%: ## build the latest image for a component
@@ -50,7 +50,7 @@ tag/%: ## tag the latest component image with the HEAD git SHA
 	docker tag $(DHUB_ORG)/$(IMAGE_PREFIX)$(notdir $@):latest \
 		$(DHUB_ORG)/$(IMAGE_PREFIX)$(notdir $@):$(GIT_MASTER_HEAD_SHA)
 
-tag-all: $(ALL_IMAGES:%=tag/%) ## tag all stacks
+tag-all: $(ALL_IMAGES:%=tag/%) ## tag all images
 
 push/%: ## push the latest and HEAD git SHA tags for a component to Docker Hub
 	docker push $(DHUB_ORG)/$(IMAGE_PREFIX)$(notdir $@):latest
@@ -63,4 +63,4 @@ release-all: environment-check \
 	build-all \
 	tag-all \
 	push-all
-release-all: ## build, tag, and push all stacks
+release-all: ## build, tag, and push all images
