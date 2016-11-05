@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.6-slim
 
 RUN pip install tornado python-dateutil
 
