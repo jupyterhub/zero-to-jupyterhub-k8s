@@ -35,6 +35,21 @@ That deploys JupyterHub!
 [minikube]: https://github.com/kubernetes/minikube#minikube
 [kubectl]: http://kubernetes.io/docs/user-guide/prereqs/
 
+File / Folder structure
+-------
+
+The `manifest.yaml` file in the project root directory contains the entirety of
+the Kubenetes configuration for this deployment.
+
+The subdirectories contain the Dockerfiles and scripts for the images used for
+this deployment.
+
+All the images for this deployment are pushed to the [data8 Docker Hub][]
+organization and are named `data8/jupyterhub-k8s-<name>` where `<name>` is the
+name of the containing folder for that image.
+
+[data8 Docker Hub]: http://hub.docker.com/r/data8/
+
 Development
 -------
 

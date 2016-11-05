@@ -32,7 +32,7 @@ spec:
       spec:
         containers:
         - name: hub-proxy-container
-          image: derrickmar24/jhub
+          image: data8/jupyterhub-k8s-hub:latest
           env:
           - name: POD_NAMESPACE
             valueFrom:
@@ -60,7 +60,7 @@ spec:
     spec:
       containers:
         - name: cull-container
-          image: derrickmar24/jhub-cull
+          image: data8/jupyterhub-k8s-cull:latest
           command:
             - /bin/sh
             - -c
