@@ -49,15 +49,13 @@ before_install:
   - kubectl cluster-info
 
 script:
-- make build-all
+- make build-all BRANCH=$TRAVIS_BRANCH
 
-# Release the images when the master branch is merged, then deploy config to
-# staging cluster.
+# Release the images and deploy config to staging cluster if on master
 after_success:
-- if [ "$TRAVIS_BRANCH" == "master" ]; then
-    touch ~/.jhub-k8s-images-builder ;
-    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" ;
-    make release-all ;
+- docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+- make release-all BRANCH=$TRAVIS_BRANCH
 
+- if [ "$TRAVIS_BRANCH" == "master" ]; then
     kubectl apply -f manifest.yaml ;
   fi
