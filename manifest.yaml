@@ -24,28 +24,28 @@ kind: Deployment
 metadata:
   name: hub-proxy-deployment
 spec:
-    replicas: 1
-    template:
-      metadata:
-        labels:
-          name: hub-proxy-pod
-      spec:
-        containers:
-        - name: hub-proxy-container
-          image: data8/jupyterhub-k8s-hub:latest
-          env:
-          - name: POD_NAMESPACE
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.namespace
-          - name: CULL_JHUB_TOKEN
-            valueFrom:
-              configMapKeyRef:
-                name: cull-config
-                key: auth.jhub-token.cull
-          ports:
-            - containerPort: 8000
-              name: hub-proxy-port
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: hub-proxy-pod
+    spec:
+      containers:
+      - name: hub-proxy-container
+        image: data8/jupyterhub-k8s-hub:master
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: CULL_JHUB_TOKEN
+          valueFrom:
+            configMapKeyRef:
+              name: cull-config
+              key: auth.jhub-token.cull
+        ports:
+          - containerPort: 8000
+            name: hub-proxy-port
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -60,7 +60,7 @@ spec:
     spec:
       containers:
         - name: cull-container
-          image: data8/jupyterhub-k8s-cull:latest
+          image: data8/jupyterhub-k8s-cull:master
           command:
             - /bin/sh
             - -c
