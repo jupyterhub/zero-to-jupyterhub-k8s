@@ -26,10 +26,10 @@ services:
 - docker
 
 before_install:
-  # Install gcloud sdk
+  # Install gcloud sdk.
+  # The travis cache will create the directory on init; we have to remove it so
+  # the installer can install properly
   - if [ ! -d ${HOME}/google-cloud-sdk/bin ]; then
-      # The travis cache will create this directory on init; we have to
-      # remove it so the installer can install properly
       rm -rf ${HOME}/google-cloud-sdk ;
       curl https://sdk.cloud.google.com | bash;
     fi
