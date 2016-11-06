@@ -4,19 +4,58 @@ language: generic
 
 env:
   global:
-  - secure: g7t69V1mOk2kGA+CsQXPh33MWtO/ehY33Q1nqbhgsecylEBYT2O2wMHy6iFEfApl0YKgEehGkEPmU8Pt1HuNN9Rog/EE7pV16DJjmuscCAkQf0OIGOJWYYiFFP0niJ4yYigyNF40hdML9Oxen6qBrarrQpEV0YzfptFg05G8fAXQ5vJSOl8QoMD64fRVOfki3vmHEg9rFcL8adaLAMGGxV5G0Y5CJobMdfI6jKZYTe8d8p9IO4jgR1M52J4B9IjEASLNCax8gPTqvQMZDSkw1xgDxw4xddHRxlscPgW7BUBtvuk9XzsygE9DBq+R5QsXkhQ0xhfzJBc1f3Lgp7CIdxYFUDBUI2XHfpsFSiBW7ZpFFbuUn27N98nG8rnSMxmb+YKLv3ZROIVO0CygoKnuKjlqojzKiu8bPSQJra5bXisnilmCl9UYqtnINS1Xq9JzHXeyh6H62CFcp/ylDKVvjBMASkdEdbFvkJr/zZHcwUrQXnnaqfPLbdAT/RWN52a5UYtWLElpWDo9FJ3XT8fjWCNYWS+mj5xBpnGsSMGZEd/R7VvHQPdqQVsIJT3ggk5x6sk2NJCsqoIlZho4AJOuj7UiT4ELWsVJTsmHaLRDTybh5NzEjyIxrTeG00DaBJTi7anFELDY10yyd8E77YKWzD4SJvZiMfnvbewob/tiV90=
+  # Make sure gcloud command is on our PATH
+  - PATH=${HOME}/google-cloud-sdk/bin:$PATH CLOUDSDK_CORE_DISABLE_PROMPTS=1
+
+  # Docker Hub login info
   - secure: Bi0S1F1rePozQeSag7AgqK/si5pEXqOLdJBi7lb+fO/8T9S4h83aoyLtbrckIUVYgDu9frScVDlgd/+7UtXw8MI8q4OIEx8w8sODfRidFmNf6LZcq0/8mIJhlkseIb9ngcv13jCy7G8deDErEm0hETysmYB3EdNsEwKc+SLQ0iKLH3CR8mZV6CHLHecYb1wynfxeyLDMhVwwHciufMMDOyoFbVDk6koPQ3ismPApUIh/FiQOx+qTxIaTT1g09ARfi8A+cQDJcLa8typDjh1XVjG9WYsSpxtMdzsrJepA2Nr9MLwYs6GW2F648P0TxmILMbdZCv59yrXs1r52EwsWbzULXOefB22aGlOI0d/5Dfhednh3akjXtm7EymXoVJ17KKcWp/4CXftXK52RirU1d2pM2VN9UXSuUMtC8611XRjuLw4okqfB1hhg6+JfQ2tXlegAtE8aVrllOyb4BMCk4jiasu6YmZhz0VfWV1XMxL3rvmCMbFgA6+oGmtYYKO9raN/4J4fo+PJV9YJcGjIlTOahyuAe1TrH/7iFW/1MzQMBfYJG8w56XBILEntedtPMpDlBBXyI8frrDKuP1Fi4HNB4mxvH7JyflhANlEJNaC3xlrxJlJazPxxaHmdHzHtfI2kPZYKYrNstp3z9Tl3wfi/xHenDDN43vkGU2QieHeY=
   - secure: s3f4pcb7lfX6AJ+BWqUViOkfEr63n1vt3fVwjcoV6ZlQsY1bna32KP1G8we1pkx2uQ6fFUPQG/CE6yNOnVjXeDycfNv3sPJAOB49ZoXkUCjFN7nyBhGG24dkW/Yhv+OS8MaSgXW1d+y/efT+amJMpTKPpeSvtKJpvxYDJieE4EoxAzvHFz3ANuA/wt7mGFQu8E29B42MlHMXUalcbs5VWINukn5bRLLJE+Zd/FibyqHQC2wXeTJbH6MwQ3wI0BO8naez56D/Ih0bj5jVgaLiiE75P2pwfRDtobX//GsstnS4cydtW77p7hfw/WOVA8DFDy/b/sqx2bh8GcfH2q4cbB3HSQntjqBrfnjU3kOoDjkE547NPEqLOCGTmgaR8PCYESGITgrzrQeKoL8jgypecZa8voYY3vy86uGqP5uxaMnVhGXcc3bUT8Y0Yp/VtYYamlrexcPS+YO14DfRR8TrXygQUI06w79FfIpXjQLuFKzKNrhgdI4K4BCvIjqwGZ15KLtbvTPPtvGqfyiBwz4M3JHnZ4deA+B/EEA+KYrYDEdNLjUgiA14dUU5BBtUXQeC9QhzCoHhtkZ044Wm1ODBaMlWzvcL1tdL+CjT1PEy53ZEQMV1PkKI23urcchXL73785fE72TLVrLh/UR1M4OV9zFEHtAhkpkymNMDycoPxhc=
+
+  - GCLOUD_ZONE=us-central1-a
+  - GCLOUD_PROJECT=data-8
+  - GOOGLE_APPLICATION_CREDENTIALS=./data8-travis-creds.json
+  # Travis assumes this cluster exists before running this deployment
+  - GCLOUD_CLUSTER_NAME=staging
+
+
+# Cache our Gcloud SDK between commands
+cache:
+  directories:
+  - "$HOME/google-cloud-sdk/"
 
 services:
 - docker
 
+before_install:
+  # Install gcloud sdk.
+  # The travis cache will create the directory on init; we have to remove it so
+  # the installer can install properly
+  - if [ ! -d ${HOME}/google-cloud-sdk/bin ]; then
+      rm -rf ${HOME}/google-cloud-sdk ;
+      curl https://sdk.cloud.google.com | bash;
+    fi
+  - gcloud components install kubectl
+
+  # Decrypt the gcloud credentials and login
+  - openssl aes-256-cbc -K $encrypted_3f1be162614a_key
+    -iv $encrypted_3f1be162614a_iv -in data8-travis-creds.json.enc
+    -out data8-travis-creds.json -d
+  - gcloud auth activate-service-account --key-file data8-travis-creds.json
+
+  - gcloud config set compute/zone $GCLOUD_ZONE
+  - gcloud config set project $GCLOUD_PROJECT
+
+  - gcloud container clusters get-credentials $GCLOUD_CLUSTER_NAME
+  - kubectl cluster-info
+
 script:
-- make build-all
+- make build-all BRANCH=$TRAVIS_BRANCH
 
-
+# Release the images and deploy config to staging cluster if on master
 after_success:
+- docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+- make release-all BRANCH=$TRAVIS_BRANCH
+
 - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" ;
-    make release-all ;
+    kubectl apply -f manifest.yaml ;
   fi

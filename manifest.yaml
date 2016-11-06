@@ -84,7 +84,7 @@ spec:
     spec:
       containers:
         - name: cull-container
-          image: data8/jupyterhub-k8s-cull:latest
+          image: data8/jupyterhub-k8s-cull:master
           command:
             - /bin/sh
             - -c
