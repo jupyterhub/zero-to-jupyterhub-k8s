@@ -9,7 +9,7 @@ RUN apt-get install --yes --no-install-recommends \
 
 RUN pip3 install --upgrade pip
 # We install jupyterhub for the jupyterhub-singleuser script
-RUN pip3 --no-cache-dir install git+git://github.com/data8/jupyterhub-k8s.git@volumes
+RUN pip3 --no-cache-dir install git+git://github.com/data-8/jupyterhub-k8s.git@volumes
 
 EXPOSE 8888
 
