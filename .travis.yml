@@ -13,6 +13,7 @@ env:
 
   - GCLOUD_ZONE=us-central1-a
   - GCLOUD_PROJECT=data-8
+  - GOOGLE_APPLICATION_CREDENTIALS=./data8-travis-creds.json
   # Travis assumes this cluster exists before running this deployment
   - GCLOUD_CLUSTER_NAME=staging
 
@@ -36,8 +37,9 @@ before_install:
   - gcloud components install kubectl
 
   # Decrypt the gcloud credentials and login
-  - openssl aes-256-cbc -K $encrypted_3f1be162614a_key -iv $encrypted_3f1be162614a_iv
-    -in data8-travis-creds.json.enc -out data8-travis-creds.json -d
+  - openssl aes-256-cbc -K $encrypted_3f1be162614a_key
+    -iv $encrypted_3f1be162614a_iv -in data8-travis-creds.json.enc
+    -out data8-travis-creds.json -d
   - gcloud auth activate-service-account --key-file data8-travis-creds.json
 
   - gcloud config set compute/zone $GCLOUD_ZONE
