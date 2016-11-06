@@ -5,7 +5,7 @@ language: generic
 env:
   global:
   # Make sure gcloud command is on our PATH
-  - PATH=$PATH:${HOME}/google-cloud-sdk/bin CLOUDSDK_CORE_DISABLE_PROMPTS=1
+  - PATH=${HOME}/google-cloud-sdk/bin:$PATH CLOUDSDK_CORE_DISABLE_PROMPTS=1
 
   # Docker Hub login info
   - secure: Bi0S1F1rePozQeSag7AgqK/si5pEXqOLdJBi7lb+fO/8T9S4h83aoyLtbrckIUVYgDu9frScVDlgd/+7UtXw8MI8q4OIEx8w8sODfRidFmNf6LZcq0/8mIJhlkseIb9ngcv13jCy7G8deDErEm0hETysmYB3EdNsEwKc+SLQ0iKLH3CR8mZV6CHLHecYb1wynfxeyLDMhVwwHciufMMDOyoFbVDk6koPQ3ismPApUIh/FiQOx+qTxIaTT1g09ARfi8A+cQDJcLa8typDjh1XVjG9WYsSpxtMdzsrJepA2Nr9MLwYs6GW2F648P0TxmILMbdZCv59yrXs1r52EwsWbzULXOefB22aGlOI0d/5Dfhednh3akjXtm7EymXoVJ17KKcWp/4CXftXK52RirU1d2pM2VN9UXSuUMtC8611XRjuLw4okqfB1hhg6+JfQ2tXlegAtE8aVrllOyb4BMCk4jiasu6YmZhz0VfWV1XMxL3rvmCMbFgA6+oGmtYYKO9raN/4J4fo+PJV9YJcGjIlTOahyuAe1TrH/7iFW/1MzQMBfYJG8w56XBILEntedtPMpDlBBXyI8frrDKuP1Fi4HNB4mxvH7JyflhANlEJNaC3xlrxJlJazPxxaHmdHzHtfI2kPZYKYrNstp3z9Tl3wfi/xHenDDN43vkGU2QieHeY=
@@ -27,10 +27,10 @@ services:
 
 before_install:
   # Install gcloud sdk
-  - if [ ! -d ${HOME}/google-cloud-sdk ]; then
+  - if [ ! -d ${HOME}/google-cloud-sdk/bin ]; then
       curl https://sdk.cloud.google.com | bash;
     fi
-  - sudo gcloud components install kubectl
+  - gcloud components install kubectl
 
   # Decrypt the gcloud credentials and login
   - openssl aes-256-cbc -K $encrypted_3f1be162614a_key -iv $encrypted_3f1be162614a_iv
