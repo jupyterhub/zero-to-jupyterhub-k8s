@@ -53,7 +53,7 @@ tag/%: ## tag the latest component image with the HEAD git SHA
 
 tag-all: $(ALL_IMAGES:%=tag/%) ## tag all images
 
-push/%: ## push the latest and HEAD git SHA tags for a component to Docker Hub
+push/%: ## push the branch and HEAD git SHA tags for a component to Docker Hub
 	docker push $(DHUB_ORG)/$(IMAGE_PREFIX)$(notdir $@):$(BRANCH)
 	docker push $(DHUB_ORG)/$(IMAGE_PREFIX)$(notdir $@):$(GIT_MASTER_HEAD_SHA)
 
