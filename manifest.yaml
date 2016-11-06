@@ -32,7 +32,7 @@ spec:
       spec:
         containers:
         - name: hub-proxy-container
-          image: data8/jupyterhub-k8s-hub:volumes
+          image: data8/jupyterhub-k8s-hub:741da201ed8f
           env:
           - name: POD_NAMESPACE
             valueFrom:
