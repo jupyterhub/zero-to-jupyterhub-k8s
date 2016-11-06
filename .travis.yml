@@ -11,6 +11,8 @@ env:
   - secure: Bi0S1F1rePozQeSag7AgqK/si5pEXqOLdJBi7lb+fO/8T9S4h83aoyLtbrckIUVYgDu9frScVDlgd/+7UtXw8MI8q4OIEx8w8sODfRidFmNf6LZcq0/8mIJhlkseIb9ngcv13jCy7G8deDErEm0hETysmYB3EdNsEwKc+SLQ0iKLH3CR8mZV6CHLHecYb1wynfxeyLDMhVwwHciufMMDOyoFbVDk6koPQ3ismPApUIh/FiQOx+qTxIaTT1g09ARfi8A+cQDJcLa8typDjh1XVjG9WYsSpxtMdzsrJepA2Nr9MLwYs6GW2F648P0TxmILMbdZCv59yrXs1r52EwsWbzULXOefB22aGlOI0d/5Dfhednh3akjXtm7EymXoVJ17KKcWp/4CXftXK52RirU1d2pM2VN9UXSuUMtC8611XRjuLw4okqfB1hhg6+JfQ2tXlegAtE8aVrllOyb4BMCk4jiasu6YmZhz0VfWV1XMxL3rvmCMbFgA6+oGmtYYKO9raN/4J4fo+PJV9YJcGjIlTOahyuAe1TrH/7iFW/1MzQMBfYJG8w56XBILEntedtPMpDlBBXyI8frrDKuP1Fi4HNB4mxvH7JyflhANlEJNaC3xlrxJlJazPxxaHmdHzHtfI2kPZYKYrNstp3z9Tl3wfi/xHenDDN43vkGU2QieHeY=
   - secure: s3f4pcb7lfX6AJ+BWqUViOkfEr63n1vt3fVwjcoV6ZlQsY1bna32KP1G8we1pkx2uQ6fFUPQG/CE6yNOnVjXeDycfNv3sPJAOB49ZoXkUCjFN7nyBhGG24dkW/Yhv+OS8MaSgXW1d+y/efT+amJMpTKPpeSvtKJpvxYDJieE4EoxAzvHFz3ANuA/wt7mGFQu8E29B42MlHMXUalcbs5VWINukn5bRLLJE+Zd/FibyqHQC2wXeTJbH6MwQ3wI0BO8naez56D/Ih0bj5jVgaLiiE75P2pwfRDtobX//GsstnS4cydtW77p7hfw/WOVA8DFDy/b/sqx2bh8GcfH2q4cbB3HSQntjqBrfnjU3kOoDjkE547NPEqLOCGTmgaR8PCYESGITgrzrQeKoL8jgypecZa8voYY3vy86uGqP5uxaMnVhGXcc3bUT8Y0Yp/VtYYamlrexcPS+YO14DfRR8TrXygQUI06w79FfIpXjQLuFKzKNrhgdI4K4BCvIjqwGZ15KLtbvTPPtvGqfyiBwz4M3JHnZ4deA+B/EEA+KYrYDEdNLjUgiA14dUU5BBtUXQeC9QhzCoHhtkZ044Wm1ODBaMlWzvcL1tdL+CjT1PEy53ZEQMV1PkKI23urcchXL73785fE72TLVrLh/UR1M4OV9zFEHtAhkpkymNMDycoPxhc=
 
+  - GCLOUD_SDK_URL=https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-133.0.0-linux-x86_64.tar.gz
+
   - GCLOUD_ZONE=us-central1-a
   - GCLOUD_PROJECT=data8
   # Travis assumes this cluster exists before running this deployment
@@ -28,7 +30,9 @@ services:
 before_install:
   # Install gcloud sdk
   - if [ ! -d ${HOME}/google-cloud-sdk ]; then
-      curl https://sdk.cloud.google.com | bash;
+      cd ${HOME} ;
+      wget -O google-cloud-sdk.tar.gz $GCLOUD_SDK_URL;
+      tar -xzf google-cloud-sdk.tar.gz ;
     fi
   - gcloud components install kubectl
 
