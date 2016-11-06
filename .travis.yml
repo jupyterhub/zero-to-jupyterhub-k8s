@@ -12,7 +12,7 @@ env:
   - secure: s3f4pcb7lfX6AJ+BWqUViOkfEr63n1vt3fVwjcoV6ZlQsY1bna32KP1G8we1pkx2uQ6fFUPQG/CE6yNOnVjXeDycfNv3sPJAOB49ZoXkUCjFN7nyBhGG24dkW/Yhv+OS8MaSgXW1d+y/efT+amJMpTKPpeSvtKJpvxYDJieE4EoxAzvHFz3ANuA/wt7mGFQu8E29B42MlHMXUalcbs5VWINukn5bRLLJE+Zd/FibyqHQC2wXeTJbH6MwQ3wI0BO8naez56D/Ih0bj5jVgaLiiE75P2pwfRDtobX//GsstnS4cydtW77p7hfw/WOVA8DFDy/b/sqx2bh8GcfH2q4cbB3HSQntjqBrfnjU3kOoDjkE547NPEqLOCGTmgaR8PCYESGITgrzrQeKoL8jgypecZa8voYY3vy86uGqP5uxaMnVhGXcc3bUT8Y0Yp/VtYYamlrexcPS+YO14DfRR8TrXygQUI06w79FfIpXjQLuFKzKNrhgdI4K4BCvIjqwGZ15KLtbvTPPtvGqfyiBwz4M3JHnZ4deA+B/EEA+KYrYDEdNLjUgiA14dUU5BBtUXQeC9QhzCoHhtkZ044Wm1ODBaMlWzvcL1tdL+CjT1PEy53ZEQMV1PkKI23urcchXL73785fE72TLVrLh/UR1M4OV9zFEHtAhkpkymNMDycoPxhc=
 
   - GCLOUD_ZONE=us-central1-a
-  - GCLOUD_PROJECT=data8
+  - GCLOUD_PROJECT=data-8
   # Travis assumes this cluster exists before running this deployment
   - GCLOUD_CLUSTER_NAME=staging
 
