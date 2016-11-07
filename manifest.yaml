@@ -1,3 +1,23 @@
+#
+# We are using a GCE disk as persistent storage for the Hub
+# and eventually, each individual user node.
+#
+# An administrator with access must provision these disks with a reasonable amount of space
+# before hand. Please note that with the K8s deployment, we are no longer using a shared NFS
+# and instead each user will have his or her own disk.
+# 
+# Find the region for your cluster beforehand using:
+#
+#     gcloud container clusters list
+#
+# Provision your disk like so:
+#
+#     gcloud compute disks create hub-workdir-01 --size 1GiB
+#
+# Please make sure to delete your disk after you are done using it as you will be charged.
+#
+#     gcloud compute disks delete hub-workdir-01
+
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -5,6 +25,31 @@ metadata:
 data:
   # Used to authenticate the culler to the hub. This string was generated with `openssl rand -hex 32`.
   auth.jhub-token.cull: 13fdff1305cd883e49223908186a63294922dadb59b5d1122473041f160c4b03
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data8-hub-workdir
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  gcePersistentDisk:
+    pdName: data8-hub-workdir
+    fsType: ext4
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: data8-workdir
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
 ---
 apiVersion: v1
 kind: Service
@@ -30,9 +75,16 @@ spec:
       labels:
         name: hub-proxy-pod
     spec:
+      volumes:
+      - name: data8-workdir-volume
+        persistentVolumeClaim:
+          claimName: data8-workdir
       containers:
       - name: hub-proxy-container
         image: data8/jupyterhub-k8s-hub:master
+        volumeMounts:
+          - mountPath: /srv/jupyterhub
+            name: data8-workdir-volume
         env:
         - name: POD_NAMESPACE
           valueFrom:
