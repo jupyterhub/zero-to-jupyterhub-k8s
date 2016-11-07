@@ -28,7 +28,8 @@ Returns output that looks like:
 
 We also rely on persistent disks created by the Google Cloud Platform.
 
-You may provision a disk on the Google Cloud Shell using the following command:
+Before deploying for the first time, provision a disk on the Google Cloud Shell
+using the following command:
 
     gcloud compute disks create your-disk-name-here --size 10GiB
 
@@ -41,14 +42,6 @@ Now, change your manifest file such that in the entry for PersistentVolume:
     gcePersistentDisk:
       pdName: your-disk-name-here
       fsType: ext4
-
-Lastly, change your PersistentVolumeClaim entry to reflect disk size:
-
-    kind: PersistentVolumeClaim
-    ...
-    resources:
-      requests:
-        storage: 10Gi
 
 Then, from the project root, run
 
