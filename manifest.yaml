@@ -7,9 +7,10 @@ spec:
     storage: 1Gi
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  hostPath:
-    path: /data/peter-test-01/
+  persistentVolumeReclaimPolicy: Delete
+  gcePersistentDisk:
+    pdName: peter-test-01
+    fsType: ext4
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -57,6 +58,7 @@ spec:
         containers:
         - name: hub-proxy-container
           image: data8/jupyterhub-k8s-hub:volumes
+          imagePullPolicy: Always
           env:
           - name: POD_NAMESPACE
             valueFrom:
