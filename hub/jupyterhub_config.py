@@ -25,14 +25,14 @@ c.KubeSpawner.volumes = [
 	{
 		'name': 'volume-peter-test', 
 		'persistentVolumeClaim': {
-			'claimName': 'peter-test-claim'
+			'claimName': '{username}-{userid}-claim'
 		}
 	}
 ]
 c.KubeSpawner.volume_mounts = [
 	{
 		'mountPath': '/home', 
-		'name': 'volume-peter-test'
+		'name': 'volume-{username}-{userid}'
 	}
 ]
 
