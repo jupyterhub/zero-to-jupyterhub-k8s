@@ -32,7 +32,7 @@ metadata:
   name: data8-hub-workdir-01
 spec:
   capacity:
-    storage: 1Gi
+    storage: 10Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
