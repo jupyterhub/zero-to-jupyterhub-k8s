@@ -26,6 +26,34 @@ Returns output that looks like:
 
     Kubernetes master is running at https://146.148.80.79
 
+In our configuartion, we also rely on persistent disks created by the Google Cloud Platform for storage. You may provision a disk on the Google Cloud Shell using the following command:
+	
+	gcloud compute disk create your-disk-name-here --size 10GiB
+
+Please note that you will need to use the name of the disk you created, and that the size of the disk may vary based on your use case. The hub uses a disk of size 10 gigabytes.  
+
+Once you run the above command, you will be prompted for the region you want to create your disk at. Please select:
+
+	[10] us-central1-a
+
+Now, change your manifest.yaml file such that in the entry for PersistentVolume:
+
+	kind: PersistentVolume
+	metadata:
+		name: your-disk-name-here
+	...
+	gcePersistentDisk:
+		pdName: your-disk-name-here
+		fsType: ext4
+
+Lastly, change your PersistentVolumeClaim entry to request the same amount of storage as you provisioned for your disk. For us, it looks like this:
+	
+	kind: PersistentVolumeClaim
+	...
+	resources:
+		requests:
+			storage: 10Gi
+
 Then, from the project root, run
 
     kubectl apply -f manifest.yaml
