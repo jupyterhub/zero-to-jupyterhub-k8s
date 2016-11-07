@@ -31,7 +31,7 @@ c.KubeSpawner.volumes = [
 ]
 c.KubeSpawner.volume_mounts = [
 	{
-		'mountPath': '/', 
+		'mountPath': '~', 
 		'name': 'volume-peter-test'
 	}
 ]

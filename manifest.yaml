@@ -7,7 +7,7 @@ spec:
     storage: 1Gi
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Delete
+  persistentVolumeReclaimPolicy: Retain
   gcePersistentDisk:
     pdName: peter-test-01
     fsType: ext4
