@@ -20,8 +20,8 @@ c.KubeSpawner.start_timeout = 60 * 5  # Upto 5 minutes, first pulls can be reall
 c.KubeSpawner.singleuser_image_spec = 'yuvipanda/simple-singleuser:v1'
 
 # The spawned containers need to be able to talk to the hub, ok through the proxy!
-c.KubeSpawner.hub_connect_ip = os.environ['HUB_PROXY_SERVICE_HOST']
-c.KubeSpawner.hub_connect_port = int(os.environ['HUB_PROXY_SERVICE_PORT'])
+    c.KubeSpawner.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
+    c.KubeSpawner.hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])
 
 # Do not use any authentication at all
 c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
