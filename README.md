@@ -30,11 +30,7 @@ We also rely on persistent disks created by the Google Cloud Platform.
 
 You may provision a disk on the Google Cloud Shell using the following command:
     
-    gcloud compute disk create your-disk-name-here --size 10GiB
-
-Then, select the region you want to create your disk at when prompted, using:
-
-    [10] us-central1-a
+    gcloud compute disks create your-disk-name-here --size 10GiB
 
 Now, change your manifest file such that in the entry for PersistentVolume:
 
