@@ -21,8 +21,20 @@ c.KubeSpawner.start_timeout = 60 * 5  # Upto 5 minutes, first pulls can be reall
 c.KubeSpawner.singleuser_image_spec = 'yuvipanda/simple-singleuser:v1'
 
 # Add volumes to singleuser pods
-c.KubeSpawner.volumes = [{'name': 'volume-peter-test', 'persistentVolumeClaim': [{'claimName': 'peter-test-claim'}]}]
-c.KubeSpawner.volume_mounts = [{'mountPath': '/', 'name': 'volume-peter-test'}]
+c.KubeSpawner.volumes = [
+	{
+		'name': 'volume-peter-test', 
+		'persistentVolumeClaim': {
+			'claimName': 'peter-test-claim'
+		}
+	}
+]
+c.KubeSpawner.volume_mounts = [
+	{
+		'mountPath': '/', 
+		'name': 'volume-peter-test'
+	}
+]
 
 # The spawned containers need to be able to talk to the hub, ok through the proxy!
 c.KubeSpawner.hub_connect_ip = os.environ['HUB_PROXY_SERVICE_HOST']
