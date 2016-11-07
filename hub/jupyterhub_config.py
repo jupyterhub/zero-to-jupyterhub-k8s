@@ -2,8 +2,14 @@ import os
 
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
-# Use the nginx based proxy, rather than the nodejs one
-c.JupyterHub.proxy_cmd = '/usr/local/bin/nchp'
+# Connect to a proxy running in a different pod
+c.JupyterHub.proxy_api_ip = os.environ['PROXY_API_SERVICE_HOST']
+c.JupyterHub.proxy_api_port = int(os.environ['PROXY_API_SERVICE_PORT'])
+
+c.JupyterHub.ip = os.environ['PROXY_PUBLIC_SERVICE_HOST']
+c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
+
+# the hub should listen on all interfaces, so the proxy can access it
 c.JupyterHub.ip = '0.0.0.0'
 
 c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')

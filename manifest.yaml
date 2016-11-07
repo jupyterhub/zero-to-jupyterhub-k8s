@@ -5,7 +5,7 @@
 # An administrator with access must provision these disks with a reasonable amount of space
 # before hand. Please note that with the K8s deployment, we are no longer using a shared NFS
 # and instead each user will have his or her own disk.
-# 
+#
 # Find the region for your cluster beforehand using:
 #
 #     gcloud container clusters list
@@ -21,10 +21,13 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: cull-config
+  name: hub-config
 data:
   # Used to authenticate the culler to the hub. This string was generated with `openssl rand -hex 32`.
   auth.jhub-token.cull: 13fdff1305cd883e49223908186a63294922dadb59b5d1122473041f160c4b03
+  # Used to authenticate the hub to the proxy. This string was generated with `pwgen 64`.
+  # Please generate a new one for your own deployment!
+  auth.jhub-token.proxy: Kev4Shai9phai0Eez2aiyaefaepheutei3baehaiseipheef1Ah2cah4xeaquohr
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -64,23 +67,60 @@ spec:
       port: 80
       targetPort: 8000
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxy-api
+spec:
+  selector:
+    name: proxy-pod
+  ports:
+    - protocol: TCP
+      port: 8001
+      targetPort: 8001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxy-public
+spec:
+  type: LoadBalancer
+  selector:
+    name: proxy-pod
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hub
+spec:
+  selector:
+    name: hub-pod
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: hub-proxy-deployment
+  name: hub-deployment
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        name: hub-proxy-pod
+        name: hub-pod
     spec:
       volumes:
       - name: data8-workdir-volume
         persistentVolumeClaim:
           claimName: data8-workdir
       containers:
-      - name: hub-proxy-container
+      - name: hub-container
         image: data8/jupyterhub-k8s-hub:master
         volumeMounts:
           - mountPath: /srv/jupyterhub
@@ -93,11 +133,42 @@ spec:
         - name: CULL_JHUB_TOKEN
           valueFrom:
             configMapKeyRef:
-              name: cull-config
+              name: hub-config
               key: auth.jhub-token.cull
+        - name: CONFIGPROXY_AUTH_TOKEN
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: auth.jhub-token.proxy
         ports:
           - containerPort: 8000
-            name: hub-proxy-port
+            name: hub
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: proxy-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: proxy-pod
+    spec:
+      containers:
+      - name: proxy-container
+        image: yuvipanda/nchp:v1
+        env:
+          - name: CONFIGPROXY_AUTH_TOKEN
+            valueFrom:
+              configMapKeyRef:
+                name: hub-config
+                key: auth.jhub-token.proxy
+        ports:
+          - containerPort: 8000
+            name: proxy-public
+          - containerPort: 8001
+            name: api
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
