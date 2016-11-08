@@ -14,16 +14,16 @@ c.KubeSpawner.singleuser_image_spec = 'yuvipanda/simple-singleuser:v1'
 # Add volumes to singleuser pods
 c.KubeSpawner.volumes = [
 	{
-		'name': 'volume-peter-test', 
+		'name': 'volume-{username}-{userid}', 
 		'persistentVolumeClaim': {
-			'claimName': u'\u007busername\u007d-\u007buserid\u007d-claim'
+			'claimName': '{username}-{userid}-claim'
 		}
 	}
 ]
 c.KubeSpawner.volume_mounts = [
 	{
 		'mountPath': '/home', 
-		'name': u'volume-\u007busername\u007d-\u007buserid\u007d'
+		'name': 'volume-{username}-{userid}'
 	}
 ]
 
