@@ -108,7 +108,7 @@ spec:
           claimName: data8-workdir
       containers:
       - name: hub-container
-        image: yuvipanda/separate-proxy-hub:v1
+        image: data8/jupyterhub-k8s-hub:separate-proxy
         imagePullPolicy: Always
         volumeMounts:
           - mountPath: /srv/jupyterhub
