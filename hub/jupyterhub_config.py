@@ -6,6 +6,8 @@ c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 c.JupyterHub.proxy_cmd = '/usr/local/bin/nchp'
 c.JupyterHub.ip = '0.0.0.0'
 
+c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
+
 c.KubeSpawner.start_timeout = 60 * 5  # Upto 5 minutes, first pulls can be really slow
 
 # Our simplest user image! Optimized to just... start, and be small!
@@ -16,7 +18,7 @@ c.KubeSpawner.volumes = [
 	{
 		'name': 'volume-{username}-{userid}', 
 		'persistentVolumeClaim': {
-			'claimName': '{username}-{userid}-claim'
+			'claimName': 'claim-{username}-{userid}'
 		}
 	}
 ]

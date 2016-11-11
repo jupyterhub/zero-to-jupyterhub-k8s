@@ -1,27 +1,11 @@
-apiVersion: v1
-kind: PersistentVolume
+kind: StorageClass
+apiVersion: storage.k8s.io/v1beta1
 metadata:
-  name: peter-test-01
-spec:
-  capacity:
-    storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  gcePersistentDisk:
-    pdName: peter-test-01
-    fsType: ext4
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: peter-3-claim
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
+  name: single-user-storage
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-standard
+  zone: us-central1-b
 ---
 kind: ConfigMap
 apiVersion: v1
