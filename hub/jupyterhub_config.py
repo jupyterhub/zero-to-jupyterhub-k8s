@@ -17,7 +17,7 @@ c.KubeSpawner.singleuser_image_spec = 'yuvipanda/simple-singleuser:v1'
 c.KubeSpawner.pvc_name_template = 'claim-{username}-{userid}'
 c.KubeSpawner.storage_class = 'single-user-storage'
 c.KubeSpawner.access_modes = ['ReadWriteOnce']
-c.KubeSpawner.storage = '10GiB'
+c.KubeSpawner.storage = '10Gi'
 
 # Add volumes to singleuser pods
 c.KubeSpawner.volumes = [
