@@ -13,6 +13,28 @@ c.KubeSpawner.start_timeout = 60 * 5  # Upto 5 minutes, first pulls can be reall
 # Our simplest user image! Optimized to just... start, and be small!
 c.KubeSpawner.singleuser_image_spec = 'yuvipanda/simple-singleuser:v1'
 
+# Configure dynamically provisioning pvc
+c.KubeSpawner.pvc_name_template = 'claim-{username}-{userid}'
+c.KubeSpawner.storage_class = 'single-user-storage'
+c.KubeSpawner.access_modes = ['ReadWriteOnce']
+c.KubeSpawner.storage = '10GiB'
+
+# Add volumes to singleuser pods
+c.KubeSpawner.volumes = [
+    {
+        'name': 'volume-{username}-{userid}',
+        'persistentVolumeClaim': {
+            'claimName': 'claim-{username}-{userid}'
+        }
+    }
+]
+c.KubeSpawner.volume_mounts = [
+    {
+        'mountPath': '/home',
+        'name': 'volume-{username}-{userid}'
+    }
+]
+
 # The spawned containers need to be able to talk to the hub, ok through the proxy!
 c.KubeSpawner.hub_connect_ip = os.environ['HUB_PROXY_SERVICE_HOST']
 c.KubeSpawner.hub_connect_port = int(os.environ['HUB_PROXY_SERVICE_PORT'])
@@ -21,7 +43,7 @@ c.KubeSpawner.hub_connect_port = int(os.environ['HUB_PROXY_SERVICE_PORT'])
 c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
 
 c.JupyterHub.api_tokens = {
-  os.environ['CULL_JHUB_TOKEN']: 'cull',
+    os.environ['CULL_JHUB_TOKEN']: 'cull',
 }
 
 c.Authenticator.admin_users = {'cull', 'derrickmar1215'}

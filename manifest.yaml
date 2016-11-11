@@ -5,7 +5,7 @@
 # An administrator with access must provision these disks with a reasonable amount of space
 # before hand. Please note that with the K8s deployment, we are no longer using a shared NFS
 # and instead each user will have his or her own disk.
-# 
+#
 # Find the region for your cluster beforehand using:
 #
 #     gcloud container clusters list
@@ -18,6 +18,15 @@
 #
 #     gcloud compute disks delete hub-workdir-01
 
+kind: StorageClass
+apiVersion: storage.k8s.io/v1beta1
+metadata:
+  name: single-user-storage
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-standard
+  zone: us-central1-a
+---
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -82,6 +91,7 @@ spec:
       containers:
       - name: hub-proxy-container
         image: data8/jupyterhub-k8s-hub:master
+        imagePullPolicy: Always
         volumeMounts:
           - mountPath: /srv/jupyterhub
             name: data8-workdir-volume
