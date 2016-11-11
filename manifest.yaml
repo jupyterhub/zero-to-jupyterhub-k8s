@@ -32,7 +32,7 @@ data:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: data8-hub-workdir-01
+  name: allan-workdir-01
 spec:
   capacity:
     storage: 10Gi
@@ -40,7 +40,7 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   gcePersistentDisk:
-    pdName: data8-hub-workdir-01
+    pdName: allan-workdir-01
     fsType: ext4
 ---
 kind: PersistentVolumeClaim
@@ -53,19 +53,6 @@ spec:
   resources:
     requests:
       storage: 10Gi
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: hub-proxy
-spec:
-  type: LoadBalancer
-  selector:
-    name: hub-proxy-pod
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 8000
 ---
 apiVersion: v1
 kind: Service
@@ -121,7 +108,8 @@ spec:
           claimName: data8-workdir
       containers:
       - name: hub-container
-        image: data8/jupyterhub-k8s-hub:master
+        image: data8/jupyterhub-k8s-hub:separate-proxy
+        imagePullPolicy: Always
         volumeMounts:
           - mountPath: /srv/jupyterhub
             name: data8-workdir-volume
@@ -187,7 +175,7 @@ spec:
           command:
             - /bin/sh
             - -c
-          args: ['python /srv/cull/cull_idle_servers.py --timeout=3600 --cull_every=600 --url=http://${HUB_PROXY_SERVICE_HOST}:${HUB_PROXY_SERVICE_PORT}/hub']
+          args: ['python /srv/cull/cull_idle_servers.py --timeout=3600 --cull_every=600 --url=http://${HUB_SERVICE_HOST}:${HUB_SERVICE_PORT}/hub']
           env:
           - name: JPY_API_TOKEN
             valueFrom:
