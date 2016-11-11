@@ -1,0 +1,7 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cull-config
+data:
+  # Used to authenticate the culler to the hub. This string was generated with `openssl rand -hex 32`.
+  auth.jhub-token.cull: 13fdff1305cd883e49223908186a63294922dadb59b5d1122473041f160c4b03
