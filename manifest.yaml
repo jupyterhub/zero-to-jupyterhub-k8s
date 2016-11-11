@@ -5,7 +5,7 @@
 # An administrator with access must provision these disks with a reasonable amount of space
 # before hand. Please note that with the K8s deployment, we are no longer using a shared NFS
 # and instead each user will have his or her own disk.
-# 
+#
 # Find the region for your cluster beforehand using:
 #
 #     gcloud container clusters list
@@ -25,7 +25,7 @@ metadata:
 provisioner: kubernetes.io/gce-pd
 parameters:
   type: pd-standard
-  zone: us-central1-b
+  zone: us-central1-a
 ---
 kind: ConfigMap
 apiVersion: v1

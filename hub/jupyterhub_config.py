@@ -16,23 +16,23 @@ c.KubeSpawner.singleuser_image_spec = 'yuvipanda/simple-singleuser:v1'
 # Configure dynamically provisioning pvc
 c.KubeSpawner.pvc_name_template = 'claim-{username}-{userid}'
 c.KubeSpawner.storage_class = 'single-user-storage'
-c.KubeSpawner.acess_modes = ['ReadWriteOnce']
-c.KubeSpawner.storage = '1GiB'
+c.KubeSpawner.access_modes = ['ReadWriteOnce']
+c.KubeSpawner.storage = '10GiB'
 
 # Add volumes to singleuser pods
 c.KubeSpawner.volumes = [
-	{
-		'name': 'volume-{username}-{userid}', 
-		'persistentVolumeClaim': {
-			'claimName': 'claim-{username}-{userid}'
-		}
-	}
+    {
+        'name': 'volume-{username}-{userid}',
+        'persistentVolumeClaim': {
+            'claimName': 'claim-{username}-{userid}'
+        }
+    }
 ]
 c.KubeSpawner.volume_mounts = [
-	{
-		'mountPath': '/home', 
-		'name': 'volume-{username}-{userid}'
-	}
+    {
+        'mountPath': '/home',
+        'name': 'volume-{username}-{userid}'
+    }
 ]
 
 # The spawned containers need to be able to talk to the hub, ok through the proxy!
@@ -43,7 +43,7 @@ c.KubeSpawner.hub_connect_port = int(os.environ['HUB_PROXY_SERVICE_PORT'])
 c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
 
 c.JupyterHub.api_tokens = {
-  os.environ['CULL_JHUB_TOKEN']: 'cull',
+    os.environ['CULL_JHUB_TOKEN']: 'cull',
 }
 
 c.Authenticator.admin_users = {'cull', 'derrickmar1215'}
