@@ -13,6 +13,12 @@ c.KubeSpawner.start_timeout = 60 * 5  # Upto 5 minutes, first pulls can be reall
 # Our simplest user image! Optimized to just... start, and be small!
 c.KubeSpawner.singleuser_image_spec = 'yuvipanda/simple-singleuser:v1'
 
+# Configure dynamically provisioning pvc
+c.KubeSpawner.pvc_name_template = 'claim-{username}-{userid}'
+c.KubeSpawner.storage_class = 'single-user-storage'
+c.KubeSpawner.acess_modes = ['ReadWriteOnce']
+c.KubeSpawner.storage = '1GiB'
+
 # Add volumes to singleuser pods
 c.KubeSpawner.volumes = [
 	{
