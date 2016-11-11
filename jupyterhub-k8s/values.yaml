@@ -18,4 +18,8 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi
+# TODO: Make this secure
+secrets:
+  jhub-token-cull: 13fdff1305cd883e49223908186a63294922dadb59b5d1122473041f160c4b03
+
 
