@@ -47,10 +47,7 @@ writing, with autoscaling expected soon ([link][ACS]).
 [AWS]: https://aws.amazon.com/about-aws/whats-new/2016/05/amazon-ec2-container-service-supports-automatic-service-scaling/
 [ACS]: https://azure.microsoft.com/en-us/documentation/articles/container-service-scale/
 
-Implementation-wise, we just have to create a [HorizontalPodAutoscaler][]
+Implementation-wise, we need to create a [HorizontalPodAutoscaler][]
 object in our k8s config in order to make use of autoscaling.
 
 [HorizontalPodAutoscaler]: http://kubernetes.io/docs/api-reference/autoscaling/v1/definitions/#_v1_horizontalpodautoscaler
-
-Specifically, we pre-provisioned ~50 nodes in order to
-handle load spikes that
