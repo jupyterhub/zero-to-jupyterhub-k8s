@@ -88,8 +88,8 @@ spec:
     name: hub-pod
   ports:
     - protocol: TCP
-      port: 8000
-      targetPort: 8000
+      port: 8081
+      targetPort: 8081
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -129,7 +129,7 @@ spec:
               name: hub-config
               key: auth.jhub-token.proxy
         ports:
-          - containerPort: 8000
+          - containerPort: 8081
             name: hub
 ---
 apiVersion: extensions/v1beta1

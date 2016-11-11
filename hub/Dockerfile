@@ -14,6 +14,7 @@ ADD jupyterhub_config.py /srv/jupyterhub_config.py
 
 WORKDIR /srv/jupyterhub
 
-EXPOSE 8000
+# JupyterHub API port
+EXPOSE 8081
 
 CMD jupyterhub --config /srv/jupyterhub_config.py --no-ssl
