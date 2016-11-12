@@ -18,6 +18,15 @@
 #
 #     gcloud compute disks delete hub-workdir-01
 
+kind: StorageClass
+apiVersion: storage.k8s.io/v1beta1
+metadata:
+  name: single-user-storage
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-standard
+  zone: us-central1-a
+---
 kind: ConfigMap
 apiVersion: v1
 metadata:
