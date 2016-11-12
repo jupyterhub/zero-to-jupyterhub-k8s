@@ -41,7 +41,7 @@ data:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: data8-hub-workdir-01
+  name: data8-hub-workdir-02
 spec:
   capacity:
     storage: 10Gi
@@ -49,7 +49,7 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   gcePersistentDisk:
-    pdName: data8-hub-workdir-01
+    pdName: data8-hub-workdir-02
     fsType: ext4
 ---
 kind: PersistentVolumeClaim
