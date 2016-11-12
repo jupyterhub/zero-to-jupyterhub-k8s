@@ -1,22 +1,10 @@
 #
 # We are using a GCE disk as persistent storage for the Hub
-# and eventually, each individual user node.
+# and for each individual user node.
 #
-# An administrator with access must provision these disks with a reasonable amount of space
-# before hand. Please note that with the K8s deployment, we are no longer using a shared NFS
-# and instead each user will have his or her own disk.
-#
-# Find the region for your cluster beforehand using:
-#
-#     gcloud container clusters list
-#
-# Provision your disk like so:
-#
-#     gcloud compute disks create hub-workdir-01 --size 1GiB
-#
-# Please make sure to delete your disk after you are done using it as you will be charged.
-#
-#     gcloud compute disks delete hub-workdir-01
+# An administrator no longer has to manually provision a disk for the Hub.
+# Since the pvc for the hub is using a storage class, the volume will automatically
+# be provisioned dynamically
 
 kind: StorageClass
 apiVersion: storage.k8s.io/v1beta1
@@ -35,24 +23,12 @@ data:
   # Used to authenticate the culler to the hub. This string was generated with `openssl rand -hex 32`.
   auth.jhub-token.cull: 13fdff1305cd883e49223908186a63294922dadb59b5d1122473041f160c4b03
 ---
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: data8-hub-workdir-01
-spec:
-  capacity:
-    storage: 10Gi
-  accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  gcePersistentDisk:
-    pdName: data8-hub-workdir-01
-    fsType: ext4
----
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: data8-workdir
+  annotations:
+    volume.beta.kubernetes.io/storage-class: single-user-storage
 spec:
   accessModes:
     - ReadWriteOnce
