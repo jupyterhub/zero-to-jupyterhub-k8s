@@ -41,7 +41,7 @@ data:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: allan-workdir-01
+  name: data8-hub-workdir-01
 spec:
   capacity:
     storage: 10Gi
@@ -49,7 +49,7 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   gcePersistentDisk:
-    pdName: allan-workdir-01
+    pdName: data8-hub-workdir-01
     fsType: ext4
 ---
 kind: PersistentVolumeClaim
@@ -117,7 +117,7 @@ spec:
           claimName: data8-workdir
       containers:
       - name: hub-container
-        image: data8/jupyterhub-k8s-hub:separate-proxy
+        image: data8/jupyterhub-k8s-hub:master
         imagePullPolicy: Always
         volumeMounts:
           - mountPath: /srv/jupyterhub

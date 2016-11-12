@@ -41,7 +41,7 @@ c.KubeSpawner.volume_mounts = [
     }
 ]
 
-# The spawned containers need to be able to talk to the hub, ok through the proxy!
+# Gives spawned containers access to the API of the hub
 c.KubeSpawner.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
 c.KubeSpawner.hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])
 
