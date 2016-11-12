@@ -15,7 +15,7 @@ c.KubeSpawner.singleuser_image_spec = 'yuvipanda/simple-singleuser:v1'
 
 # Configure dynamically provisioning pvc
 c.KubeSpawner.pvc_name_template = 'claim-{username}-{userid}'
-c.KubeSpawner.storage_class = 'single-user-storage'
+c.KubeSpawner.storage_class = 'gce-standard-storage'
 c.KubeSpawner.access_modes = ['ReadWriteOnce']
 c.KubeSpawner.storage = '10Gi'
 

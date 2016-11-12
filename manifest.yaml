@@ -2,14 +2,19 @@
 # We are using a GCE disk as persistent storage for the Hub
 # and for each individual user node.
 #
-# An administrator no longer has to manually provision a disk for the Hub.
-# Since the pvc for the hub is using a storage class, the volume will automatically
-# be provisioned dynamically
+# A volume for the hub is automatically provisioned b/c its pvc
+# is using a storage class. There is no need to manually provision
+# any disks on the cluster.
+# 
+# When a single user pod is spun up, a corresponding pvc is 
+# dynamically provisioned by kubespawner. If a pvc for that user
+# already exists, the pod mounts to the existing pvc.
+# 
 
 kind: StorageClass
 apiVersion: storage.k8s.io/v1beta1
 metadata:
-  name: single-user-storage
+  name: gce-standard-storage
 provisioner: kubernetes.io/gce-pd
 parameters:
   type: pd-standard
@@ -28,7 +33,7 @@ apiVersion: v1
 metadata:
   name: data8-workdir
   annotations:
-    volume.beta.kubernetes.io/storage-class: single-user-storage
+    volume.beta.kubernetes.io/storage-class: gce-standard-storage
 spec:
   accessModes:
     - ReadWriteOnce
