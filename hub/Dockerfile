@@ -7,13 +7,14 @@ RUN pip3 install --upgrade pip
 
 RUN pip3 --no-cache-dir install jupyterhub requests-futures jupyterhub-dummyauthenticator
 
-RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner.git
+RUN pip3 --no-cache-dir install git+https://github.com/data-8/kubespawner.git@volumes
 RUN pip3 --no-cache-dir install git+https://github.com/yuvipanda/jupyterhub-nginx-chp.git
 
 ADD jupyterhub_config.py /srv/jupyterhub_config.py
 
 WORKDIR /srv/jupyterhub
 
-EXPOSE 8000
+# JupyterHub API port
+EXPOSE 8081
 
 CMD jupyterhub --config /srv/jupyterhub_config.py --no-ssl
