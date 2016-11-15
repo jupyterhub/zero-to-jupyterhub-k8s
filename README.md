@@ -14,8 +14,8 @@ Clone this repo:
 
     git clone https://github.com/data-8/jupyterhub-k8s
 
-Set up a Kubernetes cluster either locally using [minikube][] or using an
-online provider such as Google Container Engine.
+Set up a Kubernetes cluster using Google Container Engine. Other cloud
+providers are not currently supported but will be before release.
 
 Configure [`kubectl`][kubectl] to point to your cluster. This is automatically
 done when using `minikube` or the `gcloud` CLI. Verify that
@@ -26,30 +26,12 @@ Returns output that looks like:
 
     Kubernetes master is running at https://146.148.80.79
 
-We also rely on persistent disks created by the Google Cloud Platform.
-
-Before deploying for the first time, provision a disk on the Google Cloud Shell
-using the following command:
-
-    gcloud compute disks create your-disk-name-here --size 10GiB
-
-Now, change your manifest file such that in the entry for PersistentVolume:
-
-    kind: PersistentVolume
-    metadata:
-      name: your-disk-name-here
-    ...
-    gcePersistentDisk:
-      pdName: your-disk-name-here
-      fsType: ext4
-
 Then, from the project root, run
 
     kubectl apply -f manifest.yaml
 
 That deploys JupyterHub!
 
-[minikube]: https://github.com/kubernetes/minikube#minikube
 [kubectl]: http://kubernetes.io/docs/user-guide/prereqs/
 
 File / Folder structure
