@@ -4,6 +4,4 @@ metadata:
   name: cull-config
 data:
   # Used to authenticate the culler to the hub. This string was generated with `openssl rand -hex 32`.
-  auth.jhub-token.cull: {{.Values.secrets.jhub-token-cull | quote}}
-
-
+  auth.jhub-token.proxy: {{.Values.secrets.jhub-token-proxy | quote}}

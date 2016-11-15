@@ -6,8 +6,13 @@ image:
   repository: data8/jupyterhub-k8s-hub
   tag: master
   pullPolicy: IfNotPresent
+secrets:
+  # Used to authenticate the hub to the proxy. This string was generated with `pwgen 64`.
+  # Please generate a new one for your own deployment!
+  jhub-token-proxy: Kev4Shai9phai0Eez2aiyaefaepheutei3baehaiseipheef1Ah2cah4xeaquohr
 
 # TODO: Make this secure
 jhub-cull:
   secrets:
+    # Used to authenticate the culler to the hub. This string was generated with `openssl rand -hex 32`.
     jhub-api-token: 13fdff1305cd883e49223908186a63294922dadb59b5d1122473041f160c4b03
