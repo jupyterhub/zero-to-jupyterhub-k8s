@@ -2,6 +2,9 @@ sudo: required
 
 language: generic
 
+notifications:
+  slack: cal-blueprint:bnmKRTR6OkIPbLKl80e6ABlD
+
 env:
   global:
   # Make sure gcloud command is on our PATH
