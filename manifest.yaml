@@ -170,5 +170,5 @@ spec:
           - name: JPY_API_TOKEN
             valueFrom:
               configMapKeyRef:
-                name: cull-config
+                name: hub-config
                 key: auth.jhub-token.cull
