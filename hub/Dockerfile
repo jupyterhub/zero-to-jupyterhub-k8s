@@ -6,7 +6,7 @@ RUN apt-get install -y --no-install-recommends python3 python3-pip ca-certificat
 RUN pip3 install --upgrade pip
 
 RUN pip3 install --no-cache-dir --pre jupyterhub
-RUN pip3 --no-cache-dir install requests-futures jupyterhub-dummyauthenticator
+RUN pip3 install oauthenticator==0.4.*
 
 RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner.git
 RUN pip3 --no-cache-dir install git+https://github.com/yuvipanda/jupyterhub-nginx-chp.git
