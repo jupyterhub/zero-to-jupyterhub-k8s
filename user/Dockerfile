@@ -1,5 +1,7 @@
 FROM jupyter/singleuser
 
+USER root
+
 # Additional TeX packages for notebooks with unicode characters
 RUN apt-get update -q && \
   DEBIAN_FRONTEND=noninteractive apt-get install -q -y \
@@ -119,3 +121,5 @@ RUN pip install --egg git+https://github.com/gallantlab/pycortex@data8
 
 RUN apt-get clean
 RUN conda clean --all --yes
+
+USER $NB_USER
