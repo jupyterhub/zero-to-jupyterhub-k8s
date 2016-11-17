@@ -14,7 +14,8 @@
 .PHONY: help
 
 ALL_IMAGES:=cull \
-	hub
+	hub \
+	user
 
 # This prefixes all our image names
 IMAGE_PREFIX:=jupyterhub-k8s-
