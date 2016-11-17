@@ -30,6 +30,11 @@ data:
   # Used to authenticate the hub to the proxy. This string was generated with `pwgen 64`.
   # Please generate a new one for your own deployment!
   auth.jhub-token.proxy: Kev4Shai9phai0Eez2aiyaefaepheutei3baehaiseipheef1Ah2cah4xeaquohr
+
+  # Add in oauth secrets! These are gonna get invalidated soon because we
+  # already accidentally exposed them so yolo
+  oauth.client-id.google: "92948014362-c7jc8k20co1e4eqmg8095818htadijat.apps.googleusercontent.com"
+  oauth.client-secret.google: "BabUWSqHd4ZekBqiaur4S1cm"
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -98,7 +103,7 @@ spec:
           claimName: data8-workdir
       containers:
       - name: hub-container
-        image: data8/jupyterhub-k8s-hub:master
+        image: data8/jupyterhub-k8s-hub:ds8-jhub-debug
         imagePullPolicy: Always
         volumeMounts:
           - mountPath: /srv/jupyterhub
@@ -118,6 +123,18 @@ spec:
             configMapKeyRef:
               name: hub-config
               key: auth.jhub-token.proxy
+        - name: GOOGLE_OAUTH_CLIENT_ID
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: oauth.client-id.google
+        - name: GOOGLE_OAUTH_CLIENT_SECRET
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: oauth.client-secret.google
+        - name: OAUTH_CALLBACK_URL
+          value: http://derrick-jhub.calblueprint.org/hub/oauth_callback
         ports:
           - containerPort: 8081
             name: hub
