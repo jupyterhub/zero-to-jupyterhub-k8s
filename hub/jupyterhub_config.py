@@ -5,6 +5,7 @@ c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 # Connect to a proxy running in a different pod
 c.JupyterHub.proxy_api_ip = os.environ['PROXY_API_SERVICE_HOST']
 c.JupyterHub.proxy_api_port = int(os.environ['PROXY_API_SERVICE_PORT'])
+c.JupyterHub.proxy_cmd = '/usr/local/bin/nchp'
 
 c.JupyterHub.ip = os.environ['PROXY_PUBLIC_SERVICE_HOST']
 c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
