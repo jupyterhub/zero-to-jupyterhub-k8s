@@ -1,3 +1,4 @@
+# CHECKPOINT 1
 FROM debian:jessie
 
 MAINTAINER Derrick Mar <derrickmar1215@berkeley.edu>
@@ -75,7 +76,7 @@ RUN conda install --quiet --yes \
 
 # INSTALL HUB
 # Install JupyterHub to get the jupyterhub-singleuser startup script
-RUN pip3 install --no-cache-dir --pre jupyterhub
+RUN pip install --no-cache-dir --pre jupyterhub
 
 EXPOSE 8888
 
