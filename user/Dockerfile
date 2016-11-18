@@ -1,4 +1,3 @@
-# CHECKPOINT 1
 # CHECKPOINT 2
 FROM debian:jessie
 
@@ -111,6 +110,73 @@ RUN conda install --quiet --yes \
 # Install JupyterHub to get the jupyterhub-singleuser startup script
 RUN pip install --no-cache-dir --pre jupyterhub
 
+# CONNECTOR COURSES PACKAGES
+# For reproducibility
+RUN conda install --yes ipython==4.2.0
+RUN conda install --yes jupyter_client==4.3.0
+RUN conda install --yes matplotlib==1.5.1
+RUN conda install --yes nbconvert==4.2.0
+RUN conda install --yes notebook==4.2.1
+RUN conda install --yes numpy==1.11.0
+RUN conda install --yes pip==8.1.2
+RUN conda install --yes pyzmq==15.2.0
+RUN conda install --yes requests==2.10.0
+RUN conda install --yes scipy==0.17.1
+RUN conda install --yes terminado==0.6
+RUN conda install --yes traitlets==4.2.1
+
+# For geospatial connector ; pfrontiera
+RUN conda install --yes gdal==2.0.0 libgdal==2.0.0
+RUN conda install --yes pyproj==1.9.5.1
+RUN conda install --yes pysal==1.11.1
+RUN conda install --yes shapely==1.5.13
+
+# For ecology connector ; cboettig
+RUN conda install --yes numexpr==2.6.0
+RUN conda install --yes psycopg2==2.6.1
+
+# For humanities connector ; troland
+RUN conda install --yes gensim==0.12.4
+RUN conda install --yes nltk==3.2.1
+
+# For neuro connector ; mark.lescroart
+RUN conda install --yes lxml==3.6.4
+
+# For humanities connector ; troland
+# models
+RUN python -m nltk.downloader -d /usr/local/share/nltk_data averaged_perceptron_tagger
+RUN python -m nltk.downloader -d /usr/local/share/nltk_data maxent_ne_chunker
+
+# corpora
+RUN python -m nltk.downloader -d /usr/local/share/nltk_data cmudict
+RUN python -m nltk.downloader -d /usr/local/share/nltk_data wordnet
+RUN python -m nltk.downloader -d /usr/local/share/nltk_data words
+RUN python -m nltk.downloader -d /usr/local/share/nltk_data punkt
+
+# For geospatial connector ; pfrontiera
+RUN pip install geopy==1.11.0
+
+# For neuro connector ; mark.lescroart
+RUN pip install nibabel==2.0.2
+RUN pip install mne==0.13.0
+RUN pip install tqdm==4.8.4
+
+# For neuro connector ; choldgraf
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y \
+  imagemagick
+
+# For child development connector; nishantdesai
+RUN pip install pygrowup==0.8.2
+
+# For cogneuro: pycortex
+RUN pip install git+https://github.com/ryanlovett/nbserverproxy.git
+RUN jupyter serverextension enable --system --py nbserverproxy
+RUN pip install --egg git+https://github.com/gallantlab/pycortex@data8
+
+#DS8
+RUN pip install okpy==1.6.4
+RUN pip install pypandoc==1.2.0
+RUN pip install datascience==0.8.2
 # NOTEBOOK EXTENSIONS
 
 EXPOSE 8888
