@@ -111,6 +111,8 @@ RUN conda install --quiet --yes \
 # Install JupyterHub to get the jupyterhub-singleuser startup script
 RUN pip install --no-cache-dir --pre jupyterhub
 
+# NOTEBOOK EXTENSIONS
+
 EXPOSE 8888
 
 CMD jupyterhub-singleuser \
