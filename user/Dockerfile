@@ -178,7 +178,60 @@ RUN pip install --egg git+https://github.com/gallantlab/pycortex@data8
 RUN pip install okpy==1.6.4
 RUN pip install pypandoc==1.2.0
 RUN pip install datascience==0.8.2
+
+# TEX
+# Additional TeX packages for notebooks with unicode characters
+RUN apt-get update -q && \
+  DEBIAN_FRONTEND=noninteractive apt-get install -q -y \
+    texlive-latex-extra \
+    texlive-generic-recommended \
+    texlive-xetex
+
+# Hack to use xelatex instead of pdflatex
+RUN sed -i -e '/ *latex_command =/s/pdflatex/xelatex/' \
+  /opt/conda/lib/python*/site-packages/nbconvert/exporters/pdf.py
+
+# Ensure LaTeX buffer is large enough
+RUN echo buf_size=6400000 > /etc/texmf/texmf.d/10data8.cnf
+RUN update-texmf
+
+# FONTS
+# Download XKCD font for plt.xkcd()
+RUN wget -q -P /usr/share/fonts \
+  https://github.com/shreyankg/xkcd-desktop/raw/master/Humor-Sans.ttf
+
+# Pre-generate font cache so the user does not see fc-list warning when
+# importing datascience. https://github.com/matplotlib/matplotlib/issues/5836
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y \
+  libxrender1
+RUN python -c 'import matplotlib.pyplot'
+
+
 # NOTEBOOK EXTENSIONS
+# Activate ipywidgets extension in the environment that runs the notebook server
+RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix
+
+RUN pip install git+https://github.com/yuvipanda/nbtimetravel.git
+RUN jupyter nbextension install --system --py nbtimetravel
+RUN jupyter nbextension enable --system --py nbtimetravel
+
+# Show memory usage via Yuvi's extension
+RUN pip install git+https://github.com/data-8/nbresuse.git
+RUN jupyter serverextension enable  --system --py nbresuse
+RUN jupyter nbextension     install --system --py nbresuse
+RUN jupyter nbextension     enable  --system --py nbresuse
+
+# MISC
+# Restore atomic intermediate if notebook is invalid.
+# This happens when kernels crash on oom conditions.
+RUN wget -q -P /tmp http://github.com/jupyter/notebook/commit/6b220c9.patch
+# Change into python's site-packages/
+RUN cd $(python -c "import site; print(site.getsitepackages()[0])") && \
+  patch -p1 < /tmp/6b220c9.patch
+
+# CLEANUP
+RUN apt-get clean
+RUN conda clean --all --yes
 
 EXPOSE 8888
 
