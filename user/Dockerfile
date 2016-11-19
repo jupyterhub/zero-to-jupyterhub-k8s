@@ -238,9 +238,12 @@ RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini 
 # Create jovyan user with UID=1000 and in the 'users' group
 ENV NB_USER jovyan
 ENV NB_UID 1000
+ENV HOME /home/$NB_USER
+
 RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
     mkdir -p $CONDA_DIR && \
-    chown $NB_USER $CONDA_DIR
+    chown $NB_USER $CONDA_DIR \
+    chown $NB_USER $HOME
 
 # CLEANUP
 RUN apt-get clean
