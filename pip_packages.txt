@@ -1,0 +1,20 @@
+# For geospatial connector ; pfrontiera
+RUN pip install geopy==1.11.0
+
+# For neuro connector ; mark.lescroart
+RUN pip install nibabel==2.0.2
+RUN pip install mne==0.13.0
+RUN pip install tqdm==4.8.4
+
+# For child development connector; nishantdesai
+RUN pip install pygrowup==0.8.2
+
+# For cogneuro: pycortex
+RUN pip install git+https://github.com/ryanlovett/nbserverproxy.git
+RUN jupyter serverextension enable --system --py nbserverproxy
+RUN pip install --egg git+https://github.com/gallantlab/pycortex@data8
+
+#DS8
+RUN pip install okpy==1.6.4
+RUN pip install pypandoc==1.2.0
+RUN pip install datascience==0.8.2

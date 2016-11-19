@@ -1,0 +1,26 @@
+# Install all OS dependencies for fully functional notebook server
+git
+vim
+jed
+emacs
+build-essential
+python-dev
+unzip
+libsm6
+pandoc
+texlive-latex-base
+texlive-fonts-extra
+texlive-fonts-recommended
+libxrender1
+inkscape
+
+# for matplotlib anim
+libav-tools
+
+# For neuro connector ; choldgraf
+imagemagick
+
+# Additional TeX packages for notebooks with unicode characters
+texlive-latex-extra
+texlive-generic-recommended
+texlive-xetex
