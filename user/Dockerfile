@@ -242,8 +242,7 @@ ENV HOME /home/$NB_USER
 
 RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
     mkdir -p $CONDA_DIR && \
-    chown $NB_USER $CONDA_DIR \
-    chown $NB_USER $HOME
+    chown $NB_USER $CONDA_DIR
 
 # CLEANUP
 RUN apt-get clean
@@ -252,6 +251,11 @@ RUN conda clean --all --yes
 EXPOSE 8888
 
 USER $NB_USER
+
+# Setup jovyan home directory
+RUN mkdir /home/$NB_USER/work && \
+    mkdir /home/$NB_USER/.jupyter && \
+    echo "cacert=/etc/ssl/certs/ca-certificates.crt" > /home/$NB_USER/.curlrc
 
 CMD jupyterhub-singleuser \
   --port=8888 \
