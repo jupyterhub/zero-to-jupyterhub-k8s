@@ -235,11 +235,20 @@ RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini 
     mv tini /usr/local/bin/tini && \
     chmod +x /usr/local/bin/tini
 
+# Create jovyan user with UID=1000 and in the 'users' group
+ENV NB_USER jovyan
+ENV NB_UID 1000
+RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
+    mkdir -p $CONDA_DIR && \
+    chown $NB_USER $CONDA_DIR
+
 # CLEANUP
 RUN apt-get clean
 RUN conda clean --all --yes
 
 EXPOSE 8888
+
+USER $NB_USER
 
 CMD jupyterhub-singleuser \
   --port=8888 \
