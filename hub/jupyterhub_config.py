@@ -19,7 +19,7 @@ c.JupyterHub.hub_ip = '0.0.0.0'
 c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
 
 # Upto 15 minutes, first pulls can be really slow because data8 user image is huge
-c.KubeSpawner.start_timeout = 60 * 15
+c.KubeSpawner.start_timeout = 60 * 20
 
 # Our simplest user image! Optimized to just... start, and be small!
 c.KubeSpawner.singleuser_image_spec = 'data8/jupyterhub-k8s-user:ds8-jhub-from-scratch'
