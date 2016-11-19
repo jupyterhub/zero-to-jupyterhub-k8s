@@ -159,6 +159,7 @@ RUN apt-get clean
 RUN conda clean --all --yes
 
 EXPOSE 8888
+WORKDIR /home/$NB_USER/work
 
 USER $NB_USER
 
