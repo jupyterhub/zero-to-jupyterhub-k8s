@@ -23,6 +23,10 @@ RUN REPO=http://cdn-fastly.deb.debian.org \
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
 
+COPY apt_get_packages.txt /tmp/apt_get_packages.txt
+COPY conda_packages.txt /tmp/conda_packages.txt
+COPY pip_packages.txt /tmp/pip_packages.txt
+
 # Configure Environment
 ENV CONDA_DIR /opt/conda
 ENV PATH $CONDA_DIR/bin:$PATH
@@ -35,7 +39,7 @@ ENV NB_UID 1000
 
 # apt-get utilities
 RUN apt-get update && apt-get install -yq \
-    $(grep -vE "^\s*#" filename apt_get_packages.txt | tr "\n" " ")
+    $(grep -vE "^\s*#" /tmp/apt_get_packages.txt | tr "\n" " ") \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -54,7 +58,7 @@ RUN cd /tmp && \
 # INSTALL CONDA PACKAGES
 # Remove pyqt and qt pulled in for matplotlib since we're only ever going to
 # use notebook-friendly backends in these images
-RUN conda install --quiet --yes --file conda_packages.txt && \
+RUN conda install --quiet --yes --file /tmp/conda_packages.txt && \
     conda remove --quiet --yes --force qt pyqt && \
     conda clean -tipsy
 
@@ -73,9 +77,14 @@ RUN python -m nltk.downloader -d /usr/local/share/nltk_data \
     punkt
 
 # INSTALL ADDITIONAL PACKAGES WITH PIP
-pip install -r pip_packages.txt
+pip install -r /tmp/pip_packages.txt
+# For cogneuro: pycortex
+RUN pip install git+https://github.com/ryanlovett/nbserverproxy.git
+RUN pip install --egg git+https://github.com/gallantlab/pycortex@data8
 
 # NOTEBOOK EXTENSIONS  ################################################
+RUN jupyter serverextension enable --system --py nbserverproxy
+
 # Activate ipywidgets extension in the environment that runs the notebook server
 RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix
 
