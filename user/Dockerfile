@@ -162,8 +162,9 @@ RUN pip install mne==0.13.0
 RUN pip install tqdm==4.8.4
 
 # For neuro connector ; choldgraf
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y \
-  imagemagick
+RUN apt-get update -q && \
+  DEBIAN_FRONTEND=noninteractive apt-get install -q -y \
+    imagemagick
 
 # For child development connector; nishantdesai
 RUN pip install pygrowup==0.8.2
