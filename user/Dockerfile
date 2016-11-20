@@ -133,6 +133,10 @@ RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.10.0/tini 
     chmod +x /usr/local/bin/tini
 #######################################################################
 
+RUN jupyter serverextension enable --system --py nbinteract
+RUN jupyter nbextension install --system --py nbinteract
+RUN jupyter nbextension enable --system --py nbinteract
+
 # CLEANUP
 RUN apt-get clean
 RUN conda clean --all --yes
