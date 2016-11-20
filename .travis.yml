@@ -2,6 +2,9 @@ sudo: required
 
 language: generic
 
+notifications:
+  slack: cal-blueprint:bnmKRTR6OkIPbLKl80e6ABlD
+
 env:
   global:
   # Make sure gcloud command is on our PATH
@@ -18,13 +21,20 @@ env:
   - GCLOUD_CLUSTER_NAME=staging
 
 
-# Cache our Gcloud SDK between commands
 cache:
   directories:
   - "$HOME/google-cloud-sdk/"
+  - "$HOME/docker/"
 
 services:
 - docker
+
+# Based on https://github.com/travis-ci/travis-ci/issues/5358#issuecomment-186593265
+# Maintains a cache of docker images to speed up Travis builds
+before_cache:
+  - >
+    mkdir -p $HOME/docker && docker images -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}'
+    | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > $HOME/docker/$1.tar.gz'
 
 before_install:
   # Install gcloud sdk.
@@ -47,6 +57,9 @@ before_install:
 
   - gcloud container clusters get-credentials $GCLOUD_CLUSTER_NAME
   - kubectl cluster-info
+
+  # Load cached docker images
+  - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
 
 script:
 - make build-all BRANCH=$TRAVIS_BRANCH
