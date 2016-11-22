@@ -64,8 +64,7 @@ release/%: ## release a particular image name
 	tag/$(notdir $@) \
 	push/$(notdir $@)
 
-release-all: refresh-all \
-	build-all \
+release-all: build-all \
 	tag-all \
 	push-all
 release-all: ## build, tag, and push all images
