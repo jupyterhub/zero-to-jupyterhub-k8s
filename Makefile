@@ -59,8 +59,12 @@ push/%: ## push the branch and HEAD git SHA tags for a component to Docker Hub
 
 push-all: $(ALL_IMAGES:%=push/%) ## push all images
 
-release-all: refresh-all \
-	build-all \
+release/%: ## release a particular image name
+	$(MAKE) build/$(notdir $@) \
+	tag/$(notdir $@) \
+	push/$(notdir $@)
+
+release-all: build-all \
 	tag-all \
 	push-all
 release-all: ## build, tag, and push all images
