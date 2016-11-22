@@ -1,0 +1,54 @@
+# jupyter/minimal-notebook packages
+nomkl
+ipywidgets=5.2*
+pandas=0.19*
+numexpr=2.6*
+matplotlib=1.5*
+scipy=0.17*
+seaborn=0.7*
+scikit-learn=0.17*
+scikit-image=0.11*
+sympy=1.0*
+cython=0.23*
+patsy=0.4*
+statsmodels=0.6*
+cloudpickle=0.1*
+dill=0.2*
+numba=0.23*
+bokeh=0.11*
+sqlalchemy=1.0*
+hdf5=1.8.17
+h5py=2.6*
+
+# For reproducibility
+ipython==4.2.0
+jupyter_client==4.3.0
+matplotlib==1.5.1
+nbconvert==4.2.0
+notebook==4.2.1
+pip==8.1.2
+pyzmq==15.2.0
+requests==2.10.0
+scipy==0.17.1
+terminado==0.6
+traitlets==4.2.1
+
+# For geospatial connector ; pfrontiera
+gdal==2.0.0
+libgdal==2.0.0
+pyproj==1.9.5.1
+pysal==1.11.1
+shapely==1.5.13
+
+# For ecology connector ; cboettig
+numexpr==2.6.0
+psycopg2==2.6.1
+
+# For humanities connector ; troland
+gensim==0.12.4
+nltk==3.2.1
+
+# For neuro connector ; mark.lescroart
+lxml==3.6.4
+
+
