@@ -21,10 +21,10 @@ env:
   - GCLOUD_CLUSTER_NAME=staging
 
 
-# Cache our Gcloud SDK between commands
 cache:
   directories:
   - "$HOME/google-cloud-sdk/"
+  - "$HOME/docker/"
 
 services:
 - docker
