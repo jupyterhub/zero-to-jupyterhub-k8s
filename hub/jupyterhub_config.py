@@ -22,7 +22,7 @@ c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
 c.KubeSpawner.start_timeout = 60 * 20
 
 # Our simplest user image! Optimized to just... start, and be small!
-c.KubeSpawner.singleuser_image_spec = 'data8/jupyterhub-k8s-user:ds8-jhub-from-scratch'
+c.KubeSpawner.singleuser_image_spec = 'data8/jupyterhub-k8s-user:tini'
 c.KubeSpawner.singleuser_image_pull_policy = 'Always'
 
 # Configure dynamically provisioning pvc
