@@ -45,8 +45,6 @@ RUN mkdir /home/$NB_USER/work && \
     mkdir /home/$NB_USER/.jupyter && \
     echo "cacert=/etc/ssl/certs/ca-certificates.crt" > /home/$NB_USER/.curlrc
 
-# Install conda as jovyan
-
 # INSTALL CONDA AS JOVYAN
 RUN cd /tmp && \
     mkdir -p $CONDA_DIR && \
@@ -105,7 +103,7 @@ RUN apt-get update && apt-get install -yq \
 RUN pip install git+https://github.com/ryanlovett/nbserverproxy.git
 RUN pip install --egg git+https://github.com/gallantlab/pycortex@data8
 
-# NOTEBOOK EXTENSIONS  ################################################
+####################### NOTEBOOK EXTENSIONS  ###########################
 RUN jupyter serverextension enable --system --py nbserverproxy
 
 # Activate ipywidgets extension in the environment that runs the notebook server
@@ -123,7 +121,7 @@ RUN jupyter nbextension     install --system --py nbresuse
 RUN jupyter nbextension     enable  --system --py nbresuse
 #######################################################################
 
-# MISC ################################################################
+################################ MISC #################################
 # Hack to use xelatex instead of pdflatex
 RUN sed -i -e '/ *latex_command =/s/pdflatex/xelatex/' \
   /opt/conda/lib/python*/site-packages/nbconvert/exporters/pdf.py
@@ -168,6 +166,8 @@ EXPOSE 8888
 WORKDIR /home/$NB_USER/work
 
 USER $NB_USER
+
+ENTRYPOINT ["tini", "--"]
 
 CMD jupyterhub-singleuser \
   --port=8888 \

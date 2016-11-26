@@ -1,8 +1,6 @@
 # Install all OS dependencies for fully functional notebook server
 git
 vim
-jed
-emacs
 build-essential
 python-dev
 unzip
