@@ -45,8 +45,6 @@ RUN mkdir /home/$NB_USER/work && \
     mkdir /home/$NB_USER/.jupyter && \
     echo "cacert=/etc/ssl/certs/ca-certificates.crt" > /home/$NB_USER/.curlrc
 
-# Install conda as jovyan
-
 # INSTALL CONDA AS JOVYAN
 RUN cd /tmp && \
     mkdir -p $CONDA_DIR && \
