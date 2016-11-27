@@ -7,4 +7,4 @@ data:
   auth.jhub-token.proxy: {{.Values.secrets.jhubTokenProxy | quote}}
   oauth.client-id.google: {{.Values.secrets.clientIdGoogle | quote}}
   oauth.client-secret.google: {{.Values.secrets.clientSecretGoogle | quote}}
-  auth.jhub-token.cull: {{.Values.jhubCull.secrets.jhubApiToken | quote}}
+  auth.jhub-token.cull: {{.Values.jhubcull.secrets.jhubApiToken | quote}}

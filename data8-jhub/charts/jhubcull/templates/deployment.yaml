@@ -1,25 +1,24 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
-  labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  name: cull-deployment
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
+        name: cull-pod
     spec:
       containers:
-      - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        args: ['python /srv/cull/cull_idle_servers.py --timeout=3600 --cull_every=600 --url=http://${HUB_PROXY_SERVICE_HOST}:${HUB_PROXY_SERVICE_PORT}/hub']
-        env:
-        - name: JPY_API_TOKEN
-          valueFrom:
-            configMapKeyRef:
-              name: cull-config
-              key: auth.jhub-token.cull
-
+        - name: cull-container
+          image: data8/jupyterhub-k8s-cull:master
+          command:
+            - /bin/sh
+            - -c
+          args: ['python /srv/cull/cull_idle_servers.py --timeout=3600 --cull_every=600 --url=http://${HUB_SERVICE_HOST}:${HUB_SERVICE_PORT}/hub']
+          env:
+          - name: JPY_API_TOKEN
+            valueFrom:
+              configMapKeyRef:
+                name: hub-config
+                key: auth.jhub-token.cull

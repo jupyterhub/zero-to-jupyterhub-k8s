@@ -20,6 +20,22 @@ parameters:
   type: pd-standard
   zone: us-central1-a
 ---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: hub-config
+data:
+  # Used to authenticate the culler to the hub. This string was generated with `openssl rand -hex 32`.
+  auth.jhub-token.cull: 13fdff1305cd883e49223908186a63294922dadb59b5d1122473041f160c4b03
+  # Used to authenticate the hub to the proxy. This string was generated with `pwgen 64`.
+  # Please generate a new one for your own deployment!
+  auth.jhub-token.proxy: Kev4Shai9phai0Eez2aiyaefaepheutei3baehaiseipheef1Ah2cah4xeaquohr
+
+  # Add in oauth secrets! These are gonna get invalidated soon because we
+  # already accidentally exposed them so yolo
+  oauth.client-id.google: "92948014362-c7jc8k20co1e4eqmg8095818htadijat.apps.googleusercontent.com"
+  oauth.client-secret.google: "BabUWSqHd4ZekBqiaur4S1cm"
+---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -148,28 +164,28 @@ spec:
             name: proxy-public
           - containerPort: 8001
             name: api
-# ---
-# apiVersion: extensions/v1beta1
-# kind: Deployment
-# metadata:
-#   name: cull-deployment
-# spec:
-#   replicas: 1
-#   template:
-#     metadata:
-#       labels:
-#         name: cull-pod
-#     spec:
-#       containers:
-#         - name: cull-container
-#           image: data8/jupyterhub-k8s-cull:master
-#           command:
-#             - /bin/sh
-#             - -c
-#           args: ['python /srv/cull/cull_idle_servers.py --timeout=3600 --cull_every=600 --url=http://${HUB_SERVICE_HOST}:${HUB_SERVICE_PORT}/hub']
-#           env:
-#           - name: JPY_API_TOKEN
-#             valueFrom:
-#               configMapKeyRef:
-#                 name: hub-config
-#                 key: auth.jhub-token.cull
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: cull-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: cull-pod
+    spec:
+      containers:
+        - name: cull-container
+          image: data8/jupyterhub-k8s-cull:master
+          command:
+            - /bin/sh
+            - -c
+          args: ['python /srv/cull/cull_idle_servers.py --timeout=3600 --cull_every=600 --url=http://${HUB_SERVICE_HOST}:${HUB_SERVICE_PORT}/hub']
+          env:
+          - name: JPY_API_TOKEN
+            valueFrom:
+              configMapKeyRef:
+                name: hub-config
+                key: auth.jhub-token.cull
