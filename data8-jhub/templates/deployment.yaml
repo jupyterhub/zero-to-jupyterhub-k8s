@@ -118,7 +118,7 @@ spec:
               name: hub-config
               key: oauth.client-secret.google
         - name: OAUTH_CALLBACK_URL
-          value: http://derrick-jhub.calblueprint.org/hub/oauth_callback
+          value: "{{ .Values.oauthCallbackUrl }}"
         ports:
           - containerPort: 8081
             name: hub
