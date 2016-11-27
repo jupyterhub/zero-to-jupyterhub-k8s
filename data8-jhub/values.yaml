@@ -1,21 +1,18 @@
-# Default values for data8-jhub.
+# Default values for jupyterhub-k8s.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 replicaCount: 1
 image:
-  repository: nginx
-  tag: stable
+  repository: data8/jupyterhub-k8s-hub
+  tag: master
   pullPolicy: IfNotPresent
-service:
-  name: nginx
-  type: ClusterIP
-  externalPort: 80
-  internalPort: 80
-resources:
-  limits:
-    cpu: 100m
-    memory: 128Mi
-  requests:
-    cpu: 100m
-    memory: 128Mi
 
+secrets:
+  jhub_token_proxy: "Kev4Shai9phai0Eez2aiyaefaepheutei3baehaiseipheef1Ah2cah4xeaquohr"
+  client_id_google: "92948014362-c7jc8k20co1e4eqmg8095818htadijat.apps.googleusercontent.com"
+  client_secret_google: "BabUWSqHd4ZekBqiaur4S1cm"
+
+# TODO: Make this secure
+jhub-cull:
+  secrets:
+    jhub_api_token: "13fdff1305cd883e49223908186a63294922dadb59b5d1122473041f160c4b03"
