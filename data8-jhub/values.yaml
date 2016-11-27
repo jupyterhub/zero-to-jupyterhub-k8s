@@ -8,11 +8,11 @@ image:
   pullPolicy: IfNotPresent
 
 secrets:
-  jhub_token_proxy: "Kev4Shai9phai0Eez2aiyaefaepheutei3baehaiseipheef1Ah2cah4xeaquohr"
-  client_id_google: "92948014362-c7jc8k20co1e4eqmg8095818htadijat.apps.googleusercontent.com"
-  client_secret_google: "BabUWSqHd4ZekBqiaur4S1cm"
+  jhubTokenProxy: "Kev4Shai9phai0Eez2aiyaefaepheutei3baehaiseipheef1Ah2cah4xeaquohr"
+  clientIdGoogle: "92948014362-c7jc8k20co1e4eqmg8095818htadijat.apps.googleusercontent.com"
+  clientSecretGoogle: "BabUWSqHd4ZekBqiaur4S1cm"
 
 # TODO: Make this secure
-jhub-cull:
+jhubcull:
   secrets:
-    jhub_api_token: "13fdff1305cd883e49223908186a63294922dadb59b5d1122473041f160c4b03"
+    jhubApiToken: "13fdff1305cd883e49223908186a63294922dadb59b5d1122473041f160c4b03"
