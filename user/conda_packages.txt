@@ -25,7 +25,6 @@ ipython==4.2.0
 jupyter_client==4.3.0
 matplotlib==1.5.1
 nbconvert==4.2.0
-notebook==4.2.1
 pip==8.1.2
 pyzmq==15.2.0
 requests==2.10.0

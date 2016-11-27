@@ -33,7 +33,19 @@ ENV LANGUAGE en_US.UTF-8
 ENV NB_USER jovyan
 ENV NB_UID 1000
 
-# INSTALL CONDA
+# Create jovyan user with UID=1000 and in the 'users' group
+RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
+    mkdir -p $CONDA_DIR && \
+    chown $NB_USER $CONDA_DIR
+
+USER $NB_USER
+
+# Setup jovyan home directory
+RUN mkdir /home/$NB_USER/work && \
+    mkdir /home/$NB_USER/.jupyter && \
+    echo "cacert=/etc/ssl/certs/ca-certificates.crt" > /home/$NB_USER/.curlrc
+
+# INSTALL CONDA AS JOVYAN
 RUN cd /tmp && \
     mkdir -p $CONDA_DIR && \
     wget --quiet https://repo.continuum.io/miniconda/Miniconda3-4.1.11-Linux-x86_64.sh && \
@@ -56,10 +68,17 @@ RUN conda install --quiet --yes --file /tmp/conda_packages.txt && \
 
 RUN conda install --yes numpy==1.11.0
 
-# INSTALL HUB
+# INSTALL NOTEBOOK AS JOVYAN
+RUN conda install --quiet --yes \
+    'notebook=4.2*' \
+    && conda clean -tipsy
+
+# INSTALL HUB AS JOVYAN
 # Install JupyterHub to get the jupyterhub-singleuser startup script
 # Use --pre to use 0.7 version
 RUN pip install --no-cache-dir --pre jupyterhub
+
+USER root
 
 # NLTK
 RUN python -m nltk.downloader -d /usr/local/share/nltk_data \
@@ -144,6 +163,9 @@ RUN apt-get clean
 RUN conda clean --all --yes
 
 EXPOSE 8888
+WORKDIR /home/$NB_USER/work
+
+USER $NB_USER
 
 CMD jupyterhub-singleuser \
   --port=8888 \
