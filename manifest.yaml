@@ -19,17 +19,6 @@ provisioner: kubernetes.io/gce-pd
 parameters:
   type: pd-standard
   zone: us-central1-a
-# ---
-# kind: ConfigMap
-# apiVersion: v1
-# metadata:
-#   name: hub-config
-# data:
-#   # Used to authenticate the culler to the hub. This string was generated with `openssl rand -hex 32`.
-#   auth.jhub-token.cull: 13fdff1305cd883e49223908186a63294922dadb59b5d1122473041f160c4b03
-#   # Used to authenticate the hub to the proxy. This string was generated with `pwgen 64`.
-#   # Please generate a new one for your own deployment!
-#   auth.jhub-token.proxy: Kev4Shai9phai0Eez2aiyaefaepheutei3baehaiseipheef1Ah2cah4xeaquohr
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -118,6 +107,18 @@ spec:
             configMapKeyRef:
               name: hub-config
               key: auth.jhub-token.proxy
+        - name: GOOGLE_OAUTH_CLIENT_ID
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: oauth.client-id.google
+        - name: GOOGLE_OAUTH_CLIENT_SECRET
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: oauth.client-secret.google
+        - name: OAUTH_CALLBACK_URL
+          value: http://derrick-jhub.calblueprint.org/hub/oauth_callback
         ports:
           - containerPort: 8081
             name: hub
@@ -170,5 +171,5 @@ spec:
           - name: JPY_API_TOKEN
             valueFrom:
               configMapKeyRef:
-                name: cull-config
+                name: hub-config
                 key: auth.jhub-token.cull

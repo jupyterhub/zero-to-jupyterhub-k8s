@@ -2,6 +2,9 @@ sudo: required
 
 language: generic
 
+notifications:
+  slack: cal-blueprint:bnmKRTR6OkIPbLKl80e6ABlD
+
 env:
   global:
   # Make sure gcloud command is on our PATH
@@ -18,10 +21,10 @@ env:
   - GCLOUD_CLUSTER_NAME=staging
 
 
-# Cache our Gcloud SDK between commands
 cache:
   directories:
   - "$HOME/google-cloud-sdk/"
+  - "$HOME/docker/"
 
 services:
 - docker
