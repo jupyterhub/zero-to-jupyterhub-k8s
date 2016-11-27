@@ -2,8 +2,10 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: cull-deployment
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       labels:
@@ -11,11 +13,11 @@ spec:
     spec:
       containers:
         - name: cull-container
-          image: data8/jupyterhub-k8s-cull:master
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           command:
             - /bin/sh
             - -c
-          args: ['python /srv/cull/cull_idle_servers.py --timeout=3600 --cull_every=600 --url=http://${HUB_SERVICE_HOST}:${HUB_SERVICE_PORT}/hub']
+          args: ['python /srv/cull/cull_idle_servers.py --timeout={{ .Values.cull_timeout }} --cull_every={{ .Values.cull_every }} --url=http://${HUB_SERVICE_HOST}:${HUB_SERVICE_PORT}/hub']
           env:
           - name: JPY_API_TOKEN
             valueFrom:
