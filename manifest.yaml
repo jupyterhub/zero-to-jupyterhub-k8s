@@ -103,7 +103,7 @@ spec:
           claimName: data8-workdir
       containers:
       - name: hub-container
-        image: data8/jupyterhub-k8s-hub:tini
+        image: data8/jupyterhub-k8s-hub:master
         imagePullPolicy: Always
         volumeMounts:
           - mountPath: /srv/jupyterhub
