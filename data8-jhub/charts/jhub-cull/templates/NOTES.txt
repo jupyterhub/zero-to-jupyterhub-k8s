@@ -1,0 +1,2 @@
+Thank you for installing {{.Chart.Name}}.
+

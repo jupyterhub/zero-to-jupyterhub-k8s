@@ -1,0 +1,9 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: hub-config
+data:
+  # Used to authenticate the culler to the hub. This string was generated with `openssl rand -hex 32`.
+  auth.jhub-token.proxy: {{.Values.secrets.jhub_token_proxy | quote}}
+  oauth.client-id.google: {{.Values.secrets.client_id_google | quote}}
+  oauth.client-secret.google: {{.Values.secrets.client_secret_google | quote}}

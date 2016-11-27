@@ -1,4 +1,0 @@
-apiVersion: v1
-description: A Helm chart for Kubernetes config, container images, and docs for Data 8 deployment of JupyterHub on Kubernetes.
-name: jupyterhub-k8s
-version: 0.1.0
