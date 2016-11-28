@@ -1,0 +1,25 @@
+# Default values for jupyterhub-k8s.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+oauthCallbackUrl: http://derrick-jhub.calblueprint.org/hub/oauth_callback
+image:
+  repository: data8/jupyterhub-k8s-hub
+  tag: master
+  pullPolicy: IfNotPresent
+
+# TODO: Make this secure
+secrets:
+  # Used to authenticate the hub to the proxy. This string was generated with `pwgen 64`.
+  # Please generate a new one for your own deployment!
+  jhubTokenProxy: "Kev4Shai9phai0Eez2aiyaefaepheutei3baehaiseipheef1Ah2cah4xeaquohr"
+
+  # Add in oauth secrets! These are gonna get invalidated soon because we
+  # already accidentally exposed them so yolo
+  clientIdGoogle: "92948014362-c7jc8k20co1e4eqmg8095818htadijat.apps.googleusercontent.com"
+  clientSecretGoogle: "BabUWSqHd4ZekBqiaur4S1cm"
+
+jhubcull:
+  secrets:
+    # Used to authenticate the culler to the hub. This string was generated with `openssl rand -hex 32`.
+    jhubApiToken: "13fdff1305cd883e49223908186a63294922dadb59b5d1122473041f160c4b03"

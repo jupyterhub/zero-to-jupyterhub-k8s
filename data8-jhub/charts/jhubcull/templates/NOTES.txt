@@ -1,0 +1,8 @@
+Thank you for installing {{.Chart.Name}}. This chart is a culler for jhub that kills idle notebooks. The chart contains a single deployment with a single pod that uses the jupyterhub api to cull idle notebooks.
+
+Your release is named {{ .Release.Name }}.
+
+To learn more about the release, try:
+
+  $ helm status {{ .Release.Name }}
+  $ helm get {{ .Release.Name }}

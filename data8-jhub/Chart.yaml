@@ -1,0 +1,4 @@
+apiVersion: v1
+description: UC Berkeley data8's version of jupyterhub.
+name: data8-jhub
+version: 0.1.0

@@ -1,0 +1,6 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cull-config
+data:
+  auth.jhub-token.cull: {{.Values.secrets.jhubApiToken | quote}}

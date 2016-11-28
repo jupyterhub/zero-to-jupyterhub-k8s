@@ -1,0 +1,8 @@
+Thank you for installing {{.Chart.Name}}. Your release is named {{ .Release.Name }}.
+
+This chart is UC Berkeley data8's version of jupyterhub.
+
+To learn more about the release, try:
+
+  $ helm status {{ .Release.Name }}
+  $ helm get {{ .Release.Name }}

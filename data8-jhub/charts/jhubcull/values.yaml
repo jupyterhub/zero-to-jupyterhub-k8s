@@ -1,0 +1,9 @@
+# Default values for jhubcull.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+cull_timeout: 3600
+cull_every: 600
+image:
+  repository: data8/jupyterhub-k8s-cull
+  tag: master
