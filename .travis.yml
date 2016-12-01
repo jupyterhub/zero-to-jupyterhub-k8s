@@ -60,5 +60,5 @@ after_success:
 - make release-all BRANCH=$TRAVIS_BRANCH
 
 - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    kubectl apply -f manifest.yaml ;
+    helm install ./data8-jhub/ ;
   fi
