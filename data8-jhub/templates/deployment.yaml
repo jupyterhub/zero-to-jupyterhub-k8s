@@ -131,6 +131,7 @@ spec:
               name: hub-config
               key: oauth.google.client-secret
         - name: GOOGLE_OAUTH_CALLBACK_URL
+          valueFrom:
             configMapKeyRef:
               name: hub-config
               key: oauth.google.callback-url

@@ -2,7 +2,6 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 replicaCount: 1
-oauthCallbackUrl: http://staging-jhub.calblueprint.org/hub/oauth_callback
 image:
   repository: data8/jupyterhub-k8s-hub
   tag: master
@@ -12,6 +11,7 @@ oauth:
   google:
     client_id: "insert-client-id-from-google-here"
     client_secret: "insert-client-secret-from-google-here"
+    callback_url: "insert-callback-url-from-google-here"
     hosted_domain: "insert-hosted-domain-from-google-here"
     login_service: "Insert name of login service shown in login button here"
 
