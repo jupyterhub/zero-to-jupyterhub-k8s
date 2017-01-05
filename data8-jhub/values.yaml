@@ -10,10 +10,10 @@ image:
 
 oauth:
   google:
-    client-id: "insert-client-id-from-google-here"
-    client-secret: "insert-client-secret-from-google-here"
-    hosted-domain: "insert-hosted-domain-from-google-here"
-    login-service: "Insert name of login service shown in login button here"
+    client_id: "insert-client-id-from-google-here"
+    client_secret: "insert-client-secret-from-google-here"
+    hosted_domain: "insert-hosted-domain-from-google-here"
+    login_service: "Insert name of login service shown in login button here"
 
 # TODO: Make this secure
 secrets:
