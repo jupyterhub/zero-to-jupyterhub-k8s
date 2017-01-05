@@ -10,7 +10,7 @@ ${CONDA_DIR}/bin/conda install --quiet --yes \
 # for more info.
 mkdir ${CONDA_DIR}/nltk
 
-${CONDA_DIR}/bin/python -m nltk.downloader -d ${CONDA_DIR}/nltk
+${CONDA_DIR}/bin/python -m nltk.downloader -d ${CONDA_DIR}/nltk \
     averaged_perceptron_tagger \
     cmudict \
     maxent_ne_chunker \
