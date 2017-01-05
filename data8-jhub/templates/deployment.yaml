@@ -10,22 +10,20 @@
 # dynamically provisioned by kubespawner. If a pvc for that user
 # already exists, the pod mounts to the existing pvc.
 #
-
 kind: StorageClass
 apiVersion: storage.k8s.io/v1beta1
 metadata:
-  name: gce-standard-storage
+  name: gce-ssd-storage
 provisioner: kubernetes.io/gce-pd
 parameters:
-  type: pd-standard
-  zone: us-central1-a
+  type: pd-ssd
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: data8-workdir
   annotations:
-    volume.beta.kubernetes.io/storage-class: gce-standard-storage
+    volume.beta.kubernetes.io/storage-class: gce-ssd-storage
 spec:
   accessModes:
     - ReadWriteOnce
@@ -93,6 +91,21 @@ spec:
           - mountPath: /srv/jupyterhub
             name: data8-workdir-volume
         env:
+        - name: SINGLEUSER_STORAGE_CLASS
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: singleuser.storage.class
+        - name: SINGLEUSER_STORAGE_CAPACITY
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: singleuser.storage.capacity
+        - name: SINGLEUSER_IMAGE
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: singleuser.image
         - name: POD_NAMESPACE
           valueFrom:
             fieldRef:

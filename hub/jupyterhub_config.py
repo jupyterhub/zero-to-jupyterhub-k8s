@@ -21,13 +21,16 @@ c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
 c.KubeSpawner.start_timeout = 60 * 20
 
 # Our simplest user image! Optimized to just... start, and be small!
-c.KubeSpawner.singleuser_image_spec = 'data8/jupyterhub-k8s-user:master'
+c.KubeSpawner.singleuser_image_spec = os.environ['SINGLEUSER_IMAGE']
 
 # Configure dynamically provisioning pvc
 c.KubeSpawner.pvc_name_template = 'claim-{username}-{userid}'
-c.KubeSpawner.user_storage_class = 'gce-standard-storage'
+c.KubeSpawner.user_storage_class = os.environ['SINGLEUSER_STORAGE_CLASS']
 c.KubeSpawner.user_storage_access_modes = ['ReadWriteOnce']
-c.KubeSpawner.user_storage_capacity = '10Gi'
+c.KubeSpawner.user_storage_capacity = os.environ['SINGLEUSER_STORAGE_CAPACITY']
+
+c.KubeSpawner.singleuser_uid = 1000
+c.KubeSpawner.singleuser_fs_gid = 100
 
 # Add volumes to singleuser pods
 c.KubeSpawner.volumes = [
@@ -40,7 +43,7 @@ c.KubeSpawner.volumes = [
 ]
 c.KubeSpawner.volume_mounts = [
     {
-        'mountPath': '/home',
+        'mountPath': '/home/jovyan',
         'name': 'volume-{username}-{userid}'
     }
 ]

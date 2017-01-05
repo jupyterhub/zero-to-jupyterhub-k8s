@@ -7,3 +7,6 @@ data:
   oauth.client-id.google: {{.Values.secrets.clientIdGoogle | quote}}
   oauth.client-secret.google: {{.Values.secrets.clientSecretGoogle | quote}}
   auth.jhub-token.cull: {{.Values.jhubcull.secrets.jhubApiToken | quote}}
+  singleuser.storage.class: {{.Values.singleuser.storage.class }}
+  singleuser.storage.capacity: {{.Values.singleuser.storage.capacity | quote }}
+  singleuser.image: {{.Values.singleuser.image | quote }}
