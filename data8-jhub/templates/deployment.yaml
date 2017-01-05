@@ -124,14 +124,26 @@ spec:
           valueFrom:
             configMapKeyRef:
               name: hub-config
-              key: oauth.client-id.google
+              key: oauth.google.client-id
         - name: GOOGLE_OAUTH_CLIENT_SECRET
           valueFrom:
             configMapKeyRef:
               name: hub-config
-              key: oauth.client-secret.google
-        - name: OAUTH_CALLBACK_URL
-          value: "{{ .Values.oauthCallbackUrl }}"
+              key: oauth.google.client-secret
+        - name: GOOGLE_OAUTH_CALLBACK_URL
+            configMapKeyRef:
+              name: hub-config
+              key: oauth.google.callback-url
+        - name: GOOGLE_OAUTH_HOSTED_DOMAIN
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: oauth.google.hosted-domain
+        - name: GOOGLE_OAUTH_LOGIN_SERVICE
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: oauth.google.login-service
         ports:
           - containerPort: 8081
             name: hub

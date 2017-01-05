@@ -4,8 +4,11 @@ metadata:
   name: hub-config
 data:
   auth.jhub-token.proxy: {{.Values.secrets.jhubTokenProxy | quote}}
-  oauth.client-id.google: {{.Values.secrets.clientIdGoogle | quote}}
-  oauth.client-secret.google: {{.Values.secrets.clientSecretGoogle | quote}}
+  oauth.google.client-id: {{.Values.oauth.google.client-id | quote}}
+  oauth.google.client-secret: {{.Values.oauth.google.client-secret | quote}}
+  oauth.google.hosted-domain: {{.Values.oauth.google.hosted-domain | quote}}
+  oauth.google.login-service: {{.Values.oauth.google.login-service | quote}}
+  oauth.google.callback-url: {{.Values.oauth.google.callback-url}}
   auth.jhub-token.cull: {{.Values.jhubcull.secrets.jhubApiToken | quote}}
   singleuser.storage.class: {{.Values.singleuser.storage.class }}
   singleuser.storage.capacity: {{.Values.singleuser.storage.capacity | quote }}

@@ -8,16 +8,18 @@ image:
   tag: master
   pullPolicy: IfNotPresent
 
+oauth:
+  google:
+    client-id: "insert-client-id-from-google-here"
+    client-secret: "insert-client-secret-from-google-here"
+    hosted-domain: "insert-hosted-domain-from-google-here"
+    login-service: "Insert name of login service shown in login button here"
+
 # TODO: Make this secure
 secrets:
   # Used to authenticate the hub to the proxy. This string was generated with `pwgen 64`.
   # Please generate a new one for your own deployment!
   jhubTokenProxy: "Kev4Shai9phai0Eez2aiyaefaepheutei3baehaiseipheef1Ah2cah4xeaquohr"
-
-  # Add in oauth secrets! These are gonna get invalidated soon because we
-  # already accidentally exposed them so yolo
-  clientIdGoogle: "92948014362-c7jc8k20co1e4eqmg8095818htadijat.apps.googleusercontent.com"
-  clientSecretGoogle: "BabUWSqHd4ZekBqiaur4S1cm"
 
 jhubcull:
   secrets:

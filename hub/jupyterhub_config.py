@@ -56,9 +56,9 @@ c.KubeSpawner.hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])
 c.JupyterHub.authenticator_class = 'oauthenticator.GoogleOAuthenticator'
 c.GoogleOAuthenticator.client_id = os.environ['GOOGLE_OAUTH_CLIENT_ID']
 c.GoogleOAuthenticator.client_secret = os.environ['GOOGLE_OAUTH_CLIENT_SECRET']
-c.GoogleOAuthenticator.oauth_callback_url = os.environ['OAUTH_CALLBACK_URL']
-c.GoogleOAuthenticator.hosted_domain = 'berkeley.edu'
-c.GoogleOAuthenticator.login_service = 'UC Berkeley'
+c.GoogleOAuthenticator.oauth_callback_url = os.environ['GOOGLE_OAUTH_CALLBACK_URL']
+c.GoogleOAuthenticator.hosted_domain = os.environ['GOOGLE_OAUTH_HOSTED_DOMAIN']
+c.GoogleOAuthenticator.login_service = os.environ['GOOGLE_OAUTH_LOGIN_SERVICE']
 
 c.JupyterHub.api_tokens = {
     os.environ['CULL_JHUB_TOKEN']: 'cull',
