@@ -49,6 +49,9 @@ metadata:
   name: proxy-public
 spec:
   type: LoadBalancer
+  {{ if .Values.public_ip }}
+  loadBalancerIP: {{ .Values.public_ip }}
+  {{ end }}
   selector:
     name: proxy-pod
   ports:
