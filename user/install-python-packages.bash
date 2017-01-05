@@ -41,6 +41,6 @@ ${CONDA_DIR}/bin/pip --no-cache-dir install \
             datascience==0.8.2
 
 # Execute all connector setup scripts
-ls /usr/local/bin/connectors-setup/*.bash | xargs -L1 /bin/bash
+ls /usr/local/sbin/connectors-setup/*.bash | xargs -L1 /bin/bash
 
 ${CONDA_DIR}/bin/conda clean -tipsy
