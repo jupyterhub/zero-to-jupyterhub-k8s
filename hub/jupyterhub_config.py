@@ -50,6 +50,11 @@ c.KubeSpawner.volume_mounts = [
 c.KubeSpawner.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
 c.KubeSpawner.hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])
 
+c.KubeSpawner.mem_limit = os.environ.get('SINGLEUSER_MEM_LIMIT', None)
+c.KubeSpawner.mem_guarantee = os.environ.get('SINGLEUSER_MEM_GUARANTEE', None)
+c.KubeSpawner.cpu_limit = os.environ.get('SINGLEUSER_CPU_LIMIT', None)
+c.KubeSpawner.cpu_guarantee = os.environ.get('SINGLEUSER_CPU_GUARANTEE', None)
+
 # Do not use any authentication at all
 c.JupyterHub.authenticator_class = 'oauthenticator.GoogleOAuthenticator'
 c.GoogleOAuthenticator.client_id = os.environ['GOOGLE_OAUTH_CLIENT_ID']
