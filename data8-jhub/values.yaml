@@ -31,4 +31,4 @@ singleuser:
   storage:
     class: gce-ssd-storage
     capacity: 10Gi
-  image: yuvipanda/data8-simple-singleuser:latest
+  image: gcr.io/data-8/data8-singleuser:latest
