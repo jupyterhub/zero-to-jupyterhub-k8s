@@ -28,7 +28,7 @@ c.KubeSpawner.user_storage_access_modes = ['ReadWriteOnce']
 c.KubeSpawner.user_storage_capacity = os.environ['SINGLEUSER_STORAGE_CAPACITY']
 
 c.KubeSpawner.singleuser_uid = 1000
-c.KubeSpawner.singleuser_fs_gid = 100
+c.KubeSpawner.singleuser_fs_gid = 1000
 
 # Add volumes to singleuser pods
 c.KubeSpawner.volumes = [
