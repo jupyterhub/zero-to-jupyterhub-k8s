@@ -88,8 +88,7 @@ spec:
           claimName: data8-workdir
       containers:
       - name: hub-container
-        image: gcr.io/data-8/data8-hub
-        imagePullPolicy: Always
+        image: gcr.io/data-8/data8-hub:latest
         volumeMounts:
           - mountPath: /srv/jupyterhub
             name: data8-workdir-volume
