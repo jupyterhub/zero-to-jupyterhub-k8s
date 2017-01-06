@@ -1,8 +1,6 @@
 import os
 import sys
 
-sys.path.insert(0, '/srv/oauthenticator')
-
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
 # Connect to a proxy running in a different pod
