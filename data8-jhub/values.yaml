@@ -2,6 +2,9 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# Name of this installation. Will be used to create namespace
+# and storageclass. Must be a valid DNS label
+name: 'datahub-dev'
 # Set this explicitly if you want to use a static allocated
 # IP as the public LoadBalancer IP. Requires support by
 # your Cloud Provider. GKE supports this
@@ -29,7 +32,6 @@ jhubcull:
 
 singleuser:
   storage:
-    class: gce-ssd-storage
     capacity: 10Gi
   image: gcr.io/data-8/data8-singleuser:latest
   cpu:

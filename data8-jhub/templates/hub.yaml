@@ -1,17 +1,10 @@
-kind: StorageClass
-apiVersion: storage.k8s.io/v1beta1
-metadata:
-  name: gce-ssd-storage
-provisioner: kubernetes.io/gce-pd
-parameters:
-  type: pd-ssd
----
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: hub-db-dir
+  namespace: {{ .Values.name }}
   annotations:
-    volume.beta.kubernetes.io/storage-class: gce-ssd-storage
+    volume.beta.kubernetes.io/storage-class: hub-storage-{{ .Values.name }}
 spec:
   accessModes:
     - ReadWriteOnce
@@ -23,6 +16,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: hub
+  namespace: {{ .Values.name }}
 spec:
   selector:
     name: hub-pod
@@ -35,6 +29,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: hub-config
+  namespace: {{ .Values.name }}
 data:
   auth.jhub-token.proxy: {{.Values.secrets.jhubTokenProxy | quote}}
   oauth.google.client-id: {{.Values.oauth.google.client_id | quote}}
@@ -43,7 +38,7 @@ data:
   oauth.google.login-service: {{.Values.oauth.google.login_service | quote}}
   oauth.google.callback-url: {{.Values.oauth.google.callback_url}}
   auth.jhub-token.cull: {{.Values.jhubcull.secrets.jhubApiToken | quote}}
-  singleuser.storage.class: {{.Values.singleuser.storage.class }}
+  singleuser.storage.class: single-user-storage-{{ .Values.name }}
   singleuser.storage.capacity: {{.Values.singleuser.storage.capacity | quote }}
   singleuser.image: {{ .Values.singleuser.image | quote }}
   {{ if .Values.singleuser.memory.limit -}}
@@ -64,6 +59,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: hub-deployment
+  namespace: {{ .Values.name }}
 spec:
   replicas: 1
   template:

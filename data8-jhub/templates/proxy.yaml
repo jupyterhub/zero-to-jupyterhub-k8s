@@ -14,6 +14,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: proxy-api
+  namespace: {{ .Values.name }}
 spec:
   selector:
     name: proxy-pod
@@ -26,6 +27,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: proxy-public
+  namespace: {{ .Values.name }}
 spec:
   type: LoadBalancer
   {{ if .Values.public_ip }}
@@ -42,6 +44,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: proxy-deployment
+  namespace: {{ .Values.name }}
 spec:
   replicas: 1
   template:
