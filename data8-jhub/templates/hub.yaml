@@ -31,13 +31,15 @@ metadata:
   name: hub-config
   namespace: {{ .Values.name }}
 data:
-  auth.jhub-token.proxy: {{.Values.secrets.jhubTokenProxy | quote}}
-  oauth.google.client-id: {{.Values.oauth.google.client_id | quote}}
-  oauth.google.client-secret: {{.Values.oauth.google.client_secret | quote}}
-  oauth.google.hosted-domain: {{.Values.oauth.google.hosted_domain | quote}}
-  oauth.google.login-service: {{.Values.oauth.google.login_service | quote}}
-  oauth.google.callback-url: {{.Values.oauth.google.callback_url}}
-  auth.jhub-token.cull: {{.Values.jhubcull.secrets.jhubApiToken | quote}}
+  token.proxy: {{ .Values.token.proxy | quote }}
+  token.culler: {{ .Values.token.culler | quote }}
+  {{ if eq .Values.auth.type "google" -}}
+  oauth.google.client-id: {{.Values.auth.google.clientId | quote}}
+  oauth.google.client-secret: {{.Values.auth.google.clientSecret | quote}}
+  oauth.google.hosted-domain: {{.Values.auth.google.hostedDomain | quote}}
+  oauth.google.login-service: {{.Values.auth.google.loginService | quote}}
+  oauth.google.callback-url: {{.Values.auth.google.callbackUrl}}
+  {{- end }}
   singleuser.storage.class: single-user-storage-{{ .Values.name }}
   singleuser.storage.capacity: {{.Values.singleuser.storage.capacity | quote }}
   singleuser.image: {{ .Values.singleuser.image | quote }}
@@ -88,7 +90,6 @@ spec:
             configMapKeyRef:
               name: hub-config
               key: singleuser.storage.capacity
-
         {{ if .Values.singleuser.memory.guarantee -}}
         - name: SINGLEUSER_MEM_GUARANTEE
           valueFrom:
@@ -130,12 +131,12 @@ spec:
           valueFrom:
             configMapKeyRef:
               name: hub-config
-              key: auth.jhub-token.cull
+              key: token.culler
         - name: CONFIGPROXY_AUTH_TOKEN
           valueFrom:
             configMapKeyRef:
               name: hub-config
-              key: auth.jhub-token.proxy
+              key: token.proxy
         - name: GOOGLE_OAUTH_CLIENT_ID
           valueFrom:
             configMapKeyRef:

@@ -30,8 +30,8 @@ metadata:
   namespace: {{ .Values.name }}
 spec:
   type: LoadBalancer
-  {{ if .Values.public_ip }}
-  loadBalancerIP: {{ .Values.public_ip }}
+  {{ if .Values.publicIP }}
+  loadBalancerIP: {{ .Values.publicIP }}
   {{ end }}
   selector:
     name: proxy-pod
@@ -60,7 +60,7 @@ spec:
             valueFrom:
               configMapKeyRef:
                 name: hub-config
-                key: auth.jhub-token.proxy
+                key: token.proxy
         ports:
           - containerPort: 8000
             name: proxy-public

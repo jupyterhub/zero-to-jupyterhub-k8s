@@ -9,27 +9,21 @@ name: 'datahub-dev'
 # Set this explicitly if you want to use a static allocated
 # IP as the public LoadBalancer IP. Requires support by
 # your Cloud Provider. GKE supports this
-public_ip: null
+publicIP: null
 
 # Google OAuth secrets
-oauth:
+auth:
+  type: google
   google:
-    client_id: "insert-client-id-from-google-here"
-    client_secret: "insert-client-secret-from-google-here"
-    callback_url: "insert-callback-url-from-google-here"
-    hosted_domain: "insert-hosted-domain-from-google-here"
-    login_service: "Insert name of login service shown in login button here"
+    clientId: "insert-client-id-from-google-here"
+    clientSecret: "insert-client-secret-from-google-here"
+    callbackUrl: "insert-callback-url-from-google-here"
+    hostedDomain: "insert-hosted-domain-from-google-here"
+    loginService: "Insert name of login service shown in login button here"
 
-# TODO: Make this secure
-secrets:
-  # Used to authenticate the hub to the proxy. This string was generated with `pwgen 64`.
-  # Please generate a new one for your own deployment!
-  jhubTokenProxy: "Kev4Shai9phai0Eez2aiyaefaepheutei3baehaiseipheef1Ah2cah4xeaquohr"
-
-jhubcull:
-  secrets:
-    # Used to authenticate the culler to the hub. This string was generated with `openssl rand -hex 32`.
-    jhubApiToken: "13fdff1305cd883e49223908186a63294922dadb59b5d1122473041f160c4b03"
+token:
+  proxy: 'generate with pwgen 64 and put here'
+  culler: 'generate with openssl rand -hex 32 here'
 
 singleuser:
   storage:
