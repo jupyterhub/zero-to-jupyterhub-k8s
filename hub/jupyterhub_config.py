@@ -67,4 +67,7 @@ c.JupyterHub.api_tokens = {
     os.environ['CULL_JHUB_TOKEN']: 'cull',
 }
 
+# Enable admins to access user servers
+c.JupyterHub.admin_access = True
+
 c.Authenticator.admin_users = {'cull'}
