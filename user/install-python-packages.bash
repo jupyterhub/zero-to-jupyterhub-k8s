@@ -28,6 +28,10 @@ ${CONDA_DIR}/bin/conda install --quiet --yes \
             statsmodels=0.6* \
             sympy=1.0*
 
+# Pre-generate font cache so the user does not see fc-list warning when
+# importing datascience. https://github.com/matplotlib/matplotlib/issues/5836
+${CONDA_DIR}/bin/python -c 'import matplotlib.pyplot'
+
 ${CONDA_DIR}/bin/conda install --quiet --yes numpy=1.11*
 
 # Remove pyqt and qt, since we do not need them with notebooks
