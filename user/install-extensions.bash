@@ -24,3 +24,9 @@ ${CONDA_DIR}/bin/pip --no-cache-dir install pytest webargs requests gitpython to
 ${CONDA_DIR}/bin/jupyter serverextension enable --sys-prefix --py nbinteract
 ${CONDA_DIR}/bin/jupyter nbextension install --sys-prefix --py nbinteract
 ${CONDA_DIR}/bin/jupyter nbextension enable --sys-prefix --py nbinteract
+
+# nbgdrive to let users synch their files to gdrive
+${CONDA_DIR}/bin/pip install git+https://github.com/data-8/nbgdrive.git
+${CONDA_DIR}/bin/jupyter serverextension enable --sys-prefix --py nbgdrive
+${CONDA_DIR}/bin/jupyter nbextension install --sys-prefix --py nbgdrive
+${CONDA_DIR}/bin/jupyter nbextension enable --sys-prefix --py nbgdrive
