@@ -1,0 +1,166 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: hub-db-dir
+  namespace: {{ .Values.name }}
+  annotations:
+    volume.beta.kubernetes.io/storage-class: hub-storage-{{ .Values.name }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hub
+  namespace: {{ .Values.name }}
+spec:
+  selector:
+    name: hub-pod
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: hub-config
+  namespace: {{ .Values.name }}
+data:
+  auth.jhub-token.proxy: {{.Values.secrets.jhubTokenProxy | quote}}
+  oauth.google.client-id: {{.Values.oauth.google.client_id | quote}}
+  oauth.google.client-secret: {{.Values.oauth.google.client_secret | quote}}
+  oauth.google.hosted-domain: {{.Values.oauth.google.hosted_domain | quote}}
+  oauth.google.login-service: {{.Values.oauth.google.login_service | quote}}
+  oauth.google.callback-url: {{.Values.oauth.google.callback_url}}
+  auth.jhub-token.cull: {{.Values.jhubcull.secrets.jhubApiToken | quote}}
+  singleuser.storage.class: single-user-storage-{{ .Values.name }}
+  singleuser.storage.capacity: {{.Values.singleuser.storage.capacity | quote }}
+  singleuser.image: {{ .Values.singleuser.image | quote }}
+  {{ if .Values.singleuser.memory.limit -}}
+  singleuser.memory.limit: {{ .Values.singleuser.memory.limit | quote}}
+  {{- end }}
+  {{ if .Values.singleuser.memory.guarantee -}}
+  singleuser.memory.guarantee: {{ .Values.singleuser.memory.guarantee | quote}}
+  {{- end }}
+  {{ if .Values.singleuser.cpu.limit -}}
+  singleuser.cpu.limit: {{ .Values.singleuser.cpu.limit | quote}}
+  {{- end }}
+  {{ if .Values.singleuser.cpu.guarantee -}}
+  singleuser.cpu.guarantee: {{ .Values.singleuser.cpu.guarantee | quote}}
+  {{- end }}
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hub-deployment
+  namespace: {{ .Values.name }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: hub-pod
+    spec:
+      volumes:
+      - name: hub-db-dir
+        persistentVolumeClaim:
+          claimName: hub-db-dir
+      containers:
+      - name: hub-container
+        image: gcr.io/data-8/data8-hub:latest
+        volumeMounts:
+          - mountPath: /srv/jupyterhub
+            name: hub-db-dir
+        env:
+        - name: SINGLEUSER_STORAGE_CLASS
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: singleuser.storage.class
+        - name: SINGLEUSER_STORAGE_CAPACITY
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: singleuser.storage.capacity
+
+        {{ if .Values.singleuser.memory.guarantee -}}
+        - name: SINGLEUSER_MEM_GUARANTEE
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: singleuser.memory.limit
+        {{- end }}
+        {{ if .Values.singleuser.memory.limit -}}
+        - name: SINGLEUSER_MEM_LIMIT
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: singleuser.memory.limit
+        {{- end }}
+        {{ if .Values.singleuser.cpu.guarantee -}}
+        - name: SINGLEUSER_CPU_GUARANTEE
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: singleuser.cpu.guarantee
+        {{- end }}
+        {{ if .Values.singleuser.cpu.limit -}}
+        - name: SINGLEUSER_CPU_LIMIT
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: singleuser.cpu.limit
+        {{- end }}
+        - name: SINGLEUSER_IMAGE
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: singleuser.image
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: CULL_JHUB_TOKEN
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: auth.jhub-token.cull
+        - name: CONFIGPROXY_AUTH_TOKEN
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: auth.jhub-token.proxy
+        - name: GOOGLE_OAUTH_CLIENT_ID
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: oauth.google.client-id
+        - name: GOOGLE_OAUTH_CLIENT_SECRET
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: oauth.google.client-secret
+        - name: GOOGLE_OAUTH_CALLBACK_URL
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: oauth.google.callback-url
+        - name: GOOGLE_OAUTH_HOSTED_DOMAIN
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: oauth.google.hosted-domain
+        - name: GOOGLE_OAUTH_LOGIN_SERVICE
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: oauth.google.login-service
+        ports:
+          - containerPort: 8081
+            name: hub

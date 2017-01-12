@@ -1,12 +1,24 @@
 # Default values for jupyterhub-k8s.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-replicaCount: 1
-oauthCallbackUrl: http://staging-jhub.calblueprint.org/hub/oauth_callback
-image:
-  repository: data8/jupyterhub-k8s-hub
-  tag: master
-  pullPolicy: IfNotPresent
+
+# Name of this installation. Will be used to create namespace
+# and storageclass. Must be a valid DNS label
+name: 'datahub-dev'
+
+# Set this explicitly if you want to use a static allocated
+# IP as the public LoadBalancer IP. Requires support by
+# your Cloud Provider. GKE supports this
+public_ip: null
+
+# Google OAuth secrets
+oauth:
+  google:
+    client_id: "insert-client-id-from-google-here"
+    client_secret: "insert-client-secret-from-google-here"
+    callback_url: "insert-callback-url-from-google-here"
+    hosted_domain: "insert-hosted-domain-from-google-here"
+    login_service: "Insert name of login service shown in login button here"
 
 # TODO: Make this secure
 secrets:
@@ -14,12 +26,22 @@ secrets:
   # Please generate a new one for your own deployment!
   jhubTokenProxy: "Kev4Shai9phai0Eez2aiyaefaepheutei3baehaiseipheef1Ah2cah4xeaquohr"
 
-  # Add in oauth secrets! These are gonna get invalidated soon because we
-  # already accidentally exposed them so yolo
-  clientIdGoogle: "92948014362-c7jc8k20co1e4eqmg8095818htadijat.apps.googleusercontent.com"
-  clientSecretGoogle: "BabUWSqHd4ZekBqiaur4S1cm"
-
 jhubcull:
   secrets:
     # Used to authenticate the culler to the hub. This string was generated with `openssl rand -hex 32`.
     jhubApiToken: "13fdff1305cd883e49223908186a63294922dadb59b5d1122473041f160c4b03"
+
+singleuser:
+  storage:
+    capacity: 10Gi
+  image: gcr.io/data-8/data8-singleuser:latest
+  cpu:
+    limit: null
+    guarantee: null
+  memory:
+    limit: 2G
+    guarantee: 2G
+
+cull:
+  timeout: 3600
+  every: 600

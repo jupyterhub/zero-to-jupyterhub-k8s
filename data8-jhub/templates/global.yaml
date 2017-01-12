@@ -1,0 +1,25 @@
+# Contains k8s objects that don't belong in the namespace
+# to which the JupyterHub is deployed.
+# Create the namespace itself
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: {{ .Values.name }}
+---
+# Dynamic provisioner for the single-user server pods
+kind: StorageClass
+apiVersion: storage.k8s.io/v1beta1
+metadata:
+  name: single-user-storage-{{ .Values.name }}
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-ssd
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1beta1
+metadata:
+  name: hub-storage-{{ .Values.name }}
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-ssd
+
