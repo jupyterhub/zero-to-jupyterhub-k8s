@@ -91,7 +91,7 @@ RUN wget -q -P /usr/share/fonts \
 # Pre-generate font cache so the user does not see fc-list warning when
 # importing datascience. https://github.com/matplotlib/matplotlib/issues/5836
 # When run as root, this generates them in /var/cache/fontconfig, and not under $HOME
-RUN python -c 'import matplotlib.pyplot'
+RUN MPLBACKEND=nbagg python -c 'import matplotlib.pyplot'
 
 #######################################################################
 
