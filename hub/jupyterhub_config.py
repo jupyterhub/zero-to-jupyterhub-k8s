@@ -20,6 +20,7 @@ c.KubeSpawner.start_timeout = 60 * 20
 
 # Our simplest user image! Optimized to just... start, and be small!
 c.KubeSpawner.singleuser_image_spec = os.environ['SINGLEUSER_IMAGE']
+c.KubeSpawner.singleuser_image_pull_policy = 'Always'
 
 # Configure dynamically provisioning pvc
 c.KubeSpawner.pvc_name_template = 'claim-{username}-{userid}'
