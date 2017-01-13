@@ -6,6 +6,9 @@
 # and storageclass. Must be a valid DNS label
 name: 'datahub-dev'
 
+hub:
+  image: gcr.io/data-8/data8-hub:latest
+
 # Set this explicitly if you want to use a static allocated
 # IP as the public LoadBalancer IP. Requires support by
 # your Cloud Provider. GKE supports this
