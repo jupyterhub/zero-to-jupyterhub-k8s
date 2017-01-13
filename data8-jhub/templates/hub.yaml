@@ -31,13 +31,20 @@ metadata:
   name: hub-config
   namespace: {{ .Values.name }}
 data:
-  auth.jhub-token.proxy: {{.Values.secrets.jhubTokenProxy | quote}}
-  oauth.google.client-id: {{.Values.oauth.google.client_id | quote}}
-  oauth.google.client-secret: {{.Values.oauth.google.client_secret | quote}}
-  oauth.google.hosted-domain: {{.Values.oauth.google.hosted_domain | quote}}
-  oauth.google.login-service: {{.Values.oauth.google.login_service | quote}}
-  oauth.google.callback-url: {{.Values.oauth.google.callback_url}}
-  auth.jhub-token.cull: {{.Values.jhubcull.secrets.jhubApiToken | quote}}
+  token.proxy: {{ .Values.token.proxy | quote }}
+  token.culler: {{ .Values.token.culler | quote }}
+
+  auth.type: {{ .Values.auth.type | quote }}
+  {{ if eq .Values.auth.type "hmac" -}}
+  auth.hmac.secret-key: {{ .Values.auth.hmac.secretKey | quote }}
+  {{- end }}
+  {{ if eq .Values.auth.type "google" -}}
+  auth.google.client-id: {{.Values.auth.google.clientId | quote}}
+  auth.google.client-secret: {{.Values.auth.google.clientSecret | quote}}
+  auth.google.hosted-domain: {{.Values.auth.google.hostedDomain | quote}}
+  auth.google.login-service: {{.Values.auth.google.loginService | quote}}
+  auth.google.callback-url: {{.Values.auth.google.callbackUrl}}
+  {{- end }}
   singleuser.storage.class: single-user-storage-{{ .Values.name }}
   singleuser.storage.capacity: {{.Values.singleuser.storage.capacity | quote }}
   singleuser.image: {{ .Values.singleuser.image | quote }}
@@ -88,7 +95,6 @@ spec:
             configMapKeyRef:
               name: hub-config
               key: singleuser.storage.capacity
-
         {{ if .Values.singleuser.memory.guarantee -}}
         - name: SINGLEUSER_MEM_GUARANTEE
           valueFrom:
@@ -130,37 +136,51 @@ spec:
           valueFrom:
             configMapKeyRef:
               name: hub-config
-              key: auth.jhub-token.cull
+              key: token.culler
         - name: CONFIGPROXY_AUTH_TOKEN
           valueFrom:
             configMapKeyRef:
               name: hub-config
-              key: auth.jhub-token.proxy
+              key: token.proxy
+        - name: HUB_AUTH_TYPE
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: auth.type
+        {{ if eq .Values.auth.type "hmac" -}}
+        - name: HMAC_SECRET_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: auth.hmac.secret-key
+        {{- end }}
+        {{ if eq .Values.auth.type "google" -}}
         - name: GOOGLE_OAUTH_CLIENT_ID
           valueFrom:
             configMapKeyRef:
               name: hub-config
-              key: oauth.google.client-id
+              key: auth.google.client-id
         - name: GOOGLE_OAUTH_CLIENT_SECRET
           valueFrom:
             configMapKeyRef:
               name: hub-config
-              key: oauth.google.client-secret
+              key: auth.google.client-secret
         - name: GOOGLE_OAUTH_CALLBACK_URL
           valueFrom:
             configMapKeyRef:
               name: hub-config
-              key: oauth.google.callback-url
+              key: auth.google.callback-url
         - name: GOOGLE_OAUTH_HOSTED_DOMAIN
           valueFrom:
             configMapKeyRef:
               name: hub-config
-              key: oauth.google.hosted-domain
+              key: auth.google.hosted-domain
         - name: GOOGLE_OAUTH_LOGIN_SERVICE
           valueFrom:
             configMapKeyRef:
               name: hub-config
-              key: oauth.google.login-service
+              key: auth.google.login-service
+        {{- end }}
         ports:
           - containerPort: 8081
             name: hub

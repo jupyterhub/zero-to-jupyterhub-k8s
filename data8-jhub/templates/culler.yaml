@@ -22,4 +22,4 @@ spec:
             valueFrom:
               configMapKeyRef:
                 name: hub-config
-                key: auth.jhub-token.cull
+                key: token.culler
