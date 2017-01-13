@@ -80,7 +80,7 @@ spec:
           claimName: hub-db-dir
       containers:
       - name: hub-container
-        image: gcr.io/data-8/data8-hub:latest
+        image: {{ .Values.hub.image }}
         volumeMounts:
           - mountPath: /srv/jupyterhub
             name: hub-db-dir
