@@ -96,8 +96,8 @@ RUN wget -q -P /usr/share/fonts \
 # the environment variable MPLCONFIGDIR. We then import
 # matplotlib's pyplot to trigger this caching behavior.
 # NOTE: This can be done away with once we use MPL 2
-+RUN mkdir -p /var/cache/matplotlib && chown jovyan:jovyan /var/cache/matplotlib
-+ENV MPLCONFIGDIR=/var/cache/matplotlib
+RUN mkdir -p /var/cache/matplotlib && chown jovyan:jovyan /var/cache/matplotlib
+ENV MPLCONFIGDIR=/var/cache/matplotlib
 RUN MPLBACKEND=nbagg python -c 'import matplotlib.pyplot'
 #######################################################################
 
