@@ -32,9 +32,6 @@ spec:
       labels:
         name: statsd-pod
     spec:
-      ports:
-      - containerPort: 8125
-        name: statsd
       containers:
       - name: statsd-container
         image: gcr.io/data-8/statsd-hub:latest
@@ -51,3 +48,6 @@ spec:
               configMapKeyRef:
                 name: statsd-config
                 key: metrics.datadog.prefix
+        ports:
+        - containerPort: 8125
+          name: statsd
