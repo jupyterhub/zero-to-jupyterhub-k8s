@@ -88,11 +88,17 @@ RUN update-texmf
 RUN wget -q -P /usr/share/fonts \
   https://github.com/shreyankg/xkcd-desktop/raw/master/Humor-Sans.ttf
 
-# Pre-generate font cache so the user does not see fc-list warning when
-# importing datascience. https://github.com/matplotlib/matplotlib/issues/5836
-# When run as root, this generates them in /var/cache/fontconfig, and not under $HOME
+# We want to pre-generate the matplotlib font-list cache
+# in a way that keeps the cache in the docker image (since
+# $HOME is mounted in a persistent volume). We do this by
+# making matplotlib keep its cache (and other config too - but
+# we don't care about that for now) in /var/cache by setting
+# the environment variable MPLCONFIGDIR. We then import
+# matplotlib's pyplot to trigger this caching behavior.
+# NOTE: This can be done away with once we use MPL 2
++RUN mkdir -p /var/cache/matplotlib && chown jovyan:jovyan /var/cache/matplotlib
++ENV MPLCONFIGDIR=/var/cache/matplotlib
 RUN MPLBACKEND=nbagg python -c 'import matplotlib.pyplot'
-
 #######################################################################
 
 EXPOSE 8888
