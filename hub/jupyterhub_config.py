@@ -77,7 +77,7 @@ c.JupyterHub.api_tokens = {
 # Setup STATSD
 if 'STATSD_SERVICE_HOST' in os.environ:
     c.JupyterHub.statsd_host = os.environ['STATSD_SERVICE_HOST']
-    c.JupyterHub.statsd_prefix = os.environ['STATSD_SERVICE_PORT']
+    c.JupyterHub.statsd_port = os.environ['STATSD_SERVICE_PORT']
 
 # Enable admins to access user servers
 c.JupyterHub.admin_access = True
