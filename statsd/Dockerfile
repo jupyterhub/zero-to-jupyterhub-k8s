@@ -10,7 +10,8 @@ RUN apt-key add /tmp/nodesource.gpg.key && rm /tmp/nodesource.gpg.key
 ADD nodesource.list /etc/apt/sources.list.d/nodesource.list
 
 RUN apt-get update
-RUN apt-get install --yes npm
+# The nodesource 'nodejs' package comes with npm
+RUN apt-get install --yes nodejs
 
 RUN npm install -g statsd  statsd-datadog-backend
 
