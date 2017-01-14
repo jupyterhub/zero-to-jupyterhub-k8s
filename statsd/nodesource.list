@@ -1,0 +1,4 @@
+# HTTP is ok because we pin to a GPG key
+# And apt-transport-https isn't installed by default,
+# and doing that would add a few layers.
+deb http://deb.nodesource.com/node_6.x jessie main

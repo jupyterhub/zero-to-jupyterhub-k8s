@@ -42,3 +42,8 @@ singleuser:
 cull:
   timeout: 3600
   every: 600
+
+metrics:
+  datadog:
+    apiKey: null
+    prefix: stresstest
