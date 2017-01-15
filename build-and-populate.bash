@@ -13,12 +13,14 @@ fi
 GIT_REV=$(git rev-parse --verify HEAD)
 TAG="${GIT_REV}"
 IMAGE="$1"
-IMAGE_SPEC="gcr.io/data-8/jupyterhub-k8s-${IMAGE}:${TAG}"
 
 if [ "${IMAGE}" == "user" ]; then
-    DOCKERFILE="Dockerfile.${2}"
+    USER_IMAGE_TYPE="${2}"
+    DOCKERFILE="Dockerfile.${USER_IMAGE_TYPE}"
+    IMAGE_SPEC="gcr.io/data-8/jupyterhub-k8s-${IMAGE}-${USER_IMAGE_TYPE}:${TAG}"
 else
     DOCKERFILE="Dockerfile"
+    IMAGE_SPEC="gcr.io/data-8/jupyterhub-k8s-${IMAGE}:${TAG}"
 fi
 
 cd ${IMAGE}
