@@ -29,6 +29,7 @@ gcloud docker -- push ${IMAGE_SPEC}
 
 echo "Pushed ${IMAGE_SPEC}"
 
-kubectl get node --no-headers --output=custom-columns=NAME:.metadata.name | parallel gcloud compute ssh {} -- "/usr/share/google/dockercfg_update.sh && docker pull ${IMAGE_SPEC}"
+# Pull this container in all of the nodes in current kubernetes context, 16 nodes at a time
+kubectl get node --no-headers --output=custom-columns=NAME:.metadata.name | parallel -j16 "gcloud compute ssh {} -- '/usr/share/google/dockercfg_update.sh && docker pull ${IMAGE_SPEC}'"
 
 echo "Use ${IMAGE_SPEC} for ${IMAGE}"
