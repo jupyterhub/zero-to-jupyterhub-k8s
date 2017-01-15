@@ -66,10 +66,33 @@ if auth_type == 'google':
     c.GoogleOAuthenticator.oauth_callback_url = os.environ['GOOGLE_OAUTH_CALLBACK_URL']
     c.GoogleOAuthenticator.hosted_domain = os.environ['GOOGLE_OAUTH_HOSTED_DOMAIN']
     c.GoogleOAuthenticator.login_service = os.environ['GOOGLE_OAUTH_LOGIN_SERVICE']
+    email_domain = os.environ['GOOGLE_OAUTH_HOSTED_DOMAIN']
 elif auth_type == 'hmac':
     c.JupyterHub.authenticator_class = 'hmacauthenticator.HMACAuthenticator'
     c.HMACAuthenticator.secret_key = bytes.fromhex(os.environ['HMAC_SECRET_KEY'])
+    email_domain = 'localdomain'
 
+def generate_user_email(spawner):
+    """
+    Used as the EMAIL environment variable
+    """
+    return '{username}@{domain}'.format(
+        username=spawner.user.name, domain=email_domain
+    )
+
+def generate_user_name(spawner):
+    """
+    Used as GIT_AUTHOR_NAME and GIT_COMMITTER_NAME environment variables
+    """
+    return spawner.user.name
+
+c.KubeSpawner.environment = {
+    'EMAIL': generate_user_email
+    # git requires these committer attributes
+    'GIT_AUTHOR_NAME': generate_user_name,
+    'GIT_COMMITTER_NAME': generate_user_name
+}
+ 
 c.JupyterHub.api_tokens = {
     os.environ['CULL_JHUB_TOKEN']: 'cull',
 }
