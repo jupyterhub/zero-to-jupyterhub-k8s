@@ -4,5 +4,5 @@ MAINTAINER Ryan Lovett <rylo@berkeley.edu>
 
 USER $NB_USER
 
-RUN /usr/local/sbin/install-prob140.bash
 ADD install-prob140.bash /usr/local/sbin/install-prob140.bash
+RUN /usr/local/sbin/install-prob140.bash
