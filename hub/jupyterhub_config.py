@@ -87,7 +87,7 @@ def generate_user_name(spawner):
     return spawner.user.name
 
 c.KubeSpawner.environment = {
-    'EMAIL': generate_user_email
+    'EMAIL': generate_user_email,
     # git requires these committer attributes
     'GIT_AUTHOR_NAME': generate_user_name,
     'GIT_COMMITTER_NAME': generate_user_name
