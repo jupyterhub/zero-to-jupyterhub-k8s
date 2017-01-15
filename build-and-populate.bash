@@ -15,8 +15,14 @@ TAG="${GIT_REV}"
 IMAGE="$1"
 IMAGE_SPEC="gcr.io/data-8/jupyterhub-k8s-${IMAGE}:${TAG}"
 
+if [ "${IMAGE}" -eq "user" ]; then
+    DOCKERFILE="Dockerfile.${2}"
+else
+    DOCKERFILE="Dockerfile"
+fi
+
 cd ${IMAGE}
-docker build -t ${IMAGE_SPEC} .
+docker build -t ${IMAGE_SPEC} -f ${DOCKERFILE} .
 gcloud docker -- push ${IMAGE_SPEC}
 
 echo "Pushed ${IMAGE_SPEC}"
