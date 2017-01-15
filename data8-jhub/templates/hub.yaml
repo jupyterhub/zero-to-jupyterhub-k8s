@@ -47,7 +47,7 @@ data:
   {{- end }}
   singleuser.storage.class: single-user-storage-{{ .Values.name }}
   singleuser.storage.capacity: {{.Values.singleuser.storage.capacity | quote }}
-  singleuser.image: {{ .Values.singleuser.image | quote }}
+  singleuser.image: "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"
   {{ if .Values.singleuser.memory.limit -}}
   singleuser.memory.limit: {{ .Values.singleuser.memory.limit | quote}}
   {{- end }}
@@ -80,7 +80,7 @@ spec:
           claimName: hub-db-dir
       containers:
       - name: hub-container
-        image: {{ .Values.hub.image }}
+        image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
         volumeMounts:
           - mountPath: /srv/jupyterhub
             name: hub-db-dir

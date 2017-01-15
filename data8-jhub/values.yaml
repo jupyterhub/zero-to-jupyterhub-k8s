@@ -7,7 +7,9 @@
 name: 'datahub-dev'
 
 hub:
-  image: gcr.io/data-8/data8-hub:latest
+  image:
+    name: gcr.io/data-8/jupyterhub-k8s-hub
+    tag: null  # Must be overriden
 
 # Set this explicitly if you want to use a static allocated
 # IP as the public LoadBalancer IP. Requires support by
@@ -31,7 +33,9 @@ token:
 singleuser:
   storage:
     capacity: 10Gi
-  image: gcr.io/data-8/data8-singleuser:latest
+  image:
+    name: gcr.io/data-8/jupyterhub-k8s-singleuser
+    tag: null # Must be overriden
   cpu:
     limit: null
     guarantee: null
