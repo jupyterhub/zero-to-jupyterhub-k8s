@@ -10,9 +10,9 @@ if ! git diff-index --quiet HEAD; then
     exit 1
 fi
 
-GIT_REV=$(git rev-parse --verify HEAD)
-TAG="${GIT_REV}"
 IMAGE="$1"
+GIT_REV=$(git log -n 1 --pretty=format:%h -- ${IMAGE})
+TAG="${GIT_REV}"
 
 if [ "${IMAGE}" == "user" ]; then
     USER_IMAGE_TYPE="${2}"
@@ -33,3 +33,4 @@ echo "Pushed ${IMAGE_SPEC}"
 kubectl get node --no-headers --output=custom-columns=NAME:.metadata.name | parallel -j16 "gcloud compute ssh {} -- '/usr/share/google/dockercfg_update.sh && docker pull ${IMAGE_SPEC}'"
 
 echo "Use ${IMAGE_SPEC} for ${IMAGE}"
+echo "Run ./populate.bash ${IMAGE_SPEC} to populate all nodes in current context with this image"
