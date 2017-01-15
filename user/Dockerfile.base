@@ -79,11 +79,6 @@ RUN update-texmf
 RUN wget -q -P /usr/share/fonts \
   https://github.com/shreyankg/xkcd-desktop/raw/master/Humor-Sans.ttf
 
-# gdrive executable for nbgdrive extension
-RUN wget -q -O /usr/local/bin/gdrive \
-  "https://docs.google.com/uc?id=0B3X9GlR6EmbnQ0FtZmJJUXEyRTA&export=download"
-RUN chmod +x /usr/local/bin/gdrive
-
 # Create matplotlib font-list cache dir
 RUN install -d -o $NB_USER -g $NB_USER $MPLCONFIGDIR
 
