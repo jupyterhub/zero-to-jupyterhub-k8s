@@ -1,0 +1,13 @@
+FROM gcr.io/data-8/singleuser-datahub:latest
+
+MAINTAINER Ryan Lovett <rylo@berkeley.edu>
+
+USER root
+
+ADD install-rstudio-server.bash /usr/local/sbin/install-rstudio-server.bash
+RUN /usr/local/sbin/install-rstudio-server.bash
+
+USER $NB_USER
+
+ADD install-nbrsessionproxy.bash /usr/local/sbin/install-nbrsessionproxy.bash
+RUN /usr/local/sbin/install-nbrsessionproxy.bash
