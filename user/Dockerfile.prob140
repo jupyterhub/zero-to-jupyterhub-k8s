@@ -1,0 +1,8 @@
+FROM gcr.io/data-8/jupyterhub-k8s-user-datahub:75e4e61
+
+MAINTAINER Ryan Lovett <rylo@berkeley.edu>
+
+USER $NB_USER
+
+RUN /usr/local/sbin/install-prob140.bash
+ADD install-prob140.bash /usr/local/sbin/install-prob140.bash
