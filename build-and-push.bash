@@ -2,6 +2,14 @@
 # Builds and pushes a given image to gcr.io + all nodes in current kubectl context
 set -e
 
+# Bail if we're on a dirty git tree
+if ! git diff-index --quiet HEAD; then
+    echo "You have uncommited changes. Please commit them before building and populating"
+    echo "This helps ensure that all docker images are traceable back to a git commit"
+    echo "If you push anyway Yuvi will be sad :("
+    exit 1
+fi
+
 GIT_REV=$(git rev-parse --verify HEAD)
 TAG="${GIT_REV}"
 IMAGE="$1"
