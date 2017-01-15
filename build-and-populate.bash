@@ -15,7 +15,7 @@ TAG="${GIT_REV}"
 IMAGE="$1"
 IMAGE_SPEC="gcr.io/data-8/jupyterhub-k8s-${IMAGE}:${TAG}"
 
-if [ "${IMAGE}" -eq "user" ]; then
+if [ "${IMAGE}" == "user" ]; then
     DOCKERFILE="Dockerfile.${2}"
 else
     DOCKERFILE="Dockerfile"
