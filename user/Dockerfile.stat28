@@ -4,10 +4,10 @@ MAINTAINER Ryan Lovett <rylo@berkeley.edu>
 
 USER root
 
-ADD install-rstudio-server.bash /usr/local/sbin/install-rstudio-server.bash
-RUN /usr/local/sbin/install-rstudio-server.bash
+ADD install-stat28-root.bash /usr/local/sbin/install-stat28-root.bash
+RUN /usr/local/sbin/install-stat28-root.bash
 
 USER $NB_USER
 
-ADD install-nbrsessionproxy.bash /usr/local/sbin/install-nbrsessionproxy.bash
-RUN /usr/local/sbin/install-nbrsessionproxy.bash
+ADD install-stat28-nbuser.bash /usr/local/sbin/install-stat28-nbuser.bash
+RUN /usr/local/sbin/install-stat28-nbuser.bash
