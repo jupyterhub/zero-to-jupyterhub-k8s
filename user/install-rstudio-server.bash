@@ -11,7 +11,8 @@ apt-get -y --quiet --no-install-recommends install \
     gdebi-core \
     r-base \
     r-base-dev \
-    libopenblas-base
+    libopenblas-base \
+    lmodern
 
 wget --quiet ${URL}
 gdebi --non-interactive ${PACKAGE}
