@@ -16,3 +16,7 @@ gdebi --non-interactive ${PACKAGE}
 rm ${PACKAGE}
 
 apt-get clean
+
+# RStudio needs to find libR.so
+echo /opt/conda/lib/R/lib > /etc/ld.so.conf.d/stat28-conda.conf
+ldconfig
