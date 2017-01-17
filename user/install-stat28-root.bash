@@ -13,8 +13,8 @@ U_CODE="jessie-cran3"
 # Configure apt repository for R packages
 echo "deb ${R_REPO}/bin/linux/debian ${U_CODE}/" > \
     /etc/apt/sources.list.d/mran.list
-gpg --recv-keys ${MRAN_KEY}
-gpg --export ${MRAN_KEY} | apt-key add -
+gpg --keyserver keyserver.ubuntu.com --recv-keys ${MRAN_KEY}
+gpg -a --export ${MRAN_KEY} | apt-key add -
 echo -n | openssl s_client -connect mran.revolutionanalytics.com:443 | \
     sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | \
     tee '/usr/local/share/ca-certificates/mran.revolutionanalytics.com.crt'
