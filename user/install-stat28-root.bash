@@ -6,15 +6,15 @@ apt-get -y --quiet --no-install-recommends install \
 	apt-transport-https
 
 R_REPO="https://mran.revolutionanalytics.com/snapshot/2017-01-16"
-MRAN_KEY="E084DAB9"
+MRAN_KEY="06F90DE5381BA480"
 GPG_KEY_SERVER="keyserver.ubuntu.com"
 U_CODE="jessie-cran3"
 
 # Configure apt repository for R packages
 echo "deb ${R_REPO}/bin/linux/debian ${U_CODE}/" > \
     /etc/apt/sources.list.d/mran.list
-gpg --keyserver ${GPG_KEY_SERVER} --recv-key ${MRAN_KEY}
-gpg -a --export ${MRAN_KEY} | apt-key add -
+gpg --recv-keys ${MRAN_KEY}
+gpg --export ${MRAN_KEY} | apt-key add -
 echo -n | openssl s_client -connect mran.revolutionanalytics.com:443 | \
     sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | \
     tee '/usr/local/share/ca-certificates/mran.revolutionanalytics.com.crt'
