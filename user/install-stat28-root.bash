@@ -23,7 +23,15 @@ update-ca-certificates
 # Install R
 apt-get -q update > /dev/null
 apt-get -y --quiet --no-install-recommends install \
-	r-base r-recommended libopenblas-base \
+        build-essential \
+        gcc \
+	curl \
+        pkg-config \
+	libcurl4-openssl-dev \
+	libreadline-dev \
+	libssl-dev \
+	libzmq3-dev \
+	r-base r-recommended r-base-dev libopenblas-base \
 	r-cran-evaluate \
 	r-cran-digest
 
