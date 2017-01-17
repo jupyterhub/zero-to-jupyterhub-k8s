@@ -23,7 +23,13 @@ update-ca-certificates
 # Install R
 apt-get -q update > /dev/null
 apt-get -y --quiet --no-install-recommends install \
-	r-base r-recommended libopenblas-base
+	r-base r-recommended libopenblas-base \
+	r-cran-evaluate \
+	r-cran-crayon \
+	r-cran-digest \
+	r-cran-devtools \
+	r-cran-uuid \
+	r-cran-rmarkdown
 
 ## Define our default R repository
 # Use HTTPS for RProfile to prevent an error message in RStudio.
@@ -31,7 +37,7 @@ R_REPO_HTTPS=${R_REPO//http:/https:}
 echo "options(repos = list(CRAN = '${R_REPO_HTTPS}'))" >> /etc/R/Rprofile.site
 
 # Install R and irkernel
-Rscript -e "install.packages(c('repr', 'IRdisplay', 'evaluate', 'crayon', 'pbdZMQ', 'devtools', 'uuid', 'digest', 'rmarkdown'), repos='${R_REPO}')"
+Rscript -e "install.packages(c('repr', 'IRdisplay', 'pbdZMQ'), repos='${R_REPO}')"
 Rscript -e "devtools::install_github('IRkernel/IRkernel')"
 Rscript -e "IRkernel::installspec(FALSE)"
 
