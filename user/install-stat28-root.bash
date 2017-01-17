@@ -2,6 +2,9 @@
 
 set -e
 
+apt-get -y --quiet --no-install-recommends install \
+	apt-transport-https
+
 R_REPO="https://mran.revolutionanalytics.com/snapshot/2017-01-16"
 MRAN_KEY="E084DAB9"
 GPG_KEY_SERVER="keyserver.ubuntu.com"
