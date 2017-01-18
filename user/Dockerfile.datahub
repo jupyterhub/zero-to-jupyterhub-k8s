@@ -22,8 +22,27 @@ RUN chmod +x /usr/local/bin/gdrive
 
 USER $NB_USER
 
-ADD connectors /usr/local/sbin/connectors-setup
+ADD install-python-packages.bash /usr/local/sbin/install-python-packages.bash
 RUN /usr/local/sbin/install-python-packages.bash
 
 ADD install-extensions.bash /usr/local/sbin/install-extensions.bash
 RUN /usr/local/sbin/install-extensions.bash
+
+RUN mkdir -p /usr/local/sbin/connectors
+ADD connectors/ecology.bash /usr/local/sbin/connectors/ecology.bash
+RUN /usr/local/sbin/connectors/ecology.bash
+
+ADD connectors/humanities.bash /usr/local/sbin/connectors/humanities.bash
+RUN /usr/local/sbin/connectors/humanities.bash
+
+ADD connectors/child-dev.bash /usr/local/sbin/connectors/child-dev.bash
+RUN /usr/local/sbin/connectors/child-dev.bash
+
+ADD connectors/geospatial.bash /usr/local/sbin/connectors/geospatial.bash
+RUN /usr/local/sbin/connectors/geospatial.bash
+
+ADD connectors/neuro.bash /usr/local/sbin/connectors/neuro.bash
+RUN /usr/local/sbin/connectors/neuro.bash
+
+ADD install-ds8.bash /usr/local/sbin/install-ds8.bash
+RUN /usr/local/sbin/install-ds8.bash
