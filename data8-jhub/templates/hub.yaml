@@ -47,7 +47,6 @@ data:
   {{- end }}
   singleuser.storage.class: single-user-storage-{{ .Values.name }}
   singleuser.storage.capacity: {{.Values.singleuser.storage.capacity | quote }}
-  singleuser.image: "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"
   {{ if .Values.singleuser.memory.limit -}}
   singleuser.memory.limit: {{ .Values.singleuser.memory.limit | quote}}
   {{- end }}
@@ -123,11 +122,10 @@ spec:
               name: hub-config
               key: singleuser.cpu.limit
         {{- end }}
+        # Put this here directly so hub will restart when we
+        # change this
         - name: SINGLEUSER_IMAGE
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: singleuser.image
+          value:  "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"
         - name: POD_NAMESPACE
           valueFrom:
             fieldRef:
