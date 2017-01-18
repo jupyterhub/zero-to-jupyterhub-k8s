@@ -32,7 +32,7 @@ ADD connectors/ecology.bash /usr/local/sbin/connector-ecology.bash
 RUN /usr/local/sbin/connector-ecology.bash
 
 ADD connectors/humanities.bash /usr/local/sbin/connector-humanities.bash
-RUN /usr/local/sbin/connectors-humanities.bash
+RUN /usr/local/sbin/connector-humanities.bash
 
 ADD connectors/child-dev.bash /usr/local/sbin/connector-child-dev.bash
 RUN /usr/local/sbin/connector-child-dev.bash
