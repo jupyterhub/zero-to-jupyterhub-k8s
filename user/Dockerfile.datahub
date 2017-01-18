@@ -9,7 +9,7 @@
 # Since we'll be mounting /home/jovyan from a persistent volume, anything
 # you add in the docker file under /home/jovyan will never take effect.
 
-FROM gcr.io/data-8/jupyterhub-k8s-user-base:d30e2e5
+FROM gcr.io/data-8/jupyterhub-k8s-user-base:597d59d
 
 MAINTAINER Data Science Infrastructure <ds-inst@berkeley.edu>
 
