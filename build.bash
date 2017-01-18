@@ -29,4 +29,4 @@ gcloud docker -- push ${IMAGE_SPEC}
 
 echo "Pushed ${IMAGE_SPEC}"
 
-echo "Run ./populate.bash ${IMAGE_SPEC} to populate all nodes in current context with this image"
+echo "Run ./populate.bash <prod/dev/playground> ${IMAGE_SPEC} to populate all nodes in current context with this image"
