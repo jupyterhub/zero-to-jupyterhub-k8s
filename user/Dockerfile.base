@@ -87,9 +87,6 @@ USER $NB_USER
 ADD install-base-notebook.bash /usr/local/sbin/install-base-notebook.bash
 RUN /usr/local/sbin/install-base-notebook.bash
 
-ADD install-python-packages.bash /usr/local/sbin/install-python-packages.bash
-RUN /usr/local/sbin/install-python-packages.bash
-
 #######################################################################
 
 EXPOSE 8888
