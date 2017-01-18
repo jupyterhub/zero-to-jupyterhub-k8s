@@ -24,7 +24,7 @@ else
 fi
 
 cd ${IMAGE}
-docker build -t ${IMAGE_SPEC} -f ${DOCKERFILE} .
+docker build --no-cache -t ${IMAGE_SPEC} -f ${DOCKERFILE} .
 gcloud docker -- push ${IMAGE_SPEC}
 
 echo "Pushed ${IMAGE_SPEC}"
