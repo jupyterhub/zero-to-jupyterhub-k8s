@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: statsd
+  namespace: {{ .Values.name }}
+spec:
+  selector:
+    name: statsd-pod
+  ports:
+    - protocol: UDP
+      port: 8125
+      targetPort: 8125
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: statsd-config
+  namespace: {{ .Values.name }}
+data:
+  metrics.datadog.api-key: {{ .Values.metrics.datadog.apiKey | quote }}
+  metrics.datadog.prefix: {{ .Values.metrics.datadog.prefix | quote }}
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: statsd-deployment
+  namespace: {{ .Values.name }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: statsd-pod
+    spec:
+      containers:
+      - name: statsd-container
+        image: gcr.io/data-8/statsd-hub:latest
+        env:
+          - name: DATADOG_API_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: statsd-config
+                key: metrics.datadog.api-key
+          - name: HUB_NAME
+            value: {{ .Values.name | quote }}
+          - name: DATADOG_PREFIX
+            valueFrom:
+              configMapKeyRef:
+                name: statsd-config
+                key: metrics.datadog.prefix
+        ports:
+        - containerPort: 8125
+          name: statsd

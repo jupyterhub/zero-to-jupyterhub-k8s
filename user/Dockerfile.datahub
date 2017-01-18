@@ -1,0 +1,29 @@
+# This container image will be used by students with JupyterHub
+#
+# We split things into separate bash scripts that are then run from inside
+# the container, rather than super long single lines with && in Docker.
+# This is cleaner to understand and maintain in the long run. We trade off
+# some docker build time cache for this, but gain in clarity and
+# maintainability.
+#
+# Since we'll be mounting /home/jovyan from a persistent volume, anything
+# you add in the docker file under /home/jovyan will never take effect.
+
+FROM gcr.io/data-8/jupyterhub-k8s-user-base:d30e2e5
+
+MAINTAINER Data Science Infrastructure <ds-inst@berkeley.edu>
+
+USER root
+
+# gdrive executable for nbgdrive extension
+RUN wget -q -O /usr/local/bin/gdrive \
+  "https://docs.google.com/uc?id=0B3X9GlR6EmbnQ0FtZmJJUXEyRTA&export=download"
+RUN chmod +x /usr/local/bin/gdrive
+
+USER $NB_USER
+
+ADD connectors /usr/local/sbin/connectors-setup
+RUN /usr/local/sbin/install-python-packages.bash
+
+ADD install-extensions.bash /usr/local/sbin/install-extensions.bash
+RUN /usr/local/sbin/install-extensions.bash

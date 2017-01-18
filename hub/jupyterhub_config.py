@@ -20,6 +20,7 @@ c.KubeSpawner.start_timeout = 60 * 20
 
 # Our simplest user image! Optimized to just... start, and be small!
 c.KubeSpawner.singleuser_image_spec = os.environ['SINGLEUSER_IMAGE']
+c.KubeSpawner.singleuser_image_pull_policy = 'Always'
 
 # Configure dynamically provisioning pvc
 c.KubeSpawner.pvc_name_template = 'claim-{username}-{userid}'
@@ -55,17 +56,51 @@ c.KubeSpawner.mem_guarantee = os.environ.get('SINGLEUSER_MEM_GUARANTEE', None)
 c.KubeSpawner.cpu_limit = os.environ.get('SINGLEUSER_CPU_LIMIT', None)
 c.KubeSpawner.cpu_guarantee = os.environ.get('SINGLEUSER_CPU_GUARANTEE', None)
 
-# Do not use any authentication at all
-c.JupyterHub.authenticator_class = 'oauthenticator.GoogleOAuthenticator'
-c.GoogleOAuthenticator.client_id = os.environ['GOOGLE_OAUTH_CLIENT_ID']
-c.GoogleOAuthenticator.client_secret = os.environ['GOOGLE_OAUTH_CLIENT_SECRET']
-c.GoogleOAuthenticator.oauth_callback_url = os.environ['GOOGLE_OAUTH_CALLBACK_URL']
-c.GoogleOAuthenticator.hosted_domain = os.environ['GOOGLE_OAUTH_HOSTED_DOMAIN']
-c.GoogleOAuthenticator.login_service = os.environ['GOOGLE_OAUTH_LOGIN_SERVICE']
+# Allow switching authenticators from environment variables
+auth_type = os.environ['HUB_AUTH_TYPE']
 
+if auth_type == 'google':
+    c.JupyterHub.authenticator_class = 'oauthenticator.GoogleOAuthenticator'
+    c.GoogleOAuthenticator.client_id = os.environ['GOOGLE_OAUTH_CLIENT_ID']
+    c.GoogleOAuthenticator.client_secret = os.environ['GOOGLE_OAUTH_CLIENT_SECRET']
+    c.GoogleOAuthenticator.oauth_callback_url = os.environ['GOOGLE_OAUTH_CALLBACK_URL']
+    c.GoogleOAuthenticator.hosted_domain = os.environ['GOOGLE_OAUTH_HOSTED_DOMAIN']
+    c.GoogleOAuthenticator.login_service = os.environ['GOOGLE_OAUTH_LOGIN_SERVICE']
+    email_domain = os.environ['GOOGLE_OAUTH_HOSTED_DOMAIN']
+elif auth_type == 'hmac':
+    c.JupyterHub.authenticator_class = 'hmacauthenticator.HMACAuthenticator'
+    c.HMACAuthenticator.secret_key = bytes.fromhex(os.environ['HMAC_SECRET_KEY'])
+    email_domain = 'localdomain'
+
+def generate_user_email(spawner):
+    """
+    Used as the EMAIL environment variable
+    """
+    return '{username}@{domain}'.format(
+        username=spawner.user.name, domain=email_domain
+    )
+
+def generate_user_name(spawner):
+    """
+    Used as GIT_AUTHOR_NAME and GIT_COMMITTER_NAME environment variables
+    """
+    return spawner.user.name
+
+c.KubeSpawner.environment = {
+    'EMAIL': generate_user_email,
+    # git requires these committer attributes
+    'GIT_AUTHOR_NAME': generate_user_name,
+    'GIT_COMMITTER_NAME': generate_user_name
+}
+ 
 c.JupyterHub.api_tokens = {
     os.environ['CULL_JHUB_TOKEN']: 'cull',
 }
+
+# Setup STATSD
+if 'STATSD_SERVICE_HOST' in os.environ:
+    c.JupyterHub.statsd_host = os.environ['STATSD_SERVICE_HOST']
+    c.JupyterHub.statsd_port = int(os.environ['STATSD_SERVICE_PORT'])
 
 # Enable admins to access user servers
 c.JupyterHub.admin_access = True
