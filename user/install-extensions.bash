@@ -18,7 +18,7 @@ ${CONDA_DIR}/bin/jupyter nbextension install --sys-prefix --py nbresuse
 ${CONDA_DIR}/bin/jupyter nbextension enable --sys-prefix --py nbresuse
 
 # interact notebook extension
-${CONDA_DIR}/bin/pip install git+https://github.com/data-8/nbinteract.git
+${CONDA_DIR}/bin/pip install git+https://github.com/data-8/nbinteract.git@ad576960c98c00cc960599533cda373be65ecef3
 # FIXME: This should just be in setup.py of the repo
 ${CONDA_DIR}/bin/pip --no-cache-dir install pytest webargs requests gitpython toolz
 ${CONDA_DIR}/bin/jupyter serverextension enable --sys-prefix --py nbinteract
