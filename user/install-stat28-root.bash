@@ -33,7 +33,8 @@ apt-get -y --quiet --no-install-recommends install \
 	libzmq3-dev \
 	r-base r-recommended r-base-dev libopenblas-base \
 	r-cran-evaluate \
-	r-cran-digest
+	r-cran-digest \
+	r-cran-testthat
 
 ## Define our default R repository
 # Use HTTPS for RProfile to prevent an error message in RStudio.
@@ -41,7 +42,7 @@ R_REPO_HTTPS=${R_REPO//http:/https:}
 echo "options(repos = list(CRAN = '${R_REPO_HTTPS}'))" >> /etc/R/Rprofile.site
 
 # Install R and irkernel
-Rscript -e "install.packages(c('crayon', 'formatR', 'devtools', 'uuid', 'rmarkdown', 'repr', 'IRdisplay', 'pbdZMQ', 'testthat'), repos='${R_REPO}')"
+Rscript -e "install.packages(c('crayon', 'formatR', 'devtools', 'uuid', 'rmarkdown', 'repr', 'IRdisplay', 'pbdZMQ'), repos='${R_REPO}')"
 Rscript -e "devtools::install_github('IRkernel/IRkernel')"
 Rscript -e "IRkernel::installspec(FALSE)"
 
