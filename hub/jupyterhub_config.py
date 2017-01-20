@@ -107,6 +107,11 @@ c.JupyterHub.admin_access = True
 
 c.Authenticator.admin_users = {
     'cull',
+    # prob140
+    'adhikari',
+    'dibya.ghosh',
+    'zhang.j',
+    #
     'arvindiyengar',
     'vinitra',
     'namushegian',
@@ -141,6 +146,7 @@ c.Authenticator.admin_users = {
     'wiltonwu',
     'rjoshi',
     'stevenwuyinze',
+    # all
     'denero',
     'samlau95',
     'yuvipanda',
