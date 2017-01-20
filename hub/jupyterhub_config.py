@@ -110,6 +110,7 @@ c.Authenticator.admin_users = {
     # prob140
     'adhikari',
     'dibya.ghosh',
+    'maxwelljweinstein',
     'zhang.j',
     #
     'arvindiyengar',
