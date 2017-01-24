@@ -42,6 +42,7 @@ for ns in NAMESPACES:
 	cur_pods += count_pods(ns)
 
 if cur_pods < POD_THRESHOLE * max_pods:
+	print(cur_pods)
 	sys.exit(0)
 
 new_node_count = node_count + BUMP_INCREMENT
