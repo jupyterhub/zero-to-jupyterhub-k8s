@@ -20,7 +20,7 @@ def count_pods(namespace):
 NAMESPACES = ['datahub', 'prob140', 'stat28']
 USERS_PER_NODE = 7
 CLUSTER = 'prod'
-POD_THRESHOLE = 0.9
+POD_THRESHOLD = 0.9
 BUMP_INCREMENT = 2
 
 cmd = ['gcloud', 'container', 'clusters', 'describe', CLUSTER]
@@ -41,7 +41,7 @@ cur_pods = 0
 for ns in NAMESPACES:
 	cur_pods += count_pods(ns)
 
-if cur_pods < POD_THRESHOLE * max_pods:
+if cur_pods < POD_THRESHOLD * max_pods:
 	print(cur_pods)
 	sys.exit(0)
 
