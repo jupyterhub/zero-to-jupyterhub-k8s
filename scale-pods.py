@@ -46,8 +46,8 @@ if cur_pods < POD_THRESHOLD * max_pods:
 	sys.exit(0)
 
 new_node_count = node_count + BUMP_INCREMENT
-cmd = ['gcloud', 'container', 'clusters', 'resize', CLUSTER, '--size',
-	str(new_node_count)]
+cmd = ['gcloud', '--quiet', 'container', 'clusters', 'resize', CLUSTER,
+	'--size', str(new_node_count)]
 print(' '.join(cmd))
 p = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout
 buf = p.read()
