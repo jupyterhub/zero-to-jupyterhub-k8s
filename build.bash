@@ -10,6 +10,14 @@ if ! git diff-index --quiet HEAD; then
     exit 1
 fi
 
+if [ $(kubectl cluster-info | grep -q azure) -eq 0 ]; then
+	DOCKER_REPO="data8-on.azurecr.io/data-8"
+	DOCKER_PUSH="docker push"
+else
+	DOCKER_REPO="gcr.io/data-8"
+	DOCKER_PUSH="gcloud docker -- push"
+fi
+
 IMAGE="$1"
 GIT_REV=$(git log -n 1 --pretty=format:%h -- ${IMAGE})
 TAG="${GIT_REV}"
@@ -17,15 +25,15 @@ TAG="${GIT_REV}"
 if [ "${IMAGE}" == "user" ]; then
     USER_IMAGE_TYPE="${2}"
     DOCKERFILE="Dockerfile.${USER_IMAGE_TYPE}"
-    IMAGE_SPEC="gcr.io/data-8/jupyterhub-k8s-${IMAGE}-${USER_IMAGE_TYPE}:${TAG}"
+    IMAGE_SPEC="${DOCKER_REPO}/jupyterhub-k8s-${IMAGE}-${USER_IMAGE_TYPE}:${TAG}"
 else
     DOCKERFILE="Dockerfile"
-    IMAGE_SPEC="gcr.io/data-8/jupyterhub-k8s-${IMAGE}:${TAG}"
+    IMAGE_SPEC="${DOCKER_REPO}/jupyterhub-k8s-${IMAGE}:${TAG}"
 fi
 
 cd ${IMAGE}
 docker build -t ${IMAGE_SPEC} -f ${DOCKERFILE} .
-gcloud docker -- push ${IMAGE_SPEC}
+${DOCKER_PUSH} ${IMAGE_SPEC}
 
 echo "Pushed ${IMAGE_SPEC}"
 
