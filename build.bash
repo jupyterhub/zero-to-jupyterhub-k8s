@@ -15,7 +15,7 @@ if ! git diff-index --quiet HEAD; then
     exit 1
 fi
 
-kubectl cluster-info | grep -q azure
+kubectl cluster-info | grep -q azure | true
 if [ ${PIPESTATUS[1]} -eq 0 ]; then
 	DOCKER_REPO="data8-on.azurecr.io/data-8"
 	DOCKER_PUSH="docker push"
