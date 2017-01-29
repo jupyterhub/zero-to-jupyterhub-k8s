@@ -2,6 +2,11 @@
 # Builds and pushes a given image to gcr.io + all nodes in current kubectl context
 set -e
 
+if [ -z "$1" ]; then
+	echo "Usage: $0 {hub,user {base,datahub,prob140,stat28}}"
+	exit 1
+fi
+
 # Bail if we're on a dirty git tree
 if ! git diff-index --quiet HEAD; then
     echo "You have uncommited changes. Please commit them before building and populating"
