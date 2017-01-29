@@ -42,7 +42,7 @@ R_REPO_HTTPS=${R_REPO//http:/https:}
 echo "options(repos = list(CRAN = '${R_REPO_HTTPS}'))" >> /etc/R/Rprofile.site
 
 # Install R and irkernel
-Rscript -e "install.packages(c('crayon', 'formatR', 'devtools', 'uuid', 'rmarkdown', 'repr', 'IRdisplay', 'pbdZMQ'), repos='${R_REPO}')"
+Rscript -e "install.packages(c('crayon', 'formatR', 'devtools', 'uuid', 'rmarkdown', 'repr', 'IRdisplay', 'pbdZMQ', 'vioplot', 'gtools', 'zoo', 'alluvial', 'gpairs'), repos='${R_REPO}')"
 Rscript -e "devtools::install_github('IRkernel/IRkernel')"
 Rscript -e "IRkernel::installspec(FALSE)"
 
