@@ -112,6 +112,11 @@ c.Authenticator.admin_users = {
     'dibya.ghosh',
     'maxwelljweinstein',
     'zhang.j',
+    # cogneuro
+    'choldgraf',
+    'fatma',
+    'lwehbe',
+    'mark.lescroart',
     #
     'arvindiyengar',
     'vinitra',
