@@ -54,7 +54,7 @@ spec:
     spec:
       containers:
       - name: proxy-container
-        image: yuvipanda/nchp:v1
+        image: image: {{ .Values.proxy.image.name }}:{{ .Values.proxy.image.tag }}
         env:
           - name: CONFIGPROXY_AUTH_TOKEN
             valueFrom:
