@@ -14,7 +14,7 @@ RUN apt-get install --yes --no-install-recommends -t jessie-backports\
     lua-cjson
 
 RUN pip3 install jinja2 traitlets
-RUN pip3 install git+https://github.com/yuvipanda/jupyterhub-nginx-chp.git@master#egg=nchp
+RUN pip3 install git+https://github.com/yuvipanda/jupyterhub-nginx-chp.git@a3f5ab3#egg=nchp
 
 EXPOSE 8000
 
