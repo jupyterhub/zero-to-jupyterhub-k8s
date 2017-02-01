@@ -1,5 +1,4 @@
 import os
-import json
 import sys
 
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
@@ -50,12 +49,16 @@ c.KubeSpawner.volume_mounts = [
 
 # Shared data mounts - used to mount shared data (across all
 # students) from pre-prepared PVCs to students.
-# The env variable should be a JSON dictionary
-# The key should be the subpath under /data/shared they should
-# be mounted on, and the value should be name of PVC to mount
+# The env variable should be a string of the following form:
+# {mount_name_1}={pvc_name_1};{mount_name_2}={pvc_name_2}; etc
+# This will mount the given PVC under /data/project/{mount_name}
+# This is using this custom format and not JSON because
+# rendering JSON is a PITA from go templates
 shared_data_mounts_str = os.environ.get('SHARED_DATA_MOUNTS', None)
 if shared_data_mounts_str:
-    shared_data_mounts = json.parse(shared_data_mounts_str)
+    shared_data_mounts = dict([
+        m.split('=') for m in shared_data_mounts_str.split(';')
+        if m])
     c.KubeSpawner.volumes += [{
         'name': 'shared-data-{name}'.format(name=name),
         'persistentVolumeClaim': {
