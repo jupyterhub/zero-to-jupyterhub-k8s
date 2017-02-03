@@ -59,16 +59,15 @@ if shared_data_mounts_str:
     shared_data_mounts = dict([
         m.split('=') for m in shared_data_mounts_str.split(';')
         if m])
-    c.KubeSpawner.volumes += [{
-        'name': 'shared-data-{name}'.format(name=name),
-        'persistentVolumeClaim': {
-            'claimName': claimName
-        }
-    } for name, claimName in shared_data_mounts.items()]
-    c.KubeSpawner.volume_mounts += [{
-        'mountPath': '/data/shared/{name}'.format(name=name),
-        'name': 'shared-data-{name}'.format(name=name),
-    }]
+    for name, claimName in shared_data_mounts.items():
+        c.KubeSpawner.volumes += [{
+            'name': 'shared-data-{name}'.format(name=name),
+            'persistentVolumeClaim': { 'claimName': claimName }
+        }]
+        c.KubeSpawner.volume_mounts += [{
+            'name': 'shared-data-{name}'.format(name=name),
+            'mountPath': '/data/shared/{name}'.format(name=name),
+        }]
 
 # Gives spawned containers access to the API of the hub
 c.KubeSpawner.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
