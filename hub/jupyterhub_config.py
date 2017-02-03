@@ -64,11 +64,15 @@ if shared_data_mounts_str:
     for name, claimName in shared_data_mounts.items():
         c.KubeSpawner.volumes += [{
             'name': 'shared-data-{name}'.format(name=name),
-            'persistentVolumeClaim': { 'claimName': claimName }
+            'persistentVolumeClaim': {
+                'claimName': claimName,
+                'readOnly': True
+            }
         }]
         c.KubeSpawner.volume_mounts += [{
             'mountPath': '/data/shared/{name}'.format(name=name),
             'name': 'shared-data-{name}'.format(name=name),
+            'readOnly': True
         }]
 
 # Gives spawned containers access to the API of the hub
