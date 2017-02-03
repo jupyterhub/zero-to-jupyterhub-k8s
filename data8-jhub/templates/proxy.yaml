@@ -54,7 +54,7 @@ spec:
     spec:
       containers:
       - name: proxy-container
-        image: gcr.io/data-8/jupyterhub-k8s-proxy:bb74350
+        image: "gcr.io/data-8/jupyterhub-k8s-proxy:bb74350"
         env:
           - name: CONFIGPROXY_AUTH_TOKEN
             valueFrom:
