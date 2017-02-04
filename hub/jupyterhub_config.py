@@ -61,17 +61,18 @@ if shared_data_mounts_str:
     shared_data_mounts = dict([
         m.split('=') for m in shared_data_mounts_str.split(';')
         if m])
-    for name, claimName in shared_data_mounts.items():
+    for shareName, diskName in shared_data_mounts.items():
         c.KubeSpawner.volumes += [{
-            'name': 'shared-data-{name}'.format(name=name),
-            'persistentVolumeClaim': {
-                'claimName': claimName,
+            'name': 'shared-data-{name}'.format(name=shareName),
+            'gcePersistentDisk': {
+                'fsType': 'ext4',
+                'pdName': diskName,
                 'readOnly': True
             }
         }]
         c.KubeSpawner.volume_mounts += [{
-            'mountPath': '/data/shared/{name}'.format(name=name),
-            'name': 'shared-data-{name}'.format(name=name),
+            'mountPath': '/data/shared/{name}'.format(name=shareName),
+            'name': 'shared-data-{name}'.format(name=shareName),
             'readOnly': True
         }]
 
