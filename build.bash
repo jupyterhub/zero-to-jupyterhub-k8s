@@ -43,4 +43,7 @@ ${DOCKER_PUSH} ${IMAGE_SPEC}
 
 echo "Pushed ${IMAGE_SPEC}"
 
-echo "Run ./populate.bash <prod/dev/playground> ${IMAGE_SPEC} to populate all nodes in current context with this image"
+echo "To populate all nodes in current context with this image, run:"
+_cmd="  ./populate.bash %-4s %s\n"
+printf "${_cmd}" "dev"  "${IMAGE_SPEC}"
+printf "${_cmd}" "prod" "${IMAGE_SPEC}"
