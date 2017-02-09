@@ -186,5 +186,6 @@ c.Authenticator.admin_users = {
     'samlau95',
     'yuvipanda',
     'rylo',
-    'peterkangveerman'
+    'peterkangveerman',
+    'scf-stat',
 }
