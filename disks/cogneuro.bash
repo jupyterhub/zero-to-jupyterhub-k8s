@@ -2,7 +2,6 @@
 
 set -e
 
-wget https://www.dropbox.com/s/2ccxfwg6t5d2rfw/data.zip
-unzip data.zip
-rm -rf __MACOSX/
-rm data.zip
+wget https://www.dropbox.com/s/qyd48wpdxc6x1xo/cogneuro88data.tar.gz
+tar -xvf cogneuro88data.tar.gz
+rm cogneuro88data.tar.gz
