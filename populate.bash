@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-CONTEXT_PREFIX=gke_data-8_us-central1-a_
+CONTEXT_PREFIX=$(jq -r '.populateSettings.contextPrefix' 'docker-settings.json')
 
 CONTEXT="${CONTEXT_PREFIX}${1}"
 IMAGE_SPEC="${2}"

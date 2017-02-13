@@ -2,8 +2,10 @@
 # Builds and pushes a given image to gcr.io + all nodes in current kubectl context
 set -e
 
+IMAGE_TYPES=$(jq -r '.buildSettings.imageTypes' 'docker-settings.json')
+
 if [ -z "$1" ]; then
-	echo "Usage: $0 {hub,user {base,datahub,prob140,stat28}}"
+	echo "Usage: $0 {hub,user,proxy {base${IMAGE_TYPES}}}"
 	exit 1
 fi
 
@@ -17,10 +19,10 @@ fi
 
 kubectl cluster-info | grep -q azure | true
 if [ ${PIPESTATUS[1]} -eq 0 ]; then
-	DOCKER_REPO="data8-on.azurecr.io/data-8"
+	DOCKER_REPO=$(jq -r '.buildSettings.dockerRepo.azure' 'docker-settings.json')
 	DOCKER_PUSH="docker push"
 else
-	DOCKER_REPO="gcr.io/data-8"
+	DOCKER_REPO=$(jq -r '.buildSettings.dockerRepo.gcloud' 'docker-settings.json')
 	DOCKER_PUSH="gcloud docker -- push"
 fi
 
