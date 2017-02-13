@@ -1,0 +1,9 @@
+{
+    "buildSettings": {
+        "dockerRepo": {
+            "gcloud": "gcr.io/data-8",
+            "azure": "data8-on.azurecr.io/data-8"
+        },
+        "imageTypes": ",datahub,prob140,stat28"
+    }
+}
