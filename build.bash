@@ -5,7 +5,7 @@ set -e
 IMAGE_TYPES=$(jq -r '.buildSettings.imageTypes' 'docker-settings.json')
 
 if [ -z "$1" ]; then
-	echo "Usage: $0 {hub,user {base${IMAGE_TYPES}}}"
+	echo "Usage: $0 {hub,user,proxy {base${IMAGE_TYPES}}}"
 	exit 1
 fi
 
