@@ -54,7 +54,7 @@ spec:
     spec:
       containers:
       - name: proxy-container
-        image: "gcr.io/data-8/jupyterhub-k8s-proxy:bb74350"
+        image: {{ .Values.proxy.image.name }}:{{ .Values.proxy.image.tag }}
         env:
           - name: CONFIGPROXY_AUTH_TOKEN
             valueFrom:
@@ -66,4 +66,3 @@ spec:
             name: proxy-public
           - containerPort: 8001
             name: api
-
