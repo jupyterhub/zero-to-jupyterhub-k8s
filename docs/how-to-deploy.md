@@ -11,7 +11,7 @@ Go back to your dashboard in the GCP console. Click `Activate Google Cloud Shell
 In the new terminal window that popped up, clone the jupyterhub-k8s repository.
 
 ```
-$ git clone https://github.com/data-8/jupyterhub-k8s.github.com
+$ git clone https://github.com/data-8/jupyterhub-k8s
 ```
 
 Set the zone.
