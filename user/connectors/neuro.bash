@@ -14,5 +14,6 @@ ${CONDA_DIR}/bin/pip --no-cache-dir install \
 # Installs the cortex library
 git clone https://github.com/gallantlab/pycortex
 cd pycortex
-git checkout data8
+# commit on data8 branch
+git checkout d570713
 ${CONDA_DIR}/bin/python setup.py install
