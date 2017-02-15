@@ -26,7 +26,7 @@ ${CONDA_DIR}/bin/jupyter serverextension enable --sys-prefix --py nbinteract
 ${CONDA_DIR}/bin/jupyter nbextension install --sys-prefix --py nbinteract
 ${CONDA_DIR}/bin/jupyter nbextension enable --sys-prefix --py nbinteract
 
-${CONDA_DIR}/bin/pip install git+https://github.com/data-8/nbgdrive.git
+${CONDA_DIR}/bin/pip install git+https://github.com/data-8/nbgdrive.git@3a98798
 ${CONDA_DIR}/bin/jupyter serverextension enable --sys-prefix --py nbgdrive
 ${CONDA_DIR}/bin/jupyter nbextension install --sys-prefix --py nbgdrive
 ${CONDA_DIR}/bin/jupyter nbextension enable --sys-prefix --py nbgdrive
