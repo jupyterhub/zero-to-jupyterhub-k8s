@@ -22,7 +22,7 @@ def getNodes():
         print(str(e))
         sys.exit(1)
 
-def setSchedulable(name, value, url=generateUrl(API_HOST, API_PORT) + "nodes/"):
+def setUnschedulable(name, value=True, url=generateUrl(API_HOST, API_PORT) + "nodes/"):
     """Set the spec key 'unschedulable'"""
     url += name + '/'
     newNode = {
@@ -44,3 +44,22 @@ def setSchedulable(name, value, url=generateUrl(API_HOST, API_PORT) + "nodes/"):
             return msg["message"]
         except Exception:
             return "Error"
+        
+def numPods(node):
+    """Return number of pods running on the node,
+    return -1 if an error occurred"""
+    # TODO: What is there is a permanent pod, e.g.
+    # hub / proxy?
+    
+    try:
+        return len(node["status"]["images"])
+    except Exception:
+        return -1
+
+def getName(node):
+    """Return name of a node, return '' if
+    an error occurred """
+    try:
+        return len(node["metadata"]["name"])
+    except Exception:
+        return ''
