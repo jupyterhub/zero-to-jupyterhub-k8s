@@ -35,7 +35,11 @@ def setUnschedulable(name, value=True, url=generateUrl(API_HOST, API_PORT) + "no
                    "unschedulable": value
                 }
             }
-    r = requests.patch(url, json = newNode)
+
+    # PATCH header required by Kubernetes
+    patch_header = {"Content-Type": "application/strategic-merge-patch+json"}
+
+    r = requests.patch(url, json = newNode, headers = patch_header)
     if r.status == 200:
         return ""
     else:
@@ -43,7 +47,7 @@ def setUnschedulable(name, value=True, url=generateUrl(API_HOST, API_PORT) + "no
             msg = json.loads(r.text)
             return msg["message"]
         except Exception:
-            return "Error"
+            return "Return type was " + str(r.status)
         
 def numPods(node):
     """Return number of pods running on the node,
