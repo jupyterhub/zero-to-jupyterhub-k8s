@@ -2,16 +2,16 @@
 
 ## Google Cloud Engine ##
 
-Log into the gcloud console: [console.cloud.google.com](console.cloud.google.com/)
+Log into the gcloud console at [console.cloud.google.com](console.cloud.google.com/)
 
 Create a cluster. Go to `Container Engine` > `Container clusters` > `+ Create Cluster`. Fill out the required information and make sure you know how many instances you will need and what the memory and cpu requirements will be.
 
 Go back to your dashboard in the GCP console. Click `Activate Google Cloud Shell` in the upper right-hand corner. It is an icon that looks like a small terminal.
 
-In the new terminal window that popped up, clone the jupyterhub-k8s repository.
+In the new terminal window, clone the jupyterhub-k8s repository.
 
 ```
-$ git clone https://github.com/data-8/jupyterhub-k8s
+git clone https://github.com/data-8/jupyterhub-k8s
 ```
 
 Set the zone.
@@ -42,12 +42,12 @@ Here is an example:
 }
 ```
 
-Run Build
+Run the build script.
 ```
-$ ./build.bash <'hub' or 'user' or 'proxy'> <image type>
+./build.bash [ hub | proxy | user user_type ]
 ```
 
-Run the populate command that build.bash spits out and keep track of the image tag that it lists at the end of the populate command string.
+Then enter the populate.bash commands printed by build.bash. Note the tag of the image that gets populated.
 
 Edit the `helm-chart/values.yaml` file where it says `# Must be overridden`. Set the image tags to the tags of the docker images you just built using `./build.bash`. Also make sure to set the correct docker images. You may also adjust some of the other settings in the `values.yaml` file if necessary.
 
@@ -68,5 +68,3 @@ helm --kube-context=<your context prefix><'dev' or 'prod'> upgrade <release name
 ```
 
 Congragulations! You just deployed your own jupyterhub cluster using kubernetes! :D
-
-
