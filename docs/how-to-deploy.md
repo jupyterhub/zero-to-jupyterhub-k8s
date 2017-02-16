@@ -51,9 +51,9 @@ Then enter the populate.bash commands printed by build.bash. Note the tag of the
 
 Edit the `helm-chart/values.yaml` file where it says `# Must be overridden`. Set the image tags to the tags of the docker images you just built using `./build.bash`. Also make sure to set the correct docker images. You may also adjust some of the other settings in the `values.yaml` file if necessary.
 
-[Install helm](https://github.com/kubernetes/helm/blob/master/docs/install.md)
+Install [helm](https://github.com/kubernetes/helm/blob/master/docs/install.md).
 
-Run helm
+Run helm.
 ```
 helm init
 
