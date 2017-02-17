@@ -5,7 +5,7 @@
 import requests
 import json
 import sys
-from scale.settings import API_HOST, API_PORT
+from settings import API_HOST, API_PORT
 
 def generateUrl(host, port):
     return "http://" + host + ':' + port + "/api/v1/"
@@ -17,7 +17,7 @@ def getNodes():
     assert r.status_code == 200
     try:
         nodesList = json.loads(r.text)
-        return nodesList[u'items']
+        return nodesList['items']
     except Exception as e:
         print(str(e))
         sys.exit(1)
@@ -40,7 +40,7 @@ def setUnschedulable(name, value=True, url=generateUrl(API_HOST, API_PORT) + "no
     patch_header = {"Content-Type": "application/strategic-merge-patch+json"}
 
     r = requests.patch(url, json = newNode, headers = patch_header)
-    if r.status == 200:
+    if r.status_code == 200:
         return ""
     else:
         try:
@@ -64,6 +64,13 @@ def getName(node):
     """Return name of a node, return '' if
     an error occurred """
     try:
-        return len(node["metadata"]["name"])
+        return node["metadata"]["name"]
     except Exception:
         return ''
+    
+def isUnschedulable(node):
+    """Return the value of 'Unschedulable' of a node"""
+    if "unschedulable" in node["spec"]:
+        return node["spec"]["unschedulable"]
+    else:
+        return False
