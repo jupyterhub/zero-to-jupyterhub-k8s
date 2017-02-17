@@ -9,29 +9,76 @@ This repo contains the Kubernetes config, container images, and docs for Data
 Getting Started
 -------
 
-Clone this repo:
+### Google Cloud Engine ###
 
-    git clone https://github.com/data-8/jupyterhub-k8s
+Log into the gcloud console at [console.cloud.google.com](console.cloud.google.com/)
 
-Set up a Kubernetes cluster using Google Container Engine. Other cloud
-providers are not currently supported but will be before release.
+Create a cluster. Go to `Container Engine` > `Container clusters` > `+ Create Cluster`. Fill out the required information and make sure you know how many instances you will need and what the memory and cpu requirements will be.
 
-Configure [`kubectl`][kubectl] to point to your cluster. This is automatically
-done when using `minikube` or the `gcloud` CLI. Verify that
+Go back to your dashboard in the GCP console. Click `Activate Google Cloud Shell` in the upper right-hand corner. It is an icon that looks like a small terminal.
 
-    kubectl cluster-info
+In the new terminal window, clone the jupyterhub-k8s repository.
 
-Returns output that looks like:
+```
+git clone https://github.com/data-8/jupyterhub-k8s
+```
 
-    Kubernetes master is running at https://146.148.80.79
+Set the zone.
+```
+gcloud config set compute/zone <your zone>
+```
 
-Then, from the project root, run
+Get credentials for your cluster
+```
+gcloud container clusters get-credentials dev
+```
 
-    kubectl apply -f manifest.yaml
+Edit the docker-settings.json file. Set the docker repo name corresponding to your cloud provider. Set the image types. You can leave this blank if you are only using the base image. Set the context prefix to whatever you want.
 
-That deploys JupyterHub!
+Here is an example:
+```
+{
+    "buildSettings": {
+        "dockerRepo": {
+            "gcloud": "gcr.io/data-8",
+            "azure": "data8-on.azurecr.io/data-8"
+        },
+        "imageTypes": ",datahub,prob140,stat28"
+    },
+    "populateSettings": {
+        "contextPrefix": "gke_data-8_us-central1-a_"
+    }
+}
+```
 
-[kubectl]: http://kubernetes.io/docs/user-guide/prereqs/
+Run the build script.
+```
+./build.bash [ hub | proxy | user user_type ]
+```
+
+Then enter the populate.bash commands printed by build.bash. Note the tag of the image that gets populated.
+
+Edit the `helm-chart/values.yaml` file where it says `# Must be overridden`. Set the image tags to the tags of the docker images you just built using `./build.bash`. Also make sure to set the correct docker images. You may also adjust some of the other settings in the `values.yaml` file if necessary.
+
+Install [helm](https://github.com/kubernetes/helm/blob/master/docs/install.md).
+
+Run helm.
+```
+helm init
+
+helm --kube-context=<your context prefix><'dev' or 'prod'> install ./helm-chart
+```
+
+Later, when you want to change your deployment run:
+```
+helm list
+
+helm --kube-context=<your context prefix><'dev' or 'prod'> upgrade <release name> ./helm-chart
+```
+
+Congragulations! You just deployed your own jupyterhub cluster using kubernetes! :D
+
+
 
 File / Folder structure
 -------
