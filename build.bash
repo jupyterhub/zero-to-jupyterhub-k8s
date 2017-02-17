@@ -40,6 +40,10 @@ else
 fi
 
 cd ${IMAGE}
+if [ ! -f ${DOCKERFILE} ]; then
+	echo "No such file: ${IMAGE}/${DOCKERFILE}"
+	exit 1
+fi
 docker build -t ${IMAGE_SPEC} -f ${DOCKERFILE} .
 ${DOCKER_PUSH} ${IMAGE_SPEC}
 
