@@ -19,6 +19,7 @@ def getNodes():
         nodesList = json.loads(r.text)
         return nodesList['items']
     except Exception as e:
+        # FIXME: proper exception handling
         print(str(e))
         sys.exit(1)
 
@@ -56,7 +57,7 @@ def numPods(node):
     # hub / proxy?
     
     try:
-        return len(node["status"]["images"])
+        return len(node["status"]["volumesAttached"]) # FIXME: not an accurate indicator
     except Exception:
         return -1
 
