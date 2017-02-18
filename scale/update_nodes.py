@@ -23,6 +23,9 @@ def updateUnschedulable(number_unschedulable, nodes = getNodes(), f=__getBlockPr
     nodes are blocked, if possible; 
     return number of nodes newly blocked; negative
     value means the number of nodes unblocked"""
+    
+    assert number_unschedulable >= 0
+    
     schedulableNodes= []
     unschedulableNodes = []
     
@@ -42,9 +45,12 @@ def updateUnschedulable(number_unschedulable, nodes = getNodes(), f=__getBlockPr
     
     heapq.heapify(priority)
     for _ in range(number_unschedulable):
-        _, index = heapq.heappop(priority)
-        if nodes[index] in schedulableNodes:
-            toBlock.append(nodes[index])
+        if len(priority) > 0:
+            _, index = heapq.heappop(priority)
+            if nodes[index] in schedulableNodes:
+                toBlock.append(nodes[index])
+        else:
+            break
     for _, index in priority:
         if nodes[index] in unschedulableNodes:
             toUnBlock.append(nodes[index])
