@@ -2,15 +2,28 @@
 
 """Primary scale logic"""
 from workload import scheduleGoal, getCriticalNodeNames
-from utils import getNodes, getName
+from utils import getNodes, getName, setUnschedulable, shutdownSpecifiedNode
 from update_nodes import updateUnschedulable
 from gcloud_update import increaseNewGCloudNode
 
 SERVICE_PROVIDER = "gcloud"
 
 
-def shutdownEmptyNodes():
-    raise NotImplementedError
+def shutdownEmptyNodes(nodes=getNodes()):
+    """
+    1. Check all nodes for if they are empty
+    2. If so, first try to remove some node that is unschedulable
+    3. Else add to a list of references and set one of those to be unschedulable after
+    """
+    shutdownCandidates = []
+    for each in nodes:
+        if numPods(each) == 0:
+            if isUnschedulable(each):
+                return shutdownSpecifiedNode(each)
+            else:
+		shutdownCandidates.append(each)
+
+    return setUnschedulable(shutdownCandidates[0])
 
 
 def createNewNodes(newTotalNodes):
@@ -36,6 +49,6 @@ def scale():
     updateUnschedulable(goal, nodes)
 
     if len(criticalNodeNames) + goal > len(allNodes):
-        createNewNodes(len(criticalNodeNames) + goal)
-
+	createNewNodes(len(criticalNodeNames) + goal)
+    
     shutdownEmptyNodes()

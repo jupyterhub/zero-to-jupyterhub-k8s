@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#/usr/bin/python
 
 """Kubernetes API access functions"""
 
@@ -121,6 +121,19 @@ def setUnschedulable(name, value=True, url=generateUrl(API_HOST, API_PORT) + "no
         except Exception:
             return "Return type was " + str(r.status)
 
+def shutdownSpecifiedNode(name, url=generateUrl(API_HOST, API_PORT) + "nodes/"):
+    """Deletes the specified node"""
+    url = name + '/'
+    r = requests.delete(url)
+    
+    if r.status_code == 200:
+	return ""
+    else:
+	try:
+	    msg = json.loads(r.text)
+	    return msg["message"]
+        except Exception:
+	    return "Failed to shut down node named: %s\n" % name
 
 def getName(resource):
     """Return name of a node, return '' if

@@ -6,6 +6,7 @@
 # NAMESPACES = ['datahub', 'prob140', 'stat28']
 # CLUSTER = 'prod'
 # KUBECTL_CONTEXT = 'gke_data-8_us-central1-a_prod'
+GCLOUD_INSTANCE_GROUP = 'gke-dev-default-pool-dbd2a02e-grp'
 
 # Legacy scaling settings
 USERS_PER_NODE = 7
