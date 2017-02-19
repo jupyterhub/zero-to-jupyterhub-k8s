@@ -10,19 +10,13 @@ SERVICE_PROVIDER = "gcloud"
 
 def shutdownEmptyNodes(nodes=getNodes()):
     """
-    1. Check all nodes for if they are empty
-    2. If so, first try to remove some node that is unschedulable
-    3. Else add to a list of references and set one of those to be unschedulable after
+    Search through all nodes and shut down those that are unschedulable
+    and devoid of pods
     """
-    shutdownCandidates = []
     for each in nodes:
-        if numPods(each) == 0:
+        if numPods(each) == 0 and isUnschedulable(each):
             if isUnschedulable(each):
-                return shutdownSpecifiedNode(each)
-            else:
-		shutdownCandidates.append(each)
-
-    return setUnschedulable(shutdownCandidates[0])
+                return shutdownSpecifiedNode(each['metadata']['name'])
 
 
 def createNewNodes(newTotalNodes):
