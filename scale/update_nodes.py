@@ -22,15 +22,25 @@ def __updateNodes(nodes, unschedulable):
     return updated
 
 
-def updateUnschedulable(number_unschedulable, nodes, calculatePriority=__getBlockPriority, additional_args=[getPods()]):
+def updateUnschedulable(number_unschedulable, nodes, calculatePriority=None):
     """Attempt to make sure given number of
     nodes are blocked, if possible; 
     return number of nodes newly blocked; negative
     value means the number of nodes unblocked
 
+    calculatePriority should be a function
+    that takes a node and return its priority value
+    for being blocked; smallest == highest
+    priority; default implementation uses numPods
+
     CRITICAL NODES SHOULD NOT BE INCLUDED IN THE INPUT LIST"""
 
     assert number_unschedulable >= 0
+
+    if calculatePriority == None:
+        # Default implementation based on numPods
+        pods = getPods()
+        calculatePriority = lambda node: numPods(node, pods)
 
     schedulableNodes = []
     unschedulableNodes = []
@@ -44,7 +54,7 @@ def updateUnschedulable(number_unschedulable, nodes, calculatePriority=__getBloc
         else:
             schedulableNodes.append(nodes[count])
         priority.append(
-            (calculatePriority(nodes[count], *additional_args), count))
+            (calculatePriority(nodes[count]), count))
 
     # Attempt to modify property based on priority
     toBlock = []
