@@ -20,6 +20,13 @@ OPTIMAL_UTILIZATION = 0.75
 MIN_NODES = 3
 MAX_NODES = 72
 
+CRITICAL_POD_TYPES = ["hub", "proxy", "statsd"]
+CRITICAL_NAMESPACES = []
+OMIT_POD_TYPES = ["cull"]
+OMIT_NAMESPACES = ["kube-system"]
+
 # API Access Proxy provided by kubectl
+# Need a kubectl proxy running at http://API_HOST:API_PORT/
+# See https://kubernetes.io/docs/user-guide/kubectl/kubectl_proxy/
 API_HOST = "localhost"
 API_PORT = "18080" 

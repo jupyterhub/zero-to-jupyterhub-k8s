@@ -1,12 +1,15 @@
 #!/usr/bin/python
-from utils import getNodes, numPods, setUnschedulable, getName, isUnschedulable
+from utils import getNodes, setUnschedulable, getName, isUnschedulable, getPods
+from workload import numPods
 import heapq
 
-def __getBlockPriority(node):
+__pods = None # Ugly fix to avoid numerous pods api calls
+
+def __getBlockPriority(node, pods = __pods):
     """Return the priority value of a node
     for being blocked; smallest == highest
     priority"""
-    return numPods(node)
+    return numPods(node, pods)
 
 def __updateNodes(nodes, unschedulable):
     """Update given list of nodes with given
@@ -32,12 +35,14 @@ def updateUnschedulable(number_unschedulable, nodes = getNodes(), f=__getBlockPr
     priority = []
     
     # Analyze nodes status and establish blocking priority
+    __pods = getPods()
     for count in range(len(nodes)):
         if isUnschedulable(nodes[count]):
             unschedulableNodes.append(nodes[count])
         else:
             schedulableNodes.append(nodes[count])
         priority.append((f(nodes[count]), count))
+    __pods = None
     
     # Attempt to modify property based on priority
     toBlock = []

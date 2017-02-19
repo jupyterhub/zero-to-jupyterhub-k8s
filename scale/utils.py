@@ -22,6 +22,43 @@ def getNodes():
         # FIXME: proper exception handling
         print(str(e))
         sys.exit(1)
+        
+def getPods():
+    """Return a list of v1.Pod dict"""
+    r = requests.get(generateUrl(API_HOST, API_PORT) + 
+                     "pods")
+    assert r.status_code == 200
+    try:
+        podsList = json.loads(r.text)
+        return podsList['items']
+    except Exception as e:
+        # FIXME: proper exception handling
+        print(str(e))
+        sys.exit(1)
+        
+def getPodHostName(pod):
+    """Return the host node name of the pod"""
+    # Based on Kubernetes API:
+    # https://kubernetes.io/docs/api-reference/v1/definitions/#_v1_podspec
+    # ** API is unclear the value of nodeName flag after the pod is scheduled
+    return pod["spec"]["nodeName"]
+
+def getPodName(pod):
+    """Return the name of the pod"""
+    return getName(pod)
+
+def getNodeName(node):
+    """Return the name of the node"""
+    return getName(node)
+
+def getPodNamesapce(pod):
+    """Return the namespace of the pod"""
+    return pod["metadata"]["namespace"]
+
+def getPodType(pod):
+    """Return the Type of the pod"""
+    # TODO: May not be the best approach
+    return getPodName(pod).split['-'][0]
 
 def setUnschedulable(name, value=True, url=generateUrl(API_HOST, API_PORT) + "nodes/"):
     """Set the spec key 'unschedulable'"""
@@ -49,23 +86,12 @@ def setUnschedulable(name, value=True, url=generateUrl(API_HOST, API_PORT) + "no
             return msg["message"]
         except Exception:
             return "Return type was " + str(r.status)
-        
-def numPods(node):
-    """Return number of pods running on the node,
-    return -1 if an error occurred"""
-    # TODO: What is there is a permanent pod, e.g.
-    # hub / proxy?
-    
-    try:
-        return len(node["status"]["volumesAttached"]) # FIXME: not an accurate indicator
-    except Exception:
-        return -1
 
-def getName(node):
+def getName(resource):
     """Return name of a node, return '' if
     an error occurred """
     try:
-        return node["metadata"]["name"]
+        return resource["metadata"]["name"]
     except Exception:
         return ''
     
