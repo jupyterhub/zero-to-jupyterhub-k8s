@@ -21,11 +21,13 @@ def __updateNodes(nodes, unschedulable):
         updated.append(getName(each))
     return updated
 
-def updateUnschedulable(number_unschedulable, nodes = getNodes(), f=__getBlockPriority):
+def updateUnschedulable(number_unschedulable, nodes, f=__getBlockPriority):
     """Attempt to make sure given number of
     nodes are blocked, if possible; 
     return number of nodes newly blocked; negative
-    value means the number of nodes unblocked"""
+    value means the number of nodes unblocked
+    
+    CRITICAL NODES SHOULD NOT BE INCLUDED IN THE INPUT LIST"""
     
     assert number_unschedulable >= 0
     

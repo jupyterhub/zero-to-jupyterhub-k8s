@@ -42,29 +42,37 @@ def getCapacity(node):
     # FIXME: not adjusted to different machine types
     return CAPACITY_PER_NODE
 
-def getNumSchedulable(nodes):
-    """Return number of nodes schedulable"""
+def getNumSchedulable(nodes, criticalNodeNames):
+    """Return number of nodes schedulable AND NOT
+    IN THE LIST OF CRITICAL NODES"""
     result = 0
     for each in nodes:
-        if not isUnschedulable(each):
+        if (not isUnschedulable(each)) and getName(each) not in criticalNodeNames:
             result += 1
     return result
 
 def getNumUnschedulable(nodes):
-    """Return number of nodes unschedulable"""
-    return len(nodes) - getNumSchedulable(nodes)
+    """Return number of nodes unschedulable
+    
+    ASSUMING CRITICAL NODES ARE SCHEDULABLE"""
+    result = 0
+    for each in nodes:
+        if isUnschedulable(each):
+            result += 1
+    return result
 
-def getEffectiveWorkload(nodes):
+def getEffectiveWorkload(nodes, criticalNodeNames):
     """Return effective workload in the given list of nodes"""
-    return getSumWorkload(nodes) / getNumSchedulable(nodes)
+    return getSumWorkload(nodes) / getNumSchedulable(nodes, criticalNodeNames)
 
 def scheduleGoal(nodes = getNodes()):
-    """Return the goal number of schedulable nodes given
-    the current situation"""
-    currentUtilization = getEffectiveWorkload(nodes) / getCapacity(nodes[0])
+    """Return the goal number of schedulable nodes IN ADDITION
+    TO CRITICAL NODES, given the current situation"""
+    criticalNodeNames = getCriticalNodeNames(getPods())
+    currentUtilization = getEffectiveWorkload(nodes, criticalNodeNames) / getCapacity(nodes[0])
     if currentUtilization >= MIN_UTILIZATION and currentUtilization <= MAX_UTILIZATION:
         # leave unchanged
-        return getNumSchedulable(nodes)
+        return getNumSchedulable(nodes, criticalNodeNames)
     else:
         # need to scale down
         requiredNum = round(getSumWorkload(nodes) / OPTIMAL_UTILIZATION / getCapacity(nodes[0]))
