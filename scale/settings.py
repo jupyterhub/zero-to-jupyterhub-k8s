@@ -23,7 +23,7 @@ MAX_NODES = 72
 CRITICAL_POD_TYPES = ["hub", "proxy", "statsd"]
 CRITICAL_NAMESPACES = []
 OMIT_POD_TYPES = ["cull"]
-OMIT_NAMESPACES = ["kube-system"]
+OMIT_NAMESPACES = ["kube-system", "default"]
 
 # API Access Proxy provided by kubectl
 # Context switch is determined by the kubectl proxy

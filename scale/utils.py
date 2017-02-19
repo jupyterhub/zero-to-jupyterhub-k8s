@@ -40,12 +40,37 @@ def getPods():
         sys.exit(1)
 
 
+def getNamespacesName():
+    """Return a list of namespaces in the form of string"""
+    r = requests.get(generateUrl(API_HOST, API_PORT) +
+                     "namespaces")
+    assert r.status_code == 200
+    result = []
+    try:
+        namespaces = json.loads(r.text)
+        for each in namespaces["items"]:
+            result.append(getName(each))
+        return result
+    except Exception as e:
+        # FIXME: proper exception handling
+        print(str(e))
+        sys.exit(1)
+
+
 def getPodHostName(pod):
     """Return the host node name of the pod"""
     # Based on Kubernetes API:
     # https://kubernetes.io/docs/api-reference/v1/definitions/#_v1_podspec
     # ** API is unclear the value of nodeName flag after the pod is scheduled
     return pod["spec"]["nodeName"]
+
+
+def getClusterName(node=getNodes()[0]):
+    """Return the (guessed) name of the cluster"""
+    nodeName = getName(node)
+    parts = nodeName.split('-')
+    assert len(parts) > 2
+    return parts[1]
 
 
 def getPodName(pod):

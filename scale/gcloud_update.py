@@ -6,18 +6,12 @@ import yaml
 # The following code is adapted from the legacy scale script:
 # scale-pods.py
 
-# MAIN
-NAMESPACES = ['datahub', 'prob140', 'stat28']
-USERS_PER_NODE = 7
-CLUSTER = 'prod'
-KUBECTL_CONTEXT = 'gke_data-8_us-central1-a_prod'
-POD_THRESHOLD = 0.9
-BUMP_INCREMENT = 2
+KUBECTL_CONTEXT_PREFIX = 'gke_data-8_us-central1-a_'
 
 
-def __get_hub_pod(namespace, prefix=b'hub-deployment'):
+def __get_hub_pod(namespace, cluster_name, prefix=b'hub-deployment'):
     '''Return the name of the hub pod.'''
-    cmd = ['kubectl', '--context=' + KUBECTL_CONTEXT,
+    cmd = ['kubectl', '--context=' + KUBECTL_CONTEXT_PREFIX + cluster_name,
            '--namespace=' + namespace, 'get', 'pods',
            '-o=custom-columns=NAME:.metadata.name']
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout
@@ -31,9 +25,9 @@ def __get_hub_pod(namespace, prefix=b'hub-deployment'):
     return ''
 
 
-def __get_singleuser_image(namespace, hub_pod):
+def __get_singleuser_image(namespace, hub_pod, cluster_name):
     '''Return the name:tag of the hub's singleuser image.'''
-    cmd = ['kubectl', '--context=' + KUBECTL_CONTEXT,
+    cmd = ['kubectl', '--context=' + KUBECTL_CONTEXT_PREFIX + cluster_name,
            '--namespace=' + namespace, 'get', 'pod', '-o=yaml',
            hub_pod]
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout
@@ -50,7 +44,7 @@ def __get_singleuser_image(namespace, hub_pod):
     return image
 
 
-def increaseNewGCloudNode(new_node_number):
+def increaseNewGCloudNode(new_node_number, cluster_name, namespaces):
     """ONLY FOR CREATING NEW NODES to ensure 
     new _node_number is running
 
@@ -58,7 +52,7 @@ def increaseNewGCloudNode(new_node_number):
     expected"""
 
     # call gcloud command to start new nodes in GCE
-    cmd = ['gcloud', '--quiet', 'container', 'clusters', 'resize', CLUSTER,
+    cmd = ['gcloud', '--quiet', 'container', 'clusters', 'resize', cluster_name,
            '--size', str(new_node_number)]
     print(' '.join(cmd))
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout
@@ -66,14 +60,14 @@ def increaseNewGCloudNode(new_node_number):
     p.close()
 
     # Populate latest singleuser image on all nodes
-    for ns in NAMESPACES:
-        hub_pod = __get_hub_pod(ns)
-        image = __get_singleuser_image(ns, hub_pod)
+    for ns in namespaces:
+        hub_pod = __get_hub_pod(ns, cluster_name)
+        image = __get_singleuser_image(ns, hub_pod, cluster_name)
         if not image:
             continue
 
         # TODO: Use absolute path is recommended
-        cmd = ['./populate.bash', CLUSTER, image]
+        cmd = ['./populate.bash', cluster_name, image]
         print(' '.join(cmd))
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout
         buf = p.read()
