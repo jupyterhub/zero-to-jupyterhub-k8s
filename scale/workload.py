@@ -1,10 +1,10 @@
 #!/usr/bin/python
-from utils import getNodes, isUnschedulable, getPods, getPodNamesapce,\
+from utils import getNodes, isUnschedulable, getPods, getPodNamesapce, \
     getPodType, getPodHostName, getName
 from settings import CAPACITY_PER_NODE, MIN_NODES, MAX_NODES, MAX_UTILIZATION, MIN_UTILIZATION, OPTIMAL_UTILIZATION
 from settings import OMIT_NAMESPACES, CRITICAL_POD_TYPES, OMIT_POD_TYPES, CRITICAL_NAMESPACES
 
-def numPods(node, pods = getPods()):
+def numPods(node, pods=getPods()):
     """Return the effective number of pods on
     the node"""
     result = 0
@@ -13,7 +13,7 @@ def numPods(node, pods = getPods()):
             result += 1
     return result
     
-def getCriticalNodeNames(pods = getPods()):
+def getCriticalNodeNames(pods=getPods()):
     """Return a list of nodes where critical pods
     are running"""
     result = []
@@ -23,7 +23,7 @@ def getCriticalNodeNames(pods = getPods()):
                 result.append(getPodHostName(each))
     return result
 
-def getWorkload(node, pods = getPods()):
+def getWorkload(node, pods=getPods()):
     """Return the workload on the given node"""
     return numPods(node, pods)
 
@@ -65,9 +65,10 @@ def getEffectiveWorkload(nodes, criticalNodeNames):
     """Return effective workload in the given list of nodes"""
     return getSumWorkload(nodes) / getNumSchedulable(nodes, criticalNodeNames)
 
-def scheduleGoal(nodes = getNodes()):
+def scheduleGoal():
     """Return the goal number of schedulable nodes IN ADDITION
     TO CRITICAL NODES, given the current situation"""
+    nodes = getNodes()
     criticalNodeNames = getCriticalNodeNames(getPods())
     currentUtilization = getEffectiveWorkload(nodes, criticalNodeNames) / getCapacity(nodes[0])
     if currentUtilization >= MIN_UTILIZATION and currentUtilization <= MAX_UTILIZATION:
@@ -76,8 +77,8 @@ def scheduleGoal(nodes = getNodes()):
     else:
         # need to scale down
         requiredNum = round(getSumWorkload(nodes) / OPTIMAL_UTILIZATION / getCapacity(nodes[0]))
-        if requiredNum < MIN_NODES:
-            requiredNum = MIN_NODES
-        if requiredNum > MAX_NODES:
-            requiredNum = MAX_NODES
+        if requiredNum < MIN_NODES - len(criticalNodeNames):
+            requiredNum = MIN_NODES - len(criticalNodeNames)
+        if requiredNum > MAX_NODES - len(criticalNodeNames):
+            requiredNum = MAX_NODES - len(criticalNodeNames)
         return requiredNum
