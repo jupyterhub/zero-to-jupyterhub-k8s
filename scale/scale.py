@@ -8,7 +8,6 @@ from gcloud_update import increaseNewGCloudNode
 
 SERVICE_PROVIDER = "gcloud"
 
-
 def shutdownEmptyNodes(nodes=getNodes()):
     """
     1. Check all nodes for if they are empty

@@ -5,7 +5,8 @@
 import requests
 import json
 import sys
-from settings import API_HOST, API_PORT
+import subprocess
+from settings import API_HOST, API_PORT, GCLOUD_INSTANCE_GROUP
 
 
 def generateUrl(host, port):
@@ -121,22 +122,16 @@ def setUnschedulable(name, value=True, url=generateUrl(API_HOST, API_PORT) + "no
         except Exception:
             return "Return type was " + str(r.status)
 
-def shutdownSpecifiedNode(name, url=generateUrl(API_HOST, API_PORT) + "nodes/"):
-    """Deletes the specified node"""
-    url = name + '/'
-    r = requests.delete(url)
+def shutdownSpecifiedNode(name):
+    """Deletes the specified node by calling the Google Cloud Engine"""
+    cmd = ['gcloud', 'compute', 'instance-groups', 'managed', 'delete-instances',
+	   GCLOUD_INSTANCE_GROUP, '--instances=' + name]
+    p = subprocess.Popen(' '.join(cmd), stdout=subprocess.PIPE, shell=True)
+    output, err = p.communicate()
+    return "Successfully removed node: %s\n" % name if not err else "Unable to remove node"
     
-    if r.status_code == 200:
-	return ""
-    else:
-	try:
-	    msg = json.loads(r.text)
-	    return msg["message"]
-        except Exception:
-	    return "Failed to shut down node named: %s\n" % name
-
 def getName(resource):
-    """Return name of a node, return '' if
+    """ Return name of a node, return '' if
     an error occurred """
     try:
         return resource["metadata"]["name"]
