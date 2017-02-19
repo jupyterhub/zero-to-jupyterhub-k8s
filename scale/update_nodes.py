@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from utils import getNodes, setUnschedulable, getName, isUnschedulable, getPods
+from utils import setUnschedulable, getName, isUnschedulable, getPods
 from workload import numPods
 import heapq
 
@@ -22,7 +22,7 @@ def __updateNodes(nodes, unschedulable):
     return updated
 
 
-def updateUnschedulable(number_unschedulable, nodes, calculatePriority=__getBlockPriority, additional_args=(getPods())):
+def updateUnschedulable(number_unschedulable, nodes, calculatePriority=__getBlockPriority, additional_args=[getPods()]):
     """Attempt to make sure given number of
     nodes are blocked, if possible; 
     return number of nodes newly blocked; negative
