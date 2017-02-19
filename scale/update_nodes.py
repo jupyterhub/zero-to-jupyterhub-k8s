@@ -24,7 +24,7 @@ def __updateNodes(nodes, unschedulable):
     return updated
 
 
-def updateUnschedulable(number_unschedulable, nodes, f=__getBlockPriority):
+def updateUnschedulable(number_unschedulable, nodes, calculatePriority=__getBlockPriority):
     """Attempt to make sure given number of
     nodes are blocked, if possible; 
     return number of nodes newly blocked; negative
@@ -46,7 +46,7 @@ def updateUnschedulable(number_unschedulable, nodes, f=__getBlockPriority):
             unschedulableNodes.append(nodes[count])
         else:
             schedulableNodes.append(nodes[count])
-        priority.append((f(nodes[count]), count))
+        priority.append((calculatePriority(nodes[count]), count))
     __pods = None
 
     # Attempt to modify property based on priority
