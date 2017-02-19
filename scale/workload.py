@@ -12,8 +12,8 @@ def numPods(node, pods=getPods()):
     for each in pods:
         if not(getPodNamesapce(each) in OMIT_NAMESPACES or
                getPodNamesapce(each) in CRITICAL_NAMESPACES or
-               getPodType(pods) in OMIT_POD_TYPES or
-               getPodType(pods) in CRITICAL_POD_TYPES
+               getPodType(each) in OMIT_POD_TYPES or
+               getPodType(each) in CRITICAL_POD_TYPES
                ) and getPodHostName(each) == getName(node):
             result += 1
     return result
@@ -24,7 +24,7 @@ def getCriticalNodeNames(pods=getPods()):
     are running"""
     result = []
     for each in pods:
-        if getPodNamesapce(each) in CRITICAL_NAMESPACES or getPodType(pods) in CRITICAL_POD_TYPES:
+        if getPodNamesapce(each) in CRITICAL_NAMESPACES or getPodType(each) in CRITICAL_POD_TYPES:
             if getPodHostName(each) not in result:
                 result.append(getPodHostName(each))
     return result
