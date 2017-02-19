@@ -2,10 +2,10 @@
 
 """ Shared settings and constant values across multiple scaling scripts"""
 
-# Constant context values used by Kubernetes
-NAMESPACES = ['datahub', 'prob140', 'stat28']
-CLUSTER = 'prod'
-KUBECTL_CONTEXT = 'gke_data-8_us-central1-a_prod'
+# Deprecated constant context values used by Kubernetes
+# NAMESPACES = ['datahub', 'prob140', 'stat28']
+# CLUSTER = 'prod'
+# KUBECTL_CONTEXT = 'gke_data-8_us-central1-a_prod'
 
 # Legacy scaling settings
 USERS_PER_NODE = 7
@@ -13,7 +13,7 @@ POD_THRESHOLD = 0.9
 BUMP_INCREMENT = 2
 
 # New scaling settings #TODO: discuss with BIDS
-CAPACITY_PER_NODE = USERS_PER_NODE #FIXME: should be determined dynamically
+CAPACITY_PER_NODE = USERS_PER_NODE  # FIXME: should be determined dynamically
 MIN_UTILIZATION = 0.65
 MAX_UTILIZATION = 0.85
 OPTIMAL_UTILIZATION = 0.75
@@ -26,7 +26,8 @@ OMIT_POD_TYPES = ["cull"]
 OMIT_NAMESPACES = ["kube-system"]
 
 # API Access Proxy provided by kubectl
+# Context switch is determined by the kubectl proxy
 # Need a kubectl proxy running at http://API_HOST:API_PORT/
 # See https://kubernetes.io/docs/user-guide/kubectl/kubectl_proxy/
 API_HOST = "localhost"
-API_PORT = "18080" 
+API_PORT = "18080"
