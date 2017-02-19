@@ -2,7 +2,7 @@
 
 """Primary scale logic"""
 from workload import scheduleGoal, getCriticalNodeNames
-from utils import getNodes, getName, setUnschedulable
+from utils import getNodes, getName, setUnschedulable, shutdownSpecifiedNode, getClusterName, getNamespacesName
 from update_nodes import updateUnschedulable
 from gcloud_update import increaseNewGCloudNode, shutdownSpecifiedNode
 
@@ -32,7 +32,8 @@ def createNewNodes(newTotalNodes):
     if newTotalNodes <= len(getNodes()):
         return
     if SERVICE_PROVIDER == "gcloud":
-        increaseNewGCloudNode(newTotalNodes)
+        increaseNewGCloudNode(
+            newTotalNodes, getClusterName(), getNamespacesName())
 
 
 def scale():
