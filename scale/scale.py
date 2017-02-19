@@ -2,9 +2,9 @@
 
 """Primary scale logic"""
 from workload import scheduleGoal, getCriticalNodeNames
-from utils import getNodes, getName, setUnschedulable, shutdownSpecifiedNode
+from utils import getNodes, getName, setUnschedulable
 from update_nodes import updateUnschedulable
-from gcloud_update import increaseNewGCloudNode
+from gcloud_update import increaseNewGCloudNode, shutdownSpecifiedNode
 
 SERVICE_PROVIDER = "gcloud"
 
