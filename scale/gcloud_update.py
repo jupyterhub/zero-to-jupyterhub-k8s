@@ -58,7 +58,7 @@ def increaseNewGCloudNode(new_node_number, cluster_name, namespaces):
 
         # FIXME: Use absolute path is recommended
         # TODO: Use native python scripts to populate
-        cmd = ['../populate.bash', cluster_name, image]
+        cmd = ['./populate.bash', cluster_name, image]
         print(' '.join(cmd))
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout
         buf = p.read()
