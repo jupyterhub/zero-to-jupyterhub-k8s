@@ -9,6 +9,8 @@ from utils import getNodes, isUnschedulable, getPods, getPodNamespace, \
 from settings import CAPACITY_PER_NODE, MIN_NODES, MAX_NODES, MAX_UTILIZATION, MIN_UTILIZATION, OPTIMAL_UTILIZATION
 from settings import OMIT_NAMESPACES, CRITICAL_POD_TYPES, OMIT_POD_TYPES, CRITICAL_NAMESPACES
 
+import logging
+
 
 def numPods(node, pods=getPods()):
     """Return the effective number of noncritical
@@ -90,18 +92,21 @@ def scheduleGoal():
     """Return the goal number of schedulable nodes IN ADDITION
     TO CRITICAL NODES, given the current situation"""
     nodes = getNodes()
+    logging.info("Current scheduling target: %f ~ %f" %
+                 (MIN_UTILIZATION, MAX_UTILIZATION))
     criticalNodeNames = getCriticalNodeNames(getPods())
     currentUtilization = getEffectiveWorkload(
         nodes, criticalNodeNames) / getCapacity(nodes[0])
+    logging.info("Current workload is %f" % currentUtilization)
     if currentUtilization >= MIN_UTILIZATION and currentUtilization <= MAX_UTILIZATION:
         # leave unchanged
         return getNumSchedulable(nodes, criticalNodeNames)
     else:
         # need to scale down
-        requiredNum = round(
-            getSumWorkload(nodes) / OPTIMAL_UTILIZATION / getCapacity(nodes[0]))
+        requiredNum = getSumWorkload(
+            nodes) / OPTIMAL_UTILIZATION / getCapacity(nodes[0])
         if requiredNum < MIN_NODES - len(criticalNodeNames):
             requiredNum = MIN_NODES - len(criticalNodeNames)
         if requiredNum > MAX_NODES - len(criticalNodeNames):
             requiredNum = MAX_NODES - len(criticalNodeNames)
-        return requiredNum
+        return round(requiredNum)

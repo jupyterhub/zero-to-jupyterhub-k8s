@@ -5,6 +5,7 @@
 from utils import setUnschedulable, getName, isUnschedulable, getPods
 from workload import numPods
 import heapq
+import logging
 
 
 def __getBlockPriority(node, pods):
@@ -39,6 +40,9 @@ def updateUnschedulable(number_unschedulable, nodes, calculatePriority=None):
     CRITICAL NODES SHOULD NOT BE INCLUDED IN THE INPUT LIST"""
 
     assert number_unschedulable >= 0
+
+    logging.info(
+        "Updating unschedulable flags to ensure %i nodes are unschedulable" % number_unschedulable)
 
     if calculatePriority == None:
         # Default implementation based on numPods
@@ -76,6 +80,8 @@ def updateUnschedulable(number_unschedulable, nodes, calculatePriority=None):
             toUnBlock.append(nodes[index])
 
     __updateNodes(toBlock, True)
+    logging.debug("%i nodes newly blocked" % len(toBlock))
     __updateNodes(toUnBlock, False)
+    logging.debug("%i nodes newly unblocked" % len(toUnBlock))
 
     return len(toBlock) - len(toUnBlock)

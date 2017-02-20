@@ -5,6 +5,8 @@ from settings import GCLOUD_INSTANCE_GROUP
 from utils import getPods, getPodType, getPodNamespace,\
     get_singleuser_image_value
 
+import logging
+
 
 def shutdownSpecifiedNode(name):
     """Deletes the specified node by calling the Google Cloud Engine"""
@@ -12,6 +14,8 @@ def shutdownSpecifiedNode(name):
            GCLOUD_INSTANCE_GROUP, '--instances=' + name]
     p = subprocess.Popen(' '.join(cmd), stdout=subprocess.PIPE, shell=True)
     output, err = p.communicate()
+
+    # TODO: Jeff pls find a proper way to log the below message
     return "Successfully removed node: %s\n" % name if not err else "Unable to remove node"
 
 # The following code is adapted from the legacy scale script:
