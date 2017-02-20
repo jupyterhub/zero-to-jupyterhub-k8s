@@ -4,7 +4,9 @@
 
 from kubernetes import client, config
 #import requests
+import logging
 
+logging.getLogger("kubernetes").setLevel(logging.WARNING)
 config.load_kube_config()
 v1 = client.CoreV1Api()
 
