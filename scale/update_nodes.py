@@ -2,8 +2,8 @@
 
 """Execute changes to the Kubernetes cluster"""
 
-from utils import setUnschedulable, getName, isUnschedulable, getPods
-from workload import numPods
+from utils import set_unschedulable, get_name, is_unschedulable, get_pods
+from workload import get_pods_number_on_node
 import heapq
 import logging
 
@@ -12,7 +12,7 @@ def __getBlockPriority(node, pods):
     """Return the priority value of a node
     for being blocked; smallest == highest
     priority"""
-    return numPods(node, pods)
+    return get_pods_number_on_node(node, pods)
 
 
 def __updateNodes(nodes, unschedulable):
@@ -21,8 +21,8 @@ def __updateNodes(nodes, unschedulable):
 
     updated = []
     for each in nodes:
-        setUnschedulable(getName(each), unschedulable)
-        updated.append(getName(each))
+        set_unschedulable(get_name(each), unschedulable)
+        updated.append(get_name(each))
     return updated
 
 
@@ -35,7 +35,7 @@ def updateUnschedulable(number_unschedulable, nodes, calculatePriority=None):
     calculatePriority should be a function
     that takes a node and return its priority value
     for being blocked; smallest == highest
-    priority; default implementation uses numPods
+    priority; default implementation uses get_pods_number_on_node
 
     CRITICAL NODES SHOULD NOT BE INCLUDED IN THE INPUT LIST"""
 
@@ -47,9 +47,9 @@ def updateUnschedulable(number_unschedulable, nodes, calculatePriority=None):
         "Updating unschedulable flags to ensure %i nodes are unschedulable" % number_unschedulable)
 
     if calculatePriority == None:
-        # Default implementation based on numPods
-        pods = getPods()
-        calculatePriority = lambda node: numPods(node, pods)
+        # Default implementation based on get_pods_number_on_node
+        pods = get_pods()
+        calculatePriority = lambda node: get_pods_number_on_node(node, pods)
 
     schedulableNodes = []
     unschedulableNodes = []
@@ -58,7 +58,7 @@ def updateUnschedulable(number_unschedulable, nodes, calculatePriority=None):
 
     # Analyze nodes status and establish blocking priority
     for count in range(len(nodes)):
-        if isUnschedulable(nodes[count]):
+        if is_unschedulable(nodes[count]):
             unschedulableNodes.append(nodes[count])
         else:
             schedulableNodes.append(nodes[count])

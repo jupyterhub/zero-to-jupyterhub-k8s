@@ -2,13 +2,13 @@
 
 import subprocess
 from settings import GCLOUD_INSTANCE_GROUP, GCE_ZONE
-from utils import getPods, getPodType, getPodNamespace,\
+from utils import get_pods, get_pod_type, get_pod_namespace,\
     get_singleuser_image_value
 
 import logging
 
 
-def shutdownSpecifiedNode(name):
+def shutdown_specified_node(name):
     """Deletes the specified node by calling the Google Cloud Engine"""
     cmd = ['gcloud', 'compute', 'instance-groups', 'managed', 'delete-instances',
            GCLOUD_INSTANCE_GROUP, '--instances=' + name]
@@ -26,14 +26,14 @@ KUBECTL_CONTEXT_PREFIX = 'gke_data-8_us-central1-a_'
 
 def __get_hub_pod(namespace):
     '''Return the hub pod. Return None if not found.'''
-    pods = getPods()
+    pods = get_pods()
     for each in pods:
-        if getPodType(each) == 'hub' and getPodNamespace(each) == namespace:
+        if get_pod_type(each) == 'hub' and get_pod_namespace(each) == namespace:
             return each
     return None
 
 
-def increaseNewGCloudNode(new_node_number, cluster_name, namespaces):
+def increase_new_gcloud_node(new_node_number, cluster_name, namespaces):
     """ONLY FOR CREATING NEW NODES to ensure 
     new _node_number is running
 

@@ -11,13 +11,13 @@ import logging
 logging.getLogger("requests").setLevel(logging.WARNING)
 
 
-def generateUrl(host, port):
+def generate_url(host, port):
     return "http://" + host + ':' + port + "/api/v1/"
 
 
-def getNodes():
+def get_nodes():
     """Return a list of v1.Node dict"""
-    r = requests.get(generateUrl(API_HOST, API_PORT) +
+    r = requests.get(generate_url(API_HOST, API_PORT) +
                      "nodes")
     assert r.status_code == 200
     try:
@@ -29,9 +29,9 @@ def getNodes():
         sys.exit(1)
 
 
-def getPods():
+def get_pods():
     """Return a list of v1.Pod dict"""
-    r = requests.get(generateUrl(API_HOST, API_PORT) +
+    r = requests.get(generate_url(API_HOST, API_PORT) +
                      "pods")
     assert r.status_code == 200
     try:
@@ -43,16 +43,16 @@ def getPods():
         sys.exit(1)
 
 
-def getNamespacesName():
+def get_namespaces_name():
     """Return a list of namespaces in the form of string"""
-    r = requests.get(generateUrl(API_HOST, API_PORT) +
+    r = requests.get(generate_url(API_HOST, API_PORT) +
                      "namespaces")
     assert r.status_code == 200
     result = []
     try:
         namespaces = json.loads(r.text)
         for each in namespaces["items"]:
-            result.append(getName(each))
+            result.append(get_name(each))
         return result
     except Exception as e:
         # FIXME: proper exception handling
@@ -60,7 +60,7 @@ def getNamespacesName():
         sys.exit(1)
 
 
-def getPodHostName(pod):
+def get_pod_host_name(pod):
     """Return the host node name of the pod"""
     # Based on Kubernetes API:
     # https://kubernetes.io/docs/api-reference/v1/definitions/#_v1_podspec
@@ -68,36 +68,36 @@ def getPodHostName(pod):
     return pod["spec"]["nodeName"]
 
 
-def getClusterName(node=getNodes()[0]):
+def get_cluster_name(node=get_nodes()[0]):
     """Return the (guessed) name of the cluster"""
-    nodeName = getName(node)
+    nodeName = get_name(node)
     parts = nodeName.split('-')
     assert len(parts) > 2
     return parts[1]
 
 
-def getPodName(pod):
+def get_pod_name(pod):
     """Return the name of the pod"""
-    return getName(pod)
+    return get_name(pod)
 
 
-def getNodeName(node):
+def get_node_name(node):
     """Return the name of the node"""
-    return getName(node)
+    return get_name(node)
 
 
-def getPodNamespace(pod):
+def get_pod_namespace(pod):
     """Return the namespace of the pod"""
     return pod["metadata"]["namespace"]
 
 
-def getPodType(pod):
+def get_pod_type(pod):
     """Return the Type of the pod"""
     # TODO: May not be the best approach
-    return getPodName(pod).split('-')[0]
+    return get_pod_name(pod).split('-')[0]
 
 
-def setUnschedulable(name, value=True, url=generateUrl(API_HOST, API_PORT) + "nodes/"):
+def set_unschedulable(name, value=True, url=generate_url(API_HOST, API_PORT) + "nodes/"):
     """Set the spec key 'unschedulable'"""
     url += name + '/'
     newNode = {
@@ -125,7 +125,7 @@ def setUnschedulable(name, value=True, url=generateUrl(API_HOST, API_PORT) + "no
             return "Return type was " + str(r.status)
 
 
-def getName(resource):
+def get_name(resource):
     """ Return name of a node, return '' if
     an error occurred """
     try:
@@ -134,7 +134,7 @@ def getName(resource):
         return ''
 
 
-def isUnschedulable(node):
+def is_unschedulable(node):
     """Return the value of 'Unschedulable' of a node"""
     if "unschedulable" in node["spec"]:
         return node["spec"]["unschedulable"]
