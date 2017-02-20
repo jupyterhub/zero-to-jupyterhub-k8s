@@ -64,3 +64,6 @@ def scale():
 
     # CRITICAL NODES SHOULD NOT BE SHUTDOWN
     shutdownEmptyNodes(nodes)
+
+if __name__ == "__main__":
+    scale()
