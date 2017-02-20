@@ -40,6 +40,7 @@ def updateUnschedulable(number_unschedulable, nodes, calculatePriority=None):
     CRITICAL NODES SHOULD NOT BE INCLUDED IN THE INPUT LIST"""
 
     assert number_unschedulable >= 0
+    number_unschedulable = int(number_unschedulable)
 
     logging.info(
         "Updating unschedulable flags to ensure %i nodes are unschedulable" % number_unschedulable)

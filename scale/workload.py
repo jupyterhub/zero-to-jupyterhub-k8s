@@ -109,4 +109,4 @@ def scheduleGoal():
             requiredNum = MIN_NODES - len(criticalNodeNames)
         if requiredNum > MAX_NODES - len(criticalNodeNames):
             requiredNum = MAX_NODES - len(criticalNodeNames)
-        return round(requiredNum)
+        return int(round(requiredNum))

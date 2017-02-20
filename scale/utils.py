@@ -6,6 +6,9 @@ import requests
 import json
 import sys
 from settings import API_HOST, API_PORT
+import logging
+
+logging.getLogger("requests").setLevel(logging.WARNING)
 
 
 def generateUrl(host, port):
