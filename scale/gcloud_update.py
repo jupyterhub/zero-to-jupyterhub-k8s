@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 import subprocess
-import yaml
 from settings import GCLOUD_INSTANCE_GROUP
 from utils import getPods, getPodType, getPodNamespace,\
     get_singleuser_image_value
