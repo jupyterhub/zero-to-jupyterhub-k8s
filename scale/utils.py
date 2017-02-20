@@ -5,8 +5,7 @@
 import requests
 import json
 import sys
-import subprocess
-from settings import API_HOST, API_PORT, GCLOUD_INSTANCE_GROUP
+from settings import API_HOST, API_PORT
 
 
 def generateUrl(host, port):
@@ -121,6 +120,7 @@ def setUnschedulable(name, value=True, url=generateUrl(API_HOST, API_PORT) + "no
             return msg["message"]
         except Exception:
             return "Return type was " + str(r.status)
+
 
 def getName(resource):
     """ Return name of a node, return '' if

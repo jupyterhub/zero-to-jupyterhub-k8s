@@ -2,6 +2,7 @@
 
 import subprocess
 import yaml
+from settings import GCLOUD_INSTANCE_GROUP
 
 # The following code is adapted from the legacy scale script:
 # scale-pods.py
@@ -43,6 +44,7 @@ def __get_singleuser_image(namespace, hub_pod, cluster_name):
 
     return image
 
+
 def shutdownSpecifiedNode(name):
     """Deletes the specified node by calling the Google Cloud Engine"""
     cmd = ['gcloud', 'compute', 'instance-groups', 'managed', 'delete-instances',
@@ -50,6 +52,7 @@ def shutdownSpecifiedNode(name):
     p = subprocess.Popen(' '.join(cmd), stdout=subprocess.PIPE, shell=True)
     output, err = p.communicate()
     return "Successfully removed node: %s\n" % name if not err else "Unable to remove node"
+
 
 def increaseNewGCloudNode(new_node_number, cluster_name, namespaces):
     """ONLY FOR CREATING NEW NODES to ensure 

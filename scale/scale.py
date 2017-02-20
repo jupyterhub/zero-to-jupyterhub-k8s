@@ -1,12 +1,13 @@
 #!/usr/bin/python
 
 """Primary scale logic"""
-from workload import scheduleGoal, getCriticalNodeNames
-from utils import getNodes, getName, setUnschedulable, shutdownSpecifiedNode, getClusterName, getNamespacesName
+from workload import scheduleGoal, getCriticalNodeNames, numPods
+from utils import getNodes, getName, getClusterName, getNamespacesName, isUnschedulable
 from update_nodes import updateUnschedulable
 from gcloud_update import increaseNewGCloudNode, shutdownSpecifiedNode
 
 SERVICE_PROVIDER = "gcloud"
+
 
 def shutdownEmptyNodes(nodes=getNodes()):
     """
@@ -43,6 +44,6 @@ def scale():
     updateUnschedulable(goal, nodes)
 
     if len(criticalNodeNames) + goal > len(allNodes):
-	createNewNodes(len(criticalNodeNames) + goal)
-    
+        createNewNodes(len(criticalNodeNames) + goal)
+
     shutdownEmptyNodes()
