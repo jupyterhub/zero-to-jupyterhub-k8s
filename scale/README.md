@@ -1,16 +1,21 @@
 JupyterHub Kubernetes Autoscaler
 ===================================
 
-#### Definitions
+### Definitions
 
 **Critical Service=** Pods whose names start with `hub, proxy, statsd`
+
 **Omitted Namespace=** Default name space, `kube-system` namespace
+
 **Omitted Service=** Pods whose names start with `cull`
+
 **Workload=**  On a node, number of pods that do not belong to `Critical Service`, do not belong to `Omitted Service`, and do not belong to `Omitted Namespace`
+
 **Capacity=** Defined number of pods that can run on a single node; the value is 0 for nodes running `Critical Service` and nodes marked `Unschedulable`
+
 **Utilization=** On certain nodes, the ratio between the sum of `Workload` and the sum of `Capacity`
 
-#### Expected Behavior
+### Expected Behavior
 
 When `scale.py` is exected
 
@@ -20,19 +25,22 @@ When `scale.py` is exected
 3. Make sure there are at least **predefined minimum number** of nodes schedulable by removing flags or add new nodes.
 4. Shutdown all empty unschedulable nodes
 
-#### How to run
+### How to run
 
 0. Read `settings.py` to make sure you like the current settings.
 1. Ensure a kubectl proxy **running in the context you want to scale** is listening at `http://API_HOST:API_PORT/`, both values were defined in `settings.py`. By default, it is `http://localhost:18080`. See `https://kubernetes.io/docs/user-guide/kubectl/kubectl_proxy/` for details.
 2. Run `scale.py`, a one-time scaling should happen, and the script will quit.
 
-#### Requirements
+### Requirements
 
 Python 2 or 3, with `requests` installed;
+
 Kubernetes, with `kubectl` added in `$PATH`;
+
 Google Cloud SDK, with `gcloud` added in `$PATH`;
+
 Necessary privilege or credentials.
 
-#### Supported Service Providers
+### Supported Service Providers
 
 Only Google Cloud Platform is supported for booting and shutting down nodes for now.
