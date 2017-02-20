@@ -26,7 +26,7 @@ def shutdownEmptyNodes(nodes):
             shutdownSpecifiedNode(getName(each))
 
 
-def createNewNodes(newTotalNodes):
+def resizeForNewNodes(newTotalNodes):
     """create new nodes to match newTotalNodes required
     only for scaling up, no action taken if newTotalNodes
     is smaller than number of current nodes"""
@@ -55,12 +55,12 @@ def scale():
          goal)
     ))
 
-    updateUnschedulable(goal, nodes)
+    updateUnschedulable(len(nodes) - goal, nodes)
 
     if len(criticalNodeNames) + goal > len(allNodes):
-        logging.info("Creating additional %i nodes to satisfy the demand" % (
+        logging.info("Resize the cluster to %i nodes to satisfy the demand" % (
             len(criticalNodeNames) + goal))
-        createNewNodes(len(criticalNodeNames) + goal)
+        resizeForNewNodes(len(criticalNodeNames) + goal)
 
     # CRITICAL NODES SHOULD NOT BE SHUTDOWN
     shutdownEmptyNodes(nodes)

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import subprocess
-from settings import GCLOUD_INSTANCE_GROUP
+from settings import GCLOUD_INSTANCE_GROUP, GCE_ZONE
 from utils import getPods, getPodType, getPodNamespace,\
     get_singleuser_image_value
 
@@ -43,7 +43,7 @@ def increaseNewGCloudNode(new_node_number, cluster_name, namespaces):
     # call gcloud command to start new nodes in GCE
     # FIXME: Use GCloud API calls instead
     cmd = ['gcloud', '--quiet', 'container', 'clusters', 'resize', cluster_name,
-           '--size', str(new_node_number)]
+           '--size', str(new_node_number), '--zone', GCE_ZONE]
     print(' '.join(cmd))
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout
     buf = p.read()
