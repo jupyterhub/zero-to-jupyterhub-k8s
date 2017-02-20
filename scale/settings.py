@@ -10,7 +10,7 @@ GCLOUD_INSTANCE_GROUP = 'gke-dev-default-pool-dbd2a02e-grp'
 GCE_ZONE = "us-central1-a"
 
 # Legacy scaling settings
-#USERS_PER_NODE = 7
+USERS_PER_NODE = 7
 #POD_THRESHOLD = 0.9
 #BUMP_INCREMENT = 2
 

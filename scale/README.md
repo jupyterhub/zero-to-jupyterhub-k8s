@@ -3,17 +3,17 @@ JupyterHub Kubernetes Autoscaler
 
 ### Definitions
 
-**Critical Service=** Pods whose names start with `hub, proxy, statsd`
+**Critical Service =** Pods whose names start with `hub, proxy, statsd`
 
-**Omitted Namespace=** Default name space, `kube-system` namespace
+**Omitted Namespace =** Default name space, `kube-system` namespace
 
-**Omitted Service=** Pods whose names start with `cull`
+**Omitted Service =** Pods whose names start with `cull`
 
-**Workload=**  On a node, number of pods that do not belong to `Critical Service`, do not belong to `Omitted Service`, and do not belong to `Omitted Namespace`
+**Workload =**  On a node, number of pods that do not belong to `Critical Service`, do not belong to `Omitted Service`, and do not belong to `Omitted Namespace`
 
-**Capacity=** Defined number of pods that can run on a single node; the value is 0 for nodes running `Critical Service` and nodes marked `Unschedulable`
+**Capacity =** Defined number of pods that can run on a single node; the value is 0 for nodes running `Critical Service` and nodes marked `Unschedulable`
 
-**Utilization=** On certain nodes, the ratio between the sum of `Workload` and the sum of `Capacity`
+**Utilization =** On certain nodes, the ratio between the sum of `Workload` and the sum of `Capacity`
 
 ### Expected Behavior
 

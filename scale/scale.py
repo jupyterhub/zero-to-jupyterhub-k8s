@@ -8,7 +8,7 @@ from gcloud_update import increaseNewGCloudNode, shutdownSpecifiedNode
 
 import logging
 
-logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.DEBUG)
 
 SERVICE_PROVIDER = "gcloud"
 
