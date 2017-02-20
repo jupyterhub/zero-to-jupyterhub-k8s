@@ -52,13 +52,13 @@ def increaseNewGCloudNode(new_node_number, cluster_name, namespaces):
     # Populate latest singleuser image on all nodes
     for ns in namespaces:
         hub_pod = __get_hub_pod(ns)
-        image = get_singleuser_image_value(ns, hub_pod, cluster_name)
+        image = get_singleuser_image_value(hub_pod)
         if image == '':
             continue
 
         # FIXME: Use absolute path is recommended
         # TODO: Use native python scripts to populate
-        cmd = ['./populate.bash', cluster_name, image]
+        cmd = ['../populate.bash', cluster_name, image]
         print(' '.join(cmd))
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout
         buf = p.read()

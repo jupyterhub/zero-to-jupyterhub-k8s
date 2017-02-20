@@ -8,6 +8,8 @@ from gcloud_update import increaseNewGCloudNode, shutdownSpecifiedNode
 
 import logging
 
+logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
+
 SERVICE_PROVIDER = "gcloud"
 
 
@@ -39,13 +41,14 @@ def createNewNodes(newTotalNodes):
 def scale():
     """Update the nodes property based on scaling policy
     and create new nodes if necessary"""
-    goal = scheduleGoal()
+    allNodes = getNodes()
+    logging.info("Scaling on cluster %s" % getClusterName(allNodes[0]))
     nodes = []  # a list of nodes that are NOT critical
     criticalNodeNames = getCriticalNodeNames()
-    allNodes = getNodes()
     for each in allNodes:
         if getName(each) not in criticalNodeNames:
             nodes.append(each)
+    goal = scheduleGoal()
     logging.info("Total nodes in the cluster: %i" % len(allNodes))
     logging.info("Found %i critical nodes; recommending additional %i nodes for service" % (
         (len(allNodes) - len(nodes),
