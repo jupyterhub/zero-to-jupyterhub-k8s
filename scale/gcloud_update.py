@@ -3,7 +3,8 @@
 import subprocess
 import yaml
 from settings import GCLOUD_INSTANCE_GROUP
-from utils import getPods, getPodType, getPodNamespace, getName
+from utils import getPods, getPodType, getPodNamespace,\
+    get_singleuser_image_value
 
 
 def shutdownSpecifiedNode(name):
@@ -20,34 +21,13 @@ def shutdownSpecifiedNode(name):
 KUBECTL_CONTEXT_PREFIX = 'gke_data-8_us-central1-a_'
 
 
-# FIXME: replace kubectl with up to date API calls
 def __get_hub_pod(namespace):
-    '''Return the name of the hub pod. Return '' if not found.'''
+    '''Return the hub pod. Return None if not found.'''
     pods = getPods()
     for each in pods:
         if getPodType(each) == 'hub' and getPodNamespace(each) == namespace:
-            return getName(each)
-    return ''
-
-
-# FIXME: replace kubectl with up to date API calls
-def __get_singleuser_image(namespace, hub_pod, cluster_name):
-    '''Return the name:tag of the hub's singleuser image.'''
-    cmd = ['kubectl', '--context=' + KUBECTL_CONTEXT_PREFIX + cluster_name,
-           '--namespace=' + namespace, 'get', 'pod', '-o=yaml',
-           hub_pod]
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout
-    buf = p.read()
-    p.close()
-
-    description = yaml.load(buf)
-    image = ''
-    for env in description['spec']['containers'][0]['env']:
-        if env['name'] == 'SINGLEUSER_IMAGE':
-            image = env['value']
-            break
-
-    return image
+            return each
+    return None
 
 
 def increaseNewGCloudNode(new_node_number, cluster_name, namespaces):
@@ -69,8 +49,8 @@ def increaseNewGCloudNode(new_node_number, cluster_name, namespaces):
     # Populate latest singleuser image on all nodes
     for ns in namespaces:
         hub_pod = __get_hub_pod(ns)
-        image = __get_singleuser_image(ns, hub_pod, cluster_name)
-        if not image:
+        image = get_singleuser_image_value(ns, hub_pod, cluster_name)
+        if image == '':
             continue
 
         # FIXME: Use absolute path is recommended
