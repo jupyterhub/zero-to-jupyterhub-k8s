@@ -17,7 +17,7 @@ def shutdownEmptyNodes(nodes=getNodes()):
     for each in nodes:
         if numPods(each) == 0 and isUnschedulable(each):
             if isUnschedulable(each):
-                return shutdownSpecifiedNode(each['metadata']['name'])
+                return shutdownSpecifiedNode(getName(each))
 
 
 def createNewNodes(newTotalNodes):

@@ -83,7 +83,7 @@ def getNodeName(node):
     return getName(node)
 
 
-def getPodNamesapce(pod):
+def getPodNamespace(pod):
     """Return the namespace of the pod"""
     return pod["metadata"]["namespace"]
 

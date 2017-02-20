@@ -3,6 +3,7 @@
 import subprocess
 import yaml
 from settings import GCLOUD_INSTANCE_GROUP
+from utils import getPods, getPodType, getPodNamespace, getName
 
 
 def shutdownSpecifiedNode(name):
@@ -20,19 +21,12 @@ KUBECTL_CONTEXT_PREFIX = 'gke_data-8_us-central1-a_'
 
 
 # FIXME: replace kubectl with up to date API calls
-def __get_hub_pod(namespace, cluster_name, prefix=b'hub-deployment'):
-    '''Return the name of the hub pod.'''
-    cmd = ['kubectl', '--context=' + KUBECTL_CONTEXT_PREFIX + cluster_name,
-           '--namespace=' + namespace, 'get', 'pods',
-           '-o=custom-columns=NAME:.metadata.name']
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout
-    line = p.readline()
-    while line:
-        if line.startswith(prefix):
-            return line.strip()
-        line = p.readline()
-        continue
-    p.close()
+def __get_hub_pod(namespace):
+    '''Return the name of the hub pod. Return '' if not found.'''
+    pods = getPods()
+    for each in pods:
+        if getPodType(each) == 'hub' and getPodNamespace(each) == namespace:
+            return getName(each)
     return ''
 
 
@@ -74,7 +68,7 @@ def increaseNewGCloudNode(new_node_number, cluster_name, namespaces):
 
     # Populate latest singleuser image on all nodes
     for ns in namespaces:
-        hub_pod = __get_hub_pod(ns, cluster_name)
+        hub_pod = __get_hub_pod(ns)
         image = __get_singleuser_image(ns, hub_pod, cluster_name)
         if not image:
             continue

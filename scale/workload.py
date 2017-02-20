@@ -4,7 +4,7 @@
 
 All functions in the file should be read-only and cause no side effects."""
 
-from utils import getNodes, isUnschedulable, getPods, getPodNamesapce, \
+from utils import getNodes, isUnschedulable, getPods, getPodNamespace, \
     getPodType, getPodHostName, getName
 from settings import CAPACITY_PER_NODE, MIN_NODES, MAX_NODES, MAX_UTILIZATION, MIN_UTILIZATION, OPTIMAL_UTILIZATION
 from settings import OMIT_NAMESPACES, CRITICAL_POD_TYPES, OMIT_POD_TYPES, CRITICAL_NAMESPACES
@@ -15,8 +15,8 @@ def numPods(node, pods=getPods()):
     pods on the node"""
     result = 0
     for each in pods:
-        if not(getPodNamesapce(each) in OMIT_NAMESPACES or
-               getPodNamesapce(each) in CRITICAL_NAMESPACES or
+        if not(getPodNamespace(each) in OMIT_NAMESPACES or
+               getPodNamespace(each) in CRITICAL_NAMESPACES or
                getPodType(each) in OMIT_POD_TYPES or
                getPodType(each) in CRITICAL_POD_TYPES
                ) and getPodHostName(each) == getName(node):
@@ -29,7 +29,7 @@ def getCriticalNodeNames(pods=getPods()):
     are running"""
     result = []
     for each in pods:
-        if getPodNamesapce(each) in CRITICAL_NAMESPACES or getPodType(each) in CRITICAL_POD_TYPES:
+        if getPodNamespace(each) in CRITICAL_NAMESPACES or getPodType(each) in CRITICAL_POD_TYPES:
             if getPodHostName(each) not in result:
                 result.append(getPodHostName(each))
     return result
