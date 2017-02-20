@@ -9,10 +9,12 @@ from gcloud_update import increaseNewGCloudNode, shutdownSpecifiedNode
 SERVICE_PROVIDER = "gcloud"
 
 
-def shutdownEmptyNodes(nodes=getNodes()):
+def shutdownEmptyNodes(nodes):
     """
     Search through all nodes and shut down those that are unschedulable
-    and devoid of pods
+    and devoid of non-critical pods
+
+    CRITICAL NODES SHOULD NEVER BE INCLUDED IN THE INPUT LIST
     """
     for each in nodes:
         if numPods(each) == 0 and isUnschedulable(each):
@@ -46,4 +48,5 @@ def scale():
     if len(criticalNodeNames) + goal > len(allNodes):
         createNewNodes(len(criticalNodeNames) + goal)
 
-    shutdownEmptyNodes()
+    # CRITICAL NODES SHOULD NOT BE SHUTDOWN
+    shutdownEmptyNodes(nodes)
