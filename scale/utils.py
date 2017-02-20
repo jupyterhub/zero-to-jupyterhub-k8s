@@ -17,6 +17,7 @@ v1 = client.CoreV1Api()
 
 def get_nodes():
     """Return a list of v1.Node"""
+    logging.debug("Getting all nodes in the cluster")
     return v1.list_node().items
 #     r = requests.get(generate_url(API_HOST, API_PORT) +
 #                      "nodes")
@@ -32,6 +33,7 @@ def get_nodes():
 
 def get_pods():
     """Return a list of v1.Pod"""
+    logging.debug("Getting all pods in all namespaces")
     return v1.list_pod_for_all_namespaces().items
 #     r = requests.get(generate_url(API_HOST, API_PORT) +
 #                      "pods")
@@ -101,6 +103,8 @@ def get_pod_type(pod):
 
 def set_unschedulable(node_name, value=True):
     """Set the spec key 'unschedulable'"""
+    logging.debug(
+        "Setting %s node's unschedulable property to %r" % (node_name, value))
     new_node = client.V1Node(
         api_version="v1",
         kind="Node",

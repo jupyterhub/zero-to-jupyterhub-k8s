@@ -28,14 +28,11 @@ When `scale.py` is exected
 ### How to run
 
 0. Read `settings.py` to make sure you like the current settings.
-1. Ensure a kubectl proxy **running in the context you want to scale** is listening at `http://API_HOST:API_PORT/`, both values were defined in `settings.py`. By default, it is `http://localhost:18080`. See `https://kubernetes.io/docs/user-guide/kubectl/kubectl_proxy/` for details.
-2. Run `scale.py`, a one-time scaling should happen, and the script will quit.
+1. Run `scale.py`, a one-time scaling should happen, and the script will quit.
 
 ### Requirements
 
-Python 3, with `requests` installed;
-
-Kubernetes, with `kubectl` added in `$PATH`;
+Python 3, with `kubernetes` installed;
 
 Google Cloud SDK, with `gcloud` added in `$PATH`;
 
