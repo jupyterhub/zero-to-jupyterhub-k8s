@@ -1,4 +1,9 @@
 #!/usr/bin/python
+
+"""Provide functions to analyze current workload status of the cluster.
+
+All functions in the file should be read-only and cause no side effects."""
+
 from utils import getNodes, isUnschedulable, getPods, getPodNamesapce, \
     getPodType, getPodHostName, getName
 from settings import CAPACITY_PER_NODE, MIN_NODES, MAX_NODES, MAX_UTILIZATION, MIN_UTILIZATION, OPTIMAL_UTILIZATION

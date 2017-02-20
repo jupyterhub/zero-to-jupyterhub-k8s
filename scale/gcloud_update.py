@@ -4,12 +4,22 @@ import subprocess
 import yaml
 from settings import GCLOUD_INSTANCE_GROUP
 
+
+def shutdownSpecifiedNode(name):
+    """Deletes the specified node by calling the Google Cloud Engine"""
+    cmd = ['gcloud', 'compute', 'instance-groups', 'managed', 'delete-instances',
+           GCLOUD_INSTANCE_GROUP, '--instances=' + name]
+    p = subprocess.Popen(' '.join(cmd), stdout=subprocess.PIPE, shell=True)
+    output, err = p.communicate()
+    return "Successfully removed node: %s\n" % name if not err else "Unable to remove node"
+
 # The following code is adapted from the legacy scale script:
 # scale-pods.py
 
 KUBECTL_CONTEXT_PREFIX = 'gke_data-8_us-central1-a_'
 
 
+# FIXME: replace kubectl with up to date API calls
 def __get_hub_pod(namespace, cluster_name, prefix=b'hub-deployment'):
     '''Return the name of the hub pod.'''
     cmd = ['kubectl', '--context=' + KUBECTL_CONTEXT_PREFIX + cluster_name,
@@ -26,6 +36,7 @@ def __get_hub_pod(namespace, cluster_name, prefix=b'hub-deployment'):
     return ''
 
 
+# FIXME: replace kubectl with up to date API calls
 def __get_singleuser_image(namespace, hub_pod, cluster_name):
     '''Return the name:tag of the hub's singleuser image.'''
     cmd = ['kubectl', '--context=' + KUBECTL_CONTEXT_PREFIX + cluster_name,
@@ -45,15 +56,6 @@ def __get_singleuser_image(namespace, hub_pod, cluster_name):
     return image
 
 
-def shutdownSpecifiedNode(name):
-    """Deletes the specified node by calling the Google Cloud Engine"""
-    cmd = ['gcloud', 'compute', 'instance-groups', 'managed', 'delete-instances',
-           GCLOUD_INSTANCE_GROUP, '--instances=' + name]
-    p = subprocess.Popen(' '.join(cmd), stdout=subprocess.PIPE, shell=True)
-    output, err = p.communicate()
-    return "Successfully removed node: %s\n" % name if not err else "Unable to remove node"
-
-
 def increaseNewGCloudNode(new_node_number, cluster_name, namespaces):
     """ONLY FOR CREATING NEW NODES to ensure 
     new _node_number is running
@@ -62,6 +64,7 @@ def increaseNewGCloudNode(new_node_number, cluster_name, namespaces):
     expected"""
 
     # call gcloud command to start new nodes in GCE
+    # FIXME: Use GCloud API calls instead
     cmd = ['gcloud', '--quiet', 'container', 'clusters', 'resize', cluster_name,
            '--size', str(new_node_number)]
     print(' '.join(cmd))
@@ -76,7 +79,8 @@ def increaseNewGCloudNode(new_node_number, cluster_name, namespaces):
         if not image:
             continue
 
-        # TODO: Use absolute path is recommended
+        # FIXME: Use absolute path is recommended
+        # TODO: Use native python scripts to populate
         cmd = ['./populate.bash', cluster_name, image]
         print(' '.join(cmd))
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout
