@@ -32,7 +32,7 @@ def __get_hub_pod(namespace):
     return None
 
 
-def increase_new_gcloud_node(new_node_number, cluster_name, namespaces):
+def increase_new_gcloud_node(new_node_number, cluster_name):
     """ONLY FOR CREATING NEW NODES to ensure 
     new _node_number is running
 

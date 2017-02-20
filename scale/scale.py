@@ -2,7 +2,7 @@
 
 """Primary scale logic"""
 from workload import schedule_goal, get_critical_node_names, get_pods_number_on_node
-from utils import get_nodes, get_name, get_cluster_name, get_namespaces_name, is_unschedulable
+from utils import get_nodes, get_name, get_cluster_name, is_unschedulable
 from update_nodes import updateUnschedulable
 from gcloud_update import increase_new_gcloud_node, shutdown_specified_node
 
@@ -36,7 +36,7 @@ def resize_for_new_nodes(newTotalNodes):
     logging.info("Using service provider: %s" % SERVICE_PROVIDER)
     if SERVICE_PROVIDER == "gcloud":
         increase_new_gcloud_node(
-            newTotalNodes, get_cluster_name(), get_namespaces_name())
+            newTotalNodes, get_cluster_name())
 
 
 def scale():

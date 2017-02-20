@@ -26,10 +26,3 @@ CRITICAL_POD_TYPES = ["hub", "proxy"]
 CRITICAL_NAMESPACES = []
 OMIT_POD_TYPES = ["cull", "statsd"]
 OMIT_NAMESPACES = ["kube-system", "default"]
-
-# API Access Proxy provided by kubectl
-# Context switch is determined by the kubectl proxy
-# Need a kubectl proxy running at http://API_HOST:API_PORT/
-# See https://kubernetes.io/docs/user-guide/kubectl/kubectl_proxy/
-API_HOST = "localhost"
-API_PORT = "18080"
