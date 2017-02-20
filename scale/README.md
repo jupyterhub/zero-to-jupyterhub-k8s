@@ -3,11 +3,11 @@ JupyterHub Kubernetes Autoscaler
 
 ### Definitions
 
-**Critical Service =** Pods whose names start with `hub, proxy, statsd`
+**Critical Service =** Pods whose names start with `hub`, `proxy`
 
 **Omitted Namespace =** Default name space, `kube-system` namespace
 
-**Omitted Service =** Pods whose names start with `cull`
+**Omitted Service =** Pods whose names start with `cull`, `statsd`
 
 **Workload =**  On a node, number of pods that do not belong to `Critical Service`, do not belong to `Omitted Service`, and do not belong to `Omitted Namespace`
 
@@ -33,7 +33,7 @@ When `scale.py` is exected
 
 ### Requirements
 
-Python 2 or 3, with `requests` installed;
+Python 3, with `requests` installed;
 
 Kubernetes, with `kubectl` added in `$PATH`;
 

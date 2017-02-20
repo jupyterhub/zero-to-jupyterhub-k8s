@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 """ Shared settings and constant values across multiple scaling scripts"""
 
@@ -22,9 +22,9 @@ OPTIMAL_UTILIZATION = 0.75
 MIN_NODES = 3
 MAX_NODES = 72
 
-CRITICAL_POD_TYPES = ["hub", "proxy", "statsd"]
+CRITICAL_POD_TYPES = ["hub", "proxy"]
 CRITICAL_NAMESPACES = []
-OMIT_POD_TYPES = ["cull"]
+OMIT_POD_TYPES = ["cull", "statsd"]
 OMIT_NAMESPACES = ["kube-system", "default"]
 
 # API Access Proxy provided by kubectl

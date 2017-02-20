@@ -1,4 +1,4 @@
-#/usr/bin/python
+#/usr/bin/python3
 
 """Kubernetes API access functions"""
 
@@ -140,16 +140,3 @@ def is_unschedulable(node):
         return node["spec"]["unschedulable"]
     else:
         return False
-
-
-def get_singleuser_image_value(hub_pod):
-    '''Return the name:tag of the hub's singleuser image. If 
-    not found, return ''. '''
-    try:
-        for env in hub_pod['spec']['containers'][0]['env']:
-            if env['name'] == 'SINGLEUSER_IMAGE':
-                return env['value']
-
-        return ''
-    except Exception:
-        return ''

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 """Primary scale logic"""
 from workload import schedule_goal, get_critical_node_names, get_pods_number_on_node
@@ -8,7 +8,8 @@ from gcloud_update import increase_new_gcloud_node, shutdown_specified_node
 
 import logging
 
-logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.DEBUG)
+logging.basicConfig(
+    format='%(asctime)s %(levelname)s %(message)s', level=logging.DEBUG)
 
 SERVICE_PROVIDER = "gcloud"
 

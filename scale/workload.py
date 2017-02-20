@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 """Provide functions to analyze current workload status of the cluster.
 

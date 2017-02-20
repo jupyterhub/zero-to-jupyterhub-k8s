@@ -1,9 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import subprocess
 from settings import GCLOUD_INSTANCE_GROUP, GCE_ZONE
-from utils import get_pods, get_pod_type, get_pod_namespace,\
-    get_singleuser_image_value
+from utils import get_pods, get_pod_type, get_pod_namespace
 
 import logging
 
@@ -12,7 +11,7 @@ def shutdown_specified_node(name):
     """Deletes the specified node by calling the Google Cloud Engine"""
     cmd = ['gcloud', 'compute', 'instance-groups', 'managed', 'delete-instances',
            GCLOUD_INSTANCE_GROUP, '--instances=' + name]
-    p = subprocess.Popen(' '.join(cmd), stdout=subprocess.PIPE, shell=True)
+    p = subprocess.Popen(' '.join(cmd), stdout=subprocess.PIPE)
     output, err = p.communicate()
 
     # TODO: Jeff pls find a proper way to log the below message
@@ -48,18 +47,3 @@ def increase_new_gcloud_node(new_node_number, cluster_name, namespaces):
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout
     buf = p.read()
     p.close()
-
-    # Populate latest singleuser image on all nodes
-    for ns in namespaces:
-        hub_pod = __get_hub_pod(ns)
-        image = get_singleuser_image_value(hub_pod)
-        if image == '':
-            continue
-
-        # FIXME: Use absolute path is recommended
-        # TODO: Use native python scripts to populate
-        cmd = ['./populate.bash', cluster_name, image]
-        print(' '.join(cmd))
-        p = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout
-        buf = p.read()
-        p.close()
