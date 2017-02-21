@@ -6,6 +6,7 @@ from utils import set_unschedulable, get_name, is_unschedulable, get_pods
 from workload import get_pods_number_on_node
 import heapq
 import logging
+scale_logger = logging.getLogger("scale")
 
 
 def __getBlockPriority(node, pods):
@@ -43,7 +44,7 @@ def updateUnschedulable(number_unschedulable, nodes, calculatePriority=None):
         number_unschedulable = 0
     number_unschedulable = int(number_unschedulable)
 
-    logging.info(
+    scale_logger.info(
         "Updating unschedulable flags to ensure %i nodes are unschedulable" % number_unschedulable)
 
     if calculatePriority == None:
@@ -82,8 +83,8 @@ def updateUnschedulable(number_unschedulable, nodes, calculatePriority=None):
             toUnBlock.append(nodes[index])
 
     __updateNodes(toBlock, True)
-    logging.debug("%i nodes newly blocked" % len(toBlock))
+    scale_logger.debug("%i nodes newly blocked" % len(toBlock))
     __updateNodes(toUnBlock, False)
-    logging.debug("%i nodes newly unblocked" % len(toUnBlock))
+    scale_logger.debug("%i nodes newly unblocked" % len(toUnBlock))
 
     return len(toBlock) - len(toUnBlock)

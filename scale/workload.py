@@ -8,8 +8,8 @@ from utils import get_nodes, is_unschedulable, get_pods, get_pod_namespace, \
     get_pod_type, get_pod_host_name, get_name
 from settings import CAPACITY_PER_NODE, MIN_NODES, MAX_NODES, MAX_UTILIZATION, MIN_UTILIZATION, OPTIMAL_UTILIZATION
 from settings import OMIT_NAMESPACES, CRITICAL_POD_TYPES, OMIT_POD_TYPES, CRITICAL_NAMESPACES
-
 import logging
+scale_logger = logging.getLogger("scale")
 
 
 def get_pods_number_on_node(node, pods=get_pods()):
@@ -92,12 +92,12 @@ def schedule_goal():
     """Return the goal number of schedulable nodes IN ADDITION
     TO CRITICAL NODES, given the current situation"""
     nodes = get_nodes()
-    logging.info("Current scheduling target: %f ~ %f" %
-                 (MIN_UTILIZATION, MAX_UTILIZATION))
+    scale_logger.info("Current scheduling target: %f ~ %f" %
+                      (MIN_UTILIZATION, MAX_UTILIZATION))
     criticalNodeNames = get_critical_node_names(get_pods())
     currentUtilization = get_effective_workload(
         nodes, criticalNodeNames) / get_capacity(nodes[0])
-    logging.info("Current workload is %f" % currentUtilization)
+    scale_logger.info("Current workload is %f" % currentUtilization)
     if currentUtilization >= MIN_UTILIZATION and currentUtilization <= MAX_UTILIZATION:
         # leave unchanged
         return get_num_schedulable(nodes, criticalNodeNames)

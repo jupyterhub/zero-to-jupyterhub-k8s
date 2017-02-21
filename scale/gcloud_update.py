@@ -3,8 +3,8 @@
 import subprocess
 from settings import GCLOUD_INSTANCE_GROUP, GCE_ZONE
 from utils import get_pods, get_pod_type, get_pod_namespace
-
 import logging
+scale_logger = logging.getLogger("scale")
 
 
 def shutdown_specified_node(name):
@@ -15,7 +15,7 @@ def shutdown_specified_node(name):
     p = subprocess.Popen(' '.join(cmd), stdout=subprocess.PIPE)
     output, err = p.communicate()
     if err:
-        logging.error("Cannot shutdown node %s" % name)
+        scale_logger.error("Cannot shutdown node %s" % name)
 
 
 def __get_hub_pod(namespace):
@@ -36,7 +36,7 @@ def increase_new_gcloud_node(new_node_number, cluster_name):
 
     # call gcloud command to start new nodes in GCE
     # FIXME: Use GCloud API calls instead
-    logging.info("Resizing the cluster to %i nodes" % new_node_number)
+    scale_logger.info("Resizing the cluster to %i nodes" % new_node_number)
     cmd = ['gcloud', '--quiet', 'container', 'clusters', 'resize', cluster_name,
            '--size', str(new_node_number), '--zone', GCE_ZONE]
     print(' '.join(cmd))
