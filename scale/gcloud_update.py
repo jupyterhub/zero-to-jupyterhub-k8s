@@ -21,9 +21,9 @@ def shutdown_specified_node(name):
 def __get_hub_pod(namespace):
     '''Return the hub pod. Return None if not found.'''
     pods = get_pods()
-    for each in pods:
-        if get_pod_type(each) == 'hub' and get_pod_namespace(each) == namespace:
-            return each
+    for pod in pods:
+        if get_pod_type(pod) == 'hub' and get_pod_namespace(pod) == namespace:
+            return pod
     return None
 
 

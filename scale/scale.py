@@ -23,10 +23,10 @@ def shutdown_empty_nodes(nodes):
 
     CRITICAL NODES SHOULD NEVER BE INCLUDED IN THE INPUT LIST
     """
-    for each in nodes:
-        if get_pods_number_on_node(each) == 0 and is_unschedulable(each):
-            scale_logger.info("Shutting down empty node: %s" % get_name(each))
-            shutdown_specified_node(get_name(each))
+    for node in nodes:
+        if get_pods_number_on_node(node) == 0 and is_unschedulable(node):
+            scale_logger.info("Shutting down empty node: %s" % get_name(node))
+            shutdown_specified_node(get_name(node))
 
 
 def resize_for_new_nodes(newTotalNodes):
@@ -48,9 +48,9 @@ def scale():
     scale_logger.info("Scaling on cluster %s" % get_cluster_name(allNodes[0]))
     nodes = []  # a list of nodes that are NOT critical
     criticalNodeNames = get_critical_node_names()
-    for each in allNodes:
-        if get_name(each) not in criticalNodeNames:
-            nodes.append(each)
+    for node in allNodes:
+        if get_name(node) not in criticalNodeNames:
+            nodes.append(node)
     goal = schedule_goal()
     scale_logger.info("Total nodes in the cluster: %i" % len(allNodes))
     scale_logger.info("Found %i critical nodes; recommending additional %i nodes for service" % (

@@ -21,9 +21,9 @@ def __updateNodes(nodes, unschedulable):
     unschedulable property"""
 
     updated = []
-    for each in nodes:
-        set_unschedulable(get_name(each), unschedulable)
-        updated.append(get_name(each))
+    for node in nodes:
+        set_unschedulable(get_name(node), unschedulable)
+        updated.append(get_name(node))
     return updated
 
 

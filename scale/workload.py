@@ -16,12 +16,12 @@ def get_pods_number_on_node(node, pods=get_pods()):
     """Return the effective number of noncritical
     pods on the node"""
     result = 0
-    for each in pods:
-        if not(get_pod_namespace(each) in OMIT_NAMESPACES or
-               get_pod_namespace(each) in CRITICAL_NAMESPACES or
-               get_pod_type(each) in OMIT_POD_TYPES or
-               get_pod_type(each) in CRITICAL_POD_TYPES
-               ) and get_pod_host_name(each) == get_name(node):
+    for pod in pods:
+        if not(get_pod_namespace(pod) in OMIT_NAMESPACES or
+               get_pod_namespace(pod) in CRITICAL_NAMESPACES or
+               get_pod_type(pod) in OMIT_POD_TYPES or
+               get_pod_type(pod) in CRITICAL_POD_TYPES
+               ) and get_pod_host_name(pod) == get_name(node):
             result += 1
     return result
 
@@ -30,10 +30,10 @@ def get_critical_node_names(pods=get_pods()):
     """Return a list of nodes where critical pods
     are running"""
     result = []
-    for each in pods:
-        if get_pod_namespace(each) in CRITICAL_NAMESPACES or get_pod_type(each) in CRITICAL_POD_TYPES:
-            if get_pod_host_name(each) not in result:
-                result.append(get_pod_host_name(each))
+    for pod in pods:
+        if get_pod_namespace(pod) in CRITICAL_NAMESPACES or get_pod_type(pod) in CRITICAL_POD_TYPES:
+            if get_pod_host_name(pod) not in result:
+                result.append(get_pod_host_name(pod))
     return result
 
 
@@ -47,8 +47,8 @@ def get_sum_workload(nodes):
     the given list of nodes"""
     pods = get_pods()
     total = 0
-    for each in nodes:
-        total += get_workload(each, pods)
+    for node in nodes:
+        total += get_workload(node, pods)
     return total
 
 
@@ -63,8 +63,8 @@ def get_num_schedulable(nodes, criticalNodeNames):
     """Return number of nodes schedulable AND NOT
     IN THE LIST OF CRITICAL NODES"""
     result = 0
-    for each in nodes:
-        if (not is_unschedulable(each)) and get_name(each) not in criticalNodeNames:
+    for node in nodes:
+        if (not is_unschedulable(node)) and get_name(node) not in criticalNodeNames:
             result += 1
     return result
 
@@ -74,8 +74,8 @@ def get_num_unschedulable(nodes):
 
     ASSUMING CRITICAL NODES ARE SCHEDULABLE"""
     result = 0
-    for each in nodes:
-        if is_unschedulable(each):
+    for node in nodes:
+        if is_unschedulable(node):
             result += 1
     return result
 

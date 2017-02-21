@@ -3,7 +3,6 @@
 """Kubernetes API access functions"""
 
 from kubernetes import client, config
-#import requests
 import logging
 
 scale_logger = logging.getLogger("scale")
@@ -12,57 +11,16 @@ config.load_kube_config()
 v1 = client.CoreV1Api()
 
 
-# def generate_url(host, port):
-#    return "http://" + host + ':' + port + "/api/v1/"
-
-
 def get_nodes():
     """Return a list of v1.Node"""
     scale_logger.debug("Getting all nodes in the cluster")
     return v1.list_node().items
-#     r = requests.get(generate_url(API_HOST, API_PORT) +
-#                      "nodes")
-#     assert r.status_code == 200
-#     try:
-#         nodesList = json.loads(r.text)
-#         return nodesList['items']
-#     except Exception as e:
-#         # FIXME: proper exception handling
-#         print(str(e))
-#         sys.exit(1)
 
 
 def get_pods():
     """Return a list of v1.Pod"""
     scale_logger.debug("Getting all pods in all namespaces")
     return v1.list_pod_for_all_namespaces().items
-#     r = requests.get(generate_url(API_HOST, API_PORT) +
-#                      "pods")
-#     assert r.status_code == 200
-#     try:
-#         podsList = json.loads(r.text)
-#         return podsList['items']
-#     except Exception as e:
-#         # FIXME: proper exception handling
-#         print(str(e))
-#         sys.exit(1)
-
-
-# def get_namespaces_name():
-#     """Return a list of namespaces in the form of string"""
-#     r = requests.get(generate_url(API_HOST, API_PORT) +
-#                      "namespaces")
-#     assert r.status_code == 200
-#     result = []
-#     try:
-#         namespaces = json.loads(r.text)
-#         for each in namespaces.items:
-#             result.append(get_name(each))
-#         return result
-#     except Exception as e:
-#         # FIXME: proper exception handling
-#         print(str(e))
-#         sys.exit(1)
 
 
 def get_pod_host_name(pod):
@@ -117,12 +75,8 @@ def set_unschedulable(node_name, value=True):
 
 
 def get_name(resource):
-    """ Return name of a node, return '' if
-    an error occurred """
-    try:
-        return resource.metadata.name
-    except Exception:
-        return ''
+    """ Return name of a node"""
+    return resource.metadata.name
 
 
 def is_unschedulable(node):
