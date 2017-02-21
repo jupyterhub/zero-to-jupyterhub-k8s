@@ -31,8 +31,10 @@ def get_pod_host_name(pod):
     return pod.spec.node_name
 
 
-def get_cluster_name(node=get_nodes()[0]):
+def get_cluster_name(node=None):
     """Return the (guessed) name of the cluster"""
+    if node == None:
+        node = get_nodes()[0]
     node_name = get_name(node)
     parts = node_name.split('-')
     assert len(parts) > 2

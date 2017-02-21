@@ -12,9 +12,11 @@ import logging
 scale_logger = logging.getLogger("scale")
 
 
-def get_pods_number_on_node(node, pods=get_pods()):
+def get_pods_number_on_node(node, pods=None):
     """Return the effective number of noncritical
     pods on the node"""
+    if pods == None:
+        pods = get_pods()
     result = 0
     for pod in pods:
         if not(get_pod_namespace(pod) in OMIT_NAMESPACES or
@@ -26,9 +28,11 @@ def get_pods_number_on_node(node, pods=get_pods()):
     return result
 
 
-def get_critical_node_names(pods=get_pods()):
+def get_critical_node_names(pods=None):
     """Return a list of nodes where critical pods
     are running"""
+    if pods == None:
+        pods = get_pods()
     result = []
     for pod in pods:
         if get_pod_namespace(pod) in CRITICAL_NAMESPACES or get_pod_type(pod) in CRITICAL_POD_TYPES:
@@ -37,8 +41,10 @@ def get_critical_node_names(pods=get_pods()):
     return result
 
 
-def get_workload(node, pods=get_pods()):
+def get_workload(node, pods=None):
     """Return the workload on the given node"""
+    if pods == None:
+        pods = get_pods()
     return get_pods_number_on_node(node, pods)
 
 
