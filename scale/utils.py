@@ -35,31 +35,16 @@ def get_cluster_name(node=None):
     """Return the (guessed) name of the cluster"""
     if node == None:
         node = get_nodes()[0]
-    node_name = get_name(node)
+    node_name = node.metadata.name
     parts = node_name.split('-')
     assert len(parts) > 2
     return parts[1]
 
 
-def get_pod_name(pod):
-    """Return the name of the pod"""
-    return get_name(pod)
-
-
-def get_node_name(node):
-    """Return the name of the node"""
-    return get_name(node)
-
-
-def get_pod_namespace(pod):
-    """Return the namespace of the pod"""
-    return pod.metadata.namespace
-
-
 def get_pod_type(pod):
     """Return the Type of the pod"""
     # TODO: May not be the best approach
-    return get_pod_name(pod).split('-')[0]
+    return pod.metadata.name.split('-')[0]
 
 
 def set_unschedulable(node_name, value=True):
@@ -74,13 +59,3 @@ def set_unschedulable(node_name, value=True):
     )
     # TODO: exception handling
     v1.patch_node(node_name, new_node)
-
-
-def get_name(resource):
-    """ Return name of a node"""
-    return resource.metadata.name
-
-
-def is_unschedulable(node):
-    """Return the value of 'Unschedulable' of a node"""
-    return node.spec.unschedulable

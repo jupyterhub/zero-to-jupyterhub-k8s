@@ -2,7 +2,7 @@
 
 import subprocess
 from settings import GCLOUD_INSTANCE_GROUP, GCE_ZONE
-from utils import get_pods, get_pod_type, get_pod_namespace
+from utils import get_pods, get_pod_type
 import logging
 scale_logger = logging.getLogger("scale")
 
@@ -22,7 +22,7 @@ def __get_hub_pod(namespace):
     '''Return the hub pod. Return None if not found.'''
     pods = get_pods()
     for pod in pods:
-        if get_pod_type(pod) == 'hub' and get_pod_namespace(pod) == namespace:
+        if get_pod_type(pod) == 'hub' and pod.metadata.namespace == namespace:
             return pod
     return None
 

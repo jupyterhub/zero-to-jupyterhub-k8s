@@ -2,7 +2,7 @@
 
 """Execute changes to the Kubernetes cluster"""
 
-from utils import set_unschedulable, get_name, is_unschedulable, get_pods
+from utils import set_unschedulable, get_pods
 from workload import get_pods_number_on_node
 import heapq
 import logging
@@ -22,8 +22,8 @@ def __updateNodes(nodes, unschedulable):
 
     updated = []
     for node in nodes:
-        set_unschedulable(get_name(node), unschedulable)
-        updated.append(get_name(node))
+        set_unschedulable(node.metadata.name, unschedulable)
+        updated.append(node.metadata.name)
     return updated
 
 
@@ -59,7 +59,7 @@ def updateUnschedulable(number_unschedulable, nodes, calculatePriority=None):
 
     # Analyze nodes status and establish blocking priority
     for count in range(len(nodes)):
-        if is_unschedulable(nodes[count]):
+        if nodes[count].spec.unschedulable:
             unschedulableNodes.append(nodes[count])
         else:
             schedulableNodes.append(nodes[count])

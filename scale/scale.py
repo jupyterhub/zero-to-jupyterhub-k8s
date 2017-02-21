@@ -2,7 +2,7 @@
 
 """Primary scale logic"""
 from workload import schedule_goal, get_critical_node_names, get_pods_number_on_node
-from utils import get_nodes, get_name, get_cluster_name, is_unschedulable
+from utils import get_nodes, get_cluster_name
 from update_nodes import updateUnschedulable
 from gcloud_update import increase_new_gcloud_node, shutdown_specified_node
 
@@ -24,9 +24,10 @@ def shutdown_empty_nodes(nodes):
     CRITICAL NODES SHOULD NEVER BE INCLUDED IN THE INPUT LIST
     """
     for node in nodes:
-        if get_pods_number_on_node(node) == 0 and is_unschedulable(node):
-            scale_logger.info("Shutting down empty node: %s" % get_name(node))
-            shutdown_specified_node(get_name(node))
+        if get_pods_number_on_node(node) == 0 and node.spec.unschedulable:
+            scale_logger.info(
+                "Shutting down empty node: %s" % node.metadata.name)
+            shutdown_specified_node(node.metadata.name)
 
 
 def resize_for_new_nodes(newTotalNodes):
@@ -49,7 +50,7 @@ def scale():
     nodes = []  # a list of nodes that are NOT critical
     criticalNodeNames = get_critical_node_names()
     for node in allNodes:
-        if get_name(node) not in criticalNodeNames:
+        if node.metadata.name not in criticalNodeNames:
             nodes.append(node)
     goal = schedule_goal()
     scale_logger.info("Total nodes in the cluster: %i" % len(allNodes))

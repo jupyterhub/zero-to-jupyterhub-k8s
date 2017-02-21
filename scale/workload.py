@@ -4,8 +4,8 @@
 
 All functions in the file should be read-only and cause no side effects."""
 
-from utils import get_nodes, is_unschedulable, get_pods, get_pod_namespace, \
-    get_pod_type, get_pod_host_name, get_name
+from utils import get_nodes, get_pods, \
+    get_pod_type, get_pod_host_name
 from settings import CAPACITY_PER_NODE, MIN_NODES, MAX_NODES, MAX_UTILIZATION, MIN_UTILIZATION, OPTIMAL_UTILIZATION
 from settings import OMIT_NAMESPACES, CRITICAL_POD_TYPES, OMIT_POD_TYPES, CRITICAL_NAMESPACES
 import logging
@@ -19,11 +19,11 @@ def get_pods_number_on_node(node, pods=None):
         pods = get_pods()
     result = 0
     for pod in pods:
-        if not(get_pod_namespace(pod) in OMIT_NAMESPACES or
-               get_pod_namespace(pod) in CRITICAL_NAMESPACES or
+        if not(pod.metadata.namespace in OMIT_NAMESPACES or
+               pod.metadata.namespace in CRITICAL_NAMESPACES or
                get_pod_type(pod) in OMIT_POD_TYPES or
                get_pod_type(pod) in CRITICAL_POD_TYPES
-               ) and get_pod_host_name(pod) == get_name(node):
+               ) and get_pod_host_name(pod) == node.metadata.name:
             result += 1
     return result
 
@@ -35,7 +35,7 @@ def get_critical_node_names(pods=None):
         pods = get_pods()
     result = []
     for pod in pods:
-        if get_pod_namespace(pod) in CRITICAL_NAMESPACES or get_pod_type(pod) in CRITICAL_POD_TYPES:
+        if pod.metadata.namespace in CRITICAL_NAMESPACES or get_pod_type(pod) in CRITICAL_POD_TYPES:
             if get_pod_host_name(pod) not in result:
                 result.append(get_pod_host_name(pod))
     return result
@@ -70,7 +70,7 @@ def get_num_schedulable(nodes, criticalNodeNames):
     IN THE LIST OF CRITICAL NODES"""
     result = 0
     for node in nodes:
-        if (not is_unschedulable(node)) and get_name(node) not in criticalNodeNames:
+        if (not node.spec.unschedulable) and node.metadata.name not in criticalNodeNames:
             result += 1
     return result
 
@@ -81,7 +81,7 @@ def get_num_unschedulable(nodes):
     ASSUMING CRITICAL NODES ARE SCHEDULABLE"""
     result = 0
     for node in nodes:
-        if is_unschedulable(node):
+        if node.spec.unschedulable:
             result += 1
     return result
 
