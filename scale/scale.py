@@ -69,4 +69,5 @@ def scale():
     shutdown_empty_nodes(nodes)
 
 if __name__ == "__main__":
+    scale_logger.setLevel(logging.DEBUG)
     scale()
