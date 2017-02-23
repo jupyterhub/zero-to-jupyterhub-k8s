@@ -39,29 +39,31 @@ c.KubeSpawner.singleuser_image_spec = os.environ['SINGLEUSER_IMAGE']
 c.KubeSpawner.singleuser_image_pull_policy = 'Always'
 
 # Configure dynamically provisioning pvc
-c.KubeSpawner.pvc_name_template = 'claim-{username}-{userid}'
-c.KubeSpawner.user_storage_class = get_config('singleuser.storage.class')
-c.KubeSpawner.user_storage_access_modes = ['ReadWriteOnce']
-c.KubeSpawner.user_storage_capacity = get_config('singleuser.storage.capacity')
+storage_type = get_config('singleuser.storage.type')
+if storage_type == 'dynamic':
+    c.KubeSpawner.pvc_name_template = 'claim-{username}-{userid}'
+    c.KubeSpawner.user_storage_class = get_config('singleuser.storage.class')
+    c.KubeSpawner.user_storage_access_modes = ['ReadWriteOnce']
+    c.KubeSpawner.user_storage_capacity = get_config('singleuser.storage.capacity')
 
-c.KubeSpawner.singleuser_uid = 1000
-c.KubeSpawner.singleuser_fs_gid = 1000
+    c.KubeSpawner.singleuser_uid = 1000
+    c.KubeSpawner.singleuser_fs_gid = 1000
 
-# Add volumes to singleuser pods
-c.KubeSpawner.volumes = [
-    {
-        'name': 'volume-{username}-{userid}',
-        'persistentVolumeClaim': {
-            'claimName': 'claim-{username}-{userid}'
+    # Add volumes to singleuser pods
+    c.KubeSpawner.volumes = [
+        {
+            'name': 'volume-{username}-{userid}',
+            'persistentVolumeClaim': {
+                'claimName': 'claim-{username}-{userid}'
+            }
         }
-    }
-]
-c.KubeSpawner.volume_mounts = [
-    {
-        'mountPath': '/home/jovyan',
-        'name': 'volume-{username}-{userid}'
-    }
-]
+    ]
+    c.KubeSpawner.volume_mounts = [
+        {
+            'mountPath': '/home/jovyan',
+            'name': 'volume-{username}-{userid}'
+        }
+    ]
 
 # Shared data mounts - used to mount shared data (across all
 # students) from pre-prepared PVCs to students. PVCs are mounted under

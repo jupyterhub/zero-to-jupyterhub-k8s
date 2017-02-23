@@ -37,6 +37,7 @@ token:
 
 singleuser:
   storage:
+    type: dynamic
     capacity: 10Gi
   image:
     name: gcr.io/data-8/jupyterhub-k8s-singleuser

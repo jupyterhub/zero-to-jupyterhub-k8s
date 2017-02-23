@@ -49,8 +49,11 @@ data:
   auth.google.login-service: {{.Values.auth.google.loginService | quote}}
   auth.google.callback-url: {{.Values.auth.google.callbackUrl}}
   {{- end }}
+  singleuser.storage.type: {{ .Values.singleuser.storage.type | quote }}
+  {{ if eq .Values.singleuser.storage.type "dynamic" -}}
   singleuser.storage.class: single-user-storage-{{ .Values.name }}
   singleuser.storage.capacity: {{.Values.singleuser.storage.capacity | quote }}
+  {{- end }}
   {{ if .Values.singleuser.memory.limit -}}
   singleuser.memory.limit: {{ .Values.singleuser.memory.limit | quote}}
   {{- end }}
