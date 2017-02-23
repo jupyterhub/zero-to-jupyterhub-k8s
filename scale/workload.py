@@ -67,7 +67,7 @@ def get_node_memory_capacity(node):
 def get_total_cluster_memory_usage(options, pods=None):
     """Gets the total memory usage of 
     all student pods"""
-    if pods == None:
+    if pods is None:
         pods = get_pods()
     student_pods = list(filter(lambda pod: pod.metadata.name.startswith(options.student_pod_identifier), pods))
     total_mem_usage = 0
@@ -79,7 +79,7 @@ def get_total_cluster_memory_usage(options, pods=None):
 def get_total_cluster_memory_capacity(nodes=None):
     """Returns the total memory capacity of all nodes, as student
     pods can be scheduled on any node that meets its Request criteria"""
-    if nodes == None:
+    if nodes is None:
         nodes = get_nodes()
     total_mem_capacity = 0
     for node in nodes:
