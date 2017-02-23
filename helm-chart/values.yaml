@@ -48,12 +48,18 @@ singleuser:
     limit: 2G
     guarantee: 2G
 
+db:
+  type: sqlite-pvc
+
+
 cull:
   enabled: true
   timeout: 3600
   every: 600
 
 metrics:
+  enabled: true
+  # FIXME: Allow different types here?
   datadog:
     apiKey: null
     prefix: stresstest
