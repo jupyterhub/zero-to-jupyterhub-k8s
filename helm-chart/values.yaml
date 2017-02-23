@@ -49,6 +49,7 @@ singleuser:
     guarantee: 2G
 
 cull:
+  enabled: true
   timeout: 3600
   every: 600
 

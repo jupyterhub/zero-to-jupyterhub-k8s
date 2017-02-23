@@ -122,9 +122,10 @@ c.KubeSpawner.environment = {
     'GIT_COMMITTER_NAME': generate_user_name
 }
  
-c.JupyterHub.api_tokens = {
-    os.environ['CULL_JHUB_TOKEN']: 'cull',
-}
+if 'CULL_JHUB_TOKEN' in os.environ:
+    c.JupyterHub.api_tokens = {
+        os.environ['CULL_JHUB_TOKEN']: 'cull',
+    }
 
 # Setup STATSD
 if 'STATSD_SERVICE_HOST' in os.environ:

@@ -32,7 +32,9 @@ metadata:
   namespace: {{ .Values.name }}
 data:
   token.proxy: {{ .Values.token.proxy | quote }}
+  {{ if .Values.cull.enabled -}}
   token.culler: {{ .Values.token.culler | quote }}
+  {{- end }}
 
   auth.type: {{ .Values.auth.type | quote }}
   {{ if eq .Values.auth.type "hmac" -}}
@@ -136,11 +138,13 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        {{ if .Values.cull.enabled -}}
         - name: CULL_JHUB_TOKEN
           valueFrom:
             configMapKeyRef:
               name: hub-config
               key: token.culler
+        {{- end }}
         - name: CONFIGPROXY_AUTH_TOKEN
           valueFrom:
             configMapKeyRef:
