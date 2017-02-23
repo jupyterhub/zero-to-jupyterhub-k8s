@@ -72,7 +72,7 @@ def get_total_cluster_memory_usage(options, pods=None):
     student_pods = list(filter(lambda pod: pod.metadata.name.startswith(options.student_pod_identifier), pods))
     total_mem_usage = 0
     for pod in student_pods:
-        total_mem_usage += int(pod.spec.containers[0].resrouces.requests['memory'])
+        total_mem_usage += int(pod.spec.containers[0].resources.requests['memory'])
     return total_mem_usage
 
 
