@@ -14,7 +14,7 @@ scale_logger = logging.getLogger("scale")
 def get_pods_number_on_node(node, options, pods=None):
     """Return the effective number of noncritical
     pods on the node"""
-    if pods == None:
+    if pods is None:
         pods = get_pods()
     result = 0
     for pod in pods:
@@ -29,7 +29,7 @@ def get_pods_number_on_node(node, options, pods=None):
 def get_critical_node_names(options, pods=None):
     """Return a list of nodes where critical pods
     are running"""
-    if pods == None:
+    if pods is None:
         pods = get_pods()
     result = []
     for pod in pods:
@@ -39,20 +39,20 @@ def get_critical_node_names(options, pods=None):
     return result
 
 
-def get_workload(node, pods=None):
+def get_workload(node, options, pods=None):
     """Return the workload on the given node"""
-    if pods == None:
+    if pods is None:
         pods = get_pods()
-    return get_pods_number_on_node(node, pods)
+    return get_pods_number_on_node(node, options, pods)
 
 
-def get_sum_workload(nodes):
+def get_sum_workload(nodes, options):
     """Return the total workload on
     the given list of nodes"""
     pods = get_pods()
     total = 0
     for node in nodes:
-        total += get_workload(node, pods)
+        total += get_workload(node, options, pods)
     return total
 
 
@@ -129,7 +129,7 @@ def schedule_goal(options):
     nodes = get_nodes()
     scale_logger.info("Current scheduling target: %f ~ %f" %
                       (options.min_utilization, options.max_utilization))
-    criticalNodeNames = get_critical_node_names(get_pods())
+    criticalNodeNames = get_critical_node_names(options, get_pods())
     currentUtilization = get_effective_workload(
         options, nodes, criticalNodeNames) / get_capacity(nodes[0])
     scale_logger.info("Current workload is %f" % currentUtilization)
@@ -139,7 +139,7 @@ def schedule_goal(options):
     else:
         # need to scale down
         requiredNum = get_sum_workload(
-            nodes) / options.optimal_utilization / get_capacity(nodes[0])
+            nodes, options) / options.optimal_utilization / get_capacity(nodes[0])
         if requiredNum < options.min_nodes - len(criticalNodeNames):
             requiredNum = options.min_nodes - len(criticalNodeNames)
         if requiredNum > options.max_nodes - len(criticalNodeNames):

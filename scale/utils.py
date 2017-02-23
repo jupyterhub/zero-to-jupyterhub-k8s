@@ -33,7 +33,7 @@ def get_pod_host_name(pod):
 
 def get_cluster_name(node=None):
     """Return the (guessed) name of the cluster"""
-    if node == None:
+    if node is None:
         node = get_nodes()[0]
     node_name = node.metadata.name
     parts = node_name.split('-')
