@@ -1,5 +1,21 @@
+import yaml
 import os
 import sys
+
+def get_config(key):
+    """
+    Find a config item of a given name & return it
+
+    Parses everything as YAML, so lists and dicts are available too
+    """
+    path = os.path.join('/etc/jupyterhub/config', key)
+    try:
+        with open(path) as f:
+            data = yaml.safe_load(f)
+            print(key, data)
+            return data
+    except FileNotFoundError:
+        return None
 
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
@@ -18,15 +34,15 @@ c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
 # Upto 15 minutes, first pulls can be really slow because data8 user image is huge
 c.KubeSpawner.start_timeout = 60 * 20
 
-# Our simplest user image! Optimized to just... start, and be small!
+# Use env var for this, since we want hub to restart when this changes
 c.KubeSpawner.singleuser_image_spec = os.environ['SINGLEUSER_IMAGE']
 c.KubeSpawner.singleuser_image_pull_policy = 'Always'
 
 # Configure dynamically provisioning pvc
 c.KubeSpawner.pvc_name_template = 'claim-{username}-{userid}'
-c.KubeSpawner.user_storage_class = os.environ['SINGLEUSER_STORAGE_CLASS']
+c.KubeSpawner.user_storage_class = get_config('singleuser.storage.class')
 c.KubeSpawner.user_storage_access_modes = ['ReadWriteOnce']
-c.KubeSpawner.user_storage_capacity = os.environ['SINGLEUSER_STORAGE_CAPACITY']
+c.KubeSpawner.user_storage_capacity = get_config('singleuser.storage.capacity')
 
 c.KubeSpawner.singleuser_uid = 1000
 c.KubeSpawner.singleuser_fs_gid = 1000
@@ -80,25 +96,25 @@ if shared_data_mounts_str:
 c.KubeSpawner.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
 c.KubeSpawner.hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])
 
-c.KubeSpawner.mem_limit = os.environ.get('SINGLEUSER_MEM_LIMIT', None)
-c.KubeSpawner.mem_guarantee = os.environ.get('SINGLEUSER_MEM_GUARANTEE', None)
-c.KubeSpawner.cpu_limit = os.environ.get('SINGLEUSER_CPU_LIMIT', None)
-c.KubeSpawner.cpu_guarantee = os.environ.get('SINGLEUSER_CPU_GUARANTEE', None)
+c.KubeSpawner.mem_limit = get_config('singleuser.memory.limit')
+c.KubeSpawner.mem_guarantee = get_config('singleuser.memory.guarantee')
+c.KubeSpawner.cpu_limit = get_config('singleuser.cpu.limit')
+c.KubeSpawner.cpu_guarantee = get_config('singleuser.cpu.guarantee')
 
-# Allow switching authenticators from environment variables
-auth_type = os.environ['HUB_AUTH_TYPE']
+# Allow switching authenticators easily
+auth_type = get_config('auth.type')
 
 if auth_type == 'google':
     c.JupyterHub.authenticator_class = 'oauthenticator.GoogleOAuthenticator'
-    c.GoogleOAuthenticator.client_id = os.environ['GOOGLE_OAUTH_CLIENT_ID']
-    c.GoogleOAuthenticator.client_secret = os.environ['GOOGLE_OAUTH_CLIENT_SECRET']
-    c.GoogleOAuthenticator.oauth_callback_url = os.environ['GOOGLE_OAUTH_CALLBACK_URL']
-    c.GoogleOAuthenticator.hosted_domain = os.environ['GOOGLE_OAUTH_HOSTED_DOMAIN']
-    c.GoogleOAuthenticator.login_service = os.environ['GOOGLE_OAUTH_LOGIN_SERVICE']
-    email_domain = os.environ['GOOGLE_OAUTH_HOSTED_DOMAIN']
+    c.GoogleOAuthenticator.client_id = get_config('auth.google.client-id')
+    c.GoogleOAuthenticator.client_secret = get_config('auth.google.client_secret')
+    c.GoogleOAuthenticator.oauth_callback_url = get_config('auth.google.callback-url')
+    c.GoogleOAuthenticator.hosted_domain = get_config('auth.google.hosted-domain')
+    c.GoogleOAuthenticator.login_service = get_config('auth.google.login-service')
+    email_domain = get_config('auth.google.hosted-domain')
 elif auth_type == 'hmac':
     c.JupyterHub.authenticator_class = 'hmacauthenticator.HMACAuthenticator'
-    c.HMACAuthenticator.secret_key = bytes.fromhex(os.environ['HMAC_SECRET_KEY'])
+    c.HMACAuthenticator.secret_key = bytes.fromhex(get_config('auth.hmac.secret-key'))
     email_domain = 'local'
 elif auth_type == 'dummy':
     c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
@@ -137,51 +153,6 @@ if 'STATSD_SERVICE_HOST' in os.environ:
     c.JupyterHub.statsd_port = int(os.environ['STATSD_SERVICE_PORT'])
 
 # Enable admins to access user servers
-c.JupyterHub.admin_access = True
+c.JupyterHub.admin_access = get_config('admin.access')
 
-c.Authenticator.admin_users = {
-    'cull',
-    # prob140
-    'adhikari',
-    'dibya.ghosh',
-    'maxwelljweinstein',
-    'zhang.j',
-    # cogneuro
-    'choldgraf',
-    'fatma',
-    'lwehbe',
-    'mark.lescroart',
-    #
-    'arvindiyengar',
-    'vinitra',
-    'namushegian',
-    'nskh',
-    'alon.daks',
-    'jwhughes',
-    'niraj.a.rao',
-    'kellerstrass',
-    'michelleyang',
-    'priyanka.bhoj',
-    'tanaynathan18',
-    'wumadeline',
-    'marcus.lee',
-    'delphine.ho',
-    'j.hu',
-    'huangjiayi0922',
-    'swathugala',
-    'supadhyay',
-    'v.oikonomou',
-    'satish.vinay',
-    'j_dong1021',
-    'inan.husain',
-    'wiltonwu',
-    'rjoshi',
-    'stevenwuyinze',
-    # all
-    'denero',
-    'samlau95',
-    'yuvipanda',
-    'rylo',
-    'peterkangveerman',
-    'scf-stat',
-}
+c.Authenticator.admin_users = get_config('admin.users')

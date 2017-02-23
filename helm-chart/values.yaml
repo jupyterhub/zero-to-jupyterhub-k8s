@@ -63,3 +63,7 @@ metrics:
   datadog:
     apiKey: null
     prefix: stresstest
+
+admin:
+  access: true # Set to true to allow admins to access user notebooks
+  users: [] # List of users who are admins

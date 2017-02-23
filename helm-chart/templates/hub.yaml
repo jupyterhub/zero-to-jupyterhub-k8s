@@ -63,6 +63,9 @@ data:
   {{ if .Values.singleuser.cpu.guarantee -}}
   singleuser.cpu.guarantee: {{ .Values.singleuser.cpu.guarantee | quote}}
   {{- end }}
+  admin.access: {{ .Values.admin.access | quote }}
+  admin.users: |
+    {{ toYaml .Values.admin.users | indent 4 }}
 
 ---
 apiVersion: extensions/v1beta1
@@ -77,8 +80,11 @@ spec:
       labels:
         name: hub-pod
     spec:
-      {{ if eq .Values.db.type "sqlite-pvc" -}}
       volumes:
+      - name: config
+        configMap:
+          name: hub-config
+      {{ if eq .Values.db.type "sqlite-pvc" -}}
       - name: hub-db-dir
         persistentVolumeClaim:
           claimName: hub-db-dir
@@ -86,50 +92,15 @@ spec:
       containers:
       - name: hub-container
         image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
-        {{ if eq .Values.db.type "sqlite-pvc" -}}
         volumeMounts:
+          - mountPath: /etc/jupyterhub/config/
+            name: config
+        {{ if eq .Values.db.type "sqlite-pvc" -}}
           - mountPath: /srv/jupyterhub
             name: hub-db-dir
         {{- end }}
+        imagePullPolicy: IfNotPresent
         env:
-        - name: SINGLEUSER_STORAGE_CLASS
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: singleuser.storage.class
-        - name: SINGLEUSER_STORAGE_CAPACITY
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: singleuser.storage.capacity
-        {{ if .Values.singleuser.memory.guarantee -}}
-        - name: SINGLEUSER_MEM_GUARANTEE
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: singleuser.memory.limit
-        {{- end }}
-        {{ if .Values.singleuser.memory.limit -}}
-        - name: SINGLEUSER_MEM_LIMIT
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: singleuser.memory.limit
-        {{- end }}
-        {{ if .Values.singleuser.cpu.guarantee -}}
-        - name: SINGLEUSER_CPU_GUARANTEE
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: singleuser.cpu.guarantee
-        {{- end }}
-        {{ if .Values.singleuser.cpu.limit -}}
-        - name: SINGLEUSER_CPU_LIMIT
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: singleuser.cpu.limit
-        {{- end }}
         # Put this here directly so hub will restart when we
         # change this
         - name: SINGLEUSER_IMAGE
@@ -144,57 +115,11 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        {{ if .Values.cull.enabled -}}
-        - name: CULL_JHUB_TOKEN
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: token.culler
-        {{- end }}
         - name: CONFIGPROXY_AUTH_TOKEN
           valueFrom:
             configMapKeyRef:
               name: hub-config
               key: token.proxy
-        - name: HUB_AUTH_TYPE
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: auth.type
-        {{ if eq .Values.auth.type "hmac" -}}
-        - name: HMAC_SECRET_KEY
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: auth.hmac.secret-key
-        {{- end }}
-        {{ if eq .Values.auth.type "google" -}}
-        - name: GOOGLE_OAUTH_CLIENT_ID
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: auth.google.client-id
-        - name: GOOGLE_OAUTH_CLIENT_SECRET
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: auth.google.client-secret
-        - name: GOOGLE_OAUTH_CALLBACK_URL
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: auth.google.callback-url
-        - name: GOOGLE_OAUTH_HOSTED_DOMAIN
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: auth.google.hosted-domain
-        - name: GOOGLE_OAUTH_LOGIN_SERVICE
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: auth.google.login-service
-        {{- end }}
         ports:
           - containerPort: 8081
             name: hub
