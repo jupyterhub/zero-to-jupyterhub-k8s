@@ -37,8 +37,11 @@ RUN /usr/local/sbin/connector-humanities.bash
 ADD connectors/child-dev.bash /usr/local/sbin/connector-child-dev.bash
 RUN /usr/local/sbin/connector-child-dev.bash
 
-ADD connectors/geospatial.bash /usr/local/sbin/connector-geospatial.bash
-RUN /usr/local/sbin/connector-geospatial.bash
+ADD connectors/espm88a.bash /usr/local/sbin/connector-espm88a.bash
+RUN /usr/local/sbin/connector-espm88a.bash
+
+ADD connectors/geog88.bash /usr/local/sbin/connector-geog88.bash
+RUN /usr/local/sbin/connector-geog88.bash
 
 ADD connectors/neuro.bash /usr/local/sbin/connector-neuro.bash
 RUN /usr/local/sbin/connector-neuro.bash
