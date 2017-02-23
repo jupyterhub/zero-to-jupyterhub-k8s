@@ -8,6 +8,7 @@ from gcloud_update import increase_new_gcloud_node, shutdown_specified_node
 from settings import settings
 
 import logging
+import argparse
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)s %(message)s')
@@ -17,7 +18,7 @@ scale_logger = logging.getLogger("scale")
 SERVICE_PROVIDER = "gcloud"
 
 
-def shutdown_empty_nodes(nodes):
+def shutdown_empty_nodes(nodes, options):
     """
     Search through all nodes and shut down those that are unschedulable
     and devoid of non-critical pods
@@ -68,9 +69,18 @@ def scale(options):
         resize_for_new_nodes(len(criticalNodeNames) + goal)
 
     # CRITICAL NODES SHOULD NOT BE SHUTDOWN
-    shutdown_empty_nodes(nodes)
+    shutdown_empty_nodes(nodes, options)
 
 if __name__ == "__main__":
-    scale_logger.setLevel(logging.DEBUG)
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-v", "--verbose", help="Show verbose output (debug)", action="store_true")
+
+    args = parser.parse_args()
+    if args.verbose:
+        scale_logger.setLevel(logging.DEBUG)
+    else:
+        scale_logger.setLevel(logging.INFO)
+
     options = settings()
     scale(options)
