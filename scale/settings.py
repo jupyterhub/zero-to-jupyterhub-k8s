@@ -53,7 +53,7 @@ class settings:
         if "OMIT_NAMESPACES" in os.environ:
             self.omit_namespaces = os.environ[
                 "OMIT_NAMESPACES"].split(self.env_delimiter)
-        if "STUDENT_POD_IDENTIFIER" in os.environ:
-            self.student_pod_identifier = os.environ[
+        if "STUDENT_POD_TYPE" in os.environ:
+            self.student_pod_type = os.environ[
                  "STUDENT_POD_TYPE"]
 
