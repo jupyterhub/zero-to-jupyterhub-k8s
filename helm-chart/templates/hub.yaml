@@ -1,3 +1,4 @@
+{{ if eq .Values.db.type "sqlite-pvc" -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -12,6 +13,7 @@ spec:
     requests:
       storage: 10Gi
 ---
+{{- end }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -75,16 +77,20 @@ spec:
       labels:
         name: hub-pod
     spec:
+      {{ if eq .Values.db.type "sqlite-pvc" -}}
       volumes:
       - name: hub-db-dir
         persistentVolumeClaim:
           claimName: hub-db-dir
+      {{- end }}
       containers:
       - name: hub-container
         image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
+        {{ if eq .Values.db.type "sqlite-pvc" -}}
         volumeMounts:
           - mountPath: /srv/jupyterhub
             name: hub-db-dir
+        {{- end }}
         env:
         - name: SINGLEUSER_STORAGE_CLASS
           valueFrom:

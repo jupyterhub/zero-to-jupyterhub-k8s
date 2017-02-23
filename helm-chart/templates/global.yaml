@@ -14,6 +14,7 @@ metadata:
 provisioner: kubernetes.io/gce-pd
 parameters:
   type: pd-ssd
+{{ if eq .Values.db.type "sqlite-pvc" -}}
 ---
 kind: StorageClass
 apiVersion: storage.k8s.io/v1beta1
@@ -22,4 +23,5 @@ metadata:
 provisioner: kubernetes.io/gce-pd
 parameters:
   type: pd-ssd
+{{- end }}
 
