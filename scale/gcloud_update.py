@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 
 import subprocess
-from settings import GCLOUD_INSTANCE_GROUP, GCE_ZONE
 from utils import get_pods, get_pod_type
 import logging
 scale_logger = logging.getLogger("scale")
+
+GCLOUD_INSTANCE_GROUP = 'gke-dev-default-pool-dbd2a02e-grp'
+GCE_ZONE = "us-central1-a"
 
 
 def shutdown_specified_node(name):

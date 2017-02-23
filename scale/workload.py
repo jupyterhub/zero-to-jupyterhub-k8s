@@ -6,36 +6,35 @@ All functions in the file should be read-only and cause no side effects."""
 
 from utils import get_nodes, get_pods, \
     get_pod_type, get_pod_host_name
-from settings import CAPACITY_PER_NODE, MIN_NODES, MAX_NODES, MAX_UTILIZATION, MIN_UTILIZATION, OPTIMAL_UTILIZATION
-from settings import OMIT_NAMESPACES, CRITICAL_POD_TYPES, OMIT_POD_TYPES, CRITICAL_NAMESPACES
+from settings import CAPACITY_PER_NODE
 import logging
 scale_logger = logging.getLogger("scale")
 
 
-def get_pods_number_on_node(node, pods=None):
+def get_pods_number_on_node(node, options, pods=None):
     """Return the effective number of noncritical
     pods on the node"""
     if pods == None:
         pods = get_pods()
     result = 0
     for pod in pods:
-        if not(pod.metadata.namespace in OMIT_NAMESPACES or
-               pod.metadata.namespace in CRITICAL_NAMESPACES or
-               get_pod_type(pod) in OMIT_POD_TYPES or
-               get_pod_type(pod) in CRITICAL_POD_TYPES
+        if not(pod.metadata.namespace in options.omit_namespaces or
+               pod.metadata.namespace in options.critical_namespaces or
+               get_pod_type(pod) in options.omit_pod_types or
+               get_pod_type(pod) in options.critical_pod_types
                ) and get_pod_host_name(pod) == node.metadata.name:
             result += 1
     return result
 
 
-def get_critical_node_names(pods=None):
+def get_critical_node_names(options, pods=None):
     """Return a list of nodes where critical pods
     are running"""
     if pods == None:
         pods = get_pods()
     result = []
     for pod in pods:
-        if pod.metadata.namespace in CRITICAL_NAMESPACES or get_pod_type(pod) in CRITICAL_POD_TYPES:
+        if pod.metadata.namespace in options.critical_namespaces or get_pod_type(pod) in options.critical_pod_types:
             if get_pod_host_name(pod) not in result:
                 result.append(get_pod_host_name(pod))
     return result
@@ -94,25 +93,25 @@ def get_effective_workload(nodes, criticalNodeNames):
         return float("inf")
 
 
-def schedule_goal():
+def schedule_goal(options):
     """Return the goal number of schedulable nodes IN ADDITION
     TO CRITICAL NODES, given the current situation"""
     nodes = get_nodes()
     scale_logger.info("Current scheduling target: %f ~ %f" %
-                      (MIN_UTILIZATION, MAX_UTILIZATION))
+                      (options.min_utilization, options.max_utilization))
     criticalNodeNames = get_critical_node_names(get_pods())
     currentUtilization = get_effective_workload(
         nodes, criticalNodeNames) / get_capacity(nodes[0])
     scale_logger.info("Current workload is %f" % currentUtilization)
-    if currentUtilization >= MIN_UTILIZATION and currentUtilization <= MAX_UTILIZATION:
+    if currentUtilization >= options.min_utilization and currentUtilization <= options.max_utilization:
         # leave unchanged
         return get_num_schedulable(nodes, criticalNodeNames)
     else:
         # need to scale down
         requiredNum = get_sum_workload(
-            nodes) / OPTIMAL_UTILIZATION / get_capacity(nodes[0])
-        if requiredNum < MIN_NODES - len(criticalNodeNames):
-            requiredNum = MIN_NODES - len(criticalNodeNames)
-        if requiredNum > MAX_NODES - len(criticalNodeNames):
-            requiredNum = MAX_NODES - len(criticalNodeNames)
+            nodes) / options.optimal_utilization / get_capacity(nodes[0])
+        if requiredNum < options.min_nodes - len(criticalNodeNames):
+            requiredNum = options.min_nodes - len(criticalNodeNames)
+        if requiredNum > options.max_nodes - len(criticalNodeNames):
+            requiredNum = options.max_nodes - len(criticalNodeNames)
         return int(round(requiredNum))

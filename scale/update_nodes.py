@@ -9,13 +9,6 @@ import logging
 scale_logger = logging.getLogger("scale")
 
 
-def __getBlockPriority(node, pods):
-    """Return the priority value of a node
-    for being blocked; smallest == highest
-    priority"""
-    return get_pods_number_on_node(node, pods)
-
-
 def __updateNodes(nodes, unschedulable):
     """Update given list of nodes with given
     unschedulable property"""
@@ -27,7 +20,7 @@ def __updateNodes(nodes, unschedulable):
     return updated
 
 
-def updateUnschedulable(number_unschedulable, nodes, calculatePriority=None):
+def updateUnschedulable(number_unschedulable, nodes, options, calculatePriority=None):
     """Attempt to make sure given number of
     nodes are blocked, if possible; 
     return number of nodes newly blocked; negative
@@ -50,7 +43,8 @@ def updateUnschedulable(number_unschedulable, nodes, calculatePriority=None):
     if calculatePriority == None:
         # Default implementation based on get_pods_number_on_node
         pods = get_pods()
-        calculatePriority = lambda node: get_pods_number_on_node(node, pods)
+        calculatePriority = lambda node: get_pods_number_on_node(
+            node, options, pods)
 
     schedulableNodes = []
     unschedulableNodes = []
