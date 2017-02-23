@@ -69,21 +69,26 @@ def get_total_cluster_memory_usage(options, pods=None):
     all student pods"""
     if pods is None:
         pods = get_pods()
-    student_pods = list(filter(lambda pod: pod.metadata.name.startswith(options.student_pod_identifier), pods))
+    student_pods = list(filter(lambda pod: pod.spec.containers[0].name == options.student_pod_type, pods))
     total_mem_usage = 0
     for pod in student_pods:
-        total_mem_usage += int(pod.spec.containers[0].resources.requests['memory'])
+        try:
+            total_mem_usage += int(pod.spec.containers[0].resources.requests['memory'])
+        except KeyError:
+            continue 
     return total_mem_usage
 
 
-def get_total_cluster_memory_capacity(nodes=None):
+def get_total_cluster_memory_capacity(options, nodes=None):
     """Returns the total memory capacity of all nodes, as student
     pods can be scheduled on any node that meets its Request criteria"""
     if nodes is None:
         nodes = get_nodes()
     total_mem_capacity = 0
+    critical_node_names = get_critical_node_names(options)    
     for node in nodes:
-        total_mem_capacity += get_node_memory_capacity(node)
+        if node.metadata.name not in critical_node_names:
+            total_mem_capacity += get_node_memory_capacity(node)
     return total_mem_capacity
 
 
@@ -118,7 +123,7 @@ def get_num_unschedulable(nodes):
 def get_effective_workload(options, nodes, criticalNodeNames):
     """Return effective workload in the given list of nodes"""
     try:
-        return get_total_cluster_memory_usage(options) / get_total_cluster_memory_capacity(nodes)
+        return get_total_cluster_memory_usage(options) / get_total_cluster_memory_capacity(options, nodes)
     except ZeroDivisionError:
         return float("inf")
 
