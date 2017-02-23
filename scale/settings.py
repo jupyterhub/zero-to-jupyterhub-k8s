@@ -26,6 +26,7 @@ class settings:
         self.critical_namespaces = []
         self.omit_pod_types = ["cull", "statsd"]
         self.omit_namespaces = ["kube-system", "default"]
+        self.student_pod_identifier = "jupyter"
         self.load_env()
 
     def load_env(self):
@@ -52,3 +53,7 @@ class settings:
         if "OMIT_NAMESPACES" in os.environ:
             self.omit_namespaces = os.environ[
                 "OMIT_NAMESPACES"].split(self.env_delimiter)
+        if "STUDENT_POD_IDENTIFIER" in os.environ:
+            self.student_pod_identifier = os.environ[
+                 "STUDENT_POD_IDENTIFIER"]
+

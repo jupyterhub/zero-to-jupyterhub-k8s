@@ -26,7 +26,6 @@ def get_pods_number_on_node(node, options, pods=None):
             result += 1
     return result
 
-
 def get_critical_node_names(options, pods=None):
     """Return a list of nodes where critical pods
     are running"""
@@ -57,6 +56,37 @@ def get_sum_workload(nodes):
     return total
 
 
+def get_node_memory_capacity(node):
+    """Converts the specific memory entry 
+    of the kubernetes API into the byte capacity"""
+    node_mem_in_kibibytes = int(node.status.capacity['memory'].replace('Ki', ''))
+    node_mem_in_bytes = 1024 * node_mem_in_kibibytes
+    return node_mem_in_bytes
+
+
+def get_total_cluster_memory_usage(options, pods=None):
+    """Gets the total memory usage of 
+    all student pods"""
+    if pods == None:
+        pods = get_pods()
+    student_pods = list(filter(lambda pod: pod.metadata.name.startswith(options.student_pod_identifier), pods))
+    total_mem_usage = 0
+    for pod in student_pods:
+        total_mem_usage += int(pod.spec.containers[0].resrouces.requests['memory'])
+    return total_mem_usage
+
+
+def get_total_cluster_memory_capacity(nodes=None):
+    """Returns the total memory capacity of all nodes, as student
+    pods can be scheduled on any node that meets its Request criteria"""
+    if nodes == None:
+        nodes = get_nodes()
+    total_mem_capacity = 0
+    for node in nodes:
+        total_mem_capacity += get_node_memory_capacity(node)
+    return total_mem_capacity
+
+
 def get_capacity(node):
     """Return the workload capacity of the 
     given node"""
@@ -85,10 +115,10 @@ def get_num_unschedulable(nodes):
     return result
 
 
-def get_effective_workload(nodes, criticalNodeNames):
+def get_effective_workload(options, nodes, criticalNodeNames):
     """Return effective workload in the given list of nodes"""
     try:
-        return get_sum_workload(nodes) / get_num_schedulable(nodes, criticalNodeNames)
+        return get_total_cluster_memory_usage(options) / get_total_cluster_memory_capacity(nodes)
     except ZeroDivisionError:
         return float("inf")
 
@@ -101,7 +131,7 @@ def schedule_goal(options):
                       (options.min_utilization, options.max_utilization))
     criticalNodeNames = get_critical_node_names(get_pods())
     currentUtilization = get_effective_workload(
-        nodes, criticalNodeNames) / get_capacity(nodes[0])
+        options, nodes, criticalNodeNames) / get_capacity(nodes[0])
     scale_logger.info("Current workload is %f" % currentUtilization)
     if currentUtilization >= options.min_utilization and currentUtilization <= options.max_utilization:
         # leave unchanged
