@@ -69,7 +69,7 @@ data:
   admin.access: {{ .Values.admin.access | quote }}
   admin.users: |
     {{ range $user := .Values.admin.users -}}
-    - {{ $user -}}
+    - {{ $user }}
     {{ end }}
 ---
 apiVersion: extensions/v1beta1
