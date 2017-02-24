@@ -2,25 +2,23 @@
 
 """Execute changes to the Kubernetes cluster"""
 
-from utils import set_unschedulable, get_pods
-from workload import get_pods_number_on_node
 import heapq
 import logging
 scale_logger = logging.getLogger("scale")
 
 
-def __updateNodes(nodes, unschedulable):
+def __updateNodes(k8s, nodes, unschedulable):
     """Update given list of nodes with given
     unschedulable property"""
 
     updated = []
     for node in nodes:
-        set_unschedulable(node.metadata.name, unschedulable)
+        k8s.set_unschedulable(node.metadata.name, unschedulable)
         updated.append(node.metadata.name)
     return updated
 
 
-def updateUnschedulable(number_unschedulable, nodes, options, calculatePriority=None):
+def updateUnschedulable(number_unschedulable, nodes, k8s, calculatePriority=None):
     """Attempt to make sure given number of
     nodes are blocked, if possible; 
     return number of nodes newly blocked; negative
@@ -42,9 +40,7 @@ def updateUnschedulable(number_unschedulable, nodes, options, calculatePriority=
 
     if calculatePriority == None:
         # Default implementation based on get_pods_number_on_node
-        pods = get_pods()
-        calculatePriority = lambda node: get_pods_number_on_node(
-            node, options, pods)
+        calculatePriority = lambda node: k8s.get_pods_number_on_node(node)
 
     schedulableNodes = []
     unschedulableNodes = []
@@ -76,9 +72,9 @@ def updateUnschedulable(number_unschedulable, nodes, options, calculatePriority=
         if nodes[index] in unschedulableNodes:
             toUnBlock.append(nodes[index])
 
-    __updateNodes(toBlock, True)
+    __updateNodes(k8s, toBlock, True)
     scale_logger.debug("%i nodes newly blocked" % len(toBlock))
-    __updateNodes(toUnBlock, False)
+    __updateNodes(k8s, toUnBlock, False)
     scale_logger.debug("%i nodes newly unblocked" % len(toUnBlock))
 
     return len(toBlock) - len(toUnBlock)

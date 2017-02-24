@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 import subprocess
-from utils import get_pods, get_pod_type
 import logging
 scale_logger = logging.getLogger("scale")
 
@@ -18,15 +17,6 @@ def shutdown_specified_node(name):
     output, err = p.communicate()
     if err:
         scale_logger.error("Cannot shutdown node %s" % name)
-
-
-def __get_hub_pod(namespace):
-    '''Return the hub pod. Return None if not found.'''
-    pods = get_pods()
-    for pod in pods:
-        if get_pod_type(pod) == 'hub' and pod.metadata.namespace == namespace:
-            return pod
-    return None
 
 
 def increase_new_gcloud_node(new_node_number, cluster_name):

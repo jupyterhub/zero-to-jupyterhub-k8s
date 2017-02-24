@@ -1,14 +1,14 @@
 #!/usr/bin/python3
 
 """Primary scale logic"""
-from workload import schedule_goal, get_critical_node_names, get_pods_number_on_node
-from utils import get_nodes, get_cluster_name
+from workload import schedule_goal
 from update_nodes import updateUnschedulable
 from gcloud_update import increase_new_gcloud_node, shutdown_specified_node
 from settings import settings
 
 import logging
 import argparse
+from kubernetes_control import k8s_control
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)s %(message)s')
@@ -18,7 +18,7 @@ scale_logger = logging.getLogger("scale")
 SERVICE_PROVIDER = "gcloud"
 
 
-def shutdown_empty_nodes(nodes, options):
+def shutdown_empty_nodes(nodes, k8s):
     """
     Search through all nodes and shut down those that are unschedulable
     and devoid of non-critical pods
@@ -26,50 +26,48 @@ def shutdown_empty_nodes(nodes, options):
     CRITICAL NODES SHOULD NEVER BE INCLUDED IN THE INPUT LIST
     """
     for node in nodes:
-        if get_pods_number_on_node(node, options) == 0 and node.spec.unschedulable:
+        if k8s.get_pods_number_on_node(node) == 0 and node.spec.unschedulable:
             scale_logger.info(
                 "Shutting down empty node: %s" % node.metadata.name)
             shutdown_specified_node(node.metadata.name)
 
 
-def resize_for_new_nodes(newTotalNodes):
+def resize_for_new_nodes(newTotalNodes, k8s):
     """create new nodes to match newTotalNodes required
-    only for scaling up, no action taken if newTotalNodes
-    is smaller than number of current nodes"""
-    if newTotalNodes <= len(get_nodes()):
-        return
+    only for scaling up"""
     scale_logger.info("Using service provider: %s" % SERVICE_PROVIDER)
     if SERVICE_PROVIDER == "gcloud":
         increase_new_gcloud_node(
-            newTotalNodes, get_cluster_name())
+            newTotalNodes, k8s.get_cluster_name())
 
 
 def scale(options):
     """Update the nodes property based on scaling policy
     and create new nodes if necessary"""
-    allNodes = get_nodes()
-    scale_logger.info("Scaling on cluster %s" % get_cluster_name(allNodes[0]))
+    k8s = k8s_control(options)
+    scale_logger.info("Scaling on cluster %s" %
+                      k8s.get_cluster_name())
     nodes = []  # a list of nodes that are NOT critical
-    criticalNodeNames = get_critical_node_names(options)
-    for node in allNodes:
+    criticalNodeNames = k8s.get_critical_node_names()
+    for node in k8s.nodes:
         if node.metadata.name not in criticalNodeNames:
             nodes.append(node)
-    goal = schedule_goal(options)
-    scale_logger.info("Total nodes in the cluster: %i" % len(allNodes))
+    goal = schedule_goal(k8s)
+    scale_logger.info("Total nodes in the cluster: %i" % len(k8s.nodes))
     scale_logger.info("Found %i critical nodes; recommending additional %i nodes for service" % (
-        (len(allNodes) - len(nodes),
+        (len(k8s.nodes) - len(nodes),
          goal)
     ))
 
-    updateUnschedulable(len(nodes) - goal, nodes, options)
+    updateUnschedulable(len(nodes) - goal, nodes, k8s)
 
-    if len(criticalNodeNames) + goal > len(allNodes):
+    if len(criticalNodeNames) + goal > len(k8s.nodes):
         scale_logger.info("Resize the cluster to %i nodes to satisfy the demand" % (
             len(criticalNodeNames) + goal))
-        resize_for_new_nodes(len(criticalNodeNames) + goal)
+        resize_for_new_nodes(len(criticalNodeNames) + goal, k8s)
 
     # CRITICAL NODES SHOULD NOT BE SHUTDOWN
-    shutdown_empty_nodes(nodes, options)
+    shutdown_empty_nodes(nodes, k8s)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

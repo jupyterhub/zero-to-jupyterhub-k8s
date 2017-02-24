@@ -20,12 +20,12 @@ class settings:
 
         # FIXME: Replace with labels
         self.critical_pod_types = os.environ.get(
-            "CRITICAL_POD_TYPES", "").split(self.env_delimiter)
+            "CRITICAL_POD_TYPES", "hub:proxy").split(self.env_delimiter)
         self.critical_namespaces = os.environ.get(
             "CRITICAL_NAMESPACES", "").split(self.env_delimiter)
         self.omit_pod_types = os.environ.get(
-            "OMIT_POD_TYPES", "").split(self.env_delimiter)
+            "OMIT_POD_TYPES", "stasd:cull").split(self.env_delimiter)
         self.omit_namespaces = os.environ.get(
-            "OMIT_NAMESPACES", "").split(self.env_delimiter)
+            "OMIT_NAMESPACES", "kube-system:default").split(self.env_delimiter)
         self.student_pod_type = os.environ.get(
-            "STUDENT_POD_TYPE", "").split(self.env_delimiter)
+            "STUDENT_POD_TYPE", "jupyter").split(self.env_delimiter)
