@@ -68,8 +68,9 @@ data:
   {{- end }}
   admin.access: {{ .Values.admin.access | quote }}
   admin.users: |
-    {{ toYaml .Values.admin.users | indent 4 }}
-
+    {{ range $user := .Values.admin.users -}}
+    - {{ $user -}}
+    {{ end }}
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -87,7 +88,7 @@ spec:
       - name: config
         configMap:
           name: hub-config
-      {{ if eq .Values.db.type "sqlite-pvc" -}}
+      {{ if eq .Values.db.type "sqlite-pvc" }}
       - name: hub-db-dir
         persistentVolumeClaim:
           claimName: hub-db-dir
@@ -98,7 +99,7 @@ spec:
         volumeMounts:
           - mountPath: /etc/jupyterhub/config/
             name: config
-        {{ if eq .Values.db.type "sqlite-pvc" -}}
+        {{ if eq .Values.db.type "sqlite-pvc" }}
           - mountPath: /srv/jupyterhub
             name: hub-db-dir
         {{- end }}
