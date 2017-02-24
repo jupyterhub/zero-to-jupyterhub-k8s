@@ -7,7 +7,7 @@ import logging
 scale_logger = logging.getLogger("scale")
 
 
-def __updateNodes(k8s, nodes, unschedulable):
+def __update_nodes(k8s, nodes, unschedulable):
     """Update given list of nodes with given
     unschedulable property"""
 
@@ -18,13 +18,13 @@ def __updateNodes(k8s, nodes, unschedulable):
     return updated
 
 
-def updateUnschedulable(number_unschedulable, nodes, k8s, calculatePriority=None):
+def update_unschedulable(number_unschedulable, nodes, k8s, calculate_priority=None):
     """Attempt to make sure given number of
     nodes are blocked, if possible; 
     return number of nodes newly blocked; negative
     value means the number of nodes unblocked
 
-    calculatePriority should be a function
+    calculate_priority should be a function
     that takes a node and return its priority value
     for being blocked; smallest == highest
     priority; default implementation uses get_pods_number_on_node
@@ -38,23 +38,23 @@ def updateUnschedulable(number_unschedulable, nodes, k8s, calculatePriority=None
     scale_logger.info(
         "Updating unschedulable flags to ensure %i nodes are unschedulable" % number_unschedulable)
 
-    if calculatePriority == None:
+    if calculate_priority == None:
         # Default implementation based on get_pods_number_on_node
-        calculatePriority = lambda node: k8s.get_pods_number_on_node(node)
+        calculate_priority = lambda node: k8s.get_pods_number_on_node(node)
 
-    schedulableNodes = []
-    unschedulableNodes = []
+    schedulable_nodes = []
+    unschedulable_nodes = []
 
     priority = []
 
     # Analyze nodes status and establish blocking priority
     for count in range(len(nodes)):
         if nodes[count].spec.unschedulable:
-            unschedulableNodes.append(nodes[count])
+            unschedulable_nodes.append(nodes[count])
         else:
-            schedulableNodes.append(nodes[count])
+            schedulable_nodes.append(nodes[count])
         priority.append(
-            (calculatePriority(nodes[count]), count))
+            (calculate_priority(nodes[count]), count))
 
     # Attempt to modify property based on priority
     toBlock = []
@@ -64,17 +64,17 @@ def updateUnschedulable(number_unschedulable, nodes, k8s, calculatePriority=None
     for _ in range(number_unschedulable):
         if len(priority) > 0:
             _, index = heapq.heappop(priority)
-            if nodes[index] in schedulableNodes:
+            if nodes[index] in schedulable_nodes:
                 toBlock.append(nodes[index])
         else:
             break
     for _, index in priority:
-        if nodes[index] in unschedulableNodes:
+        if nodes[index] in unschedulable_nodes:
             toUnBlock.append(nodes[index])
 
-    __updateNodes(k8s, toBlock, True)
+    __update_nodes(k8s, toBlock, True)
     scale_logger.debug("%i nodes newly blocked" % len(toBlock))
-    __updateNodes(k8s, toUnBlock, False)
+    __update_nodes(k8s, toUnBlock, False)
     scale_logger.debug("%i nodes newly unblocked" % len(toUnBlock))
 
     return len(toBlock) - len(toUnBlock)

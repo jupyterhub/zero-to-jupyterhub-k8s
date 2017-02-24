@@ -2,7 +2,7 @@
 
 """Primary scale logic"""
 from workload import schedule_goal
-from update_nodes import updateUnschedulable
+from update_nodes import update_unschedulable
 from gcloud_update import increase_new_gcloud_node, shutdown_specified_node
 from settings import settings
 
@@ -32,13 +32,13 @@ def shutdown_empty_nodes(nodes, k8s):
             shutdown_specified_node(node.metadata.name)
 
 
-def resize_for_new_nodes(newTotalNodes, k8s):
-    """create new nodes to match newTotalNodes required
+def resize_for_new_nodes(new_total_nodes, k8s):
+    """create new nodes to match new_total_nodes required
     only for scaling up"""
     scale_logger.info("Using service provider: %s" % SERVICE_PROVIDER)
     if SERVICE_PROVIDER == "gcloud":
         increase_new_gcloud_node(
-            newTotalNodes, k8s.get_cluster_name())
+            new_total_nodes, k8s.get_cluster_name())
 
 
 def scale(options):
@@ -59,7 +59,7 @@ def scale(options):
          goal)
     ))
 
-    updateUnschedulable(len(nodes) - goal, nodes, k8s)
+    update_unschedulable(len(nodes) - goal, nodes, k8s)
 
     if len(criticalNodeNames) + goal > len(k8s.nodes):
         scale_logger.info("Resize the cluster to %i nodes to satisfy the demand" % (

@@ -1,1 +1,3 @@
-kubernetes
+kubernetes==1.0.0b1
+# kubernetes 1.0.0b1 forgot to include websocket dependency
+websocket==0.2.1
