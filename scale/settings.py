@@ -4,12 +4,6 @@
 
 import os
 
-# Legacy scaling settings
-USERS_PER_NODE = 7
-
-# New scaling settings #TODO: discuss with BIDS
-CAPACITY_PER_NODE = USERS_PER_NODE  # FIXME: should be determined dynamically
-
 
 class settings:
 
@@ -17,43 +11,21 @@ class settings:
 
     def __init__(self):
         """Set default value"""
-        self.max_utilization = 0.85
-        self.min_utilization = 0.65
-        self.optimal_utilization = 0.75
-        self.min_nodes = 3
-        self.max_nodes = 72
-        self.critical_pod_types = ["hub", "proxy"]
-        self.critical_namespaces = []
-        self.omit_pod_types = ["cull", "statsd"]
-        self.omit_namespaces = ["kube-system", "default"]
-        self.student_pod_type = "notebook"
-        self.load_env()
+        self.max_utilization = float(os.environ.get("MAX_UTILIZATION", 0.85))
+        self.min_utilization = float(os.environ.get("MIN_UTILIZATION", 0.65))
+        self.optimal_utilization = float(
+            os.environ.get("OPTIMAL_UTILIZATION", 0.75))
+        self.min_nodes = int(os.environ.get("MIN_NODES", 3))
+        self.max_nodes = int(os.environ.get("MAX_NODES", 72))
 
-    def load_env(self):
-        """Load settings from os.env"""
-        if "MIN_UTILIZATION" in os.environ:
-            self.min_utilization = float(os.environ["MIN_UTILIZATION"])
-        if "MAX_UTILIZATION" in os.environ:
-            self.max_utilization = float(os.environ["MAX_UTILIZATION"])
-        if "OPTIMAL_UTILIZATION" in os.environ:
-            self.optimal_utilization = float(os.environ["OPTIMAL_UTILIZATION"])
-        if "MIN_NODES" in os.environ:
-            self.min_nodes = int(os.environ["MIN_NODES"])
-        if "MAX_NODES" in os.environ:
-            self.max_nodes = int(os.environ["MAX_NODES"])
-        if "CRITICAL_POD_TYPES" in os.environ:
-            self.critical_pod_types = os.environ[
-                "CRITICAL_POD_TYPES"].split(self.env_delimiter)
-        if "CRITICAL_NAMESPACES" in os.environ:
-            self.critical_namespaces = os.environ[
-                "CRITICAL_NAMESPACES"].split(self.env_delimiter)
-        if "OMIT_POD_TYPES" in os.environ:
-            self.omit_pod_types = os.environ[
-                "OMIT_POD_TYPES"].split(self.env_delimiter)
-        if "OMIT_NAMESPACES" in os.environ:
-            self.omit_namespaces = os.environ[
-                "OMIT_NAMESPACES"].split(self.env_delimiter)
-        if "STUDENT_POD_TYPE" in os.environ:
-            self.student_pod_type = os.environ[
-                 "STUDENT_POD_TYPE"]
-
+        # FIXME: Replace with labels
+        self.critical_pod_types = os.environ.get(
+            "CRITICAL_POD_TYPES", "").split(self.env_delimiter)
+        self.critical_namespaces = os.environ.get(
+            "CRITICAL_NAMESPACES", "").split(self.env_delimiter)
+        self.omit_pod_types = os.environ.get(
+            "OMIT_POD_TYPES", "").split(self.env_delimiter)
+        self.omit_namespaces = os.environ.get(
+            "OMIT_NAMESPACES", "").split(self.env_delimiter)
+        self.student_pod_type = os.environ.get(
+            "STUDENT_POD_TYPE", "").split(self.env_delimiter)

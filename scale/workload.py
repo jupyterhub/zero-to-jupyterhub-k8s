@@ -6,7 +6,6 @@ All functions in the file should be read-only and cause no side effects."""
 
 from utils import get_nodes, get_pods, \
     get_pod_type, get_pod_host_name
-from settings import CAPACITY_PER_NODE
 import logging
 scale_logger = logging.getLogger("scale")
 
@@ -25,6 +24,7 @@ def get_pods_number_on_node(node, options, pods=None):
                ) and get_pod_host_name(pod) == node.metadata.name:
             result += 1
     return result
+
 
 def get_critical_node_names(options, pods=None):
     """Return a list of nodes where critical pods
@@ -59,7 +59,8 @@ def get_sum_workload(nodes, options):
 def get_node_memory_capacity(node):
     """Converts the specific memory entry 
     of the kubernetes API into the byte capacity"""
-    node_mem_in_kibibytes = int(node.status.capacity['memory'].replace('Ki', ''))
+    node_mem_in_kibibytes = int(
+        node.status.capacity['memory'].replace('Ki', ''))
     node_mem_in_bytes = 1024 * node_mem_in_kibibytes
     return node_mem_in_bytes
 
@@ -69,13 +70,15 @@ def get_total_cluster_memory_usage(options, pods=None):
     all student pods"""
     if pods is None:
         pods = get_pods()
-    student_pods = list(filter(lambda pod: pod.spec.containers[0].name == options.student_pod_type, pods))
+    student_pods = list(
+        filter(lambda pod: pod.spec.containers[0].name == options.student_pod_type, pods))
     total_mem_usage = 0
     for pod in student_pods:
         try:
-            total_mem_usage += int(pod.spec.containers[0].resources.requests['memory'])
+            total_mem_usage += int(
+                pod.spec.containers[0].resources.requests['memory'])
         except KeyError:
-            continue 
+            continue
     return total_mem_usage
 
 
@@ -85,7 +88,7 @@ def get_total_cluster_memory_capacity(options, nodes=None):
     if nodes is None:
         nodes = get_nodes()
     total_mem_capacity = 0
-    critical_node_names = get_critical_node_names(options)    
+    critical_node_names = get_critical_node_names(options)
     for node in nodes:
         if node.metadata.name not in critical_node_names:
             total_mem_capacity += get_node_memory_capacity(node)
@@ -95,8 +98,7 @@ def get_total_cluster_memory_capacity(options, nodes=None):
 def get_capacity(node):
     """Return the workload capacity of the 
     given node"""
-    # FIXME: not adjusted to different machine types
-    return CAPACITY_PER_NODE
+    get_node_memory_capacity(node)
 
 
 def get_num_schedulable(nodes, criticalNodeNames):
