@@ -24,7 +24,7 @@ def schedule_goal(k8s):
     scale_logger.info("Current scheduling target: %f ~ %f" %
                       (k8s.options.min_utilization, k8s.options.max_utilization))
     currentUtilization = get_effective_utilization(k8s)
-    scale_logger.info("Current workload is %f" % currentUtilization)
+    scale_logger.info("Current workload is %f", currentUtilization)
     if currentUtilization >= k8s.options.min_utilization and currentUtilization <= k8s.options.max_utilization:
         # leave unchanged
         return k8s.get_num_schedulable()

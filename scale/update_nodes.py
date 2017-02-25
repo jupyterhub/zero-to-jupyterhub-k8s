@@ -36,7 +36,7 @@ def update_unschedulable(number_unschedulable, nodes, k8s, calculate_priority=No
     number_unschedulable = int(number_unschedulable)
 
     scale_logger.info(
-        "Updating unschedulable flags to ensure %i nodes are unschedulable" % number_unschedulable)
+        "Updating unschedulable flags to ensure %i nodes are unschedulable", number_unschedulable)
 
     if calculate_priority == None:
         # Default implementation based on get_pods_number_on_node
@@ -73,8 +73,8 @@ def update_unschedulable(number_unschedulable, nodes, k8s, calculate_priority=No
             toUnBlock.append(nodes[index])
 
     __update_nodes(k8s, toBlock, True)
-    scale_logger.debug("%i nodes newly blocked" % len(toBlock))
+    scale_logger.debug("%i nodes newly blocked", len(toBlock))
     __update_nodes(k8s, toUnBlock, False)
-    scale_logger.debug("%i nodes newly unblocked" % len(toUnBlock))
+    scale_logger.debug("%i nodes newly unblocked", len(toUnBlock))
 
     return len(toBlock) - len(toUnBlock)

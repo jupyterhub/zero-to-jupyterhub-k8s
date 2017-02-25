@@ -30,3 +30,9 @@ def get_node_memory_capacity(node):
         node.status.capacity['memory'].replace('Ki', ''))
     node_mem_in_bytes = 1024 * node_mem_in_kibibytes
     return node_mem_in_bytes
+
+
+def check_list_intersection(list1, list2):
+    """Return True if two lists have intersection,
+    otherwise False"""
+    return len(set(list1).intersection(set(list2))) != 0

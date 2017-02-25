@@ -28,14 +28,14 @@ def shutdown_empty_nodes(nodes, k8s):
     for node in nodes:
         if k8s.get_pods_number_on_node(node) == 0 and node.spec.unschedulable:
             scale_logger.info(
-                "Shutting down empty node: %s" % node.metadata.name)
+                "Shutting down empty node: %s", node.metadata.name)
             shutdown_specified_node(node.metadata.name)
 
 
 def resize_for_new_nodes(new_total_nodes, k8s):
     """create new nodes to match new_total_nodes required
     only for scaling up"""
-    scale_logger.info("Using service provider: %s" % SERVICE_PROVIDER)
+    scale_logger.info("Using service provider: %s", SERVICE_PROVIDER)
     if SERVICE_PROVIDER == "gcloud":
         increase_new_gcloud_node(
             new_total_nodes, k8s.get_cluster_name())
@@ -48,23 +48,22 @@ def scale(options):
     scale_logger.info("Scaling on cluster %s" %
                       k8s.get_cluster_name())
     nodes = []  # a list of nodes that are NOT critical
-    criticalNodeNames = k8s.get_critical_node_names()
     for node in k8s.nodes:
-        if node.metadata.name not in criticalNodeNames:
+        if node.metadata.name not in k8s.critical_node_names:
             nodes.append(node)
     goal = schedule_goal(k8s)
-    scale_logger.info("Total nodes in the cluster: %i" % len(k8s.nodes))
-    scale_logger.info("Found %i critical nodes; recommending additional %i nodes for service" % (
+    scale_logger.info("Total nodes in the cluster: %i", len(k8s.nodes))
+    scale_logger.info("Found %i critical nodes; recommending additional %i nodes for service", (
         (len(k8s.nodes) - len(nodes),
          goal)
     ))
 
     update_unschedulable(len(nodes) - goal, nodes, k8s)
 
-    if len(criticalNodeNames) + goal > len(k8s.nodes):
-        scale_logger.info("Resize the cluster to %i nodes to satisfy the demand" % (
-            len(criticalNodeNames) + goal))
-        resize_for_new_nodes(len(criticalNodeNames) + goal, k8s)
+    if len(k8s.critical_node_names) + goal > len(k8s.nodes):
+        scale_logger.info("Resize the cluster to %i nodes to satisfy the demand", (
+            len(k8s.critical_node_names) + goal))
+        resize_for_new_nodes(len(k8s.critical_node_names) + goal, k8s)
 
     # CRITICAL NODES SHOULD NOT BE SHUTDOWN
     shutdown_empty_nodes(nodes, k8s)
