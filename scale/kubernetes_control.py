@@ -43,7 +43,7 @@ class k8s_control:
         scale_logger.debug("Getting all pods in all namespaces")
         pods = self.v1.list_pod_for_all_namespaces().items
         for pod in pods:
-            if not (check_list_intersection(self.options.omit_labels, pod.metadata.labels.keys()) or pod.metadata.namespace in self.options.omit_namespaces):
+            if not (check_list_intersection(self.options.omit_labels, pod.metadata.labels) or pod.metadata.namespace in self.options.omit_namespaces):
                 result.append(pod)
         return result
 
@@ -69,7 +69,7 @@ class k8s_control:
             try:
                 total_mem_usage += int(
                     pod.spec.containers[0].resources.requests['memory'])
-            except KeyError:
+            except (KeyError, TypeError):
                 # In the case that there is no memory request, the memory
                 # usage is seen as 0
                 continue
@@ -90,7 +90,7 @@ class k8s_control:
         are running"""
         result = []
         for pod in self.pods:
-            if not check_list_intersection(pod.metadata.labels.keys(), self.options.preemptible_labels):
+            if not check_list_intersection(pod.metadata.labels, self.options.preemptible_labels):
                 if get_pod_host_name(pod) not in result:
                     result.append(get_pod_host_name(pod))
         return result

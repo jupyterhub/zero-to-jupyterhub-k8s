@@ -35,4 +35,6 @@ def get_node_memory_capacity(node):
 def check_list_intersection(list1, list2):
     """Return True if two lists have intersection,
     otherwise False"""
+    if list1 is None or list2 is None:
+        return False
     return len(set(list1).intersection(set(list2))) != 0

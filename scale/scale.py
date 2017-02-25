@@ -45,18 +45,15 @@ def scale(options):
     """Update the nodes property based on scaling policy
     and create new nodes if necessary"""
     k8s = k8s_control(options)
-    scale_logger.info("Scaling on cluster %s" %
-                      k8s.get_cluster_name())
+    scale_logger.info("Scaling on cluster %s", k8s.get_cluster_name())
     nodes = []  # a list of nodes that are NOT critical
     for node in k8s.nodes:
         if node.metadata.name not in k8s.critical_node_names:
             nodes.append(node)
     goal = schedule_goal(k8s)
     scale_logger.info("Total nodes in the cluster: %i", len(k8s.nodes))
-    scale_logger.info("Found %i critical nodes; recommending additional %i nodes for service", (
-        (len(k8s.nodes) - len(nodes),
-         goal)
-    ))
+    scale_logger.info("Found %i critical nodes; recommending additional %i nodes for service",
+                      len(k8s.nodes) - len(nodes), goal)
 
     update_unschedulable(len(nodes) - goal, nodes, k8s)
 
