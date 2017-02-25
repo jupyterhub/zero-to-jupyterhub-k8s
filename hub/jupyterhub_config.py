@@ -23,6 +23,10 @@ c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 c.JupyterHub.proxy_api_ip = os.environ['PROXY_API_SERVICE_HOST']
 c.JupyterHub.proxy_api_port = int(os.environ['PROXY_API_SERVICE_PORT'])
 
+# Check that the proxy has routes appropriately setup
+# This isn't the best named setting :D
+c.last_activity_interval = 5
+
 c.JupyterHub.ip = os.environ['PROXY_PUBLIC_SERVICE_HOST']
 c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
 
