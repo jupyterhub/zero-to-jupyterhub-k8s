@@ -2,7 +2,7 @@ FROM debian:jessie
 
 RUN apt-get update
 
-RUN apt-get install -y --no-install-recommends python3 python3-pip ca-certificates git
+RUN apt-get install -y --no-install-recommends python3 python3-pip ca-certificates git libcurl4-openssl-dev
 
 RUN pip3 install --upgrade pip
 
