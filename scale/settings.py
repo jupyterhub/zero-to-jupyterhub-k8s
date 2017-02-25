@@ -23,4 +23,4 @@ class settings:
         self.omit_labels = os.environ.get(
             "OMIT_LABELS", "").split(self.env_delimiter)
         self.omit_namespaces = os.environ.get(
-            "OMIT_NAMESPACES", "kube-system:default").split(self.env_delimiter)
+            "OMIT_NAMESPACES", "kube-system").split(self.env_delimiter)
