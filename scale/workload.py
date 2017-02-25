@@ -14,9 +14,9 @@ def get_effective_utilization(k8s):
     """Return effective workload in the given list of nodes"""
     try:
         scale_logger.debug(
-            "Current memory usage is %f", k8s.get_total_cluster_memory_usage())
+            "Current memory usage is %i", k8s.get_total_cluster_memory_usage())
         scale_logger.debug(
-            "Total memory capacity is %f", k8s.get_total_cluster_memory_capacity())
+            "Total memory capacity is %i", k8s.get_total_cluster_memory_capacity())
         return k8s.get_total_cluster_memory_usage() / k8s.get_total_cluster_memory_capacity()
     except ZeroDivisionError:
         return float("inf")

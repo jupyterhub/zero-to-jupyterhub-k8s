@@ -47,6 +47,18 @@ class k8s_control:
                 result.append(pod)
         return result
 
+    def show_nodes_status(self):
+        """Print the status of all nodes in the cluster"""
+        print(
+            "Node name \t\t Num of pods on node \t Schedulable? \t Preemptible?")
+        for node in self.nodes:
+            print("%s\t%i\t%s\t%s" %
+                  (node.metadata.name,
+                   self.get_pods_number_on_node(node),
+                   "U" if node.spec.unschedulable else "S",
+                   "N" if node.metadata.name in self.critical_node_names else "P"
+                   ))
+
     def set_unschedulable(self, node_name, value=True):
         """Set the spec key 'unschedulable'"""
         scale_logger.debug(
@@ -129,3 +141,12 @@ class k8s_control:
             if node.spec.unschedulable:
                 result += 1
         return result
+
+if __name__ == "__main__":
+    import settings
+    k8s = k8s_control(settings.settings())
+    print("Displaying information of cluster %s\n" % k8s.get_cluster_name())
+    k8s.show_nodes_status()
+    print("Current memory usage is %i" % k8s.get_total_cluster_memory_usage())
+    print("Total memory capacity is %i, not including non-preemptible nodes" %
+          k8s.get_total_cluster_memory_capacity())
