@@ -1,3 +1,4 @@
+{{ if .Values.cull.enabled -}}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -23,3 +24,4 @@ spec:
               configMapKeyRef:
                 name: hub-config
                 key: token.culler
+{{- end }}

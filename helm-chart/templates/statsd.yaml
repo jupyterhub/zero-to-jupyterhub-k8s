@@ -1,3 +1,4 @@
+{{ if .Values.metrics.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -51,3 +52,4 @@ spec:
         ports:
         - containerPort: 8125
           name: statsd
+{{- end }}
