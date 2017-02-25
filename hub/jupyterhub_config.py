@@ -35,8 +35,9 @@ c.JupyterHub.hub_ip = '0.0.0.0'
 
 c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
 
-# Upto 15 minutes, first pulls can be really slow because data8 user image is huge
-c.KubeSpawner.start_timeout = 60 * 20
+# Only a minute, since we expect container images to be pre-pulled
+# If they take more than that, they should be considered failed.
+c.KubeSpawner.start_timeout = 60
 
 # Use env var for this, since we want hub to restart when this changes
 c.KubeSpawner.singleuser_image_spec = os.environ['SINGLEUSER_IMAGE']
