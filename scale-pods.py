@@ -59,7 +59,7 @@ POD_THRESHOLD = 0.9
 BUMP_INCREMENT = 2
 
 NODE_POOL = 'highmem-pool'
-USERS_PER_NODE = 6
+USERS_PER_NODE = 12
 
 # How many nodes do we have?
 cmd = ['gcloud', 'container', 'clusters', 'describe', CLUSTER]
