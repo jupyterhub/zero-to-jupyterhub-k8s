@@ -50,7 +50,7 @@ class k8s_control:
     def set_unschedulable(self, node_name, value=True):
         """Set the spec key 'unschedulable'"""
         scale_logger.debug(
-            "Setting %s node's unschedulable property to %r", (node_name, value))
+            "Setting %s node's unschedulable property to %r", node_name, value)
         assert node_name not in self.critical_node_names
         new_node = client.V1Node(
             api_version="v1",

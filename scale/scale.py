@@ -9,6 +9,7 @@ from settings import settings
 import logging
 import argparse
 from kubernetes_control import k8s_control
+from kubernetes_control_test import k8s_control_test
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)s %(message)s')
@@ -41,10 +42,13 @@ def resize_for_new_nodes(new_total_nodes, k8s):
             new_total_nodes, k8s.get_cluster_name())
 
 
-def scale(options):
+def scale(options, test=False):
     """Update the nodes property based on scaling policy
     and create new nodes if necessary"""
-    k8s = k8s_control(options)
+    if test:
+        k8s = k8s_control_test(options)
+    else:
+        k8s = k8s_control(options)
     scale_logger.info("Scaling on cluster %s", k8s.get_cluster_name())
     nodes = []  # a list of nodes that are NOT critical
     for node in k8s.nodes:
@@ -60,21 +64,27 @@ def scale(options):
     if len(k8s.critical_node_names) + goal > len(k8s.nodes):
         scale_logger.info("Resize the cluster to %i nodes to satisfy the demand", (
             len(k8s.critical_node_names) + goal))
-        resize_for_new_nodes(len(k8s.critical_node_names) + goal, k8s)
-
-    # CRITICAL NODES SHOULD NOT BE SHUTDOWN
-    shutdown_empty_nodes(nodes, k8s)
+        if not test:
+            resize_for_new_nodes(len(k8s.critical_node_names) + goal, k8s)
+    if not test:
+        # CRITICAL NODES SHOULD NOT BE SHUTDOWN
+        shutdown_empty_nodes(nodes, k8s)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-v", "--verbose", help="Show verbose output (debug)", action="store_true")
-
+    parser.add_argument(
+        "--test", help="Run the script in test mode, no real action", action="store_true")
     args = parser.parse_args()
     if args.verbose:
         scale_logger.setLevel(logging.DEBUG)
     else:
         scale_logger.setLevel(logging.INFO)
 
+    if args.test:
+        scale_logger.warning(
+            "Running in test mode, no action will actually be taken")
+
     options = settings()
-    scale(options)
+    scale(options, args.test)
