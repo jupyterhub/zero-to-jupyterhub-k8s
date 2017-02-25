@@ -1,3 +1,4 @@
+{{ if eq .Values.db.type "sqlite-pvc" -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -12,6 +13,7 @@ spec:
     requests:
       storage: 10Gi
 ---
+{{- end }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -32,7 +34,9 @@ metadata:
   namespace: {{ .Values.name }}
 data:
   token.proxy: {{ .Values.token.proxy | quote }}
+  {{ if .Values.cull.enabled -}}
   token.culler: {{ .Values.token.culler | quote }}
+  {{- end }}
 
   auth.type: {{ .Values.auth.type | quote }}
   {{ if eq .Values.auth.type "hmac" -}}
@@ -45,8 +49,11 @@ data:
   auth.google.login-service: {{.Values.auth.google.loginService | quote}}
   auth.google.callback-url: {{.Values.auth.google.callbackUrl}}
   {{- end }}
+  singleuser.storage.type: {{ .Values.singleuser.storage.type | quote }}
+  {{ if eq .Values.singleuser.storage.type "dynamic" -}}
   singleuser.storage.class: single-user-storage-{{ .Values.name }}
   singleuser.storage.capacity: {{.Values.singleuser.storage.capacity | quote }}
+  {{- end }}
   {{ if .Values.singleuser.memory.limit -}}
   singleuser.memory.limit: {{ .Values.singleuser.memory.limit | quote}}
   {{- end }}
@@ -59,7 +66,11 @@ data:
   {{ if .Values.singleuser.cpu.guarantee -}}
   singleuser.cpu.guarantee: {{ .Values.singleuser.cpu.guarantee | quote}}
   {{- end }}
-
+  admin.access: {{ .Values.admin.access | quote }}
+  admin.users: |
+    {{ range $user := .Values.admin.users -}}
+    - {{ $user }}
+    {{ end }}
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -74,54 +85,26 @@ spec:
         name: hub-pod
     spec:
       volumes:
+      - name: config
+        configMap:
+          name: hub-config
+      {{ if eq .Values.db.type "sqlite-pvc" }}
       - name: hub-db-dir
         persistentVolumeClaim:
           claimName: hub-db-dir
+      {{- end }}
       containers:
       - name: hub-container
         image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
         volumeMounts:
+          - mountPath: /etc/jupyterhub/config/
+            name: config
+        {{ if eq .Values.db.type "sqlite-pvc" }}
           - mountPath: /srv/jupyterhub
             name: hub-db-dir
+        {{- end }}
+        imagePullPolicy: IfNotPresent
         env:
-        - name: SINGLEUSER_STORAGE_CLASS
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: singleuser.storage.class
-        - name: SINGLEUSER_STORAGE_CAPACITY
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: singleuser.storage.capacity
-        {{ if .Values.singleuser.memory.guarantee -}}
-        - name: SINGLEUSER_MEM_GUARANTEE
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: singleuser.memory.limit
-        {{- end }}
-        {{ if .Values.singleuser.memory.limit -}}
-        - name: SINGLEUSER_MEM_LIMIT
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: singleuser.memory.limit
-        {{- end }}
-        {{ if .Values.singleuser.cpu.guarantee -}}
-        - name: SINGLEUSER_CPU_GUARANTEE
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: singleuser.cpu.guarantee
-        {{- end }}
-        {{ if .Values.singleuser.cpu.limit -}}
-        - name: SINGLEUSER_CPU_LIMIT
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: singleuser.cpu.limit
-        {{- end }}
         # Put this here directly so hub will restart when we
         # change this
         - name: SINGLEUSER_IMAGE
@@ -136,55 +119,11 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        - name: CULL_JHUB_TOKEN
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: token.culler
         - name: CONFIGPROXY_AUTH_TOKEN
           valueFrom:
             configMapKeyRef:
               name: hub-config
               key: token.proxy
-        - name: HUB_AUTH_TYPE
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: auth.type
-        {{ if eq .Values.auth.type "hmac" -}}
-        - name: HMAC_SECRET_KEY
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: auth.hmac.secret-key
-        {{- end }}
-        {{ if eq .Values.auth.type "google" -}}
-        - name: GOOGLE_OAUTH_CLIENT_ID
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: auth.google.client-id
-        - name: GOOGLE_OAUTH_CLIENT_SECRET
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: auth.google.client-secret
-        - name: GOOGLE_OAUTH_CALLBACK_URL
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: auth.google.callback-url
-        - name: GOOGLE_OAUTH_HOSTED_DOMAIN
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: auth.google.hosted-domain
-        - name: GOOGLE_OAUTH_LOGIN_SERVICE
-          valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: auth.google.login-service
-        {{- end }}
         ports:
           - containerPort: 8081
             name: hub

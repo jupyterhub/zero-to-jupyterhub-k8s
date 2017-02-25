@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 import subprocess
 import sys
@@ -53,11 +53,13 @@ def get_singleuser_image(namespace, hub_pod):
 
 ## MAIN
 NAMESPACES = ['datahub', 'prob140', 'stat28']
-USERS_PER_NODE = 7
 CLUSTER = 'prod'
 KUBECTL_CONTEXT = 'gke_data-8_us-central1-a_prod'
 POD_THRESHOLD = 0.9
 BUMP_INCREMENT = 2
+
+NODE_POOL = 'highmem-pool'
+USERS_PER_NODE = 6
 
 # How many nodes do we have?
 cmd = ['gcloud', 'container', 'clusters', 'describe', CLUSTER]
@@ -87,7 +89,7 @@ if cur_pods < POD_THRESHOLD * max_pods:
 
 new_node_count = node_count + BUMP_INCREMENT
 cmd = ['gcloud', '--quiet', 'container', 'clusters', 'resize', CLUSTER,
-	'--size', str(new_node_count)]
+	'--node-pool='+NODE_POOL, '--size', str(new_node_count)]
 print(' '.join(cmd))
 p = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout
 buf = p.read()
