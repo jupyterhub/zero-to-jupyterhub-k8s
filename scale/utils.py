@@ -3,7 +3,6 @@
 """Kubernetes API access functions"""
 
 import logging
-from kubernetes import client, config
 
 scale_logger = logging.getLogger("scale")
 logging.getLogger("kubernetes").setLevel(logging.WARNING)

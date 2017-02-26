@@ -3,7 +3,7 @@
 """Primary scale logic"""
 from workload import schedule_goal
 from update_nodes import update_unschedulable
-from cluster_update import cluster_control
+from cluster_update import gce_cluster_control
 from settings import settings
 
 import logging
@@ -14,6 +14,7 @@ from kubernetes_control_test import k8s_control_test
 logging.basicConfig(
     format='%(asctime)s %(levelname)s %(message)s')
 scale_logger = logging.getLogger("scale")
+
 
 def shutdown_empty_nodes(nodes, k8s, cluster):
     """
@@ -29,7 +30,7 @@ def shutdown_empty_nodes(nodes, k8s, cluster):
             cluster.shutdown_specified_node(node.metadata.name)
 
 
-def resize_for_new_nodes(new_total_nodes, k8s):
+def resize_for_new_nodes(new_total_nodes, k8s, cluster):
     """create new nodes to match new_total_nodes required
     only for scaling up
 
@@ -37,7 +38,7 @@ def resize_for_new_nodes(new_total_nodes, k8s):
     instead of CLI call"""
     scale_logger.info("Resizing up to: %d nodes", new_total_nodes)
     cluster.add_new_node(
-            new_total_nodes, k8s.get_cluster_name())
+        new_total_nodes, k8s.get_cluster_name())
 
 
 def scale(options, test=False):
@@ -47,7 +48,8 @@ def scale(options, test=False):
         k8s = k8s_control_test(options)
     else:
         k8s = k8s_control(options)
-        cluster = cluster_control(options)
+        # ONLY GCE is supported for scaling at this time
+        cluster = gce_cluster_control(options)
     scale_logger.info("Scaling on cluster %s", k8s.get_cluster_name())
 
     nodes = []  # a list of nodes that are NOT critical
@@ -66,7 +68,8 @@ def scale(options, test=False):
         scale_logger.info("Resize the cluster to %i nodes to satisfy the demand", (
             len(k8s.critical_node_names) + goal))
         if not test:
-            resize_for_new_nodes(len(k8s.critical_node_names) + goal, k8s)
+            resize_for_new_nodes(
+                len(k8s.critical_node_names) + goal, k8s, cluster)
     if not test:
         # CRITICAL NODES SHOULD NOT BE SHUTDOWN
         shutdown_empty_nodes(nodes, k8s, cluster)

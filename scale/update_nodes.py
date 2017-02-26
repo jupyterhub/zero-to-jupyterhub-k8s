@@ -4,6 +4,7 @@
 
 import heapq
 import logging
+
 scale_logger = logging.getLogger("scale")
 
 
@@ -31,10 +32,7 @@ def update_unschedulable(number_unschedulable, nodes, k8s, calculate_priority=No
 
     CRITICAL NODES SHOULD NOT BE INCLUDED IN THE INPUT LIST"""
 
-    # TODO: Should we even attempt to de-schedule things if our input
-    # is faulty like in this example?
-    if number_unschedulable < 0:
-        number_unschedulable = 0
+    assert number_unschedulable >= 0
     number_unschedulable = int(number_unschedulable)
 
     scale_logger.info(

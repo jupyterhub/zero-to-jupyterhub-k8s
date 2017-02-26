@@ -2,10 +2,9 @@
 
 """Provides read and write access to Kubernetes API"""
 
-from kubernetes import client, config
+from kubernetes import client
 import logging
 
-from utils import get_pod_host_name, get_pod_type, get_node_memory_capacity, check_list_intersection
 from kubernetes_control import k8s_control
 
 scale_logger = logging.getLogger("scale")

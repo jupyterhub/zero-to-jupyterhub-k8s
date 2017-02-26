@@ -43,7 +43,7 @@ When `scale.py` is exected
 
 Python 3, with `kubernetes` installed;
 
-Google Cloud SDK, with `gcloud` added in `$PATH`;
+Google Cloud client `google-api-python-client`;
 
 Necessary privilege or credentials.
 
