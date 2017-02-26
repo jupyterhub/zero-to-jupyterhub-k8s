@@ -2,8 +2,8 @@
 
 """Kubernetes API access functions"""
 
-from kubernetes import client, config
 import logging
+from kubernetes import client, config
 
 scale_logger = logging.getLogger("scale")
 logging.getLogger("kubernetes").setLevel(logging.WARNING)
@@ -21,6 +21,18 @@ def get_pod_type(pod):
     """Return the Type of the pod"""
     # TODO: May not be the best approach
     return pod.metadata.name.split('-')[0]
+
+
+def get_pod_memory_request(pod):
+    """Returns the amount of memory requested
+    by the node"""
+    node_memory_request = 0
+    try:
+        node_memory_request = \
+            int(pod.spec.containers[0].resources.requests['memory'])
+    except (KeyError, TypeError):
+        pass
+    return node_memory_request
 
 
 def get_node_memory_capacity(node):

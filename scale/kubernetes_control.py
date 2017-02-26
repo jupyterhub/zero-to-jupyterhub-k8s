@@ -1,11 +1,11 @@
 #/usr/bin/python3
 
 """Provides read and write access to Kubernetes API"""
-
-from kubernetes import client, config
 import logging
 
-from utils import get_pod_host_name, get_pod_type, get_node_memory_capacity, check_list_intersection
+from kubernetes import client, config
+from utils import get_pod_host_name, get_pod_type, get_pod_memory_request, \
+    get_node_memory_capacity, check_list_intersection
 
 scale_logger = logging.getLogger("scale")
 logging.getLogger("kubernetes").setLevel(logging.WARNING)
@@ -18,8 +18,7 @@ class k8s_control:
     cluster always use the node and pods status at the
     time it was initiated
 
-    self.pods do not contain pods required to be omitted 
-    in settings"""
+    self.pods omits certain pods based on settings"""
 
     def __init__(self, options):
         """ Needs to be initialized with options as an
@@ -27,10 +26,12 @@ class k8s_control:
         config.load_kube_config()
         self.options = options
         self.v1 = client.CoreV1Api()
+        self.pods = self.get_pods()
         self.nodes = self.get_nodes()
-        self.pods = self.get_pods()  # See specs above
         self.critical_node_names = self.get_critical_node_names()
         self.critical_node_number = len(self.critical_node_names)
+        self.noncritical_nodes = list(filter(lambda node: node.metadata.name not in self.critical_node_names,
+                                    self.nodes))
 
     def get_nodes(self):
         """Return a list of v1.Node"""
@@ -43,7 +44,8 @@ class k8s_control:
         scale_logger.debug("Getting all pods in all namespaces")
         pods = self.v1.list_pod_for_all_namespaces().items
         for pod in pods:
-            if not (check_list_intersection(self.options.omit_labels, pod.metadata.labels) or pod.metadata.namespace in self.options.omit_namespaces):
+            if not (check_list_intersection(self.options.omit_labels, pod.metadata.labels) or
+                    pod.metadata.namespace in self.options.omit_namespaces):
                 result.append(pod)
         return result
 
@@ -64,6 +66,7 @@ class k8s_control:
         scale_logger.debug(
             "Setting %s node's unschedulable property to %r", node_name, value)
         assert node_name not in self.critical_node_names
+
         new_node = client.V1Node(
             api_version="v1",
             kind="Node",
@@ -78,23 +81,15 @@ class k8s_control:
         all student pods"""
         total_mem_usage = 0
         for pod in self.pods:
-            try:
-                total_mem_usage += int(
-                    pod.spec.containers[0].resources.requests['memory'])
-            except (KeyError, TypeError):
-                # In the case that there is no memory request, the memory
-                # usage is seen as 0
-                continue
+            total_mem_usage += get_pod_memory_request(pod)
         return total_mem_usage
 
     def get_total_cluster_memory_capacity(self):
         """Returns the total memory capacity of all nodes, as student
         pods can be scheduled on any node that meets its Request criteria"""
         total_mem_capacity = 0
-        critical_node_names = self.critical_node_names
-        for node in self.nodes:
-            if node.metadata.name not in critical_node_names:
-                total_mem_capacity += get_node_memory_capacity(node)
+        for node in self.noncritical_nodes:
+            total_mem_capacity += get_node_memory_capacity(node)
         return total_mem_capacity
 
     def get_critical_node_names(self):
@@ -103,12 +98,15 @@ class k8s_control:
         result = []
         for pod in self.pods:
             if not check_list_intersection(pod.metadata.labels, self.options.preemptible_labels):
-                if get_pod_host_name(pod) not in result:
-                    result.append(get_pod_host_name(pod))
+                pod_hostname = get_pod_host_name(pod)
+                if pod_hostname not in result:
+                    result.append(pod_hostname)
         return result
 
     def get_pods_number_on_node(self, node):
-        """Return the effective number of pods on the node"""
+        """Return the effective number of pods on the node
+        TODO: There must be a better way to determine number
+        of running pods on node"""
         result = 0
         for pod in self.pods:
             if get_pod_host_name(pod) == node.metadata.name:
@@ -127,8 +125,8 @@ class k8s_control:
         """Return number of nodes schedulable AND NOT
         IN THE LIST OF CRITICAL NODES"""
         result = 0
-        for node in self.nodes:
-            if (not node.spec.unschedulable) and node.metadata.name not in self.critical_node_names:
+        for node in self.noncritical_nodes:
+            if not node.spec.unschedulable:
                 result += 1
         return result
 
