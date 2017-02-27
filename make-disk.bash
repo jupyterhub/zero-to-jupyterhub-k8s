@@ -27,4 +27,7 @@ sudo mkfs.ext4 -F -E lazy_itable_init=0,lazy_journal_init=0,discard ${blkdev}
 sudo mkdir -p ${mntpath}
 sudo mount -o discard,defaults ${blkdev} ${mntpath}
 
-echo ${mntpath}
+echo "New disk '${disk_name}' mounted at ${mntpath}"
+echo "After running the course-specific data retrieval script, run:"
+echo "  umount ${mntpath}"
+echo "  gcloud compute instances attach-disk provisioner-01 --disk ${disk_name}"
