@@ -2,6 +2,7 @@
 
 set -e
 
-wget https://www.dropbox.com/s/qyd48wpdxc6x1xo/cogneuro88data.tar.gz
+# Added EEG data
+wget https://www.dropbox.com/s/n3hb7cqffjwhgy1/cogneuro88data.tar.gz
 tar -xvf cogneuro88data.tar.gz
 rm cogneuro88data.tar.gz
