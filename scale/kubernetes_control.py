@@ -2,6 +2,7 @@
 
 """Provides read and write access to Kubernetes API"""
 import logging
+import sys
 
 from kubernetes import client, config
 from utils import get_pod_host_name, get_pod_type, get_pod_memory_request, \
@@ -31,19 +32,23 @@ class k8s_control:
         self.critical_node_names = self.get_critical_node_names()
         self.critical_node_number = len(self.critical_node_names)
         self.noncritical_nodes = list(filter(lambda node: node.metadata.name not in self.critical_node_names,
-                                    self.nodes))
+                                             self.nodes))
 
     def configure_new_context(self, new_context):
         """ Loads .kube config to instantiate kubernetes
         with specified context"""
-        contexts, active_context = config.list_kube_config_contexts()
+        contexts, _ = config.list_kube_config_contexts()
         try:
-            contexts = [context['name'] for context in contexts]
-            context_to_activate = list(filter(lambda context: new_context in context, contexts))[0]
+            contexts = [c['name'] for c in contexts]
+            context_to_activate = list(
+                filter(lambda context: new_context in context, contexts))
+            assert len(context_to_activate) == 1  # avoid undefined behavior
         except (TypeError, IndexError):
-            scale_logger.debug("Could not load context %s\n" % new_context)
-            config.load_kube_config()
-            return
+            scale_logger.exception("Could not load context %s\n" % new_context)
+            sys.exit(1)
+        except Exception:
+            scale_logger.fatal("Vague context specification")
+            sys.exit(1)
         config.load_kube_config(context=context_to_activate)
 
     def get_nodes(self):

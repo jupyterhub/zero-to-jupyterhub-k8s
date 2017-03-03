@@ -81,7 +81,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--test", help="Run the script in test mode, no real action", action="store_true")
     parser.add_argument(
-        "context", help="Specify the context to instantiate Kubernetes", action="store")
+        "-c", "--context", help="A unique segment in the context name to specify which to use to instantiate Kubernetes")
     args = parser.parse_args()
     if args.verbose:
         scale_logger.setLevel(logging.DEBUG)
