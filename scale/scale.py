@@ -11,6 +11,9 @@ import argparse
 from kubernetes_control import k8s_control
 from kubernetes_control_test import k8s_control_test
 
+""" Used to change the .kube config current context"""
+from kubernetes import client, config
+
 logging.basicConfig(
     format='%(asctime)s %(levelname)s %(message)s')
 scale_logger = logging.getLogger("scale")
@@ -41,13 +44,13 @@ def resize_for_new_nodes(new_total_nodes, k8s, cluster):
         new_total_nodes, k8s.get_cluster_name())
 
 
-def scale(options, test=False):
+def scale(options, context, test=False):
     """Update the nodes property based on scaling policy
     and create new nodes if necessary"""
     if test:
-        k8s = k8s_control_test(options)
+        k8s = k8s_control_test(options, context)
     else:
-        k8s = k8s_control(options)
+        k8s = k8s_control(options, context)
         # ONLY GCE is supported for scaling at this time
         cluster = gce_cluster_control(options)
     scale_logger.info("Scaling on cluster %s", k8s.get_cluster_name())
@@ -80,6 +83,8 @@ if __name__ == "__main__":
         "-v", "--verbose", help="Show verbose output (debug)", action="store_true")
     parser.add_argument(
         "--test", help="Run the script in test mode, no real action", action="store_true")
+    parser.add_argument(
+        "context", help="Specify the context to instantiate Kubernetes", action="store")
     args = parser.parse_args()
     if args.verbose:
         scale_logger.setLevel(logging.DEBUG)
@@ -91,4 +96,4 @@ if __name__ == "__main__":
             "Running in test mode, no action will actually be taken")
 
     options = settings()
-    scale(options, args.test)
+    scale(options, context, args.context)

@@ -15,8 +15,8 @@ class k8s_control_test(k8s_control):
 
     """Dummy test class for k8s_control"""
 
-    def __init__(self, options):
-        k8s_control.__init__(self, options)
+    def __init__(self, options, context):
+        k8s_control.__init__(self, options, context)
 
     def set_unschedulable(self, node_name, value=True):
         """Set the spec key 'unschedulable'"""

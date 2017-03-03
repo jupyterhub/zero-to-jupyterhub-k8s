@@ -4,6 +4,8 @@
 import logging
 
 from kubernetes import client, config
+from kubernetes.client import configuration
+from pick import pick
 from utils import get_pod_host_name, get_pod_type, get_pod_memory_request, \
     get_node_memory_capacity, check_list_intersection
 
@@ -20,10 +22,10 @@ class k8s_control:
 
     self.pods omits certain pods based on settings"""
 
-    def __init__(self, options):
+    def __init__(self, options, context):
         """ Needs to be initialized with options as an
         instance of settings"""
-        config.load_kube_config()
+        self.configure_new_context(context)
         self.options = options
         self.v1 = client.CoreV1Api()
         self.pods = self.get_pods()
@@ -32,6 +34,19 @@ class k8s_control:
         self.critical_node_number = len(self.critical_node_names)
         self.noncritical_nodes = list(filter(lambda node: node.metadata.name not in self.critical_node_names,
                                     self.nodes))
+
+    def configure_new_context(self, new_context):
+        """ Loads .kube config to instantiate kubernetes
+        with specified context"""
+        contexts, active_context = config.list_kube_config_contexts()
+        try:
+            contexts = [context['name'] for context in contexts]
+            context_to_activate = list(filter(lambda context: new_context in context, contexts))[0]
+        except (TypeError, IndexError):
+            scale_logger.debug("Could not load context %s\n" % new_context)
+            config.load_kube_config()
+            return
+        config.load_kube_config(context=context_to_activate)
 
     def get_nodes(self):
         """Return a list of v1.Node"""
@@ -94,7 +109,9 @@ class k8s_control:
 
     def get_critical_node_names(self):
         """Return a list of nodes where critical pods
-        are running"""
+        are running
+
+        TODO: Test this in dev, set labels use kubectl"""
         result = []
         for pod in self.pods:
             if not check_list_intersection(pod.metadata.labels, self.options.preemptible_labels):
@@ -140,9 +157,11 @@ class k8s_control:
                 result += 1
         return result
 
+
 if __name__ == "__main__":
     import settings
-    k8s = k8s_control(settings.settings())
+    options = settings.settings()
+    k8s = k8s_control(options, options.default_context)
     print("Displaying information of cluster %s\n" % k8s.get_cluster_name())
     k8s.show_nodes_status()
     print("Current memory usage is %i" % k8s.get_total_cluster_memory_usage())
