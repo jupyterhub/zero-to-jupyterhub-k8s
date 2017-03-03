@@ -43,10 +43,11 @@ class k8s_control:
             context_to_activate = list(
                 filter(lambda context: new_context in context, contexts))
             assert len(context_to_activate) == 1  # avoid undefined behavior
+            context_to_activate = context_to_activate[0]
         except (TypeError, IndexError):
             scale_logger.exception("Could not load context %s\n" % new_context)
             sys.exit(1)
-        except Exception:
+        except AssertionError:
             scale_logger.fatal("Vague context specification")
             sys.exit(1)
         config.load_kube_config(context=context_to_activate)
