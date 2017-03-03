@@ -4,8 +4,6 @@
 import logging
 
 from kubernetes import client, config
-from kubernetes.client import configuration
-from pick import pick
 from utils import get_pod_host_name, get_pod_type, get_pod_memory_request, \
     get_node_memory_capacity, check_list_intersection
 

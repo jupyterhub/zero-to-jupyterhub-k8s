@@ -11,9 +11,6 @@ import argparse
 from kubernetes_control import k8s_control
 from kubernetes_control_test import k8s_control_test
 
-""" Used to change the .kube config current context"""
-from kubernetes import client, config
-
 logging.basicConfig(
     format='%(asctime)s %(levelname)s %(message)s')
 scale_logger = logging.getLogger("scale")
@@ -96,4 +93,4 @@ if __name__ == "__main__":
             "Running in test mode, no action will actually be taken")
 
     options = settings()
-    scale(options, context, args.context)
+    scale(options, args.context)
