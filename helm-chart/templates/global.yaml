@@ -5,6 +5,7 @@ kind: Namespace
 apiVersion: v1
 metadata:
   name: {{ .Values.name }}
+{{ if eq .Values.singleuser.storage.type "dynamic" -}}
 ---
 # Dynamic provisioner for the single-user server pods
 kind: StorageClass
@@ -14,6 +15,7 @@ metadata:
 provisioner: kubernetes.io/gce-pd
 parameters:
   type: pd-ssd
+{{- end }}
 {{ if eq .Values.db.type "sqlite-pvc" -}}
 ---
 kind: StorageClass
