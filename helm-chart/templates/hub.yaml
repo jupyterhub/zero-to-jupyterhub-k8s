@@ -97,7 +97,7 @@ spec:
       - name: config
         configMap:
           name: hub-config
-      {{ if eq .Values.db.type "sqlite-pvc" }}
+      {{ if eq .Values.hub.db.type "sqlite-pvc" }}
       - name: hub-db-dir
         persistentVolumeClaim:
           claimName: hub-db-dir
@@ -108,7 +108,7 @@ spec:
         volumeMounts:
           - mountPath: /etc/jupyterhub/config/
             name: config
-        {{ if eq .Values.db.type "sqlite-pvc" }}
+        {{ if eq .Values.hub.db.type "sqlite-pvc" }}
           - mountPath: /srv/jupyterhub
             name: hub-db-dir
         {{- end }}
