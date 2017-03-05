@@ -70,7 +70,7 @@ data:
   hub.base_url: {{ .Values.hub.baseUrl | quote }}
   {{ if eq .Values.hub.db.type "sqlite-pvc" -}}
   hub.db_url: "sqlite:///jupyterhub.sqlite"
-  {{ elif eq .Values.hub.db.type "sqlite-memory" -}}
+  {{ else if eq .Values.hub.db.type "sqlite-memory" -}}
   hub.db_url: "sqlite://"
   {{ else -}}
   hub.db_url: {{ .Values.hub.db.url | quote }}
