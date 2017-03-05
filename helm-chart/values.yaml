@@ -50,6 +50,9 @@ singleuser:
   storage:
     type: dynamic
     capacity: 10Gi
+    homeMountPath: /home/jovyan
+    # type: hostPath
+    # homeHostPathTemplate: /data/project/paws/userhomes/{userid}
   image:
     name: gcr.io/data-8/jupyterhub-k8s-singleuser
     tag: null # Must be overriden

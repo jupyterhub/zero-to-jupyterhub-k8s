@@ -64,8 +64,23 @@ if storage_type == 'dynamic':
     ]
     c.KubeSpawner.volume_mounts = [
         {
-            'mountPath': '/home/jovyan',
+            'mountPath': get_config('singleuser.storage.home_mount_path'),
             'name': 'volume-{username}-{userid}'
+        }
+    ]
+elif storage_type == 'hostPath':
+    c.KubeSpawner.volumes = [
+        {
+            'name': 'home',
+            'hostPath': {
+                'path': get_config('singleuser.storage.home_host_path_template')
+            }
+        }
+    ]
+    c.KubeSpawner.volume_mounts = [
+        {
+            'mountPath': get_config('singleuser.storage.home_mount_path'),
+            'name': 'home'
         }
     ]
 
