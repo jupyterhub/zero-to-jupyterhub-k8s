@@ -6,6 +6,12 @@
 # and storageclass. Must be a valid DNS label
 name: 'datahub-dev'
 
+# Ideally, we should not be creating namespaces in our templates.
+# Helm can create the when you use --namespace, and we should
+# just use those. However, leaving this here for a while to
+# make sure we do not break current installations.
+createNamespace: true
+
 hub:
   baseUrl: "/"
   image:

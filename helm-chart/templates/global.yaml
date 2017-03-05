@@ -1,10 +1,12 @@
 # Contains k8s objects that don't belong in the namespace
 # to which the JupyterHub is deployed.
+{{ if eq .Values.createNamespace -}}
 # Create the namespace itself
 kind: Namespace
 apiVersion: v1
 metadata:
   name: {{ .Values.name }}
+{{- end }}
 {{ if eq .Values.singleuser.storage.type "dynamic" -}}
 ---
 # Dynamic provisioner for the single-user server pods
