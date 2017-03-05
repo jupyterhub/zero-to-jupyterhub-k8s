@@ -66,6 +66,7 @@ data:
   {{ if .Values.singleuser.cpu.guarantee -}}
   singleuser.cpu.guarantee: {{ .Values.singleuser.cpu.guarantee | quote}}
   {{- end }}
+  token.cookie_secret: {{ .Values.hub.cookieSecret | quote }}
   base_url: {{ .Values.hub.baseUrl | quote }}
   admin.access: {{ .Values.admin.access | quote }}
   admin.users: |
@@ -110,6 +111,11 @@ spec:
         # change this
         - name: SINGLEUSER_IMAGE
           value:  "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"
+        - name: JPY_COOKIE_SECRET
+          valueFrom:
+            configMapKeyRef:
+              name: hub-config
+              key: token.cookie_secret
         {{ if .Values.singleuser.mounts -}}
         {{ if .Values.singleuser.mounts.shared -}}
         - name: SHARED_DATA_MOUNTS
