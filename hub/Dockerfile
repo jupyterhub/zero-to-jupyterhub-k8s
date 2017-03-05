@@ -20,7 +20,6 @@ RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@dc
 
 ADD jupyterhub_config.py /srv/jupyterhub_config.py
 
-RUN mkdir -p /srv/jupyterhub
 WORKDIR /srv/jupyterhub
 
 # JupyterHub API port
