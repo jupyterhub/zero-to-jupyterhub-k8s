@@ -1,6 +1,6 @@
 # Contains k8s objects that don't belong in the namespace
 # to which the JupyterHub is deployed.
-{{ if eq .Values.createNamespace -}}
+{{ if .Values.createNamespace -}}
 # Create the namespace itself
 kind: Namespace
 apiVersion: v1
@@ -28,4 +28,3 @@ provisioner: kubernetes.io/gce-pd
 parameters:
   type: pd-ssd
 {{- end }}
-
