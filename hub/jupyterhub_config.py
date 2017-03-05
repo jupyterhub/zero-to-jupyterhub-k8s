@@ -163,4 +163,6 @@ c.JupyterHub.admin_access = get_config('admin.access')
 
 c.Authenticator.admin_users = get_config('admin.users')
 
-c.JupyterHub.base_url = get_config('base_url')
+c.JupyterHub.base_url = get_config('hub.base_url')
+
+c.JupyterHub.db_url = get_config('hub.db_url')

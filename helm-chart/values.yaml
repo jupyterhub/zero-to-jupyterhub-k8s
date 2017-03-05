@@ -15,6 +15,9 @@ createNamespace: true
 hub:
   baseUrl: "/"
   cookieSecret: null
+  db:
+    type: sqlite-pvc
+    url: null
   image:
     name: gcr.io/data-8/jupyterhub-k8s-hub
     tag: null  # Must be overriden
@@ -57,8 +60,6 @@ singleuser:
     limit: 2G
     guarantee: 2G
 
-db:
-  type: sqlite-pvc
 
 
 cull:
