@@ -66,6 +66,7 @@ data:
   {{ if .Values.singleuser.cpu.guarantee -}}
   singleuser.cpu.guarantee: {{ .Values.singleuser.cpu.guarantee | quote}}
   {{- end }}
+  base_url: {{ .Values.hub.baseUrl | quote }}
   admin.access: {{ .Values.admin.access | quote }}
   admin.users: |
     {{ range $user := .Values.admin.users -}}
