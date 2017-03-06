@@ -142,6 +142,7 @@ elif auth_type == 'dummy':
     email_domain = 'local'
 elif auth_type == 'tmp':
     c.JupyterHub.authenticator_class = 'tmpauthenticator.TmpAuthenticator'
+    email_domain = 'local'
 
 
 def generate_user_email(spawner):
