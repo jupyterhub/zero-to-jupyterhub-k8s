@@ -14,7 +14,7 @@ RUN apt-get install -y --no-install-recommends \
 
 RUN pip3 install --upgrade pip
 
-RUN pip3 install --no-cache-dir jupyterhub==0.7.2 oauthenticator==0.5.1 jupyterhub-dummyauthenticator==0.1 statsd
+RUN pip3 install --no-cache-dir jupyterhub==0.7.2 oauthenticator==0.5.1 jupyterhub-dummyauthenticator==0.1 jupyterhub-tmpauthenticator==0.1 statsd
 
 RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@dc41368f61d
 

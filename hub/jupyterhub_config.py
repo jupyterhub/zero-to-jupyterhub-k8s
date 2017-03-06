@@ -140,6 +140,8 @@ elif auth_type == 'hmac':
 elif auth_type == 'dummy':
     c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
     email_domain = 'local'
+elif auth_type == 'tmp':
+    c.JupyterHub.authenticator_class = 'tmpauthenticator.TmpAuthenticator'
 
 
 def generate_user_email(spawner):
