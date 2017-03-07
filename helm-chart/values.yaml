@@ -10,7 +10,7 @@ name: 'datahub-dev'
 # Helm can create the when you use --namespace, and we should
 # just use those. However, leaving this here for a while to
 # make sure we do not break current installations.
-createNamespace: true
+createNamespace: false
 
 hub:
   baseUrl: "/"
