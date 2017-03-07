@@ -16,7 +16,7 @@ hub:
   baseUrl: "/"
   cookieSecret: null
   db:
-    type: sqlite-pvc
+    type: sqlite-memory
     url: null
   image:
     name: gcr.io/data-8/jupyterhub-k8s-hub
