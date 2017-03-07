@@ -19,13 +19,13 @@ hub:
     type: sqlite-memory
     url: null
   image:
-    name: gcr.io/data-8/jupyterhub-k8s-hub
-    tag: null  # Must be overriden
+    name: yuvipanda/jupyterhub-kubernetes-hub
+    tag: v0.1
 
 proxy:
   image:
-    name: gcr.io/data-8/jupyterhub-k8s-proxy
-    tag: null  # Must be overriden
+    name: yuvipanda/jupyterhub-kubernetes-proxy
+    tag: v0.1
 
 # Set this explicitly if you want to use a static allocated
 # IP as the public LoadBalancer IP. Requires support by
@@ -54,8 +54,8 @@ singleuser:
     # type: hostPath
     # homeHostPathTemplate: /data/project/paws/userhomes/{userid}
   image:
-    name: gcr.io/data-8/jupyterhub-k8s-singleuser
-    tag: null # Must be overriden
+    name: yuvipanda/simple-singleuser
+    tag: v1
   cpu:
     limit: null
     guarantee: null
