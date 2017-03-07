@@ -34,13 +34,7 @@ publicIP: null
 
 # Google OAuth secrets
 auth:
-  type: google
-  google:
-    clientId: "insert-client-id-from-google-here"
-    clientSecret: "insert-client-secret-from-google-here"
-    callbackUrl: "insert-callback-url-from-google-here"
-    hostedDomain: "insert-hosted-domain-from-google-here"
-    loginService: "Insert name of login service shown in login button here"
+  type: dummy
 
 token:
   proxy: 'generate with pwgen 64 and put here'
