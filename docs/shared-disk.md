@@ -4,7 +4,7 @@
 1. Copy data into the disk. The course will have a script in the disks/ subdirectory of jupyterhub-k8s. Change to the mount location and run the script.
   ```
 cd /mnt/disks/{disk_name}
-/path/to/jupyterhub-k8s/disks/{course_name}.bash
+sudo /path/to/jupyterhub-k8s/disks/{course_name}.bash
 ```
 
 1. Detach the disk:
