@@ -65,7 +65,7 @@ cull:
   every: 600
 
 metrics:
-  enabled: true
+  enabled: false
   # FIXME: Allow different types here?
   datadog:
     apiKey: null
