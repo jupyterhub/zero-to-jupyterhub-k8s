@@ -9,6 +9,7 @@ cd /mnt/disks/{disk_name}
 
 1. Detach the disk:
   ```
+cd /somewhere/else/
 sudo umount /mnt/disks/{disk_name}
 gcloud compute instances attach-disk provisioner-01 --disk {disk_name}
 ```
