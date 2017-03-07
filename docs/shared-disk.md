@@ -9,7 +9,7 @@ cd /mnt/disks/{disk_name}
 
 1. Detach the disk:
   ```
-umount /mnt/disks/{disk_name}
+sudo umount /mnt/disks/{disk_name}
 gcloud compute instances attach-disk provisioner-01 --disk {disk_name}
 ```
 1. Update the chart by editing the disk name in dev.yaml.
