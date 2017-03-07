@@ -54,8 +54,8 @@ singleuser:
     limit: null
     guarantee: null
   memory:
-    limit: 2G
-    guarantee: 2G
+    limit: null
+    guarantee: null
 
 
 
