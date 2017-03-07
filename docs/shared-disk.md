@@ -11,6 +11,6 @@ cd /mnt/disks/{disk_name}
   ```
 cd /somewhere/else/
 sudo umount /mnt/disks/{disk_name}
-gcloud compute instances attach-disk provisioner-01 --disk {disk_name}
+gcloud compute instances detach-disk provisioner-01 --disk {disk_name}
 ```
 1. Update the chart by editing the disk name in dev.yaml.
