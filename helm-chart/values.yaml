@@ -20,7 +20,7 @@ hub:
     url: null
   image:
     name: yuvipanda/jupyterhub-kubernetes-hub
-    tag: v0.1
+    tag: v0.2
 
 proxy:
   image:
