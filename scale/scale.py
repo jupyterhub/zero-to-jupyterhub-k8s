@@ -62,7 +62,7 @@ def scale(options, context, test=False):
     scale_logger.info("Found %i critical nodes; recommending additional %i nodes for service",
                       len(k8s.nodes) - len(nodes), goal)
 
-    update_unschedulable(len(nodes) - goal, nodes, k8s)
+    update_unschedulable(len(nodes) + goal, nodes, k8s)
 
     if len(k8s.critical_node_names) + goal > len(k8s.nodes):
         scale_logger.info("Resize the cluster to %i nodes to satisfy the demand", (
@@ -93,4 +93,4 @@ if __name__ == "__main__":
             "Running in test mode, no action will actually be taken")
 
     options = settings()
-    scale(options, args.context)
+    scale(options, args.context, args.test)
