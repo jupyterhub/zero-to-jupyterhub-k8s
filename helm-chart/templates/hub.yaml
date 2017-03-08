@@ -79,10 +79,12 @@ data:
   hub.db_url: {{ .Values.hub.db.url | quote }}
   {{- end }}
   admin.access: {{ .Values.admin.access | quote }}
+  {{ if .Values.admin.users -}}
   admin.users: |
     {{ range $user := .Values.admin.users -}}
     - {{ $user }}
     {{ end }}
+  {{- end }}
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
