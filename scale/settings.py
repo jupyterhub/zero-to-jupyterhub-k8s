@@ -31,7 +31,7 @@ class settings:
             self.manager = os.environ["MANAGER"]
         except Exception:
             logging.fatal("gcloud cluster name MUST be specified")
-        sys.exit(1)
+            sys.exit(1)
 
         self.project = os.environ.get("PROJECT", "92948014362")
 
