@@ -44,12 +44,12 @@ def resize_for_new_nodes(new_total_nodes, k8s, cluster):
 def scale(options, context, test=0):
     """Update the nodes property based on scaling policy
     and create new nodes if necessary"""
+    cluster = gce_cluster_control(options)
     if test == 1:
         k8s = k8s_control_test(options, context)
     else:
         k8s = k8s_control(options, context)
         # ONLY GCE is supported for scaling at this time
-        cluster = gce_cluster_control(options)
     scale_logger.info("Scaling on cluster %s", k8s.get_cluster_name())
 
     nodes = []  # a list of nodes that are NOT critical
@@ -67,10 +67,10 @@ def scale(options, context, test=0):
     if len(k8s.critical_node_names) + goal > len(k8s.nodes):
         scale_logger.info("Resize the cluster to %i nodes to satisfy the demand", (
             len(k8s.critical_node_names) + goal))
-        if test != 2:
+        if test != 0:
             resize_for_new_nodes(
                 len(k8s.critical_node_names) + goal, k8s, cluster)
-    if not test != 2:
+    if not test != 0:
         # CRITICAL NODES SHOULD NOT BE SHUTDOWN
         shutdown_empty_nodes(nodes, k8s, cluster)
 
