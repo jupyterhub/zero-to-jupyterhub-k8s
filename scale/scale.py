@@ -67,10 +67,10 @@ def scale(options, context, test=0):
     if len(k8s.critical_node_names) + goal > len(k8s.nodes):
         scale_logger.info("Resize the cluster to %i nodes to satisfy the demand", (
             len(k8s.critical_node_names) + goal))
-        if test != 0:
+        if test == 0:
             resize_for_new_nodes(
                 len(k8s.critical_node_names) + goal, k8s, cluster)
-    if not test != 0:
+    if test == 0:
         # CRITICAL NODES SHOULD NOT BE SHUTDOWN
         shutdown_empty_nodes(nodes, k8s, cluster)
 
