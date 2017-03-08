@@ -27,7 +27,7 @@ class gce_cluster_control:
         self.group = options.manager
         self.project = options.project
 
-    def shut_down_specified_node(self, name):
+    def shutdown_specified_node(self, name):
         request_body = {
             "instances": [
                 self.__get_node_url_from_name(name)

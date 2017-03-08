@@ -41,10 +41,10 @@ def resize_for_new_nodes(new_total_nodes, k8s, cluster):
         new_total_nodes)
 
 
-def scale(options, context, test=False):
+def scale(options, context, test=0):
     """Update the nodes property based on scaling policy
     and create new nodes if necessary"""
-    if test:
+    if test == 1:
         k8s = k8s_control_test(options, context)
     else:
         k8s = k8s_control(options, context)
@@ -62,15 +62,15 @@ def scale(options, context, test=False):
     scale_logger.info("Found %i critical nodes; recommending additional %i nodes for service",
                       len(k8s.nodes) - len(nodes), goal)
 
-    update_unschedulable(len(nodes) + goal, nodes, k8s)
+    update_unschedulable(max(len(nodes) - goal, 0), nodes, k8s)
 
     if len(k8s.critical_node_names) + goal > len(k8s.nodes):
         scale_logger.info("Resize the cluster to %i nodes to satisfy the demand", (
             len(k8s.critical_node_names) + goal))
-        if not test:
+        if test != 2:
             resize_for_new_nodes(
                 len(k8s.critical_node_names) + goal, k8s, cluster)
-    if not test:
+    if not test != 2:
         # CRITICAL NODES SHOULD NOT BE SHUTDOWN
         shutdown_empty_nodes(nodes, k8s, cluster)
 
@@ -81,6 +81,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--test", help="Run the script in test mode, no real action", action="store_true")
     parser.add_argument(
+        "--testcloud", help="Run the script to test cloud apis, no real action on actual nodes", action="store_true")
+    parser.add_argument(
         "-c", "--context", required=True, help="A unique segment in the context name to specify which to use to instantiate Kubernetes")
     args = parser.parse_args()
     if args.verbose:
@@ -88,9 +90,15 @@ if __name__ == "__main__":
     else:
         scale_logger.setLevel(logging.INFO)
 
+    t = 0
     if args.test:
+        t = 1
         scale_logger.warning(
             "Running in test mode, no action will actually be taken")
+    if args.testcloud:
+        t = 2
+        scale_logger.warning(
+            "Running in test cloud mode, not all action will actually be taken")
 
     options = settings()
-    scale(options, args.context, args.test)
+    scale(options, args.context, t)
