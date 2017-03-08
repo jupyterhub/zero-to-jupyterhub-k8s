@@ -2,7 +2,7 @@ import yaml
 import os
 import sys
 
-def get_config(key):
+def get_config(key, default=None):
     """
     Find a config item of a given name & return it
 
@@ -15,7 +15,7 @@ def get_config(key):
             print(key, data)
             return data
     except FileNotFoundError:
-        return None
+        return default
 
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
@@ -179,7 +179,7 @@ if 'STATSD_SERVICE_HOST' in os.environ:
 # Enable admins to access user servers
 c.JupyterHub.admin_access = get_config('admin.access')
 
-c.Authenticator.admin_users = get_config('admin.users')
+c.Authenticator.admin_users = get_config('admin.users', [])
 
 c.JupyterHub.base_url = get_config('hub.base_url')
 
