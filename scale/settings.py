@@ -3,6 +3,9 @@
 """ Shared settings and constant values across multiple scaling scripts"""
 
 import os
+import logging
+import sys
+
 
 class settings:
 
@@ -17,14 +20,19 @@ class settings:
         self.min_nodes = int(os.environ.get("MIN_NODES", 3))
         self.max_nodes = int(os.environ.get("MAX_NODES", 72))
 
-        self.default_context = os.environ.get("DEFAULT_CONTEXT", "dev")
-        
-        #TODO: Get rid of these default values specific to Data8
+        # TODO: Get rid of these default values specific to Data8
         self.zone = os.environ.get("ZONE", "us-central1-a")
         # CLI regarding context that
-        # we can switch to, then we can parse for this item and 
+        # we can switch to, then we can parse for this item and
         # check in our environment variables
-        self.manager = os.environ.get("MANAGER", "gke-dev-default-pool-dbd2a02e-grp")
+
+        # "gke-dev-default-pool-dbd2a02e-grp") # MUST BE SPECIFIED
+        try:
+            self.manager = os.environ["MANAGER"]
+        except Exception:
+            logging.fatal("gcloud cluster name MUST be specified")
+        sys.exit(1)
+
         self.project = os.environ.get("PROJECT", "92948014362")
 
         self.preemptible_labels = os.environ.get(
@@ -33,3 +41,6 @@ class settings:
             "OMIT_LABELS", "").split(self.env_delimiter)
         self.omit_namespaces = os.environ.get(
             "OMIT_NAMESPACES", "kube-system").split(self.env_delimiter)
+
+        # only used for debugging
+        self.default_context = os.environ.get("DEFAULT_CONTEXT", "dev")
