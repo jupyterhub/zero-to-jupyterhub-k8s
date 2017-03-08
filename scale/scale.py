@@ -38,7 +38,7 @@ def resize_for_new_nodes(new_total_nodes, k8s, cluster):
     instead of CLI call"""
     scale_logger.info("Resizing up to: %d nodes", new_total_nodes)
     cluster.add_new_node(
-        new_total_nodes, k8s.get_cluster_name())
+        new_total_nodes)
 
 
 def scale(options, context, test=False):
