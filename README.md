@@ -38,12 +38,10 @@ Edit the docker-settings.json file. Set the docker repo name corresponding to yo
 Here is an example:
 ```
 {
+    "clusters": ["dev", "prod"],
     "buildSettings": {
-        "dockerRepo": {
-            "gcloud": "gcr.io/<your project>",
-            "azure": "data8-on.azurecr.io/data-8"
-        },
-        "imageTypes": ",datahub"
+        "dockerRepo": "gcr.io/<your project>",
+        "imageTypes": ["datahub", "prob140", "stat28"],
     },
     "populateSettings": {
         "contextPrefix": "gke_<your project>_<your zone>_"
