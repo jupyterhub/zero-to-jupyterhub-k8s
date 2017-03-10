@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
-PROJECT=$(jq -r '.gcloud.project' 'docker-settings2.json')
-ZONE=$(jq -r '.gcloud.zone' 'docker-settings2.json')
+PROJECT=$(jq -r '.gcloud.project' 'docker-settings.json')
+ZONE=$(jq -r '.gcloud.zone' 'docker-settings.json')
 
 CONTEXT="gke_${PROJECT}_${ZONE}_${1}"
 IMAGE_SPEC="${2}"
