@@ -30,7 +30,7 @@ gcloud config set compute/zone <your zone>
 
 Get credentials for your cluster
 ```
-gcloud container clusters get-credentials dev
+gcloud container clusters get-credentials <your cluster>
 ```
 
 Edit the docker-settings.json file. Set the docker repo name corresponding to your cloud provider. Set the image types. You can leave this blank if you are only using the base image. Set the context prefix to whatever you want.
@@ -40,13 +40,13 @@ Here is an example:
 {
     "buildSettings": {
         "dockerRepo": {
-            "gcloud": "gcr.io/data-8",
+            "gcloud": "gcr.io/<your project>",
             "azure": "data8-on.azurecr.io/data-8"
         },
-        "imageTypes": ",datahub,prob140,stat28"
+        "imageTypes": ",datahub"
     },
     "populateSettings": {
-        "contextPrefix": "gke_data-8_us-central1-a_"
+        "contextPrefix": "gke_<your project>_<your zone>_"
     }
 }
 ```
@@ -66,14 +66,14 @@ Run helm.
 ```
 helm init
 
-helm --kube-context=<your context prefix><'dev' or 'prod'> install ./helm-chart
+helm --kube-context=<your context prefix><your cluster> install ./helm-chart
 ```
 
 Later, when you want to change your deployment run:
 ```
 helm list
 
-helm --kube-context=<your context prefix><'dev' or 'prod'> upgrade <release name> ./helm-chart
+helm --kube-context=<your context prefix><your cluster> upgrade <release name> ./helm-chart
 ```
 
 Congragulations! You just deployed your own jupyterhub cluster using kubernetes! :D
