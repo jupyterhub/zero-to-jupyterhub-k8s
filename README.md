@@ -51,9 +51,9 @@ Here is an example:
 }
 ```
 
-Run the build script.
+Run the build script to generate Docker images. `hub` is for the jupyterhub image and `proxy` is for the jupyterhub proxy image. The build script generates more than one singleuser image; `base` is intented to be inherited by all user images and `user {user_type}` is used to specify the variants of `base`.
 ```
-./build.bash [ hub | proxy | user user_type ]
+./build.bash [ hub | proxy | base | user {user user_type} ]
 ```
 
 Then enter the populate.bash commands printed by build.bash. Note the tag of the image that gets populated.
