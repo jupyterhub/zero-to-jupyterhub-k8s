@@ -43,8 +43,9 @@ Here is an example:
         "dockerRepo": "gcr.io/<your project>",
         "imageTypes": ["datahub", "prob140", "stat28"],
     },
-    "populateSettings": {
-        "contextPrefix": "gke_<your project>_<your zone>_"
+    "gcloud": {
+        "project": "<your project>",
+        "zone": "<your zone>"
     }
 }
 ```

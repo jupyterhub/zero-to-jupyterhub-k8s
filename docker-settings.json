@@ -4,7 +4,8 @@
         "dockerRepo": "gcr.io/data-8",
         "imageTypes": ["datahub", "prob140", "stat28"]
     },
-    "populateSettings": {
-        "contextPrefix": "gke_data-8_us-central1-a_"
+    "gcloud": {
+        "project": "data-8",
+        "zone": "us-central1-a"
     }
 }
