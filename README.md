@@ -50,12 +50,14 @@ Here is an example:
 }
 ```
 
-Run the build script to generate Docker images. `hub` is for the jupyterhub image and `proxy` is for the jupyterhub proxy image. The build script generates more than one singleuser image; `base` is intented to be inherited by all user images and `user {user_type}` is used to specify the variants of `base`.
+Run the build script to generate Docker images.
 ```
-./build.bash [ hub | proxy | base | user {user user_type} ]
+./build.bash [ hub | proxy | base | user {user_type} ]
 ```
 
-Then enter the populate.bash commands printed by build.bash. Note the tag of the image that gets populated.
+`hub` is for the jupyterhub image and `proxy` is for the jupyterhub proxy image. You will find their Dockerfiles in the respective subdirectories. The singleuser server builds utilize a shared base image specified by user/Dockerfile.base. Various other singleuser server images are built from this specified by user/Dockerfile.{user_type}. For example to build the singleuser image for the course Stat 28, you would run `./build.bash base` at least once, then `./build.bash user stat28`.
+
+Each docker image is tagged with the git commit hash corresponding with the last git revision of the build files. When the build completes, the script will output the name of the tagged docker image along with the suggestion to run `populate.bash`. The populate step preseeds the docker images onto cluster nodes.
 
 Edit the `helm-chart/values.yaml` file where it says `# Must be overridden`. Set the image tags to the tags of the docker images you just built using `./build.bash`. Also make sure to set the correct docker images. You may also adjust some of the other settings in the `values.yaml` file if necessary.
 
