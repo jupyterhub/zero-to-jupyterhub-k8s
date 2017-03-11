@@ -107,6 +107,8 @@ if __name__ == "__main__":
         "-y", help="Run the script without user interactive confirmation", action="store_true")
     parser.add_argument(
         "-c", "--context", required=True, help="A unique segment in the context name to specify which to use to instantiate Kubernetes")
+    parser.add_argument(
+        "--context-for-cloud", help="An optional different unique segment in the managed pool name to specify which to use to when resizing cloud managed pools", default="")
     args = parser.parse_args()
     if args.verbose:
         scale_logger.setLevel(logging.DEBUG)
@@ -135,5 +137,7 @@ if __name__ == "__main__":
         options.yes = True
 
     options.context = args.context
+    if args.context_for_cloud != "":
+        options.context_cloud = args.context_for_cloud
 
     scale(options)
