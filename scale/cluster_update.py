@@ -26,7 +26,8 @@ class gce_cluster_control:
             'compute', 'v1', credentials=self.credentials)
         self.zone = options.zone
         self.project = options.project
-        self.group = self.__configure__managed_group_name(options.context)
+        self.group = self.__configure__managed_group_name(
+            options.context_cloud)
 
     def __configure__managed_group_name(self, segment):
         "Use self.compute to find a managed group that matches the segment"
