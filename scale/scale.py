@@ -134,7 +134,7 @@ if __name__ == "__main__":
                 "Running in test kubernetes mode, no action on node specs")
 
     if args.y:
-        confirm = lambda x, y: True
+        confirm = lambda x, y=False: True
     else:
         confirm = user_confirm
 
