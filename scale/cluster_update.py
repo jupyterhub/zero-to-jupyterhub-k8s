@@ -7,7 +7,7 @@ from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
 scale_logger = logging.getLogger("scale")
-
+logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.ERROR)
 
 # TODO: an abstract provider-side cluster resizing interface should be created
 
