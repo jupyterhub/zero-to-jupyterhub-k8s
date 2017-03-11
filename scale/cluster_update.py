@@ -36,11 +36,11 @@ class gce_cluster_control:
         for manager in managers:
             if segment in manager['name']:
                 matches.append(manager)
-        if len(manager) == 0:
+        if len(matches) == 0:
             scale_logger.exception(
                 "Could not find context %s in Google Cloud project\n" % segment)
             sys.exit(1)
-        elif len(manager) >= 2:
+        elif len(matches) >= 2:
             scale_logger.fatal("Vague context specification for Google Cloud")
             sys.exit(1)
         else:
