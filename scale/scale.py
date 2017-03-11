@@ -5,6 +5,7 @@ from workload import schedule_goal
 from update_nodes import update_unschedulable
 from cluster_update import gce_cluster_control
 from settings import settings
+from utils import confirm
 
 import logging
 import argparse
@@ -16,7 +17,7 @@ logging.basicConfig(
 scale_logger = logging.getLogger("scale")
 
 
-def shutdown_empty_nodes(nodes, k8s, cluster):
+def shutdown_empty_nodes(nodes, k8s, cluster, test=False):
     """
     Search through all nodes and shut down those that are unschedulable
     and devoid of non-critical pods
@@ -25,31 +26,44 @@ def shutdown_empty_nodes(nodes, k8s, cluster):
     """
     for node in nodes:
         if k8s.get_pods_number_on_node(node) == 0 and node.spec.unschedulable:
-            scale_logger.info(
-                "Shutting down empty node: %s", node.metadata.name)
-            cluster.shutdown_specified_node(node.metadata.name)
+            if confirm(("Shutting down empty node: %s" % node.metadata.name)):
+                scale_logger.info(
+                    "Shutting down empty node: %s", node.metadata.name)
+                if not test:
+                    cluster.shutdown_specified_node(node.metadata.name)
 
 
-def resize_for_new_nodes(new_total_nodes, k8s, cluster):
+def shutdown_empty_nodes_test(nodes, k8s, cluster):
+    shutdown_empty_nodes(nodes, k8s, cluster, True)
+
+
+def resize_for_new_nodes(new_total_nodes, k8s, cluster, test=False):
     """create new nodes to match new_total_nodes required
     only for scaling up
 
     TODO: Add gcloud python client for sizing up
     instead of CLI call"""
-    scale_logger.info("Resizing up to: %d nodes", new_total_nodes)
-    cluster.add_new_node(
-        new_total_nodes)
+    if confirm(("Resizing up to: %d nodes" % new_total_nodes)):
+        scale_logger.info("Resizing up to: %d nodes", new_total_nodes)
+        if not test:
+            cluster.add_new_node(new_total_nodes)
 
 
-def scale(options, context, test=0):
+def resize_for_new_nodes_test(new_total_nodes, k8s, cluster):
+    resize_for_new_nodes(new_total_nodes, k8s, cluster, True)
+
+
+def scale(options, context):
     """Update the nodes property based on scaling policy
     and create new nodes if necessary"""
+
+    # ONLY GCE is supported for scaling at this time
     cluster = gce_cluster_control(options)
-    if test == 1:
+    if options.test_k8s:
         k8s = k8s_control_test(options, context)
     else:
         k8s = k8s_control(options, context)
-        # ONLY GCE is supported for scaling at this time
+
     scale_logger.info("Scaling on cluster %s", k8s.get_cluster_name())
 
     nodes = []  # a list of nodes that are NOT critical
@@ -61,16 +75,21 @@ def scale(options, context, test=0):
     scale_logger.info("Total nodes in the cluster: %i", len(k8s.nodes))
     scale_logger.info("Found %i critical nodes; recommending additional %i nodes for service",
                       len(k8s.nodes) - len(nodes), goal)
-
-    update_unschedulable(max(len(nodes) - goal, 0), nodes, k8s)
+    if confirm(("Updating unschedulable flags to ensure %i nodes are unschedulable", max(len(nodes) - goal, 0))):
+        update_unschedulable(max(len(nodes) - goal, 0), nodes, k8s)
 
     if len(k8s.critical_node_names) + goal > len(k8s.nodes):
         scale_logger.info("Resize the cluster to %i nodes to satisfy the demand", (
             len(k8s.critical_node_names) + goal))
-        if test == 0:
+        if options.test_cloud:
+            resize_for_new_nodes_test(
+                len(k8s.critical_node_names) + goal, k8s, cluster)
+        else:
             resize_for_new_nodes(
                 len(k8s.critical_node_names) + goal, k8s, cluster)
-    if test == 0:
+    if options.test_cloud:
+        shutdown_empty_nodes_test(nodes, k8s, cluster)
+    else:
         # CRITICAL NODES SHOULD NOT BE SHUTDOWN
         shutdown_empty_nodes(nodes, k8s, cluster)
 
@@ -79,9 +98,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "-v", "--verbose", help="Show verbose output (debug)", action="store_true")
     parser.add_argument(
-        "--test", help="Run the script in test mode, no real action", action="store_true")
+        "-T", "--test", help="Run the script in TEST mode, log expected behavior, no real action will be taken", action="store_true")
     parser.add_argument(
-        "--testcloud", help="Run the script to test cloud apis, no real action on actual nodes", action="store_true")
+        "--test-k8s", help="Run the script to test kubernetes actions: log expected commands to kubernetes, no real action on node specs", action="store_true")
+    parser.add_argument(
+        "--test-cloud", help="Run the script to test cloud actions: log expected commands to the cloud provider, no real action on actual VM pool", action="store_true")
+    parser.add_argument(
+        "-y", help="Run the script without user interactive confirmation", action="store_true")
     parser.add_argument(
         "-c", "--context", required=True, help="A unique segment in the context name to specify which to use to instantiate Kubernetes")
     args = parser.parse_args()
@@ -90,15 +113,22 @@ if __name__ == "__main__":
     else:
         scale_logger.setLevel(logging.INFO)
 
-    t = 0
+    # Retrieve settings from the environment
+    options = settings()
+
     if args.test:
-        t = 1
         scale_logger.warning(
             "Running in test mode, no action will actually be taken")
-    if args.testcloud:
-        t = 2
+    elif args.test_cloud:
+        options.test_k8s = False
         scale_logger.warning(
-            "Running in test cloud mode, not all action will actually be taken")
+            "Running in test cloud mode, no action on VM pool")
+    elif args.test_k8s:
+        options.test_cloud = False
+        scale_logger.warning(
+            "Running in test kubernetes mode, no action on node specs")
 
-    options = settings()
-    scale(options, args.context, t)
+    if args.y:
+        options.yes = True
+
+    scale(options, args.context)

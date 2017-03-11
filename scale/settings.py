@@ -42,5 +42,9 @@ class settings:
         self.omit_namespaces = os.environ.get(
             "OMIT_NAMESPACES", "kube-system").split(self.env_delimiter)
 
+        self.test_cloud = True
+        self.test_k8s = True
+        self.yes = False
+
         # only used for debugging
         self.default_context = os.environ.get("DEFAULT_CONTEXT", "dev")
