@@ -74,9 +74,9 @@ def confirm(prompt=None, resp=False):
         prompt = 'Confirm'
 
     if resp:
-        prompt = '%s [%s]|%s: ' % (prompt, 'y', 'n')
+        prompt = '%s [%s/%s] ' % (prompt, 'Y', 'n')
     else:
-        prompt = '%s [%s]|%s: ' % (prompt, 'n', 'y')
+        prompt = '%s [%s/%s]  ' % (prompt, 'y', 'N')
 
     while True:
         ans = input(prompt)

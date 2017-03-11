@@ -75,7 +75,7 @@ def scale(options, context):
     scale_logger.info("Total nodes in the cluster: %i", len(k8s.nodes))
     scale_logger.info("Found %i critical nodes; recommending additional %i nodes for service",
                       len(k8s.nodes) - len(nodes), goal)
-    if confirm(("Updating unschedulable flags to ensure %i nodes are unschedulable", max(len(nodes) - goal, 0))):
+    if confirm(("Updating unschedulable flags to ensure %i nodes are unschedulable" % max(len(nodes) - goal, 0))):
         update_unschedulable(max(len(nodes) - goal, 0), nodes, k8s)
 
     if len(k8s.critical_node_names) + goal > len(k8s.nodes):
