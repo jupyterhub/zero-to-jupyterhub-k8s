@@ -5,7 +5,7 @@ from workload import schedule_goal
 from update_nodes import update_unschedulable
 from cluster_update import gce_cluster_control
 from settings import settings
-from utils import confirm
+from utils import user_confirm
 
 import logging
 import argparse
@@ -134,7 +134,9 @@ if __name__ == "__main__":
                 "Running in test kubernetes mode, no action on node specs")
 
     if args.y:
-        options.yes = True
+        confirm = lambda x, y: True
+    else:
+        confirm = user_confirm
 
     options.context = args.context
     if args.context_for_cloud != "":

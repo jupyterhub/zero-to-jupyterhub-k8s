@@ -51,7 +51,7 @@ def check_list_intersection(list1, list2):
     return len(set(list1).intersection(set(list2))) != 0
 
 
-def confirm(prompt=None, resp=False):
+def user_confirm(prompt=None, resp=False):
     """prompts for yes or no response from the user. Returns True for yes and
     False for no.
 
