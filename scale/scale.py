@@ -119,14 +119,17 @@ if __name__ == "__main__":
     if args.test:
         scale_logger.warning(
             "Running in test mode, no action will actually be taken")
-    elif args.test_cloud:
+    else:
         options.test_k8s = False
-        scale_logger.warning(
-            "Running in test cloud mode, no action on VM pool")
-    elif args.test_k8s:
         options.test_cloud = False
-        scale_logger.warning(
-            "Running in test kubernetes mode, no action on node specs")
+        if args.test_cloud:
+            options.test_cloud = True
+            scale_logger.warning(
+                "Running in test cloud mode, no action on VM pool")
+        if args.test_k8s:
+            options.test_k8s = True
+            scale_logger.warning(
+                "Running in test kubernetes mode, no action on node specs")
 
     if args.y:
         options.yes = True
