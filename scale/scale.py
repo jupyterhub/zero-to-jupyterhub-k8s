@@ -53,16 +53,16 @@ def resize_for_new_nodes_test(new_total_nodes, k8s, cluster):
     resize_for_new_nodes(new_total_nodes, k8s, cluster, True)
 
 
-def scale(options, context):
+def scale(options):
     """Update the nodes property based on scaling policy
     and create new nodes if necessary"""
 
     # ONLY GCE is supported for scaling at this time
     cluster = gce_cluster_control(options)
     if options.test_k8s:
-        k8s = k8s_control_test(options, context)
+        k8s = k8s_control_test(options)
     else:
-        k8s = k8s_control(options, context)
+        k8s = k8s_control(options)
 
     scale_logger.info("Scaling on cluster %s", k8s.get_cluster_name())
 
@@ -134,4 +134,6 @@ if __name__ == "__main__":
     if args.y:
         options.yes = True
 
-    scale(options, args.context)
+    options.context = args.context
+
+    scale(options)

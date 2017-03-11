@@ -22,17 +22,6 @@ class settings:
 
         # TODO: Get rid of these default values specific to Data8
         self.zone = os.environ.get("ZONE", "us-central1-a")
-        # CLI regarding context that
-        # we can switch to, then we can parse for this item and
-        # check in our environment variables
-
-        # "gke-dev-default-pool-dbd2a02e-grp") # MUST BE SPECIFIED
-        try:
-            self.manager = os.environ["MANAGER"]
-        except Exception:
-            logging.fatal("gcloud cluster name MUST be specified")
-            sys.exit(1)
-
         self.project = os.environ.get("PROJECT", "92948014362")
 
         self.preemptible_labels = os.environ.get(
@@ -45,6 +34,8 @@ class settings:
         self.test_cloud = True
         self.test_k8s = True
         self.yes = False
+
+        self.context = ""
 
         # only used for debugging
         self.default_context = os.environ.get("DEFAULT_CONTEXT", "dev")

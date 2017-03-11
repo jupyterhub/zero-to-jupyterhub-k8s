@@ -21,10 +21,10 @@ class k8s_control:
 
     self.pods omits certain pods based on settings"""
 
-    def __init__(self, options, context):
+    def __init__(self, options):
         """ Needs to be initialized with options as an
         instance of settings"""
-        self.configure_new_context(context)
+        self.context = self.configure_new_context(options.context)
         self.options = options
         self.v1 = client.CoreV1Api()
         self.pods = self.get_pods()
@@ -51,6 +51,7 @@ class k8s_control:
             scale_logger.fatal("Vague context specification")
             sys.exit(1)
         config.load_kube_config(context=context_to_activate)
+        return context_to_activate
 
     def get_nodes(self):
         """Return a list of v1.Node"""
@@ -135,12 +136,8 @@ class k8s_control:
         return result
 
     def get_cluster_name(self):
-        """Return the (guessed) name of the cluster"""
-        node = self.nodes[0]
-        node_name = node.metadata.name
-        parts = node_name.split('-')
-        assert len(parts) > 2
-        return parts[1]
+        """Return the full name of the cluster"""
+        return self.context
 
     def get_num_schedulable(self):
         """Return number of nodes schedulable AND NOT

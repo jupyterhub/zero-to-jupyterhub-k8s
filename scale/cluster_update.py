@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import logging
+import sys
 
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
@@ -24,8 +25,26 @@ class gce_cluster_control:
         self.compute = discovery.build(
             'compute', 'v1', credentials=self.credentials)
         self.zone = options.zone
-        self.group = options.manager
         self.project = options.project
+        self.group = self.__configure__managed_group_name(options.context)
+
+    def __configure__managed_group_name(self, segment):
+        "Use self.compute to find a managed group that matches the segment"
+        managers = self.compute.instanceGroupManagers().list(
+            zone=self.zone, project=self.project).execute()['items']
+        matches = []
+        for manager in managers:
+            if segment in manager['name']:
+                matches.append(manager)
+        if len(manager) == 0:
+            scale_logger.exception(
+                "Could not find context %s in Google Cloud project\n" % segment)
+            sys.exit(1)
+        elif len(manager) >= 2:
+            scale_logger.fatal("Vague context specification for Google Cloud")
+            sys.exit(1)
+        else:
+            return matches[0]
 
     def shutdown_specified_node(self, name):
         request_body = {
