@@ -44,6 +44,7 @@ class gce_cluster_control:
             scale_logger.fatal("Vague context specification for Google Cloud")
             sys.exit(1)
         else:
+            scale_logger.info("Found managed pool %s for resizing", matches[0])
             return matches[0]
 
     def shutdown_specified_node(self, name):
