@@ -141,5 +141,7 @@ if __name__ == "__main__":
     options.context = args.context
     if args.context_for_cloud != "":
         options.context_cloud = args.context_for_cloud
+    else:
+        options.context_cloud = options.context
 
     scale(options)

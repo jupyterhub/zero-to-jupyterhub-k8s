@@ -36,6 +36,7 @@ class settings:
         self.yes = False
 
         self.context = ""
+        self.context_cloud = ""
 
         # only used for debugging
         self.default_context = os.environ.get("DEFAULT_CONTEXT", "dev")
