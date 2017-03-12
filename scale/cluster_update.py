@@ -42,7 +42,8 @@ class gce_cluster_control:
                 "Could not find context %s in Google Cloud project\n" % segment)
             sys.exit(1)
         elif len(matches) >= 2:
-            scale_logger.fatal("Vague context specification for Google Cloud")
+            scale_logger.fatal(
+                "Vague context specification for Google Cloud. Try to use --context-for-cloud to specify further")
             sys.exit(1)
         else:
             scale_logger.info(
