@@ -6,3 +6,6 @@ ${CONDA_DIR}/bin/pip --no-cache-dir install \
     mplleaflet==0.0.5 \
     rtree==0.8.3 \
     ;
+
+${CONDA_DIR}/bin/conda install --quiet --yes \
+    libspatialindex=1.8.5
