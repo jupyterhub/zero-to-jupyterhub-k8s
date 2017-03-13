@@ -20,6 +20,9 @@ RUN wget -q -O /usr/local/bin/gdrive \
   "https://docs.google.com/uc?id=0B3X9GlR6EmbnQ0FtZmJJUXEyRTA&export=download"
 RUN chmod +x /usr/local/bin/gdrive
 
+# for geog88
+RUN apt-get --yes install libspatialindex-dev
+
 USER $NB_USER
 
 ADD install-python-packages.bash /usr/local/sbin/install-python-packages.bash
