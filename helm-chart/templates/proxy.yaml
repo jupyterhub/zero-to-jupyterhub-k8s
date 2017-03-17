@@ -52,7 +52,10 @@ spec:
       labels:
         name: proxy-pod
         {{ if .Values.proxy.labels -}}
-{{ toYaml .Values.proxy.labels | indent 9}}
+        # Because toYaml + indent is super flaky
+        {{ range $key, $value := .Values.proxy.labels -}}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
         {{- end }}
     spec:
       containers:
