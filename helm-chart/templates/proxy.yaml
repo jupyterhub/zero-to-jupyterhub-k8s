@@ -51,6 +51,9 @@ spec:
     metadata:
       labels:
         name: proxy-pod
+        {{ if .Values.proxy.labels -}}
+{{ toYaml .Values.proxy.labels | indent 9}}
+        {{- end }}
     spec:
       containers:
       - name: proxy-container

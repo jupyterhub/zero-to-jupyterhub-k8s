@@ -97,6 +97,9 @@ spec:
     metadata:
       labels:
         name: hub-pod
+        {{ if .Values.hub.labels -}}
+{{ toYaml .Values.hub.labels | indent 9}}
+        {{- end }}
     spec:
       volumes:
       - name: config

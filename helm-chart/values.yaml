@@ -18,6 +18,7 @@ hub:
   db:
     type: sqlite-pvc
     url: null
+  labels: null
   image:
     name: yuvipanda/jupyterhub-kubernetes-hub
     tag: v0.2
@@ -34,6 +35,7 @@ proxy:
     requests:
       cpu: 1
       memory: 1Gi
+  labels: null
 
 # Set this explicitly if you want to use a static allocated
 # IP as the public LoadBalancer IP. Requires support by
