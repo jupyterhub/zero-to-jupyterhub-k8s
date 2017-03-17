@@ -21,11 +21,19 @@ hub:
   image:
     name: yuvipanda/jupyterhub-kubernetes-hub
     tag: v0.2
+  resources:
+    requests:
+      cpu: 0.5
+      memory: 1Gi
 
 proxy:
   image:
     name: yuvipanda/jupyterhub-kubernetes-proxy
     tag: v0.1
+  resources:
+    requests:
+      cpu: 1
+      memory: 1Gi
 
 # Set this explicitly if you want to use a static allocated
 # IP as the public LoadBalancer IP. Requires support by

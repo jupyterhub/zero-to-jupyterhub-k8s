@@ -117,6 +117,8 @@ spec:
           - mountPath: /srv/jupyterhub
             name: hub-db-dir
         {{- end }}
+        resources:
+{{ toYaml .Values.hub.resources | indent 12}}
         imagePullPolicy: IfNotPresent
         env:
         # Put this here directly so hub will restart when we

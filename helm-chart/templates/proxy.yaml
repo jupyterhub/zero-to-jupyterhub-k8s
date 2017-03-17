@@ -55,6 +55,8 @@ spec:
       containers:
       - name: proxy-container
         image: {{ .Values.proxy.image.name }}:{{ .Values.proxy.image.tag }}
+        resources:
+{{ toYaml .Values.proxy.resources | indent 12 }}
         env:
           - name: CONFIGPROXY_AUTH_TOKEN
             valueFrom:
