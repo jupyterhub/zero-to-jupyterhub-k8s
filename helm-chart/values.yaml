@@ -16,7 +16,7 @@ hub:
   baseUrl: "/"
   cookieSecret: null
   db:
-    type: sqlite-memory
+    type: sqlite-pvc
     url: null
   image:
     name: yuvipanda/jupyterhub-kubernetes-hub
