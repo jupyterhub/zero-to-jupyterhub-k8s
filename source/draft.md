@@ -2,9 +2,18 @@
 
 This tutorial lets you set up a JupyterHub installation on a Kubernetes Cluster (on Google Cloud), using Helm for managing installation & upgrades.
 
-Install and authenticate with the gcloud commandline tools. https://cloud.google.com/sdk/downloads has info on how to.
 Create a kubernetes cluster:
 gcloud container clusters create my-cluster-name --num-nodes=3 --zone=us-central1-b
+
+If you get this error:
+
+ERROR: (gcloud.container.clusters.create) ResponseError: code=503, message=Project alert-result-161014 is not fully initialized with the default service accounts. Please try again later.
+
+go to in browser
+
+https://console.cloud.google.com/kubernetes/list
+
+
 Install kubectl and make sure it works:
 gcloud components install kubectl
 kubectl get node  (should return 3 nodes)
