@@ -4,7 +4,8 @@
 
 # Name of this installation. Will be used to create namespace
 # and storageclass. Must be a valid DNS label
-name: 'datahub-dev'
+# HACK: need to get rid of this, purely use --namespace only
+name: null
 
 # Ideally, we should not be creating namespaces in our templates.
 # Helm can create the when you use --namespace, and we should

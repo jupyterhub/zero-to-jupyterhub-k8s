@@ -3,9 +3,9 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: hub-db-dir
-  namespace: {{ .Values.name }}
+  namespace: {{ default .Release.Namespace .Values.name }}
   annotations:
-    volume.beta.kubernetes.io/storage-class: hub-storage-{{ .Values.name }}
+    volume.beta.kubernetes.io/storage-class: hub-storage-{{ default .Release.Namespace .Values.name }}
 spec:
   accessModes:
     - ReadWriteOnce
@@ -18,7 +18,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: hub
-  namespace: {{ .Values.name }}
+  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
 spec:
   selector:
     name: hub-pod
@@ -31,7 +31,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: hub-config
-  namespace: {{ .Values.name }}
+  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
 data:
   token.proxy: {{ .Values.token.proxy | quote }}
   {{ if .Values.cull.enabled -}}
@@ -90,7 +90,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: hub-deployment
-  namespace: {{ .Values.name }}
+  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
 spec:
   replicas: 1
   template:
