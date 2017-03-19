@@ -40,7 +40,6 @@ c.KubeSpawner.start_timeout = 5 * 60
 
 # Use env var for this, since we want hub to restart when this changes
 c.KubeSpawner.singleuser_image_spec = os.environ['SINGLEUSER_IMAGE']
-c.KubeSpawner.singleuser_image_pull_policy = 'Always'
 
 # Configure dynamically provisioning pvc
 storage_type = get_config('singleuser.storage.type')
