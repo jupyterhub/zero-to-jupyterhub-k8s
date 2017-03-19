@@ -3,8 +3,6 @@
 """ Shared settings and constant values across multiple scaling scripts"""
 
 import os
-import logging
-import sys
 
 
 class settings:
@@ -18,7 +16,7 @@ class settings:
         self.optimal_utilization = float(
             os.environ.get("OPTIMAL_UTILIZATION", 0.75))
         self.min_nodes = int(os.environ.get("MIN_NODES", 3))
-        self.max_nodes = int(os.environ.get("MAX_NODES", 72))
+        self.max_nodes = int(os.environ.get("MAX_NODES", 15))
 
         # TODO: Get rid of these default values specific to Data8
         self.zone = os.environ.get("ZONE", "us-central1-a")
@@ -39,4 +37,4 @@ class settings:
         self.context_cloud = ""
 
         # only used for debugging
-        self.default_context = os.environ.get("DEFAULT_CONTEXT", "dev")
+        self.default_context = os.environ.get("DEFAULT_CONTEXT", "prod")

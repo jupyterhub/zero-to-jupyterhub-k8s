@@ -1,14 +1,15 @@
 #!/usr/bin/python3
 
 """Primary scale logic"""
+
+import logging
+import argparse
+
 from workload import schedule_goal
 from update_nodes import update_unschedulable
 from cluster_update import gce_cluster_control
 from settings import settings
 from utils import user_confirm
-
-import logging
-import argparse
 from kubernetes_control import k8s_control
 from kubernetes_control_test import k8s_control_test
 

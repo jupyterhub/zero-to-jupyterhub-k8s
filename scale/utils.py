@@ -7,6 +7,15 @@ import logging
 scale_logger = logging.getLogger("scale")
 logging.getLogger("kubernetes").setLevel(logging.WARNING)
 
+SYMBOLS = {
+    'customary': ('B', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'),
+    'customary_ext': ('byte', 'kilo', 'mega', 'giga', 'tera', 'peta', 'exa',
+                      'zetta', 'iotta'),
+    'iec': ('Bi', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi', 'Yi'),
+    'iec_ext': ('byte', 'kibi', 'mebi', 'gibi', 'tebi', 'pebi', 'exbi',
+                'zebi', 'yobi'),
+}
+
 
 def get_pod_host_name(pod):
     """Return the host node name of the pod"""
@@ -28,7 +37,7 @@ def get_pod_memory_request(pod):
     node_memory_request = 0
     try:
         node_memory_request = \
-            int(pod.spec.containers[0].resources.requests['memory'])
+            convert_size(pod.spec.containers[0].resources.requests['memory'])
     except (KeyError, TypeError):
         pass
     return node_memory_request
@@ -37,10 +46,67 @@ def get_pod_memory_request(pod):
 def get_node_memory_capacity(node):
     """Converts the specific memory entry 
     of the kubernetes API into the byte capacity"""
-    node_mem_in_kibibytes = int(
-        node.status.capacity['memory'].replace('Ki', ''))
-    node_mem_in_bytes = 1024 * node_mem_in_kibibytes
-    return node_mem_in_bytes
+    return convert_size(node.status.capacity['memory'].replace('Ki', ''))
+
+
+def convert_size(s):
+    if s.isdigit():
+        return int(s)
+    else:
+        return human2bytes(s)
+
+
+def human2bytes(s):
+    """
+    Copied from https://code.activestate.com/recipes/578019-bytes-to-human-human-to-bytes-converter/
+
+    Attempts to guess the string format based on default symbols
+    set and return the corresponding bytes as an integer.
+    When unable to recognize the format ValueError is raised.
+
+      >>> human2bytes('0 B')
+      0
+      >>> human2bytes('1 K')
+      1024
+      >>> human2bytes('1 M')
+      1048576
+      >>> human2bytes('1 Gi')
+      1073741824
+      >>> human2bytes('1 tera')
+      1099511627776
+
+      >>> human2bytes('0.5kilo')
+      512
+      >>> human2bytes('0.1  byte')
+      0
+      >>> human2bytes('1 k')  # k is an alias for K
+      1024
+      >>> human2bytes('12 foo')
+      Traceback (most recent call last):
+          ...
+      ValueError: can't interpret '12 foo'
+    """
+    init = s
+    num = ""
+    while s and s[0:1].isdigit() or s[0:1] == '.':
+        num += s[0]
+        s = s[1:]
+    num = float(num)
+    letter = s.strip()
+    for _, sset in SYMBOLS.items():
+        if letter in sset:
+            break
+    else:
+        if letter == 'k':
+            # treat 'k' as an alias for 'K' as per: http://goo.gl/kTQMs
+            sset = SYMBOLS['customary']
+            letter = letter.upper()
+        else:
+            raise ValueError("can't interpret %r" % init)
+    prefix = {sset[0]: 1}
+    for i, s in enumerate(sset[1:]):
+        prefix[s] = 1 << (i + 1) * 10
+    return int(num * prefix[letter])
 
 
 def check_list_intersection(list1, list2):

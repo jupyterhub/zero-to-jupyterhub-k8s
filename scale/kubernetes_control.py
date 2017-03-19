@@ -5,7 +5,8 @@ import logging
 import sys
 
 from kubernetes import client, config
-from utils import get_pod_host_name, get_pod_type, get_pod_memory_request, \
+
+from utils import get_pod_host_name, get_pod_memory_request, \
     get_node_memory_capacity, check_list_intersection
 
 scale_logger = logging.getLogger("scale")
@@ -162,7 +163,8 @@ class k8s_control:
 if __name__ == "__main__":
     import settings
     options = settings.settings()
-    k8s = k8s_control(options, options.default_context)
+    options.context = options.default_context
+    k8s = k8s_control(options)
     print("Displaying information of cluster %s\n" % k8s.get_cluster_name())
     k8s.show_nodes_status()
     print("Current memory usage is %i" % k8s.get_total_cluster_memory_usage())
