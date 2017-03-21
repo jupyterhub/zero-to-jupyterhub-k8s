@@ -25,7 +25,7 @@ hub:
     tag: v0.2
   resources:
     requests:
-      cpu: 0.5
+      cpu: 0.2
       memory: 1Gi
 
 proxy:
@@ -34,8 +34,8 @@ proxy:
     tag: v0.1
   resources:
     requests:
-      cpu: 1
-      memory: 1Gi
+      cpu: 0.3
+      memory: 512Mi
   labels: null
 
 # Set this explicitly if you want to use a static allocated
