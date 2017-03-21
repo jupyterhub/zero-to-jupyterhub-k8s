@@ -9,6 +9,7 @@ Learning with JupyterHub
    :caption: Contents:
 
    googlecloud
+   clustercreate
    draft
 
 Indices and tables
