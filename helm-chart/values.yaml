@@ -53,7 +53,7 @@ token:
 
 singleuser:
   storage:
-    type: none
+    type: dynamic
     capacity: 10Gi
     homeMountPath: /home/jovyan
     # type: hostPath
