@@ -4,7 +4,8 @@
 
 # Name of this installation. Will be used to create namespace
 # and storageclass. Must be a valid DNS label
-name: 'datahub-dev'
+# HACK: need to get rid of this, purely use --namespace only
+name: null
 
 # Ideally, we should not be creating namespaces in our templates.
 # Helm can create the when you use --namespace, and we should
@@ -24,7 +25,7 @@ hub:
     tag: v0.2
   resources:
     requests:
-      cpu: 0.5
+      cpu: 0.2
       memory: 1Gi
 
 proxy:
@@ -33,8 +34,8 @@ proxy:
     tag: v0.1
   resources:
     requests:
-      cpu: 1
-      memory: 1Gi
+      cpu: 0.3
+      memory: 512Mi
   labels: null
 
 # Set this explicitly if you want to use a static allocated
@@ -52,7 +53,7 @@ token:
 
 singleuser:
   storage:
-    type: none
+    type: dynamic
     capacity: 10Gi
     homeMountPath: /home/jovyan
     # type: hostPath

@@ -13,7 +13,7 @@ metadata:
 kind: StorageClass
 apiVersion: storage.k8s.io/v1beta1
 metadata:
-  name: single-user-storage-{{ .Values.name }}
+  name: single-user-storage-{{ default .Release.Namespace .Values.name }}
 provisioner: kubernetes.io/gce-pd
 parameters:
   type: pd-ssd
@@ -23,7 +23,7 @@ parameters:
 kind: StorageClass
 apiVersion: storage.k8s.io/v1beta1
 metadata:
-  name: hub-storage-{{ .Values.name }}
+  name: hub-storage-{{ default .Release.Namespace .Values.name }}
 provisioner: kubernetes.io/gce-pd
 parameters:
   type: pd-ssd
