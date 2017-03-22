@@ -2,7 +2,7 @@ import yaml
 import os
 import sys
 
-def get_config(key):
+def get_config(key, default=None):
     """
     Find a config item of a given name & return it
 
@@ -15,7 +15,7 @@ def get_config(key):
             print(key, data)
             return data
     except FileNotFoundError:
-        return None
+        return default
 
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
@@ -40,7 +40,6 @@ c.KubeSpawner.start_timeout = 5 * 60
 
 # Use env var for this, since we want hub to restart when this changes
 c.KubeSpawner.singleuser_image_spec = os.environ['SINGLEUSER_IMAGE']
-c.KubeSpawner.singleuser_image_pull_policy = 'Always'
 
 # Configure dynamically provisioning pvc
 storage_type = get_config('singleuser.storage.type')
@@ -179,7 +178,7 @@ if 'STATSD_SERVICE_HOST' in os.environ:
 # Enable admins to access user servers
 c.JupyterHub.admin_access = get_config('admin.access')
 
-c.Authenticator.admin_users = get_config('admin.users')
+c.Authenticator.admin_users = get_config('admin.users', [])
 
 c.JupyterHub.base_url = get_config('hub.base_url')
 

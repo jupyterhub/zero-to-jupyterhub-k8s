@@ -4,13 +4,14 @@
 
 # Name of this installation. Will be used to create namespace
 # and storageclass. Must be a valid DNS label
-name: 'datahub-dev'
+# HACK: need to get rid of this, purely use --namespace only
+name: null
 
 # Ideally, we should not be creating namespaces in our templates.
 # Helm can create the when you use --namespace, and we should
 # just use those. However, leaving this here for a while to
 # make sure we do not break current installations.
-createNamespace: true
+createNamespace: false
 
 hub:
   baseUrl: "/"
@@ -18,14 +19,24 @@ hub:
   db:
     type: sqlite-pvc
     url: null
+  labels: null
   image:
-    name: gcr.io/data-8/jupyterhub-k8s-hub
-    tag: null  # Must be overriden
+    name: yuvipanda/jupyterhub-kubernetes-hub
+    tag: v0.7
+  resources:
+    requests:
+      cpu: 0.2
+      memory: 1Gi
 
 proxy:
   image:
-    name: gcr.io/data-8/jupyterhub-k8s-proxy
-    tag: null  # Must be overriden
+    name: yuvipanda/jupyterhub-kubernetes-proxy
+    tag: v0.1
+  resources:
+    requests:
+      cpu: 0.3
+      memory: 512Mi
+  labels: null
 
 # Set this explicitly if you want to use a static allocated
 # IP as the public LoadBalancer IP. Requires support by
@@ -34,13 +45,7 @@ publicIP: null
 
 # Google OAuth secrets
 auth:
-  type: google
-  google:
-    clientId: "insert-client-id-from-google-here"
-    clientSecret: "insert-client-secret-from-google-here"
-    callbackUrl: "insert-callback-url-from-google-here"
-    hostedDomain: "insert-hosted-domain-from-google-here"
-    loginService: "Insert name of login service shown in login button here"
+  type: dummy
 
 token:
   proxy: 'generate with pwgen 64 and put here'
@@ -54,14 +59,14 @@ singleuser:
     # type: hostPath
     # homeHostPathTemplate: /data/project/paws/userhomes/{userid}
   image:
-    name: gcr.io/data-8/jupyterhub-k8s-singleuser
-    tag: null # Must be overriden
+    name: yuvipanda/tiniest-notebook
+    tag: v1.1
   cpu:
     limit: null
     guarantee: null
   memory:
-    limit: 2G
-    guarantee: 2G
+    limit: null
+    guarantee: null
 
 
 
@@ -71,12 +76,12 @@ cull:
   every: 600
 
 metrics:
-  enabled: true
+  enabled: false
   # FIXME: Allow different types here?
   datadog:
     apiKey: null
     prefix: stresstest
 
 admin:
-  access: true # Set to true to allow admins to access user notebooks
-  users: [] # List of users who are admins
+  access: true
+  users: null

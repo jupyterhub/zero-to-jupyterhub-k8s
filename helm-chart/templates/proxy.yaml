@@ -14,7 +14,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: proxy-api
-  namespace: {{ .Values.name }}
+  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
 spec:
   selector:
     name: proxy-pod
@@ -27,7 +27,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: proxy-public
-  namespace: {{ .Values.name }}
+  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
 spec:
   type: LoadBalancer
   {{ if .Values.publicIP }}
@@ -44,17 +44,25 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: proxy-deployment
-  namespace: {{ .Values.name }}
+  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         name: proxy-pod
+        {{ if .Values.proxy.labels -}}
+        # Because toYaml + indent is super flaky
+        {{ range $key, $value := .Values.proxy.labels -}}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
     spec:
       containers:
       - name: proxy-container
         image: {{ .Values.proxy.image.name }}:{{ .Values.proxy.image.tag }}
+        resources:
+{{ toYaml .Values.proxy.resources | indent 12 }}
         env:
           - name: CONFIGPROXY_AUTH_TOKEN
             valueFrom:

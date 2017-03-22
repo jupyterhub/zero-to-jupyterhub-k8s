@@ -3,9 +3,9 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: hub-db-dir
-  namespace: {{ .Values.name }}
+  namespace: {{ default .Release.Namespace .Values.name }}
   annotations:
-    volume.beta.kubernetes.io/storage-class: hub-storage-{{ .Values.name }}
+    volume.beta.kubernetes.io/storage-class: hub-storage-{{ default .Release.Namespace .Values.name }}
 spec:
   accessModes:
     - ReadWriteOnce
@@ -18,7 +18,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: hub
-  namespace: {{ .Values.name }}
+  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
 spec:
   selector:
     name: hub-pod
@@ -31,7 +31,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: hub-config
-  namespace: {{ .Values.name }}
+  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
 data:
   token.proxy: {{ .Values.token.proxy | quote }}
   {{ if .Values.cull.enabled -}}
@@ -52,7 +52,7 @@ data:
   singleuser.storage.type: {{ .Values.singleuser.storage.type | quote }}
   singleuser.storage.home_mount_path: {{ .Values.singleuser.storage.homeMountPath | quote }}
   {{ if eq .Values.singleuser.storage.type "dynamic" -}}
-  singleuser.storage.class: single-user-storage-{{ .Values.name }}
+  singleuser.storage.class: single-user-storage-{{ default .Release.Namespace .Values.name }}
   singleuser.storage.capacity: {{.Values.singleuser.storage.capacity | quote }}
   {{ else if eq .Values.singleuser.storage.type "hostPath" -}}
   singleuser.storage.home_host_path_template: {{ .Values.singleuser.storage.homeHostPathTemplate | quote }}
@@ -79,22 +79,30 @@ data:
   hub.db_url: {{ .Values.hub.db.url | quote }}
   {{- end }}
   admin.access: {{ .Values.admin.access | quote }}
+  {{ if .Values.admin.users -}}
   admin.users: |
     {{ range $user := .Values.admin.users -}}
     - {{ $user }}
     {{ end }}
+  {{- end }}
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: hub-deployment
-  namespace: {{ .Values.name }}
+  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         name: hub-pod
+        {{ if .Values.hub.labels -}}
+        # Because toYaml + indent is super flaky
+        {{ range $key, $value := .Values.proxy.labels -}}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
     spec:
       volumes:
       - name: config
@@ -115,6 +123,8 @@ spec:
           - mountPath: /srv/jupyterhub
             name: hub-db-dir
         {{- end }}
+        resources:
+{{ toYaml .Values.hub.resources | indent 12}}
         imagePullPolicy: IfNotPresent
         env:
         # Put this here directly so hub will restart when we
