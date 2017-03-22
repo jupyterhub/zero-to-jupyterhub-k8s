@@ -52,7 +52,7 @@ data:
   singleuser.storage.type: {{ .Values.singleuser.storage.type | quote }}
   singleuser.storage.home_mount_path: {{ .Values.singleuser.storage.homeMountPath | quote }}
   {{ if eq .Values.singleuser.storage.type "dynamic" -}}
-  singleuser.storage.class: single-user-storage-{{ .Values.name }}
+  singleuser.storage.class: single-user-storage-{{ default .Release.Namespace .Values.name }}
   singleuser.storage.capacity: {{.Values.singleuser.storage.capacity | quote }}
   {{ else if eq .Values.singleuser.storage.type "hostPath" -}}
   singleuser.storage.home_host_path_template: {{ .Values.singleuser.storage.homeHostPathTemplate | quote }}
