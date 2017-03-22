@@ -60,7 +60,7 @@ singleuser:
     # homeHostPathTemplate: /data/project/paws/userhomes/{userid}
   image:
     name: yuvipanda/tiniest-notebook
-    tag: v1
+    tag: v1.1
   cpu:
     limit: null
     guarantee: null
