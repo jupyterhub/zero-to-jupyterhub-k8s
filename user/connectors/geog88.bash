@@ -5,4 +5,5 @@ ${CONDA_DIR}/bin/pip --no-cache-dir install \
     mplleaflet==0.0.5 \
     rtree==0.8.3 \
     geopandas==0.2.1 \
+    netcdf==0.2.1 \
     ;
