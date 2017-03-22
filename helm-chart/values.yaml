@@ -22,7 +22,7 @@ hub:
   labels: null
   image:
     name: yuvipanda/jupyterhub-kubernetes-hub
-    tag: v0.2
+    tag: v0.7
   resources:
     requests:
       cpu: 0.2
@@ -59,7 +59,7 @@ singleuser:
     # type: hostPath
     # homeHostPathTemplate: /data/project/paws/userhomes/{userid}
   image:
-    name: yuvipanda/simple-singleuser
+    name: yuvipanda/tiniest-notebook
     tag: v1
   cpu:
     limit: null
