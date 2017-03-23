@@ -69,6 +69,12 @@ data:
   {{ if .Values.singleuser.cpu.guarantee -}}
   singleuser.cpu.guarantee: {{ .Values.singleuser.cpu.guarantee | quote}}
   {{- end }}
+  {{ if .Values.singleuser.extraLabels -}}
+  singleuser.extra-labels: |
+    {{ range $key, $value := .Values.singleuser.extraLabels -}}
+    {{ $key | quote }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
   token.cookie_secret: {{ .Values.hub.cookieSecret | quote }}
   hub.base_url: {{ .Values.hub.baseUrl | quote }}
   {{ if eq .Values.hub.db.type "sqlite-pvc" -}}
