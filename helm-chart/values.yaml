@@ -22,7 +22,7 @@ hub:
   labels: null
   image:
     name: yuvipanda/jupyterhub-kubernetes-hub
-    tag: v0.7
+    tag: v0.8
   resources:
     requests:
       cpu: 0.2
@@ -52,6 +52,7 @@ token:
   culler: 'generate with openssl rand -hex 32 here'
 
 singleuser:
+  extraLabels: {}
   storage:
     type: dynamic
     capacity: 10Gi
