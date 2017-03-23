@@ -10,11 +10,13 @@ RUN apt-get install -y --no-install-recommends \
     libssl-dev \
     python3 \
     python3-dev \
-    python3-pip
+    python3-pip \
+    npm \
+    nodejs-legacy
 
 RUN pip3 install --upgrade pip
 
-RUN pip3 install --no-cache-dir jupyterhub==0.7.2 oauthenticator==0.5.1 jupyterhub-dummyauthenticator==0.1 jupyterhub-tmpauthenticator==0.1 statsd
+RUN pip3 install --no-cache-dir git+http://github.com/yuvipanda/jupyterhub@none-cmd oauthenticator==0.5.1 jupyterhub-dummyauthenticator==0.1 jupyterhub-tmpauthenticator==0.1 statsd
 
 RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@838e979befcc9
 
