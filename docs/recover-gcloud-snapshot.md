@@ -31,15 +31,15 @@ gcloud compute instances attach-disk provisioner-01 --disk recovery-{USERNAME}-2
 
 6. Create mount path:
   ```
-sudo -i mkdir /mnt/disks/recovery-{USERNAME}-1
-sudo -i mkdir /mnt/disks/recovery-{USERNAME}-2
+sudo mkdir /mnt/disks/recovery-{USERNAME}-1
+sudo mkdir /mnt/disks/recovery-{USERNAME}-2
 ...
 ```
 
 7. Mount disks:
   ```
-sudo -i mount /dev/{blockdevice1} /mnt/disks/recovery-{USERNAME}-1
-sudo -i mount /dev/{blockdevice2} /mnt/disks/recovery-{USERNAME}-2
+sudo mount /dev/{blockdevice1} /mnt/disks/recovery-{USERNAME}-1
+sudo mount /dev/{blockdevice2} /mnt/disks/recovery-{USERNAME}-2
 ...
 ```
 
@@ -52,8 +52,8 @@ cp /mnt/disks/recovery-{USERNAME}-2/some/file/2 /somewhere/else/
 
 9. Unmount disks:
   ```
-sudo -i umount /mnt/disks/recovery-{USERNAME}-1
-sudo -i umount /mnt/disks/recovery-{USERNAME}-2
+sudo umount /mnt/disks/recovery-{USERNAME}-1
+sudo umount /mnt/disks/recovery-{USERNAME}-2
 ...
 ```
 
@@ -70,4 +70,3 @@ gcloud compute disks delete recovery-{USERNAME}-1
 gcloud compute disks delete recovery-{USERNAME}-2
 ...
 ```
-
