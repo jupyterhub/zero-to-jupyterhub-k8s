@@ -6,4 +6,5 @@ ${CONDA_DIR}/bin/pip --no-cache-dir install \
     rtree==0.8.3 \
     geopandas==0.2.1 \
     netCDF4==1.2.7 \
+    nco==0.0.3 \
     ;
