@@ -49,6 +49,9 @@ data:
   auth.google.login-service: {{.Values.auth.google.loginService | quote}}
   auth.google.callback-url: {{.Values.auth.google.callbackUrl}}
   {{- end }}
+  {{ if .Values.singleuser.cmd -}}
+  singleuser.cmd: {{ .Values.singleuser.cmd | quote }}
+  {{- end }}
   singleuser.storage.type: {{ .Values.singleuser.storage.type | quote }}
   singleuser.storage.home_mount_path: {{ .Values.singleuser.storage.homeMountPath | quote }}
   {{ if eq .Values.singleuser.storage.type "dynamic" -}}

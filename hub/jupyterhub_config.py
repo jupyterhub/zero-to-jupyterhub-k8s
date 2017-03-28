@@ -166,7 +166,7 @@ c.KubeSpawner.environment = {
     'GIT_AUTHOR_NAME': generate_user_name,
     'GIT_COMMITTER_NAME': generate_user_name
 }
- 
+
 if 'CULL_JHUB_TOKEN' in os.environ:
     c.JupyterHub.api_tokens = {
         os.environ['CULL_JHUB_TOKEN']: 'cull',
@@ -185,3 +185,7 @@ c.Authenticator.admin_users = get_config('admin.users', [])
 c.JupyterHub.base_url = get_config('hub.base_url')
 
 c.JupyterHub.db_url = get_config('hub.db_url')
+
+cmd = get_config('singleuser.cmd', None)
+if cmd:
+    c.Spawner.cmd = cmd
