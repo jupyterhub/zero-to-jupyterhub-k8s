@@ -109,7 +109,7 @@ class k8s_control:
         """Returns the total memory capacity of all nodes, as student
         pods can be scheduled on any node that meets its Request criteria"""
         total_mem_capacity = 0
-        for node in self.noncritical_nodes:
+        for node in self.nodes:
             total_mem_capacity += get_node_memory_capacity(node)
         return total_mem_capacity
 
@@ -144,7 +144,7 @@ class k8s_control:
         """Return number of nodes schedulable AND NOT
         IN THE LIST OF CRITICAL NODES"""
         result = 0
-        for node in self.nodes:
+        for node in self.noncritical_nodes:
             if not node.spec.unschedulable:
                 result += 1
         return result
