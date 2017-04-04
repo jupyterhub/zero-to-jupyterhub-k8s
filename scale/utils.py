@@ -46,7 +46,7 @@ def get_pod_memory_request(pod):
 def get_node_memory_capacity(node):
     """Converts the specific memory entry 
     of the kubernetes API into the byte capacity"""
-    return convert_size(node.status.capacity['memory'].replace('Ki', ''))
+    return convert_size(node.status.capacity['memory'])
 
 
 def convert_size(s):

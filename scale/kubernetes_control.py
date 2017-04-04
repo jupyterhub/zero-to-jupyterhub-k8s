@@ -144,7 +144,7 @@ class k8s_control:
         """Return number of nodes schedulable AND NOT
         IN THE LIST OF CRITICAL NODES"""
         result = 0
-        for node in self.noncritical_nodes:
+        for node in self.nodes:
             if not node.spec.unschedulable:
                 result += 1
         return result
