@@ -35,7 +35,7 @@ metadata:
 data:
   token.proxy: {{ .Values.token.proxy | quote }}
   {{ if .Values.cull.enabled -}}
-  token.culler: {{ .Values.token.culler | quote }}
+  cull.token: {{ .Values.cull.token | quote }}
   {{- end }}
 
   auth.type: {{ .Values.auth.type | quote }}
@@ -48,6 +48,9 @@ data:
   auth.google.hosted-domain: {{.Values.auth.google.hostedDomain | quote}}
   auth.google.login-service: {{.Values.auth.google.loginService | quote}}
   auth.google.callback-url: {{.Values.auth.google.callbackUrl}}
+  {{- end }}
+  {{ if .Values.singleuser.cmd -}}
+  singleuser.cmd: {{ .Values.singleuser.cmd | quote }}
   {{- end }}
   singleuser.storage.type: {{ .Values.singleuser.storage.type | quote }}
   singleuser.storage.home_mount_path: {{ .Values.singleuser.storage.homeMountPath | quote }}
