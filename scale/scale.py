@@ -71,23 +71,25 @@ def scale(options):
     for node in k8s.nodes:
         if node.metadata.name not in k8s.critical_node_names:
             nodes.append(node)
+
+    # goal is the total number of nodes we want in the cluster
     goal = schedule_goal(k8s, options)
 
     scale_logger.info("Total nodes in the cluster: %i", len(k8s.nodes))
-    scale_logger.info("Found %i critical nodes; recommending additional %i nodes for service",
-                      len(k8s.nodes) - len(nodes), goal)
-    if confirm(("Updating unschedulable flags to ensure %i nodes are unschedulable" % max(len(nodes) - goal, 0))):
-        update_unschedulable(max(len(nodes) - goal, 0), nodes, k8s)
+    scale_logger.info("Found %i critical nodes",
+                      len(k8s.nodes) - len(nodes))
+    scale_logger.info("Recommending total %i nodes for service", goal)
 
-    if len(k8s.critical_node_names) + goal > len(k8s.nodes):
-        scale_logger.info("Resize the cluster to %i nodes to satisfy the demand", (
-            len(k8s.critical_node_names) + goal))
+    if confirm(("Updating unschedulable flags to ensure %i nodes are unschedulable" % max(len(k8s.nodes) - goal, 0))):
+        update_unschedulable(max(len(k8s.nodes) - goal, 0), nodes, k8s)
+
+    if goal > len(k8s.nodes):
+        scale_logger.info(
+            "Resize the cluster to %i nodes to satisfy the demand", goal)
         if options.test_cloud:
-            resize_for_new_nodes_test(
-                len(k8s.critical_node_names) + goal, k8s, cluster)
+            resize_for_new_nodes_test(goal, k8s, cluster)
         else:
-            resize_for_new_nodes(
-                len(k8s.critical_node_names) + goal, k8s, cluster)
+            resize_for_new_nodes(goal, k8s, cluster)
     if options.test_cloud:
         shutdown_empty_nodes_test(nodes, k8s, cluster)
     else:

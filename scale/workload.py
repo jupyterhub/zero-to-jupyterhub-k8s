@@ -25,8 +25,7 @@ def get_effective_utilization(k8s):
 
 
 def schedule_goal(k8s, options):
-    """Return the goal number of schedulable nodes IN ADDITION
-    TO CRITICAL NODES, given the current situation"""
+    """Return the goal number of schedulable nodes, given the current situation"""
     scale_logger.info("Current scheduling target: %f ~ %f",
                       k8s.options.min_utilization, k8s.options.max_utilization)
 
@@ -41,8 +40,8 @@ def schedule_goal(k8s, options):
         required_num = k8s.get_total_cluster_memory_usage(
         ) / options.optimal_utilization / get_node_memory_capacity(k8s.nodes[0])
 
-        min_noncritical_nodes = options.min_nodes - k8s.critical_node_number
-        max_noncritical_nodes = options.max_nodes - k8s.critical_node_number
+        min_noncritical_nodes = options.min_nodes
+        max_noncritical_nodes = options.max_nodes
         # Ensure that newClusterSize remains within the bounds of min and max
         # nodes
         newClusterSize = min_noncritical_nodes if required_num < min_noncritical_nodes else required_num
