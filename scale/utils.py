@@ -3,6 +3,8 @@
 """Kubernetes API access functions"""
 
 import logging
+import os
+import subprocess
 
 scale_logger = logging.getLogger("scale")
 logging.getLogger("kubernetes").setLevel(logging.WARNING)
@@ -109,6 +111,16 @@ def check_list_intersection(list1, list2):
     if list1 is None or list2 is None:
         return False
     return len(set(list1).intersection(set(list2))) != 0
+
+
+def populate_pods(pool_name, url):
+    """Populate the given url image to the specified gcloud pool"""
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    cmd = [current_dir + '/populate.bash', pool_name, url]
+    print(' '.join(cmd))
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout
+    _ = p.read()
+    p.close()
 
 
 def user_confirm(prompt=None, resp=False):

@@ -9,7 +9,7 @@ from workload import schedule_goal
 from update_nodes import update_unschedulable
 from cluster_update import gce_cluster_control
 from settings import settings
-from utils import user_confirm
+from utils import user_confirm, populate_pods
 from kubernetes_control import k8s_control
 from kubernetes_control_test import k8s_control_test
 
@@ -45,6 +45,9 @@ def resize_for_new_nodes(new_total_nodes, k8s, cluster, test=False):
         scale_logger.info("Resizing up to: %d nodes", new_total_nodes)
         if not test:
             cluster.add_new_node(new_total_nodes)
+
+    for image_url in k8s.image_urls:
+        populate_pods(k8s.context, image_url)
 
 
 def resize_for_new_nodes_test(new_total_nodes, k8s, cluster):
