@@ -25,7 +25,8 @@ def get_effective_utilization(k8s):
 
 
 def schedule_goal(k8s, options):
-    """Return the goal number of schedulable nodes, given the current situation"""
+    """Return the goal number of schedulable nodes, including nodes running
+    critical pods, given the current situation"""
     scale_logger.info("Current scheduling target: %f ~ %f",
                       k8s.options.min_utilization, k8s.options.max_utilization)
 
@@ -34,7 +35,7 @@ def schedule_goal(k8s, options):
 
     if current_utilization >= options.min_utilization and current_utilization <= options.max_utilization:
         # leave unchanged
-        return len(k8s.nodes)
+        return len(k8s.nodes) - k8s.get_num_unschedulable
     else:
         # need to scale down or up
         required_num = k8s.get_total_cluster_memory_usage(

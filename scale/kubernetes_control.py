@@ -115,9 +115,7 @@ class k8s_control:
 
     def get_critical_node_names(self):
         """Return a list of nodes where critical pods
-        are running
-
-        TODO: Test this in dev, set labels use kubectl"""
+        are running"""
         result = []
         for pod in self.pods:
             if not check_list_intersection(pod.metadata.labels, self.options.preemptible_labels):

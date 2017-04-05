@@ -25,12 +25,6 @@ def get_pod_host_name(pod):
     return pod.spec.node_name
 
 
-def get_pod_type(pod):
-    """Return the Type of the pod"""
-    # TODO: May not be the best approach
-    return pod.metadata.name.split('-')[0]
-
-
 def get_pod_memory_request(pod):
     """Returns the amount of memory requested
     by the node"""

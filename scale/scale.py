@@ -40,10 +40,7 @@ def shutdown_empty_nodes_test(nodes, k8s, cluster):
 
 def resize_for_new_nodes(new_total_nodes, k8s, cluster, test=False):
     """create new nodes to match new_total_nodes required
-    only for scaling up
-
-    TODO: Add gcloud python client for sizing up
-    instead of CLI call"""
+    only for scaling up"""
     if confirm(("Resizing up to: %d nodes" % new_total_nodes)):
         scale_logger.info("Resizing up to: %d nodes", new_total_nodes)
         if not test:
