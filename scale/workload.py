@@ -34,7 +34,7 @@ def schedule_goal(k8s, options):
 
     if current_utilization >= options.min_utilization and current_utilization <= options.max_utilization:
         # leave unchanged
-        return k8s.get_num_schedulable()
+        return len(k8s.nodes)
     else:
         # need to scale down or up
         required_num = k8s.get_total_cluster_memory_usage(
