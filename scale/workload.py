@@ -36,14 +36,14 @@ def schedule_goal(k8s, options):
         # leave unchanged
         return k8s.get_num_schedulable()
     else:
-        # need to scale down
+        # need to scale down or up
         required_num = k8s.get_total_cluster_memory_usage(
         ) / options.optimal_utilization / get_node_memory_capacity(k8s.nodes[0])
 
-        min_noncritical_nodes = options.min_nodes
-        max_noncritical_nodes = options.max_nodes
+        minimum_nodes = options.min_nodes
+        maximum_nodes = options.max_nodes
         # Ensure that newClusterSize remains within the bounds of min and max
         # nodes
-        newClusterSize = min_noncritical_nodes if required_num < min_noncritical_nodes else required_num
-        newClusterSize = max_noncritical_nodes if required_num > max_noncritical_nodes else required_num
+        newClusterSize = minimum_nodes if required_num < minimum_nodes else required_num
+        newClusterSize = maximum_nodes if required_num > maximum_nodes else required_num
         return int(round(newClusterSize))

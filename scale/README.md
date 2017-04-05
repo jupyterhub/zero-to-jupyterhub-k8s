@@ -16,11 +16,11 @@ Settings for the autoscaler should be loaded through environment variables. They
 
 ### Definitions
 
-**Critical Pods** = Pods that are not assigned a label indicating that they are "preemptible".
+**Critical Pods** = Pods that are not omitted or assigned a label indicating that they are "preemptible".
 
-**Workload** =  On a node, the sum of memory requests of pods that do not belong to `Critical Pods` and are not omitted.
+**Workload** =  The sum of memory requests of pods that are not omitted.
 
-**Capacity** = Total memeory of a single node; the value is 0 for nodes running `Critical Pods` and nodes marked `Unschedulable`
+**Capacity** = Total memeory of the cluster
 
 **Utilization** = On certain nodes, the ratio between the sum of `Workload` and the sum of `Capacity`
 
@@ -30,7 +30,7 @@ When `scale.py` is exected
 
 1. The autoscaler will calculate the **Utilization** of the cluster.
 2. If the **Utilization** of the cluster is between a **predefined minimum** and a **predefined maximum**, move the `Unschedulable` flag provided by Kubernetes between nodes, to make them deleted as soon as possible. Otherwise, the autoscaler will add or remove `Unschedulable` flags to approximate a **predefined optimal utilization**; if optimal utilization is not reached, new nodes can be created to meet the goal, to the predefined **maximum number of nodes**.
-**2a. Nodes running `critical service` will never be marked unschedulable**.
+**2a. Nodes running `critical pods` will never be marked unschedulable**.
 3. Make sure there are at least **predefined minimum number** of nodes schedulable by removing flags or add new nodes.
 4. Shutdown all empty and unschedulable nodes
 

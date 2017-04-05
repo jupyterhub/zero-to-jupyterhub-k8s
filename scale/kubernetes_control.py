@@ -168,5 +168,5 @@ if __name__ == "__main__":
     print("Displaying information of cluster %s\n" % k8s.get_cluster_name())
     k8s.show_nodes_status()
     print("Current memory usage is %i" % k8s.get_total_cluster_memory_usage())
-    print("Total memory capacity is %i, not including non-preemptible nodes" %
+    print("Total memory capacity is %i" %
           k8s.get_total_cluster_memory_capacity())
