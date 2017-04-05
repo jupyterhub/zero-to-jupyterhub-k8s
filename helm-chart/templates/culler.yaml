@@ -23,5 +23,5 @@ spec:
             valueFrom:
               configMapKeyRef:
                 name: hub-config
-                key: token.culler
+                key: cull.token
 {{- end }}

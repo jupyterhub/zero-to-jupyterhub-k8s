@@ -35,7 +35,7 @@ metadata:
 data:
   token.proxy: {{ .Values.token.proxy | quote }}
   {{ if .Values.cull.enabled -}}
-  token.culler: {{ .Values.token.culler | quote }}
+  cull.token: {{ .Values.cull.token | quote }}
   {{- end }}
 
   auth.type: {{ .Values.auth.type | quote }}

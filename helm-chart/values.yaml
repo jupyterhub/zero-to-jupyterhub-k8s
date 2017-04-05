@@ -49,7 +49,6 @@ auth:
 
 token:
   proxy: 'generate with pwgen 64 and put here'
-  culler: 'generate with openssl rand -hex 32 here'
 
 singleuser:
   extraLabels: {}
@@ -75,6 +74,7 @@ cull:
   enabled: true
   timeout: 3600
   every: 600
+  token: 'generate with openssl rand -hex 32 here'
 
 metrics:
   enabled: false
