@@ -40,9 +40,10 @@ class k8s_control:
         result = set()
         for pod in self.pods:
             env = pod.spec.containers[0].env
-            for entry in env:
-                if entry.name == 'SINGLEUSER_IMAGE':
-                    result.add(entry.value)
+            if env:
+                for entry in env:
+                    if entry.name == 'SINGLEUSER_IMAGE':
+                        result.add(entry.value)
         return result
 
     def configure_new_context(self, new_context):

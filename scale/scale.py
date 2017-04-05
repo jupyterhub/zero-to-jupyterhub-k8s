@@ -45,9 +45,9 @@ def resize_for_new_nodes(new_total_nodes, k8s, cluster, test=False):
         scale_logger.info("Resizing up to: %d nodes", new_total_nodes)
         if not test:
             cluster.add_new_node(new_total_nodes)
-
-    for image_url in k8s.image_urls:
-        populate_pods(k8s.context, image_url)
+            scale_logger.info("Populate images to new nodes")
+            for image_url in k8s.image_urls:
+                populate_pods(k8s.context, image_url)
 
 
 def resize_for_new_nodes_test(new_total_nodes, k8s, cluster):
