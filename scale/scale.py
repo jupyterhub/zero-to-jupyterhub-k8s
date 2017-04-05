@@ -73,6 +73,8 @@ def scale(options):
     goal = schedule_goal(k8s, options)
 
     scale_logger.info("Total nodes in the cluster: %i", len(k8s.nodes))
+    scale_logger.info(
+        "%i nodes are unschedulable at this time", k8s.get_num_schedulable)
     scale_logger.info("Found %i critical nodes",
                       len(k8s.nodes) - len(nodes))
     scale_logger.info("Recommending total %i nodes for service", goal)
