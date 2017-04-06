@@ -21,7 +21,7 @@ RUN wget -q -O /usr/local/bin/gdrive \
 RUN chmod +x /usr/local/bin/gdrive
 
 # for geog88
-RUN apt-get --yes install libspatialindex-dev
+RUN apt-get --yes install libspatialindex-dev libgeos-dev
 
 USER $NB_USER
 
