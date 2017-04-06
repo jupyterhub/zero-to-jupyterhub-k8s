@@ -76,8 +76,9 @@ class k8s_control:
         scale_logger.debug("Getting all pods in all namespaces")
         pods = self.v1.list_pod_for_all_namespaces().items
         for pod in pods:
-            if not (check_list_intersection(self.options.omit_labels, pod.metadata.labels) or
-                    pod.metadata.namespace in self.options.omit_namespaces):
+            if (not (check_list_intersection(self.options.omit_labels, pod.metadata.labels) or
+                     pod.metadata.namespace in self.options.omit_namespaces)) and \
+                    (pod.status.phase in ["Running", "Pending"]):
                 result.append(pod)
         return result
 
