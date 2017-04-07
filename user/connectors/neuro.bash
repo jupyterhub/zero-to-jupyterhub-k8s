@@ -20,3 +20,4 @@ cd pycortex
 # commit on data8 branch
 git checkout d570713
 ${CONDA_DIR}/bin/python setup.py install
+cd .. && rm -rf pycortex
