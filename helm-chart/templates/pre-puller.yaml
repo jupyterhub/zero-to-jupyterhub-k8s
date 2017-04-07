@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pull-all-nodes-{{.Release.Name}}-{{.Release.Revision}}
+  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - image: yuvipanda/image-allnodes-puller:v0.5
+          args: [{{ .Values.singleuser.image.name | quote }}, {{ .Values.singleuser.image.tag | quote }}]
+          name: all-nodes-puller
