@@ -43,6 +43,10 @@ c.KubeSpawner.singleuser_image_spec = os.environ['SINGLEUSER_IMAGE']
 
 c.KubeSpawner.singleuser_extra_labels = get_config('singleuser.extra-labels', {})
 
+# FIXME: Make this better? 
+c.KubeSpawner.singleuser_uid = 1000
+c.KubeSpawner.singleuser_fs_gid = 1000
+
 # Configure dynamically provisioning pvc
 storage_type = get_config('singleuser.storage.type')
 if storage_type == 'dynamic':
@@ -50,9 +54,6 @@ if storage_type == 'dynamic':
     c.KubeSpawner.user_storage_class = get_config('singleuser.storage.class')
     c.KubeSpawner.user_storage_access_modes = ['ReadWriteOnce']
     c.KubeSpawner.user_storage_capacity = get_config('singleuser.storage.capacity')
-
-    c.KubeSpawner.singleuser_uid = 1000
-    c.KubeSpawner.singleuser_fs_gid = 1000
 
     # Add volumes to singleuser pods
     c.KubeSpawner.volumes = [

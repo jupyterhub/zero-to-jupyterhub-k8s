@@ -22,7 +22,7 @@ hub:
   labels: null
   image:
     name: yuvipanda/jupyterhub-kubernetes-hub
-    tag: v0.11
+    tag: v0.12
   resources:
     requests:
       cpu: 0.2
