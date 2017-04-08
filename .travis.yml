@@ -14,4 +14,5 @@ script:
   - pip install sphinx doctr
   - cd doc
   - make html
+  - cd ..
   - doctr deploy .
