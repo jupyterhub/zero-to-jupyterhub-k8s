@@ -1,8 +1,18 @@
-script:
-  - set -e
-  - pip install doctr
-  - doctr deploy doc
-
 env:
   global:
     - secure: "WNCupFWu//w/txKmjZn9LwiqvXg8qcj+aKbXRR+DZ9PQMRtngqVHVqjlZ3ghjcXJ5OTd8IpRiAVPGluayZRpLikiiZHLVE0U7fYpsErPl7IbJ+vJ3vhwcJuUJzOGt0a0cgvwudEdFF56LeAqy3YnZPDpQ/k8+edMq2gMwfKGo3aHzwO6eIaeo65GbmNHh/vMpBDhJDUeWvZOWifIO89AWcfYch337uIXWTR2D/fh2rlqQSxY8IvcOdnbQ2NjLv/m516rNfwindtDbPeyqMCeH2plZsgOGTl7IOaw5IskwE0uwV9b8P6zeAuX63sZtRj3Z1wZE2EFC2H+YWuhtRiHNdEhAjQWgh+FoiOVsMgOUZEbnfNhODFpQ/oqGdaPjiEoE3oS0DeF78Fy5nEgQmXE2anV6+9FZsIZYnHMcr2AHpM9oE2PJgorv+LkhCTEMVIKHEeG7nmQKyP9/ziaDhxxS7fxR7ESqJLR+Y4qD16PQeDpNmgHgrWw/lsoFJnBSw1HDbOKSoQBm3h5viGJ+kSGuYxLbWoRVQqZdKinO3USr+oB31fqH0cmQgNjkVMBdZ0aVhYUMBp+sx5OblFpoeQAMgKP6eiifplBIY9LCL2y3cjDhm3ayOxfyll7PhqBPtDHbPDpAjBDPkLH6cXOUuPwPu2YfkNEUPFeKqhG/jG4lcU="
+
+
+language: python
+python:
+  - 3.6
+
+sudo: false
+
+script:
+  - set -e
+  - pip install sphinx doctr
+  - cd doc
+  - make html
+  - cd ..
+  - doctr deploy
