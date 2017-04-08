@@ -3,6 +3,16 @@ Extending your JupyterHub setup
 
 Here we’ll describe how you can extend your jupyterhub setup beyond the vanilla configuration. For example, you can expand the hardware requested, such as memory / cpu limits. You can also use different base docker images or authenticators to tailor your deployment to your needs.
 
+Scaling your deployment for more users
+======================================
+
+Currently, we don't have a way to automatically scale the number of resources that
+are being used according to the number of active users. This means that you should
+request a number of nodes that can service all of your potential users at once.
+This is done in the initial call to ``gcloud container clusters create``.
+
+A good rule of thumb is to put XXXX users per node. XXX YUVI FILL IN HERE.
+
 Extending the helm configuration 
 ================================
 
@@ -65,8 +75,13 @@ Authenticating with OAuth2
 
 JupyterHub's `oauthenticator <https://github.com/jupyterhub/oauthenticator>`_ has support for enabling your users to authenticate via a third-party OAuth provider, including GitHub, Google, and CILogon.
 
-Follow the service-specific instructions linked to on the `oauthenticator repository <https://github.com/jupyterhub/oauthenticator>`_ to generate your JupyterHub instance's OAuth2 client ID and client secret. Then declare the values in the helm chart (``config.yaml``).
-Example #1 (Google)
+Follow the service-specific instructions linked on the `oauthenticator repository <https://github.com/jupyterhub/oauthenticator>`_ to generate your JupyterHub instance's OAuth2 client ID and client secret. Then declare the values in the helm chart (``config.yaml``).
+
+Here are example configurations for two common authentication services. Note that
+in each case, you need to get the authentication credential information before
+you can configure the helmchart for authentication.
+
+**Google**
 
 .. code-block:: bash
 
@@ -79,7 +94,7 @@ Example #1 (Google)
         hostedDomain: "youruniversity.edu"
         loginService: "Your University"
 
-Example #2 (GitHub)
+**GitHub**
 
 .. code-block:: bash
 
