@@ -50,9 +50,9 @@ source_suffix = ['.rst', '.md']
 master_doc = 'index'
 
 # General information about the project.
-project = 'Learning with JupyterHub'
-copyright = '2017, Carol Willing'
-author = 'Carol Willing'
+project = 'Zero to Jupyterhub'
+copyright = '2017, Chris Holdgraf'
+author = 'Chris Holdgraf'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -104,7 +104,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'LearningwithJupyterHubdoc'
+htmlhelp_basename = 'ZeroToJupyterhubDoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -131,8 +131,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'LearningwithJupyterHub.tex', 'Learning with JupyterHub',
-     'Carol Willing', 'manual'),
+    (master_doc, 'ZeroToJupyterhubDoc.tex', 'Zero to JupyterHub',
+     'Chris Holdgraf', 'manual'),
 ]
 
 
@@ -141,7 +141,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'learningwithjupyterhub', 'Learning with JupyterHub',
+    (master_doc, 'zerotojupyterhub', 'Zero to JupyterHub',
      [author], 1)
 ]
 
@@ -152,8 +152,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'LearningwithJupyterHub', 'Learning with JupyterHub',
-     author, 'LearningwithJupyterHub', 'One line description of project.',
+    (master_doc, 'ZeroToJupyterhubDoc', 'Zero to JupyterHub',
+     author, 'ZeroToJupyterhubDoc', 'One line description of project.',
      'Miscellaneous'),
 ]
 
