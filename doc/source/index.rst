@@ -13,16 +13,18 @@ jupyterhub instance. It is in an early stage, so the information and
 tools may change quickly. If you see anything that is wrong or have any
 questions, feel free to reach out at the `issues page <https://github.com/choldgraf/zero_to_jupyterhub/issues>`_
 
+**Creating your JupyterHub**
+
 .. toctree::
     :maxdepth: 2
-    :caption: **Creating your JupyterHub**
 
     setup
     extending
 
+**Extra info and tips**
+
 .. toctree::
     :maxdepth: 2
-    :caption: **Extra info and tips**
 
     tools
     troubleshooting
