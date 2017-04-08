@@ -20,11 +20,7 @@ questions, feel free to reach out at one of the following places:
    :maxdepth: 2
    :caption: Contents:
 
-   googlecloud
-   clustercreate
-   draft
-
-Miscellaneous links
-===================
-
-* :ref:`search`
+   tools
+   setup
+   extending
+   troubleshooting
