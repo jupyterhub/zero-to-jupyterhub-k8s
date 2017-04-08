@@ -14,8 +14,11 @@ Install cloud computing services + kubernetes
 4. Click the terminal button at the top right of the page (see figure) to open an interactive terminal in the browser. Alternatively install and initialize the gcloud command-line tools, which send commands to google cloud.
     * If you installed gcloud on your own device, then install kubectl as well. It is a tool for controlling kubernetes. kubectl comes preinstalled in the Google Cloud Shell.
     ``gcloud components install kubectl``
-5. Create a kubernetes cluster on google cloud, by typing in the following command. This may take several minutes, so create a new tab by clicking the `+` button in the console frame. Then move on to “Setting up JupyterHub”.
+5. Create a kubernetes cluster on google cloud, by typing in the following command. 
+  **Note**: This may take several minutes, so create a new tab by clicking the `+` button in the console frame. Then move on to “Setting up JupyterHub”.
+
     ``gcloud container clusters create YOUR_CLUSTER --num-nodes=3 --zone=us-central1-b``
+
   * ``--num-nodes`` specifies how many computers to spin up. The higher the number, the greater the cost.
   * ``--zone`` specifies which computer center to use.  To reduce latency, choose a zone closest to whoever is sending the commands. View available zones via `gcloud compute zones list` .
   * When it’s done initializing your cluster, run `kubectl get node`. It should list three running nodes.
