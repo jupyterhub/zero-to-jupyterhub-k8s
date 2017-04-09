@@ -46,6 +46,9 @@ RUN /usr/local/sbin/connector-espm88a.bash
 ADD connectors/geog88.bash /usr/local/sbin/connector-geog88.bash
 RUN /usr/local/sbin/connector-geog88.bash
 
+ADD connectors/cogsci88.bash /usr/local/sbin/connector-cogsci88.bash
+RUN /usr/local/sbin/connector-cogsci88.bash
+
 ADD connectors/neuro.bash /usr/local/sbin/connector-neuro.bash
 RUN /usr/local/sbin/connector-neuro.bash
 
