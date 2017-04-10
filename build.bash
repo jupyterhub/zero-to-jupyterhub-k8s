@@ -47,9 +47,3 @@ docker build -t ${IMAGE_SPEC} -f ${DOCKERFILE} .
 ${DOCKER_PUSH} ${IMAGE_SPEC}
 
 echo "Pushed ${IMAGE_SPEC}"
-
-echo "To populate all nodes in current context with this image, run:"
-_cmd="  ./populate.bash %s %s\n"
-for cluster in ${CLUSTERS} ; do
-	printf "${_cmd}" ${cluster}  "${IMAGE_SPEC}"
-done
