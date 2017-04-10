@@ -30,10 +30,10 @@ ReadTheDocs.
 
 Thank you to the following contributors:
 
-Aaron Culich
-Carol Willing
-Chris Holcraft
-Ryan Lovett
-Yuvi Panda
+- Aaron Culich
+- Carol Willing
+- Chris Holcraft
+- Ryan Lovett
+- Yuvi Panda
 
 Future contributors are encouraged to add themselves to this README file too.
