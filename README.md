@@ -1,4 +1,4 @@
-# Zero to Jupyterhub with Kubernetes
+# Zero to JupyterHub with Kubernetes
 
 **This is a work in process.**
 
