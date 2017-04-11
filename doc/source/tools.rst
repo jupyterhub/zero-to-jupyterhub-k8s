@@ -18,7 +18,7 @@ Tools for setting up JupyterHub
 
 `Docker <https://docs.docker.com/engine/getstarted/>`_
 
-- Docker is a technology for “containerized” computing environments. This basically means creating a very specific combination of hardware + software that can be easily moved to any computer. It’s useful for standardizing the environment in which development happens. We use this to generate live computing environments that users of a jupyterhub will experience. They’ll all have the same basic set of files + packages.
+- Docker is a technology for “containerized” computing environments. This basically means creating a very specific combination of hardware + software that can be easily moved to any computer. It’s useful for standardizing the environment in which development happens. We use this to generate live computing environments that users of a JupyterHub will experience. They’ll all have the same basic set of files + packages.
 
 `Helm <https://github.com/kubernetes/helm/blob/master/docs/charts.md>`_
 
