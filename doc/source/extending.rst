@@ -32,7 +32,7 @@ https://github.com/data-8/jupyterhub-k8s/blob/master/helm-chart/values.yaml
 Extending your software stack with s2i
 --------------------------------------
 
-s2i,`Source to Image <https://github.com/openshift/source-to-image>`, lets you
+s2i, also known as `Source to Image`_, lets you
 quickly convert a GitHub repository into a Docker image that we can use as a
 base for your JupyterHub instance. Anything inside the GitHub repository
 will exist in a user’s environment when they join your JupyterHub. If you
@@ -41,7 +41,8 @@ s2i will ``pip install`` each of these packages into the Docker image to be
 built. Below we’ll cover how to use s2i to generate a Docker image and how to
 configure JupyterHub to build off of this image.
 
-Note: For this section, you’ll need to install s2i and docker
+.. note::
+       For this section, you’ll need to install s2i and docker.
 
 
 1. **Download s2i.** This is easily done with homebrew on a mac. For linux and
@@ -62,20 +63,20 @@ Note: For this section, you’ll need to install s2i and docker
    packages should be listed in the same way that you’d install them using
    ``pip install``. E.g.:
 
-    .. code-block:: bash
+   .. code-block:: bash
 
-        numpy
-        scipy
-        matplotlib=2.0
+          numpy
+          scipy
+          matplotlib=2.0
 
-4. **Use s2i to build your Docker image.** ``s2i`` uses a template in order to
+4. **Use s2i to build your Docker image.** `s2i` uses a template in order to
    know how to create the Docker image. We have provided one at the url in the
    commands below. Run this command::
 
        s2i build <git-repo-url>  yuvipanda/ubuntu1610-python35-venv:v0.1 gcr.io/<project-name>/<name-of-image>:<tag>
 
-   this effectively says *s2i, build ``<this repository>`` to a Docker image by
-   using ``<this template>`` and call the image ``<this>``*
+   this effectively says *s2i, build `<this repository>` to a Docker image by
+   using `<this template>` and call the image `<this>`*
 
   .. note::
          - The project name should match your google cloud project's name.
@@ -99,9 +100,11 @@ Note: For this section, you’ll need to install s2i and docker
               name: gcr.io/<project-name>/<image-name>
              tag: <tag>
 
-7. **Tell helm to update itself using this configuration.** This makes helm instruct kubernetes to change the way that it builds your computing environment, which is now being pointed to the Docker image we’ve created:
+7. **Tell helm to update itself using this configuration.** This makes helm
+   instruct kubernetes to change the way that it builds your computing
+   environment, which is now being pointed to the Docker image we’ve created::
 
-  ``helm upgrade jhub helm-chart -f config.yaml``
+       helm upgrade jhub helm-chart -f config.yaml
 
 8. **Log back into your jupyterhub instance.** If you already have a running jupyterhub session, you’ll need to restart it (by restarting your session from the control panel in the top right). New users won’t have to do this.
 9. **Enjoy your new computing environment!** You should now have a live computing environment built off of the Docker image we’ve created.
@@ -140,3 +143,6 @@ you can configure the helmchart for authentication.
           clientId: "y0urg1thubc1ient1d"
           clientSecret: "an0ther1ongs3cretstr1ng"
           callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
+
+
+.. _Source to Image: https://github.com/openshift/source-to-image
