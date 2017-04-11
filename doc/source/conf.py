@@ -50,9 +50,9 @@ source_suffix = ['.rst', '.md']
 master_doc = 'index'
 
 # General information about the project.
-project = 'Zero to Jupyterhub'
-copyright = '2017, Chris Holdgraf'
-author = 'Chris Holdgraf'
+project = u'Zero to JupyterHub with Kubernetes'
+copyright = u'2016, Project Jupyter team'
+author = u'Project Jupyter team'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
