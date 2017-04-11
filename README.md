@@ -2,7 +2,7 @@
 
 **This is a work in process.**
 
-*This documentation is currently useful for guidance not detailed instructions.*
+*This [documentation](https://zero-to-jupyterhub-with-kubernetes.readthedocs.io) is currently useful for guidance not detailed instructions.*
 
 ## Purpose
 This repository will contain the documentation source code for people to get started with
