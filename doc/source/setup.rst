@@ -28,16 +28,13 @@ Setting up JupyterHub
 
 1. Install helm in the same terminal window where you execute gcloud and kubectl:
     ``curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash`` 
-2. Clone our git repository:
-    ``git clone` `https://github.com/data-8/jupyterhub-k8s``
-3. Go into the folder that was just created via `cd jupyterhub-k8s` .
-4. Create a file called ``config.yaml`` to hold the various customizations describing our JupyterHub installation:
+2. Create a file called ``config.yaml`` to hold the various customizations describing our JupyterHub installation:
     ``nano config.yaml``
-5. Run these two commands (they’re the same command but run them twice)
+3. Run these two commands (they’re the same command but run them twice)
       ``openssl rand -hex 32``
       ``openssl rand -hex 32``
     Copy the output each time, we’ll use this in the next step.
-6. Insert these lines into the file, making sure they do not contain curly quotes or tabs. Substitute each occurrence of RANDOM_STRING_N below with the output of `openssl rand -hex 32` . The strings are tokens that will be used to authenticate your jupyterhub instance (make sure that you keep the quotation marks):
+4. Insert these lines into the file, making sure they do not contain curly quotes or tabs. Substitute each occurrence of RANDOM_STRING_N below with the output of `openssl rand -hex 32` . The strings are tokens that will be used to authenticate your jupyterhub instance (make sure that you keep the quotation marks):
 
     .. code-block:: bash
 
@@ -48,7 +45,7 @@ Setting up JupyterHub
             # output of second execution of 'openssl rand -hex 32'
             proxy: "RANDOM_STRING_2"
 
-7. Save the file by hitting `Ctrl-X` and make sure to answer ‘yes’ when it asks you to save.
+5. Save the file by hitting `Ctrl-X` and make sure to answer ‘yes’ when it asks you to save.
 
 
 Getting it all running
@@ -56,7 +53,7 @@ Getting it all running
 
 1. Run ``helm init`` to prepare the kubernetes cluster for helm installation
 2. Tell helm to create the instances you configured with the ``yaml`` file. This will spin up JupyterHub.
-    ``helm install helm-chart --name=YOUR_CHART --namespace=YOUR_NAMESPACE -f config.yaml``
+    ``helm install https://github.com/jupyterhub/helm-chart/releases/download/v0.1/jupyterhub-0.1.tgz --name=YOUR_CHART --namespace=YOUR_NAMESPACE -f config.yaml``
   1. ``--name`` can be whatever you like. People often name this based off of what this helm config does. So perhaps you might call it `jhub` .
   2. ``--namespace``  is a nifty feature of kubernetes that essentially lets you have multiple sub-deployments using a single helm-chart. People often use this to have both a “live” and a “dev” environment. You can use whatever you like but make it easy to re-type and remember.
   3. If you get a ``release named <YOUR_CHART> already exists`` error, then you should delete this helm-chart by running ``helm delete --purge <YOUR_CHART>`` . Then reinstall by repeating this step.
