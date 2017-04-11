@@ -91,7 +91,7 @@ configure JupyterHub to build off of this image.
 
        gcloud docker -- push gcr.io/<project-name>/<image-name>:<tag>
 
-6.  **Edit the jupyterhub configuration to build from this image.** We do this by editing the ``config.yaml`` file that we originally created to include the jupyter hashes. Edit ``config.yaml`` by including these lines in it:
+6.  **Edit the JupyterHub configuration to build from this image.** We do this by editing the ``config.yaml`` file that we originally created to include the jupyter hashes. Edit ``config.yaml`` by including these lines in it:
 
     .. code-block:: bash
 
@@ -106,7 +106,7 @@ configure JupyterHub to build off of this image.
 
        helm upgrade jhub helm-chart -f config.yaml
 
-8. **Log back into your jupyterhub instance.** If you already have a running jupyterhub session, you’ll need to restart it (by restarting your session from the control panel in the top right). New users won’t have to do this.
+8. **Log back into your JupyterHub instance.** If you already have a running JupyterHub session, you’ll need to restart it (by restarting your session from the control panel in the top right). New users won’t have to do this.
 9. **Enjoy your new computing environment!** You should now have a live computing environment built off of the Docker image we’ve created.
 
 Authenticating with OAuth2

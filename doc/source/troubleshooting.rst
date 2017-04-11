@@ -10,7 +10,7 @@ That all depends on how many resources you request, and what kind of cloud provi
 you are working with. There's not easy answer to this question, but a good rule
 of thumb is XXX YUVI AND RYAN FILL IN.
 
-For a more detailed pecture, Ryan Lovett has put together `a short jupyter notebook <https://github.com/data-8/jupyterhub-k8s/blob/master/docs/cost-estimation/gce_budgeting.ipynb>`_ that allows you to generate a predicted cost for running a jupyterhub deployment, given the number of nodes and memory / CPU requirements.
+For a more detailed pecture, Ryan Lovett has put together `a short jupyter notebook <https://github.com/data-8/jupyterhub-k8s/blob/master/docs/cost-estimation/gce_budgeting.ipynb>`_ that allows you to generate a predicted cost for running a JupyterHub deployment, given the number of nodes and memory / CPU requirements.
 
 **I thought I had deleted my cloud resources, but they still show up. Why?**
 
@@ -18,7 +18,7 @@ You probably deleted the specific nodes, but not the kubernetes cluster that was
 
 **How does billing for this work?!**
 
-Jupyterhub isn't handling any of the billing for your usage - that's done through
+JupyterHub isn't handling any of the billing for your usage - that's done through
 whatever cloud service you're using.
 
 Common error messages

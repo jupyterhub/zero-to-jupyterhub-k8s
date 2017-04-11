@@ -1,7 +1,7 @@
 Step by Step Instructions
 =========================
 
-These instructions will guide you through the process of setting up your jupyterhub for the first time.
+These instructions will guide you through the process of setting up your JupyterHub for the first time.
 
 Install cloud computing services + kubernetes
 ---------------------------------------------
@@ -46,7 +46,7 @@ Setting up JupyterHub
 
    Copy the output each time, we’ll use this in the next step.
 
-4. Insert these lines into the file, making sure they do not contain curly quotes or tabs. Substitute each occurrence of RANDOM_STRING_N below with the output of `openssl rand -hex 32` . The strings are tokens that will be used to authenticate your jupyterhub instance (make sure that you keep the quotation marks):
+4. Insert these lines into the file, making sure they do not contain curly quotes or tabs. Substitute each occurrence of RANDOM_STRING_N below with the output of `openssl rand -hex 32` . The strings are tokens that will be used to authenticate your JupyterHub instance (make sure that you keep the quotation marks):
 
     .. code-block:: bash
 
