@@ -8,10 +8,10 @@ push-images: push-image/hub push-image/proxy push-image/singleuser-sample push-i
 
 build-image/%:
 	cd images/$(@F) && \
-	docker build -t $(IMAGE_PREFIX)-$(@F):$(VERSION) .
+	docker build -t $(IMAGE_PREFIX)-$(@F):v$(VERSION) .
 
 push-image/%:
-	docker push $(IMAGE_PREFIX)-$(@F):$(VERSION)
+	docker push $(IMAGE_PREFIX)-$(@F):v$(VERSION)
 
 
 make-chart-metadata:
