@@ -38,6 +38,12 @@ data:
   cull.token: {{ .Values.cull.token | quote }}
   {{- end }}
 
+  {{ if .Values.statsd.enabled -}}
+  statsd.prefix: "{{ default .Release.namespace .Values.statsd.prefix }}.jupyterhub"
+  statsd.host: {{ .Values.statsd.host | quote }}
+  statsd.port: {{ default "8125" .Values.statsd.port | quote }}
+  {{- end }}
+
   auth.type: {{ .Values.auth.type | quote }}
   {{ if eq .Values.auth.type "hmac" -}}
   auth.hmac.secret-key: {{ .Values.auth.hmac.secretKey | quote }}

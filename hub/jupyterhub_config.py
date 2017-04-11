@@ -168,11 +168,6 @@ c.KubeSpawner.environment = {
     'GIT_COMMITTER_NAME': generate_user_name
 }
 
-# Setup STATSD
-if 'STATSD_SERVICE_HOST' in os.environ:
-    c.JupyterHub.statsd_host = os.environ['STATSD_SERVICE_HOST']
-    c.JupyterHub.statsd_port = int(os.environ['STATSD_SERVICE_PORT'])
-
 # Enable admins to access user servers
 c.JupyterHub.admin_access = get_config('admin.access')
 
@@ -189,6 +184,10 @@ if cull_token:
 c.JupyterHub.base_url = get_config('hub.base_url')
 
 c.JupyterHub.db_url = get_config('hub.db_url')
+
+c.JupyterHub.statsd_prefix = get_config('statsd.prefix')
+c.JupyterHub.statsd_host = get_config('statsd.host')
+c.JupyterHub.statsd_port = get_config('statsd.port', 8125)
 
 cmd = get_config('singleuser.cmd', None)
 if cmd:

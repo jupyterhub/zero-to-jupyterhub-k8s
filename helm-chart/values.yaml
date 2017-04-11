@@ -76,12 +76,11 @@ cull:
   every: 600
   token: 'generate with openssl rand -hex 32 here'
 
-metrics:
+statsd:
   enabled: false
-  # FIXME: Allow different types here?
-  datadog:
-    apiKey: null
-    prefix: stresstest
+  port: 8125
+  host: statsd
+  prefix: jupyterhub
 
 admin:
   access: true
