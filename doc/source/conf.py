@@ -51,7 +51,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Zero to JupyterHub with Kubernetes'
-copyright = u'2016, Project Jupyter team'
+copyright = u'2017, Project Jupyter team'
 author = u'Project Jupyter team'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -180,5 +180,3 @@ epub_copyright = copyright
 
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
-
-
