@@ -18,7 +18,6 @@ make-chart-metadata:
 	sed 's/{{VERSION}}/$(VERSION)/' jupyterhub/Chart.yaml.template > jupyterhub/Chart.yaml
 
 package-chart:
-	cd jupyterhub && \
-	helm package . -d ..
+	helm package jupyterhub
 
 chart: make-chart-metadata package-chart
