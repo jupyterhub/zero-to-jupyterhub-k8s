@@ -1,5 +1,7 @@
 # Zero to JupyterHub with Kubernetes
 
+[![Documentation Status](https://readthedocs.org/projects/zero-to-jupyterhub-with-kubernetes/badge/?version=latest)](http://zero-to-jupyterhub-with-kubernetes.readthedocs.io/en/latest/?badge=latest)
+
 **This is a work in process.**
 
 *This [documentation](https://zero-to-jupyterhub-with-kubernetes.readthedocs.io) is currently useful for guidance not detailed instructions.*
