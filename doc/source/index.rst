@@ -1,7 +1,7 @@
 Zero to JupyterHub
 ==================
 
-**`JupyterHub`_** is a tool that allows you to quickly utilize cloud computing
+`JupyterHub`_ is a tool that allows you to quickly utilize cloud computing
 infrastructure to manage a hub that enables users to interact remotely
 with a computing environment that you specify. JupyterHub offers a useful way
 to standardize the computing environment of a group of people (e.g.,
