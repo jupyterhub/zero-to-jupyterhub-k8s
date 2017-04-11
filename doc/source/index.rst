@@ -1,17 +1,17 @@
 Zero to JupyterHub
 ==================
 
-Jupyterhub is a tool that allows you to quickly utilize cloud computing
+**`JupyterHub`_** is a tool that allows you to quickly utilize cloud computing
 infrastructure to manage a hub that enables users to interact remotely
-with a computing environment that you specify. It is useful for when
-you want to standardize the computing environment of many people (e.g.,
-for a class of students), as well as for allowing people to access the
+with a computing environment that you specify. JupyterHub offers a useful way
+to standardize the computing environment of a group of people (e.g.,
+for a class of students), as well as allowing people to access the
 hub remotely.
 
-This is a growing collection of information to help you set up your own
-jupyterhub instance. It is in an early stage, so the information and
-tools may change quickly. If you see anything that is wrong or have any
-questions, feel free to reach out at the `issues page <https://github.com/choldgraf/zero_to_jupyterhub/issues>`_
+This growing collection of information will help you set up your own
+JupyterHub instance. It is in an early stage, so the information and
+tools may change quickly. If you see anything that is incorrect or have any
+questions, feel free to reach out at the `issues page`_.
 
 **Creating your JupyterHub**
 
@@ -28,3 +28,7 @@ questions, feel free to reach out at the `issues page <https://github.com/choldg
 
     tools
     troubleshooting
+
+
+.. _JupyterHub: https://github.com/jupyterhub/jupyterhub
+.. _issues page: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
