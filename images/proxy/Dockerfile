@@ -1,7 +1,4 @@
-FROM debian:jessie
-
-# We need this for an nginx that's new enough
-RUN echo 'deb http://ftp.debian.org/debian jessie-backports main' >> /etc/apt/sources.list
+FROM ubuntu:16.04
 
 RUN apt-get update
 

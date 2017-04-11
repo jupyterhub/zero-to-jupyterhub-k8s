@@ -1,4 +1,0 @@
-kubernetes==1.0.0b1
-google-api-python-client==1.6.2
-# kubernetes 1.0.0b1 forgot to include websocket dependency
-websocket==0.2.1
