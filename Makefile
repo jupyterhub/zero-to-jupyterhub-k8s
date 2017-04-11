@@ -1,15 +1,24 @@
 VERSION=$(shell git rev-parse --short HEAD)
 IMAGE_PREFIX=yuvipanda/jupyterhub-k8s
+PUSH_IMAGES=no
 
-images: image/hub image/proxy
+images: build-images push-images
+build-images: build-image/hub build-image/proxy build-image/singleuser-sample
+push-images: push-image/hub push-image/proxy push-image/singleuser-sample
 
-image/%:
+build-image/%:
 	cd images/$(@F) && \
 	docker build -t $(IMAGE_PREFIX)-$(@F):$(VERSION) .
 
-chart:
-	cd jupyterhub && \
-	sed 's/{{VERSION}}/$(VERSION)/' Chart.yaml.template > Chart.yaml && \
-	helm package . -d .. && \
-  rm Chart.yaml
+push-image/%:
+	docker push $(IMAGE_PREFIX)-$(@F):$(VERSION)
 
+
+make-chart-metadata:
+	sed 's/{{VERSION}}/$(VERSION)/' jupyterhub/Chart.yaml.template > jupyterhub/Chart.yaml
+
+package-chart:
+	cd jupyterhub && \
+	helm package . -d ..
+
+chart: make-chart-metadata package-chart
