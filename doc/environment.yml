@@ -1,0 +1,8 @@
+name: jhubk8s
+channels:
+  - conda-forge
+dependencies:
+- python=3.5
+- sphinx>=1.3.6,!=1.5.4
+- pip:
+    - recommonmark==0.4.0
