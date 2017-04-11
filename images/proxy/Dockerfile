@@ -2,13 +2,16 @@ FROM ubuntu:16.04
 
 RUN apt-get update
 
-RUN apt-get install --yes --no-install-recommends -t jessie-backports\
-    ca-certificates \
-    nginx-extras \
-    git \
-    python3-pip \
-    curl \
-    lua-cjson
+RUN apt-get update && \
+    apt-get install --yes --no-install-recommends \
+      ca-certificates \
+      nginx-extras \
+      git \
+      python3-pip \
+      python3-setuptools \
+      curl \
+      lua-cjson && \
+    apt-get clean && apt-get purge
 
 RUN pip3 install jinja2 traitlets
 RUN pip3 install git+https://github.com/yuvipanda/jupyterhub-nginx-chp.git@4bd293e

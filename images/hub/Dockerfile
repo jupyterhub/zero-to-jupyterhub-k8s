@@ -1,17 +1,21 @@
 # Use latest LTS for this
-FROM ubuntu:1604
+FROM ubuntu:16.04
 
 RUN apt-get update
 
-RUN apt-get install -y --no-install-recommends \
-    build-essential \
-    ca-certificates \
-    git \
-    libcurl4-openssl-dev \
-    libssl-dev \
-    python3 \
-    python3-dev \
-    python3-pip
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+      build-essential \
+      ca-certificates \
+      git \
+      libcurl4-openssl-dev \
+      libssl-dev \
+      python3 \
+      python3-dev \
+      python3-setuptools \
+      python3-pip && \
+     apt-get purge && apt-get clean
+
 
 RUN pip3 install --no-cache-dir jupyterhub==0.7.2 oauthenticator==0.5.1 jupyterhub-dummyauthenticator==0.1 jupyterhub-tmpauthenticator==0.1 statsd
 
