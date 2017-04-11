@@ -76,13 +76,6 @@ cull:
   every: 600
   token: 'generate with openssl rand -hex 32 here'
 
-metrics:
-  enabled: false
-  # FIXME: Allow different types here?
-  datadog:
-    apiKey: null
-    prefix: stresstest
-
 statsd:
   enabled: false
   port: 8125
