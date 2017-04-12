@@ -34,7 +34,7 @@ Thank you to the following contributors:
 
 - Aaron Culich
 - Carol Willing
-- Chris Holcraft
+- Chris Holdgraf
 - Ryan Lovett
 - Yuvi Panda
 
