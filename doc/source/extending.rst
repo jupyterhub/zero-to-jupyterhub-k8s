@@ -30,7 +30,7 @@ see the link below:
 https://github.com/data-8/jupyterhub-k8s/blob/master/helm-chart/values.yaml
 
 Using an existing image
-=======================
+-----------------------
 
 It's possible to build your jupyterhub deployment off of a pre-existing Docker image.
 To do this, you need to find an existing image somewhere (such as DockerHub), and configure
