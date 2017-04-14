@@ -4,7 +4,7 @@ Step by Step Instructions
 These instructions will guide you through the process of setting up your JupyterHub for the first time.
 
 Setting up kubernetes on Google Cloud
----------------------------------------------
+-------------------------------------
 
 1. We’ll be using google cloud in this tutorial, though in the future many more cloud platforms will be supported. You should be able to get free credits for trying out google cloud. However, first you need to connect your credit card to your google cloud account.
 2. Go to https://console.cloud.google.com.
@@ -94,10 +94,11 @@ Getting it all running
 5. You can find the IP to use for accessing the JupyterHub with ``kubectl --namespace=<YOUR_NAMESPACE> get svc`` . The external IP for the ‘proxy-public’ service should be accessible in a minute or two.
 6. The default authenticator is ‘dummy’ - any username / password will let you in!
 
-Next steps
-----------
+.. note::
+   Now that you have a JupyterHub running, you can customize it in many ways!
+   You can use a pre-built image for the user container, build your own, configure different authenticators, and more!
 
-Now that you have a JupyterHub running, you can customize it in many ways! You can use a pre-built image for the user container, build your own, configure different authenticators and more!
+   For information on extending your JupyterHub deployment, see `Extending Jupyterhub <extending.html>`_.
 
 Turning it all off
 ------------------
