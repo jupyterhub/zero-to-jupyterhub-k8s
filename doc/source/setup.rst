@@ -78,11 +78,11 @@ Getting it all running
 
     .. code::
 
-        helm install https://github.com/jupyterhub/helm-chart/releases/download/v0.1/jupyterhub-0.1.tgz --name=YOUR_CHART --namespace=YOUR_NAMESPACE -f config.yaml
+        helm install https://github.com/jupyterhub/helm-chart/releases/download/v0.1/jupyterhub-0.1.tgz --name=YOUR_RELEASE_NAME --namespace=YOUR_NAMESPACE -f config.yaml
 
     where:
 
-    1. ``--name`` can be whatever you like. People often name this based off of what this helm config does. So perhaps you might call it `jhub` .
+    1. ``--name`` can be whatever you like. People often base this off what this particular JupyterHub does. For example, if you are deploying for a class named 'data8' you might set this to 'data8-jupyterhub'
     2. ``--namespace``  is a nifty feature of kubernetes that essentially lets you have multiple sub-deployments using a single helm-chart. People often use this to have both a “live” and a “dev” environment. You can use whatever you like but make it easy to re-type and remember.
 
     .. note::
