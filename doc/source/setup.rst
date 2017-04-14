@@ -3,7 +3,7 @@ Step by Step Instructions
 
 These instructions will guide you through the process of setting up your JupyterHub for the first time.
 
-Install cloud computing services + kubernetes
+Setting up kubernetes on Google Cloud
 ---------------------------------------------
 
 1. We’ll be using google cloud in this tutorial, though in the future many more cloud platforms will be supported. You should be able to get free credits for trying out google cloud. However, first you need to connect your credit card to your google cloud account.
