@@ -94,6 +94,11 @@ Getting it all running
 5. You can find the IP to use for accessing the JupyterHub with ``kubectl --namespace=<YOUR_NAMESPACE> get svc`` . The external IP for the ‘proxy-public’ service should be accessible in a minute or two.
 6. The default authenticator is ‘dummy’ - any username / password will let you in!
 
+Next steps
+----------
+
+Now that you have a JupyterHub running, you can customize it in many ways! You can use a pre-built image for the user container, build your own, configure different authenticators and more!
+
 Turning it all off
 ------------------
 
