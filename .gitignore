@@ -91,3 +91,5 @@ ENV/
 # Mac
 .DS_STORE
 
+# Emacs
+.#*

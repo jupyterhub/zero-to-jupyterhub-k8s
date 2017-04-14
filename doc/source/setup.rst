@@ -3,8 +3,8 @@ Step by Step Instructions
 
 These instructions will guide you through the process of setting up your JupyterHub for the first time.
 
-Install cloud computing services + kubernetes
----------------------------------------------
+Setting up kubernetes on Google Cloud
+-------------------------------------
 
 1. We’ll be using google cloud in this tutorial, though in the future many more cloud platforms will be supported. You should be able to get free credits for trying out google cloud. However, first you need to connect your credit card to your google cloud account.
 2. Go to https://console.cloud.google.com.
@@ -78,11 +78,11 @@ Getting it all running
 
     .. code::
 
-        helm install https://github.com/jupyterhub/helm-chart/releases/download/v0.1/jupyterhub-0.1.tgz --name=YOUR_CHART --namespace=YOUR_NAMESPACE -f config.yaml
+        helm install https://github.com/jupyterhub/helm-chart/releases/download/v0.1/jupyterhub-0.1.tgz --name=YOUR_RELEASE_NAME --namespace=YOUR_NAMESPACE -f config.yaml
 
     where:
 
-    1. ``--name`` can be whatever you like. People often name this based off of what this helm config does. So perhaps you might call it `jhub` .
+    1. ``--name`` can be whatever you like. People often base this off what this particular JupyterHub does. For example, if you are deploying for a class named 'data8' you might set this to 'data8-jupyterhub'
     2. ``--namespace``  is a nifty feature of kubernetes that essentially lets you have multiple sub-deployments using a single helm-chart. People often use this to have both a “live” and a “dev” environment. You can use whatever you like but make it easy to re-type and remember.
 
     .. note::
@@ -93,6 +93,12 @@ Getting it all running
 4. Wait for the hub and proxy pod to get to running. Ignore cull errors for now; that will be fixed by https://github.com/data-8/jupyterhub-k8s/issues/143.
 5. You can find the IP to use for accessing the JupyterHub with ``kubectl --namespace=<YOUR_NAMESPACE> get svc`` . The external IP for the ‘proxy-public’ service should be accessible in a minute or two.
 6. The default authenticator is ‘dummy’ - any username / password will let you in!
+
+.. note::
+   Now that you have a JupyterHub running, you can customize it in many ways!
+   You can use a pre-built image for the user container, build your own, configure different authenticators, and more!
+
+   For information on extending your JupyterHub deployment, see `Extending Jupyterhub <extending.html>`_.
 
 Turning it all off
 ------------------
