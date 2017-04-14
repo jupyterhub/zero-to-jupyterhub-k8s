@@ -40,6 +40,7 @@ For example, UC Berkeley's `Data8 Program <https://hub.docker.com/r/berkeleydsep
 To instruct JupyterHub to use this image, simply add this to your ``config.yaml`` file:
 
     .. code-block:: yaml
+
        singleuser:
            image:
               name: berkeleydsep/singleuser-data8
@@ -52,6 +53,7 @@ now points to the Docker Hub image).
 To upgrade the cluster, run:
 
      .. code:: bash
+
         helm upgrade <YOUR_RELEASE_NAME> https://github.com/jupyterhub/helm-chart/releases/download/v0.1/jupyterhub-0.1.tgz -f config.yaml
 
      .. note::
