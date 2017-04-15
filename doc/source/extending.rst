@@ -27,7 +27,7 @@ will experience. We do this by editing the ``config.yaml`` file that the
 helmchart uses to build. For a list of configuration options that are possible,
 see the link below:
 
-https://github.com/data-8/jupyterhub-k8s/blob/master/helm-chart/values.yaml
+https://github.com/jupyterhub/helm-chart/blob/master/jupyterhub/values.yaml
 
 Using an existing image
 -----------------------
