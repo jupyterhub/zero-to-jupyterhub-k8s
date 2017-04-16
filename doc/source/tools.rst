@@ -13,7 +13,7 @@ Tools for setting up JupyterHub
 
 **Git and GitHub**
 
-- Git and GitHub are used for managing repositories of code, as well as keeping track of how these repositories change over time. In particular we’ll use a `github repository <https://github.com/data-8/jupyterhub-k8s>`_ that the JupyterHub team has put together which contains a lot of useful configuration files to connect with google cloud and kubernetes. In addition, you’ll probably want to have some code show up on JupyterHub instances once users login, and a good way to do this is by hosting your code on github.
+- Git and GitHub are used for managing repositories of code, as well as keeping track of how these repositories change over time. In particular we’ll use a `github repository <https://github.com/jupyterhub/helm-chart>`_ that the JupyterHub team has put together which contains a lot of useful configuration files to connect with google cloud and kubernetes. In addition, you’ll probably want to have some code show up on JupyterHub instances once users login, and a good way to do this is by hosting your code on github.
   - We can push / pull repositories from github using our terminal, and then instruct JupyterHub to automatically pull them into a new instance
 
 `Docker <https://docs.docker.com/engine/getstarted/>`_
