@@ -57,7 +57,7 @@ Setting up JupyterHub
 
 4. Insert these lines into the file, making sure they do not contain curly quotes or tabs. Substitute each occurrence of RANDOM_STRING_N below with the output of `openssl rand -hex 32` . The strings are tokens that will be used to authenticate your JupyterHub instance (make sure that you keep the quotation marks):
 
-    .. code-block:: bash
+    .. code-block:: yaml
 
         hub:
             # output of first execution of 'openssl rand -hex 32'
