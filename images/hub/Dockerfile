@@ -17,7 +17,13 @@ RUN apt-get update && \
      apt-get purge && apt-get clean
 
 
-RUN pip3 install --no-cache-dir jupyterhub==0.7.2 oauthenticator==0.5.1 jupyterhub-dummyauthenticator==0.1 jupyterhub-tmpauthenticator==0.1 statsd==3.2.1
+RUN pip3 install --no-cache-dir \
+         jupyterhub==0.7.2 \
+         oauthenticator==0.5.1 \
+         jupyterhub-dummyauthenticator==0.1 \
+         jupyterhub-tmpauthenticator==0.1 \
+         statsd==3.2.1 \
+         pymysql==0.7.11
 
 RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@294b5da
 
