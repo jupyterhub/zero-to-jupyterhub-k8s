@@ -1,3 +1,4 @@
+{{ if .Values.prePuller.enabled -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -13,3 +14,4 @@ spec:
         - image: yuvipanda/image-allnodes-puller:v0.8
           args: [{{ .Values.singleuser.image.name | quote }}, {{ .Values.singleuser.image.tag | quote }}]
           name: all-nodes-puller
+{{- end }}
