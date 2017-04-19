@@ -31,6 +31,53 @@ Setting up kubernetes on Google Cloud
 
       This may take several minutes, so create a new shell tab. Then move on to the section “Setting up JupyterHub”. You'll know it's done initializing when ``kubectl get node`` shows your new nodes.
 
+Setting up kubernetes on Microsoft Azure Container Service (ACS)
+----------------------------------------------------------------
+
+1. Install and initialize the Azure command-line tools, which send commands to Azure and let you do things like create and delete clusters.
+
+   - Go to the `azure-cli github repo <https://github.com/Azure/azure-cli>`_
+     to download/install the program.
+   - See the `az documentation <https://docs.microsoft.com/en-us/cli/azure/acs>`_ for more information on using the tool with the Azure Container Service.
+
+2. Authenticate the az tool so that it has access to your Azure account:
+
+   ``az login``
+
+3. Specify a `resource group <https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#resource-groups>_`, and create it if it doesn't already exist:
+
+     .. code-block:: bash
+     export RESOURCE_GROUP=YOUR_RESOURCE_GROUP
+     export LOCATION=YOUR_LOCATION
+     az group create --name=${RESOURCE_GROUP} --location=${LOCATION}
+
+  * ``RESOURCE_GROUP`` specifies your Azure resource group. If this doesn't exist, az will create it for you.
+  * ``YOUR_LOCATION`` specifies which computer center to use.  To reduce latency, choose a zone closest to whoever is sending the commands. View available zones via `az account list-locations`.
+
+5. Install ``kubectl``, a tool for controlling kubernetes:
+
+   ``az acs kubernetes install-cli``
+
+6. Authenticate kubectl:
+   ``az acs kubernetes get-credentials --resource-group=${RESOURCE_GROUP} --name=${CLUSTER_NAME}``
+   ``kubectl get node``
+
+7. Create a kubernetes cluster on Azure, by typing in the following commands:
+     .. code-block:: bash
+     export CLUSTER_NAME=YOUR_CLUSTER_NAME
+     export DNS_PREFIX=YOUR_PREFIX
+     az acs create --orchestrator-type=kubernetes --resource-group=${RESOURCE_GROUP} --name=${CLUSTER_NAME} --dns-prefix=${DNS_PREFIX}
+
+
+  * ``YOUR_CLUSTER_NAME`` is your ACS cluster name.
+  * ``YOUR_DNS_PREFIX`` is the domain name prefix for the cluster.
+
+  * When it’s done initializing your cluster, run ``kubectl get node``. It should list three running nodes.
+
+  .. note::
+
+      This may take several minutes, so create a new terminal and move on to the section “Setting up JupyterHub”. You'll know it's done initializing when ``kubectl get node`` shows your new nodes.
+
 Setting up JupyterHub
 ---------------------
 
