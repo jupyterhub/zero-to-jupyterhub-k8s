@@ -28,6 +28,7 @@ questions, feel free to reach out at the `issues page`_.
 
     tools
     troubleshooting
+    glossary
 
 
 .. _JupyterHub: https://github.com/jupyterhub/jupyterhub
