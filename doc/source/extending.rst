@@ -92,12 +92,13 @@ configure JupyterHub to build off of this image.
    have all materials that you want your users to access. In addition you can
    include a ``requirements.txt`` file that has one package per line. These
    packages should be listed in the same way that you’d install them using
-   ``pip install``. E.g.:
+   ``pip install``. You should also specify the versions explicitly so the image is
+   fully reproducible. E.g.:
 
    .. code-block:: bash
 
-          numpy
-          scipy
+          numpy=1.12.1
+          scipy=0.19.0
           matplotlib=2.0
 
 4. **Use s2i to build your Docker image.** `s2i` uses a template in order to
