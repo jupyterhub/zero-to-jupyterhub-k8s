@@ -105,7 +105,7 @@ configure JupyterHub to build off of this image.
    know how to create the Docker image. We have provided one at the url in the
    commands below. Run this command::
 
-       s2i build <git-repo-url>  yuvipanda/ubuntu1610-python35-venv:v0.1 gcr.io/<project-name>/<name-of-image>:<tag>
+       s2i build <git-repo-url>  jupyterhub/singleuser-builder:v0.1.1 gcr.io/<project-name>/<name-of-image>:<tag>
 
    this effectively says *s2i, build `<this repository>` to a Docker image by
    using `<this template>` and call the image `<this>`*
