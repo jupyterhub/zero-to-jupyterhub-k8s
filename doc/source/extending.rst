@@ -132,8 +132,8 @@ configure JupyterHub to build off of this image.
               name: gcr.io/<project-name>/<image-name>
              tag: <tag>
 
-7. **Tell helm to update itself using this configuration.** This makes helm
-   instruct kubernetes to change the way that it builds your computing
+7. **Tell helm to update jupyterhub to use this configuration.** This makes helm
+   instruct JupyterHub to change the way that it starts your computing
    environment, which is now being pointed to the Docker image we’ve created::
 
        helm upgrade jhub helm-chart -f config.yaml
