@@ -70,6 +70,9 @@ singleuser:
 
 prePuller:
   enabled: true
+  image:
+    name: yuvipanda/image-allnodes-puller
+    tag: v0.8
 
 cull:
   enabled: true
