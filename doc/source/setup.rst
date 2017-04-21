@@ -46,7 +46,7 @@ Setting up kubernetes on Microsoft Azure Container Service (ACS)
 
         az login
 
-3. Specify a `resource group <https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#resource-groups>_`, and create it if it doesn't already exist:
+3. Specify a `resource group <https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#resource-groups>`_, and create it if it doesn't already exist:
 
     .. code-block:: bash
 
