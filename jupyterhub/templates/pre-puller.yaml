@@ -11,7 +11,7 @@ spec:
     spec:
       restartPolicy: Never
       containers:
-        - image: yuvipanda/image-allnodes-puller:v0.8
+        - image: {{ .Values.prePuller.image.name }}:{{ .Values.prePuller.image.tag }}
           args: [{{ .Values.singleuser.image.name | quote }}, {{ .Values.singleuser.image.tag | quote }}]
           name: all-nodes-puller
 {{- end }}

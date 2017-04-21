@@ -67,6 +67,7 @@ singleuser:
   memory:
     limit: null
     guarantee: null
+  cmd: jupyterhub-singleuser
 
 prePuller:
   enabled: true

@@ -25,7 +25,7 @@ RUN pip3 install --no-cache-dir \
          statsd==3.2.1 \
          pymysql==0.7.11
 
-RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@294b5da
+RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@228799af
 
 ADD jupyterhub_config.py /srv/jupyterhub_config.py
 
