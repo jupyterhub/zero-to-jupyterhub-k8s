@@ -18,8 +18,10 @@ questions, feel free to reach out at the `issues page`_.
 .. toctree::
     :maxdepth: 2
 
-    setup
-    extending
+    create-k8s-cluster
+    setup-helm
+    setup-jupyterhub
+    extending-jupyterhub
 
 **Extra info and tips**
 
