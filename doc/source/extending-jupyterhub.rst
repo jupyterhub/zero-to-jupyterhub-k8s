@@ -1,33 +1,28 @@
 Extending your JupyterHub setup
 ===============================
 
-This section describes how you can extend your JupyterHub setup beyond the
-vanilla configuration. For example, you can expand the hardware requested,
-such as memory and cpu limits. You can also use different base docker
-images or authenticators to tailor your deployment to your needs.
+The helm chart used to install JupyterHub has a lot of options for you to tweak. This page lists some of the most common changes.
 
-Scaling your deployment for more users
---------------------------------------
+Applying configuration changes
+------------------------------
 
-Currently, we don't have a way to automatically scale the number of resources that
-are being used according to the number of active users. This means that you should
-request a number of nodes that can service all of your potential users at once.
-This is done in the initial call to::
+The general method is:
 
-    gcloud container clusters create
+1. Make a change to the ``config.yaml``
+2. Run a helm upgrade::
 
-A good rule of thumb is to put { TODO } users per node.
+     .. code-block:: bash
 
-Extending the helm configuration
---------------------------------
+        helm upgrade <YOUR_RELEASE_NAME> https://github.com/jupyterhub/helm-chart/releases/download/v0.1/jupyterhub-0.1.tgz -f config.yaml
 
-Since the helmchart tells kubernetes what kind of resources to make available,
-we can use the helmchart to determine what kind of computing environment users
-will experience. We do this by editing the ``config.yaml`` file that the
-helmchart uses to build. For a list of configuration options that are possible,
-see the link below:
+   Where ``<YOUR_RELEASE_NAME>`` is the parameter you passed to ``--name`` when `installing jupyterhub <setup-jupyterhub.html#install-jupyterhub>`_ with
+   ``helm install``. If you don't remember it, you can probably find it by doing ``helm list``
+3. Wait for the upgrade to finish, and make sure that when you do ``kubectl --namespace=<YOUR_NAMESPACE> get pod`` the hub and proxy pods are in ``Ready`` state. Your configuration change has been applied!
 
-https://github.com/jupyterhub/helm-chart/blob/master/jupyterhub/values.yaml
+   .. note::
+
+   Currently, most config changes (except for changing with user image is used) require you to manually restart the hub pod. You can do this by finding the name of the pod with ``kubectl --namespace=<YOUR_NAMESPACE> get pod`` (it's the one that stats with hub-), and doing ``kubectl --namespace=<YOUR_NAMESPACE> delete pod <hub-pod-name>``. This will be fixed soon!
+
 
 Using an existing image
 -----------------------
@@ -46,24 +41,13 @@ To instruct JupyterHub to use this image, simply add this to your ``config.yaml`
               name: berkeleydsep/singleuser-data8
               tag: v0.1
 
-If you have alreday initialized jupyterhub with the helmchart, you'll need to "upgrade" your helmchart.
-This will instruct the cluster to re-implement the instructions in ``config.yaml`` (which in this case
-now points to the Docker Hub image).
 
-To upgrade the cluster, run:
-
-     .. code:: bash
-
-        helm upgrade <YOUR_RELEASE_NAME> https://github.com/jupyterhub/helm-chart/releases/download/v0.1/jupyterhub-0.1.tgz -f config.yaml
-
-     .. note::
-         ``<YOUR_RELEASE_NAME>`` is what you provided to ``--name`` when you did the initial `helm install`.
-         If you forgot what name you used, you might be able to find out by running ``helm list``.
+You can then `apply the change <#applying-configuration-changes>`_ to the config as usual.
 
 Extending your software stack with s2i
 --------------------------------------
 
-s2i, also known as `Source to Image`_, lets you
+s2i, also known as `Source to Image <https://github.com/openshift/source-to-image>`_, lets you
 quickly convert a GitHub repository into a Docker image that we can use as a
 base for your JupyterHub instance. Anything inside the GitHub repository
 will exist in a user’s environment when they join your JupyterHub. If you
@@ -132,13 +116,8 @@ configure JupyterHub to build off of this image.
               name: gcr.io/<project-name>/<image-name>
              tag: <tag>
 
-7. **Tell helm to update JupyterHub to use this configuration.** This makes helm
-   instruct JupyterHub to change the way that it starts your computing
-   environment, which is now being pointed to the Docker image we’ve created::
-
-       helm upgrade jhub helm-chart -f config.yaml
-
-8. **Log back into your JupyterHub instance.** If you already have a running JupyterHub session, you’ll need to restart it (by restarting your session from the control panel in the top right). New users won’t have to do this.
+7. **Tell helm to update JupyterHub to use this configuration.** Using the normal method to `apply the change <#applying-configuration-changes>`_ to the config.
+8. **Restart your notebook if you are already logging in** If you already have a running JupyterHub session, you’ll need to restart it (by stopping and starting your session from the control panel in the top right). New users won’t have to do this.
 9. **Enjoy your new computing environment!** You should now have a live computing environment built off of the Docker image we’ve created.
 
 Authenticating with OAuth2
@@ -175,6 +154,3 @@ you can configure the helmchart for authentication.
           clientId: "y0urg1thubc1ient1d"
           clientSecret: "an0ther1ongs3cretstr1ng"
           callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
-
-
-.. _Source to Image: https://github.com/openshift/source-to-image
