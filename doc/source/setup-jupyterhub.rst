@@ -47,8 +47,10 @@ Install JupyterHub
 
     where:
 
-    1. ``--name`` can be whatever you like. People often base this off what this particular JupyterHub does. For example, if you are deploying for a class named 'data8' you might set this to 'data8-jupyterhub'
-    2. ``--namespace``  is a nifty feature of kubernetes that essentially lets you have multiple sub-deployments using a single helm-chart. People often use this to have both a “live” and a “dev” environment. You can use whatever you like but make it easy to re-type and remember.
+    1. ``--name`` is an identifier used by helm to refer to this deployment. You need it when you are changing the configuration of this install or deleting it. use something descriptive that you will easily remember - if this deployment is for a class called *data8* you might wanna set this to *data8-jupyterhub*. If you forget what the name is in the future you can find out by doing ``helm list``.
+    2. ``--namespace``  is an identifier `used by kubernetes <https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/>`_ (among other things) to separate various applications that might be running on a single kubernetes cluster. You can install many applications into the same kubernetes cluster, and each instance of an application is usually separated by being in its own namespace. You'll need this for performing any commands with ``kubectl``.
+
+    We recommend providing the same value to ``--name`` and ``--namespace`` for now to avoid too much confusion, but advanced users of kubernetes/helm should feel free to use whatever values make sense in their environment.
 
     .. note::
 
