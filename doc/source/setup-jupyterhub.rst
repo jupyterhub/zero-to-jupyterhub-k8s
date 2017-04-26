@@ -33,8 +33,8 @@ For the following steps, use your favorite code editor. We'll use the
 
 3. Insert these lines into the ``config.yaml`` file. When editing YAML files,
    use straight quotes and spaces and avoid using curly quotes or tabs.
-   Substitute each occurrence of RANDOM_STRING_N below with the output of
-   `openssl rand -hex 32`. The random hex strings are tokens that will be used
+   Substitute each occurrence of ``RANDOM_STRING_N`` below with the output of
+   ``openssl rand -hex 32``. The random hex strings are tokens that will be used
    to secure your JupyterHub instance (make sure that you keep the quotation
    marks):
 
@@ -70,33 +70,33 @@ Install JupyterHub
 
       helm install https://github.com/jupyterhub/helm-chart/releases/download/v0.1/jupyterhub-0.1.tgz --name=YOUR_RELEASE_NAME --namespace=YOUR_NAMESPACE -f config.yaml
 
-    where:
+   where:
 
-        - ``--name`` is an identifier used by helm to refer to this deployment.
-          You need it when you are changing the configuration of this install
-          or deleting it. Use something descriptive that you will easily
-          remember. For a class called *data8* you might wish set the name to
-          **data8-jupyterhub**. In the future you can find out the name by
-          using ``helm list``.
-        - ``--namespace``  is an identifier
-          `used by Kubernetes <https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/>`_
-          (among other things) to identify a particular application that might
-          be running on a single Kubernetes cluster. You can install many
-          applications into the same Kubernetes cluster, and each instance of
-          an application is usually separated by being in its own namespace.
-          You'll need the namespace identifier for performing any commands
-          with ``kubectl``.
+   - ``--name`` is an identifier used by helm to refer to this deployment.
+     You need it when you are changing the configuration of this install
+     or deleting it. Use something descriptive that you will easily
+     remember. For a class called *data8* you might wish set the name to
+     **data8-jupyterhub**. In the future you can find out the name by
+     using ``helm list``.
+   - ``--namespace``  is an identifier
+     `used by Kubernetes <https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/>`_
+     (among other things) to identify a particular application that might
+     be running on a single Kubernetes cluster. You can install many
+     applications into the same Kubernetes cluster, and each instance of
+     an application is usually separated by being in its own namespace.
+     You'll need the namespace identifier for performing any commands
+     with ``kubectl``.
 
-    We recommend providing the same value to ``--name`` and ``--namespace``
-    for now to avoid too much confusion, but advanced users of Kubernetes and
-    helm should feel free to use different values.
+   We recommend providing the same value to ``--name`` and ``--namespace``
+   for now to avoid too much confusion, but advanced users of Kubernetes and
+   helm should feel free to use different values.
 
-    .. note::
+   .. note::
 
-        If you get a ``release named <YOUR_CHART> already exists`` error, then
-        you should delete this helm-chart by running
-        ``helm delete --purge <YOUR_CHART>``. Then reinstall by repeating this
-        step.
+      If you get a ``release named <YOUR_CHART> already exists`` error, then
+      you should delete this helm-chart by running
+      ``helm delete --purge <YOUR_CHART>``. Then reinstall by repeating this
+      step.
 
 2. While Step 1 is running, you can see the pods being created by entering in
    a different terminal:
