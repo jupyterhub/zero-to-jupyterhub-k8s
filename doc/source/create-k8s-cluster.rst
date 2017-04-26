@@ -1,34 +1,69 @@
 Creating a Kubernetes Cluster
 =============================
 
-Kubernetes has `pretty good documentation <https://kubernetes.io/docs/setup/pick-right-solution/>`_ on the very large number of ways you can setup a cluster. Here, we shall provide quick instructions for the most painless & popular ways of getting setup in various cloud providers.
+Kubernetes' `documentation <https://kubernetes.io/docs/setup/pick-right-solution/>`_
+describes the many ways to set up a cluster. Here, we shall provide quick
+instructions for the most painless and popular ways of getting setup in various
+cloud providers.
 
 
 Setting up Kubernetes on `Google Cloud <https://cloud.google.com/>`_
 --------------------------------------------------------------------
 
-`Google Container Engine <https://cloud.google.com/container-engine/>`_ (confusingly abbreviated to GKE) is the simplest & most common way of setting up a Kubernetes Cluster. You should be able to get `free credits <https://cloud.google.com/free/>`_ for trying it out. However, first you need to connect your credit card to your google cloud account.
+`Google Container Engine <https://cloud.google.com/container-engine/>`_
+(confusingly abbreviated to GKE) is the simplest and most common way of setting
+up a Kubernetes Cluster. You may be able to receive `free credits
+<https://cloud.google.com/free/>`_ for trying it out. You will need to
+connect your credit card or other payment method to your google cloud account.
 
-1. Go to https://console.cloud.google.com.
-2. Click the hamburger in the top left (it has 3 horizontal lines in one button). Go to “Billing” then “Payment Methods”, and make sure you have a credit card linked to the account. (you should also get $300 in credits).
-3. Install and initialize the gcloud command-line tools, which send commands to google cloud and lets you do things like create / delete clusters.
-   
+1. Go to ``https://console.cloud.google.com``.
+
+2. Click the hamburger icon in the top left (the icon has three horizontal lines
+   in one button). Go to “Billing” then “Payment Methods”, and make sure you
+   have a credit card linked to the account. (You may also receive $300 in trial
+   credits.)
+
+3. Install and initialize the **gcloud command-line tools**. These tools send
+   commands to Google Cloud and lets you do things like create and delete
+   clusters.
+
    - Go to the `gcloud downloads page <https://cloud.google.com/sdk/downloads>`_
-     to download/install the gcloud SDK.
+     to **download and install the gcloud SDK**.
    - See the `gcloud documentation <https://cloud.google.com/sdk/>`_ for
      more information on the gcloud SDK.
-   - Install ``kubectl``, which is a tool for controlling kubernetes.
+   - **Install ``kubectl``**, which is a tool for controlling kubernetes. From
+     the terminal, enter:
 
-         ``gcloud components install kubectl``
+     .. code-block:: bash
 
-4. Create a kubernetes cluster on google cloud, by typing in the following command.
+        gcloud components install kubectl
 
-    ``gcloud container clusters create YOUR_CLUSTER --num-nodes=3 --machine-type=n1-highmem-2 --zone=us-central1-b``
+4. Create a Kubernetes cluster on Google Cloud, by typing in the following
+   command:
 
-  * ``--num-nodes`` specifies how many computers to spin up. The higher the number, the greater the cost.
-  * ``--machine-type`` specifies the amount of CPU and RAM in each node. There is a `large variety <https://cloud.google.com/compute/docs/machine-types>`_  to choose from.
-  * ``--zone`` specifies which computer center to use.  To reduce latency, choose a zone closest to whoever is sending the commands. View available zones via `gcloud compute zones list` .
-  * When it’s done initializing your cluster, run ``kubectl get node``. It should list three running nodes.
+   .. code-block:: bash
+
+      gcloud container clusters create YOUR_CLUSTER --num-nodes=3 --machine-type=n1-highmem-2 --zone=us-central1-b``
+
+   where:
+
+   * ``--num-nodes`` specifies how many computers to spin up. The higher the
+     number, the greater the cost.
+   * ``--machine-type`` specifies the amount of CPU and RAM in each node. There
+     is a `variety of types <https://cloud.google.com/compute/docs/machine-types>`_
+     to choose from.
+   * ``--zone`` specifies which computer center to use.  To reduce latency,
+     choose a zone closest to whoever is sending the commands. View available
+     zones via ``gcloud compute zones list`` .
+
+5. To test if your cluster is initialized, run:
+
+   .. code-block:: bash
+
+      kubectl get node
+
+   The response should list three running nodes.
+
 
 Setting up kubernetes on Microsoft Azure Container Service (ACS)
 ----------------------------------------------------------------
@@ -87,4 +122,5 @@ Setting up kubernetes on Microsoft Azure Container Service (ACS)
 Next Step
 ---------
 
-Now that you have a kubernetes cluster running, it is time to `set up helm <setup-helm.html>`_.
+Now that you have a Kubernetes cluster running, it is time to
+`set up helm <setup-helm.html>`_.
