@@ -1,33 +1,37 @@
 Setting up Helm
 ===============
 
-`Helm <https://helm.sh/>`_ is a tool to install, upgrade & manage applications on a kubernetes cluster. We will be using it to install & manage JupyterHub on our cluster.
+`Helm <https://helm.sh/>`_, the package manager for Kubernetes, is a useful tool
+to install, upgrade and manage applications on a Kubernetes cluster. We will be
+using Helm to install and manage JupyterHub on our cluster.
 
 Installation
 ------------
 
-The simplest way to install helm is to run the following at a terminal
+The simplest way to install helm is to run Helm's installer script at a
+terminal:
 
     .. code:: bash
 
         curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
 
-If this method of installation scares you, there are `other ways to install <https://github.com/kubernetes/helm/blob/master/docs/install.md>`_ too.
-
+`Alternative methods for helm installation <https://github.com/kubernetes/helm/blob/master/docs/install.md>`_
+exist if you prefer to install without using the script.
 
 Initialization
 --------------
 
-After installing helm on your machine, you need to initialize it on your kubernetes cluster. You can do so with
-
+After installing helm on your machine, initialize helm on your Kubernetes
+cluster. At the terminal, enter:
 
     .. code:: bash
 
         helm init
 
-This needs to happen only once per Kubernetes cluster.
+This command only needs to run once per Kubernetes cluster.
 
 Next Step
 ---------
 
-Now that you have helm set up, next step is to `install JupyterHub <setup-jupyterhub.html>`_!
+Congratulations. Helm is now set up. The next step is to
+`install JupyterHub <setup-jupyterhub.html>`_!
