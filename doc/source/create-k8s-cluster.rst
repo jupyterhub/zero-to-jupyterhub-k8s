@@ -31,7 +31,7 @@ connect your credit card or other payment method to your google cloud account.
      to **download and install the gcloud SDK**.
    - See the `gcloud documentation <https://cloud.google.com/sdk/>`_ for
      more information on the gcloud SDK.
-   - **Install ``kubectl``**, which is a tool for controlling kubernetes. From
+   - Install ``kubectl``, which is a tool for controlling kubernetes. From
      the terminal, enter:
 
      .. code-block:: bash
@@ -83,7 +83,7 @@ Setting up Kubernetes on Microsoft Azure Container Service (ACS)
 
       az login
 
-3. Specify a `resource group <https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#resource-groups>_`,
+3. Specify a `resource group <https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#resource-groups>`_,
    and create one if it doesn't already exist:
 
   .. code-block:: bash
