@@ -1,30 +1,46 @@
 Setting up JupyterHub
 =====================
 
-Now that we have a `kubernetes cluster <create-k8s-cluster.html>`_ & `helm <setup-helm.html>`_ setup, we can set up a JupyterHub!
+Now that we have a `Kubernetes cluster <create-k8s-cluster.html>`_ and
+`helm <setup-helm.html>`_ setup, we can begin setting up a JupyterHub!
 
-Prepare config file
--------------------
+Prepare configuration file
+--------------------------
 
-We will use a `YAML <https://en.wikipedia.org/wiki/YAML>`_ file to specify the configuration of our JupyterHub. Save this in a safe place - you will need it if you want to change how your JupyterHub behaves.
+This step prepares a configuration file (config file). We will use the
+`YAML <https://en.wikipedia.org/wiki/YAML>`_ file format to specify
+JupyterHub's configuration.
 
-We'll be assume you are using the `nano <https://en.wikipedia.org/wiki/GNU_nano>`_ editor to edit the config file. Feel free to use any editor you want!
+It's important to save the config file in a safe place. The config file is
+needed for future changes to JupyterHub's settings.
 
-1. Run these two commands (they’re the same command but run them twice)::
+For the following steps, use your favorite code editor. We'll use the
+`nano <https://en.wikipedia.org/wiki/GNU_nano>`_ editor as an example.
+
+1. Create a file called ``config.yaml``. For example, using the nano editor:
+
+   .. code-block:: bash
+
+       nano config.yaml
+
+2. Create two random hex strings to use as security tokens. Run these two
+   commands (they’re the same command but run them twice) in a terminal:
+
+   .. code-block:: bash
 
        openssl rand -hex 32
        openssl rand -hex 32
 
-   Copy the output each time, we’ll use this in the next step.
+   Copy the output each time, we’ll use these hex strings in the next step.
 
-2. Create a file called ``config.yaml``::
+3. Insert these lines into the ``config.yaml`` file. When editing YAML files,
+   use straight quotes and spaces and avoid using curly quotes or tabs.
+   Substitute each occurrence of RANDOM_STRING_N below with the output of
+   `openssl rand -hex 32`. The random hex strings are tokens that will be used
+   to secure your JupyterHub instance (make sure that you keep the quotation
+   marks):
 
-    nano config.yaml
-
-
-4. Insert these lines into the file, making sure they do not contain curly quotes or tabs. Substitute each occurrence of RANDOM_STRING_N below with the output of `openssl rand -hex 32` . The strings are tokens that will be used to secure your JupyterHub instance (make sure that you keep the quotation marks):
-
-    .. code-block:: yaml
+     .. code-block:: yaml
 
         hub:
             # output of first execution of 'openssl rand -hex 32'
@@ -33,7 +49,17 @@ We'll be assume you are using the `nano <https://en.wikipedia.org/wiki/GNU_nano>
             # output of second execution of 'openssl rand -hex 32'
             proxy: "RANDOM_STRING_2"
 
-5. Save the file by hitting ``Ctrl-X`` and make sure to answer ‘yes’ when it asks you to save.
+   For example:
+
+     .. code-block:: yaml
+
+        hub:
+          cookieSecret: "cb0b45df678709c5cc780ed73690898f7ba0659902f996017296143976ffb97c"
+        token:
+          proxy: "712c4c6c0e78c6c745cfb126f5bbc4b9ba763c78b4bba5797e2eaf508ac99475"
+
+4. Save the ``config.yaml``file. If using the nano editor, hit ``Ctrl-X`` and
+   make sure to answer ‘yes’ when it asks you to save.
 
 Install JupyterHub
 ------------------
@@ -57,7 +83,7 @@ Install JupyterHub
         If you get a ``release named <YOUR_CHART> already exists`` error, then you should delete this helm-chart by running ``helm delete --purge <YOUR_CHART>`` . Then reinstall by repeating this step.
 
 2. You can see the pods being created with ``kubectl --namespace=YOUR_NAMESPACE get pod``.
-3. Wait for the hub and proxy pod to get to running. 
+3. Wait for the hub and proxy pod to get to running.
 4. You can find the IP to use for accessing the JupyterHub with ``kubectl --namespace=<YOUR_NAMESPACE> get svc`` . The external IP for the ‘proxy-public’ service should be accessible in a minute or two.
 5. The default authenticator is ‘dummy’ - any username / password will let you in!
 
