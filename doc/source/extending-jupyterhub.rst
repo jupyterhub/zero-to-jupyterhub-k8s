@@ -21,7 +21,7 @@ The general method is:
 
    .. note::
 
-   Currently, most config changes (except for changing with user image is used) require you to manually restart the hub pod. You can do this by finding the name of the pod with ``kubectl --namespace=<YOUR_NAMESPACE> get pod`` (it's the one that stats with hub-), and doing ``kubectl --namespace=<YOUR_NAMESPACE> delete pod <hub-pod-name>``. This will be fixed soon!
+      Currently, most config changes (except for changing with user image is used) require you to manually restart the hub pod. You can do this by finding the name of the pod with ``kubectl --namespace=<YOUR_NAMESPACE> get pod`` (it's the one that stats with hub-), and doing ``kubectl --namespace=<YOUR_NAMESPACE> delete pod <hub-pod-name>``. This will be fixed soon!
 
 
 Using an existing image

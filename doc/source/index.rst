@@ -18,16 +18,18 @@ questions, feel free to reach out at the `issues page`_.
 .. toctree::
     :maxdepth: 2
 
+    getting-started
     create-k8s-cluster
     setup-helm
     setup-jupyterhub
-    extending-jupyterhub
+    turn-off
 
 **Extra info and tips**
 
 .. toctree::
     :maxdepth: 2
 
+    extending-jupyterhub
     tools
     troubleshooting
     glossary
