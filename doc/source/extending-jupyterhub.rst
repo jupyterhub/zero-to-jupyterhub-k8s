@@ -44,6 +44,31 @@ To instruct JupyterHub to use this image, simply add this to your ``config.yaml`
 
 You can then `apply the change <#applying-configuration-changes>`_ to the config as usual.
 
+Setting memory and CPU guarantees / limits for your users
+---------------------------------------------------------
+
+Each user on your JupyterHub gets a slice of memory and CPU to use. By default this is left
+a little to random chance - we do not provide any guarantees nor limits. We recommend most users
+change this!
+
+If you want all your users to have guaranteed access to 1Gi of RAM, and no more, you can add the
+following to your config.yaml and do an upgrade:
+
+    .. code-block:: yaml
+
+       singleuser:
+           memory:
+               limit: 1G
+               guarantee: 1G
+
+Kubernetes will make sure that each user will always have access to 1G of RAM, and requests for
+more RAM will fail (your kernel will usually die). The guarantee is the base amount of RAM that
+is guaranteed for each user, and the limit is the amount of RAM at which new memory requests
+will not be granted. You can set the limit to be higher than the guarantee if you want to allow
+some users to 'burst' RAM use occasionally (and use more RAM than the guarantee).
+
+The same applies to cpu usage too! 
+
 Extending your software stack with s2i
 --------------------------------------
 
