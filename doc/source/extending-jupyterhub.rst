@@ -114,7 +114,7 @@ configure JupyterHub to build off of this image.
           singleuser:
             image:
               name: gcr.io/<project-name>/<image-name>
-             tag: <tag>
+              tag: <tag>
 
 7. **Tell helm to update JupyterHub to use this configuration.** Using the normal method to `apply the change <#applying-configuration-changes>`_ to the config.
 8. **Restart your notebook if you are already logging in** If you already have a running JupyterHub session, you’ll need to restart it (by stopping and starting your session from the control panel in the top right). New users won’t have to do this.
