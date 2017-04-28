@@ -154,3 +154,41 @@ you can configure the helmchart for authentication.
           clientId: "y0urg1thubc1ient1d"
           clientSecret: "an0ther1ongs3cretstr1ng"
           callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
+
+Full Example of Google OAuth2
+-----------------------------
+
+If your institution is a `G Suite customer <https://gsuite.google.com>`_ that integrates with Google services such as Gmail, Calendar, and Drive, you can authenticate users to your JupyterHub using Google for authentication. Follow these steps:
+
+1. Log in to the `Google API Console <https://console.developers.google.com>`_.
+
+2. Select a project > Create a project... and set 'Project name'. This is a short term that is only displayed in the console. If you have already created a project you may skip this step.
+
+3. Type "Credentials" in the search field at the top and click to access the Credentials API.
+
+4. Click "Create credentials", then "OAuth client ID". Choose "Application type" > "Web application".
+
+5. Enter a name for your JupyterHub instance. You can give it a descriptive name or set it to be the hub's hostname.
+
+6. Set "Authorized JavaScript origins" to be your hub's URL.
+
+7. Set "Authorized redirect URIs" to be your hub's URL followed by "/hub/oauth_callback". For example http://example.com/hub/oauth_callback.
+
+8. When you click "Create", the console will generate and display a Client ID and Client Secret. Save these values.
+
+9. Type "consent screen" in the search field at the top and click to access the OAuth consent screen. Here you will customize what your users see when they login to your JupyterHub instance for the first time. Click Save when you are done.
+
+10. In your helm chart, create a stanza that contains these OAuth fields:
+
+.. code-block:: bash
+
+    auth:
+      type: google
+      google:
+        clientId: "yourlongclientidstring.apps.googleusercontent.com"
+        clientSecret: "adifferentlongstring"
+        callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
+        hostedDomain: "youruniversity.edu"
+        loginService: "Your University"
+
+The 'callbackUrl' key is set to the authorized redirect URI you specified earlier. Set 'hostedDomain' to your institution's domain name. The value of 'loginService' is a descriptive term for your institution that reminds your users which account they are using to login.
