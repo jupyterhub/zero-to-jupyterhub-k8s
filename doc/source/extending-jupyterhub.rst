@@ -9,7 +9,7 @@ Applying configuration changes
 The general method is:
 
 1. Make a change to the ``config.yaml``
-2. Run a helm upgrade::
+2. Run a helm upgrade:
 
      .. code-block:: bash
 
