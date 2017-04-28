@@ -55,6 +55,11 @@ data:
   auth.google.login-service: {{.Values.auth.google.loginService | quote}}
   auth.google.callback-url: {{.Values.auth.google.callbackUrl}}
   {{- end }}
+  {{ if eq .Values.auth.type "dummy" -}}
+  {{ if .Values.auth.dummy.password -}}
+  auth.dummy.password: {{ .Values.auth.dummy.password | quote }}
+  {{- end }}
+  {{- end }}
   {{ if .Values.singleuser.cmd -}}
   singleuser.cmd: {{ .Values.singleuser.cmd | quote }}
   {{- end }}

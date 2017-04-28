@@ -46,6 +46,8 @@ publicIP: null
 # Google OAuth secrets
 auth:
   type: dummy
+  dummy:
+    password: null
 
 token:
   proxy: 'generate with pwgen 64 and put here'

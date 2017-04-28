@@ -141,6 +141,7 @@ elif auth_type == 'hmac':
     email_domain = 'local'
 elif auth_type == 'dummy':
     c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
+    c.DummyAuthenticator.password = get_config('auth.dummy.password', None)
     email_domain = 'local'
 elif auth_type == 'tmp':
     c.JupyterHub.authenticator_class = 'tmpauthenticator.TmpAuthenticator'
