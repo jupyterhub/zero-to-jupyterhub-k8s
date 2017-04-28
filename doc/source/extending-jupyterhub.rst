@@ -162,9 +162,7 @@ If your institution is a `G Suite customer <https://gsuite.google.com>`_ that in
 
 1. Log in to the `Google API Console <https://console.developers.google.com>`_.
 
-2. Select a project > Create a project... and set 'Project name'. This is a shor
-t term that is only displayed in the console. If you have already created a proj
-ect you may skip this step.
+2. Select a project > Create a project... and set 'Project name'. This is a short term that is only displayed in the console. If you have already created a project you may skip this step.
 
 3. Type "Credentials" in the search field at the top and click to access the Credentials API.
 
