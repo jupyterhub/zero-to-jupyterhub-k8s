@@ -106,9 +106,9 @@ configure JupyterHub to build off of this image.
 
    .. code-block:: bash
 
-          numpy=1.12.1
-          scipy=0.19.0
-          matplotlib=2.0
+          numpy==1.12.1
+          scipy==0.19.0
+          matplotlib==2.0
 
 4. **Use s2i to build your Docker image.** `s2i` uses a template in order to
    know how to create the Docker image. We have provided one at the url in the
