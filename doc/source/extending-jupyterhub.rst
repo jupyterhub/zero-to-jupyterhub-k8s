@@ -81,7 +81,6 @@ configure JupyterHub to build off of this image.
 
    .. code-block:: bash
 
-          pip==9.0.1
           numpy==1.12.1
           scipy==0.19.0
           matplotlib==2.0
