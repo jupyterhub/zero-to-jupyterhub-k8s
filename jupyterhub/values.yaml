@@ -22,7 +22,7 @@ hub:
   labels: null
   image:
     name: yuvipanda/jupyterhub-k8s-hub
-    tag: v9cb7d09
+    tag: v1a2ac71
   resources:
     requests:
       cpu: 0.2
@@ -54,6 +54,7 @@ token:
 
 singleuser:
   extraLabels: {}
+  extraEnv: {}
   storage:
     type: dynamic
     capacity: 10Gi

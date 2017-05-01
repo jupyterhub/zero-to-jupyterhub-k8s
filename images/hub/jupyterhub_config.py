@@ -169,6 +169,8 @@ c.KubeSpawner.environment = {
     'GIT_COMMITTER_NAME': generate_user_name
 }
 
+c.KubeSpawner.environment.update(get_config('singleuser.extra-env', {}))
+
 # Enable admins to access user servers
 c.JupyterHub.admin_access = get_config('admin.access')
 

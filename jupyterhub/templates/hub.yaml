@@ -89,6 +89,12 @@ data:
     {{ $key | quote }}: {{ $value | quote }}
     {{- end }}
   {{- end }}
+  {{ if .Values.singleuser.extraEnv -}}
+  singleuser.extra-env: |
+    {{ range $key, $value := .Values.singleuser.extraEnv -}}
+    {{ $key | quote }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
   token.cookie_secret: {{ .Values.hub.cookieSecret | quote }}
   hub.base_url: {{ .Values.hub.baseUrl | quote }}
   {{ if eq .Values.hub.db.type "sqlite-pvc" -}}
