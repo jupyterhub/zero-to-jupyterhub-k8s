@@ -22,7 +22,7 @@ hub:
   labels: null
   image:
     name: yuvipanda/jupyterhub-k8s-hub
-    tag: v33c6c18
+    tag: v0.2
   resources:
     requests:
       cpu: 0.2
@@ -31,7 +31,7 @@ hub:
 proxy:
   image:
     name: yuvipanda/jupyterhub-k8s-proxy
-    tag: v0.1
+    tag: v0.2
   resources:
     requests:
       cpu: 0.2
@@ -63,7 +63,7 @@ singleuser:
     # homeHostPathTemplate: /data/project/paws/userhomes/{userid}
   image:
     name: yuvipanda/jupyterhub-k8s-singleuser-sample
-    tag: v0.1
+    tag: v0.2
   cpu:
     limit: null
     guarantee: null
