@@ -158,7 +158,9 @@ you can configure the helmchart for authentication.
 
 **Google**
 
-.. code-block:: bash
+For more information see the full example of Google OAuth2 in the next section.
+
+.. code-block:: yaml
 
     auth:
       type: google
@@ -171,7 +173,7 @@ you can configure the helmchart for authentication.
 
 **GitHub**
 
-.. code-block:: bash
+.. code-block:: yaml
 
       auth:
         type: github
@@ -183,7 +185,10 @@ you can configure the helmchart for authentication.
 Full Example of Google OAuth2
 -----------------------------
 
-If your institution is a `G Suite customer <https://gsuite.google.com>`_ that integrates with Google services such as Gmail, Calendar, and Drive, you can authenticate users to your JupyterHub using Google for authentication. Follow these steps:
+If your institution is a `G Suite customer <https://gsuite.google.com>`_ that integrates with Google services such as Gmail, Calendar, and Drive, you can authenticate users to your JupyterHub using Google for authentication.
+
+.. note::
+       Google requires that you specify a fully qualified domain name for your hub rather than an IP address.
 
 1. Log in to the `Google API Console <https://console.developers.google.com>`_.
 
