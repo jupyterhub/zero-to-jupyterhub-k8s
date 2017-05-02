@@ -35,7 +35,9 @@ metadata:
 data:
   token.proxy: {{ .Values.token.proxy | quote }}
   {{ if .Values.cull.enabled -}}
-  cull.token: {{ .Values.cull.token | quote }}
+  cull.enabled: "true"
+  cull.timeout: {{ .Values.cull.timeout | quote }}
+  cull.every: {{ .Values.cull.every | quote }}
   {{- end }}
 
   {{ if .Values.statsd.enabled -}}

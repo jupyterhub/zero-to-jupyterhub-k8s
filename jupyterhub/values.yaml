@@ -22,7 +22,7 @@ hub:
   labels: null
   image:
     name: yuvipanda/jupyterhub-k8s-hub
-    tag: v9cb7d09
+    tag: v33c6c18
   resources:
     requests:
       cpu: 0.2
@@ -82,7 +82,6 @@ cull:
   enabled: true
   timeout: 3600
   every: 600
-  token: 'generate with openssl rand -hex 32 here'
 
 statsd:
   enabled: false

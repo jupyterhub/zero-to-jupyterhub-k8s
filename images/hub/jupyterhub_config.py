@@ -176,13 +176,22 @@ c.JupyterHub.admin_access = get_config('admin.access')
 
 c.Authenticator.admin_users = get_config('admin.users', [])
 
-cull_token = get_config('cull.token', None)
-if cull_token:
-    c.JupyterHub.api_tokens = {
-        cull_token: 'cull'
-    }
-    if 'cull' not in c.Authenticator.admin_users:
-        c.Authenticator.admin_users.append('cull')
+
+if get_config('cull.enabled', False):
+    cull_timeout = get_config('cull.timeout')
+    cull_every = get_config('cull.every')
+    c.JupyterHub.services = [
+        {
+            'name': 'cull-idle',
+            'admin': True,
+            'command': [
+                '/usr/bin/python3',
+                '/usr/local/bin/cull_idle_servers.py',
+                '--timeout=%s' % cull_timeout,
+                '--cull_every=%s' % cull_every
+            ]
+        }
+    ]
 
 c.JupyterHub.base_url = get_config('hub.base_url')
 
