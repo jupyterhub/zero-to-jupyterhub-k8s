@@ -13,7 +13,7 @@ The general method is:
 
      .. code-block:: bash
 
-        helm upgrade <YOUR_RELEASE_NAME> https://github.com/jupyterhub/helm-chart/releases/download/v0.1/jupyterhub-0.1.tgz -f config.yaml
+        helm upgrade <YOUR_RELEASE_NAME> https://github.com/jupyterhub/helm-chart/releases/download/v0.2/jupyterhub-0.2.tgz -f config.yaml
 
    Where ``<YOUR_RELEASE_NAME>`` is the parameter you passed to ``--name`` when `installing jupyterhub <setup-jupyterhub.html#install-jupyterhub>`_ with
    ``helm install``. If you don't remember it, you can probably find it by doing ``helm list``
@@ -47,9 +47,10 @@ You can then `apply the change <#applying-configuration-changes>`_ to the config
 Setting memory and CPU guarantees / limits for your users
 ---------------------------------------------------------
 
-Each user on your JupyterHub gets a slice of memory and CPU to use. By default this is left
-a little to random chance - we do not provide any guarantees nor limits. We recommend most users
-change this!
+Each user on your JupyterHub gets a slice of memory and CPU to use. By default, each user is
+*guaranteed* 1G of RAM, but no enforced limits. This means each user is guaranteed at minimum
+1G of RAM, but no exact upper limit (this will vary based on various factors outside of your
+control). We recommend most people change this!
 
 If you want all your users to have guaranteed access to 1Gi of RAM, and no more, you can add the
 following to your config.yaml and do an upgrade:
