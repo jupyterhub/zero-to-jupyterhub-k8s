@@ -13,6 +13,10 @@ name: null
 # make sure we do not break current installations.
 createNamespace: false
 
+# Deprecated, use proxy.secretToken instead
+token:
+  proxy: null
+
 hub:
   baseUrl: "/"
   cookieSecret: null
@@ -29,6 +33,7 @@ hub:
       memory: 512Mi
 
 proxy:
+  secretToken: 'generate with openssl rand -hex 64'
   image:
     name: yuvipanda/jupyterhub-k8s-proxy
     tag: v0.2
@@ -48,9 +53,6 @@ auth:
   type: dummy
   dummy:
     password: null
-
-token:
-  proxy: 'generate with pwgen 64 and put here'
 
 singleuser:
   extraLabels: {}

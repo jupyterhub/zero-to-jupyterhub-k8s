@@ -27,13 +27,22 @@ spec:
       port: 8081
       targetPort: 8081
 ---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: hub-secret
+  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
+type: Opaque
+data:
+  proxy.token: {{ default .Values.token.proxy .Values.proxy.secretToken | b64enc | quote }}
+  hub.cookie-secret: {{ .Values.hub.cookieSecret | b64enc | quote }}
+---
 kind: ConfigMap
 apiVersion: v1
 metadata:
   name: hub-config
   {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
 data:
-  token.proxy: {{ .Values.token.proxy | quote }}
   {{ if .Values.cull.enabled -}}
   cull.enabled: "true"
   cull.timeout: {{ .Values.cull.timeout | quote }}
@@ -161,9 +170,9 @@ spec:
           value:  "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"
         - name: JPY_COOKIE_SECRET
           valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: token.cookie_secret
+            secretKeyRef:
+              name: hub-secret
+              key: hub.cookie-secret
         {{ if .Values.singleuser.mounts -}}
         {{ if .Values.singleuser.mounts.shared -}}
         - name: SHARED_DATA_MOUNTS
@@ -176,9 +185,9 @@ spec:
               fieldPath: metadata.namespace
         - name: CONFIGPROXY_AUTH_TOKEN
           valueFrom:
-            configMapKeyRef:
-              name: hub-config
-              key: token.proxy
+            secretKeyRef:
+              name: hub-secret
+              key: proxy.token
         ports:
           - containerPort: 8081
             name: hub

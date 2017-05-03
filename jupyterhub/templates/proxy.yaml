@@ -66,9 +66,9 @@ spec:
         env:
           - name: CONFIGPROXY_AUTH_TOKEN
             valueFrom:
-              configMapKeyRef:
-                name: hub-config
-                key: token.proxy
+              secretKeyRef:
+                name: hub-secret
+                key: proxy.token
         ports:
           - containerPort: 8000
             name: proxy-public
