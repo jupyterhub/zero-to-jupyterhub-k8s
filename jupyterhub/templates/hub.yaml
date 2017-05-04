@@ -40,7 +40,7 @@ data:
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: hub-config
+  name: hub-config-{{ default .Release.Revision .Values.revisionOverride }}
   {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
 data:
   {{ if .Values.cull.enabled -}}
@@ -144,7 +144,7 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: hub-config
+          name: hub-config-{{ default .Release.Revision .Values.revisionOverride }}
       {{ if eq .Values.hub.db.type "sqlite-pvc" }}
       - name: hub-db-dir
         persistentVolumeClaim:
