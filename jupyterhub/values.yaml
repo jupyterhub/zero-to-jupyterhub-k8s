@@ -24,6 +24,7 @@ hub:
     type: sqlite-pvc
     url: null
   labels: null
+  extraConfig: null
   image:
     name: yuvipanda/jupyterhub-k8s-hub
     tag: v0.2

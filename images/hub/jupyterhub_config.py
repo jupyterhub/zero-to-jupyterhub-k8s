@@ -207,3 +207,8 @@ if statsd_host:
 cmd = get_config('singleuser.cmd', None)
 if cmd:
     c.Spawner.cmd = cmd
+
+
+extra_config_path = '/etc/jupyterhub/config/hub.extra-config.py'
+if os.path.exists(extra_config_path):
+    load_subconfig(extra_config_path)
