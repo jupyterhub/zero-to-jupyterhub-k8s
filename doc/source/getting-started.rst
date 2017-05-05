@@ -9,11 +9,11 @@ the process of setting up your JupyterHub.
 
 These materials are meant to help you connect the following things:
 
-* A cloud provider (Google Cloud, Azure, SC3)
+* A cloud provider (Google Cloud, Microsoft Azure, Amazon EC2)
 * Kubernetes (to manage resources on the cloud)
 * Helm (to configure and control kubernetes)
 * Docker (to use containers that standardize computing environments)
-* JupyterHub (to manager user accounts and deploy Docker images)
+* JupyterHub (to manage users and deploy jupyter notebooks)
 
 To get started, we recommend beginning with the first item on our
 `main page <index.html>`_. If you'd like to know how to expand and

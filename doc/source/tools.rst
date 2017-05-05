@@ -9,9 +9,11 @@ information.
 Cloud Computing Providers
 -------------------------
 
-These are the organizations that host the computers on which your
-JupyterHub will run. When people access your JupyterHub remotely, they are
-creating instances on machines that are managed by these organizations.
+This is whatever will run the actual computation. Generally it means a
+company, university server, or some other organization that hosts computers
+that can be accessed remotely. JupyterHub will run on this hardware, meaning
+that users will also be operating on this hardware if they're interacting
+with your JupyterHub. 
 
 They provide the following things:
 
@@ -35,7 +37,7 @@ Container Technology
 Container technology is essentially the idea of bundling all of the
 necessary components to run a piece of software. There are many ways
 to do this, but one that we'll focus on is called Docker. Here are
-the main components of Docker:
+the main concepts of Docker:
 
 Container Image
 ***************
@@ -92,13 +94,17 @@ Kubernetes can only manage the computing resources that it is
 given. This means that it generally can **not** create new resources on its
 own (with the exception of disk space).
 
-There are three main types of objects in Kubernetes:
+The following sections describe some objects in Kubernetes that are
+most relevant for JupyterHub.
 
 Processes
 *********
 Are any program that is running on a machine. For example,
 a Jupyter Notebook creates several processes that handle the
-execution of code and the display in the browser.
+execution of code and the display in the browser. This isn't
+technically a Kubernetes object, since literally any computer has
+processes that run on it, but Kubernetes does keep track of running
+processes in order to ensure that they remain running if needed.
 
 Pods
 ****
@@ -119,7 +125,9 @@ of users can access it. You could use a single pod with two containers.
 
 This is useful because it lets you compatmentalize the components of the
 service that you want to run, which makes things easier to manage and
-keeps things more stabl.
+keeps things more stable.
+
+For more information about pods, see the `Kubernetes Documentation <https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/>`_.
 
 Deployments
 ***********
@@ -137,9 +145,13 @@ original specification of the deployment. If there are differences between
 the current state vs. the specification of the deployment, Kubernetes will
 attempt to make changes until the current state matches the specification.
 
-**Note**: Users don't generally "create" deployments directly, they are
-instead generated from a set of instructions that are sent to Kubernetes.
-We'll cover this in the section on "Helm".
+For more information about deployments, see the `Kubernetes Documentation <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_.
+
+.. note:: 
+
+    Users don't generally "create" deployments directly, they are
+    instead generated from a set of instructions that are sent to Kubernetes.
+    We'll cover this in the section on "Helm".
 
 Service
 *******
@@ -152,11 +164,13 @@ re-orient yourself every time this happens. A Kubernetes service keeps
 track of all these changes on the backend, and provides a single address
 to manage your deployment.
 
+For more information about services, see the `Kubernetes Documentation <https://kubernetes.io/docs/concepts/services-networking/service/>`_.
+
 Namespace
 *********
 
 Finally, a `namespace <https://kubernetes.io/docs/admin/namespaces/>`_
-defines a collection of deployments. This will define
+defines a collection of objects in Kubernetes. This will define
 the boundaries of hardware that the deployments have to exist within. It
 is generally the most "high-level" of the groups we've discussed thus far.
 For example, a a namespace could be a single class running with JupyterHub.
@@ -164,15 +178,21 @@ It defines all the hardware that is available to students. It also defines
 the JupyterHub machinery that glues together all of the student containers,
 manages disk space, etc.
 
-Persistent Volume Chain
+For more information about namespaces, see the `Kubernetes Documentation <https://kubernetes.io/docs/tasks/administer-cluster/namespaces/>`_.
+
+
+Persistent Volume Claim
 ***********************
 
-Persistent Volume Chains are a way to have persistent storage without
+Persistent Volume Claims are a way to have persistent storage without
 being tied down to one specific computer or machine. Kubernetes is
 about that flexibility, and that means that we don't want to lock ourselves
 in to a particular operating system just because our files are already
-on it. Persistent Volume Chains help deal with this problem by knowing
-how to convert files between filesystem types. 
+on it. Persistent Volume Claims help deal with this problem by knowing
+how to convert files between disk types (e.g., AWS vs. Google disks).
+
+For more information on Persistent Volume Claims, see the 
+`Kubernetes documentation <https://kubernetes.io/docs/concepts/storage/persistent-volumes/>`_.
 
 
 Helm
@@ -187,11 +207,12 @@ Charts
 The way that Helm controls kubernetes is with templates of structured
 information that specify some computational requirements.
 These templates are called "charts", or "helm charts". They contain
-all of the necessary information for kubernetes to generate either:
+all of the necessary information for kubernetes to generate:
 
 - a deployment object 
 - a service object
 - a persistent volume object a deployment.
+- collections of the above components
 
 They can be installed into a namespace, which causes kubernetes to
 begin deploying the objects above into that namespace.
@@ -210,7 +231,7 @@ A release is basically a specific instantiation of a helmchart inserted
 into a particular namespace. If you'd like to upgrade your
 kubernetes deployment (say, by changing the amount of RAM that each
 user should get), then you can change the helm chart, then re-deploy
-it to your kubernetes cluster. This generates a new release.
+it to your kubernetes cluster. This generates a new version of the release.
 
 
 JupyterHub
@@ -218,8 +239,8 @@ JupyterHub
 
 JupyterHub is a way of utilizing the components above in order to
 provide computational environments that users can access remotely.
-It exists as a kubernetes deployment, which is comprised of multiple
-pods. Each pod accomplishes some task that, together, make up JupyterHub.
+It exists as two kubernetes deployments, Proxy and Hub, each of which has
+one pod. Each deployment accomplishes some task that, together, make up JupyterHub.
 Finally, the output of JupyterHub is a user pod, which specifies the
 computational environment in which a single user will operate. So
 essentially a JupyterHub is a collection of:
