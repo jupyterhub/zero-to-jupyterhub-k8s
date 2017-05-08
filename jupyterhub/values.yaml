@@ -20,6 +20,7 @@ token:
 hub:
   baseUrl: "/"
   cookieSecret: null
+  publicURL: null
   db:
     type: sqlite-pvc
     url: null
@@ -27,11 +28,26 @@ hub:
   extraConfig: null
   image:
     name: yuvipanda/jupyterhub-k8s-hub
-    tag: v0.2
+    tag: v94ff73b
   resources:
     requests:
       cpu: 0.2
       memory: 512Mi
+
+builder:
+  enabled: false
+  resources:
+    requests:
+      cpu: 0.2
+      memory: 512Mi
+  image:
+    name: yuvipanda/jupyterhub-k8s-builder
+    tag: v94ff73b
+  registry:
+    host: gcr.io
+    username: _json_key
+    password: null
+
 
 proxy:
   secretToken: 'generate with openssl rand -hex 64'

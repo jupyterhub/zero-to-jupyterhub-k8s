@@ -20,9 +20,9 @@ RUN apt-get update && \
 RUN pip3 install --no-cache-dir \
          jupyterhub==0.7.2 \
          oauthenticator==0.5.1 \
-         jupyterhub-dummyauthenticator==0.3.1 \
-         jupyterhub-tmpauthenticator==0.3 \
          statsd==3.2.1 \
+         jupyterhub-dummyauthenticator==0.3.1 \
+         jupyterhub-tmpauthenticator==0.4 \
          pymysql==0.7.11
 
 RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@8ca8a9f

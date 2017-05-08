@@ -3,8 +3,8 @@ IMAGE_PREFIX=yuvipanda/jupyterhub-k8s
 PUSH_IMAGES=no
 
 images: build-images push-images
-build-images: build-image/hub build-image/proxy build-image/singleuser-sample
-push-images: push-image/hub push-image/proxy push-image/singleuser-sample
+build-images: build-image/hub build-image/proxy build-image/singleuser-sample build-image/builder
+push-images: push-image/hub push-image/proxy push-image/singleuser-sample push-image/builder
 
 build-image/%:
 	cd images/$(@F) && \
