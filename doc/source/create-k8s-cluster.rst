@@ -43,7 +43,7 @@ connect your credit card or other payment method to your google cloud account.
 
    .. code-block:: bash
 
-      gcloud container clusters create YOUR_CLUSTER --num-nodes=3 --machine-type=n1-highmem-2 --zone=us-central1-b``
+      gcloud container clusters create YOUR_CLUSTER --num-nodes=3 --machine-type=n1-highmem-2 --zone=us-central1-b
 
    where:
 
