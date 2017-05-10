@@ -22,6 +22,7 @@ questions, feel free to reach out at the `issues page`_.
     setup-helm
     setup-jupyterhub
     extending-jupyterhub
+    turn-off
 
 **Extra info and tips**
 
