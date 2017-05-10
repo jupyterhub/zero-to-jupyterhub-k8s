@@ -3,6 +3,8 @@
 
 A [helm][] [chart][] for deploying [JupyterHub] instances on [Kubernetes].
 
+**[Zero to JupyterHub with Kubernetes]** provides detailed instructions for using this project within a JupyerHub deployment.
+
 ## Overview of [Kubernetes] terminology
 
 ### What is [helm]?
@@ -58,3 +60,4 @@ To create chart metadata and package chart for use:
 [helm repo]: https://github.com/kubernetes/helm
 [chart]: https://github.com/kubernetes/helm/blob/master/docs/charts.md
 [Kubernetes Introduction to charts]: https://github.com/kubernetes/helm/blob/master/docs/charts.md
+[Zero to JupyterHub with Kubernetes]: https://zero-to-jupyterhub-with-kubernetes.readthedocs.io/en/latest/
