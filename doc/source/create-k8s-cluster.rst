@@ -109,15 +109,7 @@ Setting up Kubernetes on Microsoft Azure Container Service (ACS)
 
       az acs kubernetes install-cli
 
-6. Authenticate kubectl:
-
-   .. code-block:: bash
-
-      az acs kubernetes get-credentials \
-          --resource-group=${RESOURCE_GROUP} \
-          --name=${CLUSTER_NAME}
-
-7. Create a Kubernetes cluster on Azure, by typing in the following commands:
+6. Create a Kubernetes cluster on Azure, by typing in the following commands:
 
    .. code-block:: bash
 
@@ -127,6 +119,16 @@ Setting up Kubernetes on Microsoft Azure Container Service (ACS)
           --resource-group=${RESOURCE_GROUP} \
           --name=${CLUSTER_NAME} \
           --dns-prefix=${DNS_PREFIX}
+          
+7. Authenticate kubectl:
+
+   .. code-block:: bash
+
+      az acs kubernetes get-credentials \
+          --resource-group=${RESOURCE_GROUP} \
+          --name=${CLUSTER_NAME}
+
+
 
   where:
 
