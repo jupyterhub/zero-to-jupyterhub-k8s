@@ -46,7 +46,7 @@ builder:
       memory: 512Mi
   image:
     name: yuvipanda/jupyterhub-k8s-builder
-    tag: vfb3924d
+    tag: vf7a113f
   registry:
     prefix: null
     host: gcr.io

@@ -8,7 +8,7 @@ RUN apt-get update && \
             python3-pip && \
     apt-get clean
 
-RUN pip3 install --no-cache-dir git+https://github.com/yuvipanda/builderhub.git@b64b2df
+RUN pip3 install --no-cache-dir git+https://github.com/yuvipanda/builderhub.git@a07ae23
 ADD builder_config.py /etc
 
 WORKDIR /etc
