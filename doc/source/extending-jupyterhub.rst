@@ -68,42 +68,49 @@ is guaranteed for each user, and the limit is the amount of RAM at which new mem
 will not be granted. You can set the limit to be higher than the guarantee if you want to allow
 some users to 'burst' RAM use occasionally (and use more RAM than the guarantee).
 
-The same applies to cpu usage too! 
+The same applies to cpu usage too!
+
 
 Extending your software stack with s2i
 --------------------------------------
 
-s2i, also known as `Source to Image <https://github.com/openshift/source-to-image>`_, lets you
-quickly convert a GitHub repository into a Docker image that we can use as a
+`s2i`_, also known as `Source to Image`_, lets you
+quickly convert a GitHub repository into a Docker image that can be used as a
 base for your JupyterHub instance. Anything inside the GitHub repository
 will exist in a user’s environment when they join your JupyterHub. If you
-include a ``requirements.txt`` file in the root level of your of the repository,
+include a ``requirements.txt`` file in the root level of your repository,
 s2i will ``pip install`` each of these packages into the Docker image to be
 built. Below we’ll cover how to use s2i to generate a Docker image and how to
 configure JupyterHub to build off of this image.
 
 .. note::
-       For this section, you’ll need to install s2i and docker.
+       For this section, you will install `s2i` and docker.
 
+1. **Download s2i.**
 
-1. **Download s2i.** This is easily done with homebrew on a mac. For linux and
+   For MacOS, using Homebrew is easiest. For Linux and
    Windows it entails a couple of quick commands that you can find in the
    links below:
 
-       - On OSX: ``brew install s2i``
-       - On Linux and Windows: `follow these instructions
+       - On MacOS: ``brew install s2i``
+       - On Linux and Windows: follow `s2i's installation instructions
          <https://github.com/openshift/source-to-image#installation>`_
 
-2. **Download and start Docker.** You can do this by downloading and installing
-   Docker at `this link <https://store.docker.com/search?offering=community&platform=desktop%2Cserver&q=&type=edition>`_.
-   Once you’ve started Docker, it will show up as a tiny background application.
+2. **Download and start Docker.**
 
-3. **Create (or find) a GitHub repository you want to use.** This repo should
-   have all materials that you want your users to access. In addition you can
-   include a ``requirements.txt`` file that has one package per line. These
-   packages should be listed in the same way that you’d install them using
-   ``pip install``. You should also specify the versions explicitly so the image is
-   fully reproducible. E.g.:
+   Download and install Docker using
+   `this link <https://store.docker.com/search?offering=community&platform=desktop%2Cserver&q=&type=edition>`_.
+   After starting Docker, it will show up as a tiny background application.
+
+3. **Create (or select) a GitHub repository to use.**
+
+   This repo should have all materials that you want your users to access.
+
+   In addition to the repo, you can include a Python ``requirements.txt`` file
+   that has one package per line. These packages should be listed as you
+   would if using the ``requirements.txt`` with ``pip install``. For your
+   image to be fully reproducible, specify a package's version explicitly,
+   such as in this ``requirements.txt`` example:
 
    .. code-block:: bash
 
@@ -111,29 +118,60 @@ configure JupyterHub to build off of this image.
           scipy==0.19.0
           matplotlib==2.0
 
-4. **Use s2i to build your Docker image.** `s2i` uses a template in order to
-   know how to create the Docker image. We have provided one at the url in the
-   commands below. Run this command::
+4. **Use s2i to build your Docker image.**
 
-       s2i build <git-repo-url>  jupyterhub/singleuser-builder:v0.1.1 gcr.io/<project-name>/<name-of-image>:<tag>
+   `s2i`_ uses a template (or builder image) to create the Docker image:
+
+   .. code-block:: bash
+
+       s2i build <source location> <builder image> [<tag>] [flags]
+
+   where: <source location> is a git repo URL, <builder image> is a template,
+   and [<tag>] is the location of the built Docker image.
+
+   To build an image use
+   this command (`s2i build`_) and provide a repo URL, a builder image
+   (template), project name, image name, and tag:
+
+   .. code-block:: bash
+
+       s2i build <git-repo-url> \
+           <template> \
+           gcr.io/<project-name>/<name-of-image>:<tag>
 
    this effectively says *s2i, build `<this repository>` to a Docker image by
    using `<this template>` and call the image `<this>`*
 
-  .. note::
+   For example:
+
+   .. code-block:: bash
+
+       s2i build https://github.com/jupyterhub/jupyterhub  \
+           jupyterhub/singleuser-builder:v0.1.1 \
+           gcr.io/jupyterhub/<jupyterhub>:<ab34c8>
+
+   .. note::
          - The project name should match your google cloud project's name.
          - Don’t use underscores in your image name. Other than this it can be
-           anything memorable. This is a bug that will be fixed soon.
+           anything memorable. *This is a bug that will be fixed soon.*
          - The tag should be the first 6 characters of the SHA in the GitHub
            commit for the image to build from.
 
-5. **Push our newly-built Docker image to the cloud.** You can either push this
+5. **Push our newly-built Docker image to the cloud.**
+
+   You can either push this
    to Docker Hub, or to the gcloud docker repository. Here we’ll push to the
-   gcloud repository::
+   gcloud repository:
+
+   .. code-block:: bash
 
        gcloud docker -- push gcr.io/<project-name>/<image-name>:<tag>
 
-6.  **Edit the JupyterHub configuration to build from this image.** We do this by editing the ``config.yaml`` file that we originally created to include the jupyter hashes. Edit ``config.yaml`` by including these lines in it:
+6.  **Edit the JupyterHub configuration to build from this image.**
+
+    We do this by editing the ``config.yaml`` file that we originally created
+    to include the jupyter hashes. Edit ``config.yaml`` by including these
+    lines in it:
 
     .. code-block:: bash
 
@@ -142,9 +180,20 @@ configure JupyterHub to build off of this image.
               name: gcr.io/<project-name>/<image-name>
               tag: <tag>
 
-7. **Tell helm to update JupyterHub to use this configuration.** Using the normal method to `apply the change <#applying-configuration-changes>`_ to the config.
-8. **Restart your notebook if you are already logging in** If you already have a running JupyterHub session, you’ll need to restart it (by stopping and starting your session from the control panel in the top right). New users won’t have to do this.
-9. **Enjoy your new computing environment!** You should now have a live computing environment built off of the Docker image we’ve created.
+7. **Tell helm to update JupyterHub to use this configuration.**
+
+   Using the normal method to `apply the change <#applying-configuration-changes>`_
+   to the config.
+
+8. **Restart your notebook if you are already logging in**
+
+   If you already have a running JupyterHub session, you’ll need to restart it (by stopping and starting your session from the control panel in the top right). New users won’t have to do this.
+
+9. **Enjoy your new computing environment!**
+
+   You should now have a live computing environment built off of the Docker
+   image we’ve created.
+
 
 Authenticating with OAuth2
 --------------------------
@@ -223,3 +272,8 @@ If your institution is a `G Suite customer <https://gsuite.google.com>`_ that in
         loginService: "Your University"
 
 The 'callbackUrl' key is set to the authorized redirect URI you specified earlier. Set 'hostedDomain' to your institution's domain name. The value of 'loginService' is a descriptive term for your institution that reminds your users which account they are using to login.
+
+
+.. _s2i:  https://github.com/openshift/source-to-image
+.. _Source to Image: https://github.com/openshift/source-to-image
+.. _s2i build: https://github.com/openshift/source-to-image/blob/master/docs/cli.md#s2i-build
