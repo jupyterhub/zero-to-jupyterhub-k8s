@@ -24,5 +24,3 @@ c.BuilderApp.docker_push_secret = get_config('builder.push-secret')
 c.BuilderApp.build_namespace = os.environ['BUILD_NAMESPACE']
 
 c.BuilderApp.hub_redirect_url_template = get_config('hub.public-url') + '/hub/tmplogin?image={image}&default_url={default_url}'
-
-c.BuilderApp.build_image_spec = get_config('builder.build-image-spec')
