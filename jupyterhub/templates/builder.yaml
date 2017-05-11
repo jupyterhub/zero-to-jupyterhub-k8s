@@ -64,7 +64,7 @@ spec:
             name: config
         resources:
 {{ toYaml .Values.builder.resources | indent 12}}
-        imagePullPolicy: IfNotpresent
+        imagePullPolicy: IfNotPresent
         env:
         - name: BUILD_NAMESPACE
           valueFrom:
