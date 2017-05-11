@@ -16,7 +16,7 @@ metadata:
   name: single-user-storage-{{ default .Release.Namespace .Values.name }}
 provisioner: {{ .Values.singleuser.storage.storageClass.provisioner }}
 parameters:
-  type: {{ .Values.singleuser.storage.storageClass.type }}
+{{ toYaml .Values.singleuser.storage.storageClass.parameters | indent 2}}
 {{- end }}
 {{ if eq .Values.hub.db.type "sqlite-pvc" -}}
 ---
@@ -26,5 +26,5 @@ metadata:
   name: hub-storage-{{ default .Release.Namespace .Values.name }}
 provisioner: {{ .Values.hub.db.storageClass.provisioner }}
 parameters:
-  type: {{ .Values.hub.db.storageClass.type }}
+{{ toYaml .Values.hub.db.storageClass.parameters | indent 2}}
 {{- end }}

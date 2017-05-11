@@ -25,7 +25,8 @@ hub:
     type: sqlite-pvc
     storageClass:
       provisioner: kubernetes.io/gce-pd
-      type: pd-ssd
+      parameters:
+        type: pd-ssd
     url: null
   labels: null
   extraConfig: null
@@ -82,7 +83,8 @@ singleuser:
     type: dynamic
     storageClass:
       provisioner: kubernetes.io/gce-pd
-      type: pd-ssd
+      parameters:
+        type: pd-ssd
 
     capacity: 10Gi
     homeMountPath: /home/jovyan
