@@ -8,11 +8,11 @@ RUN apt-get update && \
             python3-pip && \
     apt-get clean
 
-RUN pip3 install --no-cache-dir git+https://github.com/yuvipanda/builderhub.git@a07ae23
-ADD builder_config.py /etc
+RUN pip3 install --no-cache-dir git+https://github.com/yuvipanda/builderhub.git@9fffab6
+ADD builderhub_config.py /etc
 
 WORKDIR /etc
 
-CMD python3 -m builder.app
+CMD python3 -m builderhub.app
 
 EXPOSE 8585
