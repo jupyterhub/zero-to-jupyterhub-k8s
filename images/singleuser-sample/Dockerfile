@@ -1,21 +1,7 @@
-FROM ubuntu:17.04
+FROM jupyter/base-notebook:ae885c0a6226
 
-ENV PATH /srv/venv/bin:$PATH
+# conda/pip/apt install additional packages here, if desired.
 
-RUN apt-get update && \
-    apt-get install --yes --no-install-recommends python3 python3-venv && \
-    apt-get purge && apt-get clean
-
-RUN adduser --disabled-password --gecos "Default Jupyter user" jovyan
-
-RUN mkdir -p /srv/venv && chown -R jovyan:jovyan /srv/venv
-
-USER jovyan
-
-RUN python3 -m venv /srv/venv
-RUN /srv/venv/bin/pip3 install --no-cache-dir notebook ipykernel jupyterhub==0.8.0b5
-
-
-WORKDIR /home/jovyan
-
-EXPOSE 8888
+# Set working directory to $HOME, needed for persistence
+# docker-stacks default is ~/work, which won't exist if we mount $HOME as a volume
+WORKDIR $HOME
