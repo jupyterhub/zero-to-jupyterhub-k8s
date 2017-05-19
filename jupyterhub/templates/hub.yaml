@@ -72,6 +72,10 @@ data:
   {{- end }}
   {{- end }}
 
+  {{ if .Values.singleuser.lifecycleHooks -}}
+  singleuser.lifecycle-hooks: {{ toJson .Values.singleuser.lifecycleHooks | quote }}
+  {{- end }}
+
   {{ if .Values.hub.extraConfig -}}
   hub.extra-config.py: |
 {{ .Values.hub.extraConfig | indent 4 }}

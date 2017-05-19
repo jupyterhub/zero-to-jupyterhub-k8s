@@ -79,6 +79,7 @@ auth:
 singleuser:
   extraLabels: {}
   extraEnv: {}
+  lifecycleHooks: null
   storage:
     type: dynamic
     storageClass:

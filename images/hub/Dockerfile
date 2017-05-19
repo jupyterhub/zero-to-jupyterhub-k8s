@@ -24,7 +24,7 @@ RUN pip3 install --no-cache-dir \
          jupyterhub-tmpauthenticator==0.4 \
          pymysql==0.7.11
 
-RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@8ca8a9f
+RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@ffc96d5 
 
 ADD jupyterhub_config.py /srv/jupyterhub_config.py
 ADD cull_idle_servers.py /usr/local/bin/cull_idle_servers.py

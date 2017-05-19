@@ -86,6 +86,10 @@ elif storage_type == 'hostPath':
         }
     ]
 
+lifecycle_hooks = get_config('singleuser.lifecycle-hooks')
+if lifecycle_hooks:
+    c.KubeSpawner.singleuser_lifecycle_hooks = lifecycle_hooks
+
 # Shared data mounts - used to mount shared data (across all
 # students) from pre-prepared PVCs to students. PVCs are mounted under
 # /data/shared/{name}.
