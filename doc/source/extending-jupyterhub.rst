@@ -142,6 +142,9 @@ configure JupyterHub to build off of this image.
 8. **Restart your notebook if you are already logging in** If you already have a running JupyterHub session, you’ll need to restart it (by stopping and starting your session from the control panel in the top right). New users won’t have to do this.
 9. **Enjoy your new computing environment!** You should now have a live computing environment built off of the Docker image we’ve created.
 
+   .. note::
+      The contents of your GitHub repository might not show up if you have enabled persistent storage. Disable persistent storage if you want them to show up!
+
 Authenticating with OAuth2
 --------------------------
 
