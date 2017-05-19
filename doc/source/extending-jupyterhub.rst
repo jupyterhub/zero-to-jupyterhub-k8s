@@ -46,22 +46,22 @@ Setting memory and CPU guarantees / limits for your users
 ---------------------------------------------------------
 
 Each user on your JupyterHub gets a slice of memory and CPU to use. There are
-two ways in which you can provision these resources: as *guaranteed* resources,
-or as *limited* resources.
+two ways to specify how much users get to use: resource *guarantees* and resource
+*limits*.
 
-A *guaranteed* resource means that all users will have *at least* this resource
-available at all times, but they may be able to use more resource if they're
+A resource *guarantee* means that all users will have *at least* this resource
+available at all times, but they may be given more resources if they're
 available. For example, if users are *guaranteed* 1G of RAM, users can technically
-use more than 1G of RAM if these resources aren't being used by other computers.
+use more than 1G of RAM if these resources aren't being used by other users.
 
-A *limited* resource sets a hard limit on the resources available. In the example
+A resource *limit* sets a hard limit on the resources available. In the example
 above, if there were a 1G memory limit, it would mean that users could use
 no more than 1G of RAM, no matter what other resources are being used on the 
 machines.
 
-By default, each user is *guaranteed* 1G of RAM. AKA all users have *at least*
+By default, each user is *guaranteed* 1G of RAM. All users have *at least*
 1G, but they can technically use more if it is available. You can easily change
-the amount of these resources, and whether they are guaranteed or limited, by
+the amount of these resources, and whether they are a *guarantee* or a *limit*, by
 changing your ``config.yaml`` file. This is done with the following structure.
 
     .. code-block:: yaml
@@ -74,27 +74,13 @@ changing your ``config.yaml`` file. This is done with the following structure.
 This sets a memory limit and guarantee of 1G. Kubernetes will make sure that
 each user will always have access to 1G of RAM, and requests for more RAM will
 fail (your kernel will usually die). You can set the limit to be higher than
-the guarantee if you want to allow some users to use larger amounts of RAM for
+the guarantee to allow some users to use larger amounts of RAM for
 a very short-term time (e.g. when running a single, short-lived function that
 consumes a lot of memory).
 
-If you also wanted to set a guarantee of CPUs, you would do so with the
-following extra options.
-
-    .. code-block:: yaml
-
-       singleuser:
-           memory:
-              limit: 1G
-              guarantee: 1G
-           cpu:
-              limit: <<SOMETHING>>
-              guarantee: <<SOMETHING>>
-
 .. note:: 
-    Remember to run a ``helm`` upgrade after changing the ``config.yaml`` file so
-    that these changes propagate to your deployment. For more information on
-    updating via ``helm``, see :ref:`setup-helm.html`.
+    Remember `apply the changes <#applying-configuraiton-changes>`_ after changing
+    your config.yaml file!
 
 Extending your software stack with s2i
 --------------------------------------
