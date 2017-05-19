@@ -32,7 +32,7 @@ hub:
   extraConfig: null
   image:
     name: yuvipanda/jupyterhub-k8s-hub
-    tag: v0.3
+    tag: v0.3.1
   resources:
     requests:
       cpu: 0.2
@@ -46,7 +46,7 @@ builder:
       memory: 512Mi
   image:
     name: yuvipanda/jupyterhub-k8s-builder
-    tag: v0.3
+    tag: v0.3.1
   registry:
     prefix: null
     host: gcr.io
@@ -58,7 +58,7 @@ proxy:
   secretToken: 'generate with openssl rand -hex 64'
   image:
     name: yuvipanda/jupyterhub-k8s-proxy
-    tag: v0.2
+    tag: v0.3.1
   resources:
     requests:
       cpu: 0.2
@@ -93,7 +93,7 @@ singleuser:
     # homeHostPathTemplate: /data/project/paws/userhomes/{userid}
   image:
     name: yuvipanda/jupyterhub-k8s-singleuser-sample
-    tag: v0.3
+    tag: v0.3.1
   cpu:
     limit: null
     guarantee: null
