@@ -32,6 +32,7 @@ data:
   builder.push-secret: builder-secret
   builder.registry.host: {{ .Values.builder.registry.host | quote }}
   builder.registry.prefix: {{ .Values.builder.registry.prefix | quote }}
+  builder.builder-image: {{ .Values.builder.builderImage | quote }}
   hub.public-url: {{ .Values.hub.publicURL | quote }}
 ---
 apiVersion: extensions/v1beta1

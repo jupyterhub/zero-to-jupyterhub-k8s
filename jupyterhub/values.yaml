@@ -47,6 +47,7 @@ builder:
   image:
     name: yuvipanda/jupyterhub-k8s-builder
     tag: v0.3.1
+  builderImage: yuvipanda/builderhub-builder:v0.1.14
   registry:
     prefix: null
     host: gcr.io

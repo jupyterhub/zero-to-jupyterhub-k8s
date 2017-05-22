@@ -23,4 +23,5 @@ c.BuilderHub.docker_image_prefix = '%s/%s/' % (get_config('builder.registry.host
 c.BuilderHub.docker_push_secret = get_config('builder.push-secret')
 c.BuilderHub.build_namespace = os.environ['BUILD_NAMESPACE']
 
+c.BuilderHub.builder_image_spec = get_config('builder.builder-image')
 c.BuilderHub.hub_redirect_url_template = get_config('hub.public-url') + '/hub/tmplogin?image={image}&default_url={default_url}'
