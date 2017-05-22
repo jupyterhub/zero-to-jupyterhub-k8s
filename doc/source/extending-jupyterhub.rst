@@ -127,10 +127,11 @@ configure JupyterHub to build off of this image.
    know how to create the Docker image. We have provided one at the url in the
    commands below. Run this command::
 
-       s2i build <git-repo-url>  jupyterhub/singleuser-builder-venv-3.5:v0.1.5 gcr.io/<project-name>/<name-of-image>:<tag>
+       s2i build --exclude "" <git-repo-url>  jupyterhub/singleuser-builder-venv-3.5:v0.1.5 gcr.io/<project-name>/<name-of-image>:<tag>
 
    this effectively says *s2i, build `<this repository>` to a Docker image by
-   using `<this template>` and call the image `<this>`*
+   using `<this template>` and call the image `<this>`*. The `--exclude ""` ensures
+   that all files are included in the container (e.g. `.git` directory).
 
   .. note::
          - The project name should match your google cloud project's name.
@@ -160,6 +161,20 @@ configure JupyterHub to build off of this image.
 
    .. note::
       The contents of your GitHub repository might not show up if you have enabled persistent storage. Disable persistent storage if you want them to show up!
+
+Pre-populating `$HOME` directory with notebooks when using Persistent Volumes
+---------------------------------------------------------------------------
+
+By default, Persistent Volumes are used, so if you would like to include the contents of the github repository in the `$HOME` directory (e.g. all of the `*.ipynb` files), then edit ``config.yaml`` include these lines in it:
+
+    .. code-block:: bash
+
+          singleuser:
+            lifecycleHooks:
+              postStart:
+                exec:
+                  command: ["/bin/sh", "-c", "test -f $HOME/.copied || cp -Rf /srv/app/src/. $HOME/; touch $HOME/.copied"]
+
 
 Authenticating with OAuth2
 --------------------------
