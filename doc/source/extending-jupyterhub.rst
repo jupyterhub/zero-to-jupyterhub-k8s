@@ -176,6 +176,8 @@ By default, Persistent Volumes are used, so if you would like to include the con
                   command: ["/bin/sh", "-c", "test -f $HOME/.copied || cp -Rf /srv/app/src/. $HOME/; touch $HOME/.copied"]
 
 
+Note that this will only copy the contents of the directory to $HOME *once* - the first time the user logs in. Further updates will not be reflected. There is work in progress for making this better.
+
 Authenticating with OAuth2
 --------------------------
 
