@@ -60,4 +60,4 @@ To create chart metadata and package chart for use:
 [helm repo]: https://github.com/kubernetes/helm
 [chart]: https://github.com/kubernetes/helm/blob/master/docs/charts.md
 [Kubernetes Introduction to charts]: https://github.com/kubernetes/helm/blob/master/docs/charts.md
-[Zero to JupyterHub with Kubernetes]: https://zero-to-jupyterhub-with-kubernetes.readthedocs.io/en/latest/
+[Zero to JupyterHub with Kubernetes]: https://zero-to-jupyterhub.readthedocs.io/en/latest/
