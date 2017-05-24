@@ -8,11 +8,11 @@ RUN apt-get update && \
             python3-pip && \
     apt-get clean
 
-RUN pip3 install --no-cache-dir git+https://github.com/yuvipanda/builderhub.git@e9f11d4
-ADD builderhub_config.py /etc
+RUN pip3 install --no-cache-dir git+https://github.com/jupyterhub/binderhub.git@d738d7f
+ADD binderhub_config.py /etc
 
 WORKDIR /etc
 
-CMD python3 -m builderhub.app
+CMD python3 -m binderhub
 
 EXPOSE 8585

@@ -38,16 +38,16 @@ hub:
       cpu: 0.2
       memory: 512Mi
 
-builder:
+binder:
   enabled: false
   resources:
     requests:
       cpu: 0.2
       memory: 512Mi
   image:
-    name: yuvipanda/jupyterhub-k8s-builder
+    name: yuvipanda/jupyterhub-k8s-binderhub
     tag: v0.3.1
-  builderImage: yuvipanda/builderhub-builder:v0.1.14
+  repo2dockerImage: yuvipanda/builderhub-builder:v0.1.16
   registry:
     prefix: null
     host: gcr.io

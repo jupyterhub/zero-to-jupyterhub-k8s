@@ -1,0 +1,77 @@
+{{ if .Values.binder.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: binder
+  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
+spec:
+  type: LoadBalancer
+  selector:
+    name: binder-pod
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8585
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: binder-secret
+  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
+type: Opaque
+data:
+  config.json: |
+    {{ b64enc (printf "{\"auths\": { \"https://%s\": { \"email\": \"not@val.id\", \"auth\": \"%s\" } } }" .Values.binder.registry.host (b64enc (printf "%s:%s" .Values.binder.registry.username .Values.binder.registry.password) ) ) }}
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: binder-config-{{ default .Release.Revision .Values.revisionOverride }}
+  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
+data:
+  binder.push-secret: binder-secret
+  binder.registry.host: {{ .Values.binder.registry.host | quote }}
+  binder.registry.prefix: {{ .Values.binder.registry.prefix | quote }}
+  binder.repo2docker-image: {{ .Values.binder.repo2dockerImage | quote }}
+  hub.public-url: {{ .Values.hub.publicURL | quote }}
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: binderhub-deployment
+  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: binder-pod
+        {{ if .Values.binder.labels -}}
+        # Because toYaml + indent is super flaky
+        {{ range $key, $value := .Values.binder.labels -}}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+    spec:
+      volumes:
+      - name: config
+        configMap:
+          name: binder-config-{{ default .Release.Revision .Values.revisionOverride }}
+      containers:
+      - name: binder-container
+        image: {{ .Values.binder.image.name }}:{{ .Values.binder.image.tag }}
+        volumeMounts:
+          - mountPath: /etc/binderhub/config/
+            name: config
+        resources:
+{{ toYaml .Values.binder.resources | indent 12}}
+        imagePullPolicy: Always
+        env:
+        - name: BUILD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        ports:
+          - containerPort: 8585
+            name: binder
+{{- end }}
