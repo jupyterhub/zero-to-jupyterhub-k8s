@@ -6,6 +6,9 @@ metadata:
   {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
 spec:
   type: LoadBalancer
+  {{ if .Values.binder.publicIP -}}
+  loadBalancerIP: {{ .Values.binder.publicIP | quote }}
+  {{- end }}
   selector:
     name: binder-pod
   ports:
