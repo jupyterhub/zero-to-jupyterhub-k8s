@@ -32,6 +32,7 @@ questions, feel free to reach out at the `issues page`_.
     extending-jupyterhub
     tools
     troubleshooting
+    cost
     glossary
 
 
