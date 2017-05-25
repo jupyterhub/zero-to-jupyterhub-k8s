@@ -127,23 +127,3 @@ Congratulations! Now that you have JupyterHub running, you can
 `extend it <extending-jupyterhub.html>`_ in many ways. You can use a pre-built
 image for the user container, build your own image, configure different
 authenticators, and more!
-
-Investigating Issues
-====================
-
-If you encounter any issues or are interested to see what's happening under the
-hood, you can use the following commands.
-
-To see running pods::
-
-  kubectl --namespace=<YOUR-NAMESPACE> get pod
-
-Then ::
-
-  kubectl --namespace=<YOUR-NAMESPACE> logs <pod-name> to see the logs
-
-you can pass -f to the logs command to tail them.
-
-Alternatively, if you're using Google cloud, you can see the logs in the GUI on
-`https://console.cloud.google.com`_ there should be 'logging' under the
-hamburger menu.

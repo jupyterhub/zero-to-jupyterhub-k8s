@@ -28,3 +28,23 @@ Common error messages
     * Execute `gcloud auth application-default login` and follow the prompts. The provided link has other options for advanced use cases.
 * ``ERROR: (gcloud.container.clusters.create) ResponseError: code=503, message=Project staeiou-5f880 is not fully initialized with the default service accounts. Please try again later.``
     * Go to ‘https://console.cloud.google.com/kubernetes/list’ and click ‘enable’ and follow the prompts
+
+Investigating Issues
+====================
+
+If you encounter any issues or are interested to see what's happening under the
+hood, you can use the following commands.
+
+To see running pods::
+
+  kubectl --namespace=<YOUR-NAMESPACE> get pod
+
+Then ::
+
+  kubectl --namespace=<YOUR-NAMESPACE> logs <pod-name> to see the logs
+
+you can pass -f to the logs command to tail them.
+
+Alternatively, if you're using Google cloud, you can see the logs in the GUI on
+`https://console.cloud.google.com`_ there should be 'logging' under the
+hamburger menu.
