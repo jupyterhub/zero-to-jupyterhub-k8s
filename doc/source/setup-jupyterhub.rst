@@ -68,7 +68,7 @@ Install JupyterHub
 
    .. code:: bash
 
-      helm install https://github.com/jupyterhub/helm-chart/releases/download/v0.3/jupyterhub-0.3.tgz \
+      helm install https://github.com/jupyterhub/helm-chart/releases/download/v0.3.1/jupyterhub-v0.3.1.tgz \
           --name=<YOUR_RELEASE_NAME> \
           --namespace=<YOUR_NAMESPACE> \
           -f config.yaml
