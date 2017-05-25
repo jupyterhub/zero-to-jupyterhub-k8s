@@ -167,7 +167,7 @@ configure JupyterHub to build off of this image.
       The contents of your GitHub repository might not show up if you have enabled persistent storage. Disable persistent storage if you want them to show up!
 
 Pre-populating `$HOME` directory with notebooks when using Persistent Volumes
----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
 
 By default, Persistent Volumes are used, so if you would like to include the contents of the github repository in the `$HOME` directory (e.g. all of the `*.ipynb` files), then edit ``config.yaml`` include these lines in it:
 
