@@ -139,6 +139,11 @@ if auth_type == 'google':
     c.GoogleOAuthenticator.hosted_domain = get_config('auth.google.hosted-domain')
     c.GoogleOAuthenticator.login_service = get_config('auth.google.login-service')
     email_domain = get_config('auth.google.hosted-domain')
+elif auth_type == 'github':
+    c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
+    c.GitHubOAuthenticator.oauth_callback_url = get_config('auth.github.callback-url')
+    c.GitHubOAuthenticator.client_id = get_config('auth.github.client-id')
+    c.GitHubOAuthenticator.client_secret = get_config('auth.github.client-secret')
 elif auth_type == 'hmac':
     c.JupyterHub.authenticator_class = 'hmacauthenticator.HMACAuthenticator'
     c.HMACAuthenticator.secret_key = bytes.fromhex(get_config('auth.hmac.secret-key'))
