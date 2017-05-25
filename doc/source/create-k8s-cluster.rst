@@ -43,7 +43,10 @@ connect your credit card or other payment method to your google cloud account.
 
    .. code-block:: bash
 
-      gcloud container clusters create YOUR_CLUSTER --num-nodes=3 --machine-type=n1-highmem-2 --zone=us-central1-b
+      gcloud container clusters create <YOUR_CLUSTER> \
+          --num-nodes=3 \
+          --machine-type=n1-highmem-2 \
+          --zone=us-central1-b
 
    where:
 
@@ -88,8 +91,8 @@ Setting up Kubernetes on Microsoft Azure Container Service (ACS)
 
   .. code-block:: bash
 
-     export RESOURCE_GROUP=YOUR_RESOURCE_GROUP
-     export LOCATION=YOUR_LOCATION
+     export RESOURCE_GROUP=<YOUR_RESOURCE_GROUP>
+     export LOCATION=<YOUR_LOCATION>
      az group create --name=${RESOURCE_GROUP} --location=${LOCATION}
 
   where:
@@ -106,19 +109,26 @@ Setting up Kubernetes on Microsoft Azure Container Service (ACS)
 
       az acs kubernetes install-cli
 
-6. Authenticate kubectl:
+6. Create a Kubernetes cluster on Azure, by typing in the following commands:
 
    .. code-block:: bash
 
-      az acs kubernetes get-credentials --resource-group=${RESOURCE_GROUP} --name=${CLUSTER_NAME}
-
-7. Create a Kubernetes cluster on Azure, by typing in the following commands:
+      export CLUSTER_NAME=<YOUR_CLUSTER_NAME>
+      export DNS_PREFIX=<YOUR_PREFIX>
+      az acs create --orchestrator-type=kubernetes \
+          --resource-group=${RESOURCE_GROUP} \
+          --name=${CLUSTER_NAME} \
+          --dns-prefix=${DNS_PREFIX}
+          
+7. Authenticate kubectl:
 
    .. code-block:: bash
 
-      export CLUSTER_NAME=YOUR_CLUSTER_NAME
-      export DNS_PREFIX=YOUR_PREFIX
-      az acs create --orchestrator-type=kubernetes --resource-group=${RESOURCE_GROUP} --name=${CLUSTER_NAME} --dns-prefix=${DNS_PREFIX}
+      az acs kubernetes get-credentials \
+          --resource-group=${RESOURCE_GROUP} \
+          --name=${CLUSTER_NAME}
+
+
 
   where:
 

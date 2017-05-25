@@ -3,6 +3,7 @@ Extending your JupyterHub setup
 
 The helm chart used to install JupyterHub has a lot of options for you to tweak. This page lists some of the most common changes.
 
+
 Applying configuration changes
 ------------------------------
 
@@ -13,15 +14,11 @@ The general method is:
 
      .. code-block:: bash
 
-        helm upgrade <YOUR_RELEASE_NAME> https://github.com/jupyterhub/helm-chart/releases/download/v0.2/jupyterhub-0.2.tgz -f config.yaml
+        helm upgrade <YOUR_RELEASE_NAME> https://github.com/jupyterhub/helm-chart/releases/download/v0.3/jupyterhub-v0.3.tgz -f config.yaml
 
    Where ``<YOUR_RELEASE_NAME>`` is the parameter you passed to ``--name`` when `installing jupyterhub <setup-jupyterhub.html#install-jupyterhub>`_ with
    ``helm install``. If you don't remember it, you can probably find it by doing ``helm list``
 3. Wait for the upgrade to finish, and make sure that when you do ``kubectl --namespace=<YOUR_NAMESPACE> get pod`` the hub and proxy pods are in ``Ready`` state. Your configuration change has been applied!
-
-   .. note::
-
-   Currently, most config changes (except for changing with user image is used) require you to manually restart the hub pod. You can do this by finding the name of the pod with ``kubectl --namespace=<YOUR_NAMESPACE> get pod`` (it's the one that stats with hub-), and doing ``kubectl --namespace=<YOUR_NAMESPACE> delete pod <hub-pod-name>``. This will be fixed soon!
 
 
 Using an existing image
@@ -44,31 +41,46 @@ To instruct JupyterHub to use this image, simply add this to your ``config.yaml`
 
 You can then `apply the change <#applying-configuration-changes>`_ to the config as usual.
 
+
 Setting memory and CPU guarantees / limits for your users
 ---------------------------------------------------------
 
-Each user on your JupyterHub gets a slice of memory and CPU to use. By default, each user is
-*guaranteed* 1G of RAM, but no enforced limits. This means each user is guaranteed at minimum
-1G of RAM, but no exact upper limit (this will vary based on various factors outside of your
-control). We recommend most people change this!
+Each user on your JupyterHub gets a slice of memory and CPU to use. There are
+two ways to specify how much users get to use: resource *guarantees* and resource
+*limits*.
 
-If you want all your users to have guaranteed access to 1Gi of RAM, and no more, you can add the
-following to your config.yaml and do an upgrade:
+A resource *guarantee* means that all users will have *at least* this resource
+available at all times, but they may be given more resources if they're
+available. For example, if users are *guaranteed* 1G of RAM, users can technically
+use more than 1G of RAM if these resources aren't being used by other users.
+
+A resource *limit* sets a hard limit on the resources available. In the example
+above, if there were a 1G memory limit, it would mean that users could use
+no more than 1G of RAM, no matter what other resources are being used on the 
+machines.
+
+By default, each user is *guaranteed* 1G of RAM. All users have *at least*
+1G, but they can technically use more if it is available. You can easily change
+the amount of these resources, and whether they are a *guarantee* or a *limit*, by
+changing your ``config.yaml`` file. This is done with the following structure.
 
     .. code-block:: yaml
 
        singleuser:
            memory:
-               limit: 1G
-               guarantee: 1G
+              limit: 1G
+              guarantee: 1G
 
-Kubernetes will make sure that each user will always have access to 1G of RAM, and requests for
-more RAM will fail (your kernel will usually die). The guarantee is the base amount of RAM that
-is guaranteed for each user, and the limit is the amount of RAM at which new memory requests
-will not be granted. You can set the limit to be higher than the guarantee if you want to allow
-some users to 'burst' RAM use occasionally (and use more RAM than the guarantee).
+This sets a memory limit and guarantee of 1G. Kubernetes will make sure that
+each user will always have access to 1G of RAM, and requests for more RAM will
+fail (your kernel will usually die). You can set the limit to be higher than
+the guarantee to allow some users to use larger amounts of RAM for
+a very short-term time (e.g. when running a single, short-lived function that
+consumes a lot of memory).
 
-The same applies to cpu usage too! 
+.. note:: 
+    Remember `apply the changes <#applying-configuraiton-changes>`_ after changing
+    your config.yaml file!
 
 Extending your software stack with s2i
 --------------------------------------
@@ -115,10 +127,11 @@ configure JupyterHub to build off of this image.
    know how to create the Docker image. We have provided one at the url in the
    commands below. Run this command::
 
-       s2i build <git-repo-url>  jupyterhub/singleuser-builder:v0.1.1 gcr.io/<project-name>/<name-of-image>:<tag>
+       s2i build --exclude "" <git-repo-url>  jupyterhub/singleuser-builder-venv-3.5:v0.1.5 gcr.io/<project-name>/<name-of-image>:<tag>
 
    this effectively says *s2i, build `<this repository>` to a Docker image by
-   using `<this template>` and call the image `<this>`*
+   using `<this template>` and call the image `<this>`*. The `--exclude ""` ensures
+   that all files are included in the container (e.g. `.git` directory).
 
   .. note::
          - The project name should match your google cloud project's name.
@@ -145,6 +158,25 @@ configure JupyterHub to build off of this image.
 7. **Tell helm to update JupyterHub to use this configuration.** Using the normal method to `apply the change <#applying-configuration-changes>`_ to the config.
 8. **Restart your notebook if you are already logging in** If you already have a running JupyterHub session, you’ll need to restart it (by stopping and starting your session from the control panel in the top right). New users won’t have to do this.
 9. **Enjoy your new computing environment!** You should now have a live computing environment built off of the Docker image we’ve created.
+
+   .. note::
+      The contents of your GitHub repository might not show up if you have enabled persistent storage. Disable persistent storage if you want them to show up!
+
+Pre-populating `$HOME` directory with notebooks when using Persistent Volumes
+---------------------------------------------------------------------------
+
+By default, Persistent Volumes are used, so if you would like to include the contents of the github repository in the `$HOME` directory (e.g. all of the `*.ipynb` files), then edit ``config.yaml`` include these lines in it:
+
+    .. code-block:: bash
+
+          singleuser:
+            lifecycleHooks:
+              postStart:
+                exec:
+                  command: ["/bin/sh", "-c", "test -f $HOME/.copied || cp -Rf /srv/app/src/. $HOME/; touch $HOME/.copied"]
+
+
+Note that this will only copy the contents of the directory to $HOME *once* - the first time the user logs in. Further updates will not be reflected. There is work in progress for making this better.
 
 Authenticating with OAuth2
 --------------------------
