@@ -68,7 +68,10 @@ Install JupyterHub
 
    .. code:: bash
 
-      helm install https://github.com/jupyterhub/helm-chart/releases/download/v0.1/jupyterhub-0.1.tgz --name=YOUR_RELEASE_NAME --namespace=YOUR_NAMESPACE -f config.yaml
+      helm install https://github.com/jupyterhub/helm-chart/releases/download/v0.3/jupyterhub-0.3.tgz \
+          --name=<YOUR_RELEASE_NAME> \
+          --namespace=<YOUR_NAMESPACE> \
+          -f config.yaml
 
    where:
 
@@ -103,7 +106,7 @@ Install JupyterHub
 
    .. code-block:: bash
 
-      kubectl --namespace=YOUR_NAMESPACE get pod
+      kubectl --namespace=<YOUR_NAMESPACE> get pod
 
 3. Wait for the hub and proxy pod to begin running.
 
