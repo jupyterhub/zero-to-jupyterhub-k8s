@@ -31,9 +31,28 @@ questions, feel free to reach out at the `issues page`_.
 
     extending-jupyterhub
     tools
-    troubleshooting
-    cost
-    glossary
+
+
+**Managing the Hub (Admin Guide for Staging and Production)**
+
+.. toctree::
+   :maxdepth: 2
+
+   resource-mgmt
+   cost
+   backups
+   upgrading
+   security-considerations
+   troubleshooting
+
+**Reference**
+
+.. toctree::
+   :maxdepth: 2
+
+   glossary
+   additional-resources
+
 
 
 .. _JupyterHub: https://github.com/jupyterhub/jupyterhub
