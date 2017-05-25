@@ -8,7 +8,7 @@ RUN apt-get update && \
             python3-pip && \
     apt-get clean
 
-RUN pip3 install --no-cache-dir git+https://github.com/jupyterhub/binderhub.git@d738d7f
+RUN pip3 install --no-cache-dir git+https://github.com/jupyterhub/binderhub.git@0ee7be0
 ADD binderhub_config.py /etc
 
 WORKDIR /etc
