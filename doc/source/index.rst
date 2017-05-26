@@ -16,24 +16,27 @@ questions, feel free to reach out at the `issues page`_.
 **Creating your JupyterHub**
 
 .. toctree::
-    :maxdepth: 2
+   :maxdepth: 2
 
-    getting-started
-    create-k8s-cluster
-    setup-helm
-    setup-jupyterhub
-    turn-off
+   getting-started
+   create-k8s-cluster
+   setup-helm
+   setup-jupyterhub
+   turn-off
 
 **Extra info and tips**
 
 .. toctree::
-    :maxdepth: 2
+   :maxdepth: 2
 
-    extending-jupyterhub
-    tools
+   extending-jupyterhub
+   tools
 
 
-**Managing the Hub (Admin Guide for Staging and Production)**
+**Administrator Guide**
+
+This section provides information on managing and maintaining a staging or
+production deployment of JupyterHub.
 
 .. toctree::
    :maxdepth: 2
