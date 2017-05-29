@@ -73,6 +73,12 @@ connect your credit card or other payment method to your google cloud account.
 Setting up Kubernetes on Microsoft Azure Container Service (ACS)
 ----------------------------------------------------------------
 
+.. note::
+
+   This is an alpha work-in-progress on ACS. We'll be evolving this over time.
+
+
+
 1. Install and initialize the **Azure command-line tools**, which send commands
    to Azure and let you do things like create and delete clusters.
 
