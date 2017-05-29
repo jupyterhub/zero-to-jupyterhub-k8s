@@ -128,8 +128,6 @@ Setting up Kubernetes on Microsoft Azure Container Service (ACS)
           --resource-group=${RESOURCE_GROUP} \
           --name=${CLUSTER_NAME}
 
-
-
   where:
 
   * ``--resource-group`` specifies your Azure resource group.

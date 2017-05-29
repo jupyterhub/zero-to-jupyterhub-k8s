@@ -16,24 +16,50 @@ questions, feel free to reach out at the `issues page`_.
 **Creating your JupyterHub**
 
 .. toctree::
-    :maxdepth: 2
+   :maxdepth: 2
 
-    getting-started
-    create-k8s-cluster
-    setup-helm
-    setup-jupyterhub
-    turn-off
+   getting-started
+   create-k8s-cluster
+   setup-helm
+   setup-jupyterhub
+   turn-off
 
-**Extra info and tips**
+**Customization Guide**
+
+JupyterHub can be configured and customized to fit a variety of deployment
+requirements. This guide helps outline how to customize and extend a JupyterHub
+deployment.
 
 .. toctree::
-    :maxdepth: 2
+   :maxdepth: 2
 
-    extending-jupyterhub
-    tools
-    troubleshooting
-    cost
-    glossary
+   extending-jupyterhub
+   tools
+
+
+**Administrator Guide**
+
+This section provides information on managing and maintaining a staging or
+production deployment of JupyterHub.
+
+.. toctree::
+   :maxdepth: 2
+
+   resource-mgmt
+   cost
+   backups
+   upgrading
+   security-considerations
+   troubleshooting
+
+**Reference**
+
+.. toctree::
+   :maxdepth: 2
+
+   glossary
+   additional-resources
+
 
 
 .. _JupyterHub: https://github.com/jupyterhub/jupyterhub
