@@ -1,4 +1,4 @@
-.. _tools:
+.. tools-deployment:
 
 Tools used in a JupyterHub Deployment
 =====================================
@@ -85,12 +85,13 @@ Docker containers or communicate via the internet.
 Kubernetes
 ----------
 
-`Kubernetes <https://kubernetes.io/>`_ is a service that runs on cloud infrastructures. It provides a single point of contact with the machinery
-of your cluster deployment, and allows a user to specify the computational requirements that they need (e.g., how many machines, how many CPUs
-per machine, how much RAM).
-Then, it handles the resources on the cluster and ensures that
-these resources are always available. If something goes down, kubernetes
-will try to automatically bring it back up.
+`Kubernetes <https://kubernetes.io/>`_ is a service that runs on cloud
+infrastructures. It provides a single point of contact with the machinery
+of your cluster deployment, and allows a user to specify the computational 
+requirements that they need (e.g., how many machines, how many CPUs
+per machine, how much RAM). Then, it handles the resources on the cluster and
+ensures that these resources are always available. If something goes down,
+kubernetes will try to automatically bring it back up.
 
 Kubernetes can only manage the computing resources that it is
 given. This means that it generally can **not** create new resources on its
@@ -101,6 +102,7 @@ most relevant for JupyterHub.
 
 Processes
 *********
+
 Are any program that is running on a machine. For example,
 a Jupyter Notebook creates several processes that handle the
 execution of code and the display in the browser. This isn't
@@ -129,7 +131,8 @@ This is useful because it lets you compatmentalize the components of the
 service that you want to run, which makes things easier to manage and
 keeps things more stable.
 
-For more information about pods, see the `Kubernetes Documentation <https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/>`_.
+For more information about pods, see the 
+`Kubernetes documentation about pods <https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/>`_.
 
 Deployments
 ***********
@@ -147,7 +150,8 @@ original specification of the deployment. If there are differences between
 the current state vs. the specification of the deployment, Kubernetes will
 attempt to make changes until the current state matches the specification.
 
-For more information about deployments, see the `Kubernetes Documentation <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_.
+For more information about deployments, see the 
+`Kubernetes documentation about deployment <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_.
 
 .. note::
 
@@ -166,7 +170,8 @@ re-orient yourself every time this happens. A Kubernetes service keeps
 track of all these changes on the backend, and provides a single address
 to manage your deployment.
 
-For more information about services, see the `Kubernetes Documentation <https://kubernetes.io/docs/concepts/services-networking/service/>`_.
+For more information about services, see the 
+`Kubernetes documentation about services <https://kubernetes.io/docs/concepts/services-networking/service/>`_.
 
 Namespace
 *********
@@ -180,7 +185,8 @@ It defines all the hardware that is available to students. It also defines
 the JupyterHub machinery that glues together all of the student containers,
 manages disk space, etc.
 
-For more information about namespaces, see the `Kubernetes Documentation <https://kubernetes.io/docs/tasks/administer-cluster/namespaces/>`_.
+For more information about namespaces, see the 
+`Kubernetes documentation on namespaces <https://kubernetes.io/docs/tasks/administer-cluster/namespaces/>`_.
 
 
 Persistent Volume Claim
@@ -194,7 +200,7 @@ on it. Persistent Volume Claims help deal with this problem by knowing
 how to convert files between disk types (e.g., AWS vs. Google disks).
 
 For more information on Persistent Volume Claims, see the
-`Kubernetes documentation <https://kubernetes.io/docs/concepts/storage/persistent-volumes/>`_.
+`Kubernetes documentation on persistent volumes <https://kubernetes.io/docs/concepts/storage/persistent-volumes/>`_.
 
 
 Helm
