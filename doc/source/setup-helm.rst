@@ -1,3 +1,5 @@
+.. _setup-helm:
+
 Setting up Helm
 ===============
 

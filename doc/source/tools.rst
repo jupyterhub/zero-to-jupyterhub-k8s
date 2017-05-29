@@ -1,3 +1,5 @@
+.. _tools:
+
 Tools used in a JupyterHub Deployment
 =====================================
 
@@ -13,7 +15,7 @@ This is whatever will run the actual computation. Generally it means a
 company, university server, or some other organization that hosts computers
 that can be accessed remotely. JupyterHub will run on this hardware, meaning
 that users will also be operating on this hardware if they're interacting
-with your JupyterHub. 
+with your JupyterHub.
 
 They provide the following things:
 
@@ -77,7 +79,7 @@ that it actually exists on a computer. It is a self-contained
 computational environment that is constructed according to the layers
 that are inside of the Container Image. However, because it is now
 running on the computer, it can do other useful things like talk to other
-Docker containers or communicate via the internet. 
+Docker containers or communicate via the internet.
 
 
 Kubernetes
@@ -89,7 +91,7 @@ per machine, how much RAM).
 Then, it handles the resources on the cluster and ensures that
 these resources are always available. If something goes down, kubernetes
 will try to automatically bring it back up.
- 
+
 Kubernetes can only manage the computing resources that it is
 given. This means that it generally can **not** create new resources on its
 own (with the exception of disk space).
@@ -147,7 +149,7 @@ attempt to make changes until the current state matches the specification.
 
 For more information about deployments, see the `Kubernetes Documentation <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_.
 
-.. note:: 
+.. note::
 
     Users don't generally "create" deployments directly, they are
     instead generated from a set of instructions that are sent to Kubernetes.
@@ -191,7 +193,7 @@ in to a particular operating system just because our files are already
 on it. Persistent Volume Claims help deal with this problem by knowing
 how to convert files between disk types (e.g., AWS vs. Google disks).
 
-For more information on Persistent Volume Claims, see the 
+For more information on Persistent Volume Claims, see the
 `Kubernetes documentation <https://kubernetes.io/docs/concepts/storage/persistent-volumes/>`_.
 
 
@@ -209,7 +211,7 @@ information that specify some computational requirements.
 These templates are called "charts", or "helm charts". They contain
 all of the necessary information for kubernetes to generate:
 
-- a deployment object 
+- a deployment object
 - a service object
 - a persistent volume object a deployment.
 - collections of the above components

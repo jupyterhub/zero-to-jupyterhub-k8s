@@ -1,3 +1,5 @@
+.. _create-k8s-cluster:
+
 Creating a Kubernetes Cluster
 =============================
 
@@ -119,7 +121,7 @@ Setting up Kubernetes on Microsoft Azure Container Service (ACS)
           --resource-group=${RESOURCE_GROUP} \
           --name=${CLUSTER_NAME} \
           --dns-prefix=${DNS_PREFIX}
-          
+
 7. Authenticate kubectl:
 
    .. code-block:: bash
