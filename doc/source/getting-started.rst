@@ -1,3 +1,5 @@
+.. _getting-started:
+
 Getting started with JupyterHub
 ===============================
 
@@ -17,9 +19,9 @@ These materials are meant to help you connect the following things:
 
 To get started, we recommend beginning with the first item on our
 `main page <index.html>`_. If you'd like to know how to expand and
-customize your jupyterhub setup, check out `extending jupyterhub <extending-jupyterhub.html>`_. Finally, for a more extensive description
-of the tools and services that JupyterHub utilizes, see our
-`technology and tools <tools.html>`_ page. Also, don't hesitate to reach
+customize your jupyterhub setup, check out :ref:`extending-jupyterhub`.
+Finally, for a more extensive description of the tools and services that
+JupyterHub utilizes, see our :ref:`tools` page. Also, don't hesitate to reach
 out at our `issues page`_ on github.
 
 .. _issues page: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues

@@ -1,8 +1,10 @@
+.. _troubleshooting:
+
 Troubleshooting
----------------
+===============
 
 FAQ
-===
+---
 
 **I thought I had deleted my cloud resources, but they still show up. Why?**
 
@@ -14,7 +16,7 @@ JupyterHub isn't handling any of the billing for your usage - that's done throug
 whatever cloud service you're using.
 
 Common error messages
-=====================
+---------------------
 
 * ``could not find default credentials. See https://developers.google.com/accounts/docs/application-default-credentials for more information.``
     * Execute `gcloud auth application-default login` and follow the prompts. The provided link has other options for advanced use cases.
@@ -22,7 +24,7 @@ Common error messages
     * Go to ‘https://console.cloud.google.com/kubernetes/list’ and click ‘enable’ and follow the prompts
 
 Investigating Issues
-====================
+--------------------
 
 If you encounter any issues or are interested to see what's happening under the
 hood, you can use the following commands.

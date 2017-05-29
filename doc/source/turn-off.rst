@@ -1,3 +1,5 @@
+.. _turn-off:
+
 Turning Off JupyterHub and Resources
 ====================================
 

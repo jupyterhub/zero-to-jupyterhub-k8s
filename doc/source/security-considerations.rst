@@ -1,3 +1,5 @@
+.. _security-considerations:
+
 Security Considerations
 =======================
 

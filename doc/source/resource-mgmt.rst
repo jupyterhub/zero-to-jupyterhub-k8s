@@ -1,3 +1,5 @@
+.. _resource-mgmt:
+
 Resource management
 ===================
 

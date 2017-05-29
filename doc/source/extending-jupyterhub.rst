@@ -1,3 +1,5 @@
+.. _extending-jupyterhub:
+
 Extending your JupyterHub setup
 ===============================
 

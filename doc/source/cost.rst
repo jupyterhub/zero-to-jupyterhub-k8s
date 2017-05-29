@@ -1,3 +1,5 @@
+.. _cost:
+
 Estimating costs
 ================
 
