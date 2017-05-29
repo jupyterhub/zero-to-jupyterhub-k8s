@@ -3,10 +3,9 @@
 Creating a Kubernetes Cluster
 =============================
 
-Kubernetes' `documentation <https://kubernetes.io/docs/setup/pick-right-solution/>`_
-describes the many ways to set up a cluster. Here, we shall provide quick
-instructions for the most painless and popular ways of getting setup in various
-cloud providers.
+Kubernetes' documentation describes the many `ways to set up a cluster`_.
+Here, we shall provide quick instructions for the most painless and
+popular ways of getting setup in various cloud providers.
 
 
 Setting up Kubernetes on `Google Cloud <https://cloud.google.com/>`_
@@ -94,10 +93,10 @@ Setting up Kubernetes on Microsoft Azure Container Service (ACS)
 
       az login
 
-3. Specify a `resource group <https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#resource-groups>`_,
-   and create one if it doesn't already exist:
+3. Specify a `Azure resource group`_, and create one if it doesn't already
+   exist:
 
-  .. code-block:: bash
+   .. code-block:: bash
 
      export RESOURCE_GROUP=<YOUR_RESOURCE_GROUP>
      export LOCATION=<YOUR_LOCATION>
@@ -155,4 +154,7 @@ Next Step
 ---------
 
 Now that you have a Kubernetes cluster running, it is time to
-`set up helm <setup-helm.html>`_.
+:ref:`set up helm <setup-helm>`.
+
+.. _ways to set up a cluster: https://kubernetes.io/docs/setup/pick-right-solution/
+.. _Azure resource group: https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#resource-groups
