@@ -1,4 +1,4 @@
-.. tools-deployment:
+.. _tools:
 
 Tools used in a JupyterHub Deployment
 =====================================
@@ -279,7 +279,8 @@ Hub Pod
 
 Receives traffic from the proxy pod. It has 3 main running processes:
 
-1. An authenticator, which can verify a user's account.It also contains a process
+1. An authenticator, which can verify a user's account. It also contains a
+   process.
 2. A "KubeSpawner" that talks to the kubernetes API and tells it to spawn
    pods for users if one doesn't already exist. KubeSpawner will tell
    kubernetes to create a pod for a new user, then it will tell the
