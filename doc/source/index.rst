@@ -13,6 +13,8 @@ JupyterHub instance. It is in an early stage, so the information and
 tools may change quickly. If you see anything that is incorrect or have any
 questions, feel free to reach out at the `issues page`_.
 
+.. _creating-your-jupyterhub:
+
 **Creating your JupyterHub**
 
 .. toctree::
