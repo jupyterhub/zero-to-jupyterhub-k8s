@@ -1,5 +1,5 @@
 VERSION=$(shell git rev-parse --short HEAD)
-IMAGE_PREFIX=yuvipanda/jupyterhub-k8s
+IMAGE_PREFIX=jupyterhub/k8s
 PUSH_IMAGES=no
 
 images: build-images push-images

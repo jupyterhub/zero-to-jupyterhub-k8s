@@ -31,7 +31,7 @@ hub:
   labels: null
   extraConfig: null
   image:
-    name: yuvipanda/jupyterhub-k8s-hub
+    name: jupyterhub/k8s-hub
     tag: v0.3.1
   resources:
     requests:
@@ -45,9 +45,9 @@ binder:
       cpu: 0.2
       memory: 512Mi
   image:
-    name: yuvipanda/jupyterhub-k8s-binderhub
+    name: jupyterhub/k8s-binderhub
     tag: v0.3.1
-  repo2dockerImage: yuvipanda/builderhub-builder:v0.1.16
+  repo2dockerImage: jupyter/repo2docker:0.2.0
   registry:
     prefix: null
     host: gcr.io
@@ -58,7 +58,7 @@ binder:
 proxy:
   secretToken: 'generate with openssl rand -hex 64'
   image:
-    name: yuvipanda/jupyterhub-k8s-proxy
+    name: jupyterhub/k8s-proxy
     tag: v0.3.1
   resources:
     requests:
@@ -93,7 +93,7 @@ singleuser:
     # type: hostPath
     # homeHostPathTemplate: /data/project/paws/userhomes/{userid}
   image:
-    name: yuvipanda/jupyterhub-k8s-singleuser-sample
+    name: jupyterhub/k8s-singleuser-sample
     tag: v0.3.1
   cpu:
     limit: null
