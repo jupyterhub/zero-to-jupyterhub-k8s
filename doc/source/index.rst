@@ -24,7 +24,11 @@ questions, feel free to reach out at the `issues page`_.
    setup-jupyterhub
    turn-off
 
-**Extra info and tips**
+**Customization Guide**
+
+JupyterHub can be configured and customized to fit a variety of deployment
+requirements. This guide helps outline how to customize and extend a JupyterHub
+deployment.
 
 .. toctree::
    :maxdepth: 2
