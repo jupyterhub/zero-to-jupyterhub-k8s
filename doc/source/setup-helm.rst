@@ -36,4 +36,4 @@ Next Step
 ---------
 
 Congratulations. Helm is now set up. The next step is to
-`install JupyterHub <setup-jupyterhub.html>`_!
+:ref:`install JupyterHub <setup-jupyterhub>`!
