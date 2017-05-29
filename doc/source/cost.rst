@@ -56,6 +56,8 @@ Data 8
 The Data 8 course at UC Berkeley used a JupyterHub to coordinate all course
 material and to provide a platform where students would run their code. This
 consisted of many hundreds of students, who had minimal requirements in terms
-of CPU and memory usage. Ryan Lovett put together a short `Jupyter notebook
-estimating the cost for computational resources <https://github.com/data-8/jupyterhub-k8s/blob/master/docs/cost-estimation/gce_budgeting.ipynb>`_
-depending on the student needs.
+of CPU and memory usage. Ryan Lovett put together a short Jupyter notebook
+`estimating the cost for computational resources`_ depending on the student
+needs.
+
+.. _estimating the cost for computational resources: https://github.com/data-8/jupyterhub-k8s/blob/master/docs/cost-estimation/gce_budgeting.ipynb
