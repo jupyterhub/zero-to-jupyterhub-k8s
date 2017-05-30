@@ -5,8 +5,15 @@ Creating a Kubernetes Cluster
 
 Kubernetes' documentation describes the many `ways to set up a cluster`_.
 Here, we shall provide quick instructions for the most painless and
-popular ways of getting setup in various cloud providers.
+popular ways of getting setup in various cloud providers:
 
+- :ref:`Google Cloud <google-cloud>`
+- :ref:`Microsoft Azure <microsoft-azure>`
+- Amazon EC2
+- Red Hat OpenShift
+- Others
+
+.. _google-cloud:
 
 Setting up Kubernetes on `Google Cloud <https://cloud.google.com/>`_
 --------------------------------------------------------------------
@@ -68,6 +75,7 @@ connect your credit card or other payment method to your google cloud account.
 
    The response should list three running nodes.
 
+.. _microsoft-azure:
 
 Setting up Kubernetes on Microsoft Azure Container Service (ACS)
 ----------------------------------------------------------------
