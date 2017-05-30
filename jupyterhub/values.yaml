@@ -47,6 +47,9 @@ proxy:
       memory: 512Mi
   labels: null
 
+ingress:
+  enabled: True
+
 
 # Google OAuth secrets
 auth:
