@@ -3,8 +3,8 @@
 Troubleshooting
 ===============
 
-FAQ
----
+FAQ - General
+-------------
 
 **I thought I had deleted my cloud resources, but they still show up. Why?**
 
@@ -22,6 +22,12 @@ through whatever cloud service you're using.
 Common error messages
 ---------------------
 
+General
+^^^^^^^
+
+This section includes "provider agnostic" error messages for JupyterHub
+and Kubernetes.
+
 Google Cloud
 ^^^^^^^^^^^^
 
@@ -30,8 +36,8 @@ Google Cloud
    for more information.``
 
    Execute ``gcloud auth application-default login`` and follow the prompts.
-   The provided link in the error message has other options for advanced use
-   cases.
+   The provided link in the error message has additional options for advanced
+   use cases.
 
 2. ``ERROR: (gcloud.container.clusters.create) ResponseError: code=503,
    message=Project staeiou-5f880 is not fully initialized with the default
@@ -43,8 +49,8 @@ Google Cloud
 Investigating Issues
 --------------------
 
-If you encounter any issues or are interested to see what's happening under
-the hood, you can use the following commands.
+If you encounter any issues or wish to see what's happening under the hood,
+use the following commands.
 
 To see running pods::
 
@@ -54,9 +60,9 @@ To see the logs::
 
   kubectl --namespace=<YOUR-NAMESPACE> logs <pod-name>
 
-You can pass :option:`-f` to the logs command to :command:`tail` them.
+You can pass ``-f`` option  to the logs command to :command:`tail` them.
 
-.. The following tip box is for provider specific help.
+.. The following tip is for provider specific help.
 
 .. tip::
 
