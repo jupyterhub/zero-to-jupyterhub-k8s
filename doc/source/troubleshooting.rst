@@ -22,19 +22,23 @@ through whatever cloud service you're using.
 Common error messages
 ---------------------
 
-- ``could not find default credentials. See
-  https://developers.google.com/accounts/docs/application-default-credentials
-  for more information.``
+Google Cloud
+^^^^^^^^^^^^
 
-  Execute ``gcloud auth application-default login`` and follow the prompts.
-  The provided link has other options for advanced use cases.
+1. ``Could not find default credentials. See
+   https://developers.google.com/accounts/docs/application-default-credentials
+   for more information.``
 
-- ``ERROR: (gcloud.container.clusters.create) ResponseError: code=503,
-  message=Project staeiou-5f880 is not fully initialized with the default
-  service accounts. Please try again later.``
+   Execute ``gcloud auth application-default login`` and follow the prompts.
+   The provided link in the error message has other options for advanced use
+   cases.
+
+2. ``ERROR: (gcloud.container.clusters.create) ResponseError: code=503,
+   message=Project staeiou-5f880 is not fully initialized with the default
+   service accounts. Please try again later.``
   
-  Go to `<https://console.cloud.google.com/kubernetes/list>`_ and click 'enable'
-  and follow the prompts.
+   Go to `<https://console.cloud.google.com/kubernetes/list>`_ and click
+   'enable' and follow the prompts.
 
 Investigating Issues
 --------------------
@@ -46,12 +50,16 @@ To see running pods::
 
   kubectl --namespace=<YOUR-NAMESPACE> get pod
 
-Then, to see the logs::
+To see the logs::
 
   kubectl --namespace=<YOUR-NAMESPACE> logs <pod-name>
 
-You can pass ``-f`` to the logs command to ``tail`` them.
+You can pass :option:`-f` to the logs command to :command:`tail` them.
 
-Alternatively, if you're using Google cloud, you can see the logs in the GUI
-on `<https://console.cloud.google.com>`_ there should be 'logging' under the
-hamburger menu.
+.. The following tip box is for provider specific help.
+
+.. tip::
+
+   **Google Cloud**: You can see the logs in the GUI on
+   `<https://console.cloud.google.com>`_ there should be **logging** under the
+   hamburger menu.
