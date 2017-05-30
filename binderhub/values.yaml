@@ -19,6 +19,32 @@ service:
   type: ClusterIP
 
 
+jupyterhub:
+  hub:
+    extraConfig: |
+      import json
+      from tmpauthenticator import TmpAuthenticator
+      class DynamicImageAuth(TmpAuthenticator):
+          def process_user(self, user, handler):
+              image = handler.get_argument('image', None, True)
+              user.spawner.singleuser_image_spec = image
+              user.spawner.default_url = handler.get_argument('default_url', '/tree', True)
+              return user
+      c.JupyterHub.authenticator_class = DynamicImageAuth
+      c.DynamicImageAuth.force_new_server = True
+      c.KubeSpawner.args.append('--NotebookApp.disable_check_xsrf=True')
+      c.KubeSpawner.args.append('--NotebookApp.allow_origin="*"')
+      # FIXME: Make this more secure?
+      c.KubeSpawner.args.append('--NotebookApp.tornado_settings={}'.format(json.dumps({'headers': {'Content-Security-Policy': ' '}})))
+
+  singleuser:
+    storage:
+      type: none
+    memory:
+      guarantee: null
+  prePuller:
+    enabled: false
+
 deployment:
   labels: {}
 
