@@ -3,8 +3,8 @@ IMAGE_PREFIX=jupyterhub/k8s
 PUSH_IMAGES=no
 
 images: build-images push-images
-build-images: build-image/hub build-image/proxy build-image/singleuser-sample build-image/binderhub
-push-images: push-image/hub push-image/proxy push-image/singleuser-sample push-image/binderhub
+build-images: build-image/hub build-image/singleuser-sample build-image/binderhub
+push-images: push-image/hub push-image/singleuser-sample push-image/binderhub
 
 build-image/%:
 	cd images/$(@F) && \
