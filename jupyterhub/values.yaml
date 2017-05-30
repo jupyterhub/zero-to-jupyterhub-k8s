@@ -38,23 +38,6 @@ hub:
       cpu: 0.2
       memory: 512Mi
 
-binder:
-  enabled: false
-  resources:
-    requests:
-      cpu: 0.2
-      memory: 512Mi
-  image:
-    name: jupyterhub/k8s-binderhub
-    tag: v0.3.1
-  repo2dockerImage: jupyter/repo2docker:0.2.0
-  registry:
-    prefix: null
-    host: gcr.io
-    username: _json_key
-    password: null
-
-
 proxy:
   secretToken: 'generate with openssl rand -hex 64'
   image:

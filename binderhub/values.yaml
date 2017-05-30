@@ -1,0 +1,36 @@
+resources:
+  requests:
+    cpu: 0.2
+    memory: 512Mi
+
+image:
+  name: jupyterhub/k8s-binderhub
+  tag: v0.3.1
+
+repo2dockerImage: jupyter/repo2docker:v0.2.2
+
+registry:
+  prefix: null
+  host: gcr.io
+  username: _json_key
+  password: null
+
+service:
+  type: ClusterIP
+
+
+deployment:
+  labels: {}
+
+ingress:
+  enabled: false
+  hosts:
+    - chart-example.local
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  tls: {}
+    # Secrets must be manually created in the namespace.
+    # - secretName: chart-example-tls
+    #   hosts:
+    #     - chart-example.local
