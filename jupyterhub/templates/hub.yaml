@@ -69,7 +69,7 @@ data:
   {{ if eq .Values.auth.type "github" -}}
   auth.github.client-id: {{.Values.auth.github.clientId | quote}}
   auth.github.client-secret: {{.Values.auth.github.clientSecret | quote}}
-  auth.github.callback-url: {{.Values.auth.github.callbackUrl}}
+  auth.github.callback-url: {{.Values.auth.github.callbackUrl | quote}}
   {{- end }}
 
   {{ if eq .Values.auth.type "dummy" -}}
