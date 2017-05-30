@@ -29,7 +29,7 @@ metadata:
   name: proxy-public
   {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   {{ if .Values.publicIP }}
   loadBalancerIP: {{ .Values.publicIP }}
   {{ end }}
@@ -37,7 +37,7 @@ spec:
     name: proxy-pod
   ports:
     - protocol: TCP
-      port: 80
+      port: 8000
       targetPort: 8000
 ---
 apiVersion: extensions/v1beta1
