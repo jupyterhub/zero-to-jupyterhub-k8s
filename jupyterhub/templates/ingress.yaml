@@ -9,15 +9,15 @@ metadata:
     {{- end }}
 spec:
   rules:
-    {{- range $host := .Values.ingress.hosts }}
-    - host: {{ $host }}
-      http:
+    - http:
         paths:
           - path: /
             backend:
               serviceName: proxy-public
               servicePort: 8000
-    {{- end -}}
+      {{ if .Values.ingress.host -}}
+      host: {{ .Values.ingress.host }}
+      {{- end }}
   {{- if .Values.ingress.tls }}
   tls:
 {{ toYaml .Values.ingress.tls | indent 4 }}
