@@ -42,6 +42,8 @@ hub:
 
 proxy:
   secretToken: 'generate with openssl rand -hex 64'
+  service:
+    type: ClusterIP
   image:
     name: jupyterhub/k8s-proxy
     tag: v0.3.1
