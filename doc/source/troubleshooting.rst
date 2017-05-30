@@ -14,26 +14,26 @@ specific set of resources is available at all times. This means that if you
 only delete the nodes, but not the kubernetes instance, then it will detect
 the loss of computers and will create two new nodes to compensate.
 
-**How does billing for this work?!**
+**How does billing for this work?**
 
-JupyterHub isn't handling any of the billing for your usage - that's done 
+JupyterHub isn't handling any of the billing for your usage. That's done
 through whatever cloud service you're using.
 
 Common error messages
 ---------------------
 
-* ``could not find default credentials. See 
+- ``could not find default credentials. See
   https://developers.google.com/accounts/docs/application-default-credentials
   for more information.``
 
-  Execute `gcloud auth application-default login` and follow the prompts.
+  Execute ``gcloud auth application-default login`` and follow the prompts.
   The provided link has other options for advanced use cases.
 
-* ``ERROR: (gcloud.container.clusters.create) ResponseError: code=503, 
+- ``ERROR: (gcloud.container.clusters.create) ResponseError: code=503,
   message=Project staeiou-5f880 is not fully initialized with the default
   service accounts. Please try again later.``
   
-  Go to ‘https://console.cloud.google.com/kubernetes/list’ and click ‘enable’
+  Go to `<https://console.cloud.google.com/kubernetes/list>`_ and click 'enable'
   and follow the prompts.
 
 Investigating Issues
@@ -46,14 +46,12 @@ To see running pods::
 
   kubectl --namespace=<YOUR-NAMESPACE> get pod
 
-Then::
+Then, to see the logs::
 
-  kubectl --namespace=<YOUR-NAMESPACE> logs <pod-name> to see the logs
+  kubectl --namespace=<YOUR-NAMESPACE> logs <pod-name>
 
-you can pass -f to the logs command to tail them.
+You can pass ``-f`` to the logs command to ``tail`` them.
 
 Alternatively, if you're using Google cloud, you can see the logs in the GUI
-on `https://console.cloud.google.com`_ there should be 'logging' under the
+on `<https://console.cloud.google.com>`_ there should be 'logging' under the
 hamburger menu.
-
-.. _https://console.cloud.google.com: https://console.cloud.google.com

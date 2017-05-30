@@ -25,7 +25,7 @@ This requires significantly fewer storage resources, and also results in faster
 load times. Storage roughly scales at <XXX> cost.
 
 Users
-------
+-----
 
 The number of users has a direct relationship to cost estimates. Since a
 deployment may support different types of users (i.e. researchers, students,
