@@ -18,6 +18,8 @@ token:
   proxy: null
 
 hub:
+  service:
+    type: ClusterIP
   baseUrl: "/"
   cookieSecret: null
   publicURL: null

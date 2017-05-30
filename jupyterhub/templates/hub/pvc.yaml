@@ -1,0 +1,15 @@
+{{ if eq .Values.hub.db.type "sqlite-pvc" -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: hub-db-dir
+  namespace: {{ default .Release.Namespace .Values.name }}
+  annotations:
+    volume.beta.kubernetes.io/storage-class: hub-storage-{{ default .Release.Namespace .Values.name }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+{{- end }}

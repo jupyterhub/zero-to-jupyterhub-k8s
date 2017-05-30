@@ -1,0 +1,67 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hub-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: hub-pod
+        {{ if .Values.hub.labels -}}
+        # Because toYaml + indent is super flaky
+        {{ range $key, $value := .Values.proxy.labels -}}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+    spec:
+      volumes:
+      - name: config
+        configMap:
+          name: hub-config-{{ default .Release.Revision .Values.revisionOverride }}
+      {{ if eq .Values.hub.db.type "sqlite-pvc" }}
+      - name: hub-db-dir
+        persistentVolumeClaim:
+          claimName: hub-db-dir
+      {{- end }}
+      containers:
+      - name: hub-container
+        image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
+        volumeMounts:
+          - mountPath: /etc/jupyterhub/config/
+            name: config
+        {{ if eq .Values.hub.db.type "sqlite-pvc" }}
+          - mountPath: /srv/jupyterhub
+            name: hub-db-dir
+        {{- end }}
+        resources:
+{{ toYaml .Values.hub.resources | indent 12}}
+        imagePullPolicy: IfNotPresent
+        env:
+        # Put this here directly so hub will restart when we
+        # change this
+        - name: SINGLEUSER_IMAGE
+          value:  "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"
+        - name: JPY_COOKIE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: hub-secret
+              key: hub.cookie-secret
+        {{ if .Values.singleuser.mounts -}}
+        {{ if .Values.singleuser.mounts.shared -}}
+        - name: SHARED_DATA_MOUNTS
+          value: "{{ range $key, $value := .Values.singleuser.mounts.shared }}{{$key}}={{$value}};{{end}}"
+        {{- end }}
+        {{- end }}
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: CONFIGPROXY_AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: hub-secret
+              key: proxy.token
+        ports:
+          - containerPort: 8081
+            name: hub
