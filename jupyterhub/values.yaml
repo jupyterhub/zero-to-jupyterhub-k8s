@@ -24,7 +24,7 @@ hub:
   extraConfig: null
   image:
     name: jupyterhub/k8s-hub
-    tag: v0.3.1
+    tag: vce71806
   resources:
     requests:
       cpu: 0.2
