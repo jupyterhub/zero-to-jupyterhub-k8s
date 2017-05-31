@@ -13,7 +13,7 @@ token:
 
 hub:
   service:
-    type: LoadBalancer
+    type: CluseterIP
   baseUrl: "/"
   cookieSecret: null
   publicURL: null
@@ -33,7 +33,7 @@ hub:
 proxy:
   secretToken: 'generate with openssl rand -hex 64'
   service:
-    type: ClusterIP
+    type: LoadBalancer
   image:
     name: jupyterhub/configurable-http-proxy
     tag: 2.0.1
