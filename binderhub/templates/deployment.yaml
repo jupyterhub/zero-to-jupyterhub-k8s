@@ -40,12 +40,18 @@ spec:
       - name: config
         configMap:
           name: binder-config-{{ default .Release.Revision .Values.revisionOverride }}
+      - name: docker-secret
+        secret:
+          secretName: binder-secret
       containers:
       - name: binder-container
         image: {{ .Values.image.name }}:{{ .Values.image.tag }}
         volumeMounts:
           - mountPath: /etc/binderhub/config/
             name: config
+          - mountPath: /root/.docker
+            name: docker-secret
+            readOnly: true
         resources:
 {{ toYaml .Values.resources | indent 12}}
         imagePullPolicy: Always
