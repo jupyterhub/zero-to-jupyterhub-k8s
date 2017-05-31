@@ -130,6 +130,3 @@ ENV/
 
 # Rope project settings
 .ropeproject
-
-# Helm generated Chart files
-jupyterhub/Chart.yaml

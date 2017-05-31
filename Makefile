@@ -13,11 +13,5 @@ build-image/%:
 push-image/%:
 	docker push $(IMAGE_PREFIX)-$(@F):v$(VERSION)
 
-
-make-chart-metadata:
-	sed 's/{{VERSION}}/$(VERSION)/' jupyterhub/Chart.yaml.template > jupyterhub/Chart.yaml
-
 package-chart:
 	helm package jupyterhub
-
-chart: make-chart-metadata package-chart
