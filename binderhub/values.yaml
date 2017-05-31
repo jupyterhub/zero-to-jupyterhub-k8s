@@ -16,7 +16,7 @@ registry:
   password: null
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
 
 
 jupyterhub:

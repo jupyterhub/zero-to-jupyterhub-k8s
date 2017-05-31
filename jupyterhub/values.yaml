@@ -13,7 +13,7 @@ token:
 
 hub:
   service:
-    type: ClusterIP
+    type: LoadBalancer
   baseUrl: "/"
   cookieSecret: null
   publicURL: null
