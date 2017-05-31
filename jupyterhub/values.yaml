@@ -13,7 +13,7 @@ token:
 
 hub:
   service:
-    type: CluseterIP
+    type: ClusterIP
   baseUrl: "/"
   cookieSecret: null
   publicURL: null
@@ -52,7 +52,7 @@ proxy:
   labels: null
 
 ingress:
-  enabled: True
+  enabled: false
 
 
 # Google OAuth secrets
