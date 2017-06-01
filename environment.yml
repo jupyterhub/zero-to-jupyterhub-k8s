@@ -1,0 +1,10 @@
+# This is for Binder.
+# Need to install bqplot with conda so it calls the javascript extension.
+dependencies:
+  - bqplot
+  - pip:
+    - sphinx
+    - recommonmark
+    - numpy
+    - ipywidgets==6  # Because the default will be 5
+    - traitlets

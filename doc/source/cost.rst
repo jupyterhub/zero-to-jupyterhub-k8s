@@ -10,6 +10,27 @@ significantly influence cost estimates, include:
 - Number of users
 - Usage patterns of users
 
+Interactive Cost Estimator
+--------------------------
+
+We've put together a small notebook that can help you estimate your costs
+for a JupyterHub instance. Below is a notebook with a single plot inside.
+The plot represents users over a single month. You can draw any pattern
+of user activity you like, then click the button and it will estimate
+the cost associated with that pattern of activity over the month.
+
+.. raw:: html
+
+   <br />
+   <iframe src="http://beta.mybinder.org/v2/gh/choldgraf/zero-to-jupyterhub-k8s/cost_demo?filepath=draw_function.ipynb" style="width:100%; height:800px; border:1px solid"></iframe>
+   <br />
+
+
+.. image:: http://mybinder.org/badge.svg
+   :target: http://beta.mybinder.org/v2/gh/choldgraf/zero-to-jupyterhub-k8s/cost_demo?filepath=draw_function.ipynb
+
+For a description of how these costs are broken down, see below.
+
 Hardware
 --------
 
