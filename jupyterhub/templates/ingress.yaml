@@ -3,10 +3,15 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: jupyterhub
+  {{- if or (and .Values.ingress.https.enabled (eq .Values.ingress.https.type "kube-lego")) .Values.ingress.annotations }}
   annotations:
+    {{- if eq .Values.ingress.https.type  "kube-lego" }}
+    kubernetes.io/tls-acme: "true"
+    {{ end -}}
     {{- range $key, $value := .Values.ingress.annotations }}
-      {{ $key }}: {{ $value | quote }}
+    {{ $key }}: {{ $value | quote }}
     {{- end }}
+  {{- end }}
 spec:
   rules:
     - http:
@@ -15,11 +20,11 @@ spec:
             backend:
               serviceName: proxy-public
               servicePort: 80
-      {{ if .Values.ingress.host -}}
       host: {{ .Values.ingress.host }}
-      {{- end }}
-  {{- if .Values.ingress.tls }}
+{{- if and .Values.ingress.https.enabled (eq .Values.ingress.https.type "kube-lego") }}
   tls:
-{{ toYaml .Values.ingress.tls | indent 4 }}
-  {{- end -}}
+    - secretName: kubelego-tls-proxy-{{ .Release.Name }}
+      hosts:
+        - {{ .Values.ingress.host }}
+{{- end }}
 {{- end -}}

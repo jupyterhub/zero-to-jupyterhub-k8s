@@ -53,6 +53,8 @@ proxy:
 
 ingress:
   enabled: false
+  https:
+    enabled: false
 
 
 # Google OAuth secrets
