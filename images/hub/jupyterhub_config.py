@@ -131,6 +131,7 @@ c.KubeSpawner.cpu_guarantee = get_config('singleuser.cpu.guarantee')
 
 # Allow switching authenticators easily
 auth_type = get_config('auth.type')
+email_domain = 'local'
 
 if auth_type == 'google':
     c.JupyterHub.authenticator_class = 'oauthenticator.GoogleOAuthenticator'
@@ -148,14 +149,11 @@ elif auth_type == 'github':
 elif auth_type == 'hmac':
     c.JupyterHub.authenticator_class = 'hmacauthenticator.HMACAuthenticator'
     c.HMACAuthenticator.secret_key = bytes.fromhex(get_config('auth.hmac.secret-key'))
-    email_domain = 'local'
 elif auth_type == 'dummy':
     c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
     c.DummyAuthenticator.password = get_config('auth.dummy.password', None)
-    email_domain = 'local'
 elif auth_type == 'tmp':
     c.JupyterHub.authenticator_class = 'tmpauthenticator.TmpAuthenticator'
-    email_domain = 'local'
 else:
     raise ValueError("Unhandled auth type: %r" % auth_type)
 
