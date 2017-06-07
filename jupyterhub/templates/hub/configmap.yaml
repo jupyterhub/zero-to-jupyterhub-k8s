@@ -24,7 +24,7 @@ data:
   auth.google.client-secret: {{.Values.auth.google.clientSecret | quote}}
   auth.google.hosted-domain: {{.Values.auth.google.hostedDomain | quote}}
   auth.google.login-service: {{.Values.auth.google.loginService | quote}}
-  auth.google.callback-url: {{.Values.auth.google.callbackUrl}}
+  auth.google.callback-url: {{.Values.auth.google.callbackUrl | quote}}
   {{- end }}
   {{ if eq .Values.auth.type "github" -}}
   auth.github.client-id: {{.Values.auth.github.clientId | quote}}
