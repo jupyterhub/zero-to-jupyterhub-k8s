@@ -86,6 +86,21 @@ elif storage_type == 'hostPath':
             'name': 'home'
         }
     ]
+elif storage_type == 'static':
+    pvc_claim_name = get_config('singleuser.storage.static.pvc-name')
+    c.KubeSpawner.volumes = [{
+        'name': 'home',
+        'persistentVolumeClaim': {
+            'claimName': pvc_claim_name
+        }
+    }]
+
+    c.KubeSpawner.volume_mounts = [{
+        'mountPath': get_config('singleuser.storage.home_mount_path'),
+        'name': 'home',
+        'subPath': get_config('singleuser.storage.static.sub-path')
+    }]
+
 
 lifecycle_hooks = get_config('singleuser.lifecycle-hooks')
 if lifecycle_hooks:
