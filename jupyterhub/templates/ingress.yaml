@@ -3,15 +3,15 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: jupyterhub
-  {{- if or (and .Values.ingress.https.enabled (eq .Values.ingress.https.type "kube-lego")) .Values.ingress.annotations }}
   annotations:
+    # Set a high limit for max size of notebooks that we can save. Default is 1M
+    ingress.kubernetes.io/proxy-body-size: 64m
     {{- if eq .Values.ingress.https.type  "kube-lego" }}
     kubernetes.io/tls-acme: "true"
     {{ end -}}
     {{- range $key, $value := .Values.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
-  {{- end }}
 spec:
   rules:
     - http:
