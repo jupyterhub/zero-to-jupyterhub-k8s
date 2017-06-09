@@ -20,24 +20,27 @@ following things:
 You already are well on your way to understanding what it means (procedurally)
 to deploy Jupyterhub. 
 
-For more guidance
------------------
+Deployment Guide
+----------------
 
-If you want more guidance, the next step on your journey is to :ref:`create a
-Kubernetes cluster on Google Cloud
-<google-cloud>`. 
+We've put together a short walkthrough going from having nothing set up to a
+complete deployment of jupyterhub on Google Cloud. If you want to follow that
+comprehensive walkthrough, the next step on your journey is to :ref:`create a
+Kubernetes cluster on Google Cloud <google-cloud>`. 
 
-For info on extensions and customization 
-----------------------------------------
 
-If you'd like to know how to expand and customize your jupyterhub setup, check
-out :ref:`extending-jupyterhub`. 
+Extending and Customizing JupyterHub
+------------------------------------
 
-For more a discussion about software dependencies
--------------------------------------------------
+If you'd like to know how to expand and customize your jupyterhub setup, such
+as increasing the hardware available to users or changing authentication
+services, check out :ref:`extending-jupyterhub`.
+
+Dependencies for Deploying a JupyterHub Instance
+------------------------------------------------
 
 For a more extensive description of the tools and services that JupyterHub
-utilizes, see our :ref:`tools` page.
+depends upon, see our :ref:`tools` page.
 
 Questions or Suggestions?
 =========================
