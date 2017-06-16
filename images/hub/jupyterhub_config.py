@@ -59,16 +59,16 @@ if storage_type == 'dynamic':
     # Add volumes to singleuser pods
     c.KubeSpawner.volumes = [
         {
-            'name': 'volume-{username}-{userid}',
+            'name': 'volume-{username}',
             'persistentVolumeClaim': {
-                'claimName': 'claim-{username}-{userid}'
+                'claimName': 'claim-{username}'
             }
         }
     ]
     c.KubeSpawner.volume_mounts = [
         {
             'mountPath': get_config('singleuser.storage.home_mount_path'),
-            'name': 'volume-{username}-{userid}'
+            'name': 'volume-{username}'
         }
     ]
 elif storage_type == 'hostPath':
