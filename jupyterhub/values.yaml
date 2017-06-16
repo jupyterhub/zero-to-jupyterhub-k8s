@@ -45,6 +45,7 @@ proxy:
     - --api-port=8001
     - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
     - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
+    - --log-level=debug
   resources:
     requests:
       cpu: 0.2
