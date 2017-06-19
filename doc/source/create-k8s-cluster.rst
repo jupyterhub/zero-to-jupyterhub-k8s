@@ -53,7 +53,7 @@ connect your credit card or other payment method to your google cloud account.
 
       gcloud container clusters create <YOUR_CLUSTER> \
           --num-nodes=3 \
-          --machine-type=n1-highmem-2 \
+          --machine-type=n1-standard-2 \
           --zone=us-central1-b
 
    where:
@@ -62,10 +62,13 @@ connect your credit card or other payment method to your google cloud account.
      number, the greater the cost.
    * ``--machine-type`` specifies the amount of CPU and RAM in each node. There
      is a `variety of types <https://cloud.google.com/compute/docs/machine-types>`_
-     to choose from.
-   * ``--zone`` specifies which computer center to use.  To reduce latency,
-     choose a zone closest to whoever is sending the commands. View available
-     zones via ``gcloud compute zones list`` .
+     to choose from. Picking something appropriate here will have a large effect
+     on how much you pay - smaller machines restrict the max amount of RAM each
+     user can have access to but allow more fine-grained scaling, reducing cost.
+     The default (`n1-standard-2`) has 2CPUs and 7.5G of RAM each, and might not
+     be a good fit for all use cases!
+   * ``--zone`` specifies which data center to use. Pick something that is not
+     too far away from your users. You can find a list of them `here <https://cloud.google.com/compute/docs/regions-zones/regions-zones#available>`_.
 
 5. To test if your cluster is initialized, run:
 
