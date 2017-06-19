@@ -33,7 +33,7 @@ Extending and Customizing JupyterHub
 ------------------------------------
 
 If you'd like to know how to expand and customize your jupyterhub setup, such
-as increasing the hardware available to users or changing authentication
+as increasing the computational resources available to users or changing authentication
 services, check out :ref:`extending-jupyterhub`.
 
 Dependencies for Deploying a JupyterHub Instance
