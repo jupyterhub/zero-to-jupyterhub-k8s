@@ -10,8 +10,8 @@ significantly influence cost estimates, include:
 - Number of users
 - Usage patterns of users
 
-Hardware
---------
+Computational Resources
+-----------------------
 
 **Memory (RAM)** makes up the largest part of a cost estimate. More RAM means
 that your users will be able to work with larger datasets with more
