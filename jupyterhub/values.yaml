@@ -19,6 +19,13 @@ hub:
   publicURL: null
   db:
     type: sqlite-pvc
+    pvc:
+      annotations: {}
+      selector: {}
+      accessModes:
+        - ReadWriteOnce
+      storage: 1Gi
+      subPath: null
     url: null
   labels: null
   extraConfig: null

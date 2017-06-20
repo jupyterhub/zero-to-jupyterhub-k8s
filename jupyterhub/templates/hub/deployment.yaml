@@ -33,6 +33,9 @@ spec:
         {{ if eq .Values.hub.db.type "sqlite-pvc" }}
           - mountPath: /srv/jupyterhub
             name: hub-db-dir
+            {{ if .Values.hub.db.pvc.subPath -}}
+            subPath: {{ .Values.hub.db.pvc.subPath | quote }}
+            {{- end }}
         {{- end }}
         resources:
 {{ toYaml .Values.hub.resources | indent 12}}
