@@ -12,10 +12,10 @@ Cloud Computing Providers
 -------------------------
 
 This is whatever will run the actual computation. Generally it means a
-company, university server, or some other organization that hosts computers
-that can be accessed remotely. JupyterHub will run on this hardware, meaning
-that users will also be operating on this hardware if they're interacting
-with your JupyterHub.
+company, university server, or some other organization that hosts computational
+resources that can be accessed remotely. JupyterHub will run on these
+computational resources, meaning that users will also be operating on these
+resources if they're interacting with your JupyterHub.
 
 They provide the following things:
 
@@ -164,7 +164,7 @@ Service
 
 A service is simply a stable way of referring to a deployment. Kubernetes
 is all about intelligently handling dynamic and quickly-changing
-computational environments. This means that the hardware may change,
+computational environments. This means that the VMs running your pods may change,
 IP addresses will be different, etc. However you don't want to have to
 re-orient yourself every time this happens. A Kubernetes service keeps
 track of all these changes on the backend, and provides a single address
@@ -177,13 +177,9 @@ Namespace
 *********
 
 Finally, a `namespace <https://kubernetes.io/docs/admin/namespaces/>`_
-defines a collection of objects in Kubernetes. This will define
-the boundaries of hardware that the deployments have to exist within. It
+defines a collection of objects in Kubernetes. It
 is generally the most "high-level" of the groups we've discussed thus far.
 For example, a a namespace could be a single class running with JupyterHub.
-It defines all the hardware that is available to students. It also defines
-the JupyterHub machinery that glues together all of the student containers,
-manages disk space, etc.
 
 For more information about namespaces, see the 
 `Kubernetes documentation on namespaces <https://kubernetes.io/docs/tasks/administer-cluster/namespaces/>`_.

@@ -6,7 +6,7 @@ Estimating costs
 Cost estimates depend highly on your deployment setup. Several factors that
 significantly influence cost estimates, include:
 
-- Hardware provided to users
+- Computational resources provided to users
 - Number of users
 - Usage patterns of users
 
