@@ -314,8 +314,9 @@ users which account they are using to login.
 Expanding and contracting the size of your cluster
 --------------------------------------------------
 
-You can easily change the scale up (or down) the size of your cluster to
-meet demand (or save cost when it is not being used).
+You can easily scale up or down your cluster's size to meet usage demand or to
+save cost when the cluster is not being used. Use the ``resize`` command and
+provide a new cluster size as a command line option ``--size``:
 
 .. code-block:: bash
 
@@ -324,12 +325,17 @@ meet demand (or save cost when it is not being used).
                 --size <NEW-SIZE> \
                 --zone <YOUR-CLUSTER-ZONE>
 
-You can check the zone, name of your cluster and its current size by
-doing `gcloud container clusters list`
+To display the cluster's name, zone, or current size, use the command
+``gcloud container clusters list``.
 
 .. note::
-    For example, if you are preparing for a workshop, you can create the cluster
-    the week before, set everything up, and then scale the cluster to zero nodes
-    to save cost. Then you can scale it up to the size you want on the day of
-    the workshop, and then delete it after the workshop is done. This way, you
-    don't have to scramble on the last day to set everything up.
+
+   When organizing and running a workshop, resizing a cluster gives you a way
+   to save cost and prepare JupyterHub before the event. For example:
+
+   - **One week before the workshop:** You can create the cluster, set
+     everything up, and then resize the cluster to zero nodes to save cost.
+   - **On the day of the workshop:** You can scale the cluster up to a suitable
+     size for the workshop. This workflow also helps you avoid scrambling on
+     the workshop day to set up the cluster and JupyterHub.
+   - **After the workshop:** The cluster can be deleted.
