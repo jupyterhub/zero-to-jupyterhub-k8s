@@ -18,7 +18,9 @@ spec:
       containers:
       - name: proxy-container
         image: {{ .Values.proxy.image.name }}:{{ .Values.proxy.image.tag }}
+        {{- if .Values.proxy.cmd }}
         command: {{ toJson .Values.proxy.cmd }}
+        {{- end }}
         resources:
 {{ toYaml .Values.proxy.resources | indent 12 }}
         env:
