@@ -2,7 +2,6 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: proxy-deployment
-  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
 spec:
   replicas: 1
   template:

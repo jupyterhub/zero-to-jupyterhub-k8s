@@ -11,7 +11,6 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: binder-config-{{ default .Release.Revision .Values.revisionOverride }}
-  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
 data:
   binder.push-secret: binder-secret
   binder.registry.host: {{ .Values.registry.host | quote }}
