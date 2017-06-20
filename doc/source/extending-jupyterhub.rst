@@ -310,3 +310,26 @@ The 'callbackUrl' key is set to the authorized redirect URI you specified
 earlier. Set 'hostedDomain' to your institution's domain name. The value of
 'loginService' is a descriptive term for your institution that reminds your
 users which account they are using to login.
+
+Expanding and contracting the size of your cluster
+--------------------------------------------------
+
+You can easily change the scale up (or down) the size of your cluster to
+meet demand (or save cost when it is not being used).
+
+.. code-block:: bash
+
+   gcloud container clusters resize \
+                <YOUR-CLUSTER-NAME> \
+                --size <NEW-SIZE> \
+                --zone <YOUR-CLUSTER-ZONE>
+
+You can check the zone, name of your cluster and its current size by
+doing `gcloud container clusters list`
+
+.. note::
+    For example, if you are preparing for a workshop, you can create the cluster
+    the week before, set everything up, and then scale the cluster to zero nodes
+    to save cost. Then you can scale it up to the size you want on the day of
+    the workshop, and then delete it after the workshop is done. This way, you
+    don't have to scramble on the last day to set everything up.
