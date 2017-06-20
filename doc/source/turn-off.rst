@@ -31,3 +31,12 @@ paying money for it.
    have not deleted will cost you money! You can check the `web console <https://console.cloud.google.com>`_
    (make sure you are in the right project and account!) to make sure everything
    has been deleted.
+
+   At a minimum, check the following under the Hamburger (left top corner) menu:
+
+   1. Compute Engine -> Disks
+   2. Container Engine
+   3. Networking -> Load Balancing
+
+   These might take several minutes to clear up, but they shouldn't have anything
+   related to your JupyterHub cluster after you have deleted the cluster.
