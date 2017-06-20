@@ -85,8 +85,8 @@ Setting up Kubernetes on Microsoft Azure Container Service (ACS)
 
 .. note::
 
-   This is an alpha work-in-progress on ACS. We'll be evolving this over time.
-
+   This is an alpha work-in-progress - please do not use in production! Help from
+   people with more Azure experience would be highly welcome :)
 
 
 1. Install and initialize the **Azure command-line tools**, which send commands
