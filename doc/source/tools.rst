@@ -15,7 +15,7 @@ This is whatever will run the actual computation. Generally it means a
 company, university server, or some other organization that hosts computational
 resources that can be accessed remotely. JupyterHub will run on these
 computational resources, meaning that users will also be operating on these
-computational resources if they're interacting with your JupyterHub.
+resources if they're interacting with your JupyterHub.
 
 They provide the following things:
 
