@@ -1,16 +1,3 @@
-# Default values for jupyterhub-k8s.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-# Name of this installation. Will be used to create namespace
-# and storageclass. Must be a valid DNS label
-# HACK: need to get rid of this, purely use --namespace only
-name: null
-
-# Deprecated, use proxy.secretToken instead
-token:
-  proxy: null
-
 hub:
   service:
     type: ClusterIP
