@@ -27,6 +27,14 @@ spec:
       containers:
       - name: hub-container
         image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8081
+          # Set it to a high number, since if you have a large number of users they
+          # are polled in sequence to begin with still!
+          initialDelaySeconds: 120
+          periodSeconds: 10
         volumeMounts:
           - mountPath: /etc/jupyterhub/config/
             name: config
