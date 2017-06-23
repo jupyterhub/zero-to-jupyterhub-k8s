@@ -84,3 +84,8 @@ This release made possible by the awesome work of the following contributors (in
 * [Yuvi Panda](https://github.com/yuvipanda/)
 
 <3
+
+### About this cricketer ###
+
+[Wasim Akram](https://en.wikipedia.org/wiki/Wasim_Akram) (وسیم اکرم) is considered by many to be
+the greatest pace bowler of all time & a founder of the fine art of [reverse swing bowling](https://en.wikipedia.org/wiki/Swing_bowling#Reverse_swing).
