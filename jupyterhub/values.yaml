@@ -28,6 +28,8 @@ proxy:
   secretToken: 'generate with openssl rand -hex 64'
   service:
     type: LoadBalancer
+    labels: {}
+    annotations: {}
   image:
     name: jupyterhub/configurable-http-proxy
     tag: 2.0.1

@@ -57,6 +57,7 @@ installation.
 * Support using a static PVC for user homes or for the hub db. This makes this release usable
   with clusters where you only have one NFS share that must be used for the whole hub.
 * PostgreSQL is now a supported hub database backend provider.
+* You can set annotations & labels on the proxy-public service now.
  
 ### Other Changes ###
 
