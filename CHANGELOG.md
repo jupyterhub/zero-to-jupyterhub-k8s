@@ -6,14 +6,12 @@ Releases are now named after famous [Cricket](https://en.wikipedia.org/wiki/Cric
 
 Released 2017-06-23
 
-This version has a bunch of breaking changes. If you are upgrading from an older 
-version that is using any of the features that changed (you probably are!) and 
-do not know much about Kubernetes, we recommend just deleting and recreating your
-installation!
 
-If you need support, reach out to us on
-[gitter](https://gitter.im/jupyterhub/jupyterhub) or open an
-[issue](https://github.com/jupyterhub/helm-chart/issues).
+We recommend that you delete prior versions of the package and install the
+latest version. If you are very familiar with Kubernetes, you can upgrade from
+an older version, but we still suggest deleting and recreating your
+installation.
+
 
 ### Breaking changes ###
 
@@ -33,7 +31,7 @@ If you need support, reach out to us on
   to a newer version. If not, you can create a StorageClass manually and everything
   should continue to work.
   
-* Setting `token.proxy` no longer works - set `proxy.secretToken` instead.
+* token.proxy is removed. Use proxy.secretToken instead.
   If your `config.yaml` contains something that looks like the following:
   
   ```yaml
@@ -41,7 +39,7 @@ If you need support, reach out to us on
       proxy: <some-secret>
   ```
   
-  you can / should change that to:
+  you should change that to:
   
   ```yaml
   proxy:
@@ -51,9 +49,9 @@ If you need support, reach out to us on
 
 ### Features ###
 
-* GitHub Authentication is now supported, thanks to [Jason Kuruzovich](https://github.com/jkuruzovich).
-* Using an [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) is
-  now supported! If your cluster already has Ingress support (with automatic Let's Encrypt support, perhaps),
+* Added GitHub Authentication support, thanks to [Jason Kuruzovich](https://github.com/jkuruzovich).
+* Added [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) support! 
+  If your cluster already has Ingress support (with automatic Let's Encrypt support, perhaps),
   you can easily use that now.
 * We now add a label to user pods / PVCs with their usernames.
 * Support using a static PVC for user homes or for the hub db. This makes this release usable
@@ -84,6 +82,12 @@ This release made possible by the awesome work of the following contributors (in
 * [Yuvi Panda](https://github.com/yuvipanda/)
 
 <3
+
+### Support ###
+
+If you need support, reach out to us on
+[gitter](https://gitter.im/jupyterhub/jupyterhub) or open an
+[issue](https://github.com/jupyterhub/helm-chart/issues).
 
 ### About this cricketer ###
 
