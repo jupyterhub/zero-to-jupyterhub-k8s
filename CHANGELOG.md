@@ -1,12 +1,14 @@
 # Changelog
 
+## [Unreleased]
+
+## Releases
+
 Releases are now named after famous [Cricket](https://en.wikipedia.org/wiki/Cricket) players.
 
-## [Unreleased] 0.5
+## [0.4] - [Akram](#akram) - 2017-06-23
 
-## [0.4] - ["Akram"] - Stability, HTTPS & breaking changes
-
-Released 2017-06-23
+Stability, HTTPS & breaking changes.
 
 ### Installation and upgrades
 
@@ -28,10 +30,10 @@ installation.
 
 * A **[StorageClass](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#storageclasses)**
   is no longer created by default. This shouldn't affect most new installs,
-  since as of Kubernetes 1.6 most cloud provider installations have a default.
-  If you are using an older version of kubernetes, easiest thing to do is upgrade
-  to a newer version. If not, you can create a StorageClass manually and everything
-  should continue to work.
+  since most cloud provider installations have a default (as of Kubernetes 1.6).
+  If you are using an older version of Kubernetes, the easiest thing to do is to
+  upgrade to a newer version. If not, you can create a StorageClass manually
+  and everything should continue to work.
 
 * `token.proxy` is removed. Use **`proxy.secretToken`** instead.
   If your `config.yaml` contains something that looks like the following:
@@ -129,6 +131,4 @@ the greatest pace bowler of all time and a founder of the fine art of
 [0.3.1]: https://github.com/jupyterhub/helm-chart/compare/v0.3...v0.3.1
 [0.3]: https://github.com/jupyterhub/helm-chart/compare/v0.2...v0.3
 [0.2]: https://github.com/jupyterhub/helm-chart/compare/v0.1...v0.2
-[1.0]: https://github.com/jupyterhub/helm-chart/releases/tag/v0.1
-
-["Akram"]: #akram
+[0.1]: https://github.com/jupyterhub/helm-chart/releases/tag/v0.1
