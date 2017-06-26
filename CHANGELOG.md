@@ -92,38 +92,35 @@ This release made possible by the awesome work of the following contributors
 
 <3
 
-## 0.3
-
-### [0.3.1] - 2017-05-19
-
-KubeSpawner updates.
-
-### [0.3] - 2017-05-15
-
-Deployer UX fixes.
-
-## [0.2] - 2017-05-01
-
-Minor cleanups and features.
-
-## [0.1] - 2017-04-10
-
-Initial Public Release
-
-## Support
-
-If you need support, reach out to us on
-[gitter](https://gitter.im/jupyterhub/jupyterhub) or open an
-[issue](https://github.com/jupyterhub/helm-chart/issues).
-
-## About the Cricketers
-
 ### Akram
 
 [Wasim Akram](https://en.wikipedia.org/wiki/Wasim_Akram) (وسیم اکرم) is considered by many to be
 the greatest pace bowler of all time and a founder of the fine art of
 [reverse swing bowling](https://en.wikipedia.org/wiki/Swing_bowling#Reverse_swing).
 
+## 0.3
+
+### [0.3.1] - 2017-05-19
+
+KubeSpawner updates. [Release note](https://github.com/jupyterhub/helm-chart/releases/tag/v0.3.1)
+
+### [0.3] - 2017-05-15
+
+Deployer UX fixes. [Release note](https://github.com/jupyterhub/helm-chart/releases/tag/v0.3)
+
+## [0.2] - 2017-05-01
+
+Minor cleanups and features. [Release note](https://github.com/jupyterhub/helm-chart/releases/tag/v0.2)
+
+## [0.1] - 2017-04-10
+
+Initial Public Release. [Release note](https://github.com/jupyterhub/helm-chart/releases/tag/v0.1)
+
+## Support
+
+If you need support, reach out to us on
+[gitter](https://gitter.im/jupyterhub/jupyterhub) or open an
+[issue](https://github.com/jupyterhub/helm-chart/issues).
 
 
 [Unreleased]: https://github.com/jupyterhub/helm-chart/compare/v0.4...HEAD
