@@ -64,15 +64,34 @@ For the following steps, use your favorite code editor. We'll use the
 Install JupyterHub
 ------------------
 
-1. Let's use helm to create the instances that you configured with the
-   ``config.yaml`` file. Run this command from the directory that contains the
+1. Let's add the JupyterHub `helm repository<https://github.com/kubernetes/helm/blob/master/docs/chart_repository.md>`_
+   to your helm, so you can install JupyterHub from it. This makes it easy to refer to the JupyterHub chart
+   without having to use a long URL each time.
+
+   .. code:: bash
+
+      helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+      helm repo update
+
+   This should show output like:
+
+   .. code::
+
+      Hang tight while we grab the latest from your chart repositories...
+      ...Skip local chart repository
+      ...Successfully got an update from the "stable" chart repository
+      ...Successfully got an update from the "jupyterhub" chart repository
+      Update Complete. ⎈ Happy Helming!⎈ 
+
+2. Now you can install the chart! Run this command from the directory that contains the
    ``config.yaml`` file to spin up JupyterHub:
 
    .. code:: bash
 
-      helm install https://github.com/jupyterhub/helm-chart/releases/download/v0.3.1/jupyterhub-v0.3.1.tgz \
-          --name=<YOUR_RELEASE_NAME> \
-          --namespace=<YOUR_NAMESPACE> \
+      helm install jupyterhub/jupyterhub
+          --version=v0.4 \
+          --name=<YOUR-RELEASE-NAME> \
+          --namespace=<YOUR-NAMESPACE> \
           -f config.yaml
 
    where:
@@ -98,10 +117,10 @@ Install JupyterHub
 
    .. note::
 
-      If you get a ``release named <YOUR_CHART> already exists`` error, then
-      you should delete this helm-chart by running
-      ``helm delete --purge <YOUR_CHART>``. Then reinstall by repeating this
-      step.
+      If you get a ``release named <YOUR-RELEASE-NAME> already exists`` error, then
+      you should delete the release by running
+      ``helm delete --purge <YOUR-RELEASE-NAME>``. Then reinstall by repeating this
+      step. If it persists, also do ``kubectl delete <YOUR-NAMESPACE>`` and try again.
 
 2. While Step 1 is running, you can see the pods being created by entering in
    a different terminal:
