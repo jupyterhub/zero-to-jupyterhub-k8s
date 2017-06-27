@@ -18,7 +18,7 @@ hub:
   extraConfig: null
   image:
     name: jupyterhub/k8s-hub
-    tag: vb15aa63
+    tag: v0.4
   resources:
     requests:
       cpu: 0.2
@@ -76,7 +76,7 @@ singleuser:
     # homeHostPathTemplate: /data/project/paws/userhomes/{userid}
   image:
     name: jupyterhub/k8s-singleuser-sample
-    tag: v0.3.1
+    tag: v0.4
   cpu:
     limit: null
     guarantee: null
