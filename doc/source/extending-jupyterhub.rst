@@ -17,12 +17,22 @@ The general method is:
 
      .. code-block:: bash
 
-        helm upgrade <YOUR_RELEASE_NAME> https://github.com/jupyterhub/helm-chart/releases/download/v0.3/jupyterhub-v0.3.tgz -f config.yaml
+        helm upgrade <YOUR_RELEASE_NAME> https://github.com/jupyterhub/helm-chart/releases/download/<HELM_CHART_VERSION>/jupyterhub-<HELM_CHART_VERSION>.tgz -f config.yaml
 
    Where ``<YOUR_RELEASE_NAME>`` is the parameter you passed to ``--name`` when
    `installing jupyterhub <setup-jupyterhub.html#install-jupyterhub>`_ with
-   ``helm install``. If you don't remember it, you can probably find it by doing
+   ``helm install`` and ``<HELM_CHART_VERSION>`` is the desired version.
+   If you don't remember ``<YOUR_RELEASE_NAME>``, you can probably find it by doing
    ``helm list``.
+
+   For example to upgrade to helm chart version 4.0.0, run the following
+   using ``<YOUR_RELEASE_NAME>``:
+
+     .. code-block:: bash
+
+        helm upgrade <YOUR_RELEASE_NAME> https://github.com/jupyterhub/helm-chart/releases/download/v4.0.0/jupyterhub-v4.0.0.tgz -f config.yaml
+
+
 3. Wait for the upgrade to finish, and make sure that when you do
    ``kubectl --namespace=<YOUR_NAMESPACE> get pod`` the hub and proxy pods are
    in ``Ready`` state. Your configuration change has been applied!
