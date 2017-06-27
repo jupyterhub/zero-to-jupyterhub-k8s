@@ -32,7 +32,7 @@ proxy:
     annotations: {}
   image:
     name: jupyterhub/configurable-http-proxy
-    tag: 2.0.1
+    tag: 2.0.4
   cmd: 
     - configurable-http-proxy
     - --ip=0.0.0.0
