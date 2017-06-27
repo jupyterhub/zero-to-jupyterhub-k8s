@@ -45,9 +45,9 @@ For the following steps, use your favorite code editor. We'll use the
       hub:
         # output of first execution of 'openssl rand -hex 32'
         cookieSecret: "RANDOM_STRING_1"
-      token:
+      proxy:
         # output of second execution of 'openssl rand -hex 32'
-        proxy: "RANDOM_STRING_2"
+        secretToken: "RANDOM_STRING_2"
 
    For example:
 
