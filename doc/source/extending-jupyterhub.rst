@@ -17,7 +17,7 @@ The general method is:
 
      .. code-block:: bash
 
-        helm upgrade <YOUR_RELEASE_NAME> https://github.com/jupyterhub/helm-chart/releases/download/v0.3/jupyterhub-v0.3.tgz -f config.yaml
+        helm upgrade <YOUR_RELEASE_NAME> jupyterhub/jupyterhub --version=v0.4 -f config.yaml
 
    Where ``<YOUR_RELEASE_NAME>`` is the parameter you passed to ``--name`` when
    `installing jupyterhub <setup-jupyterhub.html#install-jupyterhub>`_ with
