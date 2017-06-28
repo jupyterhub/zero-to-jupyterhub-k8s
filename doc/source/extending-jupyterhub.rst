@@ -111,7 +111,7 @@ configure JupyterHub to build off of this image.
    Docker at `this link <https://store.docker.com/search?offering=community&platform=desktop%2Cserver&q=&type=edition>`_.
    Once you’ve started Docker, it will show up as a tiny background application.
 
-2. **Install repo2docker**. You can easily do this with ``pip`` inside.
+2. **Install repo2docker**. You can easily do this with ``pip``.
 
    .. code:: bash
 
