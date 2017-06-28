@@ -35,7 +35,7 @@ This command only needs to run once per Kubernetes cluster.
 Verify
 ------
 
-You can verify you have the correct version + it installed properly by running:
+You can verify that you have the correct version and that it installed properly by running:
 
 .. code:: bash
 
