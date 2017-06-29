@@ -91,33 +91,39 @@ consumes a lot of memory).
     Remember `apply the changes <#applying-configuraiton-changes>`_ after changing
     your config.yaml file!
 
-Extending your software stack with s2i
---------------------------------------
+Extending your software stack with repo2docker
+----------------------------------------------
 
-s2i, also known as `Source to Image <https://github.com/openshift/source-to-image>`_,
+`repo2docker <https://github.com/jupyter/repo2docker>`_
 lets you quickly convert a GitHub repository into a Docker image that we can use
 as a base for your JupyterHub instance. Anything inside the GitHub repository
 will exist in a user’s environment when they join your JupyterHub. If you
 include a ``requirements.txt`` file in the root level of your of the repository,
-s2i will ``pip install`` each of these packages into the Docker image to be
-built. Below we’ll cover how to use s2i to generate a Docker image and how to
+repo2docker will ``pip install`` each of these packages into the Docker image to be
+built. If you have an ``environment.yaml`` file, it'll use conda and create an
+environment based on that specification. If you have a `Dockerfile` it will ignore
+everything else and just use the Dockerfile.
+
+Below we’ll cover how to use repo2docker to generate a Docker image and how to
 configure JupyterHub to build off of this image.
 
-.. note::
-       For this section, you’ll need to install s2i and docker.
-
-
-1. **Download s2i.** This is easily done with homebrew on a mac. For linux and
-   Windows it entails a couple of quick commands that you can find in the
-   links below:
-
-       - On OSX: ``brew install s2i``
-       - On Linux and Windows: `follow these instructions
-         <https://github.com/openshift/source-to-image#installation>`_
-
-2. **Download and start Docker.** You can do this by downloading and installing
+1. **Download and start Docker.** You can do this by downloading and installing
    Docker at `this link <https://store.docker.com/search?offering=community&platform=desktop%2Cserver&q=&type=edition>`_.
    Once you’ve started Docker, it will show up as a tiny background application.
+
+2. **Install repo2docker**. You can easily do this with ``pip``.
+
+   .. code:: bash
+
+      pip install jupyter-repo2docker
+
+
+   If that doesn't work due to permissions, try:
+
+   .. code:: bash
+
+      pip install --user jupyter-repo2docker
+
 
 3. **Create (or find) a GitHub repository you want to use.** This repo should
    have all materials that you want your users to access. In addition you can
@@ -132,15 +138,13 @@ configure JupyterHub to build off of this image.
           scipy==0.19.0
           matplotlib==2.0
 
-4. **Use s2i to build your Docker image.** `s2i` uses a template in order to
-   know how to create the Docker image. We have provided one at the url in the
-   commands below. Run this command::
+4. **Use repo2docker to build your Docker image.**
+   .. code-block:: bash
 
-       s2i build --exclude "" <git-repo-url>  jupyterhub/singleuser-builder-venv-3.5:v0.1.5 gcr.io/<project-name>/<name-of-image>:<tag>
+      jupyter-repo2docker <YOUR-GITHUB-REPOSITORY> --image=gcr.io/<PROJECT-NAME>/<IMAGE-NAME>:<TAG> --no-run
 
-   this effectively says *s2i, build `<this repository>` to a Docker image by
-   using `<this template>` and call the image `<this>`*. The `--exclude ""` ensures
-   that all files are included in the container (e.g. `.git` directory).
+   This tells repo2docker to fetch master of the github repository, and use
+   heuristics to build a docker image of it.
 
   .. note::
          - The project name should match your google cloud project's name.
