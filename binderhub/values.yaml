@@ -5,7 +5,7 @@ resources:
 
 image:
   name: jupyterhub/k8s-binderhub
-  tag: v004b3e3
+  tag: v4d8722d
 
 repo2dockerImage: jupyter/repo2docker:v0.2.2
 
