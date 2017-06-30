@@ -9,6 +9,8 @@ image:
 
 repo2dockerImage: jupyter/repo2docker:v0.2.2
 
+googleAnalyticsCode: null
+
 registry:
   enabled: false
   prefix: binderhub/
