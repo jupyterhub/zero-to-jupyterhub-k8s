@@ -10,7 +10,8 @@ image:
 repo2dockerImage: jupyter/repo2docker:v0.2.2
 
 registry:
-  prefix: null
+  enabled: false
+  prefix: binderhub/
   host: gcr.io
   username: _json_key
   password: null

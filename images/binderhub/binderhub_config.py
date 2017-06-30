@@ -23,5 +23,7 @@ c.BinderHub.docker_image_prefix = get_config('binder.registry.prefix')
 c.BinderHub.docker_push_secret = get_config('binder.push-secret')
 c.BinderHub.build_namespace = os.environ['BUILD_NAMESPACE']
 
+c.BinderHub.use_registry = get_config('binder.use-registry', True)
+
 c.BinderHub.builder_image_spec = get_config('binder.repo2docker-image')
 c.BinderHub.hub_redirect_url_template = get_config('binder.hub-url') + '/hub/tmplogin?image={image}&default_url={default_url}'
