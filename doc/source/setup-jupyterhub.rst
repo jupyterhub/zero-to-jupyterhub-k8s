@@ -49,14 +49,7 @@ For the following steps, use your favorite code editor. We'll use the
         # output of second execution of 'openssl rand -hex 32'
         secretToken: "RANDOM_STRING_2"
 
-   For example:
-
-   .. code-block:: yaml
-
-      hub:
-        cookieSecret: "cb0b45df678709c5cc780ed73690898f7ba0659902f996017296143976ffb97c"
-      proxy:
-        secretToken: "712c4c6c0e78c6c745cfb126f5bbc4b9ba763c78b4bba5797e2eaf508ac99475"
+... Don't put an example here! People will just copy paste that & that's a security issue.
 
 4. Save the ``config.yaml`` file. If using the nano editor, hit ``Ctrl-X`` and
    make sure to answer ‘yes’ when it asks you to save.
