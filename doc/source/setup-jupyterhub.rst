@@ -55,8 +55,8 @@ For the following steps, use your favorite code editor. We'll use the
 
       hub:
         cookieSecret: "cb0b45df678709c5cc780ed73690898f7ba0659902f996017296143976ffb97c"
-      token:
-        proxy: "712c4c6c0e78c6c745cfb126f5bbc4b9ba763c78b4bba5797e2eaf508ac99475"
+      proxy:
+        secretToken: "712c4c6c0e78c6c745cfb126f5bbc4b9ba763c78b4bba5797e2eaf508ac99475"
 
 4. Save the ``config.yaml`` file. If using the nano editor, hit ``Ctrl-X`` and
    make sure to answer ‘yes’ when it asks you to save.
