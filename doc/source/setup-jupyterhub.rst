@@ -49,7 +49,7 @@ For the following steps, use your favorite code editor. We'll use the
         # output of second execution of 'openssl rand -hex 32'
         secretToken: "RANDOM_STRING_2"
 
-... Don't put an example here! People will just copy paste that & that's a security issue.
+.. Don't put an example here! People will just copy paste that & that's a security issue.
 
 4. Save the ``config.yaml`` file. If using the nano editor, hit ``Ctrl-X`` and
    make sure to answer ‘yes’ when it asks you to save.
