@@ -13,24 +13,55 @@ JupyterHub instance. It is in an early stage, so the information and
 tools may change quickly. If you see anything that is incorrect or have any
 questions, feel free to reach out at the `issues page`_.
 
+.. _creating-your-jupyterhub:
+
 **Creating your JupyterHub**
 
 .. toctree::
-    :maxdepth: 2
+   :maxdepth: 2
 
-    create-k8s-cluster
-    setup-helm
-    setup-jupyterhub
-    extending-jupyterhub
+   getting-started
+   create-k8s-cluster
+   setup-helm
+   setup-jupyterhub
+   turn-off
 
-**Extra info and tips**
+**Customization Guide**
+
+JupyterHub can be configured and customized to fit a variety of deployment
+requirements. This guide helps outline how to customize and extend a
+JupyterHub deployment.
 
 .. toctree::
-    :maxdepth: 2
+   :maxdepth: 2
 
-    tools
-    troubleshooting
-    glossary
+   extending-jupyterhub
+   tools
+
+
+**Administrator Guide**
+
+This section provides information on managing and maintaining a staging or
+production deployment of JupyterHub.
+
+.. toctree::
+   :maxdepth: 2
+
+   resource-mgmt
+   cost
+   backups
+   upgrading
+   security-considerations
+   troubleshooting
+
+**Reference**
+
+.. toctree::
+   :maxdepth: 2
+
+   glossary
+   additional-resources
+
 
 
 .. _JupyterHub: https://github.com/jupyterhub/jupyterhub

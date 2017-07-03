@@ -1,11 +1,19 @@
+.. _create-k8s-cluster:
+
 Creating a Kubernetes Cluster
 =============================
 
-Kubernetes' `documentation <https://kubernetes.io/docs/setup/pick-right-solution/>`_
-describes the many ways to set up a cluster. Here, we shall provide quick
-instructions for the most painless and popular ways of getting setup in various
-cloud providers.
+Kubernetes' documentation describes the many `ways to set up a cluster`_.
+Here, we shall provide quick instructions for the most painless and
+popular ways of getting setup in various cloud providers:
 
+- :ref:`Google Cloud <google-cloud>`
+- :ref:`Microsoft Azure <microsoft-azure>`
+- Amazon EC2
+- Red Hat OpenShift
+- Others
+
+.. _google-cloud:
 
 Setting up Kubernetes on `Google Cloud <https://cloud.google.com/>`_
 --------------------------------------------------------------------
@@ -43,7 +51,10 @@ connect your credit card or other payment method to your google cloud account.
 
    .. code-block:: bash
 
-      gcloud container clusters create YOUR_CLUSTER --num-nodes=3 --machine-type=n1-highmem-2 --zone=us-central1-b
+      gcloud container clusters create <YOUR_CLUSTER> \
+          --num-nodes=3 \
+          --machine-type=n1-standard-2 \
+          --zone=us-central1-b
 
    where:
 
@@ -51,10 +62,13 @@ connect your credit card or other payment method to your google cloud account.
      number, the greater the cost.
    * ``--machine-type`` specifies the amount of CPU and RAM in each node. There
      is a `variety of types <https://cloud.google.com/compute/docs/machine-types>`_
-     to choose from.
-   * ``--zone`` specifies which computer center to use.  To reduce latency,
-     choose a zone closest to whoever is sending the commands. View available
-     zones via ``gcloud compute zones list`` .
+     to choose from. Picking something appropriate here will have a large effect
+     on how much you pay - smaller machines restrict the max amount of RAM each
+     user can have access to but allow more fine-grained scaling, reducing cost.
+     The default (`n1-standard-2`) has 2CPUs and 7.5G of RAM each, and might not
+     be a good fit for all use cases!
+   * ``--zone`` specifies which data center to use. Pick something that is not
+     too far away from your users. You can find a list of them `here <https://cloud.google.com/compute/docs/regions-zones/regions-zones#available>`_.
 
 5. To test if your cluster is initialized, run:
 
@@ -64,9 +78,16 @@ connect your credit card or other payment method to your google cloud account.
 
    The response should list three running nodes.
 
+.. _microsoft-azure:
 
 Setting up Kubernetes on Microsoft Azure Container Service (ACS)
 ----------------------------------------------------------------
+
+.. note::
+
+   This is an alpha work-in-progress - please do not use in production! Help from
+   people with more Azure experience would be highly welcome :)
+
 
 1. Install and initialize the **Azure command-line tools**, which send commands
    to Azure and let you do things like create and delete clusters.
@@ -83,13 +104,13 @@ Setting up Kubernetes on Microsoft Azure Container Service (ACS)
 
       az login
 
-3. Specify a `resource group <https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#resource-groups>`_,
-   and create one if it doesn't already exist:
+3. Specify a `Azure resource group`_, and create one if it doesn't already
+   exist:
 
-  .. code-block:: bash
+   .. code-block:: bash
 
-     export RESOURCE_GROUP=YOUR_RESOURCE_GROUP
-     export LOCATION=YOUR_LOCATION
+     export RESOURCE_GROUP=<YOUR_RESOURCE_GROUP>
+     export LOCATION=<YOUR_LOCATION>
      az group create --name=${RESOURCE_GROUP} --location=${LOCATION}
 
   where:
@@ -106,19 +127,24 @@ Setting up Kubernetes on Microsoft Azure Container Service (ACS)
 
       az acs kubernetes install-cli
 
-6. Authenticate kubectl:
+6. Create a Kubernetes cluster on Azure, by typing in the following commands:
 
    .. code-block:: bash
 
-      az acs kubernetes get-credentials --resource-group=${RESOURCE_GROUP} --name=${CLUSTER_NAME}
+      export CLUSTER_NAME=<YOUR_CLUSTER_NAME>
+      export DNS_PREFIX=<YOUR_PREFIX>
+      az acs create --orchestrator-type=kubernetes \
+          --resource-group=${RESOURCE_GROUP} \
+          --name=${CLUSTER_NAME} \
+          --dns-prefix=${DNS_PREFIX}
 
-7. Create a Kubernetes cluster on Azure, by typing in the following commands:
+7. Authenticate kubectl:
 
    .. code-block:: bash
 
-      export CLUSTER_NAME=YOUR_CLUSTER_NAME
-      export DNS_PREFIX=YOUR_PREFIX
-      az acs create --orchestrator-type=kubernetes --resource-group=${RESOURCE_GROUP} --name=${CLUSTER_NAME} --dns-prefix=${DNS_PREFIX}
+      az acs kubernetes get-credentials \
+          --resource-group=${RESOURCE_GROUP} \
+          --name=${CLUSTER_NAME}
 
   where:
 
@@ -139,4 +165,7 @@ Next Step
 ---------
 
 Now that you have a Kubernetes cluster running, it is time to
-`set up helm <setup-helm.html>`_.
+:ref:`set up helm <setup-helm>`.
+
+.. _ways to set up a cluster: https://kubernetes.io/docs/setup/pick-right-solution/
+.. _Azure resource group: https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#resource-groups
