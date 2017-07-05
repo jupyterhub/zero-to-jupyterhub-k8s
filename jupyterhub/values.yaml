@@ -30,6 +30,7 @@ proxy:
     type: LoadBalancer
     labels: {}
     annotations: {}
+    nodePort: null
   image:
     name: jupyterhub/configurable-http-proxy
     tag: 2.0.4

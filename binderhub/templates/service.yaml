@@ -13,3 +13,6 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8585
+      {{ if .Values.service.nodePort -}}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- end }}

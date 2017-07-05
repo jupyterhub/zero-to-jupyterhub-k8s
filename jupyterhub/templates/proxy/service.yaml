@@ -28,3 +28,6 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8000
+      {{ if .Values.proxy.service.nodePort -}}
+      nodePort: {{ .Values.proxy.service.nodePort }}
+      {{- end }}
