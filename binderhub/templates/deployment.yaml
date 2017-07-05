@@ -51,6 +51,10 @@ spec:
       - name: docker-secret
         secret:
           secretName: binder-secret
+      {{ else -}}
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock
       {{- end }}
       containers:
       - name: binder-container
@@ -62,6 +66,9 @@ spec:
           - mountPath: /root/.docker
             name: docker-secret
             readOnly: true
+          {{ else -}}
+          - mountPath: /var/run/docker.sock
+            name: docker-socket
           {{- end }}
         resources:
 {{ toYaml .Values.resources | indent 12}}
