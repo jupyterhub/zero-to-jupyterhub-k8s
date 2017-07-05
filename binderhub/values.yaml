@@ -13,7 +13,7 @@ googleAnalyticsCode: null
 
 registry:
   enabled: false
-  prefix: binderhub/
+  prefix: binderhub-local/
   host: gcr.io
   username: _json_key
   password: null
