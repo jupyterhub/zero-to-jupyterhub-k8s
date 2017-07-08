@@ -20,7 +20,7 @@ RUN pip3 install --no-cache-dir \
          pymysql==0.7.11 \
          psycopg2==2.7.1
 
-RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@746def21
+RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@804947a
 
 ADD jupyterhub_config.py /srv/jupyterhub_config.py
 ADD cull_idle_servers.py /usr/local/bin/cull_idle_servers.py
