@@ -1,6 +1,7 @@
 import yaml
 import os
 import sys
+from tornado.httpclient import AsyncHTTPClient
 
 def get_config(key, default=None):
     """
@@ -16,6 +17,13 @@ def get_config(key, default=None):
             return data
     except FileNotFoundError:
         return default
+
+
+# Configure JupyterHub to use the curl backend for making HTTP requests,
+# rather than the pure-python implementations. The default one starts
+# being too slow to make a large number of requests to the proxy API
+# at the rate required.
+AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
 
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
