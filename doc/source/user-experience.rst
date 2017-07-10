@@ -1,91 +1,121 @@
 .. _user_experience:
 
-Changing what is available to Users
-===================================
+Customization for Different Users' Needs
+========================================
 
-There are many options for tweaking what your users see after they log in
-to JupyterHub.
+Users, depending on their work needs, require different libraries, packages,
+and files. Often, users will like their **user environment** tailored to meet
+their personal preferences.
 
-User environment
-----------------
+Since JupyterHub can serve many different types of users, JupyterHub managers
+and administrators must be able to flexibly **allocate user resources**, like
+memory or compute. For example, the Hub may be serving power users with large
+resource requirements as well as beginning users with more basic resource
+needs. The ability to customize the Hub's resources to serve both user groups
+improves the user experience for all Hub users.
 
-The user environment is the set of packages, environment variables, &
-various files that are present when the user starts their server. You
-usually do this by building a **docker image** specifying all the things
-you want in it. There are many ways to build and use one - here we'll
-talk about the common ones!
+Tailoring the user environment
+------------------------------
 
-.. FIXME: Explain images better!
+The **user environment** is the set of packages, environment variables, and
+various files that are present when the user logs into JupyterHub. The user may
+also see different tools that provide interfaces to perform specialized tasks,
+such as RStudio, RISE, JupyterLab and others.
 
-Using an existing docker image
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Usually a **docker image** specifies the different things that you want to
+users to have. The following sections will describe how to use existing and
+create custom images to best serve the user.
 
-The simplest way to proceed is to use an existing docker image that someone
-else maintains. For example, the Jupyter project maintains `jupyter/docker-stacks <https://github.com/jupyter/docker-stacks/>`_,
-ready to use docker images with various popular science tools in them.
+.. tip::
+   A **docker image** is similar to a recipe that Docker can use to build
+   a working space which gives users the tools, libraries, and capabilities to
+   be productive.
 
-For example, the `scipy-notebook <https://hub.docker.com/r/jupyter/scipy-notebook/>`_
-image has a bunch of `useful libraries <https://github.com/jupyter/docker-stacks/tree/master/scipy-notebook>`_
-pre-installed, and that might satisfy your needs. You can use it by modifying
-your config.yaml to point to it and then applying the change.
+Use an existing docker image
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Using an existing docker image, that someone else has written and maintains,
+is the simplest approach. For example, Project Jupyter maintains the
+`jupyter/docker-stacks <https://github.com/jupyter/docker-stacks/>`_ repo,
+which contains ready to use docker images. A set of popular science and data
+science tools can be found in each image.
 
-.. code-block:: yaml
+The `scipy-notebook <https://hub.docker.com/r/jupyter/scipy-notebook/>`_
+image, which can be found in the ``docker-stacks`` repo, contains
+`useful scientific programming libraries <https://github.com/jupyter/docker-stacks/tree/master/scipy-notebook>`_
+pre-installed. This image may satisfy your needs. If you wish to use an
+existing image, such as the ``scipy-notebook`` image, complete these steps:
 
-   singleuser:
-     image:
-       name: jupyter/scipy-notebook
-       tag: 8e15d329f1e9
+1. Modify your ``config.yaml`` file to specify the image. For example:
 
+   .. code-block:: yaml
 
-You can then `apply the change <#applying-configuration-changes>`_, which
-will also **pre-pull** the image on all the nodes in your cluster. This
-could take several minutes, so be patient.
+       singleuser:
+         image:
+           name: jupyter/scipy-notebook
+           tag: 8e15d329f1e9
+
+   .. note::
+      Always use a specific tag, never use ``latest``.
+
+      Using ``latest`` might cause a several minute delay, confusion, or
+      failures for users when a new version of the image is released.
+
+2. Apply the change by following the directions listed in
+   `apply the change <#applying-configuration-changes>`_. These directions
+   will **pre-pull** the image to all the nodes in your cluster. This process
+   may take several minutes to complete.
+
+Build a custom image with ``repo2docker``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you can't find a pre-existing image that suits your needs, you can
+create your own image. The easiest way to do this is with the package
+``repo2docker``.
 
 .. note::
-   Always use a specific tag, never use `latest`. That might cause multi
-   minute delays or failures for users when a new version of the image is released.
 
-Building your own image with ``repo2docker``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-`repo2docker <https://github.com/jupyter/repo2docker>`_
-lets you quickly convert a GitHub repository into a Docker image that we can use
-as a base for your JupyterHub instance. Anything inside the GitHub repository
-will exist in a user’s environment when they join your JupyterHub. If you
-include a ``requirements.txt`` file in the root level of your of the repository,
-repo2docker will ``pip install`` each of these packages into the Docker image to be
-built. If you have an ``environment.yaml`` file, it'll use conda and create an
-environment based on that specification. If you have a `Dockerfile` it will ignore
-everything else and just use the Dockerfile.
+    `repo2docker <https://github.com/jupyter/repo2docker>`_ lets you quickly
+    convert a GitHub repository into a Docker image that we can use as a base
+    for your JupyterHub instance. Anything inside the GitHub repository
+    will exist in a user’s environment when they join your JupyterHub. If you
+    include a ``requirements.txt`` file in the root level of your of the
+    repository, repo2docker will ``pip install`` each of these packages into
+    the Docker image to be built. If you have an ``environment.yaml`` file,
+    `conda` will create an environment based on this file's specification. If
+    you have a `Dockerfile` it will ignore everything else and just use the
+    Dockerfile.
 
 Below we’ll cover how to use repo2docker to generate a Docker image and how to
-configure JupyterHub to build off of this image.
+configure JupyterHub to build off of this image:
 
 1. **Download and start Docker.** You can do this by downloading and installing
    Docker at `this link <https://store.docker.com/search?offering=community&platform=desktop%2Cserver&q=&type=edition>`_.
    Once you’ve started Docker, it will show up as a tiny background application.
 
-2. **Install repo2docker**. You can easily do this with ``pip``.
+2. **Install repo2docker** using ``pip``:
 
-   .. code:: bash
+    .. code:: bash
 
-      pip install jupyter-repo2docker
+        pip install jupyter-repo2docker
 
+    If that command fails due to permissions, try it with the command option ``user``:
 
-   If that doesn't work due to permissions, try:
+    .. code:: bash
 
-   .. code:: bash
-
-      pip install --user jupyter-repo2docker
+        pip install --user jupyter-repo2docker
 
 
 3. **Create (or find) a GitHub repository you want to use.** This repo should
    have all materials that you want your users to access. In addition you can
-   include a ``requirements.txt`` file that has one package per line. These
+   include a ``pip`` ``requirements.txt`` file
+
+   .. TODO Add link to pip.
+
+   that has one package per line. These
    packages should be listed in the same way that you’d install them using
-   ``pip install``. You should also specify the versions explicitly so the image is
-   fully reproducible. E.g.:
+   ``pip install``. You should also specify the versions explicitly so the
+   image is fully reproducible. E.g.:
 
    .. code-block:: bash
 
@@ -93,22 +123,24 @@ configure JupyterHub to build off of this image.
           scipy==0.19.0
           matplotlib==2.0
 
-4. **Use repo2docker to build your Docker image.**
+4. **Use repo2docker to build a Docker image.**
+
    .. code-block:: bash
 
       jupyter-repo2docker <YOUR-GITHUB-REPOSITORY> --image=gcr.io/<PROJECT-NAME>/<IMAGE-NAME>:<TAG> --no-run
 
-   This tells repo2docker to fetch master of the github repository, and use
-   heuristics to build a docker image of it.
+   This tells ``repo2docker`` to fetch ``master`` of the github repository,
+   and use heuristics to build a docker image of it.
 
   .. note::
-         - The project name should match your google cloud project's name.
-         - Don’t use underscores in your image name. Other than this it can be
-           anything memorable. This is a bug that will be fixed soon.
-         - The tag should be the first 6 characters of the SHA in the GitHub
-           commit for the image to build from.
 
-5. **Push our newly-built Docker image to the cloud.** You can either push this
+     - The project name should match your google cloud project's name.
+     - Don’t use underscores in your image name. Other than this it can be
+       anything memorable. This is a bug that will be fixed soon.
+     - The tag should be the first 6 characters of the SHA in the GitHub
+       commit for the image to build from.
+
+5. **Push the newly-built Docker image to the cloud.** You can either push this
    to Docker Hub, or to the gcloud docker repository. Here we’ll push to the
    gcloud repository::
 
@@ -125,23 +157,30 @@ configure JupyterHub to build off of this image.
               name: gcr.io/<project-name>/<image-name>
               tag: <tag>
 
+   .. note::
+
+      This step can be done automatically by setting a flag if desired.
+
 7. **Tell helm to update JupyterHub to use this configuration.** Using the
-   normal method to `apply the change <#applying-configuration-changes>`_ to
+   standard method to `apply the change <#applying-configuration-changes>`_ to
    the config.
-8. **Restart your notebook if you are already logging in** If you already have
+
+8. **Restart your notebook if you are already logged in** If you already have
    a running JupyterHub session, you’ll need to restart it (by stopping and
    starting your session from the control panel in the top right). New users
    won’t have to do this.
+
 9. **Enjoy your new computing environment!** You should now have a live
    computing environment built off of the Docker image we’ve created.
 
    .. note::
+
       The contents of your GitHub repository might not show up if you have
       enabled persistent storage. Disable persistent storage if you want them
       to show up!
 
-Setting environment variables
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Set environment variables
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Another way to affect your user's environment is by setting
 `environment variables <https://en.wikipedia.org/wiki/Environment_variable>`_.
@@ -161,7 +200,7 @@ can set any number of static environment variables here as you want.
 
 Users can read the environment variables in their code in various ways.
 
-In python,
+In Python, this code example will read in an environment variable:
 
 .. code-block:: python
 
@@ -170,14 +209,16 @@ In python,
 
 Other languages will have their own methods of accessing this.
 
-User resources
---------------
 
-User resources are the CPU / RAM / Storage resources you provide your users.
+Allocating and controlling user resources
+-----------------------------------------
+
+User resources include the CPU, RAM, and Storage which JupyterHub provides to
+users.
 
 
-Setting memory and CPU guarantees / limits for your users
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Set user memory and CPU guarantees / limits
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Each user on your JupyterHub gets a slice of memory and CPU to use. There are
 two ways to specify how much users get to use: resource *guarantees* and
@@ -214,20 +255,22 @@ a very short-term time (e.g. when running a single, short-lived function that
 consumes a lot of memory).
 
 .. note::
-    Remember `apply the changes <#applying-configuraiton-changes>`_ after changing
-    your config.yaml file!
 
-Storage resources
-~~~~~~~~~~~~~~~~~
+    Remember `apply the changes <#applying-configuration-changes>`_ after
+    changing your ``config.yaml`` file!
 
-Each user gets their own, 10Gi disk for storage when they log in. You
-can customize this in many ways!
+Allocate user storage
+~~~~~~~~~~~~~~~~~~~~~
 
-Turning off per-user persistent storage
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+By default, each user receives their own, 10Gi disk for storage when they log in
+to JupyterHub. This storage can be turned off or customized as described in these
+sections.
 
-If you want users to not have any persistent storage & just want to turn
-it off, you can easily do that.
+Turn off per-user persistent storage
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you do not wish for users to have any persistent storage, it can be
+turned off. Edit the ``config.yaml`` file and set the storage type to ``none``:
 
 .. code-block:: yaml
 
@@ -235,15 +278,16 @@ it off, you can easily do that.
      storage:
        type: none
 
-When you apply this, users will no longer be allocated a persistent $HOME
-directory. Currently running users will still have access to theirs until
-their server is restarted.
+After `applying this change <#applying-configuration-changes>`_, new users
+will no longer be allocated a persistent ``$HOME`` directory. Any currently
+running users will still have access to their storage until their server
+is restarted.
 
-Changing the size of per-user persistent storage
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Change per-user persistent storage size
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-By default, user home directories are sized to 10Gi each. You can also
-easily change this:
+By default, user home directories are sized to 10Gi each. To change this
+value, edit the ``config.yaml`` file:
 
 .. code-block:: yaml
 
@@ -251,22 +295,26 @@ easily change this:
       storage:
         capacity: 5Gi
 
-This will make all **new** user's home directories be 5Gi each, instead
-of 10Gi. Note that the disks of users who have already logged in will
-not change.
+This example will make all **new** user's home directories be 5Gi each,
+instead of 10Gi.
+
+.. important::
+
+   The disks of "logged in" users will not change or be decreased in
+   this example.
 
 
-Pre-populating ``$HOME`` directory with notebooks
------------------------------------------------
+Advanced topic: Pre-populating user's ``$HOME`` directory with notebooks
+------------------------------------------------------------------------
 
 By default, the contents of ``$HOME`` in the docker image are hidden by
 the contents of the per-user persistent volume. If you want to, you can
 execute a command before the notebook starts each time and copy the files
 you want from your image to the user's home directory.
 
-If you were using the repo2docker method of building an image & wanted
-your git repo copied on first use to user's home directory, you can use
-the following in your config.yaml.
+If you were using the repo2docker method of building an image and wanted
+your git repo copied on first use to the user's home directory, you can
+use the following in your ``config.yaml`` file:
 
     .. code-block:: bash
 
@@ -276,7 +324,8 @@ the following in your config.yaml.
                 exec:
                   command: ["/bin/sh", "-c", "test -f $HOME/.copied || cp -Rf /srv/app/src/. $HOME/; touch $HOME/.copied"]
 
+.. note::
 
-Note that this will only copy the contents of the directory to $HOME *once* -
-the first time the user logs in. Further updates will not be reflected. There
-is work in progress for making this better.
+   Note that this will only copy the contents of the directory to ``$HOME`` *once* -
+   the first time the user logs in. Further updates will not be reflected. There
+   is work in progress for making this better.
