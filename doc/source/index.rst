@@ -36,6 +36,7 @@ JupyterHub deployment.
    :maxdepth: 2
 
    extending-jupyterhub
+   user-experience
    tools
 
 
