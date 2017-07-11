@@ -25,7 +25,8 @@ such as RStudio, RISE, JupyterLab, and others.
 
 Usually a :term:`docker image` specifies the different functionality and
 things that you wish to provide to users. The following sections will describe
-how to use existing docker images and how to create custom images.
+how to use existing docker images, how to create custom images, and how to set
+environment variables.
 
 Use an existing docker image
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -53,10 +54,12 @@ existing image, such as the ``scipy-notebook`` image, complete these steps:
            tag: 8e15d329f1e9
 
    .. note::
-      Always use an explicit tag. Avoid using ``latest``.
 
-      Using ``latest`` might cause a several minute delay, confusion, or
-      failures for users when a new version of the image is released.
+      Always use an explicit ``tag``, such as a specific commit.
+
+      Avoid using ``latest``. Using ``latest`` might cause a several minute
+      delay, confusion, or failures for users when a new version of the image
+      is released.
 
 2. Apply the changes by following the directions listed in
    `apply the changes`_. These directions will **pre-pull** the image to all
@@ -68,7 +71,7 @@ Build a custom image with ``repo2docker``
 
 If you can't find a pre-existing image that suits your needs, you can
 create your own image. The easiest way to do this is with the package
-``repo2docker``.
+:term:``repo2docker``.
 
 .. note::
 
@@ -76,13 +79,14 @@ create your own image. The easiest way to do this is with the package
    convert a GitHub repository into a Docker image that can be used as a base
    for your JupyterHub instance. Anything inside the GitHub repository
    will exist in a user’s environment when they join your JupyterHub:
+
    - If you include a ``requirements.txt`` file in the root level of the
-   repository, ``repo2docker`` will ``pip install`` the specified packages
-   into the Docker image to be built.
+     repository, ``repo2docker`` will ``pip install`` the specified packages
+     into the Docker image to be built.
    - If you have an ``environment.yaml`` file, ``conda`` will create an
-   environment based on this file's specification.
+     environment based on this file's specification.
    - If you have a ``Dockerfile``, ``repo2docker`` will ignore everything
-   else and just use the Dockerfile.
+     else and just use the Dockerfile.
 
 Below we’ll cover how to use ``repo2docker`` to generate a Docker image and
 how to configure JupyterHub to build off of this image:
@@ -133,7 +137,8 @@ how to configure JupyterHub to build off of this image:
      - Don’t use underscores in your image name. Other than this, the name can
        be anything memorable. *This bug with underscores will be fixed soon.*
      - The tag should be the first 6 characters of the SHA in the GitHub
-       commit desired for building the image.
+       commit desired for building the image since this improves
+       reproducibility.
 
 5. **Push the newly-built Docker image to the cloud.** You can either push
    this to Docker Hub, or to the gcloud docker repository. Here we'll
@@ -141,7 +146,7 @@ how to configure JupyterHub to build off of this image:
 
    .. code-block:: bash
 
-       gcloud docker -- push gcr.io/<project-name>/<image-name>:<tag>
+      gcloud docker -- push gcr.io/<project-name>/<image-name>:<tag>
 
 6. **Edit the JupyterHub configuration to build from this image.**
    Edit ``config.yaml`` file to include these lines in it:
@@ -176,12 +181,11 @@ how to configure JupyterHub to build off of this image:
 Set environment variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Another way to affect your user's environment is by setting
-`environment variables <https://en.wikipedia.org/wiki/Environment_variable>`_.
-While you can set them up in your Docker image, it is often easier to set them
-up in your helm chart.
+Another way to affect your user's environment is by setting values for
+:term:`environment variables`. While you can set them up in your Docker image,
+it is often easier to set them up in your helm chart.
 
-To set them up in your helm chart, you would edit your ``config.yaml`` file
+To set them up in your helm chart, edit your ``config.yaml`` file
 and `apply the changes`_. For example, this code snippet will set the
 environment variable ``EDITOR`` to the value ``vim``:
 
@@ -192,7 +196,7 @@ environment variable ``EDITOR`` to the value ``vim``:
        EDITOR: "vim"
 
 You can set any number of static environment variables in the ``config.yaml``
-file as you want.
+file.
 
 Users can read the environment variables in their code in various ways. In
 Python, for example, the following code will read in an environment variable:
