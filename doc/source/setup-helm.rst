@@ -13,9 +13,9 @@ Installation
 The simplest way to install helm is to run Helm's installer script at a
 terminal:
 
-    .. code:: bash
+   .. code:: bash
 
-        curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
+      curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
 
 `Alternative methods for helm installation <https://github.com/kubernetes/helm/blob/master/docs/install.md>`_
 exist if you prefer to install without using the script.
@@ -26,26 +26,28 @@ Initialization
 After installing helm on your machine, initialize helm on your Kubernetes
 cluster. At the terminal, enter:
 
-    .. code:: bash
+   .. code:: bash
 
-        helm init
+      helm init
 
 This command only needs to run once per Kubernetes cluster.
 
 Verify
 ------
 
-You can verify that you have the correct version and that it installed properly by running:
+You can verify that you have the correct version and that it installed
+properly by running:
 
-.. code:: bash
+   .. code:: bash
 
-   helm version
+      helm version
 
 It should provide output like
 
-.. code::
-   Client: &version.Version{SemVer:"v2.4.1", GitCommit:"46d9ea82e2c925186e1fc620a8320ce1314cbb02", GitTreeState:"clean"}
-   Server: &version.Version{SemVer:"v2.4.1", GitCommit:"46d9ea82e2c925186e1fc620a8320ce1314cbb02", GitTreeState:"clean"}
+   .. code-block:: bash
+
+      Client: &version.Version{SemVer:"v2.4.1", GitCommit:"46d9ea82e2c925186e1fc620a8320ce1314cbb02", GitTreeState:"clean"}
+      Server: &version.Version{SemVer:"v2.4.1", GitCommit:"46d9ea82e2c925186e1fc620a8320ce1314cbb02", GitTreeState:"clean"}
 
 Make sure you have at least version 2.4.1!
 
