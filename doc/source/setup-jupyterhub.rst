@@ -57,7 +57,7 @@ For the following steps, use your favorite code editor. We'll use the
 Install JupyterHub
 ------------------
 
-1. Let's add the JupyterHub `helm repository<https://github.com/kubernetes/helm/blob/master/docs/chart_repository.md>`_
+1. Let's add the JupyterHub `helm repository <https://github.com/kubernetes/helm/blob/master/docs/chart_repository.md>`_
    to your helm, so you can install JupyterHub from it. This makes it easy to refer to the JupyterHub chart
    without having to use a long URL each time.
 
