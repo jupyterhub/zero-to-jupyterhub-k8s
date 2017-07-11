@@ -71,7 +71,7 @@ Build a custom image with ``repo2docker``
 
 If you can't find a pre-existing image that suits your needs, you can
 create your own image. The easiest way to do this is with the package
-:term:``repo2docker``.
+:term:`repo2docker`.
 
 .. note::
 
