@@ -1,10 +1,10 @@
 .. _user_experience:
 
-Customization for Different Users' Needs
-========================================
+Customization of the User Experience
+====================================
 
 Users, depending on their work needs, require different libraries, packages,
-and files. Often, users will like their **user environment** tailored to meet
+and files. Often, users wish to **tailor the user environment** to meet
 their personal preferences.
 
 Since JupyterHub can serve many different types of users, JupyterHub managers
@@ -42,7 +42,8 @@ science tools can be found in each image.
 
 The `scipy-notebook <https://hub.docker.com/r/jupyter/scipy-notebook/>`_
 image, which can be found in the ``docker-stacks`` repo, contains
-`useful scientific programming libraries <https://github.com/jupyter/docker-stacks/tree/master/scipy-notebook>`_
+`useful scientific programming libraries
+<https://github.com/jupyter/docker-stacks/tree/master/scipy-notebook>`_
 pre-installed. This image may satisfy your needs. If you wish to use an
 existing image, such as the ``scipy-notebook`` image, complete these steps:
 
