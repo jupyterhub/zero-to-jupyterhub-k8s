@@ -11,8 +11,8 @@ Since JupyterHub can serve many different types of users, JupyterHub managers
 and administrators must be able to flexibly **allocate user resources**, like
 memory or compute. For example, the Hub may be serving power users with large
 resource requirements as well as beginning users with more basic resource
-needs. The ability to customize the Hub's resources to serve both user groups
-improves the user experience for all Hub users.
+needs. The ability to customize the Hub's resources to satisfy both user
+groups improves the user experience for all Hub users.
 
 Tailoring the user environment
 ------------------------------
@@ -20,11 +20,11 @@ Tailoring the user environment
 The **user environment** is the set of packages, environment variables, and
 various files that are present when the user logs into JupyterHub. The user may
 also see different tools that provide interfaces to perform specialized tasks,
-such as RStudio, RISE, JupyterLab and others.
+such as RStudio, RISE, JupyterLab, and others.
 
 Usually a **docker image** specifies the different things that you want to
 users to have. The following sections will describe how to use existing and
-create custom images to best serve the user.
+create custom images to serve the user.
 
 .. tip::
    A **docker image** is similar to a recipe that Docker can use to build
@@ -34,11 +34,11 @@ create custom images to best serve the user.
 Use an existing docker image
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Using an existing docker image, that someone else has written and maintains,
+Using an existing docker image, that someone else has written and maintained,
 is the simplest approach. For example, Project Jupyter maintains the
 `jupyter/docker-stacks <https://github.com/jupyter/docker-stacks/>`_ repo,
-which contains ready to use docker images. A set of popular science and data
-science tools can be found in each image.
+which contains ready to use docker images. Each image includes a set of
+commonly used science and data science libraries and tools.
 
 The `scipy-notebook <https://hub.docker.com/r/jupyter/scipy-notebook/>`_
 image, which can be found in the ``docker-stacks`` repo, contains
@@ -57,15 +57,15 @@ existing image, such as the ``scipy-notebook`` image, complete these steps:
            tag: 8e15d329f1e9
 
    .. note::
-      Always use a specific tag, never use ``latest``.
+      Always use an explicit tag. Avoid using ``latest``.
 
       Using ``latest`` might cause a several minute delay, confusion, or
       failures for users when a new version of the image is released.
 
-2. Apply the change by following the directions listed in
-   `apply the change <#applying-configuration-changes>`_. These directions
-   will **pre-pull** the image to all the nodes in your cluster. This process
-   may take several minutes to complete.
+2. Apply the changes by following the directions listed in
+   `apply the changes`_. These directions will **pre-pull** the image to all
+   the nodes in your cluster. This process may take several minutes to
+   complete.
 
 Build a custom image with ``repo2docker``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -163,8 +163,7 @@ configure JupyterHub to build off of this image:
       This step can be done automatically by setting a flag if desired.
 
 7. **Tell helm to update JupyterHub to use this configuration.** Using the
-   standard method to `apply the change <#applying-configuration-changes>`_ to
-   the config.
+   standard method to `apply the changes`_ to the config.
 
 8. **Restart your notebook if you are already logged in** If you already have
    a running JupyterHub session, you’ll need to restart it (by stopping and
@@ -257,8 +256,7 @@ consumes a lot of memory).
 
 .. note::
 
-    Remember `apply the changes <#applying-configuration-changes>`_ after
-    changing your ``config.yaml`` file!
+    Remember to `apply the changes`_ after changing your ``config.yaml`` file!
 
 Allocate user storage
 ~~~~~~~~~~~~~~~~~~~~~
@@ -279,7 +277,7 @@ turned off. Edit the ``config.yaml`` file and set the storage type to ``none``:
      storage:
        type: none
 
-After `applying this change <#applying-configuration-changes>`_, new users
+Next `apply the changes`_. After the changes are applied, new users
 will no longer be allocated a persistent ``$HOME`` directory. Any currently
 running users will still have access to their storage until their server
 is restarted.
@@ -330,3 +328,5 @@ use the following in your ``config.yaml`` file:
    Note that this will only copy the contents of the directory to ``$HOME`` *once* -
    the first time the user logs in. Further updates will not be reflected. There
    is work in progress for making this better.
+
+.. _apply the changes: #applying-configuration-changes
