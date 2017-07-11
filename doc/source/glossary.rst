@@ -30,6 +30,15 @@ succinct and relevant as possible, and provide links to learn more details.
       a working space which gives users the tools, libraries, and capabilities to
       be productive.
 
+   `environment variables <https://en.wikipedia.org/wiki/Environment_variable>`_
+      A set of named values that can affect the way running processes will
+      behave on a computer. Some common examples are ``PATH``, ``HOME``, and
+      ``EDITOR``.
+
    persistent storage
       A filesystem attached to a user pod that allows the user to store
       notebooks and files that persist across multiple logins.
+
+   `repo2docker <https://github.com/jupyter/repo2docker>`_
+      A tool which lets you quickly convert a GitHub repository into a Docker
+      image that can be used as a base for your JupyterHub instance.
