@@ -14,6 +14,7 @@ resource requirements as well as beginning users with more basic resource
 needs. The ability to customize the Hub's resources to satisfy both user
 groups improves the user experience for all Hub users.
 
+
 Tailoring the user environment
 ------------------------------
 
@@ -22,14 +23,9 @@ various files that are present when the user logs into JupyterHub. The user may
 also see different tools that provide interfaces to perform specialized tasks,
 such as RStudio, RISE, JupyterLab, and others.
 
-Usually a **docker image** specifies the different things that you want to
-users to have. The following sections will describe how to use existing and
-create custom images to serve the user.
-
-.. tip::
-   A **docker image** is similar to a recipe that Docker can use to build
-   a working space which gives users the tools, libraries, and capabilities to
-   be productive.
+Usually a :term:`docker image` specifies the different functionality and
+things that you wish to provide to users. The following sections will describe
+how to use existing docker images and how to create custom images.
 
 Use an existing docker image
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -76,18 +72,17 @@ create your own image. The easiest way to do this is with the package
 
 .. note::
 
-    `repo2docker <https://github.com/jupyter/repo2docker>`_ lets you quickly
-    convert a GitHub repository into a Docker image that can be used as a base
-    for your JupyterHub instance. Anything inside the GitHub repository
-    will exist in a user’s environment when they join your JupyterHub:
-
-    - If you include a ``requirements.txt`` file in the root level of the
-      repository, ``repo2docker`` will ``pip install`` the specified packages
-      into the Docker image to be built.
-    - If you have an ``environment.yaml`` file, ``conda`` will create an
-      environment based on this file's specification.
-    - If you have a ``Dockerfile``, ``repo2docker`` will ignore everything
-      else and just use the Dockerfile.
+   `repo2docker <https://github.com/jupyter/repo2docker>`_ lets you quickly
+   convert a GitHub repository into a Docker image that can be used as a base
+   for your JupyterHub instance. Anything inside the GitHub repository
+   will exist in a user’s environment when they join your JupyterHub:
+   - If you include a ``requirements.txt`` file in the root level of the
+   repository, ``repo2docker`` will ``pip install`` the specified packages
+   into the Docker image to be built.
+   - If you have an ``environment.yaml`` file, ``conda`` will create an
+   environment based on this file's specification.
+   - If you have a ``Dockerfile``, ``repo2docker`` will ignore everything
+   else and just use the Dockerfile.
 
 Below we’ll cover how to use ``repo2docker`` to generate a Docker image and
 how to configure JupyterHub to build off of this image:
@@ -98,16 +93,16 @@ how to configure JupyterHub to build off of this image:
 
 2. **Install repo2docker** using ``pip``:
 
-    .. code:: bash
+   .. code:: bash
 
-        pip install jupyter-repo2docker
+      pip install jupyter-repo2docker
 
-    If that command fails due to insufficient permissions, try it with the
-    command option, ``user``:
+   If that command fails due to insufficient permissions, try it with the
+   command option, ``user``:
 
-    .. code:: bash
+   .. code:: bash
 
-        pip install --user jupyter-repo2docker
+      pip install --user jupyter-repo2docker
 
 
 3. **Create (or find) a GitHub repository you want to use.** This repo should
@@ -119,9 +114,9 @@ how to configure JupyterHub to build off of this image:
 
    .. code-block:: bash
 
-       numpy==1.12.1
-       scipy==0.19.0
-       matplotlib==2.0
+      numpy==1.12.1
+      scipy==0.19.0
+      matplotlib==2.0
 
 4. **Use repo2docker to build a Docker image.**
 
@@ -151,16 +146,14 @@ how to configure JupyterHub to build off of this image:
 6. **Edit the JupyterHub configuration to build from this image.**
    Edit ``config.yaml`` file to include these lines in it:
 
-    .. code-block:: bash
+   .. code-block:: bash
 
-        singleuser:
-          image:
-            name: gcr.io/<project-name>/<image-name>
-            tag: <tag>
+      singleuser:
+        image:
+          name: gcr.io/<project-name>/<image-name>
+          tag: <tag>
 
-   .. note::
-
-      This step can be done automatically by setting a flag if desired.
+   This step can be done automatically by setting a flag if desired.
 
 7. **Tell helm to update JupyterHub to use this configuration.** Use the
    standard method to `apply the changes`_ to the config.
@@ -170,14 +163,15 @@ how to configure JupyterHub to build off of this image:
    starting your session from the control panel in the top right). New users
    won’t have to do this.
 
-9. **Enjoy your new computing environment!** You should now have a live
-   computing environment built off of the Docker image we’ve created.
-
    .. note::
 
       The contents of your GitHub repository might not show up if you have
-      enabled persistent storage. Disable persistent storage if you want them
-      to show up!
+      enabled `persistent storage <user_storage>`_. Disable persistent storage
+      if you want the
+      GitHub repository contents to show up.
+
+9. **Enjoy your new computing environment!** You should now have a live
+   computing environment built off of the Docker image we’ve created.
 
 Set environment variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -260,6 +254,8 @@ consumes a lot of memory).
 
     Remember to `apply the changes`_ after changing your ``config.yaml`` file!
 
+.. _user_storage:
+
 Allocate user storage
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -327,9 +323,9 @@ use the following in your ``config.yaml`` file:
 
 .. note::
 
-   Note that this will only copy the contents of the directory to ``$HOME`` *once* -
-   the first time the user logs in. Further updates will not be reflected. There
-   is work in progress for making this better.
+   Note that this will only copy the contents of the directory to ``$HOME``
+   *once* - the first time the user logs in. Further updates will not be
+   reflected. *There is work in progress for improving this behavior.*
 
 .. _apply the changes: #applying-configuration-changes
 .. _downloading and installing Docker: https://store.docker.com/search?offering=community&platform=desktop%2Cserver&q=&type=edition
