@@ -28,7 +28,6 @@ complete deployment of jupyterhub on Google Cloud. If you want to follow that
 comprehensive walkthrough, the next step on your journey is to :ref:`create a
 Kubernetes cluster on Google Cloud <google-cloud>`. 
 
-
 Extending and Customizing JupyterHub
 ------------------------------------
 
@@ -43,7 +42,7 @@ For a more extensive description of the tools and services that JupyterHub
 depends upon, see our :ref:`tools` page.
 
 Questions or Suggestions?
-=========================
+-------------------------
 
 If you have questions or suggestions, please reach out at our `issues page`_
 on GitHub.
