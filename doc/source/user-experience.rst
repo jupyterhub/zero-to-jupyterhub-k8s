@@ -184,10 +184,12 @@ Set environment variables
 
 Another way to affect your user's environment is by setting
 `environment variables <https://en.wikipedia.org/wiki/Environment_variable>`_.
-You can set them up in your Docker image too, but it is sometimes
-easier to set them up in your helm chart!
+While you can set them up in your Docker image, it is often easier to set them
+up in your helm chart.
 
-As usual, you would just edit your ``config.yaml`` file and re-apply!
+To set them up in your helm chart, you would edit your ``config.yaml`` file
+and `apply the changes`_. For example, this code snippet will set the
+environment variable ``EDITOR`` to the value ``vim``:
 
 .. code-block:: yaml
 
@@ -195,19 +197,19 @@ As usual, you would just edit your ``config.yaml`` file and re-apply!
      extraEnv:
        EDITOR: "vim"
 
-This will set the environment variable ``EDITOR`` to the value ``vim``. You
-can set any number of static environment variables here as you want.
+You can set any number of static environment variables in the ``config.yaml``
+file as you want.
 
-Users can read the environment variables in their code in various ways.
-
-In Python, this code example will read in an environment variable:
+Users can read the environment variables in their code in various ways. In
+Python, for example, the following code will read in an environment variable:
 
 .. code-block:: python
 
    import os
    my_value = os.environ["MY_ENVIRONMENT_VARIABLE"]
 
-Other languages will have their own methods of accessing this.
+Other languages will have their own methods of reading these environment
+variables.
 
 
 Allocating and controlling user resources
