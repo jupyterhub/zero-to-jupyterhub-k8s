@@ -77,22 +77,24 @@ create your own image. The easiest way to do this is with the package
 .. note::
 
     `repo2docker <https://github.com/jupyter/repo2docker>`_ lets you quickly
-    convert a GitHub repository into a Docker image that we can use as a base
+    convert a GitHub repository into a Docker image that can be used as a base
     for your JupyterHub instance. Anything inside the GitHub repository
-    will exist in a user’s environment when they join your JupyterHub. If you
-    include a ``requirements.txt`` file in the root level of your of the
-    repository, repo2docker will ``pip install`` each of these packages into
-    the Docker image to be built. If you have an ``environment.yaml`` file,
-    `conda` will create an environment based on this file's specification. If
-    you have a `Dockerfile` it will ignore everything else and just use the
-    Dockerfile.
+    will exist in a user’s environment when they join your JupyterHub:
 
-Below we’ll cover how to use repo2docker to generate a Docker image and how to
-configure JupyterHub to build off of this image:
+    - If you include a ``requirements.txt`` file in the root level of the
+      repository, ``repo2docker`` will ``pip install`` the specified packages
+      into the Docker image to be built.
+    - If you have an ``environment.yaml`` file, ``conda`` will create an
+      environment based on this file's specification.
+    - If you have a ``Dockerfile``, ``repo2docker`` will ignore everything
+      else and just use the Dockerfile.
 
-1. **Download and start Docker.** You can do this by downloading and installing
-   Docker at `this link <https://store.docker.com/search?offering=community&platform=desktop%2Cserver&q=&type=edition>`_.
-   Once you’ve started Docker, it will show up as a tiny background application.
+Below we’ll cover how to use ``repo2docker`` to generate a Docker image and
+how to configure JupyterHub to build off of this image:
+
+1. **Download and start Docker.** You can do this by
+   `downloading and installing Docker`_. Once you’ve started Docker,
+   it will show up as a tiny background application.
 
 2. **Install repo2docker** using ``pip``:
 
@@ -100,7 +102,8 @@ configure JupyterHub to build off of this image:
 
         pip install jupyter-repo2docker
 
-    If that command fails due to permissions, try it with the command option ``user``:
+    If that command fails due to insufficient permissions, try it with the
+    command option, ``user``:
 
     .. code:: bash
 
@@ -108,21 +111,18 @@ configure JupyterHub to build off of this image:
 
 
 3. **Create (or find) a GitHub repository you want to use.** This repo should
-   have all materials that you want your users to access. In addition you can
-   include a ``pip`` ``requirements.txt`` file
-
-   .. TODO Add link to pip.
-
-   that has one package per line. These
-   packages should be listed in the same way that you’d install them using
-   ``pip install``. You should also specify the versions explicitly so the
-   image is fully reproducible. E.g.:
+   have all materials that you want your users to access. In addition, you can
+   include a ``requirements.txt`` file for `pip`_ that lists one package per
+   line to install. These packages should be listed in the same way that you’d
+   install them using ``pip install``. Specify the versions explicitly so the
+   image is fully reproducible. For example:
 
    .. code-block:: bash
+      :name: requirements.txt
 
-          numpy==1.12.1
-          scipy==0.19.0
-          matplotlib==2.0
+       numpy==1.12.1
+       scipy==0.19.0
+       matplotlib==2.0
 
 4. **Use repo2docker to build a Docker image.**
 
@@ -330,3 +330,5 @@ use the following in your ``config.yaml`` file:
    is work in progress for making this better.
 
 .. _apply the changes: #applying-configuration-changes
+.. _downloading and installing Docker: https://store.docker.com/search?offering=community&platform=desktop%2Cserver&q=&type=edition
+.. _pip: https://pip.readthedocs.io/en/latest/user_guide/#requirements-files
