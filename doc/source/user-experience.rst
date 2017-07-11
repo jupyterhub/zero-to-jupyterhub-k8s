@@ -216,7 +216,6 @@ Allocating and controlling user resources
 User resources include the CPU, RAM, and Storage which JupyterHub provides to
 users.
 
-
 Set user memory and CPU guarantees / limits
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -256,39 +255,41 @@ consumes a lot of memory).
 
 .. note::
 
-    Remember to `apply the changes`_ after changing your ``config.yaml`` file!
+   Remember to `apply the changes`_ after changing your ``config.yaml`` file!
 
 .. _user_storage:
 
 Allocate user storage
 ~~~~~~~~~~~~~~~~~~~~~
 
-By default, each user receives their own, 10Gi disk for storage when they log in
-to JupyterHub. This storage can be turned off or customized as described in these
-sections.
+By default, each user receives their own, 10Gi disk for storage when they log
+in to JupyterHub. This storage can be turned off or changed as described in
+these sections.
 
 Turn off per-user persistent storage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you do not wish for users to have any persistent storage, it can be
-turned off. Edit the ``config.yaml`` file and set the storage type to ``none``:
+turned off. Edit the ``config.yaml`` file and set the storage type to
+``none``:
 
-.. code-block:: yaml
+   .. code-block:: yaml
 
-   singleuser:
-     storage:
-       type: none
+      singleuser:
+        storage:
+          type: none
 
-Next `apply the changes`_. After the changes are applied, new users
-will no longer be allocated a persistent ``$HOME`` directory. Any currently
-running users will still have access to their storage until their server
-is restarted.
+Next `apply the changes`_.
+
+After the changes are applied, new users will no longer be allocated a
+persistent ``$HOME`` directory. Any currently running users will still have
+access to their storage until their server is restarted.
 
 Change per-user persistent storage size
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-By default, user home directories are sized to 10Gi each. To change this
-value, edit the ``config.yaml`` file:
+By default, storage for user home directories are sized to 10Gi each. To
+increase or decrease this value, edit the ``config.yaml`` file:
 
 .. code-block:: yaml
 
@@ -297,7 +298,7 @@ value, edit the ``config.yaml`` file:
         capacity: 5Gi
 
 This example will make all **new** user's home directories be 5Gi each,
-instead of 10Gi.
+instead of the default 10Gi.
 
 .. important::
 
@@ -317,19 +318,19 @@ If you were using the repo2docker method of building an image and wanted
 your git repo copied on first use to the user's home directory, you can
 use the following in your ``config.yaml`` file:
 
-    .. code-block:: bash
+   .. code-block:: bash
 
-          singleuser:
-            lifecycleHooks:
-              postStart:
-                exec:
-                  command: ["/bin/sh", "-c", "test -f $HOME/.copied || cp -Rf /srv/app/src/. $HOME/; touch $HOME/.copied"]
+      singleuser:
+        lifecycleHooks:
+          postStart:
+            exec:
+              command: ["/bin/sh", "-c", "test -f $HOME/.copied || cp -Rf /srv/app/src/. $HOME/; touch $HOME/.copied"]
 
-.. note::
 
-   Note that this will only copy the contents of the directory to ``$HOME``
-   *once* - the first time the user logs in. Further updates will not be
-   reflected. *There is work in progress for improving this behavior.*
+Note that this will only copy the contents of the directory to ``$HOME``
+*once* - the first time the user logs in. Further updates will not be
+reflected. *There is work in progress for improving this behavior.*
+
 
 .. _apply the changes: #applying-configuration-changes
 .. _downloading and installing Docker: https://store.docker.com/search?offering=community&platform=desktop%2Cserver&q=&type=edition
