@@ -111,14 +111,13 @@ how to configure JupyterHub to build off of this image:
 
 
 3. **Create (or find) a GitHub repository you want to use.** This repo should
-   have all materials that you want your users to access. In addition, you can
-   include a ``requirements.txt`` file for `pip`_ that lists one package per
-   line to install. These packages should be listed in the same way that you’d
-   install them using ``pip install``. Specify the versions explicitly so the
-   image is fully reproducible. For example:
+   have all materials that you want your users to be able to use. You may want
+   to include a `pip`_ ``requirements.txt`` file to list packages, one per
+   file line, to install such as when using ``pip install``. Specify the
+   versions explicitly so the image is fully reproducible. An example
+   ``requirements.txt`` follows:
 
    .. code-block:: bash
-      :name: requirements.txt
 
        numpy==1.12.1
        scipy==0.19.0
@@ -136,36 +135,37 @@ how to configure JupyterHub to build off of this image:
   .. note::
 
      - The project name should match your google cloud project's name.
-     - Don’t use underscores in your image name. Other than this it can be
-       anything memorable. This is a bug that will be fixed soon.
+     - Don’t use underscores in your image name. Other than this, the name can
+       be anything memorable. *This bug with underscores will be fixed soon.*
      - The tag should be the first 6 characters of the SHA in the GitHub
-       commit for the image to build from.
+       commit desired for building the image.
 
-5. **Push the newly-built Docker image to the cloud.** You can either push this
-   to Docker Hub, or to the gcloud docker repository. Here we’ll push to the
-   gcloud repository::
+5. **Push the newly-built Docker image to the cloud.** You can either push
+   this to Docker Hub, or to the gcloud docker repository. Here we'll
+   demonstrate pushing to the gcloud repository:
+
+   .. code-block:: bash
 
        gcloud docker -- push gcr.io/<project-name>/<image-name>:<tag>
 
-6. **Edit the JupyterHub configuration to build from this image.** We do this
-   by editing the ``config.yaml`` file that we originally created to include
-   the jupyter hashes. Edit ``config.yaml`` by including these lines in it:
+6. **Edit the JupyterHub configuration to build from this image.**
+   Edit ``config.yaml`` file to include these lines in it:
 
     .. code-block:: bash
 
-          singleuser:
-            image:
-              name: gcr.io/<project-name>/<image-name>
-              tag: <tag>
+        singleuser:
+          image:
+            name: gcr.io/<project-name>/<image-name>
+            tag: <tag>
 
    .. note::
 
       This step can be done automatically by setting a flag if desired.
 
-7. **Tell helm to update JupyterHub to use this configuration.** Using the
+7. **Tell helm to update JupyterHub to use this configuration.** Use the
    standard method to `apply the changes`_ to the config.
 
-8. **Restart your notebook if you are already logged in** If you already have
+8. **Restart your notebook if you are already logged in.** If you already have
    a running JupyterHub session, you’ll need to restart it (by stopping and
    starting your session from the control panel in the top right). New users
    won’t have to do this.
