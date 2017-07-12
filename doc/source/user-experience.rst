@@ -141,7 +141,7 @@ how to configure JupyterHub to build off of this image:
        reproducibility.
 
 5. **Push the newly-built Docker image to the cloud.** You can either push
-   this to Docker Hub, or to the gcloud docker repository. Here we'll
+   this to Docker Hub or to the gcloud docker repository. Here we'll
    demonstrate pushing to the gcloud repository:
 
    .. code-block:: bash
@@ -332,6 +332,6 @@ Note that this will only copy the contents of the directory to ``$HOME``
 reflected. *There is work in progress for improving this behavior.*
 
 
-.. _apply the changes: #applying-configuration-changes
+.. _apply the changes: extending-jupyterhub.html#apply-config-changes
 .. _downloading and installing Docker: https://store.docker.com/search?offering=community&platform=desktop%2Cserver&q=&type=edition
 .. _pip: https://pip.readthedocs.io/en/latest/user_guide/#requirements-files
