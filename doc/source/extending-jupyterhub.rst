@@ -6,6 +6,7 @@ Extending your JupyterHub setup
 The helm chart used to install JupyterHub has a lot of options for you to tweak.
 This page lists some of the most common changes.
 
+.. _apply-config-changes:
 
 Applying configuration changes
 ------------------------------
