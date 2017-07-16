@@ -132,7 +132,8 @@ Expanding and contracting the size of your cluster
 
 You can easily scale up or down your cluster's size to meet usage demand or to
 save cost when the cluster is not being used. Use the ``resize`` command and
-provide a new cluster size as a command line option ``--size``:
+provide a new cluster size (i.e. number of nodes) as a command line option
+``--size``:
 
 .. code-block:: bash
 
@@ -141,8 +142,14 @@ provide a new cluster size as a command line option ``--size``:
                 --size <NEW-SIZE> \
                 --zone <YOUR-CLUSTER-ZONE>
 
-To display the cluster's name, zone, or current size, use the command
-``gcloud container clusters list``.
+To display the cluster's name, zone, or current size, use the command:
+
+.. code-block:: bash
+
+   gcloud container clusters list
+
+After resizing the cluster, it may take a couple of minutes for the new cluster
+size to be reported back as the service is adding or removing nodes.
 
 .. note::
 
