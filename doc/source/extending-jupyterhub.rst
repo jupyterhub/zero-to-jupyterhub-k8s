@@ -149,7 +149,9 @@ To display the cluster's name, zone, or current size, use the command:
    gcloud container clusters list
 
 After resizing the cluster, it may take a couple of minutes for the new cluster
-size to be reported back as the service is adding or removing nodes.
+size to be reported back as the service is adding or removing nodes. You can
+find the true count of currently 'ready' nodes using ``kubectl get node`` to
+report the current ``Ready/NotReady`` status of all nodes in the cluster.
 
 .. note::
 
