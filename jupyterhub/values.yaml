@@ -49,6 +49,7 @@ proxy:
       cpu: 0.2
       memory: 512Mi
   labels: null
+  imagePullPolicy: IfNotPresent
 
 ingress:
   enabled: false
