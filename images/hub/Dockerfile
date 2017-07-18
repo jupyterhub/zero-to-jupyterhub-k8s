@@ -1,5 +1,9 @@
 FROM ubuntu:17.04
 
+ARG NB_USER=jovyan
+ARG NB_UID=1000
+ARG HOME=/home/jovyan
+
 RUN apt-get update
 
 RUN apt-get update && \
@@ -14,6 +18,13 @@ RUN apt-get update && \
       python3-pip && \
      apt-get purge && apt-get clean
 
+
+RUN adduser --disabled-password \
+    --gecos "Default user" \
+    --uid ${NB_UID} \
+    --home ${HOME} \
+    --force-badname \
+    ${NB_USER}
 
 RUN pip3 install --no-cache-dir \
          jupyterhub==0.7.2 \
@@ -35,5 +46,7 @@ WORKDIR /srv/jupyterhub
 
 # JupyterHub API port
 EXPOSE 8081
+
+USER ${NB_USER}
 
 CMD jupyterhub --config /srv/jupyterhub_config.py --no-ssl
