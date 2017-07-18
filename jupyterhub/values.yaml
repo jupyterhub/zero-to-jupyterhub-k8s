@@ -23,6 +23,7 @@ hub:
     requests:
       cpu: 0.2
       memory: 512Mi
+  imagePullPolicy: IfNotPresent
 
 proxy:
   secretToken: 'generate with openssl rand -hex 64'
@@ -48,6 +49,7 @@ proxy:
       cpu: 0.2
       memory: 512Mi
   labels: null
+  imagePullPolicy: IfNotPresent
 
 ingress:
   enabled: false

@@ -29,6 +29,7 @@ spec:
               secretKeyRef:
                 name: hub-secret
                 key: proxy.token
+        imagePullPolicy: {{ .Values.proxy.imagePullPolicy }}
         ports:
           - containerPort: 8000
             name: proxy-public
