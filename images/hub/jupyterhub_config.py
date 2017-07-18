@@ -169,6 +169,11 @@ elif auth_type == 'github':
     c.GitHubOAuthenticator.oauth_callback_url = get_config('auth.github.callback-url')
     c.GitHubOAuthenticator.client_id = get_config('auth.github.client-id')
     c.GitHubOAuthenticator.client_secret = get_config('auth.github.client-secret')
+elif auth_type == 'mediawiki':
+    c.JupyterHub.authenticator_class = 'oauthenticator.mediawiki.MWOAuthenticator'
+    c.MWOAuthenticator.client_id = get_config('auth.mediawiki.client-id')
+    c.MWOAuthenticator.client_secret = get_config('auth.mediawiki.client-secret')
+    c.MWOAuthenticator.index_url = get_config('auth.mediawiki.index-url')
 elif auth_type == 'hmac':
     c.JupyterHub.authenticator_class = 'hmacauthenticator.HMACAuthenticator'
     c.HMACAuthenticator.secret_key = bytes.fromhex(get_config('auth.hmac.secret-key'))

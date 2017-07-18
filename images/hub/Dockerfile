@@ -23,7 +23,8 @@ RUN pip3 install --no-cache-dir \
          jupyterhub-tmpauthenticator==0.4 \
          pymysql==0.7.11 \
          psycopg2==2.7.1 \
-         pycurl==7.43.0
+         pycurl==7.43.0 \
+         mwoauth==0.3.2
 
 RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@804947a
 
