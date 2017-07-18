@@ -41,7 +41,7 @@ spec:
         {{- end }}
         resources:
 {{ toYaml .Values.hub.resources | indent 12}}
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: {{ .Values.hub.imagePullPolicy }}
         env:
         # Put this here directly so hub will restart when we
         # change this
