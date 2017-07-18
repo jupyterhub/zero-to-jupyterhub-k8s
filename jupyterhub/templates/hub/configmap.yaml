@@ -46,6 +46,9 @@ data:
   hub.extra-config.py: |
 {{ .Values.hub.extraConfig | indent 4 }}
   {{- end }}
+  {{ if .Values.hub.extraConfigVars -}}
+  hub.extra-vars: {{ toJson .Values.hub.extraConfigVars | quote }}
+  {{- end }}
   {{ if .Values.singleuser.cmd -}}
   singleuser.cmd: {{ .Values.singleuser.cmd | quote }}
   {{- end }}
