@@ -62,6 +62,10 @@ data:
   {{ if .Values.singleuser.cmd -}}
   singleuser.cmd: {{ .Values.singleuser.cmd | quote }}
   {{- end }}
+
+  singleuser.uid: {{ .Values.singleuser.uid | quote }}
+  singleuser.fs-gid: {{ .Values.singleuser.fsGid | quote }}
+
   singleuser.storage.type: {{ .Values.singleuser.storage.type | quote }}
   singleuser.storage.home_mount_path: {{ .Values.singleuser.storage.homeMountPath | quote }}
   singleuser.storage.extra-volumes: {{ toJson .Values.singleuser.storage.extraVolumes | quote }}

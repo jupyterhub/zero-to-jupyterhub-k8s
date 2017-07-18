@@ -51,9 +51,13 @@ c.KubeSpawner.singleuser_image_spec = os.environ['SINGLEUSER_IMAGE']
 
 c.KubeSpawner.singleuser_extra_labels = get_config('singleuser.extra-labels', {})
 
-# FIXME: Make this better? 
-c.KubeSpawner.singleuser_uid = 1000
-c.KubeSpawner.singleuser_fs_gid = 1000
+c.KubeSpawner.singleuser_uid = get_config('singleuser.uid')
+c.KubeSpawner.singleuser_fs_gid = get_config('singleuser.fs-gid')
+
+# FIXME: Make this the default? This lets us do + with lists for
+# extraVolumes and extraVolumeMounts easily.
+c.KubeSpawner.volumes = []
+c.KubeSpawner.volume_mounts = []
 
 # Configure dynamically provisioning pvc
 storage_type = get_config('singleuser.storage.type')
@@ -94,8 +98,8 @@ elif storage_type == 'static':
         'subPath': get_config('singleuser.storage.static.sub-path')
     }]
 
-c.KubeSpawner.volumes += get_config('singleuser.storage.extra-volumes')
-c.KubeSpawner.volumeMounts += get_config('singleuser.storage.extra-volume-mounts')
+c.KubeSpawner.volumes = c.KubeSpawner.volumes + get_config('singleuser.storage.extra-volumes')
+c.KubeSpawner.volume_mounts = c.KubeSpawner.volume_mounts + get_config('singleuser.storage.extra-volume-mounts')
 
 lifecycle_hooks = get_config('singleuser.lifecycle-hooks')
 if lifecycle_hooks:
