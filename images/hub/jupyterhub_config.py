@@ -79,21 +79,6 @@ if storage_type == 'dynamic':
             'name': 'volume-{username}'
         }
     ]
-elif storage_type == 'hostPath':
-    c.KubeSpawner.volumes = [
-        {
-            'name': 'home',
-            'hostPath': {
-                'path': get_config('singleuser.storage.home_host_path_template')
-            }
-        }
-    ]
-    c.KubeSpawner.volume_mounts = [
-        {
-            'mountPath': get_config('singleuser.storage.home_mount_path'),
-            'name': 'home'
-        }
-    ]
 elif storage_type == 'static':
     pvc_claim_name = get_config('singleuser.storage.static.pvc-name')
     c.KubeSpawner.volumes = [{
@@ -109,6 +94,8 @@ elif storage_type == 'static':
         'subPath': get_config('singleuser.storage.static.sub-path')
     }]
 
+c.KubeSpawner.volumes += get_config('singleuser.storage.extra-volumes')
+c.KubeSpawner.volumeMounts += get_config('singleuser.storage.extra-volume-mounts')
 
 lifecycle_hooks = get_config('singleuser.lifecycle-hooks')
 if lifecycle_hooks:

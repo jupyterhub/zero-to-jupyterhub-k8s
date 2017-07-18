@@ -70,6 +70,8 @@ singleuser:
   lifecycleHooks: null
   storage:
     type: dynamic
+    extraVolumes: []
+    extraVolumeMounts: []
     static:
       pvcName: null
       subPath: "{username}"

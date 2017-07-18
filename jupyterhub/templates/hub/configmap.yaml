@@ -64,6 +64,8 @@ data:
   {{- end }}
   singleuser.storage.type: {{ .Values.singleuser.storage.type | quote }}
   singleuser.storage.home_mount_path: {{ .Values.singleuser.storage.homeMountPath | quote }}
+  singleuser.storage.extra-volumes: {{ toJson .Values.singleuser.storage.extraVolumes | quote }}
+  singleuser.storage.extra-volume-mounts: {{ toJson .Values.singleuser.storage.extraVolumeMounts | quote }}
   {{ if eq .Values.singleuser.storage.type "dynamic" -}}
   singleuser.storage.capacity: {{.Values.singleuser.storage.capacity | quote }}
   {{ else if eq .Values.singleuser.storage.type "static" -}}
