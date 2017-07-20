@@ -184,19 +184,11 @@ elif auth_type == 'custom':
     # following Dockerifle:
     #   FROM jupyterhub/k8s-hub:v0.4
     #   RUN pip3 install myauthenticator
-    full_class_name = get_config('auth.custom.class_name')
+    full_class_name = get_config('auth.custom.class-name')
     c.JupyterHub.authenticator_class = full_class_name
-
-    (module, class_name) = full_class_name.split('.')
-    the_module = importlib.import_module(module)
-    klass=getattr(the_module, class_name)
-
-    class_params = get_config('auth.custom.params')
-    for (class_var_name, class_var_value) in class_params.items():
-      if hasattr(klass, class_var_name):
-        setattr(klass, class_var_name, class_var_value)
-      else:
-        raise ValueError("Attribute doesn't exist: %r" % class_var_name)
+    auth_class_name = full_class_name.rsplit('.', 1)[-1]
+    auth_config = c[auth_class_name]
+    auth_config.update(get_config('auth.custom.traitlets') or {})
 else:
     raise ValueError("Unhandled auth type: %r" % auth_type)
 

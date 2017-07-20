@@ -39,8 +39,8 @@ data:
   {{- end }}
 
   {{ if eq .Values.auth.type "custom" -}}
-  auth.custom.class_name: {{ .Values.auth.custom.className | quote }}
-  auth.custom.params: {{ toJson .Values.auth.custom.params | quote }}
+  auth.custom.class-name: {{ .Values.auth.custom.className | quote }}
+  auth.custom.traitlets: {{ toJson .Values.auth.custom.traitlets | quote }}
   {{- end }}
 
   {{ if .Values.singleuser.lifecycleHooks -}}
