@@ -187,7 +187,7 @@ elif auth_type == 'custom':
     c.JupyterHub.authenticator_class = full_class_name
     auth_class_name = full_class_name.rsplit('.', 1)[-1]
     auth_config = c[auth_class_name]
-    auth_config.update(get_config('auth.custom.traitlets') or {})
+    auth_config.update(get_config('auth.custom.config') or {})
 else:
     raise ValueError("Unhandled auth type: %r" % auth_type)
 
