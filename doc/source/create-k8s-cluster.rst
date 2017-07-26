@@ -29,7 +29,10 @@ connect your credit card or other payment method to your google cloud account.
 2. Click the hamburger icon in the top left (the icon has three horizontal lines
    in one button). Go to “Billing” then “Payment Methods”, and make sure you
    have a credit card linked to the account. (You may also receive $300 in trial
-   credits.)
+   credits.) And enable the following APIs:
+      - Google Compute Engine API
+      - Google Container Engine API
+      - Google Container Registry API
 
 3. Install and initialize the **gcloud command-line tools**. These tools send
    commands to Google Cloud and lets you do things like create and delete
