@@ -38,6 +38,11 @@ data:
   {{- end }}
   {{- end }}
 
+  {{ if eq .Values.auth.type "custom" -}}
+  auth.custom.class-name: {{ .Values.auth.custom.className | quote }}
+  auth.custom.config : {{ toJson .Values.auth.custom.config | quote }}
+  {{- end }}
+
   {{ if .Values.singleuser.lifecycleHooks -}}
   singleuser.lifecycle-hooks: {{ toJson .Values.singleuser.lifecycleHooks | quote }}
   {{- end }}

@@ -1,6 +1,6 @@
-import yaml
 import os
 import sys
+import yaml
 from tornado.httpclient import AsyncHTTPClient
 
 def get_config(key, default=None):
@@ -177,6 +177,17 @@ elif auth_type == 'dummy':
     c.DummyAuthenticator.password = get_config('auth.dummy.password', None)
 elif auth_type == 'tmp':
     c.JupyterHub.authenticator_class = 'tmpauthenticator.TmpAuthenticator'
+elif auth_type == 'custom':
+    # full_class_name looks like "myauthenticator.MyAuthenticator".
+    # To create a docker image with this class availabe, you can just have the
+    # following Dockerifle:
+    #   FROM jupyterhub/k8s-hub:v0.4
+    #   RUN pip3 install myauthenticator
+    full_class_name = get_config('auth.custom.class-name')
+    c.JupyterHub.authenticator_class = full_class_name
+    auth_class_name = full_class_name.rsplit('.', 1)[-1]
+    auth_config = c[auth_class_name]
+    auth_config.update(get_config('auth.custom.config') or {})
 else:
     raise ValueError("Unhandled auth type: %r" % auth_type)
 
