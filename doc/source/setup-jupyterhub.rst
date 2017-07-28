@@ -74,7 +74,7 @@ Install JupyterHub
       ...Skip local chart repository
       ...Successfully got an update from the "stable" chart repository
       ...Successfully got an update from the "jupyterhub" chart repository
-      Update Complete. ⎈ Happy Helming!⎈ 
+      Update Complete. ⎈ Happy Helming!⎈
 
 2. Now you can install the chart! Run this command from the directory that contains the
    ``config.yaml`` file to spin up JupyterHub:
@@ -114,6 +114,15 @@ Install JupyterHub
       you should delete the release by running
       ``helm delete --purge <YOUR-RELEASE-NAME>``. Then reinstall by repeating this
       step. If it persists, also do ``kubectl delete <YOUR-NAMESPACE>`` and try again.
+
+    .. note::
+
+      If you get the error ``cannot get namespaces in the namespace
+      "<your-namespace>"``, it could be because of a permissions
+      issue. Run `this command
+      <https://kubernetes.io/docs/admin/authorization/rbac/#permissive-rbac-permissions>`_
+      to give all users permissions to configure your cluster,
+      though be warned that it may cause insecurities in your cluster.
 
 2. While Step 1 is running, you can see the pods being created by entering in
    a different terminal:
