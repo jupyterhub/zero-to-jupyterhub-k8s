@@ -1,7 +1,7 @@
 VERSION=$(shell git rev-parse --short HEAD)
 IMAGE_PREFIX=jupyterhub/k8s
 PUSH_IMAGES=no
-BUILD_ARGS=""
+BUILD_ARGS=
 
 images: build-images push-images
 build-images: build-image/hub build-image/singleuser-sample build-image/binderhub
