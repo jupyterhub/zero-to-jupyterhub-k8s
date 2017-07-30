@@ -8,3 +8,6 @@ singleuser:
     type: none
   memory:
     guarantee: null
+
+prePuller:
+  enabled: False
