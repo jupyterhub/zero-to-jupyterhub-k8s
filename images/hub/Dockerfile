@@ -1,11 +1,5 @@
 FROM ubuntu:17.04
 
-ARG NB_USER=jovyan
-ARG NB_UID=1000
-ARG HOME=/home/jovyan
-
-RUN apt-get update
-
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
       git \
@@ -18,6 +12,9 @@ RUN apt-get update && \
       python3-pip && \
      apt-get purge && apt-get clean
 
+ARG NB_USER=jovyan
+ARG NB_UID=1000
+ARG HOME=/home/jovyan
 
 RUN adduser --disabled-password \
     --gecos "Default user" \
