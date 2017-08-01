@@ -56,12 +56,6 @@ spec:
             secretKeyRef:
               name: hub-secret
               key: hub.cookie-secret
-        {{ if .Values.singleuser.mounts -}}
-        {{ if .Values.singleuser.mounts.shared -}}
-        - name: SHARED_DATA_MOUNTS
-          value: "{{ range $key, $value := .Values.singleuser.mounts.shared }}{{$key}}={{$value}};{{end}}"
-        {{- end }}
-        {{- end }}
         - name: POD_NAMESPACE
           valueFrom:
             fieldRef:
