@@ -16,6 +16,7 @@ hub:
     url: null
   labels: null
   extraConfig: null
+  extraEnv: {}
   image:
     name: jupyterhub/k8s-hub
     tag: v0.4
