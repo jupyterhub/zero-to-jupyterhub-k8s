@@ -30,6 +30,9 @@ spec:
         persistentVolumeClaim:
           claimName: hub-db-dir
       {{- end }}
+      securityContext:
+        runAsUser: {{ .Values.hub.uid }}
+        fsGroup: {{ .Values.hub.fsGid }}
       containers:
       - name: hub-container
         image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}

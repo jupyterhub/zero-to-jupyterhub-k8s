@@ -44,6 +44,9 @@ ADD cull_idle_servers.py /usr/local/bin/cull_idle_servers.py
 
 WORKDIR /srv/jupyterhub
 
+# So we can actually write a db file here
+RUN chown ${NB_USER}:${NB_USER} /srv/jupyterhub
+
 # JupyterHub API port
 EXPOSE 8081
 

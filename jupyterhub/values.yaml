@@ -4,6 +4,8 @@ hub:
   baseUrl: "/"
   cookieSecret: null
   publicURL: null
+  uid: 1000
+  fsGid: 1000
   db:
     type: sqlite-pvc
     pvc:
