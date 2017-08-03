@@ -14,6 +14,9 @@ spec:
         {{ $key }}: {{ $value | quote }}
         {{- end }}
         {{- end }}
+      annotations:
+        # This lets us autorestart when the secret changes!
+        checksum/secret: {{ include (print $.Template.BasePath "/hub/secret.yaml") . | sha256sum }}
     spec:
       containers:
       - name: proxy-container
