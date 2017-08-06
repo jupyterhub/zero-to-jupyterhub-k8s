@@ -1,0 +1,24 @@
+language: python
+sudo: required
+python:
+- 3.4
+services:
+- docker
+install:
+- pip install --no-cache-dir pyyaml
+- curl -ssL https://storage.googleapis.com/kubernetes-helm/helm-v2.5.1-linux-amd64.tar.gz
+  | sudo tar -xz -C /usr/local/bin --strip-components 1 linux-amd64/helm
+- sudo chmod +x /usr/local/bin/helm
+- "/usr/local/bin/helm init --client-only"
+script:
+- docker login -u ${DOCKER_USERNAME} -p "${DOCKER_PASSWORD}"
+- "./build.py build --commit-range ${TRAVIS_COMMIT_RANGE} --push"
+before_install:
+- openssl aes-256-cbc -K $encrypted_7d96c3e8d1a2_key -iv $encrypted_7d96c3e8d1a2_iv
+  -in travis.enc -out travis -d
+- chmod 0400 travis
+
+env:
+  global:
+  - secure: FbM+8QAYUVz4whHm2yoBrGmny1ncImqRwZeL3iH1P4I9nkgh3yyTuMbBavbcUI0ZohQx92E3IJwfKn0I67FEB88DnUR6nDgd92EixdIB75SltMSi/PzDxMpBIuyZLCPGX/Ip+AtzPmWv1xJrWTk1TcknNMAtoR/ecYawccTOQy8TzaUNtgvQJmILcyo9UO+wdrN7KTIlsXLqOBuJY7wDe5G5iDK0Ye0K/lahDi4IUfpvbaZQcZ7so1hg8TH0DY8wOyU9+VQ1jyegr5OO0rcrOK2jAjc1xks6NnqXikrPUZsukzW/f+Q3PiSRCWXOyVDL3h9iiDGKIgf0IOrrwSBnmtWMmQeTew1noyYiuK8KGT8Y7x/Sapp39OrOMT14Oaiw1uaVPADhYRraGo3pXbJ0EDRXinwfWF4GMhqJH6ygqM5Su8QnphVOWexTiJZNRHHnLojmnYhcyQrpND3qQQi+ApAw/QKS4uxMlu4fxFk2slAtsPwdqNVvm8nVlfmHuTaed7ZP+kYfcCNQZeqWuWpJZ/6L9h4/fG54yB6moY8EDH/KTkVoo6w44MIpJTbTUTlfYdhkv5TLTWmWk5HwwRWn7WZvYeDgVBgiI1biPRpDRcZ0o+FlzzKXo/cyP10Axd4zrvE924UD7jEJarwGnZFrGMUV6hJ5h/Kxc+U3yE3RTsU=
+  - secure: RdG7zCRCx2I8FsPbMNSFSmqCJTPmEx+sZCcWi1Hxv0PKLaLN3Q+7PqjfPWmJvO6pfFlCzbImt5UAHvFz11r1+xWYPF8lJySNSeMSYERHalQ4rdvdsUfz1+C/WWxrVt8TmG5kNtMuvMWiv37oPRCbtKpiKEBSK4Sgdg7I+BDdVRxxNh8hLqBVujxb2He6V71c81EIwGukgmbb06MNYHIDdoxzijbm/sCQrOCTi7SCIHjzxVoYVFQlwuNP9nGXP0bmwr47E5w9hI0pB6zLc/S0TrHwjM/8d5gwuP1p5A2UgybeeyHAVXX1D8FmPm6fsdwZ/phKhy2emKDItHnJFZiTN7uQZikIowo+l6XsflRgC2NLxg8fP4jLnrAlvfO00nYS2jDGXadaXNnlPLQRn/9A4EYMegI7hfZlVUcCuOaiama8r0dxusZnKq1yIcTId2pa/4KZrwbhQ4+Av0+gxIXfOtUhw1lGrwZVNx6SOasFIOXo8sId1SZVbSLL4q4DyFTclXBOzw2Jg2BNOmSC6U8eRBwa7GVOf8dCh/CBqgPMsdd2dJxUXzeCe+22+l46HXsEO7ReGL68p//795HCPZy/TYJQkn+6hzDLh/0TYIVgmRR17+kUGc/4IKotQVrvBrK5W1sYrGy84w/lYv1vVMvkYJH6NGixXYLpEeqMJDzyIKQ=
