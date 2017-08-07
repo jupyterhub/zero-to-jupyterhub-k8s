@@ -203,13 +203,6 @@ c.JupyterHub.base_url = get_config('hub.base_url')
 
 c.JupyterHub.db_url = get_config('hub.db_url')
 
-statsd_host = get_config('statsd.host')
-
-if statsd_host:
-    c.JupyterHub.statsd_prefix = get_config('statsd.prefix')
-    c.JupyterHub.statsd_host = get_config('statsd.host')
-    c.JupyterHub.statsd_port = get_config('statsd.port', 8125)
-
 cmd = get_config('singleuser.cmd', None)
 if cmd:
     c.Spawner.cmd = cmd

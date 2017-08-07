@@ -102,12 +102,6 @@ cull:
   timeout: 3600
   every: 600
 
-statsd:
-  enabled: false
-  port: 8125
-  host: statsd
-  prefix: jupyterhub
-
 admin:
   access: true
   users: null
