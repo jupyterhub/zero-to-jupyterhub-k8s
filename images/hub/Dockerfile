@@ -17,7 +17,7 @@ RUN apt-get update && \
 
 RUN pip3 install --no-cache-dir \
          jupyterhub==0.7.2 \
-         oauthenticator==0.5.1 \
+         oauthenticator==0.6.0 \
          statsd==3.2.1 \
          jupyterhub-dummyauthenticator==0.3.1 \
          jupyterhub-tmpauthenticator==0.4 \
