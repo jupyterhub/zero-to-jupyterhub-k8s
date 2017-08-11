@@ -69,6 +69,14 @@ For more information see the full example of Google OAuth2 in the next section.
           clientId: "y0urg1thubc1ient1d"
           clientSecret: "an0ther1ongs3cretstr1ng"
           callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
+          
+To add a whitelist of usernames add to the config file under `hub`:
+
+.. code-block:: yaml
+
+     hub:
+         extraConfig:
+             c.Authenticator.whitelist = {"user1", "user2"}
 
 Full Example of Google OAuth2
 -----------------------------
