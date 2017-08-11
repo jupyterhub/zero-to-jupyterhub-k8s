@@ -119,10 +119,11 @@ Install JupyterHub
 
       If you get the error ``cannot get namespaces in the namespace
       "<your-namespace>"``, it could be because of a permissions
-      issue. Run `this command
-      <https://kubernetes.io/docs/admin/authorization/rbac/#permissive-rbac-permissions>`_
-      to give all users permissions to configure your cluster,
-      though be warned that it may cause insecurities in your cluster.
+      issue. Run these commands then retry the install line above::
+
+          kubectl -n kube-system create sa tiller
+          kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+          helm init --service-account tiller
 
 2. While Step 1 is running, you can see the pods being created by entering in
    a different terminal:
