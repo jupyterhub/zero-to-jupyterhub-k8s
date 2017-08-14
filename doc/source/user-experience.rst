@@ -254,6 +254,7 @@ a very short-term time (e.g. when running a single, short-lived function that
 consumes a lot of memory).
 
 Similarly, you can limit CPU as follows:
+
     .. code-block:: yaml
 
        singleuser:
@@ -261,7 +262,8 @@ Similarly, you can limit CPU as follows:
               limit: 500m
               guarantee: 500m
               
-This would limit your users to a maximum of 500 "milli-cpu" (so 1/2 of a CPU core), as well as guarantee them that same amount - this measure is defined in the kubernetes docs here: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu .
+This would limit your users to a maximum of 500 "milli-cpu" (so 1/2 of a CPU core), as well as guarantee them that same amount - this measure is defined on the `compute resources page <https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu>`_ of the kubernetes docs. 
+
 
 .. note::
 
