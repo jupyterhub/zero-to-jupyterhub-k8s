@@ -74,7 +74,7 @@ Install JupyterHub
       ...Skip local chart repository
       ...Successfully got an update from the "stable" chart repository
       ...Successfully got an update from the "jupyterhub" chart repository
-      Update Complete. ⎈ Happy Helming!⎈ 
+      Update Complete. ⎈ Happy Helming!⎈
 
 2. Now you can install the chart! Run this command from the directory that contains the
    ``config.yaml`` file to spin up JupyterHub:
@@ -119,6 +119,16 @@ Install JupyterHub
       ``Error: timed out waiting for the condition`` error,
       add a ``--timeout=SOME-LARGE-NUMBER``
       parameter to the ``helm install`` command.
+
+    .. note::
+
+      If you get the error ``cannot get namespaces in the namespace
+      "<your-namespace>"``, it could be because of a permissions
+      issue. Run these commands then retry the install line above::
+
+          kubectl -n kube-system create sa tiller
+          kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+          helm init --service-account tiller
 
 2. While Step 1 is running, you can see the pods being created by entering in
    a different terminal:
