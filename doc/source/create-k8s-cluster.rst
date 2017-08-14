@@ -13,6 +13,12 @@ popular ways of getting setup in various cloud providers:
 - Red Hat OpenShift
 - Others
 
+.. note::
+
+   During the process of setting up JupyterHub, you'll be creating some
+   files for configuration purposes. It may be helpful to create a folder
+   for your JuypterHub deployment to keep track of these files.
+
 .. _google-cloud:
 
 Setting up Kubernetes on `Google Cloud <https://cloud.google.com/>`_
@@ -170,12 +176,17 @@ Setting up Kubernetes on Amazon Web Services (AWS)
 
 AWS does not have native support for Kubernetes, however there are
 many organizations that have put together their own solutions and
-guides for setting up Kubernetes on AWS. We like the `guide put
-together by Heptio <https://s3.amazonaws.com/quickstart-reference/heptio/latest/doc/heptio-kubernetes-on-the-aws-cloud.pdf>`_,
+guides for setting up Kubernetes on AWS. We like the `Heptio guide`_,
 and recommend using this for setting up your stack.
 
-1. Follow Step 1 of the Heptio guide. This sets up your Amazon account with
-   the credentials needed to run Kubernetes.
+.. note::
+
+  See the `Heptio's note on security <http://blog.kubernetes.io/2016/08/security-best-practices-kubernetes-deployment.html>`_
+  for information about keeping your Kubernetes infrastruture secure.
+
+1. Follow Step 1 of the `Heptio guide`_.
+
+   This sets up your Amazon account with the credentials needed to run Kubernetes.
 
    .. note::
 
@@ -190,28 +201,34 @@ and recommend using this for setting up your stack.
       Click the "pin" icon at the top, then drag ``CloudFormation`` and
       ``EC2`` into your navbar.
 
-2. Follow Step 2 of the Heptio guide. In this section, Heptio allows you
-   to click one of two buttons, each of which run several commands on AWS
-   that set up a "template" of resources we need for Kubernetes.
+2. Follow Step 2 of the `Heptio guide`_.
+
+   **Select template option**: In this section, Heptio allows you
+   to click one of two buttons, each runs several commands on AWS
+   that set up a "template" of necessary Kubernetes resources.
    We recommend ``Option 1``, which will create a new set of resources
    on AWS to run Kubernetes.
 
-   After clicking the link you'll be taken to an AWS page with a field already
-   chosen under "Choose a template". Simply hit "Next". On the following
-   page you'll need to fill in some information. Here are the required fields:
+   After clicking the ``Option 1`` button, you'll be taken to an AWS page with a field already
+   chosen under "Choose a template". Simply hit "Next".
+
+   **Enter AWS instance information (page 1)**: On this page you'll need to
+   fill in the following required fields:
 
    * ``Stack Name`` can be anything you like.
    * ``Availability Zone`` is related to the location of the AWS
-     resources. Choose any.
+     resources. Choose an AWS location close to your physical location or
+     any other desired AWS location.
    * ``Admin Ingress Location`` defines the locations from which you
-     can access this cluster as an administrator. Just enter ``0.0.0.0/0``
+     can access this cluster as an administrator. Enter ``0.0.0.0/0``
      for the most permissive approach.
    * ``SSH Key`` is a dropdown list of keys attached to your account.
      The one you created in Step 1 should be listed here. This will allow
-     you to SSH into the machines if you desire. This will depend on
-     the ``Instance Type`` that you choose. Remember that the most
-     common bottleneck is RAM.
-   * ``Node capacity`` defines the number of machines you've got available.
+     you to SSH into the machines if you desire.
+   * ``Node Capacity`` defines the number of machines you've got available.
+     This will depend on the ``Instance Type`` that you choose. E.g., if you
+     want each user to have 2GB and you expect 10 users, choose a combination
+     of ``Instance Type`` and ``Node Capacity`` that meets this requirement.
    * ``Instance Type`` defines what kind of machine you're requesting. See
      this `list of instance types with Amazon <https://aws.amazon.com/ec2/instance-types/>`_
      as well as this list of `pricing for each instance type <https://aws.amazon.com/ec2/pricing/on-demand/>`_.
@@ -219,23 +236,27 @@ and recommend using this for setting up your stack.
      you need users to keep lots of large files that persist over time,
      this should be larger.
    * ``Instance Type (Bastion Host)`` corresponds to a "manager"
-     node that coordinates kubernetes. You can probably leave these as defaults.
+     node that coordinates kubernetes. You may leave these as defaults.
 
-   Finally, on the next page you don't need to fill in any of the fields.
-   Hit ``Next``. Then confirm and his ``Next`` once more.
+   **Enter AWS instance information (page 2)**: On the second page you may leave
+   all of these fields as is or customize as you wish. When done, hit ``Next``. Then
+   confirm and hit ``Next`` once more.
 
    AWS will now create the computational resources defined in the Heptio
    template (and according to the options that you chose). This will
-   take a few minutes. To see the status of the resources you've requested,
+   take a few minutes.
+
+   To see the status of the resources you've requested,
    see the ``CloudFormation`` page. You should see two stacks being created,
    each will have the name you've requested. When they're done creating,
    continue with the guide.
 
-3. Follow Step 3 of the Heptio guide. This instructs you to install ``kubectl``,
-   and test that your new Kubernetes cluster works properly.
+3. Follow Step 3 of the `Heptio guide`_. Install ``kubectl``,
+   and test that your new Kubernetes cluster works properly. In this step
+   you'll need the SSH key file that was generated in Step 1.
 
-4. Request persistent disks for our Kubernetes stack. Put
-   the following text into a file called ``storage_cmd.txt``::
+4. Create a file, ``storage_cmd.txt`` on your local computer, and enter
+   this text::
 
        kind: StorageClass
        apiVersion: storage.k8s.io/v1
@@ -264,3 +285,4 @@ Now that you have a Kubernetes cluster running, it is time to
 
 .. _ways to set up a cluster: https://kubernetes.io/docs/setup/pick-right-solution/
 .. _Azure resource group: https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#resource-groups
+.. _Heptio guide: https://s3.amazonaws.com/quickstart-reference/heptio/latest/doc/heptio-kubernetes-on-the-aws-cloud.pdf
