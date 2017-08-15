@@ -232,11 +232,14 @@ and recommend using this for setting up your stack.
    * ``Instance Type`` defines what kind of machine you're requesting. See
      this `list of instance types with Amazon <https://aws.amazon.com/ec2/instance-types/>`_
      as well as this list of `pricing for each instance type <https://aws.amazon.com/ec2/pricing/on-demand/>`_.
-   * ``Disk Size`` corresponds to the hard disk for each node. If
-     you need users to keep lots of large files that persist over time,
-     this should be larger.
-   * ``Instance Type (Bastion Host)`` corresponds to a "manager"
-     node that coordinates kubernetes. You may leave these as defaults.
+   * ``Disk Size`` corresponds to the hard disk for each node. Note that this is
+     different from the disks that users will use for their own notebooks/data.
+     This disk should be large enough to contain the size of any Docker
+     images you're serving with the JupyterHub.
+   * ``Instance Type (Bastion Host)`` corresponds to a computer that allows
+     for easy SSH access to your Kubernetes cluster. This does not need to
+     be a fancy computer. You may leave these as defaults. For more information
+     on the Bastion Host, `see here <http://docs.aws.amazon.com/quickstart/latest/linux-bastion/architecture.html>`_.
 
    **Enter AWS instance information (page 2)**: On the second page you may leave
    all of these fields as is or customize as you wish. When done, hit ``Next``. Then
@@ -255,7 +258,7 @@ and recommend using this for setting up your stack.
    and test that your new Kubernetes cluster works properly. In this step
    you'll need the SSH key file that was generated in Step 1.
 
-4. Create a file, ``storage_cmd.txt`` on your local computer, and enter
+4. Create a file, ``storageclass.yml`` on your local computer, and enter
    this text::
 
        kind: StorageClass
@@ -272,10 +275,14 @@ and recommend using this for setting up your stack.
 
        .. code-block:: bash
 
-          kubectl apply -f storage_cmd.txt
+          kubectl apply -f storageclass.yml
 
-This creates persistent storage on Kubernetes. You should now be ready
-for the next step.
+This enables `dynamic provisioning
+<https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic>`_ of
+disks, allowing us to automatically assign a disk per user when they log
+in to JupyterHub.
+
+You should now be ready for the next step.
 
 Next Step
 ---------
