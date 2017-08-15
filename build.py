@@ -55,9 +55,7 @@ def build_chart():
     with open('jupyterhub/Chart.yaml') as f:
         chart = yaml.safe_load(f)
 
-    if chart['version'] == 'v0.0.1':
-        # Only munge chart if it is set to the special value of v0.0.1
-        chart['version'] = chart['version'] + '+' + version
+    chart['version'] = chart['version'] + '-' + version
 
     with open('jupyterhub/Chart.yaml', 'w') as f:
         yaml.dump(chart, f, default_flow_style=False)
