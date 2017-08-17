@@ -74,7 +74,7 @@ Install JupyterHub
       ...Skip local chart repository
       ...Successfully got an update from the "stable" chart repository
       ...Successfully got an update from the "jupyterhub" chart repository
-      Update Complete. ⎈ Happy Helming!⎈ 
+      Update Complete. ⎈ Happy Helming!⎈
 
 2. Now you can install the chart! Run this command from the directory that contains the
    ``config.yaml`` file to spin up JupyterHub:
@@ -114,7 +114,7 @@ Install JupyterHub
       you should delete the release by running
       ``helm delete --purge <YOUR-RELEASE-NAME>``. Then reinstall by repeating this
       step. If it persists, also do ``kubectl delete <YOUR-NAMESPACE>`` and try again.
-      
+
       If you're pulling from a large Docker image you may get a
       ``Error: timed out waiting for the condition`` error,
       add a ``--timeout=SOME-LARGE-NUMBER``
@@ -137,6 +137,13 @@ Install JupyterHub
 
    The external IP for the `proxy-public` service should be accessible in a
    minute or two.
+
+   .. note::
+
+      If the IP for ``proxy-public`` is too long to fit into the window, you
+      can find the longer version by calling::
+
+        kubectl --namespace=<YOUR_NAMESPACE> describe svc proxy-public
 
 5. To use JupyterHub, enter the external IP for the `proxy-public` service in
    to a browser. JupyterHub is running with a default *dummy* authenticator so

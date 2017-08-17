@@ -330,13 +330,13 @@ and recommend using this for setting up your stack.
 8. Enable legacy authorization mode. This is temporarily required since the newer
    and more secure authorization mode is not out of beta yet.
 
-   ```
-   kubectl create clusterrolebinding permissive-binding \
-    --clusterrole=cluster-admin \
-    --user=admin \
-    --user=kubelet \
-    --group=system:serviceaccounts
-  ```
+      .. code-block:: bash
+
+         kubectl create clusterrolebinding permissive-binding \
+          --clusterrole=cluster-admin \
+          --user=admin \
+          --user=kubelet \
+          --group=system:serviceaccounts
 
   This step should hopefully go away soon!
 
