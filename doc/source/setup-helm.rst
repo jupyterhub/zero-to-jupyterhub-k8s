@@ -28,7 +28,9 @@ cluster. At the terminal, enter:
 
    .. code:: bash
 
-      helm init
+      kubectl --namespace kube-system create sa tiller
+      kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+      helm init --service-account tiller
 
 This command only needs to run once per Kubernetes cluster.
 
