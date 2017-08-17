@@ -4,7 +4,11 @@ Turning Off JupyterHub and Computational Resources
 ==================================================
 
 When you are done with your hub, you should delete it so you are no longer
-paying money for it.
+paying money for it. The following sections describe how to delete your
+JupyterHub resources on various cloud providers.
+
+Google Cloud Engine
+-------------------
 
 1. First, delete the namespace the hub was installed in. This deletes any disks
    that may have been created to store user's data, and any IP addresses that
@@ -40,3 +44,22 @@ paying money for it.
 
    These might take several minutes to clear up, but they shouldn't have anything
    related to your JupyterHub cluster after you have deleted the cluster.
+
+Amazon AWS
+----------
+
+The easiest way to delete your cloud resources on AWS is to use their
+website. Go to the ``CloudFormation`` page. This should have a list of all
+running AWS stacks that you've created.
+
+If you followed the JupyterHub guide,
+there should be two items, both containing the name that you chose for this
+stack. For each item, click the checkbox next to it. Then, click ``Actions``
+and finally ``Delete Stack``. Answer "yes" to any confirmation dialogues, and
+this should begin the process of deleting your Kubernetes cluster.
+
+.. note::
+
+   Sometimes AWS fails to delete parts of the stack on a first pass. Be sure
+   to double-check that your stack has in fact been deleted, and re-perform
+   the actions above if needed.
