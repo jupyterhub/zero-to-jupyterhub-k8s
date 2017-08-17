@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxy-api
+spec:
+  selector:
+    name: proxy-pod
+  ports:
+    - protocol: TCP
+      port: 8001
+      targetPort: 8001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxy-public
+  # toYaml + indent seem a lot more unstable & error prone
+  annotations: {{ toJson .Values.proxy.service.annotations }}
+  labels: {{ toJson .Values.proxy.service.labels }}
+spec:
+  type: {{ .Values.proxy.service.type }}
+  {{ if .Values.proxy.service.loadBalancerIP -}}
+  loadBalancerIP: {{ .Values.proxy.service.loadBalancerIP }}
+  {{- end }}
+  selector:
+    name: proxy-pod
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+      {{ if .Values.proxy.service.nodePort -}}
+      nodePort: {{ .Values.proxy.service.nodePort }}
+      {{- end }}

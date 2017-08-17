@@ -1,0 +1,76 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hub-deployment
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: hub-pod
+        {{ if .Values.hub.labels -}}
+        # Because toYaml + indent is super flaky
+        {{ range $key, $value := .Values.proxy.labels -}}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+      annotations:
+        # This lets us autorestart when the configmap changes!
+        checksum/config-map: {{ include (print $.Template.BasePath "/hub/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/hub/secret.yaml") . | sha256sum }}
+    spec:
+      volumes:
+      - name: config
+        configMap:
+          name: hub-config
+      {{ if eq .Values.hub.db.type "sqlite-pvc" }}
+      - name: hub-db-dir
+        persistentVolumeClaim:
+          claimName: hub-db-dir
+      {{- end }}
+      containers:
+      - name: hub-container
+        image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
+        volumeMounts:
+          - mountPath: /etc/jupyterhub/config/
+            name: config
+        {{ if eq .Values.hub.db.type "sqlite-pvc" }}
+          - mountPath: /srv/jupyterhub
+            name: hub-db-dir
+            {{ if .Values.hub.db.pvc.subPath -}}
+            subPath: {{ .Values.hub.db.pvc.subPath | quote }}
+            {{- end }}
+        {{- end }}
+        resources:
+{{ toYaml .Values.hub.resources | indent 12}}
+        imagePullPolicy: {{ .Values.hub.imagePullPolicy }}
+        env:
+        # Put this here directly so hub will restart when we
+        # change this
+        - name: SINGLEUSER_IMAGE
+          value:  "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"
+        - name: JPY_COOKIE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: hub-secret
+              key: hub.cookie-secret
+        {{ if .Values.singleuser.mounts -}}
+        {{ if .Values.singleuser.mounts.shared -}}
+        - name: SHARED_DATA_MOUNTS
+          value: "{{ range $key, $value := .Values.singleuser.mounts.shared }}{{$key}}={{$value}};{{end}}"
+        {{- end }}
+        {{- end }}
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: CONFIGPROXY_AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: hub-secret
+              key: proxy.token
+        ports:
+          - containerPort: 8081
+            name: hub

@@ -1,75 +1,62 @@
-# Default values for jupyterhub-k8s.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-# Name of this installation. Will be used to create namespace
-# and storageclass. Must be a valid DNS label
-# HACK: need to get rid of this, purely use --namespace only
-name: null
-
-# Ideally, we should not be creating namespaces in our templates.
-# Helm can create the when you use --namespace, and we should
-# just use those. However, leaving this here for a while to
-# make sure we do not break current installations.
-createNamespace: false
-
-# Deprecated, use proxy.secretToken instead
-token:
-  proxy: null
-
 hub:
+  service:
+    type: ClusterIP
   baseUrl: "/"
   cookieSecret: null
   publicURL: null
   db:
     type: sqlite-pvc
-    storageClass:
-      provisioner: kubernetes.io/gce-pd
-      parameters:
-        type: pd-ssd
+    pvc:
+      annotations: {}
+      selector: {}
+      accessModes:
+        - ReadWriteOnce
+      storage: 1Gi
+      subPath: null
     url: null
   labels: null
   extraConfig: null
   image:
-    name: yuvipanda/jupyterhub-k8s-hub
-    tag: v0.3.1
+    name: jupyterhub/k8s-hub
+    tag: v0.4
   resources:
     requests:
       cpu: 0.2
       memory: 512Mi
-
-binder:
-  enabled: false
-  resources:
-    requests:
-      cpu: 0.2
-      memory: 512Mi
-  image:
-    name: yuvipanda/jupyterhub-k8s-binderhub
-    tag: v0.3.1
-  repo2dockerImage: yuvipanda/builderhub-builder:v0.1.16
-  registry:
-    prefix: null
-    host: gcr.io
-    username: _json_key
-    password: null
-
+  imagePullPolicy: IfNotPresent
 
 proxy:
   secretToken: 'generate with openssl rand -hex 64'
+  service:
+    type: LoadBalancer
+    labels: {}
+    annotations: {}
+    nodePort: null
   image:
-    name: yuvipanda/jupyterhub-k8s-proxy
-    tag: v0.3.1
+    name: jupyterhub/configurable-http-proxy
+    tag: 2.0.4
+  cmd: 
+    - configurable-http-proxy
+    - --ip=0.0.0.0
+    - --port=8000
+    - --api-ip=0.0.0.0
+    - --api-port=8001
+    - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
+    - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
+    - --log-level=debug
   resources:
     requests:
       cpu: 0.2
       memory: 512Mi
   labels: null
+  imagePullPolicy: IfNotPresent
 
-# Set this explicitly if you want to use a static allocated
-# IP as the public LoadBalancer IP. Requires support by
-# your Cloud Provider. GKE supports this
-publicIP: null
+ingress:
+  enabled: false
+  https:
+    enabled: false
+    type: none
+
 
 # Google OAuth secrets
 auth:
@@ -83,18 +70,16 @@ singleuser:
   lifecycleHooks: null
   storage:
     type: dynamic
-    storageClass:
-      provisioner: kubernetes.io/gce-pd
-      parameters:
-        type: pd-ssd
-
+    static:
+      pvcName: null
+      subPath: "{username}"
     capacity: 10Gi
     homeMountPath: /home/jovyan
     # type: hostPath
     # homeHostPathTemplate: /data/project/paws/userhomes/{userid}
   image:
-    name: yuvipanda/jupyterhub-k8s-singleuser-sample
-    tag: v0.3.1
+    name: jupyterhub/k8s-singleuser-sample
+    tag: v0.4
   cpu:
     limit: null
     guarantee: null

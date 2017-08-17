@@ -1,6 +1,7 @@
-import yaml
 import os
 import sys
+import yaml
+from tornado.httpclient import AsyncHTTPClient
 
 def get_config(key, default=None):
     """
@@ -16,6 +17,13 @@ def get_config(key, default=None):
             return data
     except FileNotFoundError:
         return default
+
+
+# Configure JupyterHub to use the curl backend for making HTTP requests,
+# rather than the pure-python implementations. The default one starts
+# being too slow to make a large number of requests to the proxy API
+# at the rate required.
+AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
 
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
@@ -50,7 +58,8 @@ c.KubeSpawner.singleuser_fs_gid = 1000
 # Configure dynamically provisioning pvc
 storage_type = get_config('singleuser.storage.type')
 if storage_type == 'dynamic':
-    c.KubeSpawner.pvc_name_template = 'claim-{username}-{userid}'
+    c.KubeSpawner.pvc_name_template = 'claim-{username}'
+    c.KubeSpawner.user_storage_pvc_ensure = True
     c.KubeSpawner.user_storage_class = get_config('singleuser.storage.class')
     c.KubeSpawner.user_storage_access_modes = ['ReadWriteOnce']
     c.KubeSpawner.user_storage_capacity = get_config('singleuser.storage.capacity')
@@ -58,16 +67,16 @@ if storage_type == 'dynamic':
     # Add volumes to singleuser pods
     c.KubeSpawner.volumes = [
         {
-            'name': 'volume-{username}-{userid}',
+            'name': 'volume-{username}',
             'persistentVolumeClaim': {
-                'claimName': 'claim-{username}-{userid}'
+                'claimName': 'claim-{username}'
             }
         }
     ]
     c.KubeSpawner.volume_mounts = [
         {
             'mountPath': get_config('singleuser.storage.home_mount_path'),
-            'name': 'volume-{username}-{userid}'
+            'name': 'volume-{username}'
         }
     ]
 elif storage_type == 'hostPath':
@@ -85,6 +94,21 @@ elif storage_type == 'hostPath':
             'name': 'home'
         }
     ]
+elif storage_type == 'static':
+    pvc_claim_name = get_config('singleuser.storage.static.pvc-name')
+    c.KubeSpawner.volumes = [{
+        'name': 'home',
+        'persistentVolumeClaim': {
+            'claimName': pvc_claim_name
+        }
+    }]
+
+    c.KubeSpawner.volume_mounts = [{
+        'mountPath': get_config('singleuser.storage.home_mount_path'),
+        'name': 'home',
+        'subPath': get_config('singleuser.storage.static.sub-path')
+    }]
+
 
 lifecycle_hooks = get_config('singleuser.lifecycle-hooks')
 if lifecycle_hooks:
@@ -130,6 +154,7 @@ c.KubeSpawner.cpu_guarantee = get_config('singleuser.cpu.guarantee')
 
 # Allow switching authenticators easily
 auth_type = get_config('auth.type')
+email_domain = 'local'
 
 if auth_type == 'google':
     c.JupyterHub.authenticator_class = 'oauthenticator.GoogleOAuthenticator'
@@ -139,17 +164,32 @@ if auth_type == 'google':
     c.GoogleOAuthenticator.hosted_domain = get_config('auth.google.hosted-domain')
     c.GoogleOAuthenticator.login_service = get_config('auth.google.login-service')
     email_domain = get_config('auth.google.hosted-domain')
+elif auth_type == 'github':
+    c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
+    c.GitHubOAuthenticator.oauth_callback_url = get_config('auth.github.callback-url')
+    c.GitHubOAuthenticator.client_id = get_config('auth.github.client-id')
+    c.GitHubOAuthenticator.client_secret = get_config('auth.github.client-secret')
 elif auth_type == 'hmac':
     c.JupyterHub.authenticator_class = 'hmacauthenticator.HMACAuthenticator'
     c.HMACAuthenticator.secret_key = bytes.fromhex(get_config('auth.hmac.secret-key'))
-    email_domain = 'local'
 elif auth_type == 'dummy':
     c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
     c.DummyAuthenticator.password = get_config('auth.dummy.password', None)
-    email_domain = 'local'
 elif auth_type == 'tmp':
     c.JupyterHub.authenticator_class = 'tmpauthenticator.TmpAuthenticator'
-    email_domain = 'local'
+elif auth_type == 'custom':
+    # full_class_name looks like "myauthenticator.MyAuthenticator".
+    # To create a docker image with this class availabe, you can just have the
+    # following Dockerifle:
+    #   FROM jupyterhub/k8s-hub:v0.4
+    #   RUN pip3 install myauthenticator
+    full_class_name = get_config('auth.custom.class-name')
+    c.JupyterHub.authenticator_class = full_class_name
+    auth_class_name = full_class_name.rsplit('.', 1)[-1]
+    auth_config = c[auth_class_name]
+    auth_config.update(get_config('auth.custom.config') or {})
+else:
+    raise ValueError("Unhandled auth type: %r" % auth_type)
 
 
 def generate_user_email(spawner):

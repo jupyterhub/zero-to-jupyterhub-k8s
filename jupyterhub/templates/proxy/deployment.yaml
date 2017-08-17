@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: proxy-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: proxy-pod
+        {{ if .Values.proxy.labels -}}
+        # Because toYaml + indent is super flaky
+        {{ range $key, $value := .Values.proxy.labels -}}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+      annotations:
+        # This lets us autorestart when the secret changes!
+        checksum/secret: {{ include (print $.Template.BasePath "/hub/secret.yaml") . | sha256sum }}
+    spec:
+      containers:
+      - name: proxy-container
+        image: {{ .Values.proxy.image.name }}:{{ .Values.proxy.image.tag }}
+        {{- if .Values.proxy.cmd }}
+        command: {{ toJson .Values.proxy.cmd }}
+        {{- end }}
+        resources:
+{{ toYaml .Values.proxy.resources | indent 12 }}
+        env:
+          - name: CONFIGPROXY_AUTH_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: hub-secret
+                key: proxy.token
+        imagePullPolicy: {{ .Values.proxy.imagePullPolicy }}
+        ports:
+          - containerPort: 8000
+            name: proxy-public
+          - containerPort: 8001
+            name: api

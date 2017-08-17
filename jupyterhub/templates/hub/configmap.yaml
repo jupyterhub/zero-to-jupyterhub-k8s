@@ -1,47 +1,7 @@
-{{ if eq .Values.hub.db.type "sqlite-pvc" -}}
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: hub-db-dir
-  namespace: {{ default .Release.Namespace .Values.name }}
-  annotations:
-    volume.beta.kubernetes.io/storage-class: hub-storage-{{ default .Release.Namespace .Values.name }}
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
----
-{{- end }}
-apiVersion: v1
-kind: Service
-metadata:
-  name: hub
-  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
-spec:
-  selector:
-    name: hub-pod
-  ports:
-    - protocol: TCP
-      port: 8081
-      targetPort: 8081
----
-kind: Secret
-apiVersion: v1
-metadata:
-  name: hub-secret
-  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
-type: Opaque
-data:
-  proxy.token: {{ default .Values.token.proxy .Values.proxy.secretToken | b64enc | quote }}
-  hub.cookie-secret: {{ .Values.hub.cookieSecret | b64enc | quote }}
----
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: hub-config-{{ default .Release.Revision .Values.revisionOverride }}
-  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
+  name: hub-config
 data:
   {{ if .Values.cull.enabled -}}
   cull.enabled: "true"
@@ -64,12 +24,23 @@ data:
   auth.google.client-secret: {{.Values.auth.google.clientSecret | quote}}
   auth.google.hosted-domain: {{.Values.auth.google.hostedDomain | quote}}
   auth.google.login-service: {{.Values.auth.google.loginService | quote}}
-  auth.google.callback-url: {{.Values.auth.google.callbackUrl}}
+  auth.google.callback-url: {{.Values.auth.google.callbackUrl | quote}}
   {{- end }}
+  {{ if eq .Values.auth.type "github" -}}
+  auth.github.client-id: {{.Values.auth.github.clientId | quote}}
+  auth.github.client-secret: {{.Values.auth.github.clientSecret | quote}}
+  auth.github.callback-url: {{.Values.auth.github.callbackUrl | quote}}
+  {{- end }}
+
   {{ if eq .Values.auth.type "dummy" -}}
   {{ if .Values.auth.dummy.password -}}
   auth.dummy.password: {{ .Values.auth.dummy.password | quote }}
   {{- end }}
+  {{- end }}
+
+  {{ if eq .Values.auth.type "custom" -}}
+  auth.custom.class-name: {{ .Values.auth.custom.className | quote }}
+  auth.custom.config : {{ toJson .Values.auth.custom.config | quote }}
   {{- end }}
 
   {{ if .Values.singleuser.lifecycleHooks -}}
@@ -80,14 +51,19 @@ data:
   hub.extra-config.py: |
 {{ .Values.hub.extraConfig | indent 4 }}
   {{- end }}
+  {{ if .Values.hub.extraConfigVars -}}
+  hub.extra-vars: {{ toJson .Values.hub.extraConfigVars | quote }}
+  {{- end }}
   {{ if .Values.singleuser.cmd -}}
   singleuser.cmd: {{ .Values.singleuser.cmd | quote }}
   {{- end }}
   singleuser.storage.type: {{ .Values.singleuser.storage.type | quote }}
   singleuser.storage.home_mount_path: {{ .Values.singleuser.storage.homeMountPath | quote }}
   {{ if eq .Values.singleuser.storage.type "dynamic" -}}
-  singleuser.storage.class: single-user-storage-{{ default .Release.Namespace .Values.name }}
   singleuser.storage.capacity: {{.Values.singleuser.storage.capacity | quote }}
+  {{ else if eq .Values.singleuser.storage.type "static" -}}
+  singleuser.storage.static.pvc-name: {{ .Values.singleuser.storage.static.pvcName | quote }}
+  singleuser.storage.static.sub-path: {{ .Values.singleuser.storage.static.subPath | quote }}
   {{ else if eq .Values.singleuser.storage.type "hostPath" -}}
   singleuser.storage.home_host_path_template: {{ .Values.singleuser.storage.homeHostPathTemplate | quote }}
   {{- end }}
@@ -131,72 +107,3 @@ data:
     - {{ $user }}
     {{ end }}
   {{- end }}
----
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: hub-deployment
-  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
-spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        name: hub-pod
-        {{ if .Values.hub.labels -}}
-        # Because toYaml + indent is super flaky
-        {{ range $key, $value := .Values.proxy.labels -}}
-        {{ $key }}: {{ $value | quote }}
-        {{- end }}
-        {{- end }}
-    spec:
-      volumes:
-      - name: config
-        configMap:
-          name: hub-config-{{ default .Release.Revision .Values.revisionOverride }}
-      {{ if eq .Values.hub.db.type "sqlite-pvc" }}
-      - name: hub-db-dir
-        persistentVolumeClaim:
-          claimName: hub-db-dir
-      {{- end }}
-      containers:
-      - name: hub-container
-        image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
-        volumeMounts:
-          - mountPath: /etc/jupyterhub/config/
-            name: config
-        {{ if eq .Values.hub.db.type "sqlite-pvc" }}
-          - mountPath: /srv/jupyterhub
-            name: hub-db-dir
-        {{- end }}
-        resources:
-{{ toYaml .Values.hub.resources | indent 12}}
-        imagePullPolicy: IfNotPresent
-        env:
-        # Put this here directly so hub will restart when we
-        # change this
-        - name: SINGLEUSER_IMAGE
-          value:  "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"
-        - name: JPY_COOKIE_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: hub-secret
-              key: hub.cookie-secret
-        {{ if .Values.singleuser.mounts -}}
-        {{ if .Values.singleuser.mounts.shared -}}
-        - name: SHARED_DATA_MOUNTS
-          value: "{{ range $key, $value := .Values.singleuser.mounts.shared }}{{$key}}={{$value}};{{end}}"
-        {{- end }}
-        {{- end }}
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: CONFIGPROXY_AUTH_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: hub-secret
-              key: proxy.token
-        ports:
-          - containerPort: 8081
-            name: hub

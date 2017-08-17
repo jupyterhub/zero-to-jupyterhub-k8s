@@ -3,7 +3,6 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: pull-all-nodes-{{ .Release.Time.Seconds }}-{{.Release.Name}}-{{.Release.Revision}}
-  {{ if .Values.name }}namespace: {{ .Values.name }} {{ end }}
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
 spec:
