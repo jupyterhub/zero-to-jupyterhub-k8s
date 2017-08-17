@@ -75,7 +75,7 @@ To add a whitelist of usernames add to the config file under `hub`:
 .. code-block:: yaml
 
      hub:
-         extraConfig:
+         extraConfig: |
              c.Authenticator.whitelist = {"user1", "user2"}
 
 Full Example of Google OAuth2
