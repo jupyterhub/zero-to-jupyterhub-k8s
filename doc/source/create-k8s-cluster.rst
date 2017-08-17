@@ -321,10 +321,24 @@ and recommend using this for setting up your stack.
 
           kubectl apply -f storageclass.yml
 
-This enables `dynamic provisioning
-<https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic>`_ of
-disks, allowing us to automatically assign a disk per user when they log
-in to JupyterHub.
+   This enables `dynamic provisioning
+   <https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic>`_ of
+   disks, allowing us to automatically assign a disk per user when they log
+   in to JupyterHub.
+
+
+8. Enable legacy authorization mode. This is temporarily required since the newer
+   and more secure authorization mode is not out of beta yet.
+
+   ```
+   kubectl create clusterrolebinding permissive-binding \
+    --clusterrole=cluster-admin \
+    --user=admin \
+    --user=kubelet \
+    --group=system:serviceaccounts
+  ```
+
+  This step should hopefully go away soon!
 
 You should now be ready for the next step.
 
