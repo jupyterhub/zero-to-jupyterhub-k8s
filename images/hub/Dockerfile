@@ -25,7 +25,6 @@ RUN adduser --disabled-password \
 
 RUN pip3 install --no-cache-dir \
          jupyterhub==0.8.0b1 \
-         oauthenticator==0.6.0 \
          statsd==3.2.1 \
          jupyterhub-dummyauthenticator==0.3.1 \
          jupyterhub-tmpauthenticator==0.4 \
@@ -35,6 +34,7 @@ RUN pip3 install --no-cache-dir \
          pycurl==7.43.0 \
          mwoauth==0.3.2
 
+RUN pip3 --no-cache-dir install git+https://github.com/yuvipanda/oauthenticator@0a81eefa04
 RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@804947a
 
 ADD jupyterhub_config.py /srv/jupyterhub_config.py
