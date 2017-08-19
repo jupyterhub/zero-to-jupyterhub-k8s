@@ -24,7 +24,7 @@ RUN adduser --disabled-password \
     ${NB_USER}
 
 RUN pip3 install --no-cache-dir \
-         jupyterhub==0.7.2 \
+         jupyterhub==0.8.0b1 \
          oauthenticator==0.6.0 \
          statsd==3.2.1 \
          jupyterhub-dummyauthenticator==0.3.1 \
