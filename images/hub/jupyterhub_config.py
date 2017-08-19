@@ -28,8 +28,8 @@ AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
 # Connect to a proxy running in a different pod
-c.JupyterHub.proxy_api_ip = os.environ['PROXY_API_SERVICE_HOST']
-c.JupyterHub.proxy_api_port = int(os.environ['PROXY_API_SERVICE_PORT'])
+c.ConfigurableHTTPProxy.api_url = 'http://{}:{}'.format(os.environ['PROXY_API_SERVICE_HOST'], int(os.environ['PROXY_API_SERVICE_PORT']))
+c.ConfigurableHTTPProxy.should_start = False
 
 # Check that the proxy has routes appropriately setup
 # This isn't the best named setting :D
