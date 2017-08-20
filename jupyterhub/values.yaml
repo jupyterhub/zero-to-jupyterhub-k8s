@@ -3,6 +3,8 @@ hub:
     type: ClusterIP
   baseUrl: "/"
   cookieSecret: null
+  rbac:
+    enabled: false
   publicURL: null
   uid: 1000
   fsGid: 1000
