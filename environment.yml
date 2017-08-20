@@ -8,3 +8,4 @@ dependencies:
     - numpy
     - ipywidgets==6  # Because the default will be 5
     - traitlets
+    - bs4

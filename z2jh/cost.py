@@ -2,6 +2,8 @@ import numpy as np
 from datetime import datetime as py_dtime
 from datetime import timedelta
 import pandas as pd
+import requests
+from bs4 import BeautifulSoup as bs4
 
 from bqplot import LinearScale, Axis, Lines, Figure, DateScale
 from bqplot.interacts import HandDraw
@@ -12,13 +14,50 @@ import warnings
 warnings.filterwarnings('ignore')
 locale.setlocale(locale.LC_ALL, '')
 
+# --- MACHINE COSTS ---
+http = requests.get('https://cloud.google.com/compute/pricing')
+http = bs4(http.text)
+
+# Munge the cost data
+all_dfs = []
+for table in http.find_all('table'):
+    header = table.find_all('th')
+    header = [item.text for item in header]
+
+    data = table.find_all('tr')[1:]
+    rows = []
+    for ii in data:
+        thisrow = []
+        for jj in ii.find_all('td'):
+            if 'default' in jj.attrs.keys():
+                thisrow.append(jj.attrs['default'])
+            elif 'ore-hourly' in jj.attrs.keys():
+                thisrow.append(jj.attrs['ore-hourly'].strip('$'))
+            elif 'ore-monthly' in jj.attrs.keys():
+                thisrow.append(jj.attrs['ore-monthly'].strip('$'))
+            else:
+                thisrow.append(jj.text.strip())
+        rows.append(thisrow)
+    df = pd.DataFrame(rows[:-1], columns=header)
+    all_dfs.append(df)
+
+# Pull out our reference dataframes
+disk = [df for df in all_dfs if 'Price (per GB / month)' in df.columns][0]
+
+machines_list = pd.concat([df for df in all_dfs if 'Machine type' in df.columns]).dropna()
+machines_list = machines_list.drop('Preemptible price (USD)', axis=1)
+machines_list = machines_list.rename(columns={'Price (USD)': 'Price (USD / hr)'})
+active_machine = machines_list.iloc[0]
+
 # Base costs, all per day
-cost_ram = 2.  # Per gig
-cost_cpu = 20.  # Per CPU
-cost_storage_hdd = 5.  # Per gig
-cost_storage_ssd = 10.  # Per gig
+disk['Price (per GB / month)'] = disk['Price (per GB / month)'].astype(float)
+cost_storage_hdd = disk[disk['Type'] == 'Standard provisioned space']['Price (per GB / month)'].values[0]
+cost_storage_hdd /= 30.  # To make it per day
+cost_storage_ssd = disk[disk['Type'] == 'SSD provisioned space']['Price (per GB / month)'].values[0]
+cost_storage_ssd /= 30.  # To make it per day
 storage_cost = {False: 0, 'ssd': cost_storage_ssd, 'hdd': cost_storage_hdd}
 
+# --- WIDGET ---
 date_start = py_dtime(2017, 1, 1, 0)
 n_step_min = 2
 
@@ -36,11 +75,16 @@ def autoscale(y, window_minutes=30, user_buffer=10):
     return y_scaled[window_minutes:]
 
 
-def integrate_cost(users, cost_per_day):
+def integrate_cost(machines, cost_per_day):
     cost_per_minute = cost_per_day / (24. * 60. / n_step_min)  # 24 hrs * 60 min / N minutes per step
-    cost = np.nansum([ii * cost_per_minute for ii in users])
+    cost = np.nansum([ii * cost_per_minute for ii in machines])
     return cost
 
+def calculate_machines_needed(users, mem_per_user, active_machine):
+    memory_per_machine = float(active_machine['Memory'].values[0].replace('GB', ''))
+    total_gigs_needed = [ii * mem_per_user for ii in users]
+    total_machines_needed = [int(np.ceil(ii / memory_per_machine)) for ii in total_gigs_needed]
+    return total_machines_needed
 
 def create_date_range(n_days):
     delta = timedelta(n_days)
@@ -52,15 +96,16 @@ def create_date_range(n_days):
 def cost_display(n_days=7):
 
     users = widgets.IntText(value=8, description='Number of total users')
-    ram = widgets.FloatText(value=1.0, description='RAM (gigs/user)')
-    cpu = widgets.FloatText(value=.1, description='CPU (fraction / user)')
+    storage_per_user = widgets.IntText(value=10, description='Storage per user (GB)')
+    mem_per_user = widgets.IntText(value=2, description="RAM per user (GB)")
+    machines = widgets.Dropdown(description='Machine',
+                                options=machines_list['Machine type'].values.tolist())
     persistent = widgets.Dropdown(description="Persistent Storage?",
-                                  options={'None': False, 'HDD': 'hdd',
-                                           'SSD': 'ssd'},
-                                  value=False)
+                                  options={'HDD': 'hdd', 'SSD': 'ssd'},
+                                  value='hdd')
     autoscaling = widgets.Checkbox(value=False, description='Autoscaling?')
-    text_cost_ram = widgets.Text(value='', description='RAM Cost:')
-    text_cost_cpu = widgets.Text(value='', description='CPU Cost:')
+    text_avg_num_machine = widgets.Text(value='', description='Average # Machines:')
+    text_cost_machine = widgets.Text(value='', description='Machine Cost:')
     text_cost_storage = widgets.Text(value='', description='Storage Cost:')
     text_cost_total = widgets.Text(value='', description='Total Cost:')
 
@@ -108,19 +153,25 @@ def cost_display(n_days=7):
         line_autoscale.y = autoscaled_users
 
         # Calculate costs
+        active_machine = machines_list[machines_list['Machine type'] == machines.value]
+        machine_cost = active_machine['Price (USD / hr)'].values.astype(float) * 24  # To make it cost per day
         users_for_cost = autoscaled_users if autoscaling.value is True else [max_users] * len(handdraw.lines.y)
-        cost_ram = integrate_cost(users_for_cost, ram.value)
-        cost_cpu = integrate_cost(autoscaled_users, cpu.value)
-        cost_storage = integrate_cost(autoscaled_users, storage_cost[persistent.value])
-        cost_total = cost_ram + cost_cpu + cost_storage
+        num_machines = calculate_machines_needed(users_for_cost, mem_per_user.value, active_machine)
+        avg_num_machines = np.mean(num_machines)
+        cost_machine = integrate_cost(num_machines, machine_cost)
+        cost_storage = integrate_cost(num_machines, storage_cost[persistent.value] * storage_per_user.value)
+        cost_total = cost_machine + cost_storage
 
         # Set the values
-        for iwidget, icost in [(text_cost_ram, cost_ram),
-                               (text_cost_cpu, cost_cpu),
+        for iwidget, icost in [(text_cost_machine, cost_machine),
                                (text_cost_storage, cost_storage),
-                               (text_cost_total, cost_total)]:
-
-            iwidget.value = locale.currency(icost, grouping=True)
+                               (text_cost_total, cost_total),
+                               (text_avg_num_machine, avg_num_machines)]:
+            if iwidget is not text_avg_num_machine:
+                icost = locale.currency(icost, grouping=True)
+            else:
+                icost = '{:.2f}'.format(icost)
+            iwidget.value = icost
 
         # Set the color
         if autoscaling.value is True:
@@ -133,9 +184,12 @@ def cost_display(n_days=7):
     line_hd.observe(_update_cost, names='y')
     autoscaling.observe(_update_cost)
     persistent.observe(_update_cost)
+    machines.observe(_update_cost)
+    storage_per_user.observe(_update_cost)
+    mem_per_user.observe(_update_cost)
 
     # Show it
     fig.title = 'Draw your usage pattern over time.'
-    display(users, ram, cpu, persistent, autoscaling, fig, hr,
-            text_cost_ram, text_cost_cpu, text_cost_storage, text_cost_total)
+    display(users, machines, mem_per_user, storage_per_user, persistent, autoscaling, fig, hr,
+            text_cost_machine, text_avg_num_machine, text_cost_storage, text_cost_total)
     return fig

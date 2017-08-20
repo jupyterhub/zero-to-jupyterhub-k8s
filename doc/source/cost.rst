@@ -6,9 +6,25 @@ Estimating costs
 Cost estimates depend highly on your deployment setup. Several factors that
 significantly influence cost estimates, include:
 
-- Hardware provided to users
+- Computational resources provided to users
 - Number of users
 - Usage patterns of users
+
+Computational Resources
+-----------------------
+
+**Memory (RAM)** makes up the largest part of a cost estimate. More RAM means
+that your users will be able to work with larger datasets with more
+flexibility, but it can also be expensive.
+
+**Persistent storage for users**, if needed, is another element that will impact
+the cost estimate. If users don't have persistent storage, then disks will be
+wiped after users finish their sessions. None of their changes will be saved.
+This requires significantly fewer storage resources, and also results in faster
+load times.
+
+For an example of how costs scale with computational resources, see the
+`Google Cloud pricing page <https://cloud.google.com/compute/pricing>`_.
 
 Interactive Cost Estimator
 --------------------------
@@ -21,29 +37,10 @@ the cost associated with that pattern of activity over the month.
 
 .. raw:: html
 
-   <br />
-   <iframe src="http://beta.mybinder.org/v2/gh/choldgraf/zero-to-jupyterhub-k8s/cost_demo?filepath=draw_function.ipynb" style="width:100%; height:800px; border:1px solid"></iframe>
-   <br />
-
-
-.. image:: http://mybinder.org/badge.svg
-   :target: http://beta.mybinder.org/v2/gh/choldgraf/zero-to-jupyterhub-k8s/cost_demo?filepath=draw_function.ipynb
+   <a target="_blank" href="http://beta.mybinder.org/v2/gh/choldgraf/zero-to-jupyterhub-k8s/cost_demo?filepath=draw_function.ipynb">
+   <button style="background-color: rgb(235, 119, 55); border: 1px solid; border-color: black; color: white; padding: 15px 32px; text-align: center; text-decoration: none; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 8px;">Launch the Cost Estimator</button></a>
 
 For a description of how these costs are broken down, see below.
-
-Hardware
---------
-
-**Memory (RAM)** makes up the largest part of a cost estimate. More RAM means
-that your users will be able to work with larger datasets with more
-flexibility, but it can also be expensive. As a general rule, costs associated
-with RAM scale at <XXX> cost.
-
-**Persistent storage for users**, if needed, is another element that will impact
-the cost estimate. If users don't have persistent storage, then disks will be
-wiped after users finish their sessions. None of their changes will be saved.
-This requires significantly fewer storage resources, and also results in faster
-load times. Storage roughly scales at <XXX> cost.
 
 Users
 -----
