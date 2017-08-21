@@ -17,6 +17,7 @@ hub:
         - ReadWriteOnce
       storage: 1Gi
       subPath: null
+      storageClassName: null
     url: null
   labels: {}
   extraConfig: ""
