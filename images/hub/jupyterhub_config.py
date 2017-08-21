@@ -35,6 +35,9 @@ c.ConfigurableHTTPProxy.should_start = False
 # This isn't the best named setting :D
 c.JupyterHub.last_activity_interval = 60
 
+# Max number of servers that can be spawning at any one time
+c.JupyterHub.concurrent_spawn_limit = get_config('hub.concurrent-spawn-limit')
+
 c.JupyterHub.ip = os.environ['PROXY_PUBLIC_SERVICE_HOST']
 c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
 

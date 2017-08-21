@@ -8,6 +8,7 @@ hub:
   publicURL: null
   uid: 1000
   fsGid: 1000
+  concurrentSpawnLimit: 64
   db:
     type: sqlite-pvc
     pvc:
