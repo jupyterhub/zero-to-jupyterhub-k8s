@@ -33,7 +33,7 @@ c.ConfigurableHTTPProxy.should_start = False
 
 # Check that the proxy has routes appropriately setup
 # This isn't the best named setting :D
-c.JupyterHub.last_activity_interval = 5
+c.JupyterHub.last_activity_interval = 60
 
 c.JupyterHub.ip = os.environ['PROXY_PUBLIC_SERVICE_HOST']
 c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
