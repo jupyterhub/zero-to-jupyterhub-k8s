@@ -15,14 +15,39 @@ Computational Resources
 
 **Memory (RAM)** makes up the largest part of a cost estimate. More RAM means
 that your users will be able to work with larger datasets with more
-flexibility, but it can also be expensive. As a general rule, costs associated
-with RAM scale at <XXX> cost.
+flexibility, but it can also be expensive.
 
 **Persistent storage for users**, if needed, is another element that will impact
 the cost estimate. If users don't have persistent storage, then disks will be
 wiped after users finish their sessions. None of their changes will be saved.
 This requires significantly fewer storage resources, and also results in faster
-load times. Storage roughly scales at <XXX> cost.
+load times.
+
+For an example of how costs scale with computational resources, see the
+`Google Cloud pricing page <https://cloud.google.com/compute/pricing>`_.
+
+Interactive Cost Estimator
+--------------------------
+
+We've put together a small notebook that can help you estimate your costs
+for a JupyterHub instance. The button below will take you to an interactive
+notebook served with `Binder <https://beta.mybinder.org>`_. Run the cells and
+you'll be able to choose the computational requirements you have, as well as
+draw a pattern of usage you expect over time. It will estimate the costs for
+you.
+
+.. raw:: html
+
+   <a target="_blank" href="http://beta.mybinder.org/v2/gh/choldgraf/zero-to-jupyterhub-k8s/cost_demo?filepath=draw_function.ipynb">
+   <button style="background-color: rgb(235, 119, 55); border: 1px solid; border-color: black; color: white; padding: 15px 32px; text-align: center; text-decoration: none; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 8px;">Launch the Cost Estimator</button></a>
+
+.. note::
+
+   These are cost estimates based on Google Cloud Engine instances served from
+   Oregon. Costs will vary based on your location / provider, so double check
+   with their numbers to see how they compare to this demo.
+
+For a description of how these costs are broken down, see below.
 
 Users
 -----
