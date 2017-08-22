@@ -283,7 +283,7 @@ and recommend using this for setting up your stack.
 4. Configure your ``kubectl`` to send instructions to the newly-created
    Kubernetes cluster. To do this, you'll need to copy a security file
    onto your computer. Heptio has pre-configured the command needed to do this.
-   To access it, from teh ``CloudFormation`` page click on the stack you just
+   To access it, from the ``CloudFormation`` page click on the stack you just
    created (the one without "k8s-stack" in it). Below, there is an "Outputs"
    tab. Click on this, and look for a field called ``GetKubeConfigCommand``.
    Copy / paste that text into your terminal, replacing the ``path/to/myKey.pem``
