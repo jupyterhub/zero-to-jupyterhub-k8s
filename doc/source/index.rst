@@ -64,6 +64,16 @@ production deployment of JupyterHub.
    additional-resources
 
 
+**Institutional support**
+
+This guide and the [associated helm chart](https://github.com/jupyterhub/helm-chart)
+would not be possible without the amazing institutional support from the following
+organizations (and the organizations that support them!)
+
+* [UC Berkeley Data Science Division](http://data.berkeley.edu/)
+* [Berkeley Institute for Data Science](https://bids.berkeley.edu/)
+* [Cal Poly, San Luis Obispo](http://www.calpoly.edu/)
+* [Simula Research Institute](https://www.simula.no/)
 
 .. _JupyterHub: https://github.com/jupyterhub/jupyterhub
 .. _issues page: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
