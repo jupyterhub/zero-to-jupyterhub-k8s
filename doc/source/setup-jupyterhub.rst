@@ -19,40 +19,14 @@ needed for future changes to JupyterHub's settings.
 For the following steps, use your favorite code editor. We'll use the
 `nano <https://en.wikipedia.org/wiki/GNU_nano>`_ editor as an example.
 
-1. Create a file called ``config.yaml``. Using the nano editor, for example,
-   entering ``nano config.yaml`` at the terminal will start the editor and
-   open the config file.
-
-2. Create two random hex strings to use as security tokens. Run these two
-   commands (they’re the same command but run them twice) in a terminal:
-
+1. Create a file called ``config.yaml``. 
    .. code-block:: bash
 
-       openssl rand -hex 32
-       openssl rand -hex 32
-
-   Copy the output each time, we’ll use these hex strings in the next step.
-
-3. Insert these lines into the ``config.yaml`` file. When editing YAML files,
-   use straight quotes and spaces and avoid using curly quotes or tabs.
-   Substitute each occurrence of ``RANDOM_STRING_N`` below with the output of
-   ``openssl rand -hex 32``. The random hex strings are tokens that will be used
-   to secure your JupyterHub instance (make sure that you keep the quotation
-   marks):
-
-   .. code-block:: yaml
-
-      hub:
-        # output of first execution of 'openssl rand -hex 32'
-        cookieSecret: "RANDOM_STRING_1"
-      proxy:
-        # output of second execution of 'openssl rand -hex 32'
-        secretToken: "RANDOM_STRING_2"
-
-.. Don't put an example here! People will just copy paste that & that's a security issue.
-
-4. Save the ``config.yaml`` file. If using the nano editor, hit ``Ctrl-X`` and
-   make sure to answer ‘yes’ when it asks you to save.
+       echo "hub:" >config.yaml
+       echo "    cookieSecret: \"$(openssl rand -hex 32)" >> config.yaml
+       echo " " >> config.yaml
+       echo "proxy:" >> config.yaml
+       echo "    secretToken: \"$(openssl rand -hex 32)" >> config.yaml
 
 Install JupyterHub
 ------------------
