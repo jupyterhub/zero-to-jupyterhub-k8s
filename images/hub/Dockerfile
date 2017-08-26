@@ -9,6 +9,8 @@ RUN apt-get update && \
       build-essential \
       python3-dev \
       libssl-dev \
+      npm \
+      nodejs-legacy \
       python3-pip && \
      apt-get purge && apt-get clean
 
@@ -24,7 +26,7 @@ RUN adduser --disabled-password \
     ${NB_USER}
 
 RUN pip3 install --no-cache-dir \
-         jupyterhub==0.8.0b1 \
+         git+https://github.com/jupyterhub/jupyterhub@17851b7 \
          statsd==3.2.1 \
          jupyterhub-dummyauthenticator==0.3.1 \
          jupyterhub-tmpauthenticator==0.4 \
