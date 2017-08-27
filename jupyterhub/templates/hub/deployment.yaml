@@ -54,7 +54,7 @@ spec:
         # change this
         - name: SINGLEUSER_IMAGE
           value:  "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"
-        {{ if ne .Values.hub.cookieSecret null }}
+        {{ if .Values.hub.cookieSecret }}
         - name: JPY_COOKIE_SECRET
           valueFrom:
             secretKeyRef:
