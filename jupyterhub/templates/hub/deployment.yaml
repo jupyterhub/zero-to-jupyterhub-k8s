@@ -54,11 +54,13 @@ spec:
         # change this
         - name: SINGLEUSER_IMAGE
           value:  "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"
+        {{ if ne .Values.hub.cookieSecret null }}
         - name: JPY_COOKIE_SECRET
           valueFrom:
             secretKeyRef:
               name: hub-secret
               key: hub.cookie-secret
+        {{- end }}
         - name: POD_NAMESPACE
           valueFrom:
             fieldRef:
