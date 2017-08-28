@@ -66,6 +66,11 @@ existing image, such as the ``scipy-notebook`` image, complete these steps:
    the nodes in your cluster. This process may take several minutes to
    complete.
 
+.. note::
+
+  Docker images must have the ``jupyterhub`` package installed within them to
+  be used in this manner.
+
 Build a custom image with ``repo2docker``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -261,8 +266,8 @@ Similarly, you can limit CPU as follows:
            cpu:
               limit: 500m
               guarantee: 500m
-              
-This would limit your users to a maximum of 500 "milli-cpu" (so 1/2 of a CPU core), as well as guarantee them that same amount - this measure is defined on the `compute resources page <https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu>`_ of the kubernetes docs. 
+
+This would limit your users to a maximum of 500 "milli-cpu" (so 1/2 of a CPU core), as well as guarantee them that same amount - this measure is defined on the `compute resources page <https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu>`_ of the kubernetes docs.
 
 
 .. note::
