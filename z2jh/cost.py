@@ -139,13 +139,15 @@ def cost_display(n_days=7):
                tick_format='%b %d')
     yax = Axis(scale=ys_hd, label='Numer of Users',
                orientation='vertical', grid_lines='none')
-    fig = Figure(marks=[line_fill, line_hd, line_users, line_autoscale],
+    # FIXME add `line_autoscale` when autoscale is enabled
+    fig = Figure(marks=[line_fill, line_hd, line_users],
                  axes=[xax, yax], interaction=handdraw)
 
     def _update_cost(change):
         # Pull values from the plot
         max_users = max(handdraw.lines.y)
-        line_users.y = [max_users] * len(handdraw.lines.y)
+        max_buffer = max_users * 1.05  # 5% buffer
+        line_users.y = [max_buffer] * len(handdraw.lines.y)
         if max_users > users.value:
             users.value = max_users
 
@@ -155,7 +157,7 @@ def cost_display(n_days=7):
         # Calculate costs
         active_machine = machines_list[machines_list['Machine type'] == machines.value]
         machine_cost = active_machine['Price (USD / hr)'].values.astype(float) * 24  # To make it cost per day
-        users_for_cost = autoscaled_users if autoscaling.value is True else [max_users] * len(handdraw.lines.y)
+        users_for_cost = autoscaled_users if autoscaling.value is True else [max_buffer] * len(handdraw.lines.y)
         num_machines = calculate_machines_needed(users_for_cost, mem_per_user.value, active_machine)
         avg_num_machines = np.mean(num_machines)
         cost_machine = integrate_cost(num_machines, machine_cost)
@@ -182,7 +184,7 @@ def cost_display(n_days=7):
             line_users.colors = ['#000000']
 
     line_hd.observe(_update_cost, names='y')
-    autoscaling.observe(_update_cost)
+    # autoscaling.observe(_update_cost)  # FIXME Uncomment when we implement autoscaling
     persistent.observe(_update_cost)
     machines.observe(_update_cost)
     storage_per_user.observe(_update_cost)
@@ -190,6 +192,7 @@ def cost_display(n_days=7):
 
     # Show it
     fig.title = 'Draw your usage pattern over time.'
-    display(users, machines, mem_per_user, storage_per_user, persistent, autoscaling, fig, hr,
+    # FIXME autoscaling when it's ready
+    display(users, machines, mem_per_user, storage_per_user, persistent, fig, hr,
             text_cost_machine, text_avg_num_machine, text_cost_storage, text_cost_total)
     return fig
