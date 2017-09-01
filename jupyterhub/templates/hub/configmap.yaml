@@ -112,3 +112,9 @@ data:
     - {{ $user }}
     {{ end }}
   {{- end }}
+  {{ if .Values.whitelist.users -}}
+  whitelist.users: |
+    {{ range $user := .Values.whitelist.users -}}
+    - {{ $user }}
+    {{ end }}
+  {{- end }}
