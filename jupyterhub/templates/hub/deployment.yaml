@@ -30,6 +30,9 @@ spec:
         persistentVolumeClaim:
           claimName: hub-db-dir
       {{- end }}
+      securityContext:
+        runAsUser: {{ .Values.hub.uid }}
+        fsGroup: {{ .Values.hub.fsGid }}
       containers:
       - name: hub-container
         image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
@@ -51,16 +54,12 @@ spec:
         # change this
         - name: SINGLEUSER_IMAGE
           value:  "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"
+        {{ if .Values.hub.cookieSecret }}
         - name: JPY_COOKIE_SECRET
           valueFrom:
             secretKeyRef:
               name: hub-secret
               key: hub.cookie-secret
-        {{ if .Values.singleuser.mounts -}}
-        {{ if .Values.singleuser.mounts.shared -}}
-        - name: SHARED_DATA_MOUNTS
-          value: "{{ range $key, $value := .Values.singleuser.mounts.shared }}{{$key}}={{$value}};{{end}}"
-        {{- end }}
         {{- end }}
         - name: POD_NAMESPACE
           valueFrom:
@@ -71,6 +70,10 @@ spec:
             secretKeyRef:
               name: hub-secret
               key: proxy.token
+        {{ range $key, $value := .Values.hub.extraEnv -}}
+        - name: {{ $key | quote }}
+          value: {{ $value | quote }}
+        {{ end -}}
         ports:
           - containerPort: 8081
             name: hub

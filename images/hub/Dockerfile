@@ -1,7 +1,5 @@
 FROM ubuntu:17.04
 
-RUN apt-get update
-
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
       git \
@@ -14,6 +12,16 @@ RUN apt-get update && \
       python3-pip && \
      apt-get purge && apt-get clean
 
+ARG NB_USER=jovyan
+ARG NB_UID=1000
+ARG HOME=/home/jovyan
+
+RUN adduser --disabled-password \
+    --gecos "Default user" \
+    --uid ${NB_UID} \
+    --home ${HOME} \
+    --force-badname \
+    ${NB_USER}
 
 RUN pip3 install --no-cache-dir \
          jupyterhub==0.7.2 \
@@ -23,7 +31,8 @@ RUN pip3 install --no-cache-dir \
          jupyterhub-tmpauthenticator==0.4 \
          pymysql==0.7.11 \
          psycopg2==2.7.1 \
-         pycurl==7.43.0
+         pycurl==7.43.0 \
+         mwoauth==0.3.2
 
 RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@804947a
 
@@ -32,7 +41,12 @@ ADD cull_idle_servers.py /usr/local/bin/cull_idle_servers.py
 
 WORKDIR /srv/jupyterhub
 
+# So we can actually write a db file here
+RUN chown ${NB_USER}:${NB_USER} /srv/jupyterhub
+
 # JupyterHub API port
 EXPOSE 8081
+
+USER ${NB_USER}
 
 CMD jupyterhub --config /srv/jupyterhub_config.py --no-ssl

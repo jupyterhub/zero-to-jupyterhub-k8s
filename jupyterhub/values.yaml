@@ -3,7 +3,11 @@ hub:
     type: ClusterIP
   baseUrl: "/"
   cookieSecret: null
+  rbac:
+    enabled: false
   publicURL: null
+  uid: 1000
+  fsGid: 1000
   db:
     type: sqlite-pvc
     pvc:
@@ -16,6 +20,7 @@ hub:
     url: null
   labels: null
   extraConfig: null
+  extraEnv: {}
   image:
     name: jupyterhub/k8s-hub
     tag: v0.4
@@ -68,15 +73,17 @@ singleuser:
   extraLabels: {}
   extraEnv: {}
   lifecycleHooks: null
+  uid: 1000
+  fsGid: 1000
   storage:
     type: dynamic
+    extraVolumes: []
+    extraVolumeMounts: []
     static:
       pvcName: null
       subPath: "{username}"
     capacity: 10Gi
     homeMountPath: /home/jovyan
-    # type: hostPath
-    # homeHostPathTemplate: /data/project/paws/userhomes/{userid}
   image:
     name: jupyterhub/k8s-singleuser-sample
     tag: v0.4
@@ -98,12 +105,6 @@ cull:
   enabled: true
   timeout: 3600
   every: 600
-
-statsd:
-  enabled: false
-  port: 8125
-  host: statsd
-  prefix: jupyterhub
 
 admin:
   access: true

@@ -9,12 +9,6 @@ data:
   cull.every: {{ .Values.cull.every | quote }}
   {{- end }}
 
-  {{ if .Values.statsd.enabled -}}
-  statsd.prefix: "{{ default .Release.namespace .Values.statsd.prefix }}.jupyterhub"
-  statsd.host: {{ .Values.statsd.host | quote }}
-  statsd.port: {{ default "8125" .Values.statsd.port | quote }}
-  {{- end }}
-
   auth.type: {{ .Values.auth.type | quote }}
   {{ if eq .Values.auth.type "hmac" -}}
   auth.hmac.secret-key: {{ .Values.auth.hmac.secretKey | quote }}
@@ -30,6 +24,11 @@ data:
   auth.github.client-id: {{.Values.auth.github.clientId | quote}}
   auth.github.client-secret: {{.Values.auth.github.clientSecret | quote}}
   auth.github.callback-url: {{.Values.auth.github.callbackUrl | quote}}
+  {{- end }}
+  {{ if eq .Values.auth.type "mediawiki" -}}
+  auth.mediawiki.client-id: {{.Values.auth.mediawiki.clientId | quote}}
+  auth.mediawiki.client-secret: {{.Values.auth.mediawiki.clientSecret | quote}}
+  auth.github.index-url: {{.Values.auth.mediawiki.indexUrl | quote}}
   {{- end }}
 
   {{ if eq .Values.auth.type "dummy" -}}
@@ -57,8 +56,14 @@ data:
   {{ if .Values.singleuser.cmd -}}
   singleuser.cmd: {{ .Values.singleuser.cmd | quote }}
   {{- end }}
+
+  singleuser.uid: {{ .Values.singleuser.uid | quote }}
+  singleuser.fs-gid: {{ .Values.singleuser.fsGid | quote }}
+
   singleuser.storage.type: {{ .Values.singleuser.storage.type | quote }}
   singleuser.storage.home_mount_path: {{ .Values.singleuser.storage.homeMountPath | quote }}
+  singleuser.storage.extra-volumes: {{ toJson .Values.singleuser.storage.extraVolumes | quote }}
+  singleuser.storage.extra-volume-mounts: {{ toJson .Values.singleuser.storage.extraVolumeMounts | quote }}
   {{ if eq .Values.singleuser.storage.type "dynamic" -}}
   singleuser.storage.capacity: {{.Values.singleuser.storage.capacity | quote }}
   {{ else if eq .Values.singleuser.storage.type "static" -}}
