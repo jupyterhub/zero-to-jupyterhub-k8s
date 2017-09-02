@@ -22,6 +22,60 @@ properties:
 
           Changing this value will all user logins to be invalidated. If this secret leaks,
           *immediately* change it to something else, or user data can be compromised
+      imagePullPolicy:
+        type: string
+        enum:
+          - IfNotPresent
+          - Always
+          - Never
+        description: |
+          Set the imagePullPolicy on the hub pod.
+
+          See [the kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
+          for more info on what the values mean.
+      image:
+        type: object
+        description: |
+          Set custom image name / tag for the hub pod.
+
+          Use this to customize which hub image is used. Note that you must use a version of
+          the hub image that was bundled with this particular version of the helm-chart - using
+          other images might not work.
+        properties:
+          name:
+            type: string
+            description: |
+              Name of the image, without the tag.
+
+              Examples:
+                - yuvipanda/wikimedia-hub
+                - gcr.io/my-project/my-hub
+          tag:
+            type: string
+            description: |
+              The tag of the image to pull.
+
+              This is the value after the `:` in your full image name.
+      labels:
+        type: object
+        description: |
+          Extra labels to add to the hub pod.
+
+          See [the kubernetes documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+          to learn more about labels.
+      extraEnv:
+        type: object
+        description: |
+          Extra environment variables that should be set for the hub pod.
+
+          A dictionary of key value pairs (both strings), where the key is the name of the
+          environment value and the value is the value of the environment variable that should
+          be set on the hub pod.
+
+          These are usually used in two circumstances:
+            - Passing parameters to some custom code specified with `extraConfig`
+            - Passing parameters to an authenticator or spawner that can be directly customized
+              by environment variables (rarer)
       extraConfig:
         type: string
         description: |
@@ -49,6 +103,28 @@ properties:
           No validation of this python is performed! If you make a mistake here, it will probably
           manifest as either the hub pod going into `Error` or `CrashLoopBackoff` states, or in
           some special cases, the hub running but... just doing very random things. Be careful!
+      uid:
+        type: integer
+        minimum: 0
+        description:
+          The UID the hub process should be running as.
+
+          Use this only if you are building your own image & know that a user with this uid
+          exists inside the hub container! Advanced feature, handle with care!
+
+          Defaults to 1000, which is the uid of the `jovyan` user that is present in the
+          default hub image.
+      fsGid:
+        type: integer
+        minimum: 0
+        description:
+          The gid the hub process should be using when touching any volumes mounted.
+
+          Use this only if you are building your own image & know that a group with this gid
+          exists inside the hub container! Advanced feature, handle with care!
+
+          Defaults to 1000, which is the uid of the `jovyan` user that is present in the
+          default hub image.
   proxy:
     type: object
     properties:

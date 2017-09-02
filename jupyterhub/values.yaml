@@ -18,7 +18,7 @@ hub:
       storage: 1Gi
       subPath: null
     url: null
-  labels: null
+  labels: {}
   extraConfig: ""
   extraEnv: {}
   image:
