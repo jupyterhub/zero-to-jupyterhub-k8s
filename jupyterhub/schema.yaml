@@ -56,6 +56,107 @@ properties:
               The tag of the image to pull.
 
               This is the value after the `:` in your full image name.
+      db:
+        type: object
+        properties:
+          type:
+            type: string
+            enum:
+              - sqlite-pvc
+              - sqlite-memory
+              - mysql
+              - postgres
+            description: |
+              Type of database backend to use for the hub database.
+
+              The Hub requires a persistent database to function, and this lets you specify
+              where it should be stored.
+
+              The various options are:
+
+              1. **sqlite-pvc**
+
+                 Use an `sqlite` database kept on a persistent volume attached to the hub.
+
+                 By default, this disk is dynamically created using the default
+                 [dynamic provisioner]. You can customize how this disk is created / attached
+                 by setting various properties under `hub.db.pvc`.
+
+                 This is the default setting, and should work well for most cloud provider
+                 deployments.
+
+              2. **sqlite-memory**
+
+                 Use an in-memory `sqlite` database. This should only be used for testing,
+                 since the database is erased whenever the hub pod restarts - causing the hub
+                 to lose all memory of users who had logged in before.
+
+                 When using this for testing, make sure you delete all other objects that the
+                 hub has created (such as user pods, user PVCs, etc) every time the hub restarts.
+                 Otherwise you might run into errors about duplicate resources.
+
+              3. **mysql**
+
+                 Use an externaly hosted mysql database.
+
+                 You have to specify an sqlalchemy connection string for the mysql database you
+                 want to connect to in `hub.db.url` if using this option.
+
+                 The general format of the connection string is:
+                 ```
+                 mysql+pymysql://<db-username>:<db-password>@<db-hostname>:<db-port>/<db-name>
+                 ```
+
+                 The user specified in the connection string must have the rights to create
+                 tables in the database specified.
+
+                 Note that if you use this, you *must* also set `hub.cookieSecret`.
+
+              4. **postgres**
+
+                 Use an externaly hosted postgres database.
+
+                 You have to specify an sqlalchemy connection string for the postgres database you
+                 want to connect to in `hub.db.url` if using this option.
+
+                 The general format of the connection string is:
+                 ```
+                 postgres+psycopg2://<db-username>:<db-password>@<db-hostname>:<db-port>/<db-name>
+                 ```
+
+                 The user specified in the connection string must have the rights to create
+                 tables in the database specified.
+
+                 Note that if you use this, you *must* also set `hub.cookieSecret`.
+          pvc:
+            type: object
+            descripton: |
+              Customize the Persistent Volume Claim used when `hub.db.type` is `sqlite-pvc`.
+            properties:
+              annotations:
+                type: object
+                description: |
+                  Annotations to apply to the PVC containing the sqlite database.
+
+                  TODO: Link to pvc annotations
+              selector:
+                type: object
+                description: |
+                  Selectors to set for the PVC containing the sqlite database.
+
+                  Useful when you are using a static PVC.
+
+                  TODO: Link to pvc selector docs.
+              storage:
+                type: string
+                description: |
+                  Size of disk to request for the database disk.
+          url:
+            type: string
+            description: |
+              Connection string when `hub.db.type` is mysql or postgres.
+
+              See documentation for `hub.db.type` for more details on the format of this property.
       labels:
         type: object
         description: |
@@ -141,3 +242,52 @@ properties:
           it to something else, or user data can be compromised
     required:
       - secretToken
+
+  singleuser:
+    type: object
+    description: |
+      Options for customizing the environment that is provided to the users after they log in.
+    properties:
+      cpu:
+        type: object
+        description: |
+          Set CPU limits & guarantees that are enforced for each user.
+
+          TODO: Link to k8s docs about CPU limits and guarantees.
+        properties:
+          limit:
+            type: string
+          guarantee:
+            type: string
+      memory:
+        type: object
+        description: |
+          Set Memory limits & guarantees that are enforced for each user.
+
+          TODO: Link to k8s docs about Memory limits and guarantees.
+        properties:
+          limit:
+            type: string
+          guarantee:
+            type: string
+      image:
+        type: object
+        description: |
+          Set custom image name / tag used for spawned users.
+
+          This image is used to launch the pod for each user.
+        properties:
+          name:
+            type: string
+            description: |
+              Name of the image, without the tag.
+
+              Examples:
+                - yuvipanda/wikimedia-hub-user
+                - gcr.io/my-project/my-user-image
+          tag:
+            type: string
+            description: |
+              The tag of the image to use.
+
+              This is the value after the `:` in your full image name.
