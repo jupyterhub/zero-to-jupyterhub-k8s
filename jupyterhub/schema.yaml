@@ -1,0 +1,67 @@
+title: Config
+type: object
+properties:
+  hub:
+    type: object
+    properties:
+      cookieSecret:
+        type: string
+        description: |
+          A 64-byte cryptographically secure randomly generated string used to sign values of
+          secure cookies set by the hub. If unset, jupyterhub will generate one on startup and
+          save it in the file `jupyterhub_cookie_secret` in the `/srv/jupyterhub` directory of
+          the hub container. Value set here will override the value in `jupyterhub_cookie_secret`.
+
+          You do not need to set this at all if you are using the default configuration for
+          storing databases - sqlite on a persistent volume (with `hub.db.type` set to the
+          default `sqlite-pvc`). If you are using an external database, then you must set this
+          value explicitly - or your users will keep getting logged out each time the hub pod
+          restarts.
+
+          This must be generated with `openssl rand -hex 32`.
+
+          Changing this value will all user logins to be invalidated. If this secret leaks,
+          *immediately* change it to something else, or user data can be compromised
+      extraConfig:
+        type: string
+        description: |
+          Arbitrary extra python based configuration that should be in `jupyterhub_config.py`.
+
+          This is the *escape hatch* - if you want to configure JupyterHub to do something specific
+          that is not present here as an option, you can just write the raw Python to do it here.
+
+          Non-exhaustive examples of things you can do here:
+            - Subclass authenticator / spawner to do a custom thing
+            - Dynamically launch different images for different sets of images
+            - Inject an auth token from GitHub authenticator into user pod
+            - Anything else you can think of!
+
+          Since this is usually a multi-line string, you want to format it using YAML's
+          [| operator](http://www.yaml.org/spec/1.2/spec.html#id2795688).
+
+          For example:
+            ```
+            hub:
+              extraConfig: |
+                c.JupyterHub.something = 'something'
+                c.Spawner.somethingelse = 'something else'
+
+          No validation of this python is performed! If you make a mistake here, it will probably
+          manifest as either the hub pod going into `Error` or `CrashLoopBackoff` states, or in
+          some special cases, the hub running but... just doing very random things. Be careful!
+  proxy:
+    type: object
+    properties:
+      secretToken:
+        type: string
+        description: |
+          A 64-byte cryptographically secure randomly generated string used to secure communications
+          between the hub and the configurable-http-proxy.
+
+          This must be generated with `openssl rand -hex 32`.
+
+          Changing this value will cause the proxy and hub pods to restart. It is good security
+          practice to rotate these values over time. If this secret leaks, *immediately* change
+          it to something else, or user data can be compromised
+    required:
+      - secretToken

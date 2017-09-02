@@ -19,7 +19,7 @@ hub:
       subPath: null
     url: null
   labels: null
-  extraConfig: null
+  extraConfig: ""
   extraEnv: {}
   image:
     name: jupyterhub/k8s-hub
