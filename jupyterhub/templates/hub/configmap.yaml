@@ -105,16 +105,16 @@ data:
   {{ else -}}
   hub.db_url: {{ .Values.hub.db.url | quote }}
   {{- end }}
+  {{ if .Values.hub.whitelist.users -}}
+  hub.whitelist.users: |
+    {{ range $user := .Values.hub.whitelist.users -}}
+    - {{ $user }}
+    {{ end }}
+  {{- end }}
   admin.access: {{ .Values.admin.access | quote }}
   {{ if .Values.admin.users -}}
   admin.users: |
     {{ range $user := .Values.admin.users -}}
-    - {{ $user }}
-    {{ end }}
-  {{- end }}
-  {{ if .Values.whitelist.users -}}
-  whitelist.users: |
-    {{ range $user := .Values.whitelist.users -}}
     - {{ $user }}
     {{ end }}
   {{- end }}
