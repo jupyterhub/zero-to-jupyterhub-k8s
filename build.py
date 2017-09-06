@@ -109,6 +109,7 @@ def main():
         build_images(args.image_prefix, images, args.commit_range, args.push)
         build_values(args.image_prefix)
         build_chart()
-        publish_pages()
+        if args.push:
+            publish_pages()
 
 main()
