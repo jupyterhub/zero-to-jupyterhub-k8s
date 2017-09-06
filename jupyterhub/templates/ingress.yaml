@@ -21,15 +21,9 @@ spec:
               serviceName: proxy-public
               servicePort: 80
       host: {{ .Values.ingress.host }}
-{{- if .Values.ingress.https.enabled }}
-{{- if eq .Values.ingress.https.type "kube-lego" }}
+{{- if and .Values.ingress.https.enabled (eq .Values.ingress.https.type "kube-lego") }}
   tls:
     - secretName: kubelego-tls-proxy-{{ .Release.Name }}
-      hosts:
-        - {{ .Values.ingress.host }}
-{{- else if eq .Values.ingress.https.type "manual" }}
-  tls:
-    - secretName: manual-tls-proxy-{{ .Release.Name }}
       hosts:
         - {{ .Values.ingress.host }}
 {{- end }}
