@@ -18,8 +18,8 @@ hub:
       storage: 1Gi
       subPath: null
     url: null
-  labels: null
-  extraConfig: null
+  labels: {}
+  extraConfig: ""
   extraEnv: {}
   image:
     name: jupyterhub/k8s-hub
