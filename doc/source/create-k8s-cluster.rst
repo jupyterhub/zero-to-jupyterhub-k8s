@@ -71,7 +71,7 @@ connect your credit card or other payment method to your google cloud account.
           --num-nodes=3 \
           --machine-type=n1-standard-2 \
           --zone=us-central1-b \
-          --cluster-version=1.7.3
+          --cluster-version=1.7.5
 
    where:
 
