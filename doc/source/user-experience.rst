@@ -264,11 +264,10 @@ Similarly, you can limit CPU as follows:
 
        singleuser:
            cpu:
-              limit: 500m
-              guarantee: 500m
+              limit: .5
+              guarantee: .5
 
-This would limit your users to a maximum of 500 "milli-cpu" (so 1/2 of a CPU core), as well as guarantee them that same amount - this measure is defined on the `compute resources page <https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu>`_ of the kubernetes docs.
-
+This would limit your users to a maximum of .5 of a CPU (so 1/2 of a CPU core), as well as guarantee them that same amount.
 
 .. note::
 
