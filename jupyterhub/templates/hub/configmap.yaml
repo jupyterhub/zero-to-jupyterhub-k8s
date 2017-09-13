@@ -25,6 +25,11 @@ data:
   auth.github.client-secret: {{.Values.auth.github.clientSecret | quote}}
   auth.github.callback-url: {{.Values.auth.github.callbackUrl | quote}}
   {{- end }}
+  {{ if eq .Values.auth.type "gitlab" -}}
+  auth.gitlab.client-id: {{.Values.auth.gitlab.clientId | quote}}
+  auth.gitlab.client-secret: {{.Values.auth.gitlab.clientSecret | quote}}
+  auth.gitlab.callback-url: {{.Values.auth.gitlab.callbackUrl | quote}}
+  {{- end }}
   {{ if eq .Values.auth.type "mediawiki" -}}
   auth.mediawiki.client-id: {{.Values.auth.mediawiki.clientId | quote}}
   auth.mediawiki.client-secret: {{.Values.auth.mediawiki.clientSecret | quote}}

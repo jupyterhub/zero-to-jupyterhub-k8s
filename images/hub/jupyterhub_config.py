@@ -132,6 +132,11 @@ elif auth_type == 'github':
     c.GitHubOAuthenticator.oauth_callback_url = get_config('auth.github.callback-url')
     c.GitHubOAuthenticator.client_id = get_config('auth.github.client-id')
     c.GitHubOAuthenticator.client_secret = get_config('auth.github.client-secret')
+elif auth_type == 'gitlab':
+    c.JupyterHub.authenticator_class = 'oauthenticator.gitlab.GitLabOAuthenticator'
+    c.GitLabOAuthenticator.oauth_callback_url = get_config('auth.gitlab.callback-url')
+    c.GitLabOAuthenticator.client_id = get_config('auth.gitlab.client-id')
+    c.GitLabOAuthenticator.client_secret = get_config('auth.gitlab.client-secret')
 elif auth_type == 'mediawiki':
     c.JupyterHub.authenticator_class = 'oauthenticator.mediawiki.MWOAuthenticator'
     c.MWOAuthenticator.client_id = get_config('auth.mediawiki.client-id')
