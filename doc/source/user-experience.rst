@@ -271,12 +271,6 @@ This would limit your users to a maximum of .5 of a CPU (so 1/2 of a CPU core), 
 
 .. note::
 
-   For a more complete description of how you can provision computational resources (and what values are allowed), see
-   the `compute resources page <https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu>`_
-   of the kubernetes docs.
-
-.. note::
-
    Remember to `apply the changes`_ after changing your ``config.yaml`` file!
 
 .. _user_storage:
