@@ -124,3 +124,6 @@ data:
     - {{ $user }}
     {{ end }}
   {{- end }}
+  {{ range $key, $value := .Values.hub.extraConfigMap -}}
+  custom.{{ $key }}: {{ toJson $value | quote }}
+  {{ end -}}
