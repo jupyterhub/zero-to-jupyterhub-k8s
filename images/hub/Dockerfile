@@ -29,6 +29,7 @@ RUN pip3 install --no-cache-dir \
          statsd==3.2.1 \
          jupyterhub-dummyauthenticator==0.3.1 \
          jupyterhub-tmpauthenticator==0.4 \
+         nullauthenticator==1.0 \
          pymysql==0.7.11 \
          psycopg2==2.7.1 \
          pycurl==7.43.0 \
