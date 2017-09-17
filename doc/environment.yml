@@ -6,3 +6,4 @@ dependencies:
 - sphinx>=1.3.6,!=1.5.4
 - pip:
     - recommonmark==0.4.0
+    - git+git://github.com/choldgraf/sphinx-jsonschema.git@jsonpointer

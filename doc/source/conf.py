@@ -32,7 +32,8 @@ import recommonmark
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.mathjax']
+extensions = ['sphinx.ext.mathjax',
+              'sphinx-jsonschema']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -40,6 +41,15 @@ templates_path = ['_templates']
 source_parsers = {
     '.md': 'recommonmark.parser.CommonMarkParser',
 }
+
+# Generate JSON version of the helm-chart
+import yaml, json, sys
+import requests
+resp = requests.get('https://raw.githubusercontent.com/jupyterhub/helm-chart/master/jupyterhub/schema.yaml')
+yamlraw = resp.text
+yamlstruct = yaml.load(yamlraw)
+with open('_static/schema.json', 'w') as ff:
+    json.dump(yamlstruct, ff, sort_keys=True, indent=2)
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:

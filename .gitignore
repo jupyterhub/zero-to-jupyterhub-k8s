@@ -135,3 +135,6 @@ ENV/
 
 # Emacs
 .#*
+
+# JSON schema
+doc/source/_static/schema.json
