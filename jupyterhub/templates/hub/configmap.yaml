@@ -52,6 +52,18 @@ data:
   {{- end }}
 
   hub.concurrent-spawn-limit: {{ .Values.hub.concurrentSpawnLimit | quote }}
+  {{ if .Values.hub.services -}}
+  hub.services: |
+    # include hub.services *except* api_tokens
+    {{ range $name, $service := .Values.hub.services -}}
+    {{$name}}:
+      {{ range $key, $value := $service -}}
+      {{ if ne $key "apiToken" -}}
+      {{$key}}: {{ $value }}
+      {{- end }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
   {{ if .Values.hub.extraConfig -}}
   hub.extra-config.py: |
 {{ .Values.hub.extraConfig | indent 4 }}

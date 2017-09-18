@@ -194,6 +194,7 @@ c.JupyterHub.admin_access = get_config('admin.access')
 
 c.Authenticator.admin_users = get_config('admin.users', [])
 
+c.JupyterHub.services = []
 
 c.Authenticator.whitelist = get_config('hub.whitelist.users', [])
 
@@ -201,18 +202,25 @@ c.Authenticator.whitelist = get_config('hub.whitelist.users', [])
 if get_config('cull.enabled', False):
     cull_timeout = get_config('cull.timeout')
     cull_every = get_config('cull.every')
-    c.JupyterHub.services = [
-        {
-            'name': 'cull-idle',
-            'admin': True,
-            'command': [
-                '/usr/bin/python3',
-                '/usr/local/bin/cull_idle_servers.py',
-                '--timeout=%s' % cull_timeout,
-                '--cull_every=%s' % cull_every
-            ]
-        }
-    ]
+    c.JupyterHub.services.append({
+        'name': 'cull-idle',
+        'admin': True,
+        'command': [
+            '/usr/bin/python3',
+            '/usr/local/bin/cull_idle_servers.py',
+            '--timeout=%s' % cull_timeout,
+            '--cull_every=%s' % cull_every
+        ]
+    })
+
+for name, service in get_config('hub.services', {}).items():
+    api_token = os.getenv('SERVICE_TOKEN_%s' % name.upper(), None)
+    # jupyterhub.services is a list of dicts, but
+    # in the helm chart it is a dict of dicts for easier merged-config
+    service.setdefault('name', name)
+    if api_token is not None:
+        service['api_token'] = api_token
+    c.JupyterHub.services.append(service)
 
 c.JupyterHub.base_url = get_config('hub.base_url')
 
