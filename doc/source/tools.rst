@@ -249,7 +249,7 @@ Finally, the output of JupyterHub is a user pod, which specifies the
 computational environment in which a single user will operate. So
 essentially a JupyterHub is a collection of:
 
-* Pods that contain the JupyterHub Machiner
+* Pods that contain the JupyterHub Machine
 * A bunch of user pods that are constantly being created or destroyed.
 
 Below we'll describe the primary JupyterHub pods.
