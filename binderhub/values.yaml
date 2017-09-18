@@ -5,7 +5,7 @@ resources:
 
 image:
   name: jupyterhub/k8s-binderhub
-  tag: v037d900
+  tag: v268761c
 
 repo2dockerImage: jupyter/repo2docker:v0.4.1
 
@@ -54,12 +54,10 @@ jupyterhub:
 
       c.JupyterHub.spawner_class = BinderSpawner
 
-      # add binder API token
-      c.JupyterHub.services.append({
-          'name': 'binder',
-          'admin': True,
-          'api_token': "HARDCODED",
-      })
+    services:
+      binder:
+        admin: true
+        apiToken: null
 
   singleuser:
     # start jupyter notebook

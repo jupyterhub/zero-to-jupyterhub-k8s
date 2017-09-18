@@ -78,6 +78,11 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        - name: JUPYTERHUB_API_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: hub-secret
+              key: "services.token-binder"
         ports:
           - containerPort: 8585
             name: binder
