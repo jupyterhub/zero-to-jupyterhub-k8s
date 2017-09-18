@@ -215,7 +215,7 @@ all of the necessary information for kubernetes to generate:
 
 - a deployment object
 - a service object
-- a persistent volume object a deployment.
+- a persistent volume object for a deployment.
 - collections of the above components
 
 They can be installed into a namespace, which causes kubernetes to
