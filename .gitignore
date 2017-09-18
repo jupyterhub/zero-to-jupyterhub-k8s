@@ -1,3 +1,45 @@
+### macOS ###
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+# Thumbnails
+._*
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### Vim ###
+# swap
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+# session
+Session.vim
+# temporary
+.netrwhist
+*~
+# auto-generated tag files
+tags
+
+# GCloud Credentials
+data8-travis-creds.json
+
+#### Python .gitignore from https://github.com/github/gitignore/blob/master/Python.gitignore
+####
+>>>>>>> helm-chart/master
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -20,6 +62,7 @@ lib64/
 parts/
 sdist/
 var/
+wheels/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -66,7 +109,6 @@ docs/_build/
 # PyBuilder
 target/
 
-# IPython Notebook
 .ipynb_checkpoints
 
 # pyenv
@@ -79,6 +121,7 @@ celerybeat-schedule
 .env
 
 # virtualenv
+.venv
 venv/
 ENV/
 

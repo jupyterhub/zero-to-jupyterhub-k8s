@@ -1,0 +1,13 @@
+hub:
+    cookieSecret: 1470700e01f77171c2c67b12130c25081dfbdf2697af8c2f2bd05621b31100bf
+    db:
+      type: sqlite-memory
+
+singleuser:
+  storage:
+    type: none
+  memory:
+    guarantee: null
+
+prePuller:
+  enabled: False

@@ -1,0 +1,120 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: hub-config
+data:
+  {{ if .Values.cull.enabled -}}
+  cull.enabled: "true"
+  cull.timeout: {{ .Values.cull.timeout | quote }}
+  cull.every: {{ .Values.cull.every | quote }}
+  {{- end }}
+
+  auth.type: {{ .Values.auth.type | quote }}
+  {{ if eq .Values.auth.type "hmac" -}}
+  auth.hmac.secret-key: {{ .Values.auth.hmac.secretKey | quote }}
+  {{- end }}
+  {{ if eq .Values.auth.type "google" -}}
+  auth.google.client-id: {{.Values.auth.google.clientId | quote}}
+  auth.google.client-secret: {{.Values.auth.google.clientSecret | quote}}
+  auth.google.hosted-domain: {{.Values.auth.google.hostedDomain | quote}}
+  auth.google.login-service: {{.Values.auth.google.loginService | quote}}
+  auth.google.callback-url: {{.Values.auth.google.callbackUrl | quote}}
+  {{- end }}
+  {{ if eq .Values.auth.type "github" -}}
+  auth.github.client-id: {{.Values.auth.github.clientId | quote}}
+  auth.github.client-secret: {{.Values.auth.github.clientSecret | quote}}
+  auth.github.callback-url: {{.Values.auth.github.callbackUrl | quote}}
+  {{- end }}
+  {{ if eq .Values.auth.type "mediawiki" -}}
+  auth.mediawiki.client-id: {{.Values.auth.mediawiki.clientId | quote}}
+  auth.mediawiki.client-secret: {{.Values.auth.mediawiki.clientSecret | quote}}
+  auth.github.index-url: {{.Values.auth.mediawiki.indexUrl | quote}}
+  {{- end }}
+
+  {{ if eq .Values.auth.type "dummy" -}}
+  {{ if .Values.auth.dummy.password -}}
+  auth.dummy.password: {{ .Values.auth.dummy.password | quote }}
+  {{- end }}
+  {{- end }}
+
+  {{ if eq .Values.auth.type "custom" -}}
+  auth.custom.class-name: {{ .Values.auth.custom.className | quote }}
+  auth.custom.config : {{ toJson .Values.auth.custom.config | quote }}
+  {{- end }}
+
+  {{ if .Values.singleuser.lifecycleHooks -}}
+  singleuser.lifecycle-hooks: {{ toJson .Values.singleuser.lifecycleHooks | quote }}
+  {{- end }}
+
+  {{ if .Values.hub.extraConfig -}}
+  hub.extra-config.py: |
+{{ .Values.hub.extraConfig | indent 4 }}
+  {{- end }}
+  {{ if .Values.hub.extraConfigVars -}}
+  hub.extra-vars: {{ toJson .Values.hub.extraConfigVars | quote }}
+  {{- end }}
+  {{ if .Values.singleuser.cmd -}}
+  singleuser.cmd: {{ .Values.singleuser.cmd | quote }}
+  {{- end }}
+
+  singleuser.uid: {{ .Values.singleuser.uid | quote }}
+  singleuser.fs-gid: {{ .Values.singleuser.fsGid | quote }}
+
+  singleuser.storage.type: {{ .Values.singleuser.storage.type | quote }}
+  singleuser.storage.home_mount_path: {{ .Values.singleuser.storage.homeMountPath | quote }}
+  singleuser.storage.extra-volumes: {{ toJson .Values.singleuser.storage.extraVolumes | quote }}
+  singleuser.storage.extra-volume-mounts: {{ toJson .Values.singleuser.storage.extraVolumeMounts | quote }}
+  {{ if eq .Values.singleuser.storage.type "dynamic" -}}
+  singleuser.storage.capacity: {{.Values.singleuser.storage.capacity | quote }}
+  {{ else if eq .Values.singleuser.storage.type "static" -}}
+  singleuser.storage.static.pvc-name: {{ .Values.singleuser.storage.static.pvcName | quote }}
+  singleuser.storage.static.sub-path: {{ .Values.singleuser.storage.static.subPath | quote }}
+  {{ else if eq .Values.singleuser.storage.type "hostPath" -}}
+  singleuser.storage.home_host_path_template: {{ .Values.singleuser.storage.homeHostPathTemplate | quote }}
+  {{- end }}
+  {{ if .Values.singleuser.memory.limit -}}
+  singleuser.memory.limit: {{ .Values.singleuser.memory.limit | quote}}
+  {{- end }}
+  {{ if .Values.singleuser.memory.guarantee -}}
+  singleuser.memory.guarantee: {{ .Values.singleuser.memory.guarantee | quote}}
+  {{- end }}
+  {{ if .Values.singleuser.cpu.limit -}}
+  singleuser.cpu.limit: {{ .Values.singleuser.cpu.limit | quote}}
+  {{- end }}
+  {{ if .Values.singleuser.cpu.guarantee -}}
+  singleuser.cpu.guarantee: {{ .Values.singleuser.cpu.guarantee | quote}}
+  {{- end }}
+  {{ if .Values.singleuser.extraLabels -}}
+  singleuser.extra-labels: |
+    {{ range $key, $value := .Values.singleuser.extraLabels -}}
+    {{ $key | quote }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
+  {{ if .Values.singleuser.extraEnv -}}
+  singleuser.extra-env: |
+    {{ range $key, $value := .Values.singleuser.extraEnv -}}
+    {{ $key | quote }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
+  token.cookie_secret: {{ .Values.hub.cookieSecret | quote }}
+  hub.base_url: {{ .Values.hub.baseUrl | quote }}
+  {{ if eq .Values.hub.db.type "sqlite-pvc" -}}
+  hub.db_url: "sqlite:///jupyterhub.sqlite"
+  {{ else if eq .Values.hub.db.type "sqlite-memory" -}}
+  hub.db_url: "sqlite://"
+  {{ else -}}
+  hub.db_url: {{ .Values.hub.db.url | quote }}
+  {{- end }}
+  {{ if .Values.hub.whitelist.users -}}
+  hub.whitelist.users: |
+    {{ range $user := .Values.hub.whitelist.users -}}
+    - {{ $user }}
+    {{ end }}
+  {{- end }}
+  admin.access: {{ .Values.admin.access | quote }}
+  {{ if .Values.admin.users -}}
+  admin.users: |
+    {{ range $user := .Values.admin.users -}}
+    - {{ $user }}
+    {{ end }}
+  {{- end }}
