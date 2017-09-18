@@ -8,8 +8,9 @@ RUN apt-get update && \
             python3-pip && \
     apt-get clean
 
-RUN pip3 install --no-cache-dir git+https://github.com/jupyterhub/binderhub.git@40c641ea1ba
-ADD binderhub_config.py /etc
+# FIXME: temporary ref pending binderhub#110
+RUN pip3 install --no-cache-dir git+https://github.com/minrk/binderhub.git@d6d12fa
+>>>>>>> 106867a... [TEMP] pin binderhub to wip PR
 
 WORKDIR /etc
 
