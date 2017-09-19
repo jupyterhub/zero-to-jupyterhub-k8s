@@ -11,7 +11,7 @@ help you to deploy JupyterHub on Kubernetes.
 ## Zero to JupyterHub with Kubernetes Guide
 
 The [Zero to JupyterHub Guide](https://zero-to-jupyterhub.readthedocs.io) gives
-a user-friendly steps to create a new JupyterHub deployment using Kubernetes.
+user-friendly steps to create a new JupyterHub deployment using Kubernetes.
 
 For additional information about JupyterHub, such as a technical overview,
 configuration reference, and API reference, please consult the
