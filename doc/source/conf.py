@@ -42,15 +42,6 @@ source_parsers = {
     '.md': 'recommonmark.parser.CommonMarkParser',
 }
 
-# Generate JSON version of the helm-chart
-import yaml, json, sys
-import requests
-resp = requests.get('https://raw.githubusercontent.com/jupyterhub/helm-chart/master/jupyterhub/schema.yaml')
-yamlraw = resp.text
-yamlstruct = yaml.load(yamlraw)
-with open('_static/schema.json', 'w') as ff:
-    json.dump(yamlstruct, ff, sort_keys=True, indent=2)
-
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #

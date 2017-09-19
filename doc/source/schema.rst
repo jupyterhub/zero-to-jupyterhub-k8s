@@ -13,4 +13,4 @@ helm chart. For more detailed information about some specific things you can do
 with modifications to the helm chart, see the :ref:`extending-jupyterhub` and
 :ref:`user_experience` pages.
 
-.. jsonschema:: _static/schema.json
+.. jsonschema:: https://raw.githubusercontent.com/jupyterhub/helm-chart/master/jupyterhub/schema.yaml
