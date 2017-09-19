@@ -1,0 +1,16 @@
+{{ if .Values.prePuller.enabled -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pull-all-nodes-{{ .Release.Time.Seconds }}-{{.Release.Name}}-{{.Release.Revision}}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - image: {{ .Values.prePuller.image.name }}:{{ .Values.prePuller.image.tag }}
+          args: [{{ .Values.singleuser.image.name | quote }}, {{ .Values.singleuser.image.tag | quote }}]
+          name: all-nodes-puller
+{{- end }}

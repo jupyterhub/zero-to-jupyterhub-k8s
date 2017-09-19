@@ -1,0 +1,113 @@
+hub:
+  service:
+    type: ClusterIP
+  baseUrl: "/"
+  cookieSecret: null
+  rbac:
+    enabled: false
+  publicURL: null
+  uid: 1000
+  fsGid: 1000
+  db:
+    type: sqlite-pvc
+    pvc:
+      annotations: {}
+      selector: {}
+      accessModes:
+        - ReadWriteOnce
+      storage: 1Gi
+      subPath: null
+    url: null
+  labels: {}
+  extraConfig: ""
+  extraEnv: {}
+  image:
+    name: jupyterhub/k8s-hub
+    tag: v0.4
+  resources:
+    requests:
+      cpu: 0.2
+      memory: 512Mi
+  imagePullPolicy: IfNotPresent
+  whitelist:
+    users: null
+
+proxy:
+  secretToken: 'generate with openssl rand -hex 64'
+  service:
+    type: LoadBalancer
+    labels: {}
+    annotations: {}
+    nodePort: null
+  image:
+    name: jupyterhub/configurable-http-proxy
+    tag: 2.0.4
+  cmd:
+    - configurable-http-proxy
+    - --ip=0.0.0.0
+    - --port=8000
+    - --api-ip=0.0.0.0
+    - --api-port=8001
+    - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
+    - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
+    - --log-level=debug
+  resources:
+    requests:
+      cpu: 0.2
+      memory: 512Mi
+  labels: null
+  imagePullPolicy: IfNotPresent
+
+ingress:
+  enabled: false
+  https:
+    enabled: false
+    type: none
+
+
+# Google OAuth secrets
+auth:
+  type: dummy
+  dummy:
+    password: null
+
+singleuser:
+  extraLabels: {}
+  extraEnv: {}
+  lifecycleHooks: null
+  uid: 1000
+  fsGid: 1000
+  storage:
+    type: dynamic
+    extraVolumes: []
+    extraVolumeMounts: []
+    static:
+      pvcName: null
+      subPath: "{username}"
+    capacity: 10Gi
+    homeMountPath: /home/jovyan
+  image:
+    name: jupyterhub/k8s-singleuser-sample
+    tag: v0.4
+  cpu:
+    limit: null
+    guarantee: null
+  memory:
+    limit: null
+    guarantee: 1G
+  cmd: jupyterhub-singleuser
+
+prePuller:
+  enabled: true
+  image:
+    name: yuvipanda/image-allnodes-puller
+    tag: v0.8
+
+cull:
+  enabled: true
+  timeout: 3600
+  every: 600
+
+admin:
+  access: true
+  users: null

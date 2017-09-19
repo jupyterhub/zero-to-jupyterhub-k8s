@@ -1,0 +1,30 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: jupyterhub
+  annotations:
+    # Set a high limit for max size of notebooks that we can save. Default is 1M
+    ingress.kubernetes.io/proxy-body-size: 64m
+    {{- if eq .Values.ingress.https.type  "kube-lego" }}
+    kubernetes.io/tls-acme: "true"
+    {{ end -}}
+    {{- range $key, $value := .Values.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            backend:
+              serviceName: proxy-public
+              servicePort: 80
+      host: {{ .Values.ingress.host }}
+{{- if and .Values.ingress.https.enabled (eq .Values.ingress.https.type "kube-lego") }}
+  tls:
+    - secretName: kubelego-tls-proxy-{{ .Release.Name }}
+      hosts:
+        - {{ .Values.ingress.host }}
+{{- end }}
+{{- end -}}
