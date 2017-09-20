@@ -46,3 +46,10 @@ Thank you to the following contributors:
 - Yuvi Panda
 
 Future contributors are encouraged to add themselves to this README file too.
+
+## Licensing
+
+This repository is dual licensed under the Apache2 (to match the upstream kubernetes
+[charts](https://github.com/kubernetes/charts) repository) and 3-clause BSD (to
+match the rest of Project Jupyter repositories) licenses. See the `LICENSE` file for
+more information!
