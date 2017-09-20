@@ -31,6 +31,7 @@ hub:
     requests:
       cpu: 0.2
       memory: 512Mi
+  services: {}
   imagePullPolicy: IfNotPresent
   whitelist:
     users: null

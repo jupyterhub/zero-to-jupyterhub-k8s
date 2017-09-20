@@ -18,6 +18,15 @@ def get_config(key, default=None):
     except FileNotFoundError:
         return default
 
+def get_secret(key, default=None):
+    """Get a secret from /etc/jupyterhub/secret"""
+    path = os.path.join('/etc/jupyterhub/secret', key)
+    try:
+        with open(path) as f:
+            return f.read().strip()
+    except FileNotFoundError:
+        return default
+
 
 # Configure JupyterHub to use the curl backend for making HTTP requests,
 # rather than the pure-python implementations. The default one starts
@@ -194,25 +203,32 @@ c.JupyterHub.admin_access = get_config('admin.access')
 
 c.Authenticator.admin_users = get_config('admin.users', [])
 
-
 c.Authenticator.whitelist = get_config('hub.whitelist.users', [])
 
+c.JupyterHub.services = []
 
 if get_config('cull.enabled', False):
     cull_timeout = get_config('cull.timeout')
     cull_every = get_config('cull.every')
-    c.JupyterHub.services = [
-        {
-            'name': 'cull-idle',
-            'admin': True,
-            'command': [
-                '/usr/bin/python3',
-                '/usr/local/bin/cull_idle_servers.py',
-                '--timeout=%s' % cull_timeout,
-                '--cull_every=%s' % cull_every
-            ]
-        }
-    ]
+    c.JupyterHub.services.append({
+        'name': 'cull-idle',
+        'admin': True,
+        'command': [
+            '/usr/bin/python3',
+            '/usr/local/bin/cull_idle_servers.py',
+            '--timeout=%s' % cull_timeout,
+            '--cull_every=%s' % cull_every
+        ]
+    })
+
+for name, service in get_config('hub.services', {}).items():
+    api_token = get_secret('services.token.%s' % name)
+    # jupyterhub.services is a list of dicts, but
+    # in the helm chart it is a dict of dicts for easier merged-config
+    service.setdefault('name', name)
+    if api_token:
+        service['api_token'] = api_token
+    c.JupyterHub.services.append(service)
 
 c.JupyterHub.base_url = get_config('hub.base_url')
 
