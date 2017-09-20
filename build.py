@@ -4,6 +4,8 @@ import subprocess
 import argparse
 import yaml
 
+JUPYTERHUB_VERSION = '0.8.0rc1'
+
 def last_git_modified(path):
     return subprocess.check_output([
         'git',
@@ -29,7 +31,8 @@ def build_images(prefix, images, commit_range=None, push=False):
         image_spec = '{}{}:{}'.format(prefix, image, tag)
 
         subprocess.check_call([
-            'docker', 'build', '-t', image_spec, image_path
+            'docker', 'build', '-t', image_spec, image_path,
+            '--build-arg', 'JUPYTERHUB_VERSION=%s' % JUPYTERHUB_VERSION,
         ])
         if push:
             subprocess.check_call([

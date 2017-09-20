@@ -26,8 +26,10 @@ RUN adduser --disabled-password \
     --force-badname \
     ${NB_USER}
 
+ARG JUPYTERHUB_VERSION=0.8
+
 RUN pip3 install --no-cache-dir \
-         jupyterhub==0.8.0b5 \
+         jupyterhub==$JUPYTERHUB_VERSION \
          statsd==3.2.1 \
          jupyterhub-dummyauthenticator==0.3.1 \
          jupyterhub-tmpauthenticator==0.4 \
