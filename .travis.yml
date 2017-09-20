@@ -20,7 +20,7 @@ script:
 branches:
   only:
   - master
-  - v0.5.x
+  - v0.4.x
 before_install:
 - |
   if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then
