@@ -186,8 +186,14 @@ Setting up Kubernetes on Amazon Web Services (AWS)
 
 AWS does not have native support for Kubernetes, however there are
 many organizations that have put together their own solutions and
-guides for setting up Kubernetes on AWS. We like the `Heptio guide`_,
-and recommend using this for setting up your stack.
+guides for setting up Kubernetes on AWS.
+
+We like the `Heptio guide`_, and recommend using this for setting up your cluster for clusters
+that span short periods of time (a week long workshop, for example). However, if
+you are setting up a cluster that would need to run for much longer, we recommend you use
+[kops](https://kubernetes.io/docs/getting-started-guides/kops/). It is a bit more complex,
+but provides features (such as log collection & cluster upgrades) that are necessary to
+run a longer term cluster.
 
 .. note::
 
