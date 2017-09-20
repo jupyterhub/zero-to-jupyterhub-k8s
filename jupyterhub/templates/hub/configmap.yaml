@@ -5,6 +5,7 @@ metadata:
 data:
   {{ if .Values.cull.enabled -}}
   cull.enabled: "true"
+  cull.users: {{ .Values.cull.users | quote }}
   cull.timeout: {{ .Values.cull.timeout | quote }}
   cull.every: {{ .Values.cull.every | quote }}
   {{- end }}

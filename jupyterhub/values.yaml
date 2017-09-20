@@ -109,6 +109,7 @@ prePuller:
 
 cull:
   enabled: true
+  users: false
   timeout: 3600
   every: 600
 
