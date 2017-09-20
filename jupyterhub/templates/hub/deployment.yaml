@@ -25,6 +25,9 @@ spec:
       - name: config
         configMap:
           name: hub-config
+      - name: secret
+        secret:
+          secretName: hub-secret
       {{ if eq .Values.hub.db.type "sqlite-pvc" }}
       - name: hub-db-dir
         persistentVolumeClaim:
@@ -39,6 +42,8 @@ spec:
         volumeMounts:
           - mountPath: /etc/jupyterhub/config/
             name: config
+          - mountPath: /etc/jupyterhub/secret/
+            name: secret
         {{ if eq .Values.hub.db.type "sqlite-pvc" }}
           - mountPath: /srv/jupyterhub
             name: hub-db-dir
@@ -70,15 +75,6 @@ spec:
             secretKeyRef:
               name: hub-secret
               key: proxy.token
-        {{ range $key, $value := .Values.hub.services -}}
-        {{ if $value.apiToken }}
-        - name: "SERVICE_TOKEN_{{$key | upper}}"
-          valueFrom:
-            secretKeyRef:
-              name: hub-secret
-              key: "services.token-{{$key}}"
-        {{ end -}}
-        {{ end -}}
         {{ range $key, $value := .Values.hub.extraEnv -}}
         - name: {{ $key | quote }}
           value: {{ $value | quote }}
