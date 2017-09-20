@@ -7,8 +7,7 @@ install:
 - pip install --no-cache-dir pyyaml
 - mkdir -p bin
 - export PATH=$PWD/bin:$PATH
-- curl -ssL https://storage.googleapis.com/kubernetes-helm/helm-v2.6.1-linux-amd64.tar.gz
-  | tar -xz -C bin --strip-components 1 linux-amd64/helm
+- curl -ssL https://storage.googleapis.com/kubernetes-helm/helm-v2.6.1-linux-amd64.tar.gz | tar -xz -C bin --strip-components 1 linux-amd64/helm
 - chmod +x bin/helm
 - helm init --client-only
 script:
@@ -25,8 +24,7 @@ branches:
 before_install:
 - |
   if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then
-    openssl aes-256-cbc -K $encrypted_c6b45058ffe8_key -iv $encrypted_c6b45058ffe8_iv \
-      -in travis.enc -out travis -d
+    openssl aes-256-cbc -K $encrypted_c6b45058ffe8_key -iv $encrypted_c6b45058ffe8_iv -in travis.enc -out travis -d
     chmod 0400 travis
   fi
 env:
