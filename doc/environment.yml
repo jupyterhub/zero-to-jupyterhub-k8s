@@ -6,4 +6,3 @@ dependencies:
 - sphinx>=1.3.6,!=1.5.4
 - pip:
     - recommonmark==0.4.0
-    - git+git://github.com/lnoor/sphinx-jsonschema.git@master
