@@ -26,7 +26,7 @@ RUN adduser --disabled-password \
     --force-badname \
     ${NB_USER}
 
-ARG JUPYTERHUB_VERSION=0.7.2
+ARG JUPYTERHUB_VERSION=0.8
 
 RUN pip3 install --no-cache-dir \
          jupyterhub==$JUPYTERHUB_VERSION \
