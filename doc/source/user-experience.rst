@@ -1,7 +1,7 @@
 .. _user_experience:
 
-Customization of the User Experience
-====================================
+Customizing the User Experience
+===============================
 
 Users, depending on their work needs, require different libraries, packages,
 and files. Often, users wish to **tailor the user environment** to meet
@@ -14,6 +14,9 @@ resource requirements as well as beginning users with more basic resource
 needs. The ability to customize the Hub's resources to satisfy both user
 groups improves the user experience for all Hub users.
 
+This page contains instructions for a few common ways you can extend the
+user experience for your kubernetes deployment. For a list of all the
+options you can configure with your helm chart, see the :ref:`helm-chart-schema`.
 
 Tailoring the user environment
 ------------------------------

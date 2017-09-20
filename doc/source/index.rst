@@ -37,6 +37,7 @@ JupyterHub deployment.
 
    extending-jupyterhub
    user-experience
+   schema
    tools
 
 

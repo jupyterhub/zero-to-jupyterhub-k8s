@@ -4,14 +4,15 @@ Extending your JupyterHub setup
 ===============================
 
 The helm chart used to install JupyterHub has a lot of options for you to tweak.
-This page lists some of the most common changes.
+For a semi-complete list of the changes you can apply via your helm-chart,
+see the :ref:`helm-chart-schema`.
 
 .. _apply-config-changes:
 
 Applying configuration changes
 ------------------------------
 
-The general method is:
+The general method to modify your Kubernetes deployment is to:
 
 1. Make a change to the ``config.yaml``
 2. Run a helm upgrade:
@@ -27,6 +28,9 @@ The general method is:
 3. Wait for the upgrade to finish, and make sure that when you do
    ``kubectl --namespace=<YOUR_NAMESPACE> get pod`` the hub and proxy pods are
    in ``Ready`` state. Your configuration change has been applied!
+
+Below are a few common tasks you can accomplish with modifications to your
+helm chart.
 
 Authenticating with OAuth2
 --------------------------
@@ -69,7 +73,7 @@ For more information see the full example of Google OAuth2 in the next section.
           clientId: "y0urg1thubc1ient1d"
           clientSecret: "an0ther1ongs3cretstr1ng"
           callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
-          
+
 To add a whitelist of usernames add to the config file under `hub`:
 
 .. code-block:: yaml
