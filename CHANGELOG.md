@@ -102,30 +102,30 @@ the greatest pace bowler of all time and a founder of the fine art of
 
 ### [0.3.1] - 2017-05-19
 
-KubeSpawner updates. [Release note](https://github.com/jupyterhub/helm-chart/releases/tag/v0.3.1)
+KubeSpawner updates. [Release note](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/releases/tag/v0.3.1)
 
 ### [0.3] - 2017-05-15
 
-Deployer UX fixes. [Release note](https://github.com/jupyterhub/helm-chart/releases/tag/v0.3)
+Deployer UX fixes. [Release note](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/releases/tag/v0.3)
 
 ## [0.2] - 2017-05-01
 
-Minor cleanups and features. [Release note](https://github.com/jupyterhub/helm-chart/releases/tag/v0.2)
+Minor cleanups and features. [Release note](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/releases/tag/v0.2)
 
 ## [0.1] - 2017-04-10
 
-Initial Public Release. [Release note](https://github.com/jupyterhub/helm-chart/releases/tag/v0.1)
+Initial Public Release. [Release note](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/releases/tag/v0.1)
 
 ## Support
 
 If you need support, reach out to us on
 [gitter](https://gitter.im/jupyterhub/jupyterhub) or open an
-[issue](https://github.com/jupyterhub/helm-chart/issues).
+[issue](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues).
 
 
-[Unreleased]: https://github.com/jupyterhub/helm-chart/compare/v0.4...HEAD
-[0.4]: https://github.com/jupyterhub/helm-chart/compare/v0.3.1...v0.4.0
-[0.3.1]: https://github.com/jupyterhub/helm-chart/compare/v0.3...v0.3.1
-[0.3]: https://github.com/jupyterhub/helm-chart/compare/v0.2...v0.3
-[0.2]: https://github.com/jupyterhub/helm-chart/compare/v0.1...v0.2
-[0.1]: https://github.com/jupyterhub/helm-chart/releases/tag/v0.1
+[Unreleased]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.4...HEAD
+[0.4]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.3.1...v0.4.0
+[0.3.1]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.3...v0.3.1
+[0.3]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.2...v0.3
+[0.2]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.1...v0.2
+[0.1]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/releases/tag/v0.1

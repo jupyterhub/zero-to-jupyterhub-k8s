@@ -39,7 +39,6 @@ data8-travis-creds.json
 
 #### Python .gitignore from https://github.com/github/gitignore/blob/master/Python.gitignore
 ####
->>>>>>> helm-chart/master
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
