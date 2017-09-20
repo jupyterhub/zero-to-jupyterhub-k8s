@@ -8,6 +8,7 @@ hub:
   publicURL: null
   uid: 1000
   fsGid: 1000
+  concurrentSpawnLimit: 64
   db:
     type: sqlite-pvc
     pvc:
@@ -17,9 +18,11 @@ hub:
         - ReadWriteOnce
       storage: 1Gi
       subPath: null
+      storageClassName: null
     url: null
   labels: {}
   extraConfig: ""
+  extraConfigMap: {}
   extraEnv: {}
   image:
     name: jupyterhub/k8s-hub
@@ -28,6 +31,7 @@ hub:
     requests:
       cpu: 0.2
       memory: 512Mi
+  services: {}
   imagePullPolicy: IfNotPresent
   whitelist:
     users: null
@@ -105,6 +109,7 @@ prePuller:
 
 cull:
   enabled: true
+  users: false
   timeout: 3600
   every: 600
 

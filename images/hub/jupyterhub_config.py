@@ -18,6 +18,15 @@ def get_config(key, default=None):
     except FileNotFoundError:
         return default
 
+def get_secret(key, default=None):
+    """Get a secret from /etc/jupyterhub/secret"""
+    path = os.path.join('/etc/jupyterhub/secret', key)
+    try:
+        with open(path) as f:
+            return f.read().strip()
+    except FileNotFoundError:
+        return default
+
 
 # Configure JupyterHub to use the curl backend for making HTTP requests,
 # rather than the pure-python implementations. The default one starts
@@ -28,12 +37,15 @@ AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
 # Connect to a proxy running in a different pod
-c.JupyterHub.proxy_api_ip = os.environ['PROXY_API_SERVICE_HOST']
-c.JupyterHub.proxy_api_port = int(os.environ['PROXY_API_SERVICE_PORT'])
+c.ConfigurableHTTPProxy.api_url = 'http://{}:{}'.format(os.environ['PROXY_API_SERVICE_HOST'], int(os.environ['PROXY_API_SERVICE_PORT']))
+c.ConfigurableHTTPProxy.should_start = False
 
 # Check that the proxy has routes appropriately setup
 # This isn't the best named setting :D
-c.JupyterHub.last_activity_interval = 5
+c.JupyterHub.last_activity_interval = 60
+
+# Max number of servers that can be spawning at any one time
+c.JupyterHub.concurrent_spawn_limit = get_config('hub.concurrent-spawn-limit')
 
 c.JupyterHub.ip = os.environ['PROXY_PUBLIC_SERVICE_HOST']
 c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
@@ -104,6 +116,9 @@ if lifecycle_hooks:
 c.KubeSpawner.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
 c.KubeSpawner.hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])
 
+c.JupyterHub.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
+c.JupyterHub.hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])
+
 c.KubeSpawner.mem_limit = get_config('singleuser.memory.limit')
 c.KubeSpawner.mem_guarantee = get_config('singleuser.memory.guarantee')
 c.KubeSpawner.cpu_limit = get_config('singleuser.cpu.limit')
@@ -126,6 +141,11 @@ elif auth_type == 'github':
     c.GitHubOAuthenticator.oauth_callback_url = get_config('auth.github.callback-url')
     c.GitHubOAuthenticator.client_id = get_config('auth.github.client-id')
     c.GitHubOAuthenticator.client_secret = get_config('auth.github.client-secret')
+elif auth_type == 'gitlab':
+    c.JupyterHub.authenticator_class = 'oauthenticator.gitlab.GitLabOAuthenticator'
+    c.GitLabOAuthenticator.oauth_callback_url = get_config('auth.gitlab.callback-url')
+    c.GitLabOAuthenticator.client_id = get_config('auth.gitlab.client-id')
+    c.GitLabOAuthenticator.client_secret = get_config('auth.gitlab.client-secret')
 elif auth_type == 'mediawiki':
     c.JupyterHub.authenticator_class = 'oauthenticator.mediawiki.MWOAuthenticator'
     c.MWOAuthenticator.client_id = get_config('auth.mediawiki.client-id')
@@ -183,25 +203,36 @@ c.JupyterHub.admin_access = get_config('admin.access')
 
 c.Authenticator.admin_users = get_config('admin.users', [])
 
-
 c.Authenticator.whitelist = get_config('hub.whitelist.users', [])
 
+c.JupyterHub.services = []
 
 if get_config('cull.enabled', False):
     cull_timeout = get_config('cull.timeout')
     cull_every = get_config('cull.every')
-    c.JupyterHub.services = [
-        {
-            'name': 'cull-idle',
-            'admin': True,
-            'command': [
-                '/usr/bin/python3',
-                '/usr/local/bin/cull_idle_servers.py',
-                '--timeout=%s' % cull_timeout,
-                '--cull_every=%s' % cull_every
-            ]
-        }
+    cull_cmd = [
+        '/usr/bin/python3',
+        '/usr/local/bin/cull_idle_servers.py',
+        '--timeout=%s' % cull_timeout,
+        '--cull-every=%s' % cull_every,
     ]
+    print(get_config('cull.users'), file=sys.stderr)
+    if get_config('cull.users'):
+        cull_cmd.append('--cull-users')
+    c.JupyterHub.services.append({
+        'name': 'cull-idle',
+        'admin': True,
+        'command': cull_cmd,
+    })
+
+for name, service in get_config('hub.services', {}).items():
+    api_token = get_secret('services.token.%s' % name)
+    # jupyterhub.services is a list of dicts, but
+    # in the helm chart it is a dict of dicts for easier merged-config
+    service.setdefault('name', name)
+    if api_token:
+        service['api_token'] = api_token
+    c.JupyterHub.services.append(service)
 
 c.JupyterHub.base_url = get_config('hub.base_url')
 

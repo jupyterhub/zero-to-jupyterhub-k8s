@@ -25,6 +25,9 @@ spec:
       - name: config
         configMap:
           name: hub-config
+      - name: secret
+        secret:
+          secretName: hub-secret
       {{ if eq .Values.hub.db.type "sqlite-pvc" }}
       - name: hub-db-dir
         persistentVolumeClaim:
@@ -39,6 +42,8 @@ spec:
         volumeMounts:
           - mountPath: /etc/jupyterhub/config/
             name: config
+          - mountPath: /etc/jupyterhub/secret/
+            name: secret
         {{ if eq .Values.hub.db.type "sqlite-pvc" }}
           - mountPath: /srv/jupyterhub
             name: hub-db-dir

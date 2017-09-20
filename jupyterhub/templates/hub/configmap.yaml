@@ -5,6 +5,7 @@ metadata:
 data:
   {{ if .Values.cull.enabled -}}
   cull.enabled: "true"
+  cull.users: {{ .Values.cull.users | quote }}
   cull.timeout: {{ .Values.cull.timeout | quote }}
   cull.every: {{ .Values.cull.every | quote }}
   {{- end }}
@@ -24,6 +25,11 @@ data:
   auth.github.client-id: {{.Values.auth.github.clientId | quote}}
   auth.github.client-secret: {{.Values.auth.github.clientSecret | quote}}
   auth.github.callback-url: {{.Values.auth.github.callbackUrl | quote}}
+  {{- end }}
+  {{ if eq .Values.auth.type "gitlab" -}}
+  auth.gitlab.client-id: {{.Values.auth.gitlab.clientId | quote}}
+  auth.gitlab.client-secret: {{.Values.auth.gitlab.clientSecret | quote}}
+  auth.gitlab.callback-url: {{.Values.auth.gitlab.callbackUrl | quote}}
   {{- end }}
   {{ if eq .Values.auth.type "mediawiki" -}}
   auth.mediawiki.client-id: {{.Values.auth.mediawiki.clientId | quote}}
@@ -46,6 +52,19 @@ data:
   singleuser.lifecycle-hooks: {{ toJson .Values.singleuser.lifecycleHooks | quote }}
   {{- end }}
 
+  hub.concurrent-spawn-limit: {{ .Values.hub.concurrentSpawnLimit | quote }}
+  {{ if .Values.hub.services -}}
+  hub.services: |
+    # include hub.services *except* api_tokens
+    {{ range $name, $service := .Values.hub.services -}}
+    {{$name}}:
+      {{ range $key, $value := $service -}}
+      {{ if ne $key "apiToken" -}}
+      {{$key}}: {{ $value }}
+      {{- end }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
   {{ if .Values.hub.extraConfig -}}
   hub.extra-config.py: |
 {{ .Values.hub.extraConfig | indent 4 }}
@@ -118,3 +137,6 @@ data:
     - {{ $user }}
     {{ end }}
   {{- end }}
+  {{ range $key, $value := .Values.hub.extraConfigMap -}}
+  custom.{{ $key }}: {{ toJson $value | quote }}
+  {{ end -}}
