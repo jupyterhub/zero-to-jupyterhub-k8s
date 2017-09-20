@@ -200,6 +200,7 @@ properties:
               extraConfig: |
                 c.JupyterHub.something = 'something'
                 c.Spawner.somethingelse = 'something else'
+            ```
 
           No validation of this python is performed! If you make a mistake here, it will probably
           manifest as either the hub pod going into `Error` or `CrashLoopBackoff` states, or in
