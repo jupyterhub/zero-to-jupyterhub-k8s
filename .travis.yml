@@ -12,9 +12,9 @@ install:
 - chmod +x bin/helm
 - helm init --client-only
 script:
-- docker login -u ${DOCKER_USERNAME} -p "${DOCKER_PASSWORD}"
 - |
   if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then
+    docker login -u ${DOCKER_USERNAME} -p "${DOCKER_PASSWORD}"
     export PUSH="--push"
   fi
 - "./build.py build --commit-range ${TRAVIS_COMMIT_RANGE} $PUSH"
