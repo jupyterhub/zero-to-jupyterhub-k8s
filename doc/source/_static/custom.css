@@ -1,0 +1,27 @@
+div#helm-chart-schema h2,
+div#helm-chart-schema h3,
+div#helm-chart-schema h4,
+div#helm-chart-schema h5,
+div#helm-chart-schema h6 {
+    font-family: courier new;
+}
+
+h3, h3 ~ * {
+  margin-left: 3% !important;
+}
+
+h4, h4 ~ * {
+  margin-left: 6% !important;
+}
+
+h5, h5 ~ * {
+  margin-left: 9% !important;
+}
+
+h6, h6 ~ * {
+  margin-left: 12% !important;
+}
+
+h7, h7 ~ * {
+  margin-left: 15% !important;
+}

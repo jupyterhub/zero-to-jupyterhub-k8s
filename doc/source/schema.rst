@@ -11,8 +11,6 @@ off of different Docker images, manage security and authentication, and more.
 Below is a description of the fields that are exposed with the JupyterHub
 helm chart. For more detailed information about some specific things you can do
 with modifications to the helm chart, see the :ref:`extending-jupyterhub` and
-:ref:`user_experience` pages.
+:ref:`user_experience`.
 
-.. literalinclude:: ../../jupyterhub/schema.yaml
-   :language: yaml
-   :linenos:
+.. include:: _static/schema.txt

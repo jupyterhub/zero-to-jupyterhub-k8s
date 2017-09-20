@@ -41,6 +41,9 @@ source_parsers = {
     '.md': 'recommonmark.parser.CommonMarkParser',
 }
 
+def setup(app):
+    app.add_stylesheet('custom.css')
+
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
@@ -191,3 +194,31 @@ epub_copyright = copyright
 
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
+
+# Generate the rST for the JSON schema
+import yaml
+with open('../../jupyterhub/schema.yaml') as ff:
+    data = yaml.load(ff)
+
+levels = ['-', '~', '^', '"', ',']
+def parse_yaml(yaml, count=0, pre=''):
+    if 'properties' in yaml:
+        count += 1
+        for key, val in yaml['properties'].items():
+            lines.append(pre+key)
+            lines.append(levels[count] * len(pre+key))
+            lines.append('')
+            if 'description' in val:
+                for ln in val['description'].split('\n'):
+                    lines.append(ln)
+                lines.append('')
+
+            parse_yaml(val, count, pre+'{}.'.format(key))
+        count -= 1
+
+lines = []
+count = 0
+parse_yaml(data)
+
+with open('_static/schema.txt', 'w') as ff:
+    ff.write('\n'.join(lines))

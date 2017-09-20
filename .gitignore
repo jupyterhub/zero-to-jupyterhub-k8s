@@ -103,7 +103,8 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/
+doc/build/
+doc/source/_static/schema.txt
 
 # PyBuilder
 target/
