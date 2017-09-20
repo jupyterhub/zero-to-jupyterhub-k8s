@@ -210,15 +210,19 @@ c.JupyterHub.services = []
 if get_config('cull.enabled', False):
     cull_timeout = get_config('cull.timeout')
     cull_every = get_config('cull.every')
+    cull_cmd = [
+        '/usr/bin/python3',
+        '/usr/local/bin/cull_idle_servers.py',
+        '--timeout=%s' % cull_timeout,
+        '--cull-every=%s' % cull_every,
+    ]
+    print(get_config('cull.users'), file=sys.stderr)
+    if get_config('cull.users'):
+        cull_cmd.append('--cull-users')
     c.JupyterHub.services.append({
         'name': 'cull-idle',
         'admin': True,
-        'command': [
-            '/usr/bin/python3',
-            '/usr/local/bin/cull_idle_servers.py',
-            '--timeout=%s' % cull_timeout,
-            '--cull_every=%s' % cull_every
-        ]
+        'command': cull_cmd,
     })
 
 for name, service in get_config('hub.services', {}).items():
