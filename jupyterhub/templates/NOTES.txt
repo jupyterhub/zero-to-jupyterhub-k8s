@@ -16,4 +16,4 @@ It might take a few minutes for it to appear!
 
 Note that this is still an alpha release! If you have questions, feel free to
   1. Come chat with us at https://gitter.im/jupyterhub/jupyterhub
-  2. File issues at https://github.com/jupyterhub/helm-chart/issues
+  2. File issues at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
