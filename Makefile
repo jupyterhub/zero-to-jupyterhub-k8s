@@ -4,8 +4,8 @@ PUSH_IMAGES=no
 BUILD_ARGS=
 
 images: build-images push-images
-build-images: build-image/hub build-image/singleuser-sample build-image/binderhub
-push-images: push-image/hub push-image/singleuser-sample push-image/binderhub
+build-images: build-image/hub build-image/singleuser-sample
+push-images: push-image/hub push-image/singleuser-sample
 
 build-image/%:
 	cd images/$(@F) && \
