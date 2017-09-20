@@ -1,15 +1,16 @@
 language: python
-sudo: required
 python:
-- 3.4
+- 3.6
 services:
 - docker
 install:
 - pip install --no-cache-dir pyyaml
+- mkdir -p bin
+- export PATH=$PWD/bin:$PATH
 - curl -ssL https://storage.googleapis.com/kubernetes-helm/helm-v2.6.1-linux-amd64.tar.gz
-  | sudo tar -xz -C /usr/local/bin --strip-components 1 linux-amd64/helm
-- sudo chmod +x /usr/local/bin/helm
-- "/usr/local/bin/helm init --client-only"
+  | tar -xz -C bin --strip-components 1 linux-amd64/helm
+- chmod +x bin/helm
+- helm init --client-only
 script:
 - docker login -u ${DOCKER_USERNAME} -p "${DOCKER_PASSWORD}"
 - "./build.py build --commit-range ${TRAVIS_COMMIT_RANGE} --push"
