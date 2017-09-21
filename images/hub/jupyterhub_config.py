@@ -216,7 +216,6 @@ if get_config('cull.enabled', False):
         '--timeout=%s' % cull_timeout,
         '--cull-every=%s' % cull_every,
     ]
-    print(get_config('cull.users'), file=sys.stderr)
     if get_config('cull.users'):
         cull_cmd.append('--cull-users')
     c.JupyterHub.services.append({
