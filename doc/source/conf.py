@@ -22,6 +22,7 @@
 # sys.path.insert(0, os.path.abspath('.'))
 
 import recommonmark
+from recommonmark.transform import AutoStructify
 
 # -- General configuration ------------------------------------------------
 
@@ -43,11 +44,11 @@ source_parsers = {
 
 def setup(app):
     app.add_stylesheet('custom.css')
+    app.add_transform(AutoStructify)
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-# source_suffix = ['.rst', '.md']
 source_suffix = ['.rst', '.md']
 
 # The master toctree document.
@@ -195,18 +196,18 @@ epub_copyright = copyright
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
 
-# Generate the rST for the JSON schema
+# Generate the JSON schema markdown file for the docs.
 import yaml
 with open('../../jupyterhub/schema.yaml') as ff:
     data = yaml.load(ff)
 
-levels = ['-', '~', '^', '"', ',']
 def parse_yaml(yaml, count=0, pre=''):
+    """Generate markdown headers from the schema yaml."""
     if 'properties' in yaml:
         count += 1
+        # Create markdown headers for each schema level
         for key, val in yaml['properties'].items():
-            lines.append(pre+key)
-            lines.append(levels[count] * len(pre+key))
+            lines.append('#'*(count + 1) + ' ' + pre + key)
             lines.append('')
             if 'description' in val:
                 for ln in val['description'].split('\n'):
@@ -220,5 +221,12 @@ lines = []
 count = 0
 parse_yaml(data)
 
-with open('_static/schema.txt', 'w') as ff:
-    ff.write('\n'.join(lines))
+# Generate the `.md` file
+with open('schema.txt', 'r') as ff:
+    new_lines = ff.readlines()
+    new_lines = new_lines[1:]
+    new_lines = [ln.strip('\n') for ln in new_lines]
+new_lines += lines
+
+with open('schema.md', 'w') as ff:
+    ff.write('\n'.join(new_lines))

@@ -104,7 +104,7 @@ instance/
 
 # Sphinx documentation
 doc/build/
-doc/source/_static/schema.txt
+doc/source/schema.md
 
 # PyBuilder
 target/
