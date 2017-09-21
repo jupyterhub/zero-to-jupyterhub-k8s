@@ -179,7 +179,7 @@ Namespace
 Finally, a `namespace <https://kubernetes.io/docs/admin/namespaces/>`_
 defines a collection of objects in Kubernetes. It
 is generally the most "high-level" of the groups we've discussed thus far.
-For example, a a namespace could be a single class running with JupyterHub.
+For example, a namespace could be a single class running with JupyterHub.
 
 For more information about namespaces, see the 
 `Kubernetes documentation on namespaces <https://kubernetes.io/docs/tasks/administer-cluster/namespaces/>`_.
