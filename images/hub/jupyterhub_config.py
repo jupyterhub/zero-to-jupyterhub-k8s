@@ -211,7 +211,6 @@ if get_config('cull.enabled', False):
     cull_timeout = get_config('cull.timeout')
     cull_every = get_config('cull.every')
     cull_cmd = [
-        '/usr/bin/python3',
         '/usr/local/bin/cull_idle_servers.py',
         '--timeout=%s' % cull_timeout,
         '--cull-every=%s' % cull_every,
