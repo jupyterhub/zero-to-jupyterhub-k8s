@@ -58,4 +58,4 @@ USER ${NB_USER}
 
 ENV LANG C.UTF-8
 
-CMD jupyterhub --config /srv/jupyterhub_config.py
+CMD ["jupyterhub", "--config", "/srv/jupyterhub_config.py"]
