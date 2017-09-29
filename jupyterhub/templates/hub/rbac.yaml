@@ -5,7 +5,7 @@ metadata:
   name: hub
 rules:
 - apiGroups: [""] # "" indicates the core API group
-  resources: ["pods"]
+  resources: ["pods", "persistentvolumeclaims"]
   verbs: ["get", "watch", "list", "create", "delete"]
 ---
 kind: RoleBinding
@@ -15,9 +15,14 @@ metadata:
 subjects:
 - kind: ServiceAccount
   namespace: {{ .Release.Namespace }}
-  name: default
+  name: hub
 roleRef:
   kind: Role
   name: hub
   apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: hub
 {{- end }}
