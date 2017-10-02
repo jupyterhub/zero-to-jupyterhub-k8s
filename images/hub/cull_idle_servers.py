@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Imported from https://github.com/jupyterhub/jupyterhub/blob/0.8.0rc1/examples/cull-idle/cull_idle_servers.py
 """script to monitor and cull idle single-user servers
 

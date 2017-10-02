@@ -19,6 +19,8 @@ ARG NB_USER=jovyan
 ARG NB_UID=1000
 ARG HOME=/home/jovyan
 
+ENV LANG C.UTF-8
+
 RUN adduser --disabled-password \
     --gecos "Default user" \
     --uid ${NB_UID} \
@@ -55,7 +57,4 @@ RUN chown ${NB_USER}:${NB_USER} /srv/jupyterhub
 EXPOSE 8081
 
 USER ${NB_USER}
-
-ENV LANG C.UTF-8
-
-CMD jupyterhub --config /srv/jupyterhub_config.py
+CMD ["jupyterhub", "--config", "/srv/jupyterhub_config.py"]
