@@ -4,7 +4,7 @@ import subprocess
 import argparse
 import yaml
 
-JUPYTERHUB_VERSION = '0.8.0rc2'
+JUPYTERHUB_VERSION = '0.8.0'
 
 def last_git_modified(path):
     return subprocess.check_output([
