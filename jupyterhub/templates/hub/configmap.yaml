@@ -34,7 +34,7 @@ data:
   {{ if eq .Values.auth.type "mediawiki" -}}
   auth.mediawiki.client-id: {{.Values.auth.mediawiki.clientId | quote}}
   auth.mediawiki.client-secret: {{.Values.auth.mediawiki.clientSecret | quote}}
-  auth.github.index-url: {{.Values.auth.mediawiki.indexUrl | quote}}
+  auth.mediawiki.index-url: {{.Values.auth.mediawiki.indexUrl | quote}}
   {{- end }}
 
   {{ if eq .Values.auth.type "dummy" -}}
