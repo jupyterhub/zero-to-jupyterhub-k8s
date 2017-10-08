@@ -40,9 +40,9 @@ RUN pip3 install --no-cache-dir \
          psycopg2==2.7.1 \
          pycurl==7.43.0 \
          mwoauth==0.3.2 \
+         oauthenticator==0.7.2 \
          cryptography==2.0.3
 
-RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/oauthenticator@80676a3e
 RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@5ed86f1
 
 ADD jupyterhub_config.py /srv/jupyterhub_config.py
