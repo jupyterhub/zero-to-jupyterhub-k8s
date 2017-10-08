@@ -1,7 +1,7 @@
 Debugging Kubernetes
 ====================
 
-Sometimes your Kubernetes deployment doesn't behave the way you'd expect.
+Sometimes your JupyterHub deployment doesn't behave the way you'd expect.
 This section provides some tips on debugging and fixing some common problems.
 
 Debugging commands
@@ -9,11 +9,6 @@ Debugging commands
 In order to debug your Kubernetes deployment, you need to be able to inspect
 the state of the pods being used. The following are a few common commands
 for debugging.
-
-.. note::
-
-   You may need to add ``--namespace=<YOUR_NAMESPACE>`` in order for the
-   following commands to work.
 
 **Real world scenario:** Let's say you've got a JupyterHub deployed, and a user
 tells you that they are experiencing strange behavior. Let's take a look
@@ -28,7 +23,7 @@ at our deployment to figure out what is going on.
 ~~~~~~~~~~~~~~~~~~~
 To list all pods in your Kubernetes deployment::
 
-    kubectl get pod
+    kubectl get pod --namespace==jhub
 
 This will output a list of all pods being used in the deployment.
 
@@ -38,7 +33,7 @@ pod that was created when somebody logged in to the JupyterHub.
 
 Here's an example of the output::
 
-    $ kubectl get pod --namespace=jhub
+    $ kubectl --namespace=jhub get pod
     NAME                                READY     STATUS         RESTARTS   AGE
     hub-deployment-3311438805-xnfvp     1/1       Running        0          2m
     jupyter-choldgraf                   0/1       ErrImagePull   0          25s
@@ -59,7 +54,7 @@ is defined in ``singleuser`` in our helm chart. Let's dig further...
 To see more detail about the state of a specific pod, use the following
 command::
 
-    kubectl describe pod <POD_NAME>
+    kubectl --namespace=jhub describe pod <POD_NAME>
 
 This will output several pieces of information, including configuration and
 settings for the pod. The final section you'll see is a list of recent
@@ -69,7 +64,7 @@ show up in this section.
 **Real world scenario:** In our case, one of the lines in the events page
 displays an error::
 
-      $ kubectl describe pod jupyter-choldgraf --namespace=jhub
+      $ kubectl --namespace=jhub describe pod jupyter-choldgraf
       ...
       2m            52s             4       kubelet, gke-jhubtest-default-pool-52c36683-jv6r        spec.containers{notebook}       Warning         Failed           Failed to pull image "jupyter/scipy-notebook:v0.4": rpc error: code = 2 desc = Error response from daemon: {"message":"manifest for jupyter/scipy-notebook:v0.4 not found"}
       ...
@@ -81,14 +76,14 @@ this by getting another view on the events that have transpired in the pod.
 ~~~~~~~~~~~~~~~~
 If you only want to see the latest logs for a pod, use the following command::
 
-    kubectl logs <POD_NAME>
+    kubectl --namespace=jhub logs <POD_NAME>
 
 This will output a list of the recent events for the pod. Parse these logs
 to see if something is generating an error.
 
 **Real world scenario:** In our case, we get this line back::
 
-    $ kubectl logs jupyter-choldgraf --namespace=jhub
+    $ kubectl --namespace=jhub logs jupyter-choldgraf
     Error from server (BadRequest): container "notebook" in pod "jupyter-choldgraf" is waiting to start: trying and failing to pull image
 
 Now we are sure that something is wrong with our Docker file. Let's check
@@ -100,8 +95,9 @@ Docker image. Here we see our problem::
       name:
           jupyter/scipy-notebook
 
-We haven't specified a ``tag`` for our Docker image! This is required in
-JupyterHub and not specifying a tag will cause the image pull to fail.
+We haven't specified a ``tag`` for our Docker image! Not specifying a tag
+will cause it to default to ``v0.4``, which isn't what we want and is causing
+the pod to fail.
 
 To fix this, let's add a tag to our ``config.yaml`` file::
 
@@ -112,14 +108,12 @@ To fix this, let's add a tag to our ``config.yaml`` file::
       tag:
           ae885c0a6226
 
-and run a helm upgrade::
+Then run a helm upgrade::
 
     helm upgrade jhub jupyterhub/jupyterhub --version=v0.4 -f config.yaml
 
-.. note::
-
-   In this case our Kubernetes namespace is called ``jhub``. Yours may be
-   different depending on what you chose during setup.
+where ``jhub`` is the Kubernetes namespace (substitute the namespace that you
+chose during setup).
 
 .. note::
 
@@ -128,7 +122,7 @@ and run a helm upgrade::
 Right after you run this command, let's once again list the pods in our
 deployment::
 
-  $ kubectl get pod --namespace=jhub
+  $ kubectl --namespace=jhub get pod
   NAME                                READY     STATUS              RESTARTS   AGE
   hub-deployment-2653507799-r7wf8     0/1       ContainerCreating   0          31s
   hub-deployment-3311438805-xnfvp     1/1       Terminating         0          14m
@@ -140,12 +134,12 @@ on the upgraded helm chart) being created. We also see our broken user pod,
 which will only be upgraded if it is restarted. To do this, let's delete the
 user's pod::
 
-    $ kubectl delete pod jupyter-choldgraf --namespace=jhub
+    $ kubectl --namespace=jhub delete pod jupyter-choldgraf
 
 Finally, we'll tell our user to log back in to the JupyterHub. Then let's
 list our running pods once again::
 
-  $ kubectl get pod --namespace=jhub
+  $ kubectl --namespace=jhub get pod
   NAME                                READY     STATUS    RESTARTS   AGE
   hub-deployment-2653507799-r7wf8     1/1       Running   0          3m
   jupyter-choldgraf                   1/1       Running   0          18s
@@ -157,8 +151,8 @@ Note that many debugging situations are not as straightforward as this one.
 It will take some time before you get a feel for the errors that Kubernetes
 may throw at you, and how these are tied to your configuration files.
 
-Case studies in debugging Kubernetes
-------------------------------------
+Troubleshooting Examples
+------------------------
 The following sections contain some case studies that illustrate some of the
 more common bugs / gotchas that you may experience using JupyterHub with
 Kubernetes.
@@ -167,22 +161,31 @@ Hub fails to start
 ~~~~~~~~~~~~~~~~~~
 
 **Symptom:** following ``kubectl get pod``, the ``hub-deployment`` pod is in
-``Error`` or ``CrashLoopBackoff`` state, or appears to be running but is
-unreachable via the web.
+``Error`` or ``CrashLoopBackoff`` state, or appears to be running but accessing
+the website for the JupyterHub returns an error message in the browser).
 
-**Investigating:** the output of ``kubectl logs hub-deployment...`` shows something
-like::
-    File "/usr/local/lib/python3.5/dist-packages/jupyterhub/proxy.py", line 589, in get_all_routes
-      resp = yield self.api_request('', client=client)
-    tornado.httpclient.HTTPError: HTTP 403: Forbidden
+**Investigating:** the output of ``kubectl --namespace=jhub logs
+hub-deployment...`` shows something like::
+
+  File "/usr/local/lib/python3.5/dist-packages/jupyterhub/proxy.py", line 589, in get_all_routes
+    resp = yield self.api_request('', client=client)
+  tornado.httpclient.HTTPError: HTTP 403: Forbidden
 
 **Diagnosis:** This is likely because the ``hub-deployment`` pod cannot
 communicate with the proxy pod API, likely because of a problem in the
 ``secretToken`` that was put in ``config.yaml``.
 
-**Fix:** Add to ``config.yaml``::
+**Fix:** Follow these steps:
+
+1. Create a secret token::
+
+    openssl rand -hex 32
+
+2. Add the token to ``config.yaml`` like so::
 
     proxy:
-      secretToken: '<output of `openssl rand -hex 32`>'
+       secretToken: '<output of `openssl rand -hex 32`>'
 
-Then redeploy with ``helm upgrade <my-hub> jupyterhub/jupyterhub -f my-config.yaml``.
+3. Redeploy the helm chart::
+
+    helm upgrade jhub jupyterhub/jupyterhub -f config.yaml
