@@ -141,6 +141,11 @@ elif auth_type == 'github':
     c.GitHubOAuthenticator.oauth_callback_url = get_config('auth.github.callback-url')
     c.GitHubOAuthenticator.client_id = get_config('auth.github.client-id')
     c.GitHubOAuthenticator.client_secret = get_config('auth.github.client-secret')
+elif auth_type == 'cilogon':
+    c.JupyterHub.authenticator_class = 'oauthenticator.CILogonOAuthenticator'
+    c.CILogonOAuthenticator.oauth_callback_url = get_config('auth.cilogon.callback-url')
+    c.CILogonOAuthenticator.client_id = get_config('auth.cilogon.client-id')
+    c.CILogonOAuthenticator.client_secret = get_config('auth.cilogon.client-secret')
 elif auth_type == 'gitlab':
     c.JupyterHub.authenticator_class = 'oauthenticator.gitlab.GitLabOAuthenticator'
     c.GitLabOAuthenticator.oauth_callback_url = get_config('auth.gitlab.callback-url')
