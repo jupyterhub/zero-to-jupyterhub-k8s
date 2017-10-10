@@ -5,7 +5,7 @@ Extending your JupyterHub setup
 
 The helm chart used to install JupyterHub has a lot of options for you to tweak.
 For a semi-complete list of the changes you can apply via your helm-chart,
-see the :ref:`helm-chart-schema`.
+see the :ref:`helm-chart-reference`.
 
 .. _apply-config-changes:
 

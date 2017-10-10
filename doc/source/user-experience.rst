@@ -16,7 +16,7 @@ groups improves the user experience for all Hub users.
 
 This page contains instructions for a few common ways you can extend the
 user experience for your kubernetes deployment. For a list of all the
-options you can configure with your helm chart, see the :ref:`helm-chart-schema`.
+options you can configure with your helm chart, see the :ref:`helm-chart-reference`.
 
 Tailoring the user environment
 ------------------------------

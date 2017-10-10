@@ -196,7 +196,7 @@ epub_copyright = copyright
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
 
-# Generate the JSON schema markdown file for the docs.
+# Generate the JSON schema markdown file for the reference docs.
 import yaml
 with open('../../jupyterhub/schema.yaml') as ff:
     data = yaml.load(ff)
@@ -222,11 +222,11 @@ count = 0
 parse_yaml(data)
 
 # Generate the `.md` file
-with open('schema.txt', 'r') as ff:
+with open('reference.txt', 'r') as ff:
     new_lines = ff.readlines()
     new_lines = new_lines[1:]
     new_lines = [ln.strip('\n') for ln in new_lines]
 new_lines += lines
 
-with open('schema.md', 'w') as ff:
+with open('reference.md', 'w') as ff:
     ff.write('\n'.join(new_lines))
