@@ -36,16 +36,9 @@ up a Kubernetes Cluster. You may be able to receive `free credits
 <https://cloud.google.com/free/>`_ for trying it out. You will need to
 connect your credit card or other payment method to your google cloud account.
 
-1. Go to ``https://console.cloud.google.com``.
+1. Go to ``https://console.cloud.google.com`` and log in.
 
-2. Click the hamburger icon in the top left (the icon has three horizontal lines
-   in one button). Go to “Billing” then “Payment Methods”, and make sure you
-   have a credit card linked to the account. (You may also receive $300 in trial
-   credits.) And enable the following APIs:
-
-      - Google Compute Engine API
-      - Google Container Engine API
-      - Google Container Registry API
+2. Enable the `Container Engine API <https://console.cloud.google.com/apis/api/container.googleapis.com/overview>`_.
 
 3. Install and initialize the **gcloud command-line tools**. These tools send
    commands to Google Cloud and lets you do things like create and delete
