@@ -1,7 +1,10 @@
-# This is for Binder.
 # Need to install bqplot with conda so it calls the javascript extension.
+name: bqplot
+channels:
+  - conda-forge
+  - anaconda
 dependencies:
-  - bqplot
+  - bqplot=0.9.0
   - pip:
     - sphinx
     - recommonmark
