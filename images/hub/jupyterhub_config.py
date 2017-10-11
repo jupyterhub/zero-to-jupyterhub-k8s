@@ -69,7 +69,7 @@ c.KubeSpawner.singleuser_fs_gid = get_config('singleuser.fs-gid')
 # Configure dynamically provisioning pvc
 storage_type = get_config('singleuser.storage.type')
 if storage_type == 'dynamic':
-    c.KubeSpawner.pvc_name_template = 'claim-{username}'
+    c.KubeSpawner.pvc_name_template = 'claim-{username}{servername}'
     c.KubeSpawner.user_storage_pvc_ensure = True
     c.KubeSpawner.user_storage_class = get_config('singleuser.storage.class')
     c.KubeSpawner.user_storage_access_modes = ['ReadWriteOnce']
@@ -78,16 +78,16 @@ if storage_type == 'dynamic':
     # Add volumes to singleuser pods
     c.KubeSpawner.volumes = [
         {
-            'name': 'volume-{username}',
+            'name': 'volume-{username}{servername}',
             'persistentVolumeClaim': {
-                'claimName': 'claim-{username}'
+                'claimName': 'claim-{username}{servername}'
             }
         }
     ]
     c.KubeSpawner.volume_mounts = [
         {
             'mountPath': get_config('singleuser.storage.home_mount_path'),
-            'name': 'volume-{username}'
+            'name': 'volume-{username}{servername}'
         }
     ]
 elif storage_type == 'static':
