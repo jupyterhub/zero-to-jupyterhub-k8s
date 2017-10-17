@@ -6,8 +6,8 @@ This section provides some tips on debugging and fixing some common problems.
 
 Debugging commands
 ------------------
-In order to debug your Kubernetes deployment, you need to be able to inspect
-the state of the pods being used. The following are a few common commands
+In order to debug your JupyterHub deployment, you need to be able to inspect
+the state of the resources being used. The following are a few common commands
 for debugging.
 
 **Real world scenario:** Let's say you've got a JupyterHub deployed, and a user
@@ -23,7 +23,7 @@ at our deployment to figure out what is going on.
 ~~~~~~~~~~~~~~~~~~~
 To list all pods in your Kubernetes deployment::
 
-    kubectl get pod --namespace==jhub
+    kubectl --namespace=jhub get pod
 
 This will output a list of all pods being used in the deployment.
 
@@ -47,7 +47,7 @@ pod contains something other than ``Running``, then something may be wrong.
 
 In this case, we can see that our user's pod is in the ``ErrImagePull`` state.
 This generally means that there's something wrong with the Docker image that
-is defined in ``singleuser`` in our helm chart. Let's dig further...
+is defined in ``singleuser`` in our helm chart config. Let's dig further...
 
 ``kubectl describe pod``
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -78,7 +78,8 @@ If you only want to see the latest logs for a pod, use the following command::
 
     kubectl --namespace=jhub logs <POD_NAME>
 
-This will output a list of the recent events for the pod. Parse these logs
+This will show you the logs from the pod, which often contain useful
+information about what is going wrong. Parse these logs
 to see if something is generating an error.
 
 **Real world scenario:** In our case, we get this line back::
@@ -86,14 +87,13 @@ to see if something is generating an error.
     $ kubectl --namespace=jhub logs jupyter-choldgraf
     Error from server (BadRequest): container "notebook" in pod "jupyter-choldgraf" is waiting to start: trying and failing to pull image
 
-Now we are sure that something is wrong with our Docker file. Let's check
+Now we are sure that something is wrong with our Dockerfile. Let's check
 our ``config.yaml`` file for the section where we specify the user's
 Docker image. Here we see our problem::
 
   singleuser:
   image:
-      name:
-          jupyter/scipy-notebook
+      name: jupyter/scipy-notebook
 
 We haven't specified a ``tag`` for our Docker image! Not specifying a tag
 will cause it to default to ``v0.4``, which isn't what we want and is causing
@@ -103,16 +103,14 @@ To fix this, let's add a tag to our ``config.yaml`` file::
 
   singleuser:
   image:
-      name:
-          jupyter/scipy-notebook
-      tag:
-          ae885c0a6226
+      name: jupyter/scipy-notebook
+      tag: ae885c0a6226
 
 Then run a helm upgrade::
 
     helm upgrade jhub jupyterhub/jupyterhub --version=v0.4 -f config.yaml
 
-where ``jhub`` is the Kubernetes namespace (substitute the namespace that you
+where ``jhub`` is the helm release name (substitute the release name that you
 chose during setup).
 
 .. note::
@@ -131,8 +129,8 @@ deployment::
 
 Here we can see one ``hub-deployment`` pod being destroyed, and another (based
 on the upgraded helm chart) being created. We also see our broken user pod,
-which will only be upgraded if it is restarted. To do this, let's delete the
-user's pod::
+which will not be deleted automatically. Let's manually delete it so a newer
+working pod can be started.::
 
     $ kubectl --namespace=jhub delete pod jupyter-choldgraf
 
