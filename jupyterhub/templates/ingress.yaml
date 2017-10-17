@@ -6,9 +6,15 @@ metadata:
   annotations:
     # Set a high limit for max size of notebooks that we can save. Default is 1M
     ingress.kubernetes.io/proxy-body-size: 64m
+    {{- if .Values.tlsTerminator.enabled }}
+    kubernetes.io/ingress.provider: nginx
+    kubernetes.io/ingress.class: jupyterhub-proxy-tls
+    hub.jupyter.org/tls-terminator: "true"
+    {{- else }}
     {{- if eq .Values.ingress.https.type  "kube-lego" }}
     kubernetes.io/tls-acme: "true"
     {{ end -}}
+    {{- end }}
     {{- range $key, $value := .Values.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}

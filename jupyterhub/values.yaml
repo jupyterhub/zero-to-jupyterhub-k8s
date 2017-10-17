@@ -68,6 +68,23 @@ ingress:
     enabled: false
     type: none
 
+tlsTerminator:
+  enabled: false
+  proxy:
+    image:
+      name: gcr.io/google_containers/nginx-ingress-controller
+      tag: 0.9.0-beta.15
+    service:
+      type: LoadBalancer
+  lego:
+    image:
+      name: jetstack/kube-lego
+      # We need a couple of fixes related to ingress.provider that are in master
+      # When 0.1.6 is released, switch to that!
+      tag: master-2368
+      tag: canary
+    email: ""
+
 
 # Google OAuth secrets
 auth:

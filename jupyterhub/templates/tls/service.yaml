@@ -1,0 +1,25 @@
+{{ if .Values.tlsTerminator.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: tls-terminator
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: tls-terminator
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 443
+  selector:
+    component: tls-terminator
+    release: {{ .Release.Name }}
+  type: "{{ .Values.tlsTerminator.proxy.service.type }}"
+{{- end }}
