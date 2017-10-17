@@ -76,10 +76,10 @@ proxy:
     resources: {}
   labels: null
   ingress:
-    enabled: false
+    enabled: true
     annotations: {}
   https:
-    enabled: false
+    enabled: true
     type: auto
     auto:
       letsencryptContactEmail: ""

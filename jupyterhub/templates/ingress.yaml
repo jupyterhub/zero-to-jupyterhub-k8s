@@ -1,3 +1,4 @@
+{{- if .Values.proxy.hosts }}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -30,4 +31,5 @@ spec:
     - secretName: kubelego-tls-proxy-{{ .Release.Name }}
       hosts:
 {{ toYaml .Values.proxy.hosts | indent 8 }}
+{{- end }}
 {{- end }}
