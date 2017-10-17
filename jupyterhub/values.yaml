@@ -39,28 +39,42 @@ hub:
 proxy:
   secretToken: 'generate with openssl rand -hex 64'
   service:
-    type: LoadBalancer
+    type: ClusterIP
     labels: {}
     annotations: {}
     nodePort: null
-  image:
-    name: jupyterhub/configurable-http-proxy
-    tag: 2.0.4
-  cmd:
-    - configurable-http-proxy
-    - --ip=0.0.0.0
-    - --port=8000
-    - --api-ip=0.0.0.0
-    - --api-port=8001
-    - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
-    - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
-    - --log-level=debug
-  resources:
-    requests:
-      cpu: 0.2
-      memory: 512Mi
+  chp:
+    image:
+      name: jupyterhub/configurable-http-proxy
+      tag: 2.0.4
+      pullPolicy: IfNotPresent
+    cmd:
+      - configurable-http-proxy
+      - --ip=0.0.0.0
+      - --port=8000
+      - --api-ip=0.0.0.0
+      - --api-port=8001
+      - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
+      - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
+      - --log-level=debug
+    resources:
+      requests:
+        cpu: 0.2
+        memory: 512Mi
+  nginx:
+    image:
+      name: gcr.io/google_containers/nginx-ingress-controller
+      tag: 0.9.0-beta.15
+      pullPolicy: IfNotPresent
+    resources: {}
+  lego:
+    image:
+      name: jetstack/kube-lego
+      # We need a couple of fixes related to ingress.provider that are in master
+      # When 0.1.6 is released, switch to that!
+      tag: master-2368
+    resources: {}
   labels: null
-  imagePullPolicy: IfNotPresent
   ingress:
     enabled: false
     annotations: {}
@@ -70,21 +84,6 @@ proxy:
     auto:
       letsencryptContactEmail: ""
   hosts: []
-
-
-tlsTerminator:
-  proxy:
-    image:
-      name: gcr.io/google_containers/nginx-ingress-controller
-      tag: 0.9.0-beta.15
-    service:
-      type: LoadBalancer
-  lego:
-    image:
-      name: jetstack/kube-lego
-      # We need a couple of fixes related to ingress.provider that are in master
-      # When 0.1.6 is released, switch to that!
-      tag: master-2368
 
 
 # Google OAuth secrets
