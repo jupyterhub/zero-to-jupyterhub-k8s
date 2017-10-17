@@ -50,6 +50,7 @@ production deployment of JupyterHub.
    :maxdepth: 2
 
    resource-mgmt
+   debug
    cost
    backups
    upgrading
