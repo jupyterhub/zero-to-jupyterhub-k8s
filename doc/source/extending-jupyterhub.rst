@@ -176,3 +176,25 @@ report the current ``Ready/NotReady`` status of all nodes in the cluster.
      size for the workshop. This workflow also helps you avoid scrambling on
      the workshop day to set up the cluster and JupyterHub.
    - **After the workshop:** The cluster can be deleted.
+
+
+Setting up HTTPS
+---------------
+
+Zero to JupyterHub makes setting up HTTPS quite easy.
+
+1. Buy a domain name from a registrar. Pick whichever one you want!
+2. Create an `A record` from the domain you want to use, pointing to the
+   external IP provided to the `proxy-public` service.
+3. Wait for the change to propogate. This can take several minutes. Wait until
+   you can type in the name of the domain you bought, and it shows you the hub.
+4. Add the following to your config.yaml:
+
+   ```yaml
+   proxy:
+     hosts:
+       - <your-domain-name>
+   ```
+
+   And run helm-upgrade.
+5. Wait for about a minute, now your hub is HTTPS enabled!
