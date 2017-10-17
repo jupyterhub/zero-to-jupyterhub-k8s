@@ -1,4 +1,4 @@
-{{- if .Values.ingress.enabled -}}
+{{- if or .Values.proxy.ingress.enabled (and .Values.proxy.https.enabled (eq .Values.proxy.https.type "auto") ) -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -6,31 +6,29 @@ metadata:
   annotations:
     # Set a high limit for max size of notebooks that we can save. Default is 1M
     ingress.kubernetes.io/proxy-body-size: 64m
-    {{- if .Values.tlsTerminator.enabled }}
+    {{- if and .Values.proxy.https.enabled (eq .Values.proxy.https.type "auto") }}
     kubernetes.io/ingress.provider: nginx
     kubernetes.io/ingress.class: jupyterhub-proxy-tls
     hub.jupyter.org/tls-terminator: "true"
-    {{- else }}
-    {{- if eq .Values.ingress.https.type  "kube-lego" }}
-    kubernetes.io/tls-acme: "true"
-    {{ end -}}
     {{- end }}
-    {{- range $key, $value := .Values.ingress.annotations }}
-    {{ $key }}: {{ $value | quote }}
+    {{ if .Values.proxy.ingress.annotations }}
+{{ toYaml .Values.proxy.ingress.annotations | indent 4 }}
     {{- end }}
 spec:
   rules:
+    {{- range $host := .Values.proxy.hosts }}
     - http:
         paths:
           - path: /
             backend:
               serviceName: proxy-public
               servicePort: 80
-      host: {{ .Values.ingress.host }}
-{{- if and .Values.ingress.https.enabled (eq .Values.ingress.https.type "kube-lego") }}
+      host: {{ $host }}
+    {{- end }}
+{{- if and .Values.proxy.https.enabled (eq .Values.proxy.https.type "auto") }}
   tls:
     - secretName: kubelego-tls-proxy-{{ .Release.Name }}
       hosts:
-        - {{ .Values.ingress.host }}
+{{ toYaml .Values.proxy.hosts | indent 8 }}
 {{- end }}
 {{- end -}}

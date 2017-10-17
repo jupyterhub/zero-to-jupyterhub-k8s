@@ -1,4 +1,4 @@
-{{ if .Values.tlsTerminator.enabled -}}
+{{ if and .Values.proxy.https.enabled (eq .Values.proxy.https.type "auto") -}}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -15,11 +15,12 @@ spec:
       labels:
         component: tls-terminator
         release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
         # required for kube-lego to work
         app: kube-lego
     spec:
       containers:
-        - name: tls-terminator
+        - name: nginx
           image: "{{ .Values.tlsTerminator.proxy.image.name }}:{{ .Values.tlsTerminator.proxy.image.tag }}"
           args:
             - /nginx-ingress-controller
@@ -70,8 +71,8 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
             - name: LEGO_EMAIL
-              # {{ required "tlsTerminator.lego.email is a required field" .Values.tlsTerminator.lego.email }}
-              value: {{ .Values.tlsTerminator.lego.email | quote }}
+              # {{ required "proxy.https.auto.letsencryptContactEmail is a required field" .Values.proxy.https.auto.letsencryptContactEmail }}
+              value: {{ .Values.proxy.https.auto.letsencryptContactEmail | quote }}
             - name: LEGO_SUPPORTED_INGRESS_PROVIDER
               value: "nginx"
             - name: LEGO_SUPPORTED_INGRESS_CLASS
@@ -82,8 +83,6 @@ spec:
               value: "hub.jupyter.org/tls-terminator"
             - name: LEGO_URL
               value: "https://acme-v01.api.letsencrypt.org/directory"
-            - name: LEGO_LOG_LEVEL
-              value: "debug"
           ports:
             - containerPort: 8080
           readinessProbe:

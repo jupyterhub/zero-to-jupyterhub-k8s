@@ -61,15 +61,18 @@ proxy:
       memory: 512Mi
   labels: null
   imagePullPolicy: IfNotPresent
-
-ingress:
-  enabled: false
+  ingress:
+    enabled: false
+    annotations: {}
   https:
     enabled: false
-    type: none
+    type: auto
+    auto:
+      letsencryptContactEmail: ""
+  hosts: []
+
 
 tlsTerminator:
-  enabled: false
   proxy:
     image:
       name: gcr.io/google_containers/nginx-ingress-controller
@@ -82,8 +85,6 @@ tlsTerminator:
       # We need a couple of fixes related to ingress.provider that are in master
       # When 0.1.6 is released, switch to that!
       tag: master-2368
-      tag: canary
-    email: ""
 
 
 # Google OAuth secrets
