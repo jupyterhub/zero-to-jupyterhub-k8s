@@ -7,10 +7,20 @@ When you are done with your hub, you should delete it so you are no longer
 paying money for it. The following sections describe how to delete your
 JupyterHub resources on various cloud providers.
 
-Google Cloud Engine
--------------------
+For all cloud providers
+-----------------------
 
-1. First, delete the namespace the hub was installed in. This deletes any disks
+The steps in this section must be performed for all cloud providers first,
+before doing the cloud provider specific setup.
+
+1. First, delete the helm release. This deletes all resources that were created
+   by helm to make your jupyterhub.
+
+  .. code-block:: bash
+
+     helm delete <your-helm-release-name> --purge
+
+2. First, delete the namespace the hub was installed in. This deletes any disks
    that may have been created to store user's data, and any IP addresses that
    may have been provisioned.
 
@@ -18,7 +28,13 @@ Google Cloud Engine
 
       kubectl delete namespace <your-namespace>
 
-2. Next, you should delete the kubernetes cluster. You can list all the clusters
+Google Cloud Engine
+-------------------
+
+Make sure you have performed the cloud provider agnostic steps listed above before
+doing this!
+
+1. You should delete the kubernetes cluster. You can list all the clusters
    you have.
 
    .. code-block:: bash
@@ -31,7 +47,7 @@ Google Cloud Engine
 
       gcloud container clusters delete <CLUSTER-NAME> --zone=<CLUSTER-ZONE>
 
-3. Double check to make sure all the resources are now deleted, since anything you
+2. Double check to make sure all the resources are now deleted, since anything you
    have not deleted will cost you money! You can check the `web console <https://console.cloud.google.com>`_
    (make sure you are in the right project and account!) to make sure everything
    has been deleted.
@@ -47,6 +63,9 @@ Google Cloud Engine
 
 Amazon AWS
 ----------
+
+Make sure you have performed the cloud provider agnostic steps listed above before
+doing this!
 
 The easiest way to delete your cloud resources on AWS is to use their
 website. Go to the ``CloudFormation`` page. This should have a list of all
