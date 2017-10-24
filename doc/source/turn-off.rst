@@ -65,7 +65,7 @@ Google Cloud Platform
    1. Compute Engine -> Disks
    2. Container Engine -> Container Clusters
    3. Container Registry -> Images
-   4. Networking -> Load Balancing
+   4. Networking -> Network Services -> Load Balancing
 
    These might take several minutes to clear up, but they shouldn't have anything
    related to your JupyterHub cluster after you have deleted the cluster.
