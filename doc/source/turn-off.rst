@@ -7,6 +7,14 @@ When you are done with your hub, you should delete it so you are no longer
 paying money for it. The following sections describe how to delete your
 JupyterHub resources on various cloud providers.
 
+Tearing down your JupyterHub entails:
+
+1. Deleting your Kubernetes namespace, which deletes all objects created and managed by Kubernetes
+2. Deleting any computational resources you've requested from the cloud provider
+3. Running a final check to make sure there aren't any lingering resources that haven't been deleted
+   (e.g., storage volumes in some cloud providers)
+
+
 For all cloud providers
 -----------------------
 
@@ -20,7 +28,7 @@ before doing the cloud provider specific setup.
 
      helm delete <your-helm-release-name> --purge
 
-2. First, delete the namespace the hub was installed in. This deletes any disks
+2. Next, delete the namespace the hub was installed in. This deletes any disks
    that may have been created to store user's data, and any IP addresses that
    may have been provisioned.
 
@@ -28,13 +36,13 @@ before doing the cloud provider specific setup.
 
       kubectl delete namespace <your-namespace>
 
-Google Cloud Engine
--------------------
+Google Cloud Platform
+~~~~~~~~~~~~~~~~~~~~~
 
-Make sure you have performed the cloud provider agnostic steps listed above before
-doing this!
+1. Perform the steps above for all cloud providers. These cloud provider agnostic steps will
+   delete the helm chart and delete the hub's namespace. This must be done before proceeding.
 
-1. You should delete the kubernetes cluster. You can list all the clusters
+2. You should delete the kubernetes cluster. You can list all the clusters
    you have.
 
    .. code-block:: bash
@@ -47,35 +55,35 @@ doing this!
 
       gcloud container clusters delete <CLUSTER-NAME> --zone=<CLUSTER-ZONE>
 
-2. Double check to make sure all the resources are now deleted, since anything you
+3. Double check to make sure all the resources are now deleted, since anything you
    have not deleted will cost you money! You can check the `web console <https://console.cloud.google.com>`_
-   (make sure you are in the right project and account!) to make sure everything
+   (make sure you are in the right project and account) to verify that everything
    has been deleted.
 
    At a minimum, check the following under the Hamburger (left top corner) menu:
 
    1. Compute Engine -> Disks
-   2. Container Engine
-   3. Networking -> Load Balancing
+   2. Container Engine -> Container Clusters
+   3. Container Registry -> Images
+   4. Networking -> Load Balancing
 
    These might take several minutes to clear up, but they shouldn't have anything
    related to your JupyterHub cluster after you have deleted the cluster.
 
-Amazon AWS
-----------
+Amazon Web Services (AWS)
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Make sure you have performed the cloud provider agnostic steps listed above before
-doing this!
+1. Perform the steps above for all cloud providers. These cloud provider agnostic steps will
+   delete the helm chart and delete the hub's namespace. This must be done before proceeding.
 
-The easiest way to delete your cloud resources on AWS is to use their
-website. Go to the ``CloudFormation`` page. This should have a list of all
-running AWS stacks that you've created.
+2. The easiest way to delete your cloud resources on AWS is to use their
+   website. Go to the ``CloudFormation`` page. This should have a list of all
+   running AWS stacks that you've created.
 
-If you followed the JupyterHub guide,
-there should be two items, both containing the name that you chose for this
-stack. For each item, click the checkbox next to it. Then, click ``Actions``
-and finally ``Delete Stack``. Answer "yes" to any confirmation dialogues, and
-this should begin the process of deleting your Kubernetes cluster.
+   If you followed the JupyterHub guide, there should be two items, both containing the name
+   that you chose for this stack. For each item, click the checkbox next to it. Then, click
+   ``Actions`` and finally ``Delete Stack``. Answer "yes" to any confirmation dialogues, and
+   this should begin the process of deleting your Kubernetes cluster.
 
 .. note::
 
