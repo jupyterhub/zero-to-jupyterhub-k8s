@@ -87,6 +87,14 @@ connect your credit card or other payment method to your google cloud account.
 
    The response should list three running nodes.
 
+6. Give your account super-user permissions, allowing you to perform all
+   the actions needed to set up JupyterHub.
+
+   .. code-block:: bash
+
+      kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=<your-email-address>
+
+
 .. _microsoft-azure:
 
 Setting up Kubernetes on Microsoft Azure Container Service (ACS)
