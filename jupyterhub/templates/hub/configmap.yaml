@@ -26,6 +26,11 @@ data:
   auth.github.client-secret: {{.Values.auth.github.clientSecret | quote}}
   auth.github.callback-url: {{.Values.auth.github.callbackUrl | quote}}
   {{- end }}
+  {{ if eq .Values.auth.type "cilogon" -}}
+  auth.cilogon.client-id: {{.Values.auth.cilogon.clientId | quote}}
+  auth.cilogon.client-secret: {{.Values.auth.cilogon.clientSecret | quote}}
+  auth.cilogon.callback-url: {{.Values.auth.cilogon.callbackUrl | quote}}
+  {{- end }}
   {{ if eq .Values.auth.type "gitlab" -}}
   auth.gitlab.client-id: {{.Values.auth.gitlab.clientId | quote}}
   auth.gitlab.client-secret: {{.Values.auth.gitlab.clientSecret | quote}}

@@ -74,6 +74,18 @@ For more information see the full example of Google OAuth2 in the next section.
           clientSecret: "an0ther1ongs3cretstr1ng"
           callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
 
+**CILogon**
+
+.. code-block:: yaml
+
+      auth:
+        type: cilogon
+        github:
+          clientId: "y0urc1logonc1ient1d"
+          clientSecret: "an0ther1ongs3cretstr1ng"
+          callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
+
+
 To add a whitelist of usernames add to the config file under `hub`:
 
 .. code-block:: yaml
