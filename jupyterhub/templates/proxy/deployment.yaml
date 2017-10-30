@@ -23,7 +23,7 @@ spec:
         app: kube-lego
     spec:
       {{- if .Values.proxy.rbac.enabled }}
-      serviceAccountName: nginx
+      serviceAccountName: proxy
       {{- end }}
       containers:
         - name: nginx
