@@ -39,7 +39,7 @@ hub:
 proxy:
   secretToken: generate with openssl rand -hex 64
   service:
-    type: ClusterIP
+    type: LoadBalancer
     labels: {}
     annotations: {}
     nodePort:
