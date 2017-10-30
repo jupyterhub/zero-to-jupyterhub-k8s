@@ -4,7 +4,7 @@ python:
 services:
 - docker
 install:
-- pip install --no-cache-dir pyyaml
+- pip install --no-cache-dir ruamel.yaml
 - mkdir -p bin
 - export PATH=$PWD/bin:$PATH
 - curl -ssL https://storage.googleapis.com/kubernetes-helm/helm-v2.6.1-linux-amd64.tar.gz | tar -xz -C bin --strip-components 1 linux-amd64/helm
@@ -14,7 +14,7 @@ script:
 - |
   if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then
     docker login -u ${DOCKER_USERNAME} -p "${DOCKER_PASSWORD}"
-    export PUSH="--push"
+    export PUSH="--push --publish-chart"
   fi
 - "./build.py build --commit-range ${TRAVIS_COMMIT_RANGE} $PUSH"
 branches:

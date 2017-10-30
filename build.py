@@ -2,7 +2,10 @@
 import os
 import subprocess
 import argparse
-import yaml
+from ruamel.yaml import YAML
+
+yaml = YAML()
+yaml.indent(offset=2)
 
 JUPYTERHUB_VERSION = '0.8.0'
 
@@ -41,7 +44,7 @@ def build_images(prefix, images, commit_range=None, push=False):
 
 def build_values(prefix):
     with open('jupyterhub/values.yaml') as f:
-        values = yaml.safe_load(f)
+        values = yaml.load(f)
 
     values['hub']['image']['name'] = prefix + 'hub'
     values['hub']['image']['tag'] = last_git_modified('images/hub')
@@ -50,18 +53,18 @@ def build_values(prefix):
     values['singleuser']['image']['tag'] = last_git_modified('images/singleuser-sample')
 
     with open('jupyterhub/values.yaml', 'w') as f:
-        yaml.dump(values, f, default_flow_style=False)
+        yaml.dump(values, f)
 
 
 def build_chart():
     version = last_git_modified('.')
     with open('jupyterhub/Chart.yaml') as f:
-        chart = yaml.safe_load(f)
+        chart = yaml.load(f)
 
     chart['version'] = chart['version'] + '-' + version
 
     with open('jupyterhub/Chart.yaml', 'w') as f:
-        yaml.dump(chart, f, default_flow_style=False)
+        yaml.dump(chart, f)
 
 def publish_pages():
     version = last_git_modified('.')
@@ -103,6 +106,7 @@ def main():
     build_parser = subparsers.add_parser('build', description='Build & Push images')
     build_parser.add_argument('--commit-range', help='Range of commits to consider when building images')
     build_parser.add_argument('--push', action='store_true')
+    build_parser.add_argument('--publish-chart', action='store_true')
 
 
     args = argparser.parse_args()
@@ -112,7 +116,7 @@ def main():
         build_images(args.image_prefix, images, args.commit_range, args.push)
         build_values(args.image_prefix)
         build_chart()
-        if args.push:
+        if args.publish_chart:
             publish_pages()
 
 main()

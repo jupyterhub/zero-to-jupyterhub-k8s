@@ -1,11 +1,11 @@
 hub:
   service:
     type: ClusterIP
-  baseUrl: "/"
-  cookieSecret: null
+  baseUrl: /
+  cookieSecret:
   rbac:
     enabled: false
-  publicURL: null
+  publicURL:
   uid: 1000
   fsGid: 1000
   concurrentSpawnLimit: 64
@@ -17,11 +17,11 @@ hub:
       accessModes:
         - ReadWriteOnce
       storage: 1Gi
-      subPath: null
-      storageClassName: null
-    url: null
+      subPath:
+      storageClassName:
+    url:
   labels: {}
-  extraConfig: ""
+  extraConfig: ''
   extraConfigMap: {}
   extraEnv: {}
   image:
@@ -34,15 +34,15 @@ hub:
   services: {}
   imagePullPolicy: IfNotPresent
   whitelist:
-    users: null
+    users:
 
 proxy:
-  secretToken: 'generate with openssl rand -hex 64'
+  secretToken: generate with openssl rand -hex 64
   service:
     type: ClusterIP
     labels: {}
     annotations: {}
-    nodePort: null
+    nodePort:
   chp:
     image:
       name: jupyterhub/configurable-http-proxy
@@ -74,7 +74,7 @@ proxy:
       # When 0.1.6 is released, switch to that!
       tag: master-2368
     resources: {}
-  labels: null
+  labels:
   ingress:
     enabled: true
     annotations: {}
@@ -82,7 +82,7 @@ proxy:
     enabled: true
     type: auto
     auto:
-      letsencryptContactEmail: ""
+      letsencryptContactEmail: ''
   hosts: []
 
 
@@ -90,12 +90,12 @@ proxy:
 auth:
   type: dummy
   dummy:
-    password: null
+    password:
 
 singleuser:
   extraLabels: {}
   extraEnv: {}
-  lifecycleHooks: null
+  lifecycleHooks:
   uid: 1000
   fsGid: 1000
   storage:
@@ -103,18 +103,18 @@ singleuser:
     extraVolumes: []
     extraVolumeMounts: []
     static:
-      pvcName: null
-      subPath: "{username}"
+      pvcName:
+      subPath: '{username}'
     capacity: 10Gi
     homeMountPath: /home/jovyan
   image:
     name: jupyterhub/k8s-singleuser-sample
     tag: v0.4
   cpu:
-    limit: null
-    guarantee: null
+    limit:
+    guarantee:
   memory:
-    limit: null
+    limit:
     guarantee: 1G
   cmd: jupyterhub-singleuser
 
@@ -132,4 +132,4 @@ cull:
 
 admin:
   access: true
-  users: null
+  users:
