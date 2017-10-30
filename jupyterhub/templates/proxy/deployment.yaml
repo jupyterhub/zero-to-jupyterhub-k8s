@@ -61,6 +61,7 @@ spec:
             - name: https
               containerPort: 443
               protocol: TCP
+        {{ if .Values.proxy.hosts -}}
         - name: kube-lego
           image: "{{ .Values.proxy.lego.image.name }}:{{ .Values.proxy.lego.image.tag }}"
           imagePullPolicy: {{ .Values.proxy.lego.image.pullPolicy }}
@@ -100,6 +101,7 @@ spec:
               port: 8080
             initialDelaySeconds: 5
             timeoutSeconds: 1
+        {{- end }}
         - name: chp
           image: {{ .Values.proxy.chp.image.name }}:{{ .Values.proxy.chp.image.tag }}
           {{- if .Values.proxy.chp.cmd }}
