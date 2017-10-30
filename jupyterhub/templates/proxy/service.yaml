@@ -38,9 +38,13 @@ metadata:
     component: proxy
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-    {{ if .Values.proxy.service.annotations -}}
+  {{ if .Values.proxy.service.labels -}}
+{{ toYaml .Values.proxy.service.labels | indent 4 }}
+  {{- end }}
+  {{ if .Values.proxy.service.annotations -}}
+  annotations:
 {{ toYaml .Values.proxy.service.annotations | indent 4 }}
-    {{- end }}
+  {{- end }}
   name: proxy-public
 spec:
   ports:
