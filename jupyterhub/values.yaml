@@ -123,6 +123,12 @@ prePuller:
     name: yuvipanda/image-allnodes-puller
     tag: v0.8
 
+ingress:
+  enabled: false
+  annotations: {}
+  hosts: []
+  tls:
+
 cull:
   enabled: true
   users: false
