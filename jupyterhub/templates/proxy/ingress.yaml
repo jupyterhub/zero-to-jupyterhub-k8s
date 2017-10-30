@@ -1,20 +1,17 @@
+{{- if and .Values.proxy.https.enabled (eq .Values.proxy.https.type "auto") }}
 {{- if .Values.proxy.hosts }}
+# This is solely used to provide auto HTTPS with our bundled kube-lego
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: jupyterhub
+  name: jupyterhub-internal
   annotations:
     # Set a high limit for max size of notebooks that we can save. Default is 1M
     ingress.kubernetes.io/proxy-body-size: 64m
     # These can all be overridden by setting .Values.proxy.ingress.annotations
     kubernetes.io/ingress.provider: nginx
     kubernetes.io/ingress.class: jupyterhub-proxy-tls
-    {{- if and .Values.proxy.https.enabled (eq .Values.proxy.https.type "auto") }}
     hub.jupyter.org/tls-terminator: "true"
-    {{- end }}
-    {{ if .Values.proxy.ingress.annotations }}
-{{ toYaml .Values.proxy.ingress.annotations | indent 4 }}
-    {{- end }}
 spec:
   rules:
     {{- range $host := .Values.proxy.hosts }}
@@ -26,7 +23,6 @@ spec:
               servicePort: 8000
       host: {{ $host }}
     {{- end }}
-{{- if and .Values.proxy.https.enabled (eq .Values.proxy.https.type "auto") }}
   tls:
     - secretName: kubelego-tls-proxy-{{ .Release.Name }}
       hosts:

@@ -77,9 +77,6 @@ proxy:
       tag: master-2368
     resources: {}
   labels:
-  ingress:
-    enabled: true
-    annotations: {}
   https:
     enabled: true
     type: auto
