@@ -9,7 +9,7 @@ metadata:
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: nginx
+  name: nginx-{{ .Release.Name }}
 rules:
   - apiGroups:
       - ""
@@ -74,11 +74,11 @@ metadata:
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: nginx
+  name: nginx-{{ .Release.Name }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: nginx
+  name: nginx-{{ .Release.Name }}
 subjects:
   - kind: ServiceAccount
     name: proxy
