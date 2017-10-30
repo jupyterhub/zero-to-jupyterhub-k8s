@@ -22,6 +22,9 @@ spec:
         # required for kube-lego to work
         app: kube-lego
     spec:
+      {{- if .Values.proxy.rbac.enabled }}
+      serviceAccountName: nginx
+      {{- end }}
       containers:
         - name: nginx
           image: "{{ .Values.proxy.nginx.image.name }}:{{ .Values.proxy.nginx.image.tag }}"

@@ -4,7 +4,7 @@ hub:
   baseUrl: /
   cookieSecret:
   rbac:
-    enabled: false
+    enabled: true
   publicURL:
   uid: 1000
   fsGid: 1000
@@ -38,6 +38,8 @@ hub:
 
 proxy:
   secretToken: generate with openssl rand -hex 64
+  rbac:
+    enabled: true
   service:
     type: LoadBalancer
     labels: {}

@@ -1,0 +1,155 @@
+{{ if .Values.proxy.rbac.enabled -}}
+# This is way too many permissions, but apparently the nginx-controller
+# is written to sortof assume it is clusterwide ingress provider.
+# So we keep this as is, for now.
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: nginx
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - endpoints
+      - nodes
+      - pods
+      - secrets
+    verbs:
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    resourceNames:
+      - "{{ .Release.Namespace }}"
+    verbs:
+      - get
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+    verbs:
+      - get
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs:
+      - get
+      - list
+      - update
+      - watch
+  - apiGroups:
+      - extensions
+    resources:
+      - ingresses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - extensions
+    resources:
+      - ingresses/status
+    verbs:
+      - update
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: nginx
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: nginx
+subjects:
+  - kind: ServiceAccount
+    name: nginx
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: nginx
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - namespaces
+      - pods
+      - secrets
+    verbs:
+      - get
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    resourceNames:
+      - ingress-controller-leader-jupyterhub-proxy-tls
+    verbs:
+      - get
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - create
+  - apiGroups:
+      - ""
+    resources:
+      - endpoints
+    verbs:
+      - create
+      - get
+      - update
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: nginx
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: nginx
+subjects:
+  - kind: ServiceAccount
+    name: nginx
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: nginx
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: nginx
+{{- end }}
