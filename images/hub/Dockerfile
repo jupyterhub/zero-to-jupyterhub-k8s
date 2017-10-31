@@ -31,7 +31,7 @@ RUN adduser --disabled-password \
 ARG JUPYTERHUB_VERSION=0.8
 
 RUN pip3 install --no-cache-dir \
-         jupyterhub==$JUPYTERHUB_VERSION \
+         git+https://github.com/jupyterhub/jupyterhub@9454233  \
          statsd==3.2.1 \
          jupyterhub-dummyauthenticator==0.3.1 \
          jupyterhub-tmpauthenticator==0.4 \
