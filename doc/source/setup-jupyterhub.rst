@@ -23,31 +23,24 @@ For the following steps, use your favorite code editor. We'll use the
    entering ``nano config.yaml`` at the terminal will start the editor and
    open the config file.
 
-2. Create two random hex strings to use as security tokens. Run these two
-   commands (they’re the same command but run them twice) in a terminal:
+2. Create a random hex string to use as a security token. Run this command
+   in a terminal
 
    .. code-block:: bash
 
        openssl rand -hex 32
-       openssl rand -hex 32
 
-   Copy the output each time, we’ll use these hex strings in the next step.
+   Copy the output for use in the next step
 
 3. Insert these lines into the ``config.yaml`` file. When editing YAML files,
    use straight quotes and spaces and avoid using curly quotes or tabs.
-   Substitute each occurrence of ``RANDOM_STRING_N`` below with the output of
-   ``openssl rand -hex 32``. The random hex strings are tokens that will be used
-   to secure your JupyterHub instance (make sure that you keep the quotation
-   marks):
+   Substitute ``RANDOM_STRING`` below with the output of ``openssl rand -hex 32``
+   from step 2.
 
    .. code-block:: yaml
 
-      hub:
-        # output of first execution of 'openssl rand -hex 32'
-        cookieSecret: "RANDOM_STRING_1"
       proxy:
-        # output of second execution of 'openssl rand -hex 32'
-        secretToken: "RANDOM_STRING_2"
+        secretToken: "RANDOM_STRING"
 
 .. Don't put an example here! People will just copy paste that & that's a security issue.
 
