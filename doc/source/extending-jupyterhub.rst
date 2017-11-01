@@ -183,7 +183,8 @@ Setting up HTTPS
 
 Enabling HTTPS is an important part of keeping the internet secure for
 your users & the world at large. Zero to JupyterHub makes doing so quite
-easy since version 0.5.
+easy since version 0.5, integrating with `Let's Encrypt <https://letsencrypt.org/>`_
+for free HTTPS certificates.
 
 1. Buy a domain name from a registrar. Pick whichever one you want.
 2. Create an ``A record`` from the domain you want to use, pointing to the
@@ -202,8 +203,8 @@ easy since version 0.5.
        hosts:
          - <your-domain-name>
        https:
-         auto:
-           letsEncryptContactEmail: <your-email-address>
+         letsencrypt:
+           contactEmail: <your-email-address>
 
 5. Apply the config changes by running ``helm upgrade``.
 6. Wait for about a minute, now your hub is HTTPS enabled! Congratulations, your

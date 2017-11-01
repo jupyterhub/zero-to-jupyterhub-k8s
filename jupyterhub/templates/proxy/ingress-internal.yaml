@@ -1,4 +1,4 @@
-{{- if and .Values.proxy.https.enabled (eq .Values.proxy.https.type "auto") }}
+{{- if and .Values.proxy.https.enabled (eq .Values.proxy.https.type "letsencrypt") }}
 {{- if .Values.proxy.hosts }}
 # This is solely used to provide auto HTTPS with our bundled kube-lego
 apiVersion: extensions/v1beta1

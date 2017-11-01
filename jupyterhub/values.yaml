@@ -79,9 +79,9 @@ proxy:
   labels:
   https:
     enabled: true
-    type: auto
-    auto:
-      letsencryptContactEmail: ''
+    type: letsencrypt
+    letsencrypt:
+      contactEmail: ''
   hosts: []
 
 

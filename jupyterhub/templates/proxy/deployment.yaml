@@ -64,7 +64,7 @@ spec:
             - name: https
               containerPort: 443
               protocol: TCP
-        {{ if .Values.proxy.hosts -}}
+        {{ if and .Values.proxy.hosts (and .Values.proxy.https.enabled (eq .Values.proxy.https.type "letsencrypt" ) ) -}}
         - name: kube-lego
           image: "{{ .Values.proxy.lego.image.name }}:{{ .Values.proxy.lego.image.tag }}"
           imagePullPolicy: {{ .Values.proxy.lego.image.pullPolicy }}
@@ -84,8 +84,8 @@ spec:
                 fieldRef:
                   fieldPath: status.podIP
             - name: LEGO_EMAIL
-              # {{ required "proxy.https.auto.letsencryptContactEmail is a required field" .Values.proxy.https.auto.letsencryptContactEmail }}
-              value: {{ .Values.proxy.https.auto.letsencryptContactEmail | quote }}
+              # {{ required "proxy.https.letsencrypt.contactEmail is a required field" .Values.proxy.https.letsencrypt.contactEmail }}
+              value: {{ .Values.proxy.https.letsencrypt.contactEmail | quote }}
             - name: LEGO_SUPPORTED_INGRESS_PROVIDER
               value: "nginx"
             - name: LEGO_SUPPORTED_INGRESS_CLASS
