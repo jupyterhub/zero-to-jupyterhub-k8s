@@ -82,7 +82,7 @@ proxy:
     type: letsencrypt
     letsencrypt:
       contactEmail: ''
-  hosts: []
+    hosts: []
 
 
 # Google OAuth secrets
