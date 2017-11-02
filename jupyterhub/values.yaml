@@ -109,7 +109,8 @@ singleuser:
       subPath: '{username}'
     capacity: 10Gi
     homeMountPath: /home/jovyan
-    class: null
+    dynamic:
+      storageclass:
   image:
     name: jupyterhub/k8s-singleuser-sample
     tag: v0.4
