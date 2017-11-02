@@ -71,7 +71,9 @@ storage_type = get_config('singleuser.storage.type')
 if storage_type == 'dynamic':
     c.KubeSpawner.pvc_name_template = 'claim-{username}{servername}'
     c.KubeSpawner.user_storage_pvc_ensure = True
-    c.KubeSpawner.user_storage_class = get_config('singleuser.storage.class')
+    storage_class = get_config('singleuser.storage.dynamic.storage-class', None)
+    if storage_class:
+        c.KubeSpawner.user_storage_class = storage_class
     c.KubeSpawner.user_storage_access_modes = ['ReadWriteOnce']
     c.KubeSpawner.user_storage_capacity = get_config('singleuser.storage.capacity')
 
