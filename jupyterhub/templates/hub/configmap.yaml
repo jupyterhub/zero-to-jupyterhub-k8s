@@ -90,8 +90,8 @@ data:
   singleuser.storage.extra-volume-mounts: {{ toJson .Values.singleuser.storage.extraVolumeMounts | quote }}
   {{ if eq .Values.singleuser.storage.type "dynamic" -}}
   singleuser.storage.capacity: {{.Values.singleuser.storage.capacity | quote }}
-  {{ if .Values.singleuser.storage.dynamic.storageclass -}}
-  singleuser.storage.dynamic.storageclass: {{ .Values.singleuser.storage.dynamic.storageclass | quote }}
+  {{ if .Values.singleuser.storage.dynamic.storageClass -}}
+  singleuser.storage.dynamic.storage-class: {{ .Values.singleuser.storage.dynamic.storageClass | quote }}
   {{- end }}
   {{ else if eq .Values.singleuser.storage.type "static" -}}
   singleuser.storage.static.pvc-name: {{ .Values.singleuser.storage.static.pvcName | quote }}
