@@ -4,8 +4,6 @@ metadata:
   name: hub-deployment
 spec:
   replicas: 1
-  strategy:
-    type: Recreate
   template:
     metadata:
       labels:
@@ -42,6 +40,14 @@ spec:
       containers:
       - name: hub-container
         image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
+        command:
+          - jupyterhub
+          - --config
+          - /srv/jupyterhub_config.py
+          {{ if eq .Values.hub.db.type "sqlite-pvc" }}
+          # Automatic db upgrades for sqlite!
+          - --upgrade-db
+          {{- end }}
         volumeMounts:
           - mountPath: /etc/jupyterhub/config/
             name: config
