@@ -202,7 +202,7 @@ You can also purchase your own SSL certificates from a certificate provider.
 
 1. Buy a domain name from a registrar. Pick whichever one you want.
 2. Create an ``A record`` from the domain you want to use, pointing to the
-   external IP provided to the `proxy-public` service.
+   ``EXTERNAL-IP`` of the ``proxy-public`` service.
 3. Wait for the change to propagate. Propagation can take several minutes to
    several hours. Wait until you can type in the name of the domain you bought
    and it shows you the JupyterHub landing page.
