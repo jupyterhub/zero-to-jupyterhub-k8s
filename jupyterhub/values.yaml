@@ -1,11 +1,11 @@
 hub:
   service:
     type: ClusterIP
-  baseUrl: "/"
-  cookieSecret: null
+  baseUrl: /
+  cookieSecret:
   rbac:
     enabled: false
-  publicURL: null
+  publicURL:
   uid: 1000
   fsGid: 1000
   concurrentSpawnLimit: 64
@@ -17,11 +17,11 @@ hub:
       accessModes:
         - ReadWriteOnce
       storage: 1Gi
-      subPath: null
-      storageClassName: null
-    url: null
+      subPath:
+      storageClassName:
+    url:
   labels: {}
-  extraConfig: ""
+  extraConfig: ''
   extraConfigMap: {}
   extraEnv: {}
   image:
@@ -34,51 +34,67 @@ hub:
   services: {}
   imagePullPolicy: IfNotPresent
   whitelist:
-    users: null
+    users:
 
 proxy:
-  secretToken: 'generate with openssl rand -hex 64'
+  secretToken: generate with openssl rand -hex 64
+  rbac:
+    enabled: false
   service:
     type: LoadBalancer
     labels: {}
     annotations: {}
-    nodePort: null
-  image:
-    name: jupyterhub/configurable-http-proxy
-    tag: 2.0.4
-  cmd:
-    - configurable-http-proxy
-    - --ip=0.0.0.0
-    - --port=8000
-    - --api-ip=0.0.0.0
-    - --api-port=8001
-    - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
-    - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
-    - --log-level=debug
-  resources:
-    requests:
-      cpu: 0.2
-      memory: 512Mi
-  labels: null
-  imagePullPolicy: IfNotPresent
-
-ingress:
-  enabled: false
+    nodePort:
+  chp:
+    image:
+      name: jupyterhub/configurable-http-proxy
+      tag: 2.0.4
+      pullPolicy: IfNotPresent
+    cmd:
+      - configurable-http-proxy
+      - --ip=0.0.0.0
+      - --port=8000
+      - --api-ip=0.0.0.0
+      - --api-port=8001
+      - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
+      - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
+      - --log-level=debug
+    resources:
+      requests:
+        cpu: 0.2
+        memory: 512Mi
+  nginx:
+    image:
+      name: gcr.io/google_containers/nginx-ingress-controller
+      tag: 0.9.0-beta.15
+      pullPolicy: IfNotPresent
+    resources: {}
+  lego:
+    image:
+      name: jetstack/kube-lego
+      # We need a couple of fixes related to ingress.provider that are in master
+      # When 0.1.6 is released, switch to that!
+      tag: master-2368
+    resources: {}
+  labels:
   https:
-    enabled: false
-    type: none
+    enabled: true
+    type: letsencrypt
+    letsencrypt:
+      contactEmail: ''
+    hosts: []
 
 
 # Google OAuth secrets
 auth:
   type: dummy
   dummy:
-    password: null
+    password:
 
 singleuser:
   extraLabels: {}
   extraEnv: {}
-  lifecycleHooks: null
+  lifecycleHooks:
   uid: 1000
   fsGid: 1000
   storage:
@@ -86,18 +102,18 @@ singleuser:
     extraVolumes: []
     extraVolumeMounts: []
     static:
-      pvcName: null
-      subPath: "{username}"
+      pvcName:
+      subPath: '{username}'
     capacity: 10Gi
     homeMountPath: /home/jovyan
   image:
     name: jupyterhub/k8s-singleuser-sample
     tag: v0.4
   cpu:
-    limit: null
-    guarantee: null
+    limit:
+    guarantee:
   memory:
-    limit: null
+    limit:
     guarantee: 1G
   cmd: jupyterhub-singleuser
 
@@ -107,6 +123,12 @@ prePuller:
     name: yuvipanda/image-allnodes-puller
     tag: v0.8
 
+ingress:
+  enabled: false
+  annotations: {}
+  hosts: []
+  tls:
+
 cull:
   enabled: true
   users: false
@@ -115,4 +137,4 @@ cull:
 
 admin:
   access: true
-  users: null
+  users:

@@ -188,3 +188,36 @@ report the current ``Ready/NotReady`` status of all nodes in the cluster.
      size for the workshop. This workflow also helps you avoid scrambling on
      the workshop day to set up the cluster and JupyterHub.
    - **After the workshop:** The cluster can be deleted.
+
+
+Setting up HTTPS
+----------------
+
+Enabling HTTPS is an important part of keeping the internet secure for
+your users & the world at large. Zero to JupyterHub makes doing so quite
+easy since version 0.5, integrating with `Let's Encrypt <https://letsencrypt.org/>`_
+for free HTTPS certificates.
+
+1. Buy a domain name from a registrar. Pick whichever one you want.
+2. Create an ``A record`` from the domain you want to use, pointing to the
+   external IP provided to the `proxy-public` service.
+3. Wait for the change to propagate. Propagation can take several minutes to
+   several hours. Wait till you can type in the name of the domain you bought,
+   and it shows you the JupyterHub landing page.
+
+   It is important that you wait - prematurely going to the next step might cause problems!
+
+4. Add the following to ``config.yaml``:
+
+   .. code-block:: yaml
+
+     proxy:
+       hosts:
+         - <your-domain-name>
+       https:
+         letsencrypt:
+           contactEmail: <your-email-address>
+
+5. Apply the config changes by running ``helm upgrade``.
+6. Wait for about a minute, now your hub is HTTPS enabled! Congratulations, your
+   users are now more secure now than they were before!

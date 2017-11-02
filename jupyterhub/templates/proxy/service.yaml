@@ -4,7 +4,9 @@ metadata:
   name: proxy-api
 spec:
   selector:
-    name: proxy-pod
+    name: proxy
+    component: proxy
+    release: {{ .Release.Name }}
   ports:
     - protocol: TCP
       port: 8001
@@ -13,21 +15,52 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: proxy-public
+  name: proxy-http
   # toYaml + indent seem a lot more unstable & error prone
   annotations: {{ toJson .Values.proxy.service.annotations }}
   labels: {{ toJson .Values.proxy.service.labels }}
 spec:
+  type: ClusterIP
+  selector:
+    name: proxy
+    component: proxy
+    release: {{ .Release.Name }}
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: proxy
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  {{ if .Values.proxy.service.labels -}}
+{{ toYaml .Values.proxy.service.labels | indent 4 }}
+  {{- end }}
+  {{ if .Values.proxy.service.annotations -}}
+  annotations:
+{{ toYaml .Values.proxy.service.annotations | indent 4 }}
+  {{- end }}
+  name: proxy-public
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 443
+  selector:
+    name: proxy
+    component: proxy
+    release: {{ .Release.Name }}
   type: {{ .Values.proxy.service.type }}
   {{ if .Values.proxy.service.loadBalancerIP -}}
   loadBalancerIP: {{ .Values.proxy.service.loadBalancerIP }}
   {{- end }}
-  selector:
-    name: proxy-pod
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 8000
-      {{ if .Values.proxy.service.nodePort -}}
-      nodePort: {{ .Values.proxy.service.nodePort }}
-      {{- end }}

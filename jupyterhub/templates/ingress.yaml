@@ -3,28 +3,28 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: jupyterhub
+  labels:
+    app: jupyterhub
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
   annotations:
-    # Set a high limit for max size of notebooks that we can save. Default is 1M
-    ingress.kubernetes.io/proxy-body-size: 64m
-    {{- if eq .Values.ingress.https.type  "kube-lego" }}
-    kubernetes.io/tls-acme: "true"
-    {{ end -}}
     {{- range $key, $value := .Values.ingress.annotations }}
-    {{ $key }}: {{ $value | quote }}
+      {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
   rules:
-    - http:
+    {{- range $host := .Values.ingress.hosts }}
+    - host: {{ $host }}
+      http:
         paths:
           - path: /
             backend:
               serviceName: proxy-public
               servicePort: 80
-      host: {{ .Values.ingress.host }}
-{{- if and .Values.ingress.https.enabled (eq .Values.ingress.https.type "kube-lego") }}
+    {{- end -}}
+  {{- if .Values.ingress.tls }}
   tls:
-    - secretName: kubelego-tls-proxy-{{ .Release.Name }}
-      hosts:
-        - {{ .Values.ingress.host }}
-{{- end }}
+{{ toYaml .Values.ingress.tls | indent 4 }}
+  {{- end -}}
 {{- end -}}
