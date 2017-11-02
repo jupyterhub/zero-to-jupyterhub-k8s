@@ -198,26 +198,59 @@ your users & the world at large. Zero to JupyterHub makes doing so quite
 easy since version 0.5, integrating with `Let's Encrypt <https://letsencrypt.org/>`_
 for free HTTPS certificates.
 
+You can also purchase your own SSL certificates from a certificate provider.
+
 1. Buy a domain name from a registrar. Pick whichever one you want.
 2. Create an ``A record`` from the domain you want to use, pointing to the
-   external IP provided to the `proxy-public` service.
+   ``EXTERNAL-IP`` of the ``proxy-public`` service.
 3. Wait for the change to propagate. Propagation can take several minutes to
-   several hours. Wait till you can type in the name of the domain you bought,
+   several hours. Wait until you can type in the name of the domain you bought
    and it shows you the JupyterHub landing page.
 
    It is important that you wait - prematurely going to the next step might cause problems!
 
-4. Add the following to ``config.yaml``:
+4. Tell JupyterHub to use HTTPS via ``config.yaml``
 
-   .. code-block:: yaml
+  a. For letsencrypt, add your domain name and contact email for letsencrypt renewal to ``config.yaml``:
 
-     proxy:
-       hosts:
-         - <your-domain-name>
-       https:
-         letsencrypt:
-           contactEmail: <your-email-address>
+    .. code-block:: yaml
 
-5. Apply the config changes by running ``helm upgrade``.
+      proxy:
+        https:
+          hosts:
+            - <your-domain-name>
+          letsencrypt:
+            contactEmail: <your-email-address>
+
+  b. If you have your own SSL certificate, you can configure SSL manually.
+     Add to ``config.yaml``:
+
+    .. code-block:: yaml
+
+      proxy:
+        https:
+          hosts:
+            - <your-domain-name>
+          type: manual
+
+    and paste the contents of your ssl key and certificate to ``secrets.yaml``:
+
+    .. code-block:: yaml
+
+      proxy:
+        https:
+          manual:
+            key: |
+              -----BEGIN RSA PRIVATE KEY-----
+              ...
+              -----END RSA PRIVATE KEY-----
+            cert: |
+              -----BEGIN CERTIFICATE-----
+              ...
+              -----END CERTIFICATE-----
+
+5. Apply the config changes by running ``helm upgrade ...``.
 6. Wait for about a minute, now your hub is HTTPS enabled! Congratulations, your
    users are now more secure now than they were before!
+
+

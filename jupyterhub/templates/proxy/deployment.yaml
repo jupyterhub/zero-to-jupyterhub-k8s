@@ -13,14 +13,18 @@ spec:
     metadata:
       annotations:
         # This lets us autorestart when the secret changes!
-        checksum/secret: {{ include (print $.Template.BasePath "/hub/secret.yaml") . | sha256sum }}
+        checksum/hub-secret: {{ include (print $.Template.BasePath "/hub/secret.yaml") . | sha256sum }}
+        checksum/proxy-secret: {{ include (print $.Template.BasePath "/proxy/secret.yaml") . | sha256sum }}
+        hub.jupyter.org/https-type: {{ .Values.proxy.https.type }}
       labels:
         name: proxy
         component: proxy
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
+        {{- if eq .Values.proxy.https.type "letsencrypt" }}
         # required for kube-lego to work
         app: kube-lego
+        {{- end }}
     spec:
       {{- if .Values.proxy.rbac.enabled }}
       serviceAccountName: proxy

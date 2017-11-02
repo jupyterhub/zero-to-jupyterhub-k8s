@@ -82,6 +82,9 @@ proxy:
     type: letsencrypt
     letsencrypt:
       contactEmail: ''
+    manual:
+      key:
+      cert:
     hosts: []
 
 
