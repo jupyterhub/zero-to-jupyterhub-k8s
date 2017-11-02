@@ -1,5 +1,4 @@
-{{- if and .Values.proxy.https.enabled (eq .Values.proxy.https.type "letsencrypt") }}
-{{- if .Values.proxy.https.hosts }}
+{{- if and .Values.proxy.https.enabled .Values.proxy.https.hosts }}
 # This is solely used to provide auto HTTPS with our bundled kube-lego
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -24,8 +23,15 @@ spec:
       host: {{ $host }}
     {{- end }}
   tls:
+    {{- if eq .Values.proxy.https.type "letsencrypt" }}
     - secretName: kubelego-tls-proxy-{{ .Release.Name }}
+    {{- else if eq .Values.proxy.https.type "files" }}
+    - secretName: files-tls-proxy-{{ .Release.Name }}
+    {{- else }}
+    # unhandled type
+    # it would be nice if helm had an `error` function
+    {{ required (printf "https.type must be 'files' or 'letsencrypt', not '%s'" .Values.proxy.https.type)  ._undefined }}
+    {{- end }}
       hosts:
 {{ toYaml .Values.proxy.https.hosts | indent 8 }}
-{{- end }}
 {{- end }}
