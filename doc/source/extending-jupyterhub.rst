@@ -222,7 +222,8 @@ You can also purchase your own SSL certificates from a certificate provider.
           letsencrypt:
             contactEmail: <your-email-address>
 
-  b. If you have your own SSL certificate, add to ``config.yaml``:
+  b. If you have your own SSL certificate, you can configure SSL manually.
+     Add to ``config.yaml``:
 
     .. code-block:: yaml
 
@@ -230,7 +231,7 @@ You can also purchase your own SSL certificates from a certificate provider.
         https:
           hosts:
             - <your-domain-name>
-          type: files
+          type: manual
 
     and paste the contents of your ssl key and certificate to ``secrets.yaml``:
 
@@ -238,15 +239,15 @@ You can also purchase your own SSL certificates from a certificate provider.
 
       proxy:
         https:
-          files:
-           key: |
-             -----BEGIN RSA PRIVATE KEY-----
-             ...
-             -----END RSA PRIVATE KEY-----
-           cert: |
-             -----BEGIN CERTIFICATE-----
-             ...
-             -----END CERTIFICATE-----
+          manual:
+            key: |
+              -----BEGIN RSA PRIVATE KEY-----
+              ...
+              -----END RSA PRIVATE KEY-----
+            cert: |
+              -----BEGIN CERTIFICATE-----
+              ...
+              -----END CERTIFICATE-----
 
 5. Apply the config changes by running ``helm upgrade ...``.
 6. Wait for about a minute, now your hub is HTTPS enabled! Congratulations, your
