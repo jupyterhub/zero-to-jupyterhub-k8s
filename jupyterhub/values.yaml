@@ -33,8 +33,6 @@ hub:
       memory: 512Mi
   services: {}
   imagePullPolicy: IfNotPresent
-  whitelist:
-    users:
 
 proxy:
   secretToken: generate with openssl rand -hex 64
@@ -91,6 +89,8 @@ proxy:
 # Google OAuth secrets
 auth:
   type: dummy
+  whitelist:
+    users:
   dummy:
     password:
 

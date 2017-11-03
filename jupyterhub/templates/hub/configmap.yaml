@@ -42,6 +42,10 @@ data:
   auth.mediawiki.index-url: {{.Values.auth.mediawiki.indexUrl | quote}}
   {{- end }}
 
+  {{ if .Values.auth.whitelist.users -}}
+  auth.whitelist.users: |
+{{ .Values.auth.whitelist.users | indent 4}}
+  {{- end }}
   {{ if eq .Values.auth.type "dummy" -}}
   {{ if .Values.auth.dummy.password -}}
   auth.dummy.password: {{ .Values.auth.dummy.password | quote }}
@@ -131,12 +135,6 @@ data:
   hub.db_url: "sqlite://"
   {{ else -}}
   hub.db_url: {{ .Values.hub.db.url | quote }}
-  {{- end }}
-  {{ if .Values.hub.whitelist.users -}}
-  hub.whitelist.users: |
-    {{ range $user := .Values.hub.whitelist.users -}}
-    - {{ $user }}
-    {{ end }}
   {{- end }}
   admin.access: {{ .Values.admin.access | quote }}
   {{ if .Values.admin.users -}}
