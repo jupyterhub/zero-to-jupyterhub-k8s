@@ -91,6 +91,9 @@ auth:
   type: dummy
   whitelist:
     users:
+  admin:
+    access: true
+    users:
   dummy:
     password:
 
@@ -140,6 +143,3 @@ cull:
   timeout: 3600
   every: 600
 
-admin:
-  access: true
-  users:

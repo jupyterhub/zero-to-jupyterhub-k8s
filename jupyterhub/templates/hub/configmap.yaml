@@ -136,12 +136,10 @@ data:
   {{ else -}}
   hub.db_url: {{ .Values.hub.db.url | quote }}
   {{- end }}
-  admin.access: {{ .Values.admin.access | quote }}
-  {{ if .Values.admin.users -}}
+  auth.admin.access: {{ .Values.auth.admin.access | quote }}
+  {{ if .Values.auth.admin.users -}}
   admin.users: |
-    {{ range $user := .Values.admin.users -}}
-    - {{ $user }}
-    {{ end }}
+{{ .Values.auth.admin.users | indent 4 }}
   {{- end }}
   {{ range $key, $value := .Values.hub.extraConfigMap -}}
   custom.{{ $key }}: {{ toJson $value | quote }}
