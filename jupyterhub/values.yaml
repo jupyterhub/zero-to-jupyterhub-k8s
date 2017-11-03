@@ -98,6 +98,7 @@ singleuser:
   extraLabels: {}
   extraEnv: {}
   lifecycleHooks:
+  initContainers:  
   uid: 1000
   fsGid: 1000
   storage:
