@@ -58,6 +58,10 @@ data:
   {{- end }}
 
   hub.concurrent-spawn-limit: {{ .Values.hub.concurrentSpawnLimit | quote }}
+  {{ if .Values.hub.activeServerLimit }}
+  hub.active-server-limit: {{ .Values.hub.activeServerLimit | quote }}
+  {{- end }}
+
   {{ if .Values.hub.services -}}
   hub.services: |
     # include hub.services *except* api_tokens

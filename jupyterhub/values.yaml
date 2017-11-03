@@ -9,6 +9,7 @@ hub:
   uid: 1000
   fsGid: 1000
   concurrentSpawnLimit: 64
+  activeServerLimit:
   db:
     type: sqlite-pvc
     pvc:
