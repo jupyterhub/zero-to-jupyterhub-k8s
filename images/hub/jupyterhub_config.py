@@ -49,7 +49,7 @@ c.JupyterHub.concurrent_spawn_limit = get_config('hub.concurrent-spawn-limit')
 
 active_server_limit = get_config('hub.active-server-limit', None)
 
-if active_server_limit is None:
+if active_server_limit is not None:
     c.JupyterHub.active_server_limit = int(active_server_limit)
 
 c.JupyterHub.ip = os.environ['PROXY_PUBLIC_SERVICE_HOST']
