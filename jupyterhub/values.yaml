@@ -26,7 +26,7 @@ hub:
   extraEnv: {}
   image:
     name: jupyterhub/k8s-hub
-    tag: v0.4
+    tag: 0f87fa7
   resources:
     requests:
       cpu: 0.2
@@ -117,7 +117,7 @@ singleuser:
       storageClass:
   image:
     name: jupyterhub/k8s-singleuser-sample
-    tag: v0.4
+    tag: 3bf055a
   cpu:
     limit:
     guarantee:
