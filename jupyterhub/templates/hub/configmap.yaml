@@ -57,6 +57,10 @@ data:
   singleuser.lifecycle-hooks: {{ toJson .Values.singleuser.lifecycleHooks | quote }}
   {{- end }}
 
+  {{ if .Values.singleuser.initContainers -}}
+  singleuser.init-containers: {{ toJson .Values.singleuser.initContainers | quote }}
+  {{- end }}
+
   hub.concurrent-spawn-limit: {{ .Values.hub.concurrentSpawnLimit | quote }}
   {{ if .Values.hub.services -}}
   hub.services: |
