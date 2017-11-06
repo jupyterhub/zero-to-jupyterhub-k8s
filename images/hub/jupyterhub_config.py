@@ -209,12 +209,12 @@ c.KubeSpawner.environment = {
 c.KubeSpawner.environment.update(get_config('singleuser.extra-env', {}))
 
 # Enable admins to access user servers
-c.JupyterHub.admin_access = get_config('admin.access')
+c.JupyterHub.admin_access = get_config('auth.admin.access')
 
 
-c.Authenticator.admin_users = get_config('admin.users', [])
+c.Authenticator.admin_users = get_config('auth.admin.users', [])
 
-c.Authenticator.whitelist = get_config('hub.whitelist.users', [])
+c.Authenticator.whitelist = get_config('auth.whitelist.users', [])
 
 c.JupyterHub.services = []
 
