@@ -7,7 +7,7 @@ from ruamel.yaml import YAML
 yaml = YAML()
 yaml.indent(offset=2)
 
-JUPYTERHUB_VERSION = '0.8.0'
+JUPYTERHUB_VERSION = '0.8.1'
 
 def last_git_modified(path):
     return subprocess.check_output([

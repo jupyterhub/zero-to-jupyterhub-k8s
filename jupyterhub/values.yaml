@@ -26,7 +26,7 @@ hub:
   extraEnv: {}
   image:
     name: jupyterhub/k8s-hub
-    tag: 0f87fa7
+    tag: 35b2ab6
   resources:
     requests:
       cpu: 0.2
@@ -101,7 +101,7 @@ singleuser:
   extraLabels: {}
   extraEnv: {}
   lifecycleHooks:
-  initContainers:  
+  initContainers:
   uid: 1000
   fsGid: 1000
   storage:
