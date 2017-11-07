@@ -28,6 +28,8 @@ RUN adduser --disabled-password \
     --force-badname \
     ${NB_USER}
 
+USER ${NB_USER}
+
 ARG JUPYTERHUB_VERSION=0.8
 
 RUN pip3 install --no-cache-dir \
@@ -56,5 +58,4 @@ RUN chown ${NB_USER}:${NB_USER} /srv/jupyterhub
 # JupyterHub API port
 EXPOSE 8081
 
-USER ${NB_USER}
 CMD ["jupyterhub", "--config", "/srv/jupyterhub_config.py"]
