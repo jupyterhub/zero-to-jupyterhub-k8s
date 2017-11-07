@@ -6,3 +6,4 @@ FROM jupyter/base-notebook:281505737f8a
 # set via --build-arg in Makefile
 ARG JUPYTERHUB_VERSION=0.8
 RUN pip install --no-cache jupyterhub==$JUPYTERHUB_VERSION
+
