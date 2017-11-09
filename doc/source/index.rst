@@ -15,10 +15,12 @@ questions, feel free to reach out at the `issues page`_.
 
 .. _creating-your-jupyterhub:
 
-**Creating your JupyterHub**
+Creating your JupyterHub
+------------------------
 
 .. toctree::
    :maxdepth: 2
+   :caption: Creating your JupyterHub
 
    getting-started
    create-k8s-cluster
@@ -26,7 +28,10 @@ questions, feel free to reach out at the `issues page`_.
    setup-jupyterhub
    turn-off
 
-**Customization Guide**
+.. _customization-guide:
+
+Customization Guide
+-------------------
 
 JupyterHub can be configured and customized to fit a variety of deployment
 requirements. This guide helps outline how to customize and extend a
@@ -34,20 +39,24 @@ JupyterHub deployment.
 
 .. toctree::
    :maxdepth: 2
+   :caption: Customization Guide
 
    extending-jupyterhub
    user-experience
    reference
    tools
 
+.. _administrator-guide:
 
-**Administrator Guide**
+Administrator Guide
+-------------------
 
 This section provides information on managing and maintaining a staging or
 production deployment of JupyterHub.
 
 .. toctree::
    :maxdepth: 2
+   :caption: Administrator Guide
 
    resource-mgmt
    debug
@@ -57,16 +66,21 @@ production deployment of JupyterHub.
    security-considerations
    troubleshooting
 
-**Reference**
+.. _reference:
+
+Reference
+---------
 
 .. toctree::
    :maxdepth: 2
+   :caption: Reference
 
    glossary
    additional-resources
 
 
-**Institutional support**
+Institutional support
+---------------------
 
 This guide and the `associated helm chart <https://github.com/jupyterhub/helm-chart>`_
 would not be possible without the amazing institutional support from the following
