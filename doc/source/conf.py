@@ -54,6 +54,9 @@ source_suffix = ['.rst', '.md']
 # The master toctree document.
 master_doc = 'index'
 
+# Set the default role so we can use `foo` instead of ``foo``
+default_role = 'literal'
+
 # General information about the project.
 project = u'Zero to JupyterHub with Kubernetes'
 copyright = u'2017, Project Jupyter team'
@@ -101,11 +104,16 @@ html_logo = '_static/images/logo/logo.png'
 # documentation.
 #
 html_theme_options = {
-    'show_powered_by': False,
+    'show_related': True,
+    'description': 'A tutorial to help install and manage JupyterHub with Kubernetes',
     'github_user': 'jupyterhub',
     'github_repo': 'zero-to-jupyterhub-k8s',
     'github_banner': False,
-    'show_related': False
+    'show_powered_by': False,
+    'extra_nav_links': {
+        'GitHub Repo': 'http://github.com/jupyterhub/zero-to-jupyterhub-k8s',
+        'Issue Tracker': 'http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues',
+    },
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -114,7 +122,13 @@ html_theme_options = {
 html_static_path = ['_static']
 
 html_sidebars = {
-    'index': ['sidebarintro.html'],
+    '**': [
+        'about.html',
+        'navigation.html',
+        'relations.html',
+        'sourcelink.html',
+        'searchbox.html'
+    ],
 }
 
 
@@ -195,6 +209,8 @@ epub_copyright = copyright
 
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
+
+# -- JSON schema markdown file -----------------------------------
 
 # Generate the JSON schema markdown file for the reference docs.
 import yaml
