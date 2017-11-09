@@ -31,14 +31,14 @@ Interactive Cost Estimator
 
 We've put together a small notebook that can help you estimate your costs
 for a JupyterHub instance. The button below will take you to an interactive
-notebook served with `Binder <https://beta.mybinder.org>`_. Run the cells and
+notebook served with `Binder <https://mybinder.org>`_. Run the cells and
 you'll be able to choose the computational requirements you have, as well as
 draw a pattern of usage you expect over time. It will estimate the costs for
 you.
 
 .. raw:: html
 
-   <a target="_blank" href="http://beta.mybinder.org/v2/gh/jupyterhub/zero-to-jupyterhub-k8s/master?filepath=doc/ntbk/draw_function.ipynb">
+   <a target="_blank" href="http://mybinder.org/v2/gh/jupyterhub/zero-to-jupyterhub-k8s/master?filepath=doc/ntbk/draw_function.ipynb">
    <button style="background-color: rgb(235, 119, 55); border: 1px solid; border-color: black; color: white; padding: 15px 32px; text-align: center; text-decoration: none; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 8px;">Launch the Cost Estimator</button></a>
 
 .. note::
