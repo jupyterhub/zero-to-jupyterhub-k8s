@@ -27,7 +27,7 @@ hub:
   extraEnv: {}
   image:
     name: jupyterhub/k8s-hub
-    tag: 35b2ab6
+    tag: a27db6f
   resources:
     requests:
       cpu: 0.2
