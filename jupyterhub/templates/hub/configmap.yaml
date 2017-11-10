@@ -64,7 +64,7 @@ data:
   {{ if .Values.singleuser.initContainers -}}
   singleuser.init-containers: {{ toJson .Values.singleuser.initContainers | quote }}
   {{- end }}
-
+  singleuser.start-timeout: {{ .Values.singleuser.startTimeout | quote }}
   hub.concurrent-spawn-limit: {{ .Values.hub.concurrentSpawnLimit | quote }}
   {{ if .Values.hub.activeServerLimit }}
   hub.active-server-limit: {{ .Values.hub.activeServerLimit | quote }}

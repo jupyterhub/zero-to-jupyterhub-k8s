@@ -119,6 +119,7 @@ singleuser:
   image:
     name: jupyterhub/k8s-singleuser-sample
     tag: 3bf055a
+  startTimeout: 300
   cpu:
     limit:
     guarantee:

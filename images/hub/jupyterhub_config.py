@@ -60,8 +60,7 @@ c.JupyterHub.hub_ip = '0.0.0.0'
 
 c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
 
-# Sometimes disks take a while to attach, so let's keep a not-too-short timeout
-c.KubeSpawner.start_timeout = 5 * 60
+c.KubeSpawner.start_timeout = get_config('singleuser.start-timeout')
 
 # Use env var for this, since we want hub to restart when this changes
 c.KubeSpawner.singleuser_image_spec = os.environ['SINGLEUSER_IMAGE']
