@@ -71,6 +71,7 @@ c.KubeSpawner.singleuser_extra_labels = get_config('singleuser.extra-labels', {}
 c.KubeSpawner.singleuser_uid = get_config('singleuser.uid')
 c.KubeSpawner.singleuser_fs_gid = get_config('singleuser.fs-gid')
 
+c.KubeSpawner.singleuser_node_selector = get_config('singleuser.node-selector')
 # Configure dynamically provisioning pvc
 storage_type = get_config('singleuser.storage.type')
 if storage_type == 'dynamic':
