@@ -31,7 +31,7 @@ spec:
         persistentVolumeClaim:
           claimName: hub-db-dir
       {{- end }}
-      {{- if .Values.hub.rbac.enabled }}
+      {{- if .Values.rbac.enabled }}
       serviceAccountName: hub
       {{- end }}
       securityContext:

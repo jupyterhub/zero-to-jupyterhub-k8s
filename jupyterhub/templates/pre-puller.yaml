@@ -1,4 +1,5 @@
 {{ if .Values.prePuller.enabled -}}
+{{ if .Values.rbac.enabled -}}
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
@@ -66,6 +67,7 @@ metadata:
     "helm.sh/hook-delete-policy": hook-succeeded
   name: pre-puller-{{ .Release.Name }}-{{ .Release.Revision }}
 ---
+{{- end }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -77,7 +79,9 @@ spec:
   template:
     spec:
       restartPolicy: Never
+      {{- if .Values.rbac.enabled }}
       serviceAccountName: pre-puller-{{.Release.Name}}-{{.Release.Revision}}
+      {{- end }}
       containers:
         - image: {{ .Values.prePuller.image.name }}:{{ .Values.prePuller.image.tag }}
           args: [{{ .Values.singleuser.image.name | quote }}, {{ .Values.singleuser.image.tag | quote }}]

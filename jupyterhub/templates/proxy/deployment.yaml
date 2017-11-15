@@ -26,7 +26,7 @@ spec:
         app: kube-lego
         {{- end }}
     spec:
-      {{- if .Values.proxy.rbac.enabled }}
+      {{- if .Values.rbac.enabled }}
       serviceAccountName: proxy
       {{- end }}
       containers:
