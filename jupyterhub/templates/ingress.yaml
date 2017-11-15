@@ -14,11 +14,12 @@ metadata:
     {{- end }}
 spec:
   rules:
+    {{- $root := . -}}
     {{- range $host := .Values.ingress.hosts }}
     - host: {{ $host }}
       http:
         paths:
-          - path: /
+          - path: {{ $root.Values.hub.baseUrl }}
             backend:
               serviceName: proxy-public
               servicePort: 80
