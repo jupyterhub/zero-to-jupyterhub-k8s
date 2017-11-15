@@ -12,6 +12,7 @@ hub:
   activeServerLimit:
   db:
     type: sqlite-pvc
+    upgrade: false
     pvc:
       annotations: {}
       selector: {}

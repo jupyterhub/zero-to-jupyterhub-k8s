@@ -44,7 +44,7 @@ spec:
           - jupyterhub
           - --config
           - /srv/jupyterhub_config.py
-          {{ if eq .Values.hub.db.type "sqlite-pvc" }}
+          {{ if or (eq .Values.hub.db.type "sqlite-pvc") .Values.hub.db.upgrade }}
           # Automatic db upgrades for sqlite!
           - --upgrade-db
           {{- end }}
