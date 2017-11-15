@@ -12,19 +12,19 @@ JupyterHub 0.8, HTTPS & scalability.
 
 ### Upgrading from 0.4
 
-#### DB upgrade
+#### Database upgrade
 
-This release contains a big JupyterHub version bump (from 0.7.2 to 0.8). If
-you are using the default database provider (sqlite), then the required db upgrades
+This release contains a major JupyterHub version bump (from 0.7.2 to 0.8). If
+you are using the default database provider (SQLite), then the required db upgrades
 will be performed automatically when you do a `helm upgrade`.
 
-If you are using MySQL / PostgreSQL as your backing database, you will need to
-perform a manual database upgrade with the following steps:
+If you are using MySQL / PostgreSQL as your backing database, you must perform a
+manual database upgrade before the helm upgrade.
 
 1. Make a full backup of your database, just in case things go bad.
 2. Make sure that the database user used by JupyterHub to connect to your database
    can perform schema migrations like adding new tables, altering tables, etc.
-3. In your config.yaml, add the following config:
+3. In your `config.yaml`, add the following config:
 
    ```yaml
    hub:
@@ -32,17 +32,17 @@ perform a manual database upgrade with the following steps:
        upgrade: true
    ```
 4. Do a `helm upgrade`. This should perform the database upgrade needed.
-5. Remove the lines you added in step 3, and do another `helm upgrade`.
+5. Remove the lines added in step 3, and do another `helm upgrade`.
 
 It is highly recommended that you have a `staging` environment that matches
 your production environment & can be used as a testbed for this upgrade. Feel
-free to reach out to us on [gitter](https://gitter.im/jupyterhub/binder) before
+free to reach out to us on [gitter](https://gitter.im/jupyterhub/jupyterhub) before
 your upgrade if you have any questions!
 
 #### Ingress config incompatibilities
 
 We've made HTTPS much easier to set up, with automated certificates from
-[Let's Encrypt](https://letsencrypt.org/) integration. However, this means
+[Let's Encrypt](https://letsencrypt.org/). However, this means
 that some of the keys used to set up your own ingress has changed.
 
 If you were using config under `ingress` purely to get HTTPS, we recommend
@@ -52,7 +52,7 @@ less error prone than the method recommended on 0.4.
 
 If you were using config under `ingress` for other reasons, you may continue
 to do so. The keys under `ingress` have changed, and are now much more in line
-with how many other projects use `ingress` in the [official charts repo](http://github.com/kubernetes/charts/).
+with how many other projects use `ingress` in the [official charts repo](https://github.com/kubernetes/charts/).
 
 #### Custom images
 
@@ -60,6 +60,13 @@ If you are using a custom built image, make sure that the version of the
 JupyterHub package installed in it is now 0.8. It needs to be version 0.7.2 for
 it to work with v0.4 of the helm chart, and needs to be 0.8 for it to work with
 v0.5 of the helm chart.
+
+For example, if you are using pip to install JupyterHub in your custom Docker Image,
+you would use:
+
+```bash
+pip install --no-cache-dir jupyterhub==0.8.*
+```
 
 #### Admin config incompatibility
 
@@ -90,7 +97,7 @@ auth:
 JupyterHub 0.8 is full of new features - see [CHANGELOG](https://github.com/jupyterhub/jupyterhub/blob/master/docs/source/changelog.md#080-2017-10-03)
 for more details. Specific features made to benefit this chart are:
 
-1. No more 'too many redirects' errors at scale!
+1. No more 'too many redirects' errors at scale.
 2. Lots of performance improvements, we now know we can handle up to 4k active users
 3. Concurrent spawn limits (set via `hub.concurrentSpawnLimit`) can be used to limit the concurrent
    number of users who can try to launch on the hub at any given time. This can be
@@ -127,7 +134,7 @@ You can also set up a whitelist of users by adding to the list in `auth.whitelis
 [RBAC](https://kubernetes.io/docs/admin/authorization/rbac/) is the user security model
 in Kubernetes that gives applications only as much access they need to the kubernetes
 API and not more. Prior to this, applications were all running with the equivalent
-of root on your Kubernetes cluster! This release adds appropriate roles for the
+of root on your Kubernetes cluster. This release adds appropriate roles for the
 various components of JupyterHub, for much better ability to secure clusters.
 
 #### Easier customization of `jupyterhub_config.py`
