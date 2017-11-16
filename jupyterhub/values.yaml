@@ -36,7 +36,7 @@ hub:
   imagePullPolicy: IfNotPresent
 
 proxy:
-  secretToken: generate with openssl rand -hex 64
+  secretToken: ''
   rbac:
     enabled: false
   service:
