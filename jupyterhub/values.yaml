@@ -3,8 +3,6 @@ hub:
     type: ClusterIP
   baseUrl: /
   cookieSecret:
-  rbac:
-    enabled: false
   publicURL:
   uid: 1000
   fsGid: 1000
@@ -35,10 +33,11 @@ hub:
   services: {}
   imagePullPolicy: IfNotPresent
 
+rbac:
+  enabled: false
+
 proxy:
   secretToken: ''
-  rbac:
-    enabled: false
   service:
     type: LoadBalancer
     labels: {}
