@@ -6,6 +6,7 @@ hub:
   publicURL:
   uid: 1000
   fsGid: 1000
+  nodeSelector: {}
   concurrentSpawnLimit: 64
   activeServerLimit:
   db:
@@ -76,6 +77,7 @@ proxy:
       tag: master-2368
     resources: {}
   labels:
+  nodeSelector: {}
   https:
     enabled: true
     type: letsencrypt
@@ -103,6 +105,7 @@ singleuser:
   extraEnv: {}
   lifecycleHooks:
   initContainers:
+  nodeSelector: {}
   uid: 1000
   fsGid: 1000
   storage:

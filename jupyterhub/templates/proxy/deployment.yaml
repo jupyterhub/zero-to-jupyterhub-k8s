@@ -29,6 +29,7 @@ spec:
       {{- if .Values.rbac.enabled }}
       serviceAccountName: proxy
       {{- end }}
+      nodeSelector: {{ toJson .Values.proxy.nodeSelector }}
       containers:
         - name: nginx
           image: "{{ .Values.proxy.nginx.image.name }}:{{ .Values.proxy.nginx.image.tag }}"
