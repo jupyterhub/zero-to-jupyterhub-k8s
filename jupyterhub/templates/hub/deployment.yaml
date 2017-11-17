@@ -44,9 +44,22 @@ spec:
           - jupyterhub
           - --config
           - /srv/jupyterhub_config.py
-          {{ if eq .Values.hub.db.type "sqlite-pvc" }}
-          # Automatic db upgrades for sqlite!
+          # We want to do automatic upgrades for sqlite-pvc by default, but allow users
+          # to opt out of that if they want. Users using their own db need to 'opt in'
+          # Go Templates treat nil and "" and false as 'false', making this code complex.
+          # We can probably make this a one-liner, but doing combinations of boolean vars
+          # in go templates is very inelegant & hard to reason about.
+          {{- $upgradeType := typeOf .Values.hub.db.upgrade }}
+          {{- if eq $upgradeType "bool" }}
+          # .Values.hub.db.upgrade has been explicitly set to true or false
+          {{- if .Values.hub.db.upgrade }}
           - --upgrade-db
+          {{- end }}
+          {{- else if eq $upgradeType "<nil>" }}
+          # .Values.hub.db.upgrade is nil
+          {{- if eq .Values.hub.db.type "sqlite-pvc" }}
+          - --upgrade-db
+          {{- end }}
           {{- end }}
         volumeMounts:
           - mountPath: /etc/jupyterhub/config/
