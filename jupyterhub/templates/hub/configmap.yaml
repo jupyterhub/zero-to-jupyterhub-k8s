@@ -79,8 +79,8 @@ data:
       {{ if ne $key "apiToken" -}}
       {{$key}}: {{ $value }}
       {{- end }}
-      {{- end }}
-    {{- end }}
+      {{ end }}
+    {{ end }}
   {{- end }}
   {{ if .Values.hub.extraConfig -}}
   hub.extra-config.py: |
