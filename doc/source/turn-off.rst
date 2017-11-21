@@ -37,7 +37,7 @@ before doing the cloud provider specific setup.
       kubectl delete namespace <your-namespace>
 
 Google Cloud Platform
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 1. Perform the steps above for all cloud providers. These cloud provider agnostic steps will
    delete the helm chart and delete the hub's namespace. This must be done before proceeding.
@@ -71,7 +71,7 @@ Google Cloud Platform
    related to your JupyterHub cluster after you have deleted the cluster.
 
 Amazon Web Services (AWS)
-~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------
 
 1. Perform the steps above for all cloud providers. These cloud provider agnostic steps will
    delete the helm chart and delete the hub's namespace. This must be done before proceeding.
