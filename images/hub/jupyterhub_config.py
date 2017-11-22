@@ -167,6 +167,12 @@ elif auth_type == 'mediawiki':
     c.MWOAuthenticator.client_id = get_config('auth.mediawiki.client-id')
     c.MWOAuthenticator.client_secret = get_config('auth.mediawiki.client-secret')
     c.MWOAuthenticator.index_url = get_config('auth.mediawiki.index-url')
+elif auth_type == 'globus':
+    c.JupyterHub.authenticator_class = 'oauthenticator.globus.GlobusOAuthenticator'
+    c.GlobusOAuthenticator.oauth_callback_url = get_config('auth.globus.callback-url')
+    c.GlobusOAuthenticator.client_id = get_config('auth.globus.client-id')
+    c.GlobusOAuthenticator.client_secret = get_config('auth.globus.client-secret')
+    c.GlobusOAuthenticator.identity_provider = get_config('auth.globus.identity-provider', '')
 elif auth_type == 'hmac':
     c.JupyterHub.authenticator_class = 'hmacauthenticator.HMACAuthenticator'
     c.HMACAuthenticator.secret_key = bytes.fromhex(get_config('auth.hmac.secret-key'))

@@ -41,6 +41,12 @@ data:
   auth.mediawiki.client-secret: {{.Values.auth.mediawiki.clientSecret | quote}}
   auth.mediawiki.index-url: {{.Values.auth.mediawiki.indexUrl | quote}}
   {{- end }}
+  {{ if eq .Values.auth.type "globus" -}}
+  auth.globus.client-id: {{.Values.auth.globus.clientId | quote}}
+  auth.globus.client-secret: {{.Values.auth.globus.clientSecret | quote}}
+  auth.globus.callback-url: {{.Values.auth.globus.callbackUrl | quote}}
+  auth.globus.identity-provider: {{.Values.auth.globus.identityProvider | quote}}
+  {{- end }}
 
   {{ if .Values.auth.whitelist.users -}}
   auth.whitelist.users: |
