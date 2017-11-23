@@ -95,7 +95,7 @@ data:
 
   singleuser.uid: {{ .Values.singleuser.uid | quote }}
   singleuser.fs-gid: {{ .Values.singleuser.fsGid | quote }}
-  singleuser.node-selector: {{ toJson .Values.singleuser.nodeSelector }}
+  singleuser.node-selector: {{ toJson .Values.singleuser.nodeSelector | quote }}
 
   singleuser.storage.type: {{ .Values.singleuser.storage.type | quote }}
   singleuser.storage.home_mount_path: {{ .Values.singleuser.storage.homeMountPath | quote }}
