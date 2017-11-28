@@ -85,6 +85,20 @@ For more information see the full example of Google OAuth2 in the next section.
           clientSecret: "an0ther1ongs3cretstr1ng"
           callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
 
+**Globus**
+
+Note: Non-local apps must be HTTPS. Start a Globus app `here <https://developers.globus.org/>`_!
+
+.. code-block:: yaml
+
+      auth:
+        type: globus
+        globus:
+          clientId: "y0urc1logonc1ient1d"
+          clientSecret: "an0ther1ongs3cretstr1ng"
+          callbackUrl: "https://<your_jupyterhub_host>/hub/oauth_callback"
+          identityProvider: "youruniversity.edu"
+
 
 To add a whitelist of usernames add to the config file under `hub`:
 
