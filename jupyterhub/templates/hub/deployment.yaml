@@ -39,6 +39,9 @@ spec:
         runAsUser: {{ .Values.hub.uid }}
         fsGroup: {{ .Values.hub.fsGid }}
       containers:
+      {{- if .Values.hub.extraContainers }}
+{{ toYaml .Values.hub.extraContainers | indent 6 }}
+      {{ end }}
       - name: hub-container
         image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
         command:
