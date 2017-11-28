@@ -52,10 +52,17 @@ spec:
       port: 80
       protocol: TCP
       targetPort: 80
+      # allow proxy.service.nodePort for http
+      {{ if .Values.proxy.service.nodePorts.http -}}
+      nodePort: {{ .Values.proxy.service.nodePorts.http }}
+      {{- end }}
     - name: https
       port: 443
       protocol: TCP
       targetPort: 443
+      {{ if .Values.proxy.service.nodePorts.https -}}
+      nodePort: {{ .Values.proxy.service.nodePorts.https }}
+      {{- end }}
   selector:
     name: proxy
     component: proxy

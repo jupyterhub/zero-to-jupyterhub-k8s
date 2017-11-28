@@ -45,7 +45,9 @@ proxy:
     type: LoadBalancer
     labels: {}
     annotations: {}
-    nodePort:
+    nodePorts:
+      http:
+      https:
   chp:
     image:
       name: jupyterhub/configurable-http-proxy
