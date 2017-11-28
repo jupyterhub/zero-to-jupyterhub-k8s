@@ -25,6 +25,7 @@ hub:
   extraConfig: ''
   extraConfigMap: {}
   extraEnv: {}
+  extraContainers: []
   image:
     name: jupyterhub/k8s-hub
     tag: a27db6f
