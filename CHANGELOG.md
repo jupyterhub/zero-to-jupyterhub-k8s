@@ -7,7 +7,7 @@
 Releases are now named after famous [Cricket](https://en.wikipedia.org/wiki/Cricket) players.
 
 ## [0.5] - [TBD] - 2017-11-??
-
+/
 JupyterHub 0.8, HTTPS & scalability.
 
 ### Upgrading from 0.4
@@ -119,13 +119,13 @@ instructions <here> and they are much simpler!
 
 You can also now use your own HTTPS certificates & keys rather than using Let's Encrypt.
 
-#### Better Authentication Support
+#### More authenticators supported
 
 The following new authentication providers have been added:
 
 1. GitLab
 2. CILogon
-3. ??? (Globus, but not here yet)
+3. Globus
 
 You can also set up a whitelist of users by adding to the list in `auth.whitelist.users`.
 
