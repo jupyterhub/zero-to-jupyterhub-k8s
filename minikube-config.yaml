@@ -16,4 +16,7 @@ singleuser:
     guarantee: null
 
 prePuller:
-  enabled: False
+  enabled: false
+
+rbac:
+  enabled: false
