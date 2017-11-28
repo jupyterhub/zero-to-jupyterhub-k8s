@@ -87,7 +87,12 @@ For more information see the full example of Google OAuth2 in the next section.
 
 **Globus**
 
-Note: Non-local apps must be HTTPS. Start a Globus app `here <https://developers.globus.org/>`_!
+Globus Auth is a foundational identity and access management platform service
+designed to address unique needs of the science and engineering community.
+Globus provides cloud-based services for reliably moving, sharing, publishing
+and discovering data, whether your files live on a supercomputer, lab cluster,
+tape archive, public cloud, or your own laptop. Start a Globus app
+`here <https://developers.globus.org/>`_!
 
 .. code-block:: yaml
 
