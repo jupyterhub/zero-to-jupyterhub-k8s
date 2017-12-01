@@ -41,20 +41,20 @@ your upgrade if you have any questions!
 
 #### Ingress config incompatibilities
 
-We've made HTTPS much easier to set up, with automated certificates from
+We've made HTTPS [much easier to set up](http://zero-to-jupyterhub.readthedocs.io/en/latest/extending-jupyterhub.html#setting-up-https), with automated certificates from
 [Let's Encrypt](https://letsencrypt.org/). However, this means
 that some of the keys used to set up your own ingress has changed.
 
 If you were using config under `ingress` purely to get HTTPS, we recommend
 that you delete your entire config section under `ingress` & instead follow
-the new [docs](<- link -> ) on getting HTTPS set up. It's much easier & a lot
-less error prone than the method recommended on 0.4.
+the new [docs](http://zero-to-jupyterhub.readthedocs.io/en/latest/extending-jupyterhub.html#setting-up-https)
+on getting HTTPS set up. It's much easier & a lot less error prone than the method recommended on 0.4.
 
 If you were using config under `ingress` for other reasons, you may continue
 to do so. The keys under `ingress` have changed, and are now much more in line
 with how many other projects use `ingress` in the [official charts repo](https://github.com/kubernetes/charts/).
 
-#### Custom images
+#### Custom Docker Images: JupyterHub version match
 
 If you are using a custom built image, make sure that the version of the
 JupyterHub package installed in it is now 0.8. It needs to be version 0.7.2 for
@@ -64,8 +64,8 @@ v0.5 of the helm chart.
 For example, if you are using pip to install JupyterHub in your custom Docker Image,
 you would use:
 
-```bash
-pip install --no-cache-dir jupyterhub==0.8.*
+```Dockerfile
+RUN pip install --no-cache-dir jupyterhub==0.8.*
 ```
 
 #### Admin config incompatibility
@@ -115,7 +115,8 @@ And lots more!
 
 It is our responsibility as software authors to make it very easy for admins to set up
 HTTPS for their users. v0.5 makes this much easier than v0.4. You can find the new
-instructions <here> and they are much simpler!
+instructions [here](http://zero-to-jupyterhub.readthedocs.io/en/latest/extending-jupyterhub.html#setting-up-https) and
+they are much simpler!
 
 You can also now use your own HTTPS certificates & keys rather than using Let's Encrypt.
 
