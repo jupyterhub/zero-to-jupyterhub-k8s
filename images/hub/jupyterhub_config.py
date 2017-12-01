@@ -40,6 +40,9 @@ c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 c.ConfigurableHTTPProxy.api_url = 'http://{}:{}'.format(os.environ['PROXY_API_SERVICE_HOST'], int(os.environ['PROXY_API_SERVICE_PORT']))
 c.ConfigurableHTTPProxy.should_start = False
 
+# Do not shut down user pods when hub is restarted
+c.JupyterHub.cleanup_servers = False
+
 # Check that the proxy has routes appropriately setup
 # This isn't the best named setting :D
 c.JupyterHub.last_activity_interval = 60
@@ -121,7 +124,7 @@ if lifecycle_hooks:
 
 init_containers = get_config('singleuser.init-containers')
 if init_containers:
-    c.KubeSpawner.singleuser_init_containers = init_containers    
+    c.KubeSpawner.singleuser_init_containers = init_containers
 
 # Gives spawned containers access to the API of the hub
 c.KubeSpawner.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
