@@ -63,7 +63,7 @@ production deployment of JupyterHub.
    cost
    backups
    upgrading
-   security-considerations
+   security
    troubleshooting
    advanced
 
