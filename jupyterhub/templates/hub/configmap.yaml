@@ -50,7 +50,7 @@ data:
 
   {{ if .Values.auth.whitelist.users -}}
   auth.whitelist.users: |
-{{ .Values.auth.whitelist.users | indent 4}}
+{{ toYaml .Values.auth.whitelist.users | indent 4}}
   {{- end }}
   {{ if eq .Values.auth.type "dummy" -}}
   {{ if .Values.auth.dummy.password -}}
