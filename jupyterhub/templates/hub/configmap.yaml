@@ -154,7 +154,7 @@ data:
   auth.admin.access: {{ .Values.auth.admin.access | quote }}
   {{ if .Values.auth.admin.users -}}
   auth.admin.users: |
-{{ .Values.auth.admin.users | indent 4 }}
+{{ toYaml .Values.auth.admin.users | indent 4 }}
   {{- end }}
   {{ range $key, $value := .Values.hub.extraConfigMap -}}
   custom.{{ $key }}: {{ toJson $value | quote }}
