@@ -130,7 +130,7 @@ The following new authentication providers have been added:
 
 You can also set up a whitelist of users by adding to the list in `auth.whitelist.users`.
 
-#### Role based access control
+#### [Role based access control](http://zero-to-jupyterhub.readthedocs.io/en/latest/security.html#role-based-access-control-rbac)
 
 [RBAC](https://kubernetes.io/docs/admin/authorization/rbac/) is the user security model
 in Kubernetes that gives applications only as much access they need to the kubernetes
