@@ -65,6 +65,7 @@ production deployment of JupyterHub.
    upgrading
    security-considerations
    troubleshooting
+   advanced
 
 .. _reference:
 
