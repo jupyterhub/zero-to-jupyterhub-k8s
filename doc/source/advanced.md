@@ -46,11 +46,12 @@ the nginx ingress controller & google cloud's ingress controller.
 1. Make sure that DNS is properly set up (varies wildly depending on the ingress
    controller you are using and how your cluster was set up). Accessing
    `<hostname>` from a browser should route traffic to the hub.
-1. Install & configure kube-lego using the
+2. Install & configure kube-lego using the
    [kube-lego helm-chart](https://github.com/kubernetes/charts/tree/master/stable/kube-lego).
    Remember to change `config.LEGO_EMAIL` and `config.LEGO_URL` at the least.
-2. Add an annotation + TLS config to the ingress so kube-lego knows to get certificates for
+3. Add an annotation + TLS config to the ingress so kube-lego knows to get certificates for
    it:
+
    ```yaml
    ingress:
      annotations:
