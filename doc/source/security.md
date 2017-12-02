@@ -17,3 +17,5 @@ snippet in your config.yaml:
 rbac:
    enabled: false
 ```
+
+We highly recommend against doing so, however!
