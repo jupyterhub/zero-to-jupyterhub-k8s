@@ -6,8 +6,8 @@
 
 Releases are now named after famous [Cricket](https://en.wikipedia.org/wiki/Cricket) players.
 
-## [0.5] - [TBD] - 2017-11-??
-/
+## [0.5] - [Hamid Hassan](http://www.espncricinfo.com/afghanistan/content/player/311427.html) - 2017-11-??
+
 JupyterHub 0.8, HTTPS & scalability.
 
 ### Upgrading from 0.4
@@ -160,6 +160,19 @@ that the user is spawned in. You can change the uid / gid of the user with `sing
 and `singleuser.fsGid`, mount extra volumes with `singleuser.storage.extraVolumes` &
 `singleuser.storage.extraVolumeMounts` and provide extra environment variables with
 `singleuser.extraEnv`.
+
+### Hamid Hassan
+
+Hamid Hassan is a fast bowler who currently plays for the Afghanistan National
+Cricket Team. With nicknames ranging from
+["Afghanistan's David Beckham"](https://www.rferl.org/a/interview-afghan-cricketer-living-the-dream/24752618.html) to
+["Rambo"](http://www.nzherald.co.nz/nz/news/article.cfm?c_id=1&objectid=11413633),
+he is considered by many to be Afghanistan's first Cricket Superhero. Currently
+known for fast (145km/h+) deliveries, cartwheeling celebrations, war painted
+face and having had to flee Afghanistan as a child to escape from war. He [says](http://www.nzherald.co.nz/nz/news/article.cfm?c_id=1&objectid=11413633)
+he plays because "We are ambassadors for our country and we want to show the
+world that Afghanistan is not like people recognise it by terrorists and these
+things. We want them to know that we have a lot of talent as well"
 
 ## [0.4] - [Akram](#akram) - 2017-06-23
 
