@@ -91,6 +91,19 @@ Code. Some examples of things you can do:
 3. Set traitlets for JupyterHub / Spawner / Authenticator that are not currently
    supported in the helm chart
 
+Unfortunately, you have to write your python *in* your YAML file. There's no way
+to include a file in `config.yaml`. Remember to use a `|` for multi-line strings
+in YAML:
+
+```yaml
+hub:
+  extraConfig: |
+    import time
+    c.Spawner.environment += {
+       "CURRENT_TIME": str(time.time())
+    }
+```
+
 ### `hub.extraConfigMap`
 
 This property takes a dictionary of values that are then made available for code
