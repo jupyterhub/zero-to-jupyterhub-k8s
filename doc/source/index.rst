@@ -43,6 +43,7 @@ JupyterHub deployment.
 
    extending-jupyterhub
    user-experience
+   user-management
    reference
    tools
 
