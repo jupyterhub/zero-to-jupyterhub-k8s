@@ -1,4 +1,3 @@
-<!--
 Welcome to Zero to JupyterHub!
 
 Before filing an issue, please search through the issues to see
@@ -15,8 +14,8 @@ you think it would be helpful, include a
 scrubbed version of your `config.yaml` file. We've put
 a place below where you can paste this in.
 
-*** WARNING ***
-Make sure you remove all sensitive information that's
+**WARNING**
+Make sure you **remove all sensitive information** that's
 in your `config.yaml` file, as GitHub is a public space.
 
 Please remove at *least* the following fields:
@@ -27,10 +26,12 @@ Please remove at *least* the following fields:
 
 If you post any sensitive information we reserve the
 right to edit your comment in order to remove it.
--->
 
 ## Contents of `config.yaml`
+
 ```
-CONTENTS HERE.
+```
+PUT CONTENTS HERE.
 DON'T FORGET TO REMOVE SENSITIVE INFO!
+```
 ```
