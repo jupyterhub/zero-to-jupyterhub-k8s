@@ -103,6 +103,9 @@ auth:
     users:
   dummy:
     password:
+  state:
+    enabled: false
+    cryptoKey:
 
 singleuser:
   extraLabels: {}
