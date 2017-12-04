@@ -44,7 +44,7 @@ RUN pip3 install --no-cache-dir \
          oauthenticator==0.7.2 \
          cryptography==2.0.3
 
-RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@06a2e09
+RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@v0.7.1
 
 ADD jupyterhub_config.py /srv/jupyterhub_config.py
 ADD cull_idle_servers.py /usr/local/bin/cull_idle_servers.py
