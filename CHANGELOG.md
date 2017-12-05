@@ -12,6 +12,15 @@ JupyterHub 0.8, HTTPS & scalability.
 
 ### Upgrading from 0.4
 
+Upgrading from v0.4 of the chart to v0.5 is possible and not too difficult. We
+still recommend a full fresh installation if you can, but recognize it is not
+possible all the time. We've provided and tested the following upgrade instructions.
+If you are planning an upgrade of a critical major installation, we recommend you
+test it out on a staging cluster first before applying it to production. Feel
+free to reach out to us on [gitter](http://gitter.im/jupyterhub/jupyterhub) or
+the [mailing list](https://groups.google.com/forum/#!forum/jupyter) for upgrade
+help!
+
 #### Database upgrade
 
 This release contains a major JupyterHub version bump (from 0.7.2 to 0.8). If
@@ -114,6 +123,19 @@ auth:
     users:
         - yuvipanda
 ```
+
+#### Upgrade command
+
+After modifying your config.yaml file to match, you can run the actual upgrade with
+the following helm command:
+
+```
+helm upgrade <YOUR-RELEASE-NAME> jupyterhub/jupyterhub --version=v0.5 -f config.yaml
+```
+
+This should perform the upgrade! If you have forgotten your release name, you can find
+out with `helm list`. Make sure to test the upgrade on a staging environment
+before doing the upgrade!
 
 ### New Features
 
