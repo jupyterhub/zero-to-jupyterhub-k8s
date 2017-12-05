@@ -6,7 +6,7 @@
 
 Releases are now named after famous [Cricket](https://en.wikipedia.org/wiki/Cricket) players.
 
-## [0.5] - [Hamid Hassan](http://www.espncricinfo.com/afghanistan/content/player/311427.html) - 2017-11-??
+## [0.5] - [Hamid Hassan](http://www.espncricinfo.com/afghanistan/content/player/311427.html) - 2017-12-05
 
 JupyterHub 0.8, HTTPS & scalability.
 
