@@ -1,5 +1,8 @@
 #!/bin/bash
 set -ex
+
+mkdir -p bin
+
 # install nsenter if missing (needed by kube on trusty)
 if ! which nsenter; then
   curl -L https://github.com/minrk/git-crypt-bin/releases/download/trusty/nsenter > nsenter
@@ -21,7 +24,7 @@ chmod +x minikube
 mv minikube bin/
 
 echo "starting minikube"
-sudo $PWD/bin/minikube start --vm-driver=none --kubernetes-version=v${KUBE_VERSION}
+sudo CHANGE_MINIKUBE_NONE_USER=true $PWD/bin/minikube start --vm-driver=none --kubernetes-version=v${KUBE_VERSION}
 minikube update-context
 
 echo "waiting for kubernetes"
@@ -29,6 +32,7 @@ JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.ty
 until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do
   sleep 1
 done
+kubectl get nodes
 
 echo "installing helm"
 curl -ssL https://storage.googleapis.com/kubernetes-helm/helm-v2.7.2-linux-amd64.tar.gz \
