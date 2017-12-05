@@ -212,6 +212,60 @@ he plays because "We are ambassadors for our country and we want to show the
 world that Afghanistan is not like people recognise it by terrorists and these
 things. We want them to know that we have a lot of talent as well"
 
+### Contributors
+
+This release wouldn't have been possible without the wonderful contributors
+to the [zero-to-jupyterhub](https://github.com/jupyterhub/zero-to-jupyterhub-k8s),
+[JupyterHub](https://github.com/jupyterhub/jupyterhub) and [KubeSpawner](https://github.com/jupyterhub/kubespawner)
+repos. We'd like to thank everyone who contributed in any form - Issues, commenting
+on issues, PRs and reviews.
+
+In alphabetical order,
+
+[Aaron Culich](https://github.com/aculich)
+[Aaron Watters](https://github.com/AaronWatters)
+[Aleksandr Blekh](https://github.com/ablekh)
+[Analect](https://github.com/Analect)
+[Andrea Zonca](https://github.com/zonca)
+[Andreas Mueller](https://github.com/amueller)
+[Andrew Odewahn](https://github.com/odewahn)
+[András Tóth](https://github.com/tothandras)
+[Apachipa](https://github.com/apachipa)
+[Ariel Rokem](https://github.com/arokem)
+[BrianVanEtten](https://github.com/BrianVanEtten)
+[Camilo Núñez Fernández](https://github.com/camilo-nunez)
+[Carol Willing](https://github.com/willingc)
+[Chris Holdgraf](https://github.com/choldgraf)
+[Christian Moscardi](https://github.com/cmoscardi)
+[Christopher Hench](https://github.com/henchc)
+[Danroliver](https://github.com/danroliver)
+[Erik Sundell](https://github.com/consideRatio)
+[Forrest Collman](https://github.com/fcollman)
+[Fred Mitchell](https://github.com/fm75)
+[J Forde](https://github.com/jzf2101)
+[Jacob Tomlinson](https://github.com/jacobtomlinson)
+[Lorena A. Barba](https://github.com/labarba)
+[Lukasz Tracewski](https://github.com/tracek)
+[Mahesh Vangala](https://github.com/vangalamaheshh)
+[Majining](https://github.com/spmcginnis)
+[MarkusTeufelberger](https://github.com/MarkusTeufelberger)
+[Matthias Bussonnier](https://github.com/Carreau)
+[Michael Li](https://github.com/tianhuil)
+[Min RK](https://github.com/minrk)
+[Olivier Cloarec](https://github.com/ocloarec)
+[Pedro Henriques dos Santos Teixeira](https://github.com/pedroteixeira)
+[Prof-schacht](https://github.com/prof-schacht)
+[Ruben Orduz](https://github.com/rdodev)
+[Ryan Lovett](https://github.com/ryanlovett)
+[Ryan Wang](https://github.com/rwangr)
+[Saul Shanabrook](https://github.com/saulshanabrook)
+[Simon Li](https://github.com/manics)
+[Tim Head](https://github.com/betatim)
+[Tony ](https://github.com/Montereytony)
+[Travis Sturzl](https://github.com/tsturzl)
+[Yan Zhao](https://github.com/yan130)
+[Yuvi Panda](https://github.com/yuvipanda)
+
 ## [0.4] - [Akram](#akram) - 2017-06-23
 
 Stability, HTTPS & breaking changes.
