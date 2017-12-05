@@ -11,7 +11,7 @@ hub:
   activeServerLimit:
   db:
     type: sqlite-pvc
-    upgrade: null
+    upgrade:
     pvc:
       annotations: {}
       selector: {}
@@ -28,7 +28,7 @@ hub:
   extraContainers: []
   image:
     name: jupyterhub/k8s-hub
-    tag: a27db6f
+    tag: v0.5.0
   resources:
     requests:
       cpu: 0.2
@@ -124,7 +124,7 @@ singleuser:
       storageClass:
   image:
     name: jupyterhub/k8s-singleuser-sample
-    tag: 3bf055a
+    tag: v0.5.0
   startTimeout: 300
   cpu:
     limit:
