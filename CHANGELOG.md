@@ -27,8 +27,10 @@ This release contains a major JupyterHub version bump (from 0.7.2 to 0.8). If
 you are using the default database provider (SQLite), then the required db upgrades
 will be performed automatically when you do a `helm upgrade`.
 
-If you are using MySQL / PostgreSQL as your backing database, you must perform a
-manual database upgrade before the helm upgrade.
+**Default (SQLite)**: The database upgrade will be performed automatically when you
+[perform the upgrade](#upgrade-command)
+
+**MySQL / PostgreSQL**: You will execute the following steps, which includes a manual update of your database:
 
 1. Make a full backup of your database, just in case things go bad.
 2. Make sure that the database user used by JupyterHub to connect to your database
@@ -40,13 +42,9 @@ manual database upgrade before the helm upgrade.
      db:
        upgrade: true
    ```
-4. Do a `helm upgrade`. This should perform the database upgrade needed.
-5. Remove the lines added in step 3, and do another `helm upgrade`.
+4. Do a [`helm upgrade`](#upgrade-command). This should perform the database upgrade needed.
+5. Remove the lines added in step 3, and do another [`helm upgrade`](#upgrade-command).
 
-It is highly recommended that you have a `staging` environment that matches
-your production environment & can be used as a testbed for this upgrade. Feel
-free to reach out to us on [gitter](https://gitter.im/jupyterhub/jupyterhub) before
-your upgrade if you have any questions!
 
 #### [Role based access control](http://zero-to-jupyterhub.readthedocs.io/en/latest/security.html#role-based-access-control-rbac)
 
