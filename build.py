@@ -34,14 +34,15 @@ def image_touched(image, commit_range):
         'git', 'diff', '--name-only', commit_range, os.path.join('images', image)
     ]).decode('utf-8').strip() != ''
 
-def build_images(prefix, images, commit_range=None, push=False):
+def build_images(prefix, images, tag=None, commit_range=None, push=False):
     for image in images:
         if commit_range:
             if not image_touched(image, commit_range):
                 print("Skipping {}, not touched in {}".format(image, commit_range))
                 continue
         image_path = os.path.join('images', image)
-        tag = last_modified_commit(image_path)
+        if tag is None:
+            tag = last_modified_commit(image_path)
         image_spec = '{}{}:{}'.format(prefix, image, tag)
 
         subprocess.check_call([
@@ -53,32 +54,40 @@ def build_images(prefix, images, commit_range=None, push=False):
                 'docker', 'push', image_spec
             ])
 
-def build_values(prefix):
+def build_values(prefix, hub_tag=None, singleuser_tag=None):
     rt_yaml = YAML()
     rt_yaml.indent(offset=2)
 
     with open('jupyterhub/values.yaml') as f:
         values = rt_yaml.load(f)
 
+    if hub_tag is None:
+        hub_tag = last_modified_commit('images/hub')
+
+    if singleuser_tag is None:
+        singleuser_tag = last_modified_commit('images/singleuser-sample')
+
     values['hub']['image']['name'] = prefix + 'hub'
-    values['hub']['image']['tag'] = last_modified_commit('images/hub')
+    values['hub']['image']['tag'] = hub_tag
 
     values['singleuser']['image']['name'] = prefix + 'singleuser-sample'
-    values['singleuser']['image']['tag'] = last_modified_commit('images/singleuser-sample')
+    values['singleuser']['image']['tag'] = singleuser_tag
 
     with open('jupyterhub/values.yaml', 'w') as f:
         rt_yaml.dump(values, f)
 
 
-def build_chart():
+def build_chart(version=None):
     rt_yaml = YAML()
     rt_yaml.indent(offset=2)
 
-    version = last_modified_commit('.')
     with open('jupyterhub/Chart.yaml') as f:
         chart = rt_yaml.load(f)
 
-    chart['version'] = chart['version'] + '-' + version
+    if version is None:
+        version = chart['version'] + '-' + last_modified_commit('.')
+
+    chart['version'] = version
 
     with open('jupyterhub/Chart.yaml', 'w') as f:
         rt_yaml.dump(chart, f)
@@ -169,15 +178,16 @@ def main():
     build_parser.add_argument('--commit-range', help='Range of commits to consider when building images')
     build_parser.add_argument('--push', action='store_true')
     build_parser.add_argument('--publish-chart', action='store_true')
+    build_parser.add_argument('--tag', default=None, help='Use this tag for images & charts')
 
 
     args = argparser.parse_args()
 
     images = ['hub', 'singleuser-sample']
     if args.action == 'build':
-        build_images(args.image_prefix, images, args.commit_range, args.push)
-        build_values(args.image_prefix)
-        build_chart()
+        build_images(args.image_prefix, images, args.tag, args.commit_range, args.push)
+        build_values(args.image_prefix, args.tag, args.tag)
+        build_chart(args.tag)
         if args.publish_chart:
             publish_pages()
 
