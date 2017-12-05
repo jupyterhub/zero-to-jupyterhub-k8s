@@ -39,20 +39,30 @@ your production environment & can be used as a testbed for this upgrade. Feel
 free to reach out to us on [gitter](https://gitter.im/jupyterhub/jupyterhub) before
 your upgrade if you have any questions!
 
-#### Ingress config incompatibilities
+#### [Role based access control](http://zero-to-jupyterhub.readthedocs.io/en/latest/security.html#role-based-access-control-rbac)
 
-We've made HTTPS [much easier to set up](http://zero-to-jupyterhub.readthedocs.io/en/latest/extending-jupyterhub.html#setting-up-https), with automated certificates from
-[Let's Encrypt](https://letsencrypt.org/). However, this means
-that some of the keys used to set up your own ingress has changed.
+[RBAC](https://kubernetes.io/docs/admin/authorization/rbac/) is the user security model
+in Kubernetes that gives applications only as much access they need to the kubernetes
+API and not more. Prior to this, applications were all running with the equivalent
+of root on your Kubernetes cluster. This release adds appropriate roles for the
+various components of JupyterHub, for much better ability to secure clusters.
 
-If you were using config under `ingress` purely to get HTTPS, we recommend
-that you delete your entire config section under `ingress` & instead follow
-the new [docs](http://zero-to-jupyterhub.readthedocs.io/en/latest/extending-jupyterhub.html#setting-up-https)
-on getting HTTPS set up. It's much easier & a lot less error prone than the method recommended on 0.4.
+RBAC is turned on by default. But, if your cluster is older than 1.8, or you have RBAC
+enforcement turned off, you might want to explicitly disable it. You can do so by adding
+the following snippet to your `config.yaml`:
 
-If you were using config under `ingress` for other reasons, you may continue
-to do so. The keys under `ingress` have changed, and are now much more in line
-with how many other projects use `ingress` in the [official charts repo](https://github.com/kubernetes/charts/).
+```
+rbac:
+    enabled: false
+```
+
+This is especially true if you get an error like:
+
+```
+Error: the server rejected our request for an unknown reason (get clusterrolebindings.rbac.authorization.k8s.io)
+```
+
+when doing the upgrade!
 
 #### Custom Docker Images: JupyterHub version match
 
@@ -67,6 +77,21 @@ you would use:
 ```Dockerfile
 RUN pip install --no-cache-dir jupyterhub==0.8.*
 ```
+
+#### Ingress config incompatibilities
+
+We've made HTTPS [much easier to set up](http://zero-to-jupyterhub.readthedocs.io/en/latest/extending-jupyterhub.html#setting-up-https), with automated certificates from
+[Let's Encrypt](https://letsencrypt.org/). However, this means
+that some of the keys used to set up your own ingress has changed.
+
+If you were using config under `ingress` purely to get HTTPS, we recommend
+that you delete your entire config section under `ingress` & instead follow
+the new [docs](http://zero-to-jupyterhub.readthedocs.io/en/latest/extending-jupyterhub.html#setting-up-https)
+on getting HTTPS set up. It's much easier & a lot less error prone than the method recommended on 0.4.
+
+If you were using config under `ingress` for other reasons, you may continue
+to do so. The keys under `ingress` have changed, and are now much more in line
+with how many other projects use `ingress` in the [official charts repo](https://github.com/kubernetes/charts/).
 
 #### Admin config incompatibility
 
@@ -130,13 +155,6 @@ The following new authentication providers have been added:
 
 You can also set up a whitelist of users by adding to the list in `auth.whitelist.users`.
 
-#### [Role based access control](http://zero-to-jupyterhub.readthedocs.io/en/latest/security.html#role-based-access-control-rbac)
-
-[RBAC](https://kubernetes.io/docs/admin/authorization/rbac/) is the user security model
-in Kubernetes that gives applications only as much access they need to the kubernetes
-API and not more. Prior to this, applications were all running with the equivalent
-of root on your Kubernetes cluster. This release adds appropriate roles for the
-various components of JupyterHub, for much better ability to secure clusters.
 
 #### Easier customization of `jupyterhub_config.py`
 
