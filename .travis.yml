@@ -5,11 +5,8 @@ services:
 - docker
 install:
 - pip install --no-cache-dir ruamel.yaml python-dateutil
-- mkdir -p bin
-- export PATH=$PWD/bin:$PATH
-- curl -ssL https://storage.googleapis.com/kubernetes-helm/helm-v2.6.1-linux-amd64.tar.gz | tar -xz -C bin --strip-components 1 linux-amd64/helm
-- chmod +x bin/helm
-- helm init --client-only
+- . ci/minikube.env
+- ./ci/install.sh
 script:
 - |
   if [[ "$TRAVIS_PULL_REQUEST" == "false" && ( "$TRAVIS_BRANCH" = master || "$TRAVIS_BRANCH" == v0.4.x ) ]]; then
@@ -17,6 +14,7 @@ script:
     export PUSH="--push --publish-chart"
   fi
 - "./build.py build --commit-range ${TRAVIS_COMMIT_RANGE} $PUSH"
+- ./ci/test.sh
 before_install:
 - |
   if [[ "$TRAVIS_PULL_REQUEST" == "false" && ( "$TRAVIS_BRANCH" = master || "$TRAVIS_BRANCH" == v0.4.x ) ]]; then
