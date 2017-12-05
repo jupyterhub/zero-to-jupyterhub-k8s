@@ -28,16 +28,16 @@ To list all pods in your Kubernetes deployment::
 This will output a list of all pods being used in the deployment.
 
 **Real world scenario:** In our case, we see two pods for the JupyterHub
-infrastructure (``hub-deployment`` and ``proxy-deployment``) as well as one user
+infrastructure (``hub`` and ``proxy``) as well as one user
 pod that was created when somebody logged in to the JupyterHub.
 
 Here's an example of the output::
 
     $ kubectl --namespace=jhub get pod
     NAME                                READY     STATUS         RESTARTS   AGE
-    hub-deployment-3311438805-xnfvp     1/1       Running        0          2m
+    hub-3311438805-xnfvp     1/1       Running        0          2m
     jupyter-choldgraf                   0/1       ErrImagePull   0          25s
-    proxy-deployment-1227971824-mn2wd   1/1       Running        0          5h
+    proxy-1227971824-mn2wd   1/1       Running        0          5h
 
 Here we can see the two JupyterHub pods, as well as a single user pod. Note
 that all user pods will begin with ``jupyter-``.
@@ -122,12 +122,12 @@ deployment::
 
   $ kubectl --namespace=jhub get pod
   NAME                                READY     STATUS              RESTARTS   AGE
-  hub-deployment-2653507799-r7wf8     0/1       ContainerCreating   0          31s
-  hub-deployment-3311438805-xnfvp     1/1       Terminating         0          14m
+  hub-2653507799-r7wf8     0/1       ContainerCreating   0          31s
+  hub-3311438805-xnfvp     1/1       Terminating         0          14m
   jupyter-choldgraf                   0/1       ImagePullBackOff    0          12m
   proxy-deployment-1227971824-mn2wd   1/1       Running             0          5h
 
-Here we can see one ``hub-deployment`` pod being destroyed, and another (based
+Here we can see one ``hub`` pod being destroyed, and another (based
 on the upgraded helm chart) being created. We also see our broken user pod,
 which will not be deleted automatically. Let's manually delete it so a newer
 working pod can be started.::
@@ -139,7 +139,7 @@ list our running pods once again::
 
   $ kubectl --namespace=jhub get pod
   NAME                                READY     STATUS    RESTARTS   AGE
-  hub-deployment-2653507799-r7wf8     1/1       Running   0          3m
+  hub-2653507799-r7wf8     1/1       Running   0          3m
   jupyter-choldgraf                   1/1       Running   0          18s
   proxy-deployment-1227971824-mn2wd   1/1       Running   0          5h
 
@@ -158,18 +158,18 @@ Kubernetes.
 Hub fails to start
 ~~~~~~~~~~~~~~~~~~
 
-**Symptom:** following ``kubectl get pod``, the ``hub-deployment`` pod is in
+**Symptom:** following ``kubectl get pod``, the ``hub`` pod is in
 ``Error`` or ``CrashLoopBackoff`` state, or appears to be running but accessing
 the website for the JupyterHub returns an error message in the browser).
 
 **Investigating:** the output of ``kubectl --namespace=jhub logs
-hub-deployment...`` shows something like::
+hub...`` shows something like::
 
   File "/usr/local/lib/python3.5/dist-packages/jupyterhub/proxy.py", line 589, in get_all_routes
     resp = yield self.api_request('', client=client)
   tornado.httpclient.HTTPError: HTTP 403: Forbidden
 
-**Diagnosis:** This is likely because the ``hub-deployment`` pod cannot
+**Diagnosis:** This is likely because the ``hub`` pod cannot
 communicate with the proxy pod API, likely because of a problem in the
 ``secretToken`` that was put in ``config.yaml``.
 
