@@ -8,7 +8,7 @@ spec:
   loadBalancerIP: {{ .Values.hub.service.loadBalancerIP }}
   {{- end }}
   selector:
-    name: hub-pod
+    name: hub
   ports:
     - protocol: TCP
       port: 8081
