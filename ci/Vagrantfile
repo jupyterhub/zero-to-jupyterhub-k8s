@@ -1,6 +1,13 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# To test in vagrant:
+# vagrant up
+# vagrant ssh
+# . ci/minikube.env
+# /zero-to-jupyterhub-k8s/install.sh
+# /zero-to-jupyterhub-k8s/test.sh
+
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/trusty64"
   config.vm.provider "virtualbox" do |vb|
