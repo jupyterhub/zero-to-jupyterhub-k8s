@@ -12,13 +12,13 @@ echo "waiting for pods to become ready"
 JSONPATH='{range .items[*]}{@.status.phase};{end}'
 until kubectl get pod --namespace $TEST_NAMESPACE -o jsonpath="$JSONPATH" | grep -q -i "^\(running;\)\+$"; do
     kubectl get pod --namespace $TEST_NAMESPACE
-    sleep 1
+    sleep 5
 done
 
 echo "waiting for servers to become responsive"
 until curl -s $TEST_URL > /dev/null; do
-    sleep 1
+    sleep 5
 done
 
-echo "checking jupyterhub version"
-curl $TEST_URL/hub/api | grep version
+echo "getting jupyterhub version"
+curl -s $TEST_URL/hub/api | grep version
