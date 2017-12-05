@@ -12,18 +12,14 @@ install:
 - helm init --client-only
 script:
 - |
-  if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then
+  if [[ "$TRAVIS_PULL_REQUEST" == "false" && ( "$TRAVIS_BRANCH" = master || "$TRAVIS_BRANCH" == v0.4.x ) ]]; then
     docker login -u ${DOCKER_USERNAME} -p "${DOCKER_PASSWORD}"
     export PUSH="--push --publish-chart"
   fi
 - "./build.py build --commit-range ${TRAVIS_COMMIT_RANGE} $PUSH"
-branches:
-  only:
-  - master
-  - v0.4.x
 before_install:
 - |
-  if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then
+  if [[ "$TRAVIS_PULL_REQUEST" == "false" && ( "$TRAVIS_BRANCH" = master || "$TRAVIS_BRANCH" == v0.4.x ) ]]; then
     openssl aes-256-cbc -K $encrypted_c6b45058ffe8_key -iv $encrypted_c6b45058ffe8_iv -in travis.enc -out travis -d
     chmod 0400 travis
   fi
