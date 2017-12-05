@@ -1,13 +1,17 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: hub-deployment
+  name: hub
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        name: hub-pod
+        name: hub
+        app: jupyterhub
+        component: hub
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
         {{ if .Values.hub.labels -}}
         # Because toYaml + indent is super flaky
         {{ range $key, $value := .Values.proxy.labels -}}
