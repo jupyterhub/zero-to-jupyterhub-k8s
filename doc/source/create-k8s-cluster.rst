@@ -63,7 +63,8 @@ connect your credit card or other payment method to your google cloud account.
       gcloud container clusters create <YOUR_CLUSTER> \
           --num-nodes=3 \
           --machine-type=n1-standard-2 \
-          --zone=us-central1-b
+          --zone=us-central1-b \
+          --cluster-version=1.8.4-gke.0
 
    where:
 
@@ -78,6 +79,8 @@ connect your credit card or other payment method to your google cloud account.
      be a good fit for all use cases!
    * ``--zone`` specifies which data center to use. Pick something that is not
      too far away from your users. You can find a list of them `here <https://cloud.google.com/compute/docs/regions-zones/regions-zones#available>`_.
+   * ``--cluster-version`` specifies the version of kubernetes we want. Here,
+     we specify the minimum that the default configuration will support.
 
 5. To test if your cluster is initialized, run:
 
