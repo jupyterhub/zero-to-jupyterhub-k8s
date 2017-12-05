@@ -218,7 +218,7 @@ This release wouldn't have been possible without the wonderful contributors
 to the [zero-to-jupyterhub](https://github.com/jupyterhub/zero-to-jupyterhub-k8s),
 [JupyterHub](https://github.com/jupyterhub/jupyterhub), [KubeSpawner](https://github.com/jupyterhub/kubespawner)
 and [OAuthenticator](http://github.com/jupyterhub/oauthenticator) repos.
-repos. We'd like to thank everyone who contributed in any form - Issues, commenting
+We'd like to thank everyone who contributed in any form - Issues, commenting
 on issues, PRs and reviews since the last Zero to JupyterHub release.
 
 In alphabetical order,
