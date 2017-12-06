@@ -113,6 +113,13 @@ Install JupyterHub
       add a ``--timeout=SOME-LARGE-NUMBER``
       parameter to the ``helm install`` command.
 
+  .. note::
+
+     The ``--version`` parameter corresponds to the *version of the helm chart*,
+     not the version of JupyterHub. Each version of the JupyterHub helm chart
+     is paired with a specific version of JupyterHub. E.g., v0.5 of the helm
+     chart runs JupyterHub v0.8.
+
 2. While Step 1 is running, you can see the pods being created by entering in
    a different terminal:
 

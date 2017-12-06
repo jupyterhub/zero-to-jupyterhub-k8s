@@ -4,8 +4,8 @@ Glossary
 ========
 
 A partial glossary of terms used in this guide. For more complete
-descriptions of the components in JupyterHub, see `the list of tools
-used in JupyterHub <tools.html>`_. Here we try to keep the definition as
+descriptions of the components in JupyterHub, see :ref:`tools`.
+Here we try to keep the definition as
 succinct and relevant as possible, and provide links to learn more details.
 
 .. Additions to the glossary are welcomed. Please add in alphabetical order.

@@ -30,15 +30,15 @@ popular ways of getting setup in various cloud providers:
 Setting up Kubernetes on `Google Cloud <https://cloud.google.com/>`_
 --------------------------------------------------------------------
 
-`Google Container Engine <https://cloud.google.com/container-engine/>`_
-(confusingly abbreviated to GKE) is the simplest and most common way of setting
+`Google Kubernetes Engine <https://cloud.google.com/kubernetes-engine/>`_
+(GKE) is the simplest and most common way of setting
 up a Kubernetes Cluster. You may be able to receive `free credits
 <https://cloud.google.com/free/>`_ for trying it out. You will need to
 connect your credit card or other payment method to your google cloud account.
 
 1. Go to ``https://console.cloud.google.com`` and log in.
 
-2. Enable the `Container Engine API <https://console.cloud.google.com/apis/api/container.googleapis.com/overview>`_.
+2. Enable the `Kubernetes Engine API <https://console.cloud.google.com/apis/api/container.googleapis.com/overview>`_.
 
 3. Install and initialize the **gcloud command-line tools**. These tools send
    commands to Google Cloud and lets you do things like create and delete

@@ -5,7 +5,8 @@ Zero to JupyterHub
 infrastructure to manage a hub that enables users to interact remotely
 with a computing environment that you specify. JupyterHub offers a useful way
 to standardize the computing environment of a group of people (e.g.,
-for a class of students), as well as allowing people to access the
+for a class of students or an analytics team), as well as allowing
+people to access the
 hub remotely.
 
 This growing collection of information will help you set up your own
@@ -18,9 +19,13 @@ questions, feel free to reach out at the `issues page`_.
 Creating your JupyterHub
 ------------------------
 
+This is a short walkthrough starting from square one. Go from having
+nothing set up to a complete deployment of JupyterHub in the cloud.
+To begin this comprehensive walkthrough, the next step on your journey is
+to :ref:`create a Kubernetes cluster on Google Cloud <google-cloud>`.
+
 .. toctree::
    :maxdepth: 2
-   :caption: Creating your JupyterHub
 
    getting-started
    create-k8s-cluster
@@ -34,18 +39,18 @@ Customization Guide
 -------------------
 
 JupyterHub can be configured and customized to fit a variety of deployment
-requirements. This guide helps outline how to customize and extend a
-JupyterHub deployment.
+requirements. If you'd like to know how to expand and customize your jupyterhub setup, such
+as increasing the computational resources available to users or changing authentication
+services, check out the sections below. See the :ref:`helm-chart-reference` for a semi-complete
+list of fields you can configure with your helm chart.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Customization Guide
 
    extending-jupyterhub
-   user-experience
+   user-environment
+   user-resources
    user-management
-   reference
-   tools
 
 .. _administrator-guide:
 
@@ -53,17 +58,15 @@ Administrator Guide
 -------------------
 
 This section provides information on managing and maintaining a staging or
-production deployment of JupyterHub.
+production deployment of JupyterHub. It has considerations for managing
+cloud-based deployments in general and tips for maintaining your deployment.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Administrator Guide
 
-   resource-mgmt
+   authentication
    debug
    cost
-   backups
-   upgrading
    security
    troubleshooting
    advanced
@@ -74,12 +77,12 @@ Reference
 ---------
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Reference
+   :maxdepth: 1
 
+   reference
+   tools
    glossary
    additional-resources
-
 
 Institutional support
 ---------------------
