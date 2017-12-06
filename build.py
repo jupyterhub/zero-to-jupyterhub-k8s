@@ -169,7 +169,7 @@ def publish_pages(name, git_repo, published_repo):
         'git',
         'commit',
         '-m', '[{}] Automatic update for commit {}'.format(name, version)
-    ], cwd=checkouut_dir)
+    ], cwd=checkout_dir)
     subprocess.check_call(
         ['git', 'push', 'origin', 'gh-pages'],
         cwd=checkout_dir,
@@ -195,6 +195,6 @@ def main():
         build_values(chart['name'], value_mods)
         build_chart(chart['name'], args.tag)
         if args.publish_chart:
-            publish_pages(chart['repo']['git'], chart['repo']['published'])
+            publish_pages(chart['name'], chart['repo']['git'], chart['repo']['published'])
 
 main()
