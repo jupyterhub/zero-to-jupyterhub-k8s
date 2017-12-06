@@ -99,6 +99,13 @@ on getting HTTPS set up. It's much easier & a lot less error prone than the meth
 If you were using config under `ingress` for other reasons, you may continue
 to do so. The keys under `ingress` have changed, and are now much more in line
 with how many other projects use `ingress` in the [official charts repo](https://github.com/kubernetes/charts/).
+See [our ingress documentation](http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html#ingress)
+for more details on how to set up ingress properly. This is the most likely issue if
+you are getting an error like the following when upgrading:
+
+```
+Ingress.extensions "jupyterhub" is invalid: spec: Invalid value: []extensions.IngressRule(nil): either `backend` or `rules` must be specified
+```
 
 #### Admin config incompatibility
 
