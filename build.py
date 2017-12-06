@@ -157,7 +157,7 @@ def publish_pages(name, git_repo, published_repo):
     subprocess.check_call(['git', 'checkout', 'gh-pages'], cwd=checkout_dir)
     subprocess.check_call([
         'helm', 'package', name,
-        '--destination', 'gh-pages/'
+        '--destination', '{}/'.format(checkout_dir)
     ])
     subprocess.check_call([
         'helm', 'repo', 'index', '.',
