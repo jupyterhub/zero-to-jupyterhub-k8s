@@ -13,7 +13,7 @@ script:
     docker login -u ${DOCKER_USERNAME} -p "${DOCKER_PASSWORD}"
     export PUSH="--push --publish-chart"
   fi
-- "./build.py build --commit-range ${TRAVIS_COMMIT_RANGE} $PUSH"
+- "GIT_SSH_COMMAND='ssh -i travis' ./build.py --commit-range ${TRAVIS_COMMIT_RANGE} $PUSH"
 - ./ci/test.sh
 before_install:
 - |

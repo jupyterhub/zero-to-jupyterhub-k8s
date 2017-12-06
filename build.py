@@ -8,7 +8,6 @@ from datetime import datetime
 import time
 from ruamel.yaml import YAML
 
-JUPYTERHUB_VERSION = '0.8.1'
 
 def last_modified_commit(path, **kwargs):
     return subprocess.check_output([
@@ -29,59 +28,71 @@ def last_modified_date(path, **kwargs):
         path
     ], **kwargs).decode('utf-8')
 
-def image_touched(image, commit_range):
+def path_touched(path, commit_range):
     return subprocess.check_output([
-        'git', 'diff', '--name-only', commit_range, os.path.join('images', image)
+        'git', 'diff', '--name-only', commit_range, path
     ]).decode('utf-8').strip() != ''
 
+
+def build_image(image_path, image_spec, build_args):
+    cmd = ['docker', 'build', '-t', image_spec, image_path]
+
+    for k, v in build_args.items():
+        cmd += ['--build-arg', '{}={}'.format(k, v)]
+    subprocess.check_call(cmd)
+
 def build_images(prefix, images, tag=None, commit_range=None, push=False):
-    for image in images:
+    value_modifications = {}
+    for name, options in images.items():
+        image_path = os.path.join('images', name)
         if commit_range:
-            if not image_touched(image, commit_range):
-                print("Skipping {}, not touched in {}".format(image, commit_range))
+            if not path_touched(image_path, commit_range):
+                print("Skipping {}, not touched in {}".format(name, commit_range))
                 continue
-        image_path = os.path.join('images', image)
         if tag is None:
             tag = last_modified_commit(image_path)
-        image_spec = '{}{}:{}'.format(prefix, image, tag)
+        image_name = prefix + name
+        image_spec = '{}:{}'.format(image_name, tag)
 
-        subprocess.check_call([
-            'docker', 'build', '-t', image_spec, image_path,
-            '--build-arg', 'JUPYTERHUB_VERSION=%s' % JUPYTERHUB_VERSION,
-        ])
+        build_image(image_path, image_spec, options.get('buildArgs', {}))
+        value_modifications[options['valuesPath']] = {
+            'name': image_name,
+            'tag': tag
+        }
+
         if push:
             subprocess.check_call([
                 'docker', 'push', image_spec
             ])
+    return value_modifications
 
-def build_values(prefix, hub_tag=None, singleuser_tag=None):
+def build_values(name, values_mods):
     rt_yaml = YAML()
     rt_yaml.indent(offset=2)
 
-    with open('jupyterhub/values.yaml') as f:
+    values_file = os.path.join(name, 'values.yaml')
+
+    with open(values_file) as f:
         values = rt_yaml.load(f)
 
-    if hub_tag is None:
-        hub_tag = last_modified_commit('images/hub')
+    for key, value in values_mods.items():
+        parts = key.split('.')
+        mod_obj = values
+        for p in parts:
+            mod_obj = mod_obj[p]
+        mod_obj.update(value)
 
-    if singleuser_tag is None:
-        singleuser_tag = last_modified_commit('images/singleuser-sample')
 
-    values['hub']['image']['name'] = prefix + 'hub'
-    values['hub']['image']['tag'] = hub_tag
-
-    values['singleuser']['image']['name'] = prefix + 'singleuser-sample'
-    values['singleuser']['image']['tag'] = singleuser_tag
-
-    with open('jupyterhub/values.yaml', 'w') as f:
+    with open(values_file, 'w') as f:
         rt_yaml.dump(values, f)
 
 
-def build_chart(version=None):
+def build_chart(name, version=None):
     rt_yaml = YAML()
     rt_yaml.indent(offset=2)
 
-    with open('jupyterhub/Chart.yaml') as f:
+    chart_file = os.path.join(name, 'Chart.yaml')
+    with open(chart_file) as f:
         chart = rt_yaml.load(f)
 
     if version is None:
@@ -89,7 +100,7 @@ def build_chart(version=None):
 
     chart['version'] = version
 
-    with open('jupyterhub/Chart.yaml', 'w') as f:
+    with open(chart_file, 'w') as f:
         rt_yaml.dump(chart, f)
 
 
@@ -136,59 +147,54 @@ def fixup_chart_index(repopath):
         safe_yaml.dump(index, f)
 
 
-def publish_pages():
+def publish_pages(name, git_repo, published_repo):
     version = last_modified_commit('.')
+    checkout_dir = '{}-{}'.format(name, version)
     subprocess.check_call([
         'git', 'clone', '--no-checkout',
-        'git@github.com:jupyterhub/helm-chart', 'gh-pages'],
-        env=dict(os.environ, GIT_SSH_COMMAND='ssh -i travis')
+        'git@github.com:{}'.format(git_repo), checkout_dir],
     )
-    subprocess.check_call(['git', 'checkout', 'gh-pages'], cwd='gh-pages')
+    subprocess.check_call(['git', 'checkout', 'gh-pages'], cwd=checkout_dir)
     subprocess.check_call([
-        'helm', 'package', 'jupyterhub',
+        'helm', 'package', name,
         '--destination', 'gh-pages/'
     ])
     subprocess.check_call([
         'helm', 'repo', 'index', '.',
-        '--url', 'https://jupyterhub.github.io/helm-chart'
-    ], cwd='gh-pages')
-    fixup_chart_index('gh-pages')
-    subprocess.check_call(['git', 'add', '.'], cwd='gh-pages')
+        '--url', published_repo
+    ], cwd=checkout_dir)
+    fixup_chart_index(checkout_dir)
+    subprocess.check_call(['git', 'add', '.'], cwd=checkout_dir)
     subprocess.check_call([
         'git',
         'commit',
-        '-m', '[jupyterhub] Automatic update for commit {}'.format(version)
-    ], cwd='gh-pages')
+        '-m', '[{}] Automatic update for commit {}'.format(name, version)
+    ], cwd=checkout_dir)
     subprocess.check_call(
         ['git', 'push', 'origin', 'gh-pages'],
-        cwd='gh-pages',
-        env=dict(os.environ, GIT_SSH_COMMAND='ssh -i ../travis')
+        cwd=checkout_dir,
     )
 
 
 def main():
+    with open('chartpress.yaml') as f:
+        safe_yaml = YAML(typ='safe')
+        config = safe_yaml.load(f)
+
     argparser = argparse.ArgumentParser()
-    argparser.add_argument(
-        '--image-prefix',
-        default='jupyterhub/k8s-'
-    )
-    subparsers = argparser.add_subparsers(dest='action')
 
-    build_parser = subparsers.add_parser('build', description='Build & Push images')
-    build_parser.add_argument('--commit-range', help='Range of commits to consider when building images')
-    build_parser.add_argument('--push', action='store_true')
-    build_parser.add_argument('--publish-chart', action='store_true')
-    build_parser.add_argument('--tag', default=None, help='Use this tag for images & charts')
-
+    argparser.add_argument('--commit-range', help='Range of commits to consider when building images')
+    argparser.add_argument('--push', action='store_true')
+    argparser.add_argument('--publish-chart', action='store_true')
+    argparser.add_argument('--tag', default=None, help='Use this tag for images & charts')
 
     args = argparser.parse_args()
 
-    images = ['hub', 'singleuser-sample']
-    if args.action == 'build':
-        build_images(args.image_prefix, images, args.tag, args.commit_range, args.push)
-        build_values(args.image_prefix, args.tag, args.tag)
-        build_chart(args.tag)
+    for chart in config['charts']:
+        value_mods = build_images(chart['imagePrefix'], chart['images'], args.tag, args.commit_range, args.push)
+        build_values(chart['name'], value_mods)
+        build_chart(chart['name'], args.tag)
         if args.publish_chart:
-            publish_pages()
+            publish_pages(chart['name'], chart['repo']['git'], chart['repo']['published'])
 
 main()
