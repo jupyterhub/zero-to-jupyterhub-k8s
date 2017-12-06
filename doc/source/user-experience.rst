@@ -57,6 +57,8 @@ existing image, such as the ``scipy-notebook`` image, complete these steps:
            tag: 8e15d329f1e9
 
    .. note::
+   
+      Container name cannot be longer than 63 characters.
 
       Always use an explicit ``tag``, such as a specific commit.
 
