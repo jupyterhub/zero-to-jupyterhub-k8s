@@ -34,25 +34,6 @@ cluster. At the terminal, enter:
 
 This command only needs to run once per Kubernetes cluster.
 
-Secure Helm
-~~~~~~~~~~~
-
-Ensure that `tiller is secure <https://engineering.bitnami.com/articles/helm-security.html>`_ from access inside the cluster:
-
-   .. code:: bash
-
-      kubectl -n kube-system delete service tiller-deploy
-      kubectl -n kube-system patch deployment tiller-deploy --patch '
-      spec:
-        template:
-          spec:
-            containers:
-              - name: tiller
-                ports: []
-                command: ["/tiller"]
-                args: ["--listen=localhost:44134"]
-      '
-
 Verify
 ------
 
@@ -71,6 +52,25 @@ It should provide output like
       Server: &version.Version{SemVer:"v2.4.1", GitCommit:"46d9ea82e2c925186e1fc620a8320ce1314cbb02", GitTreeState:"clean"}
 
 Make sure you have at least version 2.4.1!
+
+Secure Helm
+~~~~~~~~~~~
+
+Ensure that `tiller is secure <https://engineering.bitnami.com/articles/helm-security.html>`_ from access inside the cluster:
+
+   .. code:: bash
+
+      kubectl -n kube-system delete service tiller-deploy
+      kubectl -n kube-system patch deployment tiller-deploy --patch '
+      spec:
+        template:
+          spec:
+            containers:
+              - name: tiller
+                ports: []
+                command: ["/tiller"]
+                args: ["--listen=localhost:44134"]
+      '
 
 Next Step
 ---------
