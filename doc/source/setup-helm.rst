@@ -60,7 +60,6 @@ Ensure that `tiller is secure <https://engineering.bitnami.com/articles/helm-sec
 
    .. code:: bash
 
-      kubectl -n kube-system delete service tiller-deploy
       kubectl -n kube-system patch deployment tiller-deploy --patch '
       spec:
         template:
