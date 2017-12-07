@@ -5,7 +5,7 @@ Extending your JupyterHub setup
 
 The helm chart used to install JupyterHub has a lot of options for you to tweak.
 For a semi-complete list of the changes you can apply via your helm-chart,
-see the :ref:`helm-chart-reference`.
+see the :ref:`helm-chart-configuration-reference`.
 
 .. _apply-config-changes:
 
@@ -31,4 +31,4 @@ The general method to modify your Kubernetes deployment is to:
 
 For information about the many things you can customize with changes to
 your helm chart, see :ref:`user-environment`, :ref:`user-resources`, and
-:ref:`helm-chart-reference`.
+:ref:`helm-chart-configuration-reference`.

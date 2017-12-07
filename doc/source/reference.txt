@@ -1,9 +1,9 @@
 DO NOT EDIT THIS LINE. This file is used in `conf.py to generate schema.md`. Edit below and changes will propagate to the build.
 ```eval_rst
-.. _helm-chart-reference:
+.. _helm-chart-configuration-reference:
 ```
 
-# Helm Chart Reference
+# Helm Chart Configuration Reference
 
 The [JupyterHub helm chart](https://github.com/jupyterhub/zero-to-jupyterhub-k8s) is configurable so that you can customize your JupyterHub setup however you'd like. You can extend user resources, build off of different Docker images, manage security and authentication, and more.
 

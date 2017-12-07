@@ -6,7 +6,7 @@ Customizing the User Environment
 .. note::
 
    For a list of all the options you can configure with your helm
-   chart, see the :ref:`helm-chart-reference`.
+   chart, see the :ref:`helm-chart-configuration-reference`.
 
 This page contains instructions for a few common ways you can extend the
 user experience for your kubernetes deployment.
@@ -29,7 +29,7 @@ Use an existing docker image
    The Docker image you are using must have the ``jupyterhub`` package
    installed in order to work. Moreover, the version of ``jupyterhub`` must
    match the version installed by the helm chart that you're using. For example,
-   ``v0.5`` of the helm chart uses  ``jupyterhub==0.8``. 
+   ``v0.5`` of the helm chart uses  ``jupyterhub==0.8``.
 
 Using an existing docker image, that someone else has written and maintained,
 is the simplest approach. For example, Project Jupyter maintains the

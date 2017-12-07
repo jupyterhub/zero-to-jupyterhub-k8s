@@ -6,7 +6,7 @@ User Resources
 .. note::
 
    For a list of all the options you can configure with your helm
-   chart, see the :ref:`helm-chart-reference`.
+   chart, see the :ref:`helm-chart-configuration-reference`.
 
 User resources include the CPU, RAM, and Storage which JupyterHub provides to
 users. Most of these can be controlled via modifications to the Helm Chart.

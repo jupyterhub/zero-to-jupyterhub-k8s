@@ -19,7 +19,7 @@ Follow the service-specific instructions linked on the
 to generate your JupyterHub instance's OAuth2 client ID and client secret. Then
 declare the values in the helm chart (``config.yaml``).
 
-Here are example configurations for two common authentication services. Note
+Here are example configurations for common authentication services. Note
 that in each case, you need to get the authentication credential information
 before you can configure the helmchart for authentication.
 
