@@ -146,7 +146,7 @@ before doing the upgrade!
 
 #### JupyterHub 0.8
 
-JupyterHub 0.8 is full of new features - see [CHANGELOG](https://github.com/jupyterhub/jupyterhub/blob/master/docs/source/changelog.md#080-2017-10-03)
+JupyterHub 0.8 is full of new features - see [CHANGELOG](https://jupyterhub.readthedocs.io/en/0.8.1/changelog.html#id1)
 for more details. Specific features made to benefit this chart are:
 
 1. No more 'too many redirects' errors at scale.
