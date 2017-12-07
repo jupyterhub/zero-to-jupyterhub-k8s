@@ -6,25 +6,38 @@ Security Considerations
 Setting up HTTPS
 ----------------
 
-Enabling HTTPS is an important part of keeping the internet secure for
-your users & the world at large. Zero to JupyterHub makes doing so quite
+Enabling HTTPS is an important security practice.
+Zero to JupyterHub makes doing so quite
 easy since version 0.5, integrating with `Let's Encrypt <https://letsencrypt.org/>`_
 for free HTTPS certificates.
 
-You can also purchase your own SSL certificates from a certificate provider.
+.. note::
+
+   Alternatively, you can purchase your own SSL certificates from a certificate provider.
+
+Set up your domain
+~~~~~~~~~~~~~~~~~~
 
 1. Buy a domain name from a registrar. Pick whichever one you want.
 2. Create an ``A record`` from the domain you want to use, pointing to the
-   ``EXTERNAL-IP`` of the ``proxy-public`` service.
+   ``EXTERNAL-IP`` of the ``proxy-public`` service. The exact way to do this
+   will depend on the DNS provider that you're using.
 3. Wait for the change to propagate. Propagation can take several minutes to
    several hours. Wait until you can type in the name of the domain you bought
    and it shows you the JupyterHub landing page.
 
    It is important that you wait - prematurely going to the next step might cause problems!
 
-4. Tell JupyterHub to use HTTPS via ``config.yaml``
+Configure JupyterHub to use HTTPS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  a. For letsencrypt, add your domain name and contact email for letsencrypt renewal to ``config.yaml``:
+Now that your domain is ready, it's time to configure JupyterHub to use HTTPS
+when connecting to it.
+
+1. Tell JupyterHub to use HTTPS via ``config.yaml``
+
+  a. If you're using letsencrypt, add your domain name and contact email
+     for letsencrypt renewal to ``config.yaml``:
 
     .. code-block:: yaml
 
@@ -46,7 +59,8 @@ You can also purchase your own SSL certificates from a certificate provider.
             - <your-domain-name>
           type: manual
 
-    and paste the contents of your ssl key and certificate to ``secrets.yaml``:
+    and paste the contents of your ssl key and certificate into a file
+    called ``secrets.yaml``, like so:
 
     .. code-block:: yaml
 
@@ -62,9 +76,8 @@ You can also purchase your own SSL certificates from a certificate provider.
               ...
               -----END CERTIFICATE-----
 
-5. Apply the config changes by running ``helm upgrade ...``.
-6. Wait for about a minute, now your hub is HTTPS enabled! Congratulations, your
-   users are now more secure now than they were before!
+2. Apply the config changes by running ``helm upgrade ...``.
+3. Wait for about a minute, now your hub is HTTPS enabled!
 
 Role Based Access Control (RBAC)
 --------------------------------
@@ -86,5 +99,5 @@ snippet in your config.yaml:
    rbac:
       enabled: false
 
-We highly recommend against doing so, however, as this will introduce
-security vulnerabilities to your deployment!
+We recommend keeping RBAC enabled. Proceed with caution if disabling RBAC,
+as this introduces security vulnerabilities.

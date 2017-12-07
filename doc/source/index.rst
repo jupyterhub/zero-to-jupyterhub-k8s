@@ -19,10 +19,13 @@ questions, feel free to reach out at the `issues page`_.
 Creating your JupyterHub
 ------------------------
 
-This is a short walkthrough starting from square one. Go from having
-nothing set up to a complete deployment of JupyterHub in the cloud.
-To begin this comprehensive walkthrough, the next step on your journey is
-to :ref:`create a Kubernetes cluster on Google Cloud <google-cloud>`.
+This tutorial starts from "step zero" and walks through how to install
+and configure a complete JupyterHub deployment in the cloud. Using Kubernetes
+and the JupyterHub Helm chart provides sensible defaults for an initial
+deployment.
+
+To get started, go to :ref:`create a Kubernetes cluster on Google Cloud
+<google-cloud>`.
 
 .. toctree::
    :maxdepth: 2
@@ -39,10 +42,11 @@ Customization Guide
 -------------------
 
 JupyterHub can be configured and customized to fit a variety of deployment
-requirements. If you'd like to know how to expand and customize your jupyterhub setup, such
-as increasing the computational resources available to users or changing authentication
-services, check out the sections below. See the :ref:`helm-chart-reference` for a semi-complete
-list of fields you can configure with your helm chart.
+requirements. If you would like to expand JupyterHub, customize its setup,
+increase the computational resources available for users, or change
+authentication services, this guide will walk you through the steps.
+See the :ref:`helm-chart-reference` for a list of frequently used configurable
+helm chart fields.
 
 .. toctree::
    :maxdepth: 2
@@ -59,7 +63,7 @@ Administrator Guide
 
 This section provides information on managing and maintaining a staging or
 production deployment of JupyterHub. It has considerations for managing
-cloud-based deployments in general and tips for maintaining your deployment.
+cloud-based deployments and tips for maintaining your deployment.
 
 .. toctree::
    :maxdepth: 2

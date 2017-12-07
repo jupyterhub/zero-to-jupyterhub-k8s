@@ -163,6 +163,7 @@ public, such as GitHub or Google.
 You can specify this list of usernames in your `config.yaml`:
 
 .. raw:: yaml
+
    auth:
      whitelist:
        users:

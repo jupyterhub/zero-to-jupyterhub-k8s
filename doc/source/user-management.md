@@ -1,7 +1,7 @@
 # User Management
 
-This section describes various ways to manage the permissions that users
-have on your JupyterHub.
+This section describes management of users and their
+permissions on JupyterHub.
 
 ## Admin Users
 

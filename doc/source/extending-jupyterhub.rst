@@ -31,4 +31,4 @@ The general method to modify your Kubernetes deployment is to:
 
 For information about the many things you can customize with changes to
 your helm chart, see :ref:`user-environment`, :ref:`user-resources`, and
-:ref:`helm-chart-schema`.
+:ref:`helm-chart-reference`.

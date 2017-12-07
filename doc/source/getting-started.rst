@@ -26,16 +26,7 @@ Dependencies for Deploying a JupyterHub Instance
 For a more extensive description of the tools and services that JupyterHub
 depends upon, see our :ref:`tools` page.
 
-Questions or Suggestions?
--------------------------
-
-If you have questions or suggestions, please reach out at our `issues page`_
-on GitHub.
-
-Next Step
----------
-
 To begin deploying your JupyterHub on Kubernetes, please move on
-to :ref:`_create-k8s-cluster`.
+to :ref:`create-k8s-cluster`.
 
 .. _issues page: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
