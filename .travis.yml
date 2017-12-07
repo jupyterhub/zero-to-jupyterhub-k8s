@@ -8,19 +8,17 @@ install:
 - . ci/minikube.env
 - ./ci/install.sh
 script:
-- |
-  if [[ "$TRAVIS_PULL_REQUEST" == "false" && ( "$TRAVIS_BRANCH" = master || "$TRAVIS_BRANCH" == v0.4.x ) ]]; then
-    docker login -u ${DOCKER_USERNAME} -p "${DOCKER_PASSWORD}"
-    export PUSH="--push --publish-chart"
-  fi
-- GIT_SSH_COMMAND="ssh -i $PWD/travis" ./build.py --commit-range ${TRAVIS_COMMIT_RANGE} $PUSH
+- ./build.py --commit-range ${TRAVIS_COMMIT_RANGE}
 - ./ci/test.sh
-before_install:
-- |
-  if [[ "$TRAVIS_PULL_REQUEST" == "false" && ( "$TRAVIS_BRANCH" = master || "$TRAVIS_BRANCH" == v0.4.x ) ]]; then
-    openssl aes-256-cbc -K $encrypted_c6b45058ffe8_key -iv $encrypted_c6b45058ffe8_iv -in travis.enc -out travis -d
-    chmod 0400 travis
-  fi
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: ./ci/deploy.sh
+  on:
+    branch:
+    - master
+    - v0.4.x
 env:
   global:
   - secure: jpFpbMccpjGP+otWH2Z03VFdtR9AAu2vzrNxsoZ3IvJvrO4MfzYJ3uSCDQuB0NG9gBgaAscpTJtliPTEi7njXHLcsFeWXLUmeBEHLozYxfzDQzMvW3EYdNWcC7oVAAt3de0i0ojw9rGswiofhbu2dAe+Xd2bejv1+PVJcEC3SRPGy17kb6bme6gD3zty5ft4VpzP0nomUNqfZBRLUYxSZuKlHJaZ6Nuq434rKmXrcN6uy+eEWDorTbjyM22IIYgUmrhg++Qtu/MBR7/rriPhyRltCU14361bcxqyq2Hw+HNG8D3hsqo5TiEiYwxOQcXRgddL+Ci6/y0L1EvqOQc+1V8ycwNs2oNicwNgSn5A+9HpF495Kae039hGtj2Gpt4IbplSYwKFq/sFTq+CekxdD2YVQmGvsjep4bNVL66o2RSZVAW1Bg/G8/sSe3BwgD8IToy9+1NHPPuaVupeukRqNyUDcVvWH8hdb8AkXYY87+546etYDpn91GQnhTEberKbXX4UCmpKNXpXoprLE8nQLGb6TIoHPTyA+RRNQ4erDzMjqF43UVmhOZTtkGaRgIWK7vDAKpLUnuOguuhJUNpYpRggGQsMV8cZnaCumy5OFUf6i6rfN0Ru6a+/Bm7grJiAcnZlU7igaxgI38QaJgCKcqqzIImdcRYNQC74/Ok/1oM=
