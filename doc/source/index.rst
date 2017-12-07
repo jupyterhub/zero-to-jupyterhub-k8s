@@ -24,11 +24,11 @@ and configure a complete JupyterHub deployment in the cloud. Using Kubernetes
 and the JupyterHub Helm chart provides sensible defaults for an initial
 deployment.
 
-To get started, go to :ref:`create a Kubernetes cluster on Google Cloud
-<google-cloud>`.
+To get started, go to :ref:`getting-started`.
 
 .. toctree::
    :maxdepth: 2
+   :caption: Creating your JupyterHub
 
    getting-started
    create-k8s-cluster
@@ -50,6 +50,7 @@ helm chart fields.
 
 .. toctree::
    :maxdepth: 2
+   :caption: Customization Guide
 
    extending-jupyterhub
    user-environment
@@ -67,12 +68,14 @@ cloud-based deployments and tips for maintaining your deployment.
 
 .. toctree::
    :maxdepth: 2
+   :caption: Administrator Guide
 
    authentication
    debug
    cost
    security
    troubleshooting
+   upgrading
    advanced
 
 .. _reference:
@@ -82,6 +85,7 @@ Reference
 
 .. toctree::
    :maxdepth: 1
+   :caption: Reference
 
    reference
    tools
