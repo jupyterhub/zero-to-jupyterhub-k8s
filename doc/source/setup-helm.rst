@@ -34,7 +34,8 @@ cluster. At the terminal, enter:
 
 This command only needs to run once per Kubernetes cluster.
 
-### Secure Helm ###
+Secure Helm
+~~~~~~~~~~~
 
 Ensure that `tiller is secure <https://engineering.bitnami.com/articles/helm-security.html>`_ from access inside the cluster:
 
