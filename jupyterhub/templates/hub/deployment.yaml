@@ -18,10 +18,6 @@ spec:
         {{ $key }}: {{ $value | quote }}
         {{- end }}
         {{- end }}
-      annotations:
-        # This lets us autorestart when the configmap changes!
-        checksum/config-map: {{ include (print $.Template.BasePath "/hub/configmap.yaml") . | sha256sum }}
-        checksum/secret: {{ include (print $.Template.BasePath "/hub/secret.yaml") . | sha256sum }}
     spec:
       nodeSelector: {{ toJson .Values.hub.nodeSelector }}
       volumes:
@@ -49,6 +45,18 @@ spec:
       - name: hub-container
         image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
         command:
+          - watchmedo
+          - auto-restart
+          - --directory
+          - /etc/jupyterhub/config/
+          - --directory
+          - /etc/jupyterhub/secret/
+          - --interval
+          - "5"
+          - --ignore-directories
+          - --ignore-pattern
+          - '.*'
+          - --
           - jupyterhub
           - --config
           - /srv/jupyterhub_config.py
