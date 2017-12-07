@@ -8,7 +8,7 @@ install:
 - . ci/minikube.env
 - ./ci/install.sh
 script:
-- ./build.py build --commit-range ${TRAVIS_COMMIT_RANGE}
+- ./build.py --commit-range ${TRAVIS_COMMIT_RANGE}
 - ./ci/test.sh
 
 deploy:
