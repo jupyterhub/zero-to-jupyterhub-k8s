@@ -5,7 +5,8 @@ Zero to JupyterHub
 infrastructure to manage a hub that enables users to interact remotely
 with a computing environment that you specify. JupyterHub offers a useful way
 to standardize the computing environment of a group of people (e.g.,
-for a class of students), as well as allowing people to access the
+for a class of students or an analytics team), as well as allowing
+people to access the
 hub remotely.
 
 This growing collection of information will help you set up your own
@@ -17,6 +18,13 @@ questions, feel free to reach out at the `issues page`_.
 
 Creating your JupyterHub
 ------------------------
+
+This tutorial starts from "step zero" and walks through how to install
+and configure a complete JupyterHub deployment in the cloud. Using Kubernetes
+and the JupyterHub Helm chart provides sensible defaults for an initial
+deployment.
+
+To get started, go to :ref:`getting-started`.
 
 .. toctree::
    :maxdepth: 2
@@ -34,18 +42,20 @@ Customization Guide
 -------------------
 
 JupyterHub can be configured and customized to fit a variety of deployment
-requirements. This guide helps outline how to customize and extend a
-JupyterHub deployment.
+requirements. If you would like to expand JupyterHub, customize its setup,
+increase the computational resources available for users, or change
+authentication services, this guide will walk you through the steps.
+See the :ref:`helm-chart-configuration-reference` for a list of frequently used configurable
+helm chart fields.
 
 .. toctree::
    :maxdepth: 2
    :caption: Customization Guide
 
    extending-jupyterhub
-   user-experience
+   user-environment
+   user-resources
    user-management
-   reference
-   tools
 
 .. _administrator-guide:
 
@@ -53,19 +63,19 @@ Administrator Guide
 -------------------
 
 This section provides information on managing and maintaining a staging or
-production deployment of JupyterHub.
+production deployment of JupyterHub. It has considerations for managing
+cloud-based deployments and tips for maintaining your deployment.
 
 .. toctree::
    :maxdepth: 2
    :caption: Administrator Guide
 
-   resource-mgmt
+   authentication
    debug
    cost
-   backups
-   upgrading
    security
    troubleshooting
+   upgrading
    advanced
 
 .. _reference:
@@ -74,12 +84,13 @@ Reference
 ---------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Reference
 
+   reference
+   tools
    glossary
    additional-resources
-
 
 Institutional support
 ---------------------

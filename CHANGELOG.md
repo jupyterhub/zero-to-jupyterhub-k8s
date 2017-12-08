@@ -12,7 +12,7 @@ JupyterHub 0.8, HTTPS & scalability.
 
 ### Upgrading from 0.4
 
-See [upgrade documentation](https://zero-to-jupyterhub.readthedocs.io/en/latest/upgrading.html) for upgrade steps.
+See the [upgrade documentation](https://zero-to-jupyterhub.readthedocs.io/en/latest/upgrading.html) for upgrade steps.
 
 ### New Features
 

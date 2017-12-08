@@ -3,6 +3,9 @@
 Troubleshooting
 ===============
 
+This section contains general troubleshooting tips for your JupyterHub
+deployment. For information on debugging Kubernetes, see :ref:`debug`.
+
 FAQ - General
 -------------
 
@@ -17,19 +20,20 @@ the loss of computers and will create two new nodes to compensate.
 **How does billing for this work?**
 
 JupyterHub isn't handling any of the billing for your usage. That's done
-through whatever cloud service you're using.
+through whatever cloud service you're using. For considerations about
+managing cost with JupyterHub, see :ref:`cost`.
 
 Common error messages
 ---------------------
 
-General
-^^^^^^^
-
-This section includes "provider agnostic" error messages for JupyterHub
-and Kubernetes.
-
 Google Cloud
 ^^^^^^^^^^^^
+
+.. tip::
+
+   In Google Cloud, you can see the logs using the
+   `Cloud Console GUI <https://console.cloud.google.com>`_. See the **logging**
+   section under the hamburger menu.
 
 1. ``Could not find default credentials. See
    https://developers.google.com/accounts/docs/application-default-credentials
@@ -42,30 +46,6 @@ Google Cloud
 2. ``ERROR: (gcloud.container.clusters.create) ResponseError: code=503,
    message=Project staeiou-5f880 is not fully initialized with the default
    service accounts. Please try again later.``
-  
+
    Go to `<https://console.cloud.google.com/kubernetes/list>`_ and click
    'enable' and follow the prompts.
-
-Investigating Issues
---------------------
-
-If you encounter any issues or wish to see what's happening under the hood,
-use the following commands.
-
-To see running pods::
-
-  kubectl --namespace=<YOUR-NAMESPACE> get pod
-
-To see the logs::
-
-  kubectl --namespace=<YOUR-NAMESPACE> logs <pod-name>
-
-You can pass ``-f`` option  to the logs command to :command:`tail` them.
-
-.. The following tip is for provider specific help.
-
-.. tip::
-
-   **Google Cloud**: You can see the logs in the GUI on
-   `<https://console.cloud.google.com>`_ there should be **logging** under the
-   hamburger menu.
