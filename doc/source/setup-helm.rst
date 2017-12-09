@@ -60,16 +60,7 @@ Ensure that `tiller is secure <https://engineering.bitnami.com/articles/helm-sec
 
    .. code:: bash
 
-      kubectl -n kube-system patch deployment tiller-deploy --patch '
-      spec:
-        template:
-          spec:
-            containers:
-              - name: tiller
-                ports: []
-                command: ["/tiller"]
-                args: ["--listen=localhost:44134"]
-      '
+      kubectl --namespace=kube-system patch deployment tiller-deploy --type=json --patch='[{"op": "add", "path": "/spec/template/spec/containers/0/command", "value": ["/tiller", "--listen=localhost:44134"]}]'
 
 Next Step
 ---------
