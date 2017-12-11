@@ -13,7 +13,6 @@ def get_config(key, default=None):
     try:
         with open(path) as f:
             data = yaml.safe_load(f)
-            print(key, data)
             return data
     except FileNotFoundError:
         return default
@@ -239,6 +238,7 @@ if get_config('cull.enabled', False):
         '/usr/local/bin/cull_idle_servers.py',
         '--timeout=%s' % cull_timeout,
         '--cull-every=%s' % cull_every,
+        '--url=http://127.0.0.1:8081/hub/api'
     ]
     if get_config('cull.users'):
         cull_cmd.append('--cull-users')
