@@ -53,6 +53,15 @@ It should provide output like
 
 Make sure you have at least version 2.4.1!
 
+Secure Helm
+~~~~~~~~~~~
+
+Ensure that `tiller is secure <https://engineering.bitnami.com/articles/helm-security.html>`_ from access inside the cluster:
+
+   .. code:: bash
+
+      kubectl --namespace=kube-system patch deployment tiller-deploy --type=json --patch='[{"op": "add", "path": "/spec/template/spec/containers/0/command", "value": ["/tiller", "--listen=localhost:44134"]}]'
+
 Next Step
 ---------
 
