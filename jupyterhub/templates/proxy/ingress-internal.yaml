@@ -5,9 +5,6 @@ kind: Ingress
 metadata:
   name: jupyterhub-internal
   annotations:
-    # Set a high limit for max size of notebooks that we can save. Default is 1M
-    ingress.kubernetes.io/proxy-body-size: 64m
-    # These can all be overridden by setting .Values.proxy.ingress.annotations
     kubernetes.io/ingress.provider: nginx
     kubernetes.io/ingress.class: jupyterhub-proxy-tls
     hub.jupyter.org/tls-terminator: "true"
