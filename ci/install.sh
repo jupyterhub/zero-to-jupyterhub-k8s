@@ -40,11 +40,9 @@ curl -ssL https://storage.googleapis.com/kubernetes-helm/helm-v2.7.2-linux-amd64
 chmod +x bin/helm
 helm init
 
+
 echo "waiting for tiller"
-until helm version; do
-    sleep 1
-  done
-helm version
+kubectl --namespace=kube-system rollout status --watch deployment/tiller-deploy
 
 echo "installing git-crypt"
 curl -L https://github.com/minrk/git-crypt-bin/releases/download/0.5.0/git-crypt > bin/git-crypt

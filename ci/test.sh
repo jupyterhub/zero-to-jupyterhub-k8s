@@ -8,12 +8,8 @@ TEST_URL=http://$IP:31212
 
 helm install --name jupyterhub-test --namespace $TEST_NAMESPACE ./jupyterhub/ -f minikube-config.yaml
 
-echo "waiting for pods to become ready"
-JSONPATH='{range .items[*]}{@.status.phase};{end}'
-until kubectl get pod --namespace $TEST_NAMESPACE -o jsonpath="$JSONPATH" | grep -q -i "^\(running;\)\+$"; do
-    kubectl get pod --namespace $TEST_NAMESPACE
-    sleep 5
-done
+kubectl --namespace=$TEST_NAMESPACE rollout status --watch deployment/hub
+kubectl --namespace=$TEST_NAMESPACE rollout status --watch deployment/proxy
 
 echo "waiting for servers to become responsive"
 until curl -s $TEST_URL > /dev/null; do
