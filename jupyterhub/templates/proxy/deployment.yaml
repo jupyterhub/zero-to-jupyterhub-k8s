@@ -39,6 +39,7 @@ spec:
           args:
             - /nginx-ingress-controller
             - --default-backend-service={{ .Release.Namespace }}/proxy-http
+            - --configmap={{ .Release.Namespace }}/nginx-proxy-config
             - --ingress-class=jupyterhub-proxy-tls
             - --watch-namespace={{ .Release.Namespace }}
           env:

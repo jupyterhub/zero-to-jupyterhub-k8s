@@ -1,0 +1,6 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: nginx-proxy-config
+data:
+  proxy-body-size: "{{ .Values.proxy.nginx.proxyBodySize }}"
