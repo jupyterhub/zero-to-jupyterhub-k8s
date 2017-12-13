@@ -110,6 +110,7 @@ In alphabetical order,
 - [Aidis Stukas](https://github.com/aidiss)
 - [Aleksandr Blekh](https://github.com/ablekh)
 - [Alessandro Vozza](https://github.com/ams0)
+- [Alex Hilson](https://github.com/alexhilson)
 - [Analect](https://github.com/Analect)
 - [Andrea Zonca](https://github.com/zonca)
 - [Andreas](https://github.com/Jibbow)
