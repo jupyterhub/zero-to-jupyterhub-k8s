@@ -1,38 +1,47 @@
 #!/usr/bin/env python3
+import argparse
 import os
 import subprocess
-import argparse
-import dateutil.parser
-import dateutil.tz
-from datetime import datetime
-import time
+import shutil
+from tempfile import TemporaryDirectory
+
 from ruamel.yaml import YAML
 
+# use safe roundtrip yaml loader
+yaml = YAML(typ='rt')
+yaml.indent(offset=2)
 
-def last_modified_commit(path, **kwargs):
+def last_modified_commit(*paths, **kwargs):
     return subprocess.check_output([
         'git',
         'log',
         '-n', '1',
         '--pretty=format:%h',
-        path
+        *paths
     ], **kwargs).decode('utf-8')
 
-def last_modified_date(path, **kwargs):
+def last_modified_date(*paths, **kwargs):
     return subprocess.check_output([
         'git',
         'log',
         '-n', '1',
         '--pretty=format:%cd',
         '--date=iso',
-        path
+        *paths
     ], **kwargs).decode('utf-8')
 
-def path_touched(path, commit_range):
+def path_touched(*paths, commit_range):
     return subprocess.check_output([
-        'git', 'diff', '--name-only', commit_range, path
+        'git', 'diff', '--name-only', commit_range, *paths
     ]).decode('utf-8').strip() != ''
 
+
+def render_build_args(options, ns):
+    """Get docker build args dict, rendering any templated args."""
+    build_args = options.get('buildArgs', {})
+    for key, value in build_args.items():
+        build_args[key] = value.format(**ns)
+    return build_args
 
 def build_image(image_path, image_spec, build_args):
     cmd = ['docker', 'build', '-t', image_spec, image_path]
@@ -45,20 +54,28 @@ def build_images(prefix, images, tag=None, commit_range=None, push=False):
     value_modifications = {}
     for name, options in images.items():
         image_path = os.path.join('images', name)
-        if commit_range:
-            if not path_touched(image_path, commit_range):
-                print("Skipping {}, not touched in {}".format(name, commit_range))
-                continue
+        paths = options.get('paths', []) + [image_path]
+        last_commit = last_modified_commit(*paths)
         if tag is None:
-            tag = last_modified_commit(image_path)
+            tag = last_commit
         image_name = prefix + name
         image_spec = '{}:{}'.format(image_name, tag)
-
-        build_image(image_path, image_spec, options.get('buildArgs', {}))
         value_modifications[options['valuesPath']] = {
             'name': image_name,
             'tag': tag
         }
+
+        if commit_range and not path_touched(*paths, commit_range=commit_range):
+            print(f"Skipping {name}, not touched in {commit_range}")
+            continue
+
+        template_namespace = {
+            'LAST_COMMIT': last_commit,
+            'TAG': tag,
+        }
+
+        build_args = render_build_args(options, template_namespace)
+        build_image(image_path, image_spec, build_args)
 
         if push:
             subprocess.check_call([
@@ -67,13 +84,12 @@ def build_images(prefix, images, tag=None, commit_range=None, push=False):
     return value_modifications
 
 def build_values(name, values_mods):
-    rt_yaml = YAML()
-    rt_yaml.indent(offset=2)
+    """Update name/values.yaml with modifications"""
 
     values_file = os.path.join(name, 'values.yaml')
 
     with open(values_file) as f:
-        values = rt_yaml.load(f)
+        values = yaml.load(f)
 
     for key, value in values_mods.items():
         parts = key.split('.')
@@ -84,86 +100,59 @@ def build_values(name, values_mods):
 
 
     with open(values_file, 'w') as f:
-        rt_yaml.dump(values, f)
+        yaml.dump(values, f)
 
 
-def build_chart(name, version=None):
-    rt_yaml = YAML()
-    rt_yaml.indent(offset=2)
-
+def build_chart(name, version=None, paths=None):
+    """Update chart with specified version or last-modified commit in path(s)"""
     chart_file = os.path.join(name, 'Chart.yaml')
     with open(chart_file) as f:
-        chart = rt_yaml.load(f)
+        chart = yaml.load(f)
 
     if version is None:
-        version = chart['version'] + '-' + last_modified_commit('.')
+        if paths is None:
+            paths = ['.']
+        commit = last_modified_commit(*paths)
+        version = chart['version'].split('-')[0] + '-' + commit
 
     chart['version'] = version
 
     with open(chart_file, 'w') as f:
-        rt_yaml.dump(chart, f)
+        yaml.dump(chart, f)
 
 
-def fixup_chart_index(repopath):
-    """
-    Fixup the timestamps in helm charts index.yaml
-
-    Currently the published times of all the charts are reset to current
-    time, since they're set from mtime and our git clone does not preserve
-    mtimes.
-
-    Go YAML's time parser seems insanely finnicky, so this has a bunch of
-    really terrible datetime stuff here.
-    """
-    # Round Tripping seems to fail with index.yaml!
-    safe_yaml = YAML(typ='safe')
-    with open(os.path.join(repopath, 'index.yaml')) as f:
-        index = safe_yaml.load(f)
-
-    for _, entries in index['entries'].items():
-        for e in entries:
-            filename = e['urls'][0].split('/')[-1]
-            last_modified_str = last_modified_date(filename, cwd=repopath)
-            if last_modified_str:
-                # If git has a last modified time, use it. We rely on git to give it to us
-                # with an appropriate tz and the non dateutil.parser to parse it
-                last_modified = dateutil.parser.parse(last_modified_str)
-            else:
-                # If we don't have this in git yet (so this is the latest chart release)
-                # we still have to modify it, because apparently Go's YAML parser can not cope with
-                # different yet valid time formats in the same document (?!?!). Just leaving this
-                # be causes issues. We get mtime, do some twisting to get it to localtime so
-                # isoformat will work
-                filepath = os.path.join(repopath, filename)
-                last_modified_ts = os.path.getmtime(filepath)
-                last_modified = datetime.fromtimestamp(last_modified_ts).replace(tzinfo=dateutil.tz.tzlocal())
-            e['created'] = last_modified.isoformat()
-
-    # We have to manually set this again, because Go's YAML parser seems unable to cope with
-    # multiple types of date formatting in the same doc, even if it was generated by go in the
-    # first place!
-    index['generated'] = datetime.utcnow().replace(tzinfo=dateutil.tz.tzutc()).isoformat()
-    with open(os.path.join(repopath, 'index.yaml'), 'w') as f:
-        safe_yaml.dump(index, f)
-
-
-def publish_pages(name, git_repo, published_repo):
-    version = last_modified_commit('.')
+def publish_pages(name, paths, git_repo, published_repo):
+    """publish helm chart index to github pages"""
+    version = last_modified_commit(*paths)
     checkout_dir = '{}-{}'.format(name, version)
     subprocess.check_call([
         'git', 'clone', '--no-checkout',
         'git@github.com:{}'.format(git_repo), checkout_dir],
     )
     subprocess.check_call(['git', 'checkout', 'gh-pages'], cwd=checkout_dir)
-    subprocess.check_call([
-        'helm', 'package', name,
-        '--destination', '{}/'.format(checkout_dir)
-    ])
-    subprocess.check_call([
-        'helm', 'repo', 'index', '.',
-        '--url', published_repo
-    ], cwd=checkout_dir)
-    fixup_chart_index(checkout_dir)
+
+    # package the latest version into a temporary directory
+    # and run helm repo index with --merge to update index.yaml
+    # without refreshing all of the timestamps
+    with TemporaryDirectory() as td:
+        subprocess.check_call([
+            'helm', 'package', name,
+            '--destination', td + '/',
+        ])
+
+        subprocess.check_call([
+            'helm', 'repo', 'index', td,
+            '--url', published_repo,
+            '--merge', os.path.join(checkout_dir, 'index.yaml'),
+        ])
+
+        # equivalent to `cp td/* checkout/`
+        # copies new helm chart and updated index.yaml
+        for f in os.listdir(td):
+            shutil.copy2(
+                os.path.join(td, f),
+                os.path.join(checkout_dir, f)
+            )
     subprocess.check_call(['git', 'add', '.'], cwd=checkout_dir)
     subprocess.check_call([
         'git',
@@ -178,8 +167,7 @@ def publish_pages(name, git_repo, published_repo):
 
 def main():
     with open('chartpress.yaml') as f:
-        safe_yaml = YAML(typ='safe')
-        config = safe_yaml.load(f)
+        config = yaml.load(f)
 
     argparser = argparse.ArgumentParser()
 
@@ -193,8 +181,13 @@ def main():
     for chart in config['charts']:
         value_mods = build_images(chart['imagePrefix'], chart['images'], args.tag, args.commit_range, args.push)
         build_values(chart['name'], value_mods)
-        build_chart(chart['name'], args.tag)
+        chart_paths = ['.'] + chart.get('paths', [])
+        build_chart(chart['name'], paths=chart_paths, version=args.tag)
         if args.publish_chart:
-            publish_pages(chart['name'], chart['repo']['git'], chart['repo']['published'])
+            publish_pages(chart['name'],
+                paths=chart_paths,
+                git_repo=chart['repo']['git'],
+                published_repo=chart['repo']['published'],
+            )
 
 main()
