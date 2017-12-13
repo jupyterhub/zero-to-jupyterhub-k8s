@@ -24,7 +24,7 @@ development.
 5. Create a virtualenv & install the library required for builds to happen:
    ```bash
    python3 -m venv .
-   pip install ruamel.yaml python_dateutil
+   pip install ruamel.yaml
    ```
  6. Now run `build.py` to build the requisite docker images inside minikube:
     ```bash
