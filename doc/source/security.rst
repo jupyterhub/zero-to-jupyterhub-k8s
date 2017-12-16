@@ -94,7 +94,7 @@ appropriate minimal RBAC rules for the various components we use. If you want to
 disable the RBAC rules for whatever reason, you can do so with the following
 snippet in your config.yaml:
 
-.. raw:: yaml
+.. code-block:: yaml
 
    rbac:
       enabled: false
