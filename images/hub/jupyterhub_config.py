@@ -197,6 +197,7 @@ elif auth_type == 'custom':
 else:
     raise ValueError("Unhandled auth type: %r" % auth_type)
 
+c.Authenticator.enable_auth_state = get_config('auth.state.enabled', False)
 
 def generate_user_email(spawner):
     """
@@ -223,10 +224,7 @@ c.KubeSpawner.environment.update(get_config('singleuser.extra-env', {}))
 
 # Enable admins to access user servers
 c.JupyterHub.admin_access = get_config('auth.admin.access')
-
-
 c.Authenticator.admin_users = get_config('auth.admin.users', [])
-
 c.Authenticator.whitelist = get_config('auth.whitelist.users', [])
 
 c.JupyterHub.services = []

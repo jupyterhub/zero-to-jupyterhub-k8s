@@ -109,6 +109,13 @@ spec:
         - name: {{ $key | quote }}
           value: {{ $value | quote }}
         {{ end -}}
+        {{ if .Values.auth.state.enabled }}
+        - name: JUPYTERHUB_CRYPT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: hub-secret
+              key: auth.state.crypto-key
+        {{ end }}
         ports:
           - containerPort: 8081
             name: hub

@@ -63,6 +63,8 @@ data:
   auth.custom.config : {{ toJson .Values.auth.custom.config | quote }}
   {{- end }}
 
+  auth.state.enabled: {{ .Values.auth.state.enabled | quote }}
+
   {{ if .Values.singleuser.lifecycleHooks -}}
   singleuser.lifecycle-hooks: {{ toJson .Values.singleuser.lifecycleHooks | quote }}
   {{- end }}
