@@ -64,7 +64,7 @@ connect your credit card or other payment method to your google cloud account.
           --num-nodes=3 \
           --machine-type=n1-standard-2 \
           --zone=us-central1-b \
-          --cluster-version=1.8.4-gke.0
+          --cluster-version=1.8.4-gke.1
 
    where:
 
