@@ -4,7 +4,64 @@ The information in this document focuses primarily on cloud based deployments. F
 
 Brad Geesamen gave a wonderful talk titled [Hacking and Hardening Kubernetes by Example](https://kccncna17.sched.com/event/CU6z/hacking-and-hardening-kubernetes-clusters-by-example-i-brad-geesaman-symantec) at Kubecon NA 2017. You can [watch the talk](https://www.youtube.com/watch?v=vTgQLzeBfRU) or [read the slides](https://schd.ws/hosted_files/kccncna17/47/Hacking%20and%20Hardening%20Kubernetes%20By%20Example%20v1.pdf). Highly recommended that you do so to understand the security issues you are up against when using Kubernetes to run JupyterHub.
 
-## Secure the access to Helm
+## HTTPS
+
+Enabling HTTPS for your hub is pretty easy, since we automatically integrate with [Let's Encrypt](https://letsencrypt.org/).
+
+### Set up your domain
+
+1. Buy a domain name from a registrar. Pick whichever one you want.
+
+2. Create an A record from the domain you want to use, pointing to the EXTERNAL-IP of the proxy-public service. The exact way to do this will depend on the DNS provider that you’re using.
+
+3. Wait for the change to propagate. Propagation can take several minutes to several hours. Wait until you can type in the name of the domain you bought and it shows you the JupyterHub landing page.
+
+   It is important that you wait - prematurely going to the next step might cause problems!
+
+### Set up automatic HTTPS
+
+1. Specify the two bits of information that we need to automatically provision HTTPS certificates - your domain name & a contact email address.
+
+   ```yaml
+   proxy:
+     https:
+       hosts:
+         - <your-domain-name>
+       letsencrypt:
+         contactEmail: <your-email-address>
+   ```
+
+2. Apply the config changes by running helm upgrade ....
+3. Wait for about a minute, now your hub should be HTTPS enabled!
+
+### Set up manual HTTPS
+
+If you have your own HTTPS certificates & want to use those instead of the automatically provisioned Let's Encrypt ones, that's also possible. Note that this is considered an advanced option, so we recommend not doing it unless you have good reasons.
+
+1. Add your domain name & HTTPS certificate info to your `config.yaml`
+
+   ```yaml
+  proxy:
+  https:
+    hosts:
+      - <your-domain-name>
+    type: manual
+    manual:
+      key: |
+        -----BEGIN RSA PRIVATE KEY-----
+        ...
+        -----END RSA PRIVATE KEY-----
+      cert: |
+        -----BEGIN CERTIFICATE-----
+        ...
+        -----END CERTIFICATE-----
+
+   ```
+
+2. Apply the config changes by running helm upgrade ....
+3. Wait for about a minute, now your hub should be HTTPS enabled!
+
+## Secure access to Helm
 
 In its default configuration, helm pretty much allows root access to all other
 pods running in your cluster. See this [Bitnami Helm security article](https://engineering.bitnami.com/articles/helm-security.html)
