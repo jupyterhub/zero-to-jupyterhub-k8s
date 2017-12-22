@@ -6,7 +6,8 @@ Brad Geesamen gave a wonderful talk titled [Hacking and Hardening Kubernetes by 
 
 ## HTTPS
 
-Enabling HTTPS for your hub is pretty easy, since we automatically integrate with [Let's Encrypt](https://letsencrypt.org/).
+This section describes how to enable HTTPS on your JupyterHub. The easiest way to do so is by using [Let's Encrypt](https://letsencrypt.org/), though we'll also cover how to set up your own HTTPS credentials. For more information
+on HTTPS security see the certificates section of [this blog post](https://blog.hartleybrody.com/https-certificates/).
 
 ### Set up your domain
 
