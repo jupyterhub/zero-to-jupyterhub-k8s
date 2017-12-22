@@ -12,7 +12,7 @@ kubectl --namespace=$TEST_NAMESPACE rollout status --watch deployment/hub
 kubectl --namespace=$TEST_NAMESPACE rollout status --watch deployment/proxy
 
 echo "waiting for servers to become responsive"
-until curl -s $TEST_URL > /dev/null; do
+until curl -s $TEST_URL/hub/api; do
     sleep 5
 done
 
