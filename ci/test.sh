@@ -8,12 +8,10 @@ TEST_URL=http://$IP:31212
 
 helm install --name jupyterhub-test --namespace $TEST_NAMESPACE ./jupyterhub/ -f minikube-config.yaml
 
-kubectl --namespace=$TEST_NAMESPACE rollout status --watch deployment/hub
-kubectl --namespace=$TEST_NAMESPACE rollout status --watch deployment/proxy
-
 echo "waiting for servers to become responsive"
-until curl -s $TEST_URL > /dev/null; do
-    sleep 5
+until curl --fail -s $TEST_URL/hub/api; do
+    kubectl --namespace=$TEST_NAMESPACE describe pod
+    sleep 10
 done
 
 echo "getting jupyterhub version"
