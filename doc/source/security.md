@@ -39,25 +39,24 @@ on HTTPS security see the certificates section of [this blog post](https://blog.
 
 If you have your own HTTPS certificates & want to use those instead of the automatically provisioned Let's Encrypt ones, that's also possible. Note that this is considered an advanced option, so we recommend not doing it unless you have good reasons.
 
-1. Add your domain name & HTTPS certificate info to your `config.yaml`
+1.  Add your domain name & HTTPS certificate info to your `config.yaml`
 
-   ```yaml
-  proxy:
-  https:
-    hosts:
-      - <your-domain-name>
-    type: manual
-    manual:
-      key: |
-        -----BEGIN RSA PRIVATE KEY-----
-        ...
-        -----END RSA PRIVATE KEY-----
-      cert: |
-        -----BEGIN CERTIFICATE-----
-        ...
-        -----END CERTIFICATE-----
-
-   ```
+    ```yaml
+    proxy:
+      https:
+        hosts:
+          - <your-domain-name>
+        type: manual
+        manual:
+          key: |
+            -----BEGIN RSA PRIVATE KEY-----
+            ...
+            -----END RSA PRIVATE KEY-----
+          cert: |
+            -----BEGIN CERTIFICATE-----
+            ...
+            -----END CERTIFICATE-----
+    ```
 
 2. Apply the config changes by running helm upgrade ....
 3. Wait for about a minute, now your hub should be HTTPS enabled!
@@ -66,7 +65,7 @@ If you have your own HTTPS certificates & want to use those instead of the autom
 
 In its default configuration, helm pretty much allows root access to all other
 pods running in your cluster. See this [Bitnami Helm security article](https://engineering.bitnami.com/articles/helm-security.html)
-for more information. As a consequence, the default allows all users in your cluster to pretty much have root access to your whole cluster! 
+for more information. As a consequence, the default allows all users in your cluster to pretty much have root access to your whole cluster!
 
 You can mitigate this by limiting public access to the Tiller API. To do so, use the following command:
 
@@ -86,7 +85,7 @@ The easiest way to mitigate it is to add an [iptables](https://en.wikipedia.org/
 
 ### Google Cloud / AWS / Azure
 
-In all these clouds you can access the metadata service via the IP `169.254.169.254`. Blocking all outgoing packets to that IP should protect you. 
+In all these clouds you can access the metadata service via the IP `169.254.169.254`. Blocking all outgoing packets to that IP should protect you.
 
 ```yaml
 singleuser:
@@ -119,11 +118,11 @@ kubectl --namespace=kube-system delete rc kubernetes-dashboard
 
 ## Use Role Based Access Control (RBAC)
 
-Kubernetes supports, and often requires, using [Role Based Access Control (RBAC)](https://kubernetes.io/docs/admin/authorization/rbac/) 
+Kubernetes supports, and often requires, using [Role Based Access Control (RBAC)](https://kubernetes.io/docs/admin/authorization/rbac/)
 to secure which pods / users can perform what kinds of actions on the cluster. RBAC rules can be set to provide users with minimal necessary access based on their administrative needs.
 
 
-It is **critical** to understand that if RBAC is disabled, all pods are given `root` equivalent permission on the Kubernetes cluster and all the nodes in it. This opens up very bad vulnerabilites for your security. 
+It is **critical** to understand that if RBAC is disabled, all pods are given `root` equivalent permission on the Kubernetes cluster and all the nodes in it. This opens up very bad vulnerabilites for your security.
 
 As of the Helm chart v0.5 used with JupyterHub and BinderHub, the helm chart can natively work with RBAC enabled clusters. To provide sensible security defaults, we ship appropriate minimal RBAC rules for the various components we use. We **highly recommend** using these minimal or more restrictive RBAC rules.
 
