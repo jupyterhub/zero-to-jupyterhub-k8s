@@ -23,7 +23,7 @@ popular ways of getting setup in various cloud providers:
 
    If you are concerned at all about security (you probably should be), see
    the `Kubernetes best-practices guide <http://blog.kubernetes.io/2016/08/security-best-practices-kubernetes-deployment.html>`_
-   for information about keeping your Kubernetes infrastruture secure.
+   for information about keeping your Kubernetes infrastructure secure.
 
 .. _google-cloud:
 
