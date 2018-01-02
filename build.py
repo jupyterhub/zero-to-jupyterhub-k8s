@@ -9,7 +9,7 @@ from ruamel.yaml import YAML
 
 # use safe roundtrip yaml loader
 yaml = YAML(typ='rt')
-yaml.indent(offset=2)
+yaml.indent(mapping=2, offset=2, sequence=4)
 
 def last_modified_commit(*paths, **kwargs):
     return subprocess.check_output([
