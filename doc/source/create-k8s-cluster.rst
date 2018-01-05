@@ -15,15 +15,13 @@ popular ways of getting setup in various cloud providers:
 
 .. note::
 
-   During the process of setting up JupyterHub, you'll be creating some
-   files for configuration purposes. It may be helpful to create a folder
-   for your JuypterHub deployment to keep track of these files.
+   * During the process of setting up JupyterHub, you'll be creating some
+     files for configuration purposes. It may be helpful to create a folder
+     for your JuypterHub deployment to keep track of these files.
 
-.. note::
-
-   If you are concerned at all about security (you probably should be), see
-   the `Kubernetes best-practices guide <http://blog.kubernetes.io/2016/08/security-best-practices-kubernetes-deployment.html>`_
-   for information about keeping your Kubernetes infrastructure secure.
+   * If you are concerned at all about security (you probably should be), see
+     the `Kubernetes best-practices guide <http://blog.kubernetes.io/2016/08/security-best-practices-kubernetes-deployment.html>`_
+     for information about keeping your Kubernetes infrastructure secure.
 
 .. _google-cloud:
 
@@ -208,16 +206,14 @@ run a longer term cluster.
 
    .. note::
 
-      Make sure that you keep the file downloaded when you create the SSH
-      key. This will be needed later to allow ``kubectl`` to interact with
-      your Kubernetes cluster.
+      * Make sure that you keep the file downloaded when you create the SSH
+        key. This will be needed later to allow ``kubectl`` to interact with
+        your Kubernetes cluster.
 
-   .. note::
-
-      You may find it helpful to "pin" the services we'll be using to your AWS
-      navbar. This makes it easier to navigate in subsequent sessions.
-      Click the "pin" icon at the top, then drag ``CloudFormation`` and
-      ``EC2`` into your navbar.
+      * You may find it helpful to "pin" the services we'll be using to your AWS
+        navbar. This makes it easier to navigate in subsequent sessions.
+        Click the "pin" icon at the top, then drag ``CloudFormation`` and
+        ``EC2`` into your navbar.
 
 2. Deploy a Kubernetes template from Heptio.
 
