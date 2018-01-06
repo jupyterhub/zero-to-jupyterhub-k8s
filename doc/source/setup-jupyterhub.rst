@@ -103,22 +103,20 @@ Install JupyterHub
 
    .. note::
 
-      If you get a ``release named <YOUR-RELEASE-NAME> already exists`` error, then
-      you should delete the release by running
-      ``helm delete --purge <YOUR-RELEASE-NAME>``. Then reinstall by repeating this
-      step. If it persists, also do ``kubectl delete <YOUR-NAMESPACE>`` and try again.
+      * If you get a ``release named <YOUR-RELEASE-NAME> already exists`` error, then
+        you should delete the release by running
+        ``helm delete --purge <YOUR-RELEASE-NAME>``. Then reinstall by repeating this
+        step. If it persists, also do ``kubectl delete <YOUR-NAMESPACE>`` and try again.
 
-      If you're pulling from a large Docker image you may get a
-      ``Error: timed out waiting for the condition`` error,
-      add a ``--timeout=SOME-LARGE-NUMBER``
-      parameter to the ``helm install`` command.
+        If you're pulling from a large Docker image you may get a
+        ``Error: timed out waiting for the condition`` error,
+        add a ``--timeout=SOME-LARGE-NUMBER``
+        parameter to the ``helm install`` command.
 
-  .. note::
-
-     The ``--version`` parameter corresponds to the *version of the helm chart*,
-     not the version of JupyterHub. Each version of the JupyterHub helm chart
-     is paired with a specific version of JupyterHub. E.g., v0.5 of the helm
-     chart runs JupyterHub v0.8.
+      * The ``--version`` parameter corresponds to the *version of the helm chart*,
+        not the version of JupyterHub. Each version of the JupyterHub helm chart
+        is paired with a specific version of JupyterHub. E.g., v0.5 of the helm
+        chart runs JupyterHub v0.8.
 
 2. While Step 1 is running, you can see the pods being created by entering in
    a different terminal:
