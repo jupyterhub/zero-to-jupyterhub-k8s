@@ -42,7 +42,8 @@ RUN pip3 install --no-cache-dir \
          mwoauth==0.3.2 \
          globus_sdk[jwt]==1.2.1 \
          oauthenticator==0.7.2 \
-         cryptography==2.0.3
+         cryptography==2.0.3 \
+         watchdog==0.8.3
 
 RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@5c9bf38
 
@@ -58,4 +59,3 @@ RUN chown ${NB_USER}:${NB_USER} /srv/jupyterhub
 EXPOSE 8081
 
 USER ${NB_USER}
-CMD ["jupyterhub", "--config", "/srv/jupyterhub_config.py"]
