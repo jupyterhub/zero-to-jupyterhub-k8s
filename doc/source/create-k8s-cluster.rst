@@ -98,7 +98,7 @@ connect your credit card or other payment method to your google cloud account.
 
 .. _microsoft-azure:
 
-Setting up Kubernetes on Microsoft Azure Container Service (ACS)
+Setting up Kubernetes on Microsoft Azure Container Service (AKS)
 ----------------------------------------------------------------
 
 .. note::
@@ -122,7 +122,32 @@ Setting up Kubernetes on Microsoft Azure Container Service (ACS)
 
       az login
 
-3. Specify a `Azure resource group`_, and create one if it doesn't already
+3. Set your Azure account context:
+
+   .. code-block:: bash
+
+      az account set -s <YOUR CHOSEN SUBSCRIPTION>
+
+4. Manually preserve the subscription ID (".id" in the previous command's output) in SUBSCRIPTION_ID, or obtain it with `jq <https://stedolan.github.io/jq/>`_:
+
+   .. code-block:: bash
+
+      export SUBSCRIPTION_ID="$(az account show | jq -r .id)"
+
+5. Create a service principal:
+
+   .. code-block:: bash
+
+      az ad sp create-for-rbac --role=Contributor --scopes=/subscriptions/${SUBSCRIPTION_ID} > sp.json
+
+6. Manually preserve the service principal and password by looking them up in sp.json, or obtain them with jq:
+
+   .. code-block:: bash
+
+      export SERVICE_PRINCIPAL="$(jq -r .appId sp.json)"
+      export CLIENT_SECRET="$(jq -r .password sp.json)"
+
+7. Specify an `Azure resource group`_, and create one if it doesn't already
    exist:
 
    .. code-block:: bash
@@ -135,42 +160,45 @@ Setting up Kubernetes on Microsoft Azure Container Service (ACS)
 
   * ``--name`` specifies your Azure resource group. If a group doesn't exist,
     az will create it for you.
-  * ``--location`` specifies which computer center to use.  To reduce latency,
-    choose a zone closest to whoever is sending the commands. View available
-    zones via ``az account list-locations``.
+  * ``--location`` specifies your Azure region. To reduce latency, choose a region closest to those using the cluster. AKS is only available in `preview regions <https://github.com/Azure/AKS/blob/master/preview_regions.md>`_ at the moment. You may view all available zones via ``az account list-locations``.
 
-5. Install ``kubectl``, a tool for controlling Kubernetes:
+8. Create a Kubernetes cluster on Azure:
 
    .. code-block:: bash
 
-      az acs kubernetes install-cli
-
-6. Create a Kubernetes cluster on Azure, by typing in the following commands:
-
-   .. code-block:: bash
-
-      export CLUSTER_NAME=<YOUR_CLUSTER_NAME>
-      export DNS_PREFIX=<YOUR_PREFIX>
-      az acs create --orchestrator-type=kubernetes \
-          --resource-group=${RESOURCE_GROUP} \
-          --name=${CLUSTER_NAME} \
-          --dns-prefix=${DNS_PREFIX}
-
-7. Authenticate kubectl:
-
-   .. code-block:: bash
-
-      az acs kubernetes get-credentials \
-          --resource-group=${RESOURCE_GROUP} \
-          --name=${CLUSTER_NAME}
+      export CLUSTER=<YOUR_CLUSTER_NAME>
+      az aks create -n ${CLUSTER} -g ${RESOURCE_GROUP} \
+          --location ${LOCATION} \
+          --service-principal ${SERVICE_PRINCIPAL} \
+          --client-secret ${CLIENT_SECRET} \
+          --kubernetes-version 1.8.2
 
   where:
 
-  * ``--resource-group`` specifies your Azure resource group.
-  * ``--name`` is your ACS cluster name.
-  * ``--dns-prefix`` is the domain name prefix for the cluster.
+  * ``-n`` is your ACS cluster name.
+  * ``-g`` is your Azure resource group.
+  * ``--location`` is your Azure region.
+  * --service-principal and --client-secrets are set to the values you created earlier.
+  * --kubernetes-version is the the version of kubernetes your cluster will run. We recommend at least 1.8.x.
 
-8. To test if your cluster is initialized, run:
+9. Install ``kubectl``, a tool for controlling Kubernetes:
+
+   .. code-block:: bash
+
+      az aks install-cli
+
+10. Authenticate kubectl:
+
+   .. code-block:: bash
+
+      az aks get-credentials -n ${CLUSTER} -g ${RESOURCE_GROUP}
+
+  where:
+
+  * ``-n`` is your ACS cluster name.
+  * ``-g`` specifies your Azure resource group.
+
+11. To test if your cluster is initialized, run:
 
    .. code-block:: bash
 
