@@ -161,3 +161,40 @@ kubernetes that as a long list of cool use cases. Some example use cases are:
 
 The items in this list must be valid kubernetes
 [container specifications](https://kubernetes.io/docs/api-reference/v1.8/#container-v1-core).
+
+## Picking a Scheduler Strategy
+
+Kubernetes offers very flexible ways to determine which nodes you want yourpods
+to run on. With JupyterHub, there are two common configurations you would want,
+and the helm chart supports those natively.
+
+### Spread
+
+This spreads user pods across as many nodes as possible. A single node going
+down will not affect too many users. If you do not have explicit memory & cpu
+limits, this strategy also allows your users most use of RAM & CPU.
+
+This is the default strategy. To explicitly specify it, you can use the
+following in your config.yaml:
+
+
+```yaml
+singleuser:
+   schedulerStrategy: spread
+```
+
+### Pack
+
+This spreads user pods across as few nodes as possible. A single node going down
+might affect more nodes than with a spread strategy (depending on the node).
+You should specify memory & cpu limits & guarantees when using this strategy for
+predictable behavior for users. This increases your resource utilization, which
+is great when used with autoscalers.
+
+You can enable this strategy with the following in your config.yaml:
+
+
+```yaml
+singleuser:
+    schedulerStrategy: pack
+```
