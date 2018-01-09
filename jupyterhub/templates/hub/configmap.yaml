@@ -85,7 +85,8 @@ data:
     {{$name}}:
       {{ range $key, $value := $service -}}
       {{ if ne $key "apiToken" -}}
-      {{$key}}: {{ $value }}
+      # Use toJson since values can be more than just strings
+      {{$key}}: {{ toJson $value }}
       {{- end }}
       {{ end }}
     {{ end }}
