@@ -105,6 +105,9 @@ data:
   singleuser.fs-gid: {{ .Values.singleuser.fsGid | quote }}
   singleuser.node-selector: {{ toJson .Values.singleuser.nodeSelector | quote }}
 
+  {{ if .Values.singleuser.schedulerStrategy }}
+  singleuser.scheduler-strategy: {{ .Values.singleuser.schedulerStrategy | quote }}
+  {{- end }}
   singleuser.storage.type: {{ .Values.singleuser.storage.type | quote }}
   singleuser.storage.home_mount_path: {{ .Values.singleuser.storage.homeMountPath | quote }}
   singleuser.storage.extra-volumes: {{ toJson .Values.singleuser.storage.extraVolumes | quote }}

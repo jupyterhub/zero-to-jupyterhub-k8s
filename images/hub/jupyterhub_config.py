@@ -264,6 +264,33 @@ if cmd:
     c.Spawner.cmd = cmd
 
 
+scheduler_strategy = get_config('singleuser.scheduler-strategy', 'spread')
+
+if scheduler_strategy == 'pack':
+    # FIXME: Support setting affinity directly in KubeSpawner
+    c.KubeSpawner.singleuser_extra_pod_config = {
+        'affinity': {
+            'podAffinity': {
+                'preferredDuringSchedulingIgnoredDuringExecution': [{
+                    'weight': 100,
+                    'podAffinityTerm': {
+                        'labelSelector': {
+                            'matchExpressions': [{
+                                'key': 'component',
+                                'operator': 'In',
+                                'values': ['singleuser-server']
+                            }]
+                        },
+                        'topologyKey': 'kubernetes.io/hostname'
+                    }
+                }],
+            }
+        }
+    }
+else:
+    # Set default to {} so subconfigs can easily update it
+    c.KubeSpawner.singleuser_extra_pod_config = {}
+
 extra_config_path = '/etc/jupyterhub/config/hub.extra-config.py'
 if os.path.exists(extra_config_path):
     load_subconfig(extra_config_path)
