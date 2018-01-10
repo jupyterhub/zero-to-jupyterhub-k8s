@@ -227,6 +227,8 @@ c.JupyterHub.admin_access = get_config('auth.admin.access')
 c.Authenticator.admin_users = get_config('auth.admin.users', [])
 c.Authenticator.whitelist = get_config('auth.whitelist.users', [])
 
+c.JupyterHub.base_url = get_config('hub.base_url')
+
 c.JupyterHub.services = []
 
 if get_config('cull.enabled', False):
@@ -236,7 +238,7 @@ if get_config('cull.enabled', False):
         '/usr/local/bin/cull_idle_servers.py',
         '--timeout=%s' % cull_timeout,
         '--cull-every=%s' % cull_every,
-        '--url=http://127.0.0.1:8081/hub/api'
+        '--url=http://127.0.0.1:8081' + c.JupyterHub.base_url + 'hub/api'
     ]
     if get_config('cull.users'):
         cull_cmd.append('--cull-users')
@@ -255,7 +257,6 @@ for name, service in get_config('hub.services', {}).items():
         service['api_token'] = api_token
     c.JupyterHub.services.append(service)
 
-c.JupyterHub.base_url = get_config('hub.base_url')
 
 c.JupyterHub.db_url = get_config('hub.db_url')
 
