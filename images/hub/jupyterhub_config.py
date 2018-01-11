@@ -183,6 +183,9 @@ elif auth_type == 'dummy':
     c.DummyAuthenticator.password = get_config('auth.dummy.password', None)
 elif auth_type == 'tmp':
     c.JupyterHub.authenticator_class = 'tmpauthenticator.TmpAuthenticator'
+elif auth_type == 'lti':
+    c.JupyterHub.authenticator_class = 'ltiauthenticator.LTIAuthenticator'
+    c.LTIAuthenticator.consumers = get_config('auth.lti.consumers')
 elif auth_type == 'custom':
     # full_class_name looks like "myauthenticator.MyAuthenticator".
     # To create a docker image with this class availabe, you can just have the
