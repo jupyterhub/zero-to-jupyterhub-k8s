@@ -30,22 +30,10 @@ RUN adduser --disabled-password \
 
 ARG JUPYTERHUB_VERSION=0.8.*
 
+ADD requirements.txt /tmp/requirements.txt
 RUN pip3 install --no-cache-dir \
-         jupyterhub==${JUPYTERHUB_VERSION}  \
-         statsd==3.2.1 \
-         jupyterhub-dummyauthenticator==0.3.1 \
-         jupyterhub-tmpauthenticator==0.4 \
-         jupyterhub-ltiauthenticator==0.1 \
-         nullauthenticator==1.0 \
-         pymysql==0.7.11 \
-         psycopg2==2.7.1 \
-         pycurl==7.43.0 \
-         mwoauth==0.3.2 \
-         globus_sdk[jwt]==1.2.1 \
-         oauthenticator==0.7.2 \
-         cryptography==2.0.3
-
-RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@5c9bf38
+         jupyterhub==${JUPYTERHUB_VERSION} \
+         -r /tmp/requirements.txt
 
 ADD jupyterhub_config.py /srv/jupyterhub_config.py
 ADD cull_idle_servers.py /usr/local/bin/cull_idle_servers.py
