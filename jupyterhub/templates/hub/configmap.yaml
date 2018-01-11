@@ -47,6 +47,10 @@ data:
   auth.globus.callback-url: {{.Values.auth.globus.callbackUrl | quote}}
   auth.globus.identity-provider: {{.Values.auth.globus.identityProvider | quote}}
   {{- end }}
+  {{ if eq .Values.auth.type "lti" -}}
+  auth.lti.consumers:
+{{ toYaml .Values.auth.consumers | indent 4 }}
+  {{- end }}
 
   {{ if .Values.auth.whitelist.users -}}
   auth.whitelist.users: |
