@@ -248,6 +248,9 @@ cmd = get_config('singleuser.cmd', None)
 if cmd:
     c.Spawner.cmd = cmd
 
+default_url = get_config('singleuser.default-url', None)
+if default_url:
+    c.Spawner.default_url = default_url
 
 scheduler_strategy = get_config('singleuser.scheduler-strategy', 'spread')
 

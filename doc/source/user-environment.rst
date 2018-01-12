@@ -185,6 +185,35 @@ how to configure JupyterHub to build off of this image:
 9. **Enjoy your new computing environment!** You should now have a live
    computing environment built off of the Docker image we’ve created.
 
+Use JupyterLab by default
+-------------------------
+
+`JupyterLab <https://github.com/jupyterlab/jupyterlab>`_ is the next generation
+user interface for Project Jupyter. It can be used with JupyterHub, both as an
+optional interface and as a default.
+
+1. `Install JupyterLab <https://github.com/jupyterlab/jupyterlab#installation`_
+   in your user image.
+2. `Install JupyterLab Hub extension
+   <https://github.com/jupyterhub/jupyterlab-hub#installation>`_ in your user
+   image. This provides a nice UI for accessing JupyterHub control panel from
+   JupyterLab. You only need the `jupyter labextension` command.
+3. If you want users to launch automatically into JupyterLab instead of classic
+   notebook, use the following in your ``config.yaml``
+
+   .. code-block:: yaml
+      singleuser:
+        defaultUrl: "/lab"
+
+   This will put users into JupyterLab when they launch.
+4. Users can always classic Jupyter Notebook by replacing the ``/lab`` in the URL
+   after their server starts with ``/tree``. Similarly, you can access
+   JupyterLab even if it is not the default by replacing ``/tree`` in the URL
+   with ``/lab``
+
+.. note::
+   JupyterLab is just about to go into beta, so use with caution!
+
 Set environment variables
 -------------------------
 

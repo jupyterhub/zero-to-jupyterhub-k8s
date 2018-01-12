@@ -113,6 +113,9 @@ data:
   {{ if .Values.singleuser.cmd -}}
   singleuser.cmd: {{ .Values.singleuser.cmd | quote }}
   {{- end }}
+  {{ if .Values.singleuser.defaultUrl }}
+  singleuser.default-url: {{ .Values.singleuser.defaultUrl | quote }}
+  {{- end }}
 
   singleuser.uid: {{ .Values.singleuser.uid | quote }}
   singleuser.fs-gid: {{ .Values.singleuser.fsGid | quote }}
