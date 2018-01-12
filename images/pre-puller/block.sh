@@ -29,11 +29,11 @@ pulling_complete() {
                 https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}/api/v1/nodes
          );
 
-    JQ_PROGRAM='[.items[].metadata.labels[env.NODE_LABEL_KEY] == env.NODE_LABEL_VALUE] | all'
-    COMPLETE=$(echo ${NODES} | jq "${JQ_PROGRAM}")
-    echo ${COMPLETE}
+    TOTAL_NODES=$(echo ${NODES} | jq -r '.items | length')
+    COMPLETE_NODES=$(echo ${NODES} | jq -f nodes_with_image.jq --arg image ${IMAGE}| jq -r length)
 
-    if [[ $COMPLETE == 'true' ]]; then
+    echo "${COMPLETE_NODES} of ${TOTAL_NODES} complete"
+    if [[ ${COMPLETE_NODES} -eq ${TOTAL_NODES} ]]; then
         return 0;
     else
         return 1;
@@ -54,5 +54,7 @@ curl \
     --fail \
     --silent \
     --show-error \
-    https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}/apis/extensions/v1beta1/namespaces/${NAMESPACE}/daemonsets/${DAEMONSET_NAME}
+    --verbose \
+    https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}/apis/extensions/v1beta1/namespaces/${NAMESPACE}/daemonsets/${DAEMONSET_NAME} \
+    -d '{"apiVersion": "v1", "kind": "DeleteOptions", "propagationPolicy": "Foreground"}'
 

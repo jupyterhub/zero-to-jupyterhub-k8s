@@ -13,11 +13,3 @@ case $IMAGE in gcr.io*)
 esac
 
 curl -H "X-Registry-Auth: ${AUTH}" -X POST --unix-socket /var/run/docker.sock "http:/v1.23/images/create?fromImage=${IMAGE}&tag=${TAG}"
-
-curl  \
-    -H "Content-Type: application/merge-patch+json"  \
-    -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
-    --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt  \
-    -X PATCH \
-    https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}/api/v1/nodes/${NODE} \
-    -d "{\"metadata\": {\"labels\": {\"${NODE_LABEL_KEY}\":\"${NODE_LABEL_VALUE}\"}}}"

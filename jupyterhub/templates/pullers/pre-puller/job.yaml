@@ -19,7 +19,5 @@ spec:
                   fieldPath: metadata.namespace
             - name: DAEMONSET_SPEC
               value: {{ toJson (fromYaml (include "jupyterhub.imagePuller.daemonset" .)) | quote }}
-            - name: NODE_LABEL_KEY
-              value: {{ include "jupyterhub.imagePuller.nodeLabelKey" . | quote }} 
-            - name: NODE_LABEL_VALUE
-              value: {{ include "jupyterhub.imagePuller.nodeLabelValue" .| quote }}
+            - name: IMAGE
+              value: "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"

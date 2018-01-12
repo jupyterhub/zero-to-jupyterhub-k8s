@@ -1,9 +1,3 @@
-{{ define "jupyterhub.imagePuller.nodeLabelKey" -}}
-hub.jupyter.org/pulled-image-{{ .Release.Name }}
-{{- end }}
-{{ define "jupyterhub.imagePuller.nodeLabelValue" -}}
-{{ printf "%s:%s" .Values.singleuser.image.name .Values.singleuser.image.tag | sha256sum | trunc 63 }}
-{{- end }}
 {{ define "jupyterhub.imagePuller.daemonset" }}
 # template that returns an imagePuller daemonset
 apiVersion: extensions/v1beta1
@@ -37,14 +31,6 @@ spec:
             value: {{ .Values.singleuser.image.name }}
           - name: TAG
             value: {{ .Values.singleuser.image.tag }}
-          - name: NODE
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.nodeName
-          - name: NODE_LABEL_KEY
-            value: {{ include "jupyterhub.imagePuller.nodeLabelKey" . | quote }}
-          - name: NODE_LABEL_VALUE
-            value: {{ include "jupyterhub.imagePuller.nodeLabelValue" . | quote }}
         volumeMounts:
         - name: docker
           mountPath: /var/run/docker.sock
