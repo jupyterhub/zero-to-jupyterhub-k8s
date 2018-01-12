@@ -10,20 +10,20 @@ spec:
   selector:
     matchLabels:
         app: jupyterhub
-        component: pre-puller
+        component: image-puller
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
   template:
     metadata:
       labels:
         app: jupyterhub
-        component: pre-puller
+        component: image-puller
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
     spec:
       terminationGracePeriodSeconds: 0
       initContainers:
-      - name: pre-pull
+      - name: image-pull
         image: {{ .Values.imagePuller.image.name }}:{{ .Values.imagePuller.image.tag }}
         imagePullPolicy: Always
         env:
