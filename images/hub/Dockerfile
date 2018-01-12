@@ -36,6 +36,7 @@ RUN pip3 install --no-cache-dir \
          -r /tmp/requirements.txt
 
 ADD jupyterhub_config.py /srv/jupyterhub_config.py
+ADD z2jh /srv/z2jh
 ADD cull_idle_servers.py /usr/local/bin/cull_idle_servers.py
 
 WORKDIR /srv/jupyterhub

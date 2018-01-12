@@ -1,32 +1,8 @@
 import os
 import glob
-import sys
-import yaml
 from tornado.httpclient import AsyncHTTPClient
 
-def get_config(key, default=None):
-    """
-    Find a config item of a given name & return it
-
-    Parses everything as YAML, so lists and dicts are available too
-    """
-    path = os.path.join('/etc/jupyterhub/config', key)
-    try:
-        with open(path) as f:
-            data = yaml.safe_load(f)
-            return data
-    except FileNotFoundError:
-        return default
-
-def get_secret(key, default=None):
-    """Get a secret from /etc/jupyterhub/secret"""
-    path = os.path.join('/etc/jupyterhub/secret', key)
-    try:
-        with open(path) as f:
-            return f.read().strip()
-    except FileNotFoundError:
-        return default
-
+from z2jh import get_config, get_secret
 
 # Configure JupyterHub to use the curl backend for making HTTP requests,
 # rather than the pure-python implementations. The default one starts

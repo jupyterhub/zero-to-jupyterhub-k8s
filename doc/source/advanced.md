@@ -122,7 +122,7 @@ hub:
 ### `hub.extraConfigMap`
 
 This property takes a dictionary of values that are then made available for code
-in `hub.extraConfig` to read using a `get_config` function. You can use this to
+in `hub.extraConfig` to read using a `z2jh.get_config` function. You can use this to
 easily separate your code (which goes in `hub.extraConfig`) from your config
 (which should go here).
 
@@ -144,14 +144,17 @@ hub:
 
 In your `hub.extraConfig`,
 
-1. `get_config('custom.myString')` will return a string `"Hello!"`
-2. `get_config('custom.myList')` will return a list `["Item1", "Item2"]`
-3. `get_config('custom.myDict')` will return a dict `{"key": "value"}`
-4. `get_config('custom.myLongString')` will return a string `"Line1\nLine2"`
-5. `get_config('custom.nonExistent')` will return `None` (since you didn't
+1. `z2jh.get_config('custom.myString')` will return a string `"Hello!"`
+2. `z2jh.get_config('custom.myList')` will return a list `["Item1", "Item2"]`
+3. `z2jh.get_config('custom.myDict')` will return a dict `{"key": "value"}`
+4. `z2jh.get_config('custom.myLongString')` will return a string `"Line1\nLine2"`
+5. `z2jh.get_config('custom.nonExistent')` will return `None` (since you didn't
     specify any value for `nonExistent`)
-6. `get_config('custom.myDefault', True)` will return `True`, since that is
+6. `z2jh.get_config('custom.myDefault', True)` will return `True`, since that is
     specified as the second parameter (default)
+
+You need to have a `import z2jh` at the top of your `extraConfig` for
+`z2jh.get_config()` to work.
 
 Note that the keys in `hub.extraConfigMap` must be alpha numeric strings
 starting with a character. Dashes and Underscores are not allowed.
