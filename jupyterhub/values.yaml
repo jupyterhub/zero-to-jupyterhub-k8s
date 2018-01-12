@@ -35,6 +35,8 @@ hub:
       memory: 512Mi
   services: {}
   imagePullPolicy: IfNotPresent
+  pdb:
+    enabled: true
 
 rbac:
   enabled: true
@@ -82,6 +84,8 @@ proxy:
     resources: {}
   labels:
   nodeSelector: {}
+  pdb:
+    enabled: true
   https:
     enabled: true
     type: letsencrypt
