@@ -1,13 +1,19 @@
+{{ if .Values.prePuller.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: pre-puller-{{ .Release.Time.Seconds }}-{{.Release.Name}}-{{.Release.Revision}}
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-weight": "10"
 spec:
   template:
     spec:
       restartPolicy: Never
+      {{ if .Values.rbac.enabled }}
+      serviceAccountName: pre-puller-{{ .Release.Name }}-{{ .Release.Revision }}
+      {{- end }}
       containers:
         - image: {{ .Values.prePuller.image.name }}:{{ .Values.prePuller.image.tag }}
           name: pre-puller
@@ -21,3 +27,4 @@ spec:
               value: {{ toJson (fromYaml (include "jupyterhub.imagePuller.daemonset" .)) | quote }}
             - name: IMAGE
               value: "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"
+{{ end }}
