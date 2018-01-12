@@ -142,8 +142,15 @@ singleuser:
 prePuller:
   enabled: true
   image:
-    name: yuvipanda/image-allnodes-puller
-    tag: v0.8
+    name: jupyterhub/k8s-pre-puller
+    tag: 2b02899
+
+imagePuller:
+  enabled: false
+  image:
+    name: jupyterhub/k8s-image-puller
+    tag: 2b02899
+
 
 ingress:
   enabled: false
@@ -157,3 +164,5 @@ cull:
   timeout: 3600
   every: 600
 
+pullBlocker:
+  image: {name: yuvipanda/k8s-pull-blocker, tag: 2b02899}

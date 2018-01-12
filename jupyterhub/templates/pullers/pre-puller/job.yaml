@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pre-puller-{{ .Release.Time.Seconds }}-{{.Release.Name}}-{{.Release.Revision}}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - image: {{ .Values.prePuller.image.name }}:{{ .Values.prePuller.image.tag }}
+          name: pre-puller
+          imagePullPolicy: Always
+          env:
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: DAEMONSET_SPEC
+              value: {{ toJson (fromYaml (include "jupyterhub.imagePuller.daemonset" .)) | quote }}
+            - name: NODE_LABEL_KEY
+              value: {{ include "jupyterhub.imagePuller.nodeLabelKey" . | quote }} 
+            - name: NODE_LABEL_VALUE
+              value: {{ include "jupyterhub.imagePuller.nodeLabelValue" .| quote }}

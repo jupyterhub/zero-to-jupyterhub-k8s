@@ -10,6 +10,10 @@ charts:
         valuesPath: hub.image
         buildArgs:
           JUPYTERHUB_VERSION: 0.8.1
+      image-puller:
+        valuesPath: imagePuller.image
+      pre-puller:
+        valuesPath: prePuller.image
       singleuser-sample:
         valuesPath: singleuser.image
         buildArgs:

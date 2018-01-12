@@ -1,0 +1,58 @@
+{{ define "jupyterhub.imagePuller.nodeLabelKey" -}}
+hub.jupyter.org/pulled-image-{{ .Release.Name }}
+{{- end }}
+{{ define "jupyterhub.imagePuller.nodeLabelValue" -}}
+{{ printf "%s:%s" .Values.singleuser.image.name .Values.singleuser.image.tag | sha256sum | trunc 63 }}
+{{- end }}
+{{ define "jupyterhub.imagePuller.daemonset" }}
+# template that returns an imagePuller daemonset
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  generateName: image-puller-
+spec:
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+        app: jupyterhub
+        component: pre-puller
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+  template:
+    metadata:
+      labels:
+        app: jupyterhub
+        component: pre-puller
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+    spec:
+      terminationGracePeriodSeconds: 0
+      initContainers:
+      - name: pre-pull
+        image: {{ .Values.imagePuller.image.name }}:{{ .Values.imagePuller.image.tag }}
+        imagePullPolicy: Always
+        env:
+          - name: IMAGE
+            value: {{ .Values.singleuser.image.name }}
+          - name: TAG
+            value: {{ .Values.singleuser.image.tag }}
+          - name: NODE
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: NODE_LABEL_KEY
+            value: {{ include "jupyterhub.imagePuller.nodeLabelKey" . | quote }}
+          - name: NODE_LABEL_VALUE
+            value: {{ include "jupyterhub.imagePuller.nodeLabelValue" . | quote }}
+        volumeMounts:
+        - name: docker
+          mountPath: /var/run/docker.sock
+      containers:
+      - name: pause
+        image: gcr.io/google_containers/pause
+      volumes:
+      - name: docker
+        hostPath:
+          path: /var/run/docker.sock
+{{- end }}

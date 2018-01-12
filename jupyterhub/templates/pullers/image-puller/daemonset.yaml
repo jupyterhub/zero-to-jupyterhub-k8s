@@ -1,0 +1,3 @@
+{{ if .Values.imagePuller.enabled }}
+{{ template "jupyterhub.imagePuller.daemonset" (dict "name" "image-puller" "top" .) }}
+{{- end }}
