@@ -1,4 +1,4 @@
-FROM jupyter/base-notebook:281505737f8a
+FROM jupyter/base-notebook:400c69639ea5
 
 # conda/pip/apt install additional packages here, if desired.
 
