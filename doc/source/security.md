@@ -135,3 +135,30 @@ rbac:
 
 We strongly **discourage disabling** the RBAC rules and remind you that this action will open up security vulnerabilities. Proceed with caution!
 
+## Kubernetes API Access
+
+Allowing direct user access to the Kubernetes API can be dangerous. It allows
+users to grant themselves more privileges, access other users' content without
+permission, run (unprofitable) bitcoin mining operations & various other
+not-legitimate activities. By default, we do not allow access to the [service
+account credentials](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) needed
+to access the kubernetes API from user servers for this reason.
+
+If you want to (carefully!) give access to the Kubernetes API to your users, you
+can do so with the following in your `config.yaml`:
+
+```yaml
+singleuser:
+    serviceAccountName: <service-account-name>
+```
+
+You can either manually create a service account for use by your users and
+specify the name of that here (recommended) or use `default` to give them access
+to the default service account for the namespace. You should ideally also
+(manually) set up [RBAC](https://kubernetes.io/docs/admin/authorization/rbac/)
+rules for this service account to specify what permissions users will have.
+
+This is a sensitive security issue (similar to writing sudo rules in a
+traditional computing environment), so be very careful.
+
+There's ongoing work on making this easier!

@@ -108,6 +108,9 @@ data:
 
   singleuser.uid: {{ .Values.singleuser.uid | quote }}
   singleuser.fs-gid: {{ .Values.singleuser.fsGid | quote }}
+  {{ if .Values.singleuser.serviceAccountName }}
+  singleuser.service-account-name: {{ .Values.singleuser.serviceAccountName | quote }}
+  {{- end }}
   singleuser.node-selector: {{ toJson .Values.singleuser.nodeSelector | quote }}
 
   {{ if .Values.singleuser.schedulerStrategy }}

@@ -115,6 +115,7 @@ singleuser:
   nodeSelector: {}
   uid: 1000
   fsGid: 1000
+  serviceAccountName:
   schedulerStrategy:
   storage:
     type: dynamic
