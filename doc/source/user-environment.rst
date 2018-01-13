@@ -54,7 +54,7 @@ existing image, such as the ``scipy-notebook`` image, complete these steps:
            tag: c7fb6660d096
 
    .. note::
-   
+
       Container image name cannot be longer than 63 characters.
 
       Always use an explicit ``tag``, such as a specific commit.
@@ -219,27 +219,39 @@ variables.
 Pre-populating user's ``$HOME`` directory with notebooks
 --------------------------------------------------------
 
-By default, the contents of ``$HOME`` in the docker image are hidden by
-the contents of the per-user persistent volume. If you want to, you can
-execute a command before the notebook starts each time and copy the files
-you want from your image to the user's home directory.
+If persistent storage is enabled (on by default) then the contents of
+``$HOME`` in the docker image will be hidden to the user. In order to
+pre-populate the user's filesystem with files, you can include commands
+to be run each time a user starts their server. To do so, use the following
+pattern in ``config.yaml``:
 
-If you were using the repo2docker method of building an image and wanted
-your git repo copied on first use to the user's home directory, you can
-use the following in your ``config.yaml`` file:
+.. code-block:: bash
 
-   .. code-block:: bash
+   singleuser:
+     lifecycleHooks:
+       postStart:
+         exec:
+           command: ["your", "command", "here"]
 
-      singleuser:
-        lifecycleHooks:
-          postStart:
-            exec:
-              command: ["/bin/sh", "-c", "test -f $HOME/.copied || cp -Rf /srv/app/src/. $HOME/; touch $HOME/.copied"]
+We recommend using the tool `nbgitpuller <https://github.com/data-8/nbgitpuller>`_
+to populate your user's filesystem with a ``git`` repository. This is packaged
+with your JupyterHub installation by default. For example, the following command
+will automatically synchronize with the latest version of a repository:
 
+.. code-block:: bash
 
-Note that this will only copy the contents of the directory to ``$HOME``
-*once* - the first time the user logs in. Further updates will not be
-reflected. *There is work in progress for improving this behavior.*
+   singleuser:
+     lifecycleHooks:
+       postStart:
+         exec:
+           command: ["gitpuller", "https://github.com/data-8/materials-fa", "master", "materials-fa"]
+
+This will synchronize the master branch of the repository to a folder called
+``$HOME/materials-fa`` each time a user logs in.
+
+Note that you can also include other commands in the ``command:`` section to
+perform actions like downloading data with ``wget``. However, keep in mind that
+this command will be run **each time** a user starts their server.
 
 .. _apply the changes: extending-jupyterhub.html#apply-config-changes
 .. _downloading and installing Docker: https://store.docker.com/search?offering=community&platform=desktop%2Cserver&q=&type=edition
