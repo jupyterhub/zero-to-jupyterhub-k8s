@@ -163,6 +163,3 @@ cull:
   users: false
   timeout: 3600
   every: 600
-
-pullBlocker:
-  image: {name: yuvipanda/k8s-pull-blocker, tag: 2b02899}
