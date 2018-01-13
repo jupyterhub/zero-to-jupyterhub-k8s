@@ -27,9 +27,9 @@ spec:
         image: {{ .Values.imagePuller.image.name }}:{{ .Values.imagePuller.image.tag }}
         imagePullPolicy: Always
         env:
-          - name: IMAGE
+          - name: IMAGE_NAME
             value: {{ .Values.singleuser.image.name }}
-          - name: TAG
+          - name: IMAGE_TAG
             value: {{ .Values.singleuser.image.tag }}
         volumeMounts:
         - name: docker
