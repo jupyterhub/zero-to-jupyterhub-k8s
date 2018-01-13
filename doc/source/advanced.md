@@ -9,7 +9,7 @@ complex installations.
 
 If you are using a Kubernetes Cluster that does not provide public IPs for
 services directly, you need to use
-an [ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) 
+an [ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)
 to get traffic into your JupyterHub. This varies wildly
 based on how your cluster was set up, which is why this is in the 'Advanced' section.
 
@@ -27,7 +27,7 @@ You can specify multiple hosts that should be routed to the hub by listing them
 under `ingress.hosts`.
 
 Note that you need to install and configure an
-[Ingress Controller](https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-controllers) 
+[Ingress Controller](https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-controllers)
 for the ingress object to work. We recommend the
 [nginx ingress](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress)
 controller maintained by the community.
@@ -128,7 +128,7 @@ easily separate your code (which goes in `hub.extraConfig`) from your config
 
 For example, if you use the following snippet in your config.yaml file:
 
-```config.yaml
+```yaml
 hub:
   extraConfigMap:
     myString: Hello!

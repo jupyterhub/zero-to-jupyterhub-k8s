@@ -73,53 +73,11 @@ This would limit your users to a maximum of .5 of a CPU (so 1/2 of a CPU core), 
 
    Remember to :ref:`apply the change <apply-config-changes>` after changing your ``config.yaml`` file!
 
-.. _user_storage:
-
-Allocate user storage
----------------------
-
-By default, each user receives their own, 10Gi disk for storage when they log
-in to JupyterHub. This storage can be turned off or changed as described in
-these sections.
-
-Turn off per-user persistent storage
+Modifying user storage type and size
 ------------------------------------
 
-If you do not wish for users to have any persistent storage, it can be
-turned off. Edit the ``config.yaml`` file and set the storage type to
-``none``:
-
-   .. code-block:: yaml
-
-      singleuser:
-        storage:
-          type: none
-
-Next :ref:`apply the changes <apply-config-changes>`.
-
-After the changes are applied, new users will no longer be allocated a
-persistent ``$HOME`` directory. Any currently running users will still have
-access to their storage until their server is restarted.
-
-Change per-user persistent storage size
----------------------------------------
-
-By default, storage for user home directories are sized to 10Gi each. To
-increase or decrease this value, edit the ``config.yaml`` file:
-
-.. code-block:: yaml
-
-   singleuser:
-      storage:
-        capacity: 5Gi
-
-This example will make all **new** user's home directories be 5Gi each,
-instead of the default 10Gi.
-
-.. important::
-
-   The disks of "logged in" users will not change or be decreased in
-   this example.
+See the :ref:`user-storage` for information on how to modify the type and
+size of storage that your users have access to.
 
 Expanding and contracting the size of your cluster
 --------------------------------------------------
