@@ -1,4 +1,5 @@
 import os
+import glob
 import sys
 import yaml
 from tornado.httpclient import AsyncHTTPClient
@@ -295,6 +296,6 @@ else:
     # Set default to {} so subconfigs can easily update it
     c.KubeSpawner.singleuser_extra_pod_config = {}
 
-extra_config_path = '/etc/jupyterhub/config/hub.extra-config.py'
-if os.path.exists(extra_config_path):
-    load_subconfig(extra_config_path)
+extra_configs = sorted(glob.glob('/etc/jupyterhub/config/hub.extra-config.*.py'))
+for ec in extra_configs:
+    load_subconfig(ec)
