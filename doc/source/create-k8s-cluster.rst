@@ -101,20 +101,8 @@ connect your credit card or other payment method to your google cloud account.
 Setting up Kubernetes on Microsoft Azure Container Service (AKS)
 ----------------------------------------------------------------
 
-.. note::
+1. `Install <https://docs.microsoft.com/en-us/cli/azure/install-azure-cli>`_ the **Azure command-line tools**.
 
-   This is an alpha work-in-progress - please do not use in production! Help from
-   people with more Azure experience would be highly welcome :)
-
-
-1. Install and initialize the **Azure command-line tools**, which send commands
-   to Azure and let you do things like create and delete clusters.
-
-   - Go to the `azure-cli github repo <https://github.com/Azure/azure-cli>`_
-     to download and install the **azure-cli** tools.
-   - See the `az documentation <https://docs.microsoft.com/en-us/cli/azure/acs>`_
-     for more information on using the ``az`` tool with the Azure Container
-     Service.
 
 2. Authenticate the ``az`` tool so it may access your Azure account:
 
@@ -122,89 +110,120 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
 
       az login
 
-3. Set your Azure account context:
+
+3. Azure uses the concept of **subscriptions** to manage spending. You can
+   get a list of subscriptions your account has access to by running:
+
+   .. code-block:: bash
+
+      az account list --refresh -o table
+
+   Pick the subscription you want to use for creating the cluster, and set that
+   as your default.
 
    .. code-block:: bash
 
       az account set -s <YOUR CHOSEN SUBSCRIPTION>
 
-4. Manually preserve the subscription ID (".id" in the previous command's output) in SUBSCRIPTION_ID, or obtain it with `jq <https://stedolan.github.io/jq/>`_:
+
+4. Azure uses the concept of **resource groups** to group related resources together.
+   We need to create a resource group in a given data center location to hold all
+   the resources for our hub.
 
    .. code-block:: bash
 
-      export SUBSCRIPTION_ID="$(az account show | jq -r .id)"
-
-5. Create a service principal:
-
-   .. code-block:: bash
-
-      az ad sp create-for-rbac --role=Contributor --scopes=/subscriptions/${SUBSCRIPTION_ID} > sp.json
-
-6. Manually preserve the service principal and password by looking them up in sp.json, or obtain them with jq:
-
-   .. code-block:: bash
-
-      export SERVICE_PRINCIPAL="$(jq -r .appId sp.json)"
-      export CLIENT_SECRET="$(jq -r .password sp.json)"
-
-7. Specify an `Azure resource group`_, and create one if it doesn't already
-   exist:
-
-   .. code-block:: bash
-
-     export RESOURCE_GROUP=<YOUR_RESOURCE_GROUP>
-     export LOCATION=<YOUR_LOCATION>
-     az group create --name=${RESOURCE_GROUP} --location=${LOCATION}
+     az group create --name=<resource-group-name> --location=<datacenter-location> -o table
 
   where:
 
-  * ``--name`` specifies your Azure resource group. If a group doesn't exist,
-    az will create it for you.
-  * ``--location`` specifies your Azure region. To reduce latency, choose a region closest to those using the cluster. AKS is only available in `preview regions <https://github.com/Azure/AKS/blob/master/preview_regions.md>`_ at the moment. You may view all available zones via ``az account list-locations``.
+  * ``--name`` specifies the name of your resource group. We recommend using something
+    that uniquely identifies this hub. For example, if you are creating a resource group
+    for UC Berkeley's 2018 Spring Data100 Course, you should call it ucb_2018sp_data100_hub.
 
-8. Create a Kubernetes cluster on Azure:
+  * ``--location`` specifies the location of the data center you want your resource to be in.
+    AKS is only available in `a limited set of locations <https://github.com/Azure/AKS/blob/master/preview_regions.md>`_.
+
+5. Enable the cloud APIs required before creating a cluster.
 
    .. code-block:: bash
 
-      export CLUSTER=<YOUR_CLUSTER_NAME>
-      az aks create -n ${CLUSTER} -g ${RESOURCE_GROUP} \
-          --location ${LOCATION} \
-          --service-principal ${SERVICE_PRINCIPAL} \
-          --client-secret ${CLIENT_SECRET} \
-          --kubernetes-version 1.8.2
+      az provider register --name Microsoft.Network --wait
+      az provider register --name Microsoft.Compute --wait
+      az provider register --name Microsoft.Storage --wait
+      az provider register --name Microsoft.ContainerService --wait
 
-  where:
+6. Create an ssh key to secure your cluster.
 
-  * ``-n`` is your ACS cluster name.
-  * ``-g`` is your Azure resource group.
-  * ``--location`` is your Azure region.
-  * --service-principal and --client-secrets are set to the values you created earlier.
-  * --kubernetes-version is the the version of kubernetes your cluster will run. We recommend at least 1.8.x.
+   .. code-block:: bash
 
-9. Install ``kubectl``, a tool for controlling Kubernetes:
+      ssh-keygen -f ssh-key-<cluster-name>
+
+   Where ``<cluster-name>`` is the name of the cluster you are going to create in the next step.
+
+   This will create a public key named ``ssh-key-<cluster-name>.pub`` and a private key named
+   ``ssh-key-<cluster-name>``. Keep both of them safe!
+
+7. Create an AKS cluster!
+
+   .. code-block:: bash
+
+      az aks create --name <cluster-name> \
+                    --group <resource-group-name> \
+                    --ssh-key-value ssh-key-<cluster-name>.pub \
+                    --node-count 3 \
+                    --node-vm-size Standard_DS2_v3 \
+                    --kubernetes-version 1.8.2
+
+   where:
+
+   * ``--name`` is the name you want to use to refer to your cluster
+   * ``--group`` is the ResourceGroup you created in step 4
+   * ``--ssh-key-value`` is the ssh public key created in step 6
+   * ``--node-count`` is the number of nodes you want in your kubernetes cluster
+   * ``--node-vm-size`` is the size of the nodes you want to use, which varies based on
+     what you are using your cluster for and how much RAM/CPU each of your users need.
+     There is a `list of all possible node sizes <https://docs.microsoft.com/en-us/azure/cloud-services/cloud-services-sizes-specs>`_
+     for you to choose from, but not all might be available in your location.
+   * ``--kubernetes-version`` is the version of Kubernetes we want to use.
+
+
+   This should take a few minutes and provide you with a working Kubernetes cluster!
+
+8. Install `kubectl <https://kubernetes.io/docs/reference/kubectl/overview/>`_, a tool
+   for accessing the Kubernetes API from the commandline:
 
    .. code-block:: bash
 
       az aks install-cli
 
-10. Authenticate kubectl:
+
+9. Get credentials from Azure for ``kubectl`` to work:
 
    .. code-block:: bash
 
-      az aks get-credentials -n ${CLUSTER} -g ${RESOURCE_GROUP}
+      az aks get-credentials --name <cluster-name> --group <resource-group-name>
 
   where:
 
-  * ``-n`` is your ACS cluster name.
-  * ``-g`` specifies your Azure resource group.
+  * ``--name`` is the name you gave your cluster in step 7
+  * ``--group`` is the ResourceGroup you created in step 4
 
-11. To test if your cluster is initialized, run:
+10. Check if your cluster is fully functional
 
    .. code-block:: bash
 
       kubectl get node
 
-   The response should list three running nodes.
+   The response should list three running nodes and their kubernetes versions!
+
+.. note::
+
+   Azure AKS is still in **preview**, and not all features might work as
+   intended. In particular,
+
+   1. You have to `not use RBAC <security.html#use-role-based-access-control-rbac>`_, since AKS does not support it
+      yet.
+   2. TODO: Figure out what's needed for helm?
 
 .. _amazon-aws:
 
