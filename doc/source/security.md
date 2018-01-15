@@ -133,7 +133,11 @@ rbac:
    enabled: false
 ```
 
-We strongly **discourage disabling** the RBAC rules and remind you that this action will open up security vulnerabilities. Proceed with caution!
+We strongly **discourage disabling** the RBAC rules and remind you that this
+action will open up security vulnerabilities. However, some cloud providers
+(particularly Azure AKS)
+[do not support RBAC](https://github.com/Azure/AKS/issues/67) right now,
+and you might have to disable RBAC with this config to run on Azure.
 
 ## Kubernetes API Access
 

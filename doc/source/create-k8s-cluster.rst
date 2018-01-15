@@ -216,6 +216,15 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
 
    The response should list three running nodes and their kubernetes versions!
 
+.. note::
+
+   Azure AKS is still in **preview**, and not all features might work as
+   intended. In particular,
+
+   1. You have to `not use RBAC <security.html#use-role-based-access-control-rbac>`_, since AKS does not support it
+      yet.
+   2. TODO: Figure out what's needed for helm?
+
 .. _amazon-aws:
 
 Setting up Kubernetes on Amazon Web Services (AWS)
