@@ -4,14 +4,6 @@
 
 # User storage in JupyterHub
 
-JupyterHub uses Kubernetes to manage user storage,
-however there are still some cloud-provider-specific considerations
-that must be taken. This document describes the persistent
-storage at a conceptual level, then gives details about
-how to customize persistent storage for some major cloud
-providers.
-
-## How does JupyterHub manage storage?
 
 For the purposes of this guide, we'll describe "storage" as
 a "volume" - a location on a disk where a user's data resides.
@@ -20,14 +12,15 @@ volumes, under-the-hood it uses the cloud provider's API to
 issue the proper commands. To that extent most of our discussion
 around volumes will describe Kubernetes objects.
 
-There are two primary Kubernetes objects involved in allocating
+JupyterHub uses Kubernetes to manage user storage. There are two
+primary Kubernetes objects involved in allocating
 storage to pods:
 
-* A `PersistentVolumeClaim` (`PVC`) specifies what kind of storage is required. It is specified in your `config.yaml` file.
-* A `PersistentVolume` (`PV`) is the actual volume where the user's data resides. It is created by Kubernetes using a `PVC`.
+* A `PersistentVolumeClaim` (`PVC`) specifies what kind of storage is required. Its configuration is specified in your `config.yaml` file.
+* A `PersistentVolume` (`PV`) is the actual volume where the user's data resides. It is created by Kubernetes using a details in a `PVC`.
 
 As these are both Kubernetes objects, they can be queried
-with the standard `kubectl` commands (e.g., `kubectl get pvc`)
+with the standard `kubectl` commands (e.g., `kubectl --namespace=<your-namespace> get pvc`)
 
 In JupyterHub, each user gets their own `PersistentVolumeClaim`
 object, representing the data attached to their account.
@@ -66,7 +59,6 @@ Another common issue is limits on the number of volumes that
 may be simultaneously attached to a node in your cluster. Check
 your cloud provider for details on the limits of storage
 resources you request.
-
 
 ## Configuration
 
@@ -144,7 +136,7 @@ this with `gcloud container clusters list`).
 Next, create this object by running `kubectl apply -f <filename>`
 from the commandline. The [Kubernetes Docs](https://kubernetes.io/docs/concepts/storage/storage-classes/#gce)
 have more information on what the various fields mean. The most important field is `parameters.type`,
-which specifies the type of storage you wish to use. For example:
+which specifies the type of storage you wish to use. The two options are:
 
 * `pd-ssd` makes this `StorageClass` provision SSDs.
 * `pd-standard` will provision non-SSD disks.
@@ -160,9 +152,9 @@ singleuser:
 ```
 
 Note that for `storageClass:` we use the name that we specified
-above in `metadata: name:`.
+above in `metadata.name`.
 
-#### Size of storage provisioned
+### Size of storage provisioned
 
 You can set the size of storage requested by JupyterHub in the `PVC` in
 your `config.yaml`.
@@ -185,10 +177,10 @@ If you do not wish for users to have any persistent storage, it can be
 turned off. Edit the `config.yaml` file and set the storage type to
 `none`:
 
-``` yaml
-      singleuser:
-        storage:
-          type: none
+```yaml
+singleuser:
+  storage:
+    type: none
 ```
 
 ```eval_rst
@@ -196,5 +188,20 @@ Next :ref:`apply the changes <apply-config-changes>`.
 ```
 
 After the changes are applied, new users will no longer be allocated a
-persistent ``$HOME`` directory. Any currently running users will still have
-access to their storage until their server is restarted.
+persistent `$HOME` directory. Any currently running users will still have
+access to their storage until their server is restarted. You might have to
+manually delete current users' `PVCs` with `kubectl` to reclaim any cloud
+disks that might have allocated. You can get a current list of `PVC`s with:
+
+```bash
+kubectl --namespace=<your-namespace> get pvc
+```
+
+You can then delete the `PVCs` you do not want with:
+
+```bash
+kubectl --namespace=<your-namespace> delete pvc <pvc-name>
+```
+
+Remember that deleting someone's `PVC`s will delete all their data, so do so
+with caution!
