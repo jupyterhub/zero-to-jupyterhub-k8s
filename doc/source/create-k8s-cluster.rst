@@ -233,7 +233,7 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
 
    1. You have to `not use RBAC <security.html#use-role-based-access-control-rbac>`_, since AKS does not support it
       yet.
-   2. TODO: Figure out what's needed for helm?
+   2. You should skip step 2 (granting RBAC rights) :ref:`when setting up helm <helm-rbac>`.
 
 .. _amazon-aws:
 
