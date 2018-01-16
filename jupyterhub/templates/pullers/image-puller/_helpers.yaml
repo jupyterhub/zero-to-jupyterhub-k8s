@@ -3,6 +3,11 @@
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
+  labels:
+    app: jupyterhub
+    component: image-puller
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
   generateName: image-puller-
 spec:
   updateStrategy:
@@ -22,27 +27,16 @@ spec:
         heritage: {{ .Release.Service }}
     spec:
       terminationGracePeriodSeconds: 0
+      automountServiceAccountToken: false
       initContainers:
       - name: image-pull
-        image: {{ .Values.imagePuller.image.name }}:{{ .Values.imagePuller.image.tag }}
+        image: {{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}
         imagePullPolicy: Always
-        env:
-          - name: IMAGE_NAME
-            value: {{ .Values.singleuser.image.name }}
-          - name: IMAGE_TAG
-            value: {{ .Values.singleuser.image.tag }}
-            {{ range $key, $value := .Values.imagePuller.extraEnv }}
-          - name: {{ $key | quote }}
-            value: {{ $value | quote }}
-            {{ end }}
-        volumeMounts:
-        - name: docker
-          mountPath: /var/run/docker.sock
+        command:
+          - /bin/sh
+          - -c
+          - echo "Pulling complete"
       containers:
       - name: pause
         image: gcr.io/google_containers/pause
-      volumes:
-      - name: docker
-        hostPath:
-          path: /var/run/docker.sock
 {{- end }}

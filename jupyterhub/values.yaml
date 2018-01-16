@@ -147,9 +147,6 @@ prePuller:
 
 imagePuller:
   enabled: false
-  image:
-    name: jupyterhub/k8s-image-puller
-    tag: 2b02899
 
 
 ingress:
