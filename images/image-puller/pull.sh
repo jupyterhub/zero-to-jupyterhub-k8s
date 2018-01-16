@@ -7,6 +7,8 @@
 # Name of image to be pulling, without tag
 # IMAGE_TAG
 # Tag of the image to be pulling
+# CURL_EXTRA_OPTIONS
+# Extra commandline options to pass to curl
 #
 # Script expects a docker daemon unix socket with support for at least v1.23
 # of the docker API in /var/run/docker.sock
@@ -20,6 +22,9 @@
 #
 # Requires curl & jq to work
 set -e
+
+# CURL options to pass
+CURL_OPTIONS="--fail --silent --show-error ${CURL_EXTRA_OPTIONS}"
 
 # Stores auth info if needed
 AUTH=""
@@ -37,4 +42,9 @@ esac
 
 # We expect at least v1.23 of the docker API to be present, which is fairly old by now.
 # Since these do not get actively removed, we should be fine for a while
-curl -H "X-Registry-Auth: ${AUTH}" -X POST --unix-socket /var/run/docker.sock "http:/v1.23/images/create?fromImage=${IMAGE_NAME}&tag=${IMAGE_TAG}"
+curl \
+    -H "X-Registry-Auth: ${AUTH}" \
+    -X POST \
+    --unix-socket /var/run/docker.sock \
+    ${CURL_OPTIONS} \
+    "http:/v1.23/images/create?fromImage=${IMAGE_NAME}&tag=${IMAGE_TAG}"

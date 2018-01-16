@@ -12,6 +12,8 @@
 #     When running in cluster, this is automatically set by Kubernetes
 #  3. IMAGE
 #     Full name of user image
+#  4. CURL_EXTRA_OPTIONS
+#     Extra commandline options to pass to curl
 #
 # jq & curl are required to run this script. Complex jq scripts are kept as separate files.
 #
@@ -19,6 +21,7 @@
 # It will fail if any of the operations fail.
 set -e
 
+CURL_OPTIONS="--fail --silent --show-error ${CURL_EXTRA_OPTIONS}"
 # Create a daemonset and capture the output from the k8s API
 # When successfully created, the API output is a JSON object representing the complete spec
 echo "Creating Daemonset..."
@@ -27,9 +30,7 @@ DAEMONSET=$(curl \
     -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
     --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt  \
     -X POST \
-    --fail \
-    --silent \
-    --show-error \
+    ${CURL_OPTIONS} \
     https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}/apis/extensions/v1beta1/namespaces/${NAMESPACE}/daemonsets \
     -d "${DAEMONSET_SPEC}"
 )
@@ -46,9 +47,7 @@ pulling_complete() {
                 -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
                 --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
                 -X GET \
-                --fail \
-                --silent \
-                --show-error \
+                ${CURL_OPTIONS} \
                 https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}/api/v1/nodes
          );
 
@@ -79,10 +78,8 @@ curl \
     -H "Content-Type: application/json"  \
     -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
     --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt  \
+    ${CURL_OPTIONS} \
     -X DELETE \
-    --fail \
-    --silent \
-    --show-error \
     https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}/apis/extensions/v1beta1/namespaces/${NAMESPACE}/daemonsets/${DAEMONSET_NAME} \
     -d '{"apiVersion": "v1", "kind": "DeleteOptions", "propagationPolicy": "Foreground"}'
 

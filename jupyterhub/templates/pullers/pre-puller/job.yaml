@@ -27,4 +27,8 @@ spec:
               value: {{ toJson (fromYaml (include "jupyterhub.imagePuller.daemonset" .)) | quote }}
             - name: IMAGE
               value: "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"
+              {{ range $key, $value := .Values.prePuller.extraEnv }}
+            - name: {{ $key | quote }}
+              value: {{ $value | quote }}
+              {{ end }}
 {{ end }}
