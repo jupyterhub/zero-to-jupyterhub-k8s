@@ -49,7 +49,7 @@ data:
   {{- end }}
   {{ if eq .Values.auth.type "lti" -}}
   auth.lti.consumers: |
-{{ toYaml .Values.lti.auth.consumers | indent 4 }}
+{{ toYaml .Values.auth.lti.consumers | indent 4 }}
   {{- end }}
 
   {{ if .Values.auth.whitelist.users -}}
