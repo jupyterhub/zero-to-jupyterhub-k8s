@@ -116,7 +116,7 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
 
    .. code-block:: bash
 
-      az account list --refresh -o table
+      az account list --refresh --output table
 
    Pick the subscription you want to use for creating the cluster, and set that
    as your default.
@@ -132,16 +132,22 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
 
    .. code-block:: bash
 
-     az group create --name=<resource-group-name> --location=<datacenter-location> -o table
+     az group create \
+                   --name=<resource-group-name> \
+                   --location=<datacenter-location> \
+                   --output table
 
   where:
 
   * ``--name`` specifies the name of your resource group. We recommend using something
     that uniquely identifies this hub. For example, if you are creating a resource group
     for UC Berkeley's 2018 Spring Data100 Course, you should call it ucb_2018sp_data100_hub.
-
   * ``--location`` specifies the location of the data center you want your resource to be in.
-    AKS is only available in `a limited set of locations <https://github.com/Azure/AKS/blob/master/preview_regions.md>`_.
+    AKS is only available in `a limited set of locations
+    <https://github.com/Azure/AKS/blob/master/preview_regions.md>`_.
+  * ``--output table`` specifies that the output should be in human readable
+    format, rather than the default JSON output. We shall use this with most
+    commands when executing them by hand.
 
 5. Enable the cloud APIs required before creating a cluster.
 
@@ -168,16 +174,17 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
    .. code-block:: bash
 
       az aks create --name <cluster-name> \
-                    --group <resource-group-name> \
+                    --resource-group <resource-group-name> \
                     --ssh-key-value ssh-key-<cluster-name>.pub \
                     --node-count 3 \
-                    --node-vm-size Standard_DS2_v3 \
-                    --kubernetes-version 1.8.2
+                    --node-vm-size Standard_D2s_v3 \
+                    --kubernetes-version 1.8.2 \
+                    --output table
 
    where:
 
    * ``--name`` is the name you want to use to refer to your cluster
-   * ``--group`` is the ResourceGroup you created in step 4
+   * ``--resource-group`` is the ResourceGroup you created in step 4
    * ``--ssh-key-value`` is the ssh public key created in step 6
    * ``--node-count`` is the number of nodes you want in your kubernetes cluster
    * ``--node-vm-size`` is the size of the nodes you want to use, which varies based on
@@ -201,12 +208,15 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
 
    .. code-block:: bash
 
-      az aks get-credentials --name <cluster-name> --group <resource-group-name>
+      az aks get-credentials \
+                   --name <cluster-name> \
+                   --resource-group <resource-group-name> \
+                   --output table
 
   where:
 
   * ``--name`` is the name you gave your cluster in step 7
-  * ``--group`` is the ResourceGroup you created in step 4
+  * ``--resource-group`` is the ResourceGroup you created in step 4
 
 10. Check if your cluster is fully functional
 
@@ -223,7 +233,7 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
 
    1. You have to `not use RBAC <security.html#use-role-based-access-control-rbac>`_, since AKS does not support it
       yet.
-   2. TODO: Figure out what's needed for helm?
+   2. You should skip step 2 (granting RBAC rights) :ref:`when setting up helm <helm-rbac>`.
 
 .. _amazon-aws:
 

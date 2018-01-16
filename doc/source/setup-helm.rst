@@ -20,16 +20,36 @@ terminal:
 `Alternative methods for helm installation <https://github.com/kubernetes/helm/blob/master/docs/install.md>`_
 exist if you prefer to install without using the script.
 
+.. _helm-rbac:
+
 Initialization
 --------------
 
 After installing helm on your machine, initialize helm on your Kubernetes
 cluster. At the terminal, enter:
 
-   .. code:: bash
+1. Set up a `ServiceAccount
+   <https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/>`_
+   for use by ``Tiller``, the server side component of ``helm``.
 
-      kubectl --namespace kube-system create sa tiller
+   .. code-block:: bash
+
+      kubectl --namespace kube-system create serviceaccount tiller
+
+2. Give the ``ServiceAccount`` `RBAC
+   <https://kubernetes.io/docs/admin/authorization/rbac/>`_ full permissions to
+   manage the cluser. While most clusters have RBAC enabled and you need this
+   line, you **must** skip this step if your kubernetes cluster does not have
+   RBAC enabled (for example, if you are using Azure AKS).
+
+   .. code-block:: bash
+
       kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+
+3. Set up Helm on the cluster.
+
+   .. code-block:: bash
+
       helm init --service-account tiller
 
 This command only needs to run once per Kubernetes cluster.
