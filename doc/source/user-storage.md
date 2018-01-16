@@ -7,6 +7,7 @@
 
 For the purposes of this guide, we'll describe "storage" as
 a "volume" - a location on a disk where a user's data resides.
+
 Kubernetes handles the creation and allocation of persistent
 volumes, under-the-hood it uses the cloud provider's API to
 issue the proper commands. To that extent most of our discussion
@@ -17,9 +18,9 @@ primary Kubernetes objects involved in allocating
 storage to pods:
 
 * A `PersistentVolumeClaim` (`PVC`) specifies what kind of storage is required. Its configuration is specified in your `config.yaml` file.
-* A `PersistentVolume` (`PV`) is the actual volume where the user's data resides. It is created by Kubernetes using a details in a `PVC`.
+* A `PersistentVolume` (`PV`) is the actual volume where the user's data resides. It is created by Kubernetes using details in a `PVC`.
 
-As these are both Kubernetes objects, they can be queried
+As Kubernetes objects, they can be queried
 with the standard `kubectl` commands (e.g., `kubectl --namespace=<your-namespace> get pvc`)
 
 In JupyterHub, each user gets their own `PersistentVolumeClaim`
@@ -43,8 +44,8 @@ under-the-hood and automatically when a user logs in.
 deleted unless the `PersistentVolumeClaim` is explicitly deleted
 by the JupyterHub administrator. When a user shuts down their
 server, their user pod is deleted and their volume is
-detached from the pod, *but the `PVC` and `PV` objects still exist*. This means that
-in the future, when the user logs back in, JupyterHub will
+detached from the pod, *but the `PVC` and `PV` objects still exist*.
+In the future, when the user logs back in, JupyterHub will
 detect that the user has a pre-existing `PVC` and will simply
 attach it to their new pod, rather than creating a new `PVC`.
 
@@ -55,6 +56,7 @@ is sending a command to the underlying API of whatever cloud
 provider Kubernetes is running on. Occasionally, the request
 for a specific `PV` might fail - for example, if your account
 has reached the limit in the amount of disk space available.
+
 Another common issue is limits on the number of volumes that
 may be simultaneously attached to a node in your cluster. Check
 your cloud provider for details on the limits of storage
@@ -116,8 +118,9 @@ defer to the Kubernetes documentation.
 
 On Google Cloud, the default `StorageClass` will provision
 Standard [Google Persistent Disk](https://cloud.google.com/compute/docs/disks/#pdspecs)s.
-These run on Hard Disks, and are not very fast. If you want to use SSDs, you
-can create a new `StorageClass` by first putting the following `yaml` into a new file:
+These run on Hard Disks. For more performance, you may want to use SSDs.
+To use SSDs, you can create a new `StorageClass` by first putting the following `yaml` into a new file. We recommend a descriptive name such
+as `storageclass.yaml`, which we'll use below:
 
 ```yaml
 kind: StorageClass
@@ -133,12 +136,12 @@ parameters:
 Replace `<your-cluster-zone>` with the Zone in which you created your cluster (you can find
 this with `gcloud container clusters list`).
 
-Next, create this object by running `kubectl apply -f <filename>`
+Next, create this object by running `kubectl apply -f storageclass.yaml`
 from the commandline. The [Kubernetes Docs](https://kubernetes.io/docs/concepts/storage/storage-classes/#gce)
 have more information on what the various fields mean. The most important field is `parameters.type`,
 which specifies the type of storage you wish to use. The two options are:
 
-* `pd-ssd` makes this `StorageClass` provision SSDs.
+* `pd-ssd` makes `StorageClass` provision SSDs.
 * `pd-standard` will provision non-SSD disks.
 
 Once you have created this `StorageClass`, you can configure your JupyterHub's `PVC`
