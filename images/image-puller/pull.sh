@@ -21,9 +21,10 @@
 # on Google Cloud, pulling will fail.
 #
 # Requires curl & jq to work
-set -e
+set -euo pipefail
 
-# CURL options to pass
+# Allow setting additional curl options
+CURL_EXTRA_OPTIONS=${CURL_EXTRA_OPTIONS:-}
 CURL_OPTIONS="--fail --silent --show-error ${CURL_EXTRA_OPTIONS}"
 
 # Stores auth info if needed

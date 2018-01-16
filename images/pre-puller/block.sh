@@ -19,9 +19,12 @@
 #
 # This script is designed to be run from inside a kubernetes cluster only.
 # It will fail if any of the operations fail.
-set -e
+set -eu
 
+# Allow setting additional curl options
+CURL_EXTRA_OPTIONS=${CURL_EXTRA_OPTIONS:-}
 CURL_OPTIONS="--fail --silent --show-error ${CURL_EXTRA_OPTIONS}"
+
 # Create a daemonset and capture the output from the k8s API
 # When successfully created, the API output is a JSON object representing the complete spec
 echo "Creating Daemonset..."
