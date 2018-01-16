@@ -18,10 +18,12 @@ such as RStudio, RISE, JupyterLab, and others.
 
 Usually a :term:`docker image` specifies the functionality and
 environment that you wish to provide to users. The following sections will describe
-how to use existing docker images, how to create custom images, and how to set
+how to use existing Docker images, how to create custom images, and how to set
 environment variables.
 
-Use an existing docker image
+.. _existing-docker-image:
+
+Use an existing Docker image
 ----------------------------
 
 .. note::
@@ -31,10 +33,10 @@ Use an existing docker image
    match the version installed by the helm chart that you're using. For example,
    ``v0.5`` of the helm chart uses  ``jupyterhub==0.8``.
 
-Using an existing docker image, that someone else has written and maintained,
+Using an existing Docker image, that someone else has written and maintained,
 is the simplest approach. For example, Project Jupyter maintains the
 `jupyter/docker-stacks <https://github.com/jupyter/docker-stacks/>`_ repo,
-which contains ready to use docker images. Each image includes a set of
+which contains ready to use Docker images. Each image includes a set of
 commonly used science and data science libraries and tools.
 
 The `scipy-notebook <https://hub.docker.com/r/jupyter/scipy-notebook/>`_
@@ -221,7 +223,7 @@ Pre-populating user's ``$HOME`` directory with notebooks
 
 If persistent storage is enabled (on by default) then the contents of
 ``$HOME`` in the docker image will be hidden to the user. In order to
-pre-populate the user's filesystem with files, you can include commands
+pre-populate the user's filesystem, you can include commands
 to be run each time a user starts their server. To do so, use the following
 pattern in ``config.yaml``:
 
@@ -234,9 +236,16 @@ pattern in ``config.yaml``:
            command: ["your", "command", "here"]
 
 We recommend using the tool `nbgitpuller <https://github.com/data-8/nbgitpuller>`_
-to populate your user's filesystem with a ``git`` repository. This is packaged
-with your JupyterHub installation by default. For example, the following command
-will automatically synchronize with the latest version of a repository:
+to synchronize a folder in your user's filesystem with a ``git`` repository.
+
+To use ``nbgitpuller``, first make sure that you `install it in your Docker
+image <https://github.com/data-8/nbgitpuller#installation>`_.
+Once this is done, you'll have access to the ``nbgitpuller`` CLI from within
+JupyterHub.
+
+We recommend using a ``postStart`` hook that will be run every time a user starts
+their server. For example, the following configuration uses ``nbgitpuller`` to
+synchronize a folder with the ``master`` branch of a repository:
 
 .. code-block:: bash
 
@@ -244,10 +253,18 @@ will automatically synchronize with the latest version of a repository:
      lifecycleHooks:
        postStart:
          exec:
-           command: ["gitpuller", "https://github.com/data-8/materials-fa", "master", "materials-fa"]
+           command: ["gitpuller", "https://github.com/data-8/materials-fa17", "master", "materials-fa"]
 
 This will synchronize the master branch of the repository to a folder called
-``$HOME/materials-fa`` each time a user logs in.
+``$HOME/materials-fa`` each time a user logs in. See `the nbgitpuller documentation <https://github.com/data-8/nbgitpuller>`_
+for more information on using this tool.
+
+.. warning::
+
+   ``nbgitpuller`` will attempt to automatically resolve merge conflicts if
+   your user's repository has changed since the last sync. You should familiarize
+   yourself with the `nbgitpuller merging behavior <https://github.com/data-8/nbgitpuller#merging-behavior>`_
+   prior to using the tool in production.
 
 Note that you can also include other commands in the ``command:`` section to
 perform actions like downloading data with ``wget``. However, keep in mind that
