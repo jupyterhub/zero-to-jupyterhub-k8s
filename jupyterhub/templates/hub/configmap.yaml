@@ -48,7 +48,7 @@ data:
   auth.globus.identity-provider: {{.Values.auth.globus.identityProvider | quote}}
   {{- end }}
   {{ if eq .Values.auth.type "lti" -}}
-  auth.lti.consumers:
+  auth.lti.consumers: |
 {{ toYaml .Values.lti.auth.consumers | indent 4 }}
   {{- end }}
 
