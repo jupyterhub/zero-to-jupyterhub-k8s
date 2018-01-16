@@ -19,7 +19,7 @@
 #
 # This script is designed to be run from inside a kubernetes cluster only.
 # It will fail if any of the operations fail.
-set -eu
+set -euo pipefail
 
 # Allow setting additional curl options
 CURL_EXTRA_OPTIONS=${CURL_EXTRA_OPTIONS:-}
