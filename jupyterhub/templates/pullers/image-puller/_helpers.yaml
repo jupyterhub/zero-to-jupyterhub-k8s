@@ -38,5 +38,5 @@ spec:
           - echo "Pulling complete"
       containers:
       - name: pause
-        image: gcr.io/google_containers/pause
+        image: gcr.io/google_containers/pause:3.0
 {{- end }}
