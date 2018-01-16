@@ -31,6 +31,7 @@ CURL_OPTIONS="--fail --silent --show-error ${CURL_EXTRA_OPTIONS}"
 AUTH=""
 
 case ${IMAGE_NAME} in gcr.io*)
+    echo "Image hosted on gcr.io, assuming we are running on Google Cloud..."
     # Assume we are on google cloud, use metadata service to fetch pulling credentials
     PASSWORD=$(curl -s -f -m 10 "http://metadata/computeMetadata/v1/instance/service-accounts/default/token" -H "Metadata-Flavor: Google" \
                 | jq -r .access_token)
@@ -43,6 +44,8 @@ esac
 
 # We expect at least v1.23 of the docker API to be present, which is fairly old by now.
 # Since these do not get actively removed, we should be fine for a while
+echo "Pulling image ${IMAGE_NAME}:${IMAGE_TAG}..."
+
 curl \
     -H "X-Registry-Auth: ${AUTH}" \
     -X POST \

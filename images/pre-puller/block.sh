@@ -25,22 +25,6 @@ set -euo pipefail
 CURL_EXTRA_OPTIONS=${CURL_EXTRA_OPTIONS:-}
 CURL_OPTIONS="--fail --silent --show-error ${CURL_EXTRA_OPTIONS}"
 
-# Create a daemonset and capture the output from the k8s API
-# When successfully created, the API output is a JSON object representing the complete spec
-echo "Creating Daemonset..."
-DAEMONSET=$(curl \
-    -H "Content-Type: application/json"  \
-    -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
-    --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt  \
-    -X POST \
-    ${CURL_OPTIONS} \
-    https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}/apis/extensions/v1beta1/namespaces/${NAMESPACE}/daemonsets \
-    -d "${DAEMONSET_SPEC}"
-)
-
-# Find the generated name of the daemonset from the API response
-DAEMONSET_NAME=$(echo ${DAEMONSET} | jq -r .metadata.name)
-
 pulling_complete() {
     # Return 0 if all nodes have ${IMAGE} present in them, 1 otherwise
 
@@ -68,11 +52,33 @@ pulling_complete() {
     fi
 }
 
+if pulling_complete; then
+    echo "All images already present on all nodes!"
+    exit 0
+fi
+
+# Create a daemonset and capture the output from the k8s API
+# When successfully created, the API output is a JSON object representing the complete spec
+echo "Creating Daemonset..."
+DAEMONSET=$(curl \
+    -H "Content-Type: application/json"  \
+    -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
+    --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt  \
+    -X POST \
+    ${CURL_OPTIONS} \
+    https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}/apis/extensions/v1beta1/namespaces/${NAMESPACE}/daemonsets \
+    -d "${DAEMONSET_SPEC}"
+)
+
+# Find the generated name of the daemonset from the API response
+DAEMONSET_NAME=$(echo ${DAEMONSET} | jq -r .metadata.name)
+
 # Loop until all nodes have the image we want
 echo "Waiting for all nodes to pull images..."
 while ! pulling_complete; do
     sleep 2;
 done
+echo "All nodes have the images we need!"
 
 # Delete the daemonset after pulling is complete
 # We set propagationPolicy to "Foreground" to have the call wait until all the pods from daemonset disappear
