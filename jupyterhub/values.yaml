@@ -145,10 +145,18 @@ singleuser:
   cmd: jupyterhub-singleuser
 
 prePuller:
-  enabled: true
-  image:
-    name: yuvipanda/image-allnodes-puller
-    tag: v0.8
+  hook:
+    enabled: true
+    extraEnv: {}
+    image:
+      name: jupyterhub/k8s-pre-puller
+      tag: 2b02899
+  continuous:
+    enabled: false
+  pause:
+    image:
+      name: gcr.io/google_containers/pause
+      tag: "3.0"
 
 ingress:
   enabled: false
@@ -161,4 +169,3 @@ cull:
   users: false
   timeout: 3600
   every: 600
-

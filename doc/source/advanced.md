@@ -214,3 +214,50 @@ To explicitly specify this strategy, use the following in your `config.yaml`:
 singleuser:
     schedulerStrategy: pack
 ```
+
+## Pre-pulling Images for Faster Startup
+
+When user images are of non-trivial sizes (as most of them are), **pre-pulling**
+the images on all nodes significantly decreases the amount of time it takes to
+start a user's server. Without pre-pulling, sometimes it can take upto 5-10
+minutes for a user's server to launch. With pre-pulling, it is cut down to a few
+seconds in most cases.
+
+By default, the user container image is pulled on to all nodes whenever a `helm
+install` or `helm upgrade` is performed. This causes `helm install` and `helm
+upgrade` to take several minutes, but mostly that is worth it since it makes
+user startup performance much faster. By default `helm install` or `helm
+upgrade` will wait for 5minutes before giving up. You can configure this by
+passing the `--wait <seconds>` flag to either of them.
+
+To disable the pre-pulling during `helm install` and `helm upgrade`, you can use
+the following snippet in your `config.yaml`:
+
+
+```yaml
+prePuller:
+   hook:
+     enabled: false
+```
+
+This is not recommended unless you have specific good reasons to disable it!
+
+### Pre-Pulling for dynamically sized clusters
+
+If you add new nodes to a cluster (manually or with autoscaling), the new nodes
+will not have the user image. When a user pod starts on the new node, it will
+need to pull the image from scratch - making it very slow. This is undesirable.
+To fix this, you can enable the **continuous pre-puller**, which will run as a
+[daemonset](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/) that
+takes minimal resources on all nodes. This will force kubernetes
+to pull the user image on all nodes as soon as a node is present, thus making
+the user pod start time much faster.
+
+The continuous pre-puller is not enabled by default. To enable it, use the
+following snippet in your `config.yaml`:
+
+```yaml
+prePuller:
+  continuous:
+    enabled: true
+```

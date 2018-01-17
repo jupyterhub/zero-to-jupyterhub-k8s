@@ -1,0 +1,3 @@
+{{ if .Values.prePuller.continuous.enabled }}
+{{ template "jupyterhub.prePuller.daemonset" (dict "name" "continuous-image-puller" "top" .) }}
+{{- end }}
