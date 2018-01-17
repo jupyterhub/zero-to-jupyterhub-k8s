@@ -42,7 +42,12 @@ source_parsers = {
     '.md': 'recommonmark.parser.CommonMarkParser',
 }
 
+
 def setup(app):
+    app.add_config_value('recommonmark_config', {
+            'enable_eval_rst': True,
+            'enable_auto_doc_ref': True,
+            }, True)
     app.add_stylesheet('custom.css')
     app.add_transform(AutoStructify)
 

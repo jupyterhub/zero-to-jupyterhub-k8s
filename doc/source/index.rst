@@ -55,6 +55,7 @@ helm chart fields.
    extending-jupyterhub
    user-environment
    user-resources
+   user-storage
    user-management
 
 .. _administrator-guide:
