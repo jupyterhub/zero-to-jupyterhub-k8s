@@ -1,7 +1,14 @@
 # Advanced Topics
 
 This page contains a grab bag of various useful topics that don't have an easy
-home elsewhere. Most people setting up JupyterHubs on popular public clouds
+home elsewhere:
+
+- Ingress
+- Arbitrary code in `jupyterhub_config.py`
+- Picking a Scheduler Strategy
+- ## Pre-pulling Images for Faster Startup
+
+Most people setting up JupyterHubs on popular public clouds
 should not have to use any of this information, but it is essential for more
 complex installations.
 
@@ -220,21 +227,27 @@ singleuser:
 
 ## Pre-pulling Images for Faster Startup
 
-When user images are of non-trivial sizes (as most of them are), **pre-pulling**
-the images on all nodes significantly decreases the amount of time it takes to
-start a user's server. Without pre-pulling, sometimes it can take upto 5-10
-minutes for a user's server to launch. With pre-pulling, it is cut down to a few
-seconds in most cases.
+Pulling and building a user's images forces a user to wait before the user's
+server is started. Sometimes, the wait can be 5 to 10 minutes. **Pre-pulling**
+the images on all the nodes can cut this wait time to a few seconds. Let's look
+at how pre-pulling works.
 
-By default, the user container image is pulled on to all nodes whenever a `helm
-install` or `helm upgrade` is performed. This causes `helm install` and `helm
-upgrade` to take several minutes, but mostly that is worth it since it makes
-user startup performance much faster. By default `helm install` or `helm
-upgrade` will wait for 5minutes before giving up. You can configure this by
-passing the `--wait <seconds>` flag to either of them.
+### Pre-pulling basics
 
-To disable the pre-pulling during `helm install` and `helm upgrade`, you can use
-the following snippet in your `config.yaml`:
+With **pre-pulling**, which is enabled by default, the user's container image
+is pulled on all nodes whenever a `helm install` or `helm upgrade` is performed.
+While this causes `helm install` and `helm upgrade` to take several minutes,
+this time makes the user startup experience faster and more pleasant.
+
+With the default **pre-pulling** setting, a `helm install` or `helm upgrade`
+will cause the system to wait for 5 minutes to begin pulling the images before
+timing out. This wait time is configurable by passing the `--wait <seconds>`
+flag to the `helm` commands.
+
+We recommend using pre-pulling. For the rare cases where you have a good reason
+to disable it, pre-pulling can be disabled. To disable the pre-pulling during
+`helm install` and `helm upgrade`, you can use the following snippet in
+your `config.yaml`:
 
 
 ```yaml
@@ -245,16 +258,20 @@ prePuller:
 
 This is not recommended unless you have specific good reasons to disable it!
 
-### Pre-Pulling for dynamically sized clusters
+### Pre-Pulling and changes in cluster size
 
-If you add new nodes to a cluster (manually or with autoscaling), the new nodes
-will not have the user image. When a user pod starts on the new node, it will
-need to pull the image from scratch - making it very slow. This is undesirable.
-To fix this, you can enable the **continuous pre-puller**, which will run as a
-[daemonset](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/) that
-takes minimal resources on all nodes. This will force kubernetes
-to pull the user image on all nodes as soon as a node is present, thus making
-the user pod start time much faster.
+Cluster size can change through manual addition of nodes or autoscaling. When a
+new node is added to the cluster, the new node does not yet have the user image.
+A user using this new node would be forced to wait while the image is pulled
+from scratch. Ideally, it would be helpful to pre-pull images when the new node
+is added to the cluster.
+
+By enabling the **continuous pre-puller** (default state is disabled), the user
+image will be pre-pulled when adding a new node. When enabled, the
+**continuous pre-puller** runs as a [daemonset](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)
+to force kubernetes to pull the user image on all nodes as soon as a node is
+present. The continuous pre-puller uses minimal resources on all nodes and
+greatly speeds up the user pod start time.
 
 The continuous pre-puller is not enabled by default. To enable it, use the
 following snippet in your `config.yaml`:
