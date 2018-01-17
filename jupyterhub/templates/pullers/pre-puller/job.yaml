@@ -1,4 +1,4 @@
-{{ if .Values.prePuller.enabled }}
+{{ if .Values.prePuller.hook.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -15,7 +15,7 @@ spec:
       serviceAccountName: pre-puller-{{ .Release.Name }}-{{ .Release.Revision }}
       {{- end }}
       containers:
-        - image: {{ .Values.prePuller.image.name }}:{{ .Values.prePuller.image.tag }}
+        - image: {{ .Values.prePuller.hook.image.name }}:{{ .Values.prePuller.hook.image.tag }}
           name: pre-puller
           imagePullPolicy: Always
           env:
@@ -24,10 +24,11 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: DAEMONSET_SPEC
-              value: {{ toJson (fromYaml (include "jupyterhub.imagePuller.daemonset" .)) | quote }}
+              {{ $daemonsetName := printf "pre-pull-%s-%d-%d" .Release.Name .Release.Revision .Release.Time.Seconds }}
+              value: {{ toJson (fromYaml (include "jupyterhub.prePuller.daemonset" (dict "name" $daemonsetName "top" .))) | quote }}
             - name: IMAGE
               value: "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"
-              {{ range $key, $value := .Values.prePuller.extraEnv }}
+              {{ range $key, $value := .Values.prePuller.hook.extraEnv }}
             - name: {{ $key | quote }}
               value: {{ $value | quote }}
               {{ end }}

@@ -1,4 +1,4 @@
-{{ if .Values.prePuller.enabled }}
+{{ if .Values.prePuller.hook.enabled }}
 {{ if .Values.rbac.enabled }}
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1

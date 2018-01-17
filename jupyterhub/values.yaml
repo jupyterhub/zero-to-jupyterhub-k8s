@@ -140,14 +140,18 @@ singleuser:
   cmd: jupyterhub-singleuser
 
 prePuller:
-  enabled: true
-  image:
-    name: jupyterhub/k8s-pre-puller
-    tag: 2b02899
-
-imagePuller:
-  enabled: false
-
+  hook:
+    enabled: true
+    extraEnv: {}
+    image:
+      name: jupyterhub/k8s-pre-puller
+      tag: 2b02899
+  continuous:
+    enabled: false
+  pause:
+    image:
+      name: gcr.io/google_containers/pause
+      tag: "3.0"
 
 ingress:
   enabled: false

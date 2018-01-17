@@ -1,14 +1,14 @@
-{{ define "jupyterhub.imagePuller.daemonset" }}
-# template that returns an imagePuller daemonset
+{{ define "jupyterhub.prePuller.daemonset" }}
+# template that returns an prePuller daemonset
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
+  name: {{ .name }}
   labels:
     app: jupyterhub
     component: image-puller
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-  generateName: image-puller-
+    release: {{ .top.Release.Name }}
+    heritage: {{ .top.Release.Service }}
 spec:
   updateStrategy:
     type: RollingUpdate
@@ -16,21 +16,21 @@ spec:
     matchLabels:
         app: jupyterhub
         component: image-puller
-        release: {{ .Release.Name }}
-        heritage: {{ .Release.Service }}
+        release: {{ .top.Release.Name }}
+        heritage: {{ .top.Release.Service }}
   template:
     metadata:
       labels:
         app: jupyterhub
         component: image-puller
-        release: {{ .Release.Name }}
-        heritage: {{ .Release.Service }}
+        release: {{ .top.Release.Name }}
+        heritage: {{ .top.Release.Service }}
     spec:
       terminationGracePeriodSeconds: 0
       automountServiceAccountToken: false
       initContainers:
       - name: image-pull
-        image: {{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}
+        image: {{ .top.Values.singleuser.image.name }}:{{ .top.Values.singleuser.image.tag }}
         imagePullPolicy: Always
         command:
           - /bin/sh
@@ -38,5 +38,5 @@ spec:
           - echo "Pulling complete"
       containers:
       - name: pause
-        image: gcr.io/google_containers/pause:3.0
+        image: {{ .top.Values.prePuller.pause.image.name }}:{{ .top.Values.prePuller.pause.image.tag }}
 {{- end }}
