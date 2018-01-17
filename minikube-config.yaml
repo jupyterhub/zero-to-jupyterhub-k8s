@@ -16,8 +16,5 @@ singleuser:
   memory:
     guarantee: null
 
-prePuller:
-  enabled: false
-
 rbac:
   enabled: false
