@@ -6,7 +6,7 @@ home elsewhere:
 - Ingress
 - Arbitrary code in `jupyterhub_config.py`
 - Picking a Scheduler Strategy
-- ## Pre-pulling Images for Faster Startup
+- Pre-pulling Images for Faster Startup
 
 Most people setting up JupyterHubs on popular public clouds
 should not have to use any of this information, but it is essential for more
@@ -256,9 +256,7 @@ prePuller:
      enabled: false
 ```
 
-This is not recommended unless you have specific good reasons to disable it!
-
-### Pre-Pulling and changes in cluster size
+### Pre-pulling and changes in cluster size
 
 Cluster size can change through manual addition of nodes or autoscaling. When a
 new node is added to the cluster, the new node does not yet have the user image.
@@ -273,7 +271,7 @@ to force kubernetes to pull the user image on all nodes as soon as a node is
 present. The continuous pre-puller uses minimal resources on all nodes and
 greatly speeds up the user pod start time.
 
-The continuous pre-puller is not enabled by default. To enable it, use the
+The continuous pre-puller is disabled by default. To enable it, use the
 following snippet in your `config.yaml`:
 
 ```yaml
