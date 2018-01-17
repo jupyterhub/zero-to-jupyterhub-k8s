@@ -1,4 +1,4 @@
-FROM ubuntu:17.04
+FROM ubuntu:17.10
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -10,8 +10,6 @@ RUN apt-get update && \
       libcurl4-openssl-dev \
       libssl-dev \
       build-essential \
-      npm \
-      nodejs-legacy \
       && \
     apt-get purge && apt-get clean
 
