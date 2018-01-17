@@ -17,7 +17,7 @@ spec:
       containers:
         - image: {{ .Values.prePuller.hook.image.name }}:{{ .Values.prePuller.hook.image.tag }}
           name: pre-puller
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           env:
             - name: NAMESPACE
               valueFrom:
