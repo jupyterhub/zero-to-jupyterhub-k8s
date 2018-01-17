@@ -76,6 +76,13 @@ data:
   {{ if .Values.singleuser.initContainers -}}
   singleuser.init-containers: {{ toJson .Values.singleuser.initContainers | quote }}
   {{- end }}
+
+  singleuser.network-tools.image.name: {{ .Values.singleuser.networkTools.image.name | quote }}
+  singleuser.network-tools.image.tag: {{ .Values.singleuser.networkTools.image.tag | quote }}
+
+  singleuser.cloud-metadata: |
+{{ toYaml .Values.singleuser.cloudMetadata | indent 4 }}
+
   singleuser.start-timeout: {{ .Values.singleuser.startTimeout | quote }}
   hub.concurrent-spawn-limit: {{ .Values.hub.concurrentSpawnLimit | quote }}
   {{ if .Values.hub.activeServerLimit }}

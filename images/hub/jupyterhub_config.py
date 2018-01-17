@@ -1,6 +1,7 @@
 import os
 import glob
 from tornado.httpclient import AsyncHTTPClient
+from kubernetes import client
 
 from z2jh import get_config, get_secret
 
@@ -104,7 +105,7 @@ if lifecycle_hooks:
 
 init_containers = get_config('singleuser.init-containers')
 if init_containers:
-    c.KubeSpawner.singleuser_init_containers = init_containers
+    c.KubeSpawner.singleuser_init_containers += init_containers
 
 # Gives spawned containers access to the API of the hub
 c.KubeSpawner.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
@@ -251,6 +252,30 @@ if cmd:
 default_url = get_config('singleuser.default-url', None)
 if default_url:
     c.Spawner.default_url = default_url
+
+cloud_metadata = get_config('singleuser.cloud-metadata', {})
+
+if not cloud_metadata.get('enabled', False):
+    # Use iptables to block access to cloud metadata by default
+    network_tools_image_name = get_config('singleuser.network-tools.image.name')
+    network_tools_image_tag = get_config('singleuser.network-tools.image.tag')
+    ip_block_container = client.V1Container(
+        name="block-cloud-metadata",
+        image=f"{network_tools_image_name}:{network_tools_image_tag}",
+        command=[
+            'iptables',
+            '-A', 'OUTPUT',
+            '-d', cloud_metadata.get('ip', '169.254.169.254'),
+            '-j', 'DROP'
+        ],
+        security_context=client.V1SecurityContext(
+            privileged=True,
+            run_as_user=0,
+            capabilities=client.V1Capabilities(add=['NET_ADMIN'])
+        )
+    )
+
+    c.KubeSpawner.singleuser_init_containers.append(ip_block_container)
 
 scheduler_strategy = get_config('singleuser.scheduler-strategy', 'spread')
 
