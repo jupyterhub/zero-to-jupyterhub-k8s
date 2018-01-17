@@ -1,8 +1,13 @@
 #!/bin/sh
-# Script that does the following actions:
+# Requirements for this script:
+#  1. Must be run from inside a kubernetes cluster with ServiceAccount
+#     credentials mounted in the default location
+#  2. curl and jq are installed inside the container.
+#
+# Script does the following actions:
 #  1. Create an image-puller daemonset to fetch the user image on all nodes
-#  2. Check if all nodes have the user image present in them in a loop
-#  3. When the images are present, kill the image-puller daemonset and exit
+#  2. Wait until the images are present in all the nodes
+#  3. Kill the image-puller daemonset and exit
 #
 # All inputs are passed in as environment variables
 #  1. DAEMONSET_SPEC
@@ -14,11 +19,6 @@
 #     Full name of user image
 #  4. CURL_EXTRA_OPTIONS
 #     Extra commandline options to pass to curl
-#
-# jq & curl are required to run this script. Complex jq scripts are kept as separate files.
-#
-# This script is designed to be run from inside a kubernetes cluster only.
-# It will fail if any of the operations fail.
 set -euo pipefail
 
 # Allow setting additional curl options
