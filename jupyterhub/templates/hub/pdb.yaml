@@ -1,0 +1,19 @@
+{{ if .Values.hub.pdb.enabled }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: hub
+  labels:
+    app: jupyterhub
+    component: hub
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: jupyterhub
+      component: hub
+      release: {{ .Release.Name }}
+      heritage: {{ .Release.Service }}
+{{- end }}
