@@ -218,14 +218,15 @@ Python, for example, the following code will read in an environment variable:
 Other languages will have their own methods of reading these environment
 variables.
 
-Pre-populating user's ``$HOME`` directory with notebooks
---------------------------------------------------------
+Pre-populating user's ``$HOME`` directory with files
+----------------------------------------------------
 
-If persistent storage is enabled (on by default) then the contents of
-``$HOME`` in the docker image will be hidden to the user. In order to
-pre-populate the user's filesystem, you can include commands
-to be run each time a user starts their server. To do so, use the following
-pattern in ``config.yaml``:
+When persistent storage is enabled (which is the default), the contents of the
+docker image's $HOME directory will be hidden from the user. To make these
+contents visible to the user, you must pre-populate the user's
+filesystem. To do so, you would include commands in the ``config.yaml`` that would
+be run each time a user starts their server. The following pattern can be used
+in ``config.yaml``:
 
 .. code-block:: bash
 
@@ -235,17 +236,25 @@ pattern in ``config.yaml``:
          exec:
            command: ["your", "command", "here"]
 
+ Note that this command will be run from the ``$HOME`` location of the user's
+ running container, meaning that commands that place files relative to ``./``
+ will result in users seeing those files in their home directory. You can use
+ commands like ``wget`` to place files where you like.
+
+ However, keep in mind that this command will be run **each time** a user
+ starts their server. For this reason, we recommend using ``nbgitpuller`` to
+ synchronize your user folders with a git repository.
+
+Using ``nbgitpuller`` for synchronizing a folder
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 We recommend using the tool `nbgitpuller <https://github.com/data-8/nbgitpuller>`_
 to synchronize a folder in your user's filesystem with a ``git`` repository.
 
 To use ``nbgitpuller``, first make sure that you `install it in your Docker
 image <https://github.com/data-8/nbgitpuller#installation>`_.
 Once this is done, you'll have access to the ``nbgitpuller`` CLI from within
-JupyterHub.
-
-We recommend using a ``postStart`` hook that will be run every time a user starts
-their server. For example, the following configuration uses ``nbgitpuller`` to
-synchronize a folder with the ``master`` branch of a repository:
+JupyterHub. You can run it with a ``postStart`` hook with the following configuration
 
 .. code-block:: bash
 
@@ -265,10 +274,6 @@ for more information on using this tool.
    your user's repository has changed since the last sync. You should familiarize
    yourself with the `nbgitpuller merging behavior <https://github.com/data-8/nbgitpuller#merging-behavior>`_
    prior to using the tool in production.
-
-Note that you can also include other commands in the ``command:`` section to
-perform actions like downloading data with ``wget``. However, keep in mind that
-this command will be run **each time** a user starts their server.
 
 .. _apply the changes: extending-jupyterhub.html#apply-config-changes
 .. _downloading and installing Docker: https://store.docker.com/search?offering=community&platform=desktop%2Cserver&q=&type=edition
