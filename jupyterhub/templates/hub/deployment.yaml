@@ -37,6 +37,20 @@ spec:
         checksum/secret: {{ include (print $.Template.BasePath "/hub/secret.yaml") . | sha256sum }}
     spec:
       nodeSelector: {{ toJson .Values.hub.nodeSelector }}
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: component
+                      operator: In
+                      values: ['proxy']
+                    - key: release
+                      operator: In
+                      values: [ {{ .Release.Name | quote }} ]
       volumes:
       - name: config
         configMap:
