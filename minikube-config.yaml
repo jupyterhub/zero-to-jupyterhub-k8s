@@ -18,3 +18,7 @@ singleuser:
 
 rbac:
   enabled: false
+
+prePuller:
+  hook:
+    enabled: false
