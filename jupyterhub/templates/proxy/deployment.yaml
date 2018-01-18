@@ -36,6 +36,20 @@ spec:
       serviceAccountName: proxy
       {{- end }}
       nodeSelector: {{ toJson .Values.proxy.nodeSelector }}
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: component
+                      operator: In
+                      values: ['hub']
+                    - key: release
+                      operator: In
+                      values: [ {{ .Release.Name | quote }} ]
       containers:
         - name: nginx
           image: "{{ .Values.proxy.nginx.image.name }}:{{ .Values.proxy.nginx.image.tag }}"
