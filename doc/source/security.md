@@ -75,29 +75,18 @@ kubectl --namespace=kube-system patch deployment tiller-deploy --type=json --pat
 
 This limit shouldn't affect helm functionality in any form.
 
-## Audit Cloud Metadata server security
+## Audit Cloud Metadata server access
 
-Most cloud providers have a static IP you can hit from any of the compute nodes, including the user pod, to get metadata about the cloud. This metadata can contain very sensitive info, and this metadata, in the wrong hands, can allow attackers to take full control of your cluster and cloud resources. It is **critical** to secure the metadata service.
+Most cloud providers have a static IP you can hit from any of the compute nodes, including the user pod, to get metadata about the cloud. This metadata can contain very sensitive info, and this metadata, in the wrong hands, can allow attackers to take full control of your cluster and cloud resources. It is **critical** to secure the metadata service. We block access to this IP by default (as of v0.6), so you are protected from this!
 
 The slides beginning at [*Slide 38*](https://schd.ws/hosted_files/kccncna17/d8/Hacking%20and%20Hardening%20Kubernetes%20By%20Example%20v2.pdf) provides more information on the dangers presented by this attack.
 
-The easiest way to mitigate it is to add an [iptables](https://en.wikipedia.org/wiki/Iptables) rule in an [init-container](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/). This allows setting up firewall rules specific to the user pod in a secure way that the user can not undo. Here is how you could do it on the most popular clouds:
-
-### Google Cloud / AWS / Azure
-
-In all these clouds you can access the metadata service via the IP `169.254.169.254`. Blocking all outgoing packets to that IP should protect you.
+If you need to enable access to the metadata server for some reason, you can do the following in config.yaml:
 
 ```yaml
 singleuser:
-    initContainers:
-      - name: block-metadata
-        image: minrk/tc-init:0.0.4
-        # Block access to GCE Metadata Service from user pods
-        command: ["iptables", "-A", "OUTPUT", "-p", "tcp", "-d", "169.254.169.254", "-j", "DROP"]
-        securityContext:
-          runAsUser: 0
-          capabilities:
-            add: [ "NET_ADMIN" ]
+  cloudMetadata:
+    enabled: true
 ```
 
 ## Delete the Kubernetes Dashboard

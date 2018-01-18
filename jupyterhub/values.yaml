@@ -111,7 +111,15 @@ auth:
     enabled: false
     cryptoKey:
 
+
 singleuser:
+  networkTools:
+    image:
+      name: jupyterhub/k8s-network-tools
+      tag: a21cecb
+  cloudMetadata:
+    enabled: false
+    ip: 169.254.169.254
   extraLabels: {}
   extraEnv: {}
   lifecycleHooks:

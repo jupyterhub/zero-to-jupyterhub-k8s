@@ -29,13 +29,22 @@ spec:
       terminationGracePeriodSeconds: 0
       automountServiceAccountToken: false
       initContainers:
-      - name: image-pull
+      - name: image-pull-singleuser
         image: {{ .top.Values.singleuser.image.name }}:{{ .top.Values.singleuser.image.tag }}
         imagePullPolicy: IfNotPresent
         command:
           - /bin/sh
           - -c
           - echo "Pulling complete"
+      {{ if not .top.Values.singleuser.cloudMetadata.enabled }}
+      - name: image-pull-metadata-block
+        image: {{ .top.Values.singleuser.networkTools.image.name }}:{{ .top.Values.singleuser.networkTools.image.tag }}
+        imagePullPolicy: IfNotPresent
+        command:
+          - /bin/sh
+          - -c
+          - echo "Pulling complete"
+      {{ end }}
       containers:
       - name: pause
         image: {{ .top.Values.prePuller.pause.image.name }}:{{ .top.Values.prePuller.pause.image.tag }}
