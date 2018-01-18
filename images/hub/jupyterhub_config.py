@@ -105,7 +105,7 @@ if lifecycle_hooks:
 
 init_containers = get_config('singleuser.init-containers')
 if init_containers:
-    c.KubeSpawner.singleuser_init_containers += init_containers
+    c.KubeSpawner.singleuser_init_containers.extend(init_containers)
 
 # Gives spawned containers access to the API of the hub
 c.KubeSpawner.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
