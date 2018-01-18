@@ -35,7 +35,7 @@ RUN pip3 install --no-cache-dir \
 
 ADD jupyterhub_config.py /srv/jupyterhub_config.py
 
-ADD z2jh.py /usr/local/lib/python3.5/dist-packages/z2jh.py
+ADD z2jh.py /usr/local/lib/python3.6/dist-packages/z2jh.py
 ADD cull_idle_servers.py /usr/local/bin/cull_idle_servers.py
 
 WORKDIR /srv/jupyterhub
