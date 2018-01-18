@@ -18,10 +18,12 @@ such as RStudio, RISE, JupyterLab, and others.
 
 Usually a :term:`docker image` specifies the functionality and
 environment that you wish to provide to users. The following sections will describe
-how to use existing docker images, how to create custom images, and how to set
+how to use existing Docker images, how to create custom images, and how to set
 environment variables.
 
-Use an existing docker image
+.. _existing-docker-image:
+
+Use an existing Docker image
 ----------------------------
 
 .. note::
@@ -31,10 +33,10 @@ Use an existing docker image
    match the version installed by the helm chart that you're using. For example,
    ``v0.5`` of the helm chart uses  ``jupyterhub==0.8``.
 
-Using an existing docker image, that someone else has written and maintained,
+Using an existing Docker image, that someone else has written and maintained,
 is the simplest approach. For example, Project Jupyter maintains the
 `jupyter/docker-stacks <https://github.com/jupyter/docker-stacks/>`_ repo,
-which contains ready to use docker images. Each image includes a set of
+which contains ready to use Docker images. Each image includes a set of
 commonly used science and data science libraries and tools.
 
 The `scipy-notebook <https://hub.docker.com/r/jupyter/scipy-notebook/>`_
@@ -54,7 +56,7 @@ existing image, such as the ``scipy-notebook`` image, complete these steps:
            tag: c7fb6660d096
 
    .. note::
-   
+
       Container image name cannot be longer than 63 characters.
 
       Always use an explicit ``tag``, such as a specific commit.
@@ -245,30 +247,62 @@ Python, for example, the following code will read in an environment variable:
 Other languages will have their own methods of reading these environment
 variables.
 
-Pre-populating user's ``$HOME`` directory with notebooks
---------------------------------------------------------
+Pre-populating user's ``$HOME`` directory with files
+----------------------------------------------------
 
-By default, the contents of ``$HOME`` in the docker image are hidden by
-the contents of the per-user persistent volume. If you want to, you can
-execute a command before the notebook starts each time and copy the files
-you want from your image to the user's home directory.
+When persistent storage is enabled (which is the default), the contents of the
+docker image's $HOME directory will be hidden from the user. To make these
+contents visible to the user, you must pre-populate the user's
+filesystem. To do so, you would include commands in the ``config.yaml`` that would
+be run each time a user starts their server. The following pattern can be used
+in ``config.yaml``:
 
-If you were using the repo2docker method of building an image and wanted
-your git repo copied on first use to the user's home directory, you can
-use the following in your ``config.yaml`` file:
+.. code-block:: bash
 
-   .. code-block:: bash
+   singleuser:
+     lifecycleHooks:
+       postStart:
+         exec:
+           command: ["your", "command", "here"]
 
-      singleuser:
-        lifecycleHooks:
-          postStart:
-            exec:
-              command: ["/bin/sh", "-c", "test -f $HOME/.copied || cp -Rf /srv/app/src/. $HOME/; touch $HOME/.copied"]
+ Note that this command will be run from the ``$HOME`` location of the user's
+ running container, meaning that commands that place files relative to ``./``
+ will result in users seeing those files in their home directory. You can use
+ commands like ``wget`` to place files where you like.
 
+ However, keep in mind that this command will be run **each time** a user
+ starts their server. For this reason, we recommend using ``nbgitpuller`` to
+ synchronize your user folders with a git repository.
 
-Note that this will only copy the contents of the directory to ``$HOME``
-*once* - the first time the user logs in. Further updates will not be
-reflected. *There is work in progress for improving this behavior.*
+Using ``nbgitpuller`` for synchronizing a folder
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We recommend using the tool `nbgitpuller <https://github.com/data-8/nbgitpuller>`_
+to synchronize a folder in your user's filesystem with a ``git`` repository.
+
+To use ``nbgitpuller``, first make sure that you `install it in your Docker
+image <https://github.com/data-8/nbgitpuller#installation>`_.
+Once this is done, you'll have access to the ``nbgitpuller`` CLI from within
+JupyterHub. You can run it with a ``postStart`` hook with the following configuration
+
+.. code-block:: bash
+
+   singleuser:
+     lifecycleHooks:
+       postStart:
+         exec:
+           command: ["gitpuller", "https://github.com/data-8/materials-fa17", "master", "materials-fa"]
+
+This will synchronize the master branch of the repository to a folder called
+``$HOME/materials-fa`` each time a user logs in. See `the nbgitpuller documentation <https://github.com/data-8/nbgitpuller>`_
+for more information on using this tool.
+
+.. warning::
+
+   ``nbgitpuller`` will attempt to automatically resolve merge conflicts if
+   your user's repository has changed since the last sync. You should familiarize
+   yourself with the `nbgitpuller merging behavior <https://github.com/data-8/nbgitpuller#merging-behavior>`_
+   prior to using the tool in production.
 
 .. _apply the changes: extending-jupyterhub.html#apply-config-changes
 .. _downloading and installing Docker: https://store.docker.com/search?offering=community&platform=desktop%2Cserver&q=&type=edition
