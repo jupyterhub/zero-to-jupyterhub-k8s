@@ -143,6 +143,7 @@ singleuser:
     limit:
     guarantee: 1G
   cmd: jupyterhub-singleuser
+  defaultUrl:
 
 prePuller:
   hook:
