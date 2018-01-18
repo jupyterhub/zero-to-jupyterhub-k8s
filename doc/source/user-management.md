@@ -9,7 +9,8 @@ for a period of time. This helps free up computational resources and keeps
 costs down if you are using an autoscaling cluster.
 When these users navigate back to your JupyterHub, they will
 have to start their server again, and the state of their previous session
-will be lost. This is known as "culling".
+(variables they've created, any in-memory data, etc)
+will be lost. This is known as *culling*.
 
 ```eval_rst
 
