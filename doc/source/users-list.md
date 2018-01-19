@@ -1,4 +1,4 @@
-# Zero to JupyterHub users
+# Zero to JupyterHub Gallery
 
 This is a community maintained list of organizations / people using the Zero to
 JupyterHub guide / helm-chart to maintain their JupyterHub. Send us a Pull
