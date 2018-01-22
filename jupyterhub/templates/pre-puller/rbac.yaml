@@ -3,7 +3,7 @@
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: pre-puller-{{ .Release.Name }}-{{ .Release.Revision }}
+  name: pre-puller-{{ .Release.Time.Seconds }}-{{.Release.Name}}-{{.Release.Revision}}
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded
@@ -15,7 +15,7 @@ rules:
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: pre-puller-{{ .Release.Name }}-{{ .Release.Revision }}
+  name: pre-puller-{{ .Release.Time.Seconds }}-{{.Release.Name}}-{{.Release.Revision}}
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded
@@ -27,33 +27,33 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: pre-puller-{{ .Release.Name }}-{{ .Release.Revision }}
+  name: pre-puller-{{ .Release.Time.Seconds }}-{{.Release.Name}}-{{.Release.Revision}}
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded
 subjects:
 - kind: ServiceAccount
   namespace: {{ .Release.Namespace }}
-  name: pre-puller-{{ .Release.Name }}-{{ .Release.Revision }}
+  name: pre-puller-{{ .Release.Time.Seconds }}-{{.Release.Name}}-{{.Release.Revision}}
 roleRef:
   kind: ClusterRole
-  name: pre-puller-{{ .Release.Name }}-{{ .Release.Revision }}
+  name: pre-puller-{{ .Release.Time.Seconds }}-{{.Release.Name}}-{{.Release.Revision}}
   apiGroup: rbac.authorization.k8s.io
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: pre-puller-{{ .Release.Name }}-{{ .Release.Revision }}
+  name: pre-puller-{{ .Release.Time.Seconds }}-{{.Release.Name}}-{{.Release.Revision}}
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded
 subjects:
 - kind: ServiceAccount
   namespace: {{ .Release.Namespace }}
-  name: pre-puller-{{ .Release.Name }}-{{ .Release.Revision }}
+  name: pre-puller-{{ .Release.Time.Seconds }}-{{.Release.Name}}-{{.Release.Revision}}
 roleRef:
   kind: Role
-  name: pre-puller-{{ .Release.Name }}-{{ .Release.Revision }}
+  name: pre-puller-{{ .Release.Time.Seconds }}-{{.Release.Name}}-{{.Release.Revision}}
   apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: v1
@@ -62,6 +62,6 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded
-  name: pre-puller-{{ .Release.Name }}-{{ .Release.Revision }}
+  name: pre-puller-{{ .Release.Time.Seconds }}-{{.Release.Name}}-{{.Release.Revision}}
 {{ end }}
 {{ end }}
