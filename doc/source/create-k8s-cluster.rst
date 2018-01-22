@@ -38,22 +38,33 @@ connect your credit card or other payment method to your google cloud account.
 
 2. Enable the `Kubernetes Engine API <https://console.cloud.google.com/apis/api/container.googleapis.com/overview>`_.
 
-3. Install and initialize the **gcloud command-line tools**. These tools send
-   commands to Google Cloud and lets you do things like create and delete
-   clusters.
+3. Prepare your command line interface. You have two options, using Google's
+   interactive CLI, or working locally from your own shell interface. Instructions
+   for each are detailed below:
 
-   - Go to the `gcloud downloads page <https://cloud.google.com/sdk/downloads>`_
-     to **download and install the gcloud SDK**.
-   - See the `gcloud documentation <https://cloud.google.com/sdk/>`_ for
-     more information on the gcloud SDK.
-   - Install ``kubectl``, which is a tool for controlling kubernetes. From
-     the terminal, enter:
+   * **Google Interactive CLI**. Start the Google Cloud interactive command line
+     by Clicking the button shown below. This will start an interactive shell
+     session within Google Cloud.
+
+   .. image:: _static/images/google/start_interactive_cli.png
+      :align: center
+
+   * **Working locally**. Install and initialize the **gcloud command-line tools**.
+     These tools send commands to Google Cloud and let you do things like create
+     and delete clusters.
+
+     - Go to the `gcloud downloads page <https://cloud.google.com/sdk/downloads>`_
+       to **download and install the gcloud SDK**.
+     - See the `gcloud documentation <https://cloud.google.com/sdk/>`_ for
+       more information on the gcloud SDK.
+4. Install ``kubectl``, which is a tool for controlling kubernetes. From
+   the terminal, enter:
 
      .. code-block:: bash
 
         gcloud components install kubectl
 
-4. Create a Kubernetes cluster on Google Cloud, by typing in the following
+5. Create a Kubernetes cluster on Google Cloud, by typing in the following
    command:
 
    .. code-block:: bash
@@ -80,7 +91,7 @@ connect your credit card or other payment method to your google cloud account.
    * ``--cluster-version`` specifies the version of kubernetes we want. Here,
      we specify the minimum that the default configuration will support.
 
-5. To test if your cluster is initialized, run:
+6. To test if your cluster is initialized, run:
 
    .. code-block:: bash
 
@@ -88,7 +99,7 @@ connect your credit card or other payment method to your google cloud account.
 
    The response should list three running nodes.
 
-6. Give your account super-user permissions, allowing you to perform all
+7. Give your account super-user permissions, allowing you to perform all
    the actions needed to set up JupyterHub.
 
    .. code-block:: bash
