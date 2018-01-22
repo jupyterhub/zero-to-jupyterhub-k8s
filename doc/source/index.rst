@@ -96,14 +96,16 @@ Reference
 Institutional support
 ---------------------
 
-This guide and the `associated helm chart <https://github.com/jupyterhub/helm-chart>`_
-would not be possible without the amazing institutional support from the following
+This guide and the associated helm chart would not be possible without the
+amazing institutional support from the following
 organizations (and the organizations that support them!)
 
 * `UC Berkeley Data Science Division <http://data.berkeley.edu/>`_
 * `Berkeley Institute for Data Science <https://bids.berkeley.edu/>`_
 * `Cal Poly, San Luis Obispo <http://www.calpoly.edu/>`_
 * `Simula Research Institute <https://www.simula.no/>`_
+
+There also a `community maintained list <users-list.html>`_ of users of this Guide + Chart.
 
 .. _JupyterHub: https://github.com/jupyterhub/jupyterhub
 .. _issues page: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
