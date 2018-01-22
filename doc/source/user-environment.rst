@@ -160,7 +160,7 @@ how to configure JupyterHub to build off of this image:
 6. **Edit the JupyterHub configuration to build from this image.**
    Edit ``config.yaml`` file to include these lines in it:
 
-   .. code-block:: bash
+   .. code-block:: yaml
 
       singleuser:
         image:
@@ -194,7 +194,7 @@ Use JupyterLab by default
 user interface for Project Jupyter. It can be used with JupyterHub, both as an
 optional interface and as a default.
 
-1. `Install JupyterLab <https://github.com/jupyterlab/jupyterlab#installation`_
+1. `Install JupyterLab <https://github.com/jupyterlab/jupyterlab#installation>`_
    in your user image.
 2. `Install JupyterLab Hub extension
    <https://github.com/jupyterhub/jupyterlab-hub#installation>`_ in your user
@@ -204,6 +204,7 @@ optional interface and as a default.
    notebook, use the following in your ``config.yaml``
 
    .. code-block:: yaml
+
       singleuser:
         defaultUrl: "/lab"
 
@@ -257,7 +258,7 @@ filesystem. To do so, you would include commands in the ``config.yaml`` that wou
 be run each time a user starts their server. The following pattern can be used
 in ``config.yaml``:
 
-.. code-block:: bash
+.. code-block:: yaml
 
    singleuser:
      lifecycleHooks:
@@ -285,7 +286,7 @@ image <https://github.com/data-8/nbgitpuller#installation>`_.
 Once this is done, you'll have access to the ``nbgitpuller`` CLI from within
 JupyterHub. You can run it with a ``postStart`` hook with the following configuration
 
-.. code-block:: bash
+.. code-block:: yaml
 
    singleuser:
      lifecycleHooks:

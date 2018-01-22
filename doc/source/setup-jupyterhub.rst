@@ -44,7 +44,18 @@ For the following steps, use your favorite code editor. We'll use the
 
 .. Don't put an example here! People will just copy paste that & that's a security issue.
 
-4. Save the ``config.yaml`` file. If using the nano editor, hit ``Ctrl-X`` and
+4. **Azure AKS only** If you're on Microsoft Azure AKS, you must disable
+   RBAC. Do so by putting the following in ``config.yaml``
+
+   .. code-block:: yaml
+
+      rbac:
+         enabled: false
+
+   See the `RBAC documentation <security.html#use-role-based-access-control-rbac>`_
+   for more details.
+
+5. Save the ``config.yaml`` file. If using the nano editor, hit ``Ctrl-X`` and
    make sure to answer ‘yes’ when it asks you to save.
 
 Install JupyterHub
@@ -102,7 +113,9 @@ Install JupyterHub
    helm should feel free to use different values.
 
    .. note::
-
+      * This step may take a moment, during which time there will be no output
+        to your terminal. JupyterHub is being installed in the background.
+        
       * If you get a ``release named <YOUR-RELEASE-NAME> already exists`` error, then
         you should delete the release by running
         ``helm delete --purge <YOUR-RELEASE-NAME>``. Then reinstall by repeating this

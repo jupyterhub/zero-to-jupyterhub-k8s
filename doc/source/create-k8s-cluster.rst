@@ -101,21 +101,42 @@ connect your credit card or other payment method to your google cloud account.
 Setting up Kubernetes on Microsoft Azure Container Service (AKS)
 ----------------------------------------------------------------
 
-1. `Install <https://docs.microsoft.com/en-us/cli/azure/install-azure-cli>`_
-   the **Azure command-line tools**.
+1. Prepare your Azure shell environment. You have two options, one is to use
+   the Azure interactive shell, the other is to install the Azure command-line
+   tools locally. Instructions for each are below.
+
+   * **Using the Azure interactive shell**. The `Azure Portal <portal.azure.com>`_
+     contains an interactive shell that you can use to communicate with your
+     Kubernetes cluster. To access this shell, go to `portal.azure.com <https://portal.azure.com>`_
+     and click on the button below.
+
+     .. image:: _static/images/azure/cli_start.png
+        :align: center
+
+    .. note::
+       * If you get errors like ``could not retrieve token from local cache``,
+         try refreshing your browser window.
+       * The first time you do this, you'll be asked to create a storage
+         account where your shell filesystem will live.
+
+   * **Install command-line tools locally**. You can access the Azure CLI via
+     a package that you can install locally.
+
+     To do so, first follow the `installation instructions
+     <https://docs.microsoft.com/en-us/cli/azure/install-azure-cli>`_ in the
+     Azure documentation. Then run the following command to connect your local
+     CLI with your account:
+
+     .. code-block:: bash
+
+        az login
+
+     You'll need to open a browser and follow the instructions in your terminal
+     to log in.
 
 
-2. Authenticate the ``az`` tool so it may access your Azure account:
-
-   .. code-block:: bash
-
-      az login
-
-   You'll need to open a browser and follow the instructions in your terminal
-   to log in.
-
-
-3. Azure uses the concept of **subscriptions** to manage spending. You can
+2. Activate the correct subscription. Azure uses the concept
+   of **subscriptions** to manage spending. You can
    get a list of subscriptions your account has access to by running:
 
    .. code-block:: bash
@@ -130,7 +151,8 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
       az account set -s <YOUR-CHOSEN-SUBSCRIPTION>
 
 
-4. Azure uses the concept of **resource groups** to group related resources together.
+3. Create a resource group. Azure uses the concept of
+   **resource groups** to group related resources together.
    We need to create a resource group in a given data center location. We will create
    computational resources *within* this resource group.
 
@@ -138,7 +160,7 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
 
      az group create \
                    --name=<RESOURCE-GROUP-NAME> \
-                   --location=<DATACENTER-LOCATION> \
+                   --location=centralus \
                    --output table
 
   where:
@@ -147,13 +169,14 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
     that uniquely identifies this hub. For example, if you are creating a resource group
     for UC Berkeley's 2018 Spring Data100 Course, you should call it ucb_2018sp_data100_hub.
   * ``--location`` specifies the location of the data center you want your resource to be in.
-    `Here's a list of possible locations
+    In this case, we used the ``centralus`` location. For other options, see the
+    `Azure list of locations that support AKS
     <https://github.com/Azure/AKS/blob/master/preview_regions.md>`_.
   * ``--output table`` specifies that the output should be in human readable
     format, rather than the default JSON output. We shall use this with most
     commands when executing them by hand.
 
-5. Enable the cloud APIs required before creating a cluster.
+4. Enable the cloud APIs required before creating a cluster.
 
    The following commands enable various Azure tools that we'll need in
    creating and managing the JupyterHub.
@@ -169,7 +192,7 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
 
       Each of these commands may take up to several minutes to complete.
 
-6. Decide on a cluster name.
+5. Choose a cluster name.
 
    In the following steps we'll run commands that ask you to input a cluster
    name. We recommend using something descriptive and short. We'll refer to
@@ -182,7 +205,7 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
       mkdir <CLUSTER-NAME>
       cd <CLUSTER-NAME>
 
-7. Create an ssh key to secure your cluster.
+6. Create an ssh key to secure your cluster.
 
    .. code-block:: bash
 
@@ -198,7 +221,7 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
       This command will also print out something to your terminal screen. You
       don't need to do anything with this text.
 
-8. Create an AKS cluster.
+7. Create an AKS cluster.
 
    The following command will request a Kubernetes cluster within the resource
    group that we created earlier.
@@ -227,7 +250,7 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
 
    This should take a few minutes and provide you with a working Kubernetes cluster!
 
-9. Install `kubectl <https://kubernetes.io/docs/reference/kubectl/overview/>`_, a tool
+8. Install `kubectl <https://kubernetes.io/docs/reference/kubectl/overview/>`_, a tool
    for accessing the Kubernetes API from the commandline:
 
    .. code-block:: bash
@@ -235,7 +258,7 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
       az aks install-cli
 
 
-10. Get credentials from Azure for ``kubectl`` to work:
+9. Get credentials from Azure for ``kubectl`` to work:
 
    .. code-block:: bash
 
@@ -249,7 +272,7 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
   * ``--name`` is the name you gave your cluster in step 7
   * ``--resource-group`` is the ResourceGroup you created in step 4
 
-11. Check if your cluster is fully functional
+10. Check if your cluster is fully functional
 
    .. code-block:: bash
 

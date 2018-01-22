@@ -36,7 +36,7 @@ cluster. At the terminal, enter:
 
       kubectl --namespace kube-system create serviceaccount tiller
 
-   **If you're on Azure AKS, you should now skip directly to step 3.**
+   **Azure AKS**: If you're on Azure AKS, you should now skip directly to step 3.**
 
 2. Give the ``ServiceAccount`` `RBAC
    <https://kubernetes.io/docs/admin/authorization/rbac/>`_ full permissions to
