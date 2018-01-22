@@ -14,9 +14,13 @@ Tearing down your JupyterHub entails:
 3. Running a final check to make sure there aren't any lingering resources that haven't been deleted
    (e.g., storage volumes in some cloud providers)
 
-
 For all cloud providers
 -----------------------
+
+.. _delete-namespace:
+
+Delete the helm namespace
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The steps in this section must be performed for all cloud providers first,
 before doing the cloud provider specific setup.
@@ -39,11 +43,10 @@ before doing the cloud provider specific setup.
 Google Cloud Platform
 ---------------------
 
-1. Perform the steps above for all cloud providers. These cloud provider agnostic steps will
+1. Perform the steps in :ref:`delete-namespace`. These cloud provider agnostic steps will
    delete the helm chart and delete the hub's namespace. This must be done before proceeding.
 
-2. You should delete the kubernetes cluster. You can list all the clusters
-   you have.
+2. Delete the kubernetes cluster. You can list all the clusters you have.
 
    .. code-block:: bash
 
@@ -70,10 +73,36 @@ Google Cloud Platform
    These might take several minutes to clear up, but they shouldn't have anything
    related to your JupyterHub cluster after you have deleted the cluster.
 
+Microsoft Azure AKS
+-------------------
+
+1. Perform the steps in :ref:`delete-namespace`. These cloud provider agnostic steps will
+   delete the helm chart and delete the hub's namespace. This must be done before proceeding.
+
+2. Delete your resource group. You can list your active resource groups with
+   the following command
+
+   .. code-block:: bash
+
+      az aks list --output table
+
+   You can then delete the one you want with the following command
+
+   .. code-block:: bash
+
+      az group delete -n <YOUR-GROUP-NAME>
+
+3. Double check to make sure all the resources are now deleted, since anything you
+   have not deleted will cost you money! You can check the `web portal <https://portal.azure.com>`_
+   (check the "Resource Groups" page) to verify that everything has been deleted.
+
+   These might take several minutes to clear up, but they shouldn't have anything
+   related to your JupyterHub cluster after you have deleted the cluster.
+
 Amazon Web Services (AWS)
 -------------------------
 
-1. Perform the steps above for all cloud providers. These cloud provider agnostic steps will
+1. Perform the steps in :ref:`delete-namespace`. These cloud provider agnostic steps will
    delete the helm chart and delete the hub's namespace. This must be done before proceeding.
 
 2. The easiest way to delete your cloud resources on AWS is to use their
