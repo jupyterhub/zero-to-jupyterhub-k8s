@@ -58,6 +58,9 @@ spec:
       - name: secret
         secret:
           secretName: hub-secret
+      {{ if .Values.hub.extraVolumes }}
+{{ toYaml .Values.hub.extraVolumes | indent 6 }}
+      {{ end }}
       {{ if eq .Values.hub.db.type "sqlite-pvc" }}
       - name: hub-db-dir
         persistentVolumeClaim:
@@ -101,6 +104,9 @@ spec:
             name: config
           - mountPath: /etc/jupyterhub/secret/
             name: secret
+          {{ if .Values.hub.extraVolumeMounts }}
+{{ toYaml .Values.hub.extraVolumeMounts | indent 10 }}
+          {{ end }}
         {{ if eq .Values.hub.db.type "sqlite-pvc" }}
           - mountPath: /srv/jupyterhub
             name: hub-db-dir
