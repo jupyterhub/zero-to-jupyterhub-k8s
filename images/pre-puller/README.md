@@ -28,15 +28,8 @@ in. This is particularly bad in the `helm upgrade` case when new images to *not*
 need to be pulled in - then we end up pulling in a multi-hundred mb image that
 then just exits pretty much immediately.
 
-This gives us a few choices:
-
-1. Bash
-2. Go
-3. Rust
-
-All these can produce images < 10MB. Originally this was in Bash, but it very
-quickly became hard to maintain (since we need to set up TLS and talk to a JSON
-HTTP API & munge the resulting JSON). There was very little error handling code,
-and extending it was very bad. This made it clear it needed to be in a real
-programming language. Go is a little bit more 'mature' now than Rust is, and so
-was chosen.
+Go was a good choice for this, since we could accomplish all the things we wanted to
+with just the Go standard library, and it produces very small images (~4MB). There
+is also lots of kubernetes and container tooling around Go, which is helpful. Once
+their [dependency management situation](https://github.com/kubernetes/client-go/blob/master/INSTALL.md)
+improves, we can use the Kubernetes client library and streamline our code even further.
