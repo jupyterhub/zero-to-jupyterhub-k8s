@@ -45,6 +45,15 @@ spec:
           - -c
           - echo "Pulling complete"
       {{ end }}
+      {{ range $k, $v := .top.Values.prePuller.extraImages }}
+      - name: image-pull-{{ $k }}
+        image: {{ $v.name }}:{{ $v.tag }}
+        imagePullPolicy: IfNotPresent
+        command:
+          - /bin/sh
+          - -c
+          - echo "Pulling complete"
+      {{ end }}
       containers:
       - name: pause
         image: {{ .top.Values.prePuller.pause.image.name }}:{{ .top.Values.prePuller.pause.image.tag }}

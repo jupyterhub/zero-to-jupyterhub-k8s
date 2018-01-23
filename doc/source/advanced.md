@@ -279,3 +279,21 @@ prePuller:
   continuous:
     enabled: true
 ```
+
+### Pre-pulling additional images
+
+By default, the pre-puller only pulls the singleuser image & the networktools image (if
+access to cloud metadata is disabled). If you have customizations that need additional
+images present on all nodes, you can ask the pre-puller to also pull an arbitrary number
+of additional images.
+
+```yaml
+prePuller:
+   extraImages:
+     ubuntu:
+       name: ubuntu
+       tag: 16.04
+```
+
+This snippet will pre-pull the `ubuntu:16.04` image on all nodes, for example. You can
+pre-pull any number of images.

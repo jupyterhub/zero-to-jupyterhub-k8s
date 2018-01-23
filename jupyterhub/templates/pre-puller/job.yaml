@@ -18,18 +18,27 @@ spec:
         - image: {{ .Values.prePuller.hook.image.name }}:{{ .Values.prePuller.hook.image.tag }}
           name: pre-puller
           imagePullPolicy: IfNotPresent
+          command:
+            - /block
+            - -ca-path=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+            - -auth-token-path=/var/run/secrets/kubernetes.io/serviceaccount/token
+            - -api-server-address=https://$(KUBERNETES_SERVICE_HOST):$(KUBERNETES_SERVICE_PORT)
+            - -namespace=$(NAMESPACE)
+              {{ $daemonsetName := printf "pre-pull-%s-%d-%d" .Release.Name .Release.Revision .Release.Time.Seconds }}
+              # This is explicitly *not* quoted, since we are passing
+              # This to a go program without any shell interpolation
+            - -daemonset-spec={{ toJson (fromYaml (include "jupyterhub.prePuller.daemonset" (dict "name" $daemonsetName "top" .))) }}
+            - {{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}
+
+              {{ if not .Values.singleuser.cloudMetadata.enabled }}
+            - {{ .Values.singleuser.networkTools.image.name }}:{{ .Values.singleuser.networkTools.image.tag }}
+              {{ end }}
+              {{ range $key, $value := .Values.prePuller.extraImages }}
+            - {{ $value.name }}:{{ $value.tag }}
+              {{ end }}
           env:
             - name: NAMESPACE
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: DAEMONSET_SPEC
-              {{ $daemonsetName := printf "pre-pull-%s-%d-%d" .Release.Name .Release.Revision .Release.Time.Seconds }}
-              value: {{ toJson (fromYaml (include "jupyterhub.prePuller.daemonset" (dict "name" $daemonsetName "top" .))) | quote }}
-            - name: IMAGE
-              value: "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"
-              {{ range $key, $value := .Values.prePuller.hook.extraEnv }}
-            - name: {{ $key | quote }}
-              value: {{ $value | quote }}
-              {{ end }}
 {{ end }}
