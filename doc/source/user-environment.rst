@@ -36,7 +36,7 @@ Use an existing Docker image
 .. note::
 
    You can find the configuration for the default Docker image used in this
-   guide `here <https://github.com/jupyterhub/zero-to-jupyterhub-k8s>`_.
+   guide `here <https://github.com/jupyterhub/zero-to-jupyterhub-k8s/tree/master/images/singleuser-sample>`_.
 
 Using an existing Docker image, that someone else has written and maintained,
 is the simplest approach. For example, Project Jupyter maintains the
