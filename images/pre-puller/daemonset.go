@@ -1,14 +1,3 @@
-// Pulls a given list of images on all nodes on a cluster.
-//
-// This program will perform the following sequence of actions
-//
-// 1. Check if the given list of images already exist on all scheduleable nodes.
-//    If they do, exit!
-// 2. If they don't, create a deamonset (the spec for which is passed in
-//    as the `daemonset-spec` commandline parameter)
-// 3. Check every 2s if the images are present in all scheduleable nodes.
-// 4. Once image is in all schedulable nodes, kill the daemonset created in (2) and exit
-//
 package main
 
 import (
