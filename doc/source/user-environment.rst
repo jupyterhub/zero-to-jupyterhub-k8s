@@ -265,14 +265,14 @@ in ``config.yaml``:
          exec:
            command: ["your", "command", "here"]
 
- Note that this command will be run from the ``$HOME`` location of the user's
- running container, meaning that commands that place files relative to ``./``
- will result in users seeing those files in their home directory. You can use
- commands like ``wget`` to place files where you like.
+Note that this command will be run from the ``$HOME`` location of the user's
+running container, meaning that commands that place files relative to ``./``
+will result in users seeing those files in their home directory. You can use
+commands like ``wget`` to place files where you like.
 
- However, keep in mind that this command will be run **each time** a user
- starts their server. For this reason, we recommend using ``nbgitpuller`` to
- synchronize your user folders with a git repository.
+However, keep in mind that this command will be run **each time** a user
+starts their server. For this reason, we recommend using ``nbgitpuller`` to
+synchronize your user folders with a git repository.
 
 Using ``nbgitpuller`` for synchronizing a folder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
