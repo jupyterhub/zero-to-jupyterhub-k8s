@@ -12,7 +12,7 @@ spec:
     spec:
       restartPolicy: Never
       {{ if .Values.rbac.enabled }}
-      serviceAccountName: pre-puller-{{ .Release.Name }}-{{ .Release.Revision }}
+      serviceAccountName: pre-puller-{{ .Release.Time.Seconds }}-{{.Release.Name}}-{{.Release.Revision}}
       {{- end }}
       containers:
         - image: {{ .Values.prePuller.hook.image.name }}:{{ .Values.prePuller.hook.image.tag }}
