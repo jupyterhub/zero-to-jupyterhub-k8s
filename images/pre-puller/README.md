@@ -18,18 +18,22 @@ hub. This cuts down the amount of time it takes for a user server to start,
 since the image no longer needs to be pulled. For large images this can cut down
 startup time from almost ten minutes to a few seconds.
 
-## Why Go?
+## FAQ
 
-The role of this program is to run as a pod whenever the user is running `helm
-install` or `helm upgrade` and help pull in larger images. The image that this
-program requires to run must be as small as possible - it is unideal to pull in
-a multi hundred megabyte image first to check if more images need to be pulled
-in. This is particularly bad in the `helm upgrade` case when new images to *not*
-need to be pulled in - then we end up pulling in a multi-hundred mb image that
-then just exits pretty much immediately.
+### Why is this project in Go? Isn't the Jupyter Infrastructure Ecosystem mostly Python?
 
-Go was a good choice for this, since we could accomplish all the things we wanted to
-with just the Go standard library, and it produces very small images (~4MB). There
-is also lots of kubernetes and container tooling around Go, which is helpful. Once
-their [dependency management situation](https://github.com/kubernetes/client-go/blob/master/INSTALL.md)
-improves, we can use the Kubernetes client library and streamline our code even further.
+The size of the image needed to run this pre-puller needs to be as small as possible,
+to improve `helm upgrade` and `helm install` performance. If the image was large,
+all `helm upgrades` might have to wait for the big image to be pulled, even if no
+image pulling needs to happen. This makes for a sad user experience.
+
+We <3 python, but the smallest image with the `kubernetes` python library installed
+is about 116MB, and the smallest Python image is about 36MB. This Go image is only
+about 4MB, which is almost an order of magnitude smaller. This is the primary reason
+Go is used.
+
+### Why is the Go Kubernetes library not used here?
+
+It is currently [hard to depend on](https://github.com/kubernetes/client-go/blob/master/INSTALL.md)
+in small Go projects. Once that situation changes, we'll simplify our code by switching
+to it.
