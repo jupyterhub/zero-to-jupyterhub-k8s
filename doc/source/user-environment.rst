@@ -33,6 +33,11 @@ Use an existing Docker image
    match the version installed by the helm chart that you're using. For example,
    ``v0.5`` of the helm chart uses  ``jupyterhub==0.8``.
 
+.. note::
+
+   You can find the configuration for the default Docker image used in this
+   guide `here <https://github.com/jupyterhub/zero-to-jupyterhub-k8s>`_.
+
 Using an existing Docker image, that someone else has written and maintained,
 is the simplest approach. For example, Project Jupyter maintains the
 `jupyter/docker-stacks <https://github.com/jupyter/docker-stacks/>`_ repo,
