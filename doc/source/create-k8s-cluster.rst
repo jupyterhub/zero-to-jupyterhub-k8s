@@ -38,25 +38,33 @@ connect your credit card or other payment method to your google cloud account.
 
 2. Enable the `Kubernetes Engine API <https://console.cloud.google.com/apis/api/container.googleapis.com/overview>`_.
 
-3. Prepare your command line interface. You have two options, using Google's
-   interactive CLI, or working locally from your own shell interface. Instructions
+3. Use your preferred command line interface.
+
+   You have two options: a) use the Google Cloud Shell (no installation needed)
+   or b) install and use the gcloud command-line tool.
+   If you are unsure which to choose, we recommend beginning with option
+   "a" and using the Google Cloud Shell. Instructions
    for each are detailed below:
 
-   * **Google Interactive CLI**. Start the Google Cloud interactive command line
-     by Clicking the button shown below. This will start an interactive shell
+   a. **Use the Google Cloud Shell**. Start the Google Cloud Shell
+     by clicking the button shown below. This will start an interactive shell
      session within Google Cloud.
 
    .. image:: _static/images/google/start_interactive_cli.png
       :align: center
 
-   * **Working locally**. Install and initialize the **gcloud command-line tools**.
-     These tools send commands to Google Cloud and let you do things like create
+   See the `Google Cloud Shell docs <https://cloud.google.com/shell/docs/>`_
+   for more information.
+
+   * **Install and use the gcloud command line tool**.
+     This tool sends commands to Google Cloud and lets you do things like create
      and delete clusters.
 
-     - Go to the `gcloud downloads page <https://cloud.google.com/sdk/downloads>`_
-       to **download and install the gcloud SDK**.
-     - See the `gcloud documentation <https://cloud.google.com/sdk/>`_ for
-       more information on the gcloud SDK.
+     - Go to the `gcloud command line tool downloads page <https://cloud.google.com/sdk/downloads>`_
+       to **download and install the gcloud command line tool**.
+     - See the `gcloud documentation <https://cloud.google.com/pubsub/docs/quickstart-cli>`_ for
+       more information on the gcloud command line tool.
+
 4. Install ``kubectl``, which is a tool for controlling kubernetes. From
    the terminal, enter:
 
@@ -64,8 +72,8 @@ connect your credit card or other payment method to your google cloud account.
 
         gcloud components install kubectl
 
-5. Create a Kubernetes cluster on Google Cloud, by typing in the following
-   command:
+5. Create a Kubernetes cluster on Google Cloud, by typing the following
+   command into either the Google Cloud shell or the gcloud command-line tool:
 
    .. code-block:: bash
 
