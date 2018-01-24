@@ -10,4 +10,4 @@ mwoauth==0.3.2
 globus_sdk[jwt]==1.2.1
 oauthenticator==0.7.2
 cryptography==2.0.3
-git+https://github.com/jupyterhub/kubespawner@5c9bf38
+jupyterhub-kubespawner==0.8
