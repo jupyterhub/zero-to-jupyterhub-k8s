@@ -211,7 +211,7 @@ singleuser:
 ### Pack
 
 * **Behavior**: This packs user pods into **as few nodes as possible**.
-* **Benefits**: This increases your resource utilization, which is useful in conjunction with autoscalers.
+* **Benefits**: This reduces your resource utilization, which is useful in conjunction with autoscalers.
 * **Drawbacks**: A single node going down might affect more user pods than using
   a "spread" strategy (depending on the node).
 
