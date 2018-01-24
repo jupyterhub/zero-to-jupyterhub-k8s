@@ -55,8 +55,7 @@ For the following steps, use your favorite code editor. We'll use the
    See the `RBAC documentation <security.html#use-role-based-access-control-rbac>`_
    for more details.
 
-5. Save the ``config.yaml`` file. If using the nano editor, hit ``Ctrl-X`` and
-   make sure to answer ‘yes’ when it asks you to save.
+5. Save the ``config.yaml`` file.
 
 Install JupyterHub
 ------------------
@@ -115,7 +114,7 @@ Install JupyterHub
    .. note::
       * This step may take a moment, during which time there will be no output
         to your terminal. JupyterHub is being installed in the background.
-        
+
       * If you get a ``release named <YOUR-RELEASE-NAME> already exists`` error, then
         you should delete the release by running
         ``helm delete --purge <YOUR-RELEASE-NAME>``. Then reinstall by repeating this

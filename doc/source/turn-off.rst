@@ -30,7 +30,7 @@ before doing the cloud provider specific setup.
 
   .. code-block:: bash
 
-     helm delete <your-helm-release-name> --purge
+     helm delete <YOUR-HELM-RELEASE-NAME> --purge
 
 2. Next, delete the namespace the hub was installed in. This deletes any disks
    that may have been created to store user's data, and any IP addresses that
@@ -38,7 +38,7 @@ before doing the cloud provider specific setup.
 
    .. code-block:: bash
 
-      kubectl delete namespace <your-namespace>
+      kubectl delete namespace <YOUR-NAMESPACE>
 
 Google Cloud Platform
 ---------------------
@@ -84,20 +84,23 @@ Microsoft Azure AKS
 
    .. code-block:: bash
 
-      az aks list --output table
+      az group list --output table
 
    You can then delete the one you want with the following command
 
    .. code-block:: bash
 
-      az group delete -n <YOUR-GROUP-NAME>
+      az group delete --name <YOUR-GROUP-NAME>
+
+   Be careful to delete the correct Resource Group, as doing so will irreversibly
+   delete all resources within the group!
 
 3. Double check to make sure all the resources are now deleted, since anything you
    have not deleted will cost you money! You can check the `web portal <https://portal.azure.com>`_
    (check the "Resource Groups" page) to verify that everything has been deleted.
 
    These might take several minutes to clear up, but they shouldn't have anything
-   related to your JupyterHub cluster after you have deleted the cluster.
+   related to your JupyterHub cluster after you have deleted the resource group.
 
 Amazon Web Services (AWS)
 -------------------------
