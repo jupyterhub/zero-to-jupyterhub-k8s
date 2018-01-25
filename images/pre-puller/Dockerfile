@@ -1,7 +1,9 @@
-FROM alpine:3.5
+FROM golang:1.9.2
 
-RUN apk add --no-cache curl jq
+COPY *.go /go/
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags '-w -s' -installsuffix cgo -a -o /go/block /go/*.go
 
-ADD . .
+FROM scratch
 
-ENTRYPOINT ["./block.sh"]
+COPY --from=0 /go/block /block
+
