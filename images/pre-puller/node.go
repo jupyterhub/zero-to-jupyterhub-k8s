@@ -18,7 +18,7 @@ type NodeList struct {
 			Name string `json:"name"`
 		} `json:"metadata"`
 		Spec struct {
-			Unschedulable bool `json:"unscheduleable"`
+			Unschedulable bool `json:"unschedulable"`
 		} `json:"spec"`
 		Status struct {
 			Images []struct {
