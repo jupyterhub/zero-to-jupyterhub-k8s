@@ -165,7 +165,7 @@ how to configure JupyterHub to build off of this image:
 6. **Edit the JupyterHub configuration to build from this image.**
    Edit ``config.yaml`` file to include these lines in it:
 
-   .. code-block:: bash
+   .. code-block:: yaml
 
       singleuser:
         image:
@@ -264,7 +264,7 @@ filesystem. To do so, you would include commands in the ``config.yaml`` that wou
 be run each time a user starts their server. The following pattern can be used
 in ``config.yaml``:
 
-.. code-block:: bash
+.. code-block:: yaml
 
    singleuser:
      lifecycleHooks:
@@ -292,7 +292,7 @@ image <https://github.com/data-8/nbgitpuller#installation>`_.
 Once this is done, you'll have access to the ``nbgitpuller`` CLI from within
 JupyterHub. You can run it with a ``postStart`` hook with the following configuration
 
-.. code-block:: bash
+.. code-block:: yaml
 
    singleuser:
      lifecycleHooks:

@@ -40,12 +40,22 @@ For the following steps, use your favorite code editor. We'll use the
    .. code-block:: yaml
 
       proxy:
-        secretToken: "RANDOM_STRING"
+        secretToken: "<OUTPUT-OF-`openssl rand -hex 32`>"
 
 .. Don't put an example here! People will just copy paste that & that's a security issue.
 
-4. Save the ``config.yaml`` file. If using the nano editor, hit ``Ctrl-X`` and
-   make sure to answer ‘yes’ when it asks you to save.
+4. **Azure AKS only** If you're on Microsoft Azure AKS, you must disable
+   RBAC. Do so by putting the following in ``config.yaml``
+
+   .. code-block:: yaml
+
+      rbac:
+         enabled: false
+
+   See the `RBAC documentation <security.html#use-role-based-access-control-rbac>`_
+   for more details.
+
+5. Save the ``config.yaml`` file.
 
 Install JupyterHub
 ------------------
@@ -102,6 +112,8 @@ Install JupyterHub
    helm should feel free to use different values.
 
    .. note::
+      * This step may take a moment, during which time there will be no output
+        to your terminal. JupyterHub is being installed in the background.
 
       * If you get a ``release named <YOUR-RELEASE-NAME> already exists`` error, then
         you should delete the release by running
@@ -123,7 +135,7 @@ Install JupyterHub
 
    .. code-block:: bash
 
-      kubectl --namespace=<YOUR_NAMESPACE> get pod
+      kubectl --namespace=<YOUR-NAMESPACE> get pod
 
 3. Wait for the hub and proxy pod to begin running.
 
@@ -131,7 +143,7 @@ Install JupyterHub
 
    .. code-block:: bash
 
-      kubectl --namespace=<YOUR_NAMESPACE> get svc
+      kubectl --namespace=<YOUR-NAMESPACE> get svc
 
    The external IP for the `proxy-public` service should be accessible in a
    minute or two.
@@ -141,7 +153,7 @@ Install JupyterHub
       If the IP for ``proxy-public`` is too long to fit into the window, you
       can find the longer version by calling::
 
-        kubectl --namespace=<YOUR_NAMESPACE> describe svc proxy-public
+        kubectl --namespace=<YOUR-NAMESPACE> describe svc proxy-public
 
 5. To use JupyterHub, enter the external IP for the `proxy-public` service in
    to a browser. JupyterHub is running with a default *dummy* authenticator so
