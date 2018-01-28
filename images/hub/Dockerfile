@@ -29,6 +29,7 @@ RUN adduser --disabled-password \
 ARG JUPYTERHUB_VERSION=0.8.*
 
 ADD requirements.txt /tmp/requirements.txt
+RUN pip3 install --upgrade pip
 RUN pip3 install --no-cache-dir \
          jupyterhub==${JUPYTERHUB_VERSION} \
          -r /tmp/requirements.txt
