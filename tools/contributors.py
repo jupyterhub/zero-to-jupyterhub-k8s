@@ -32,7 +32,7 @@ from github import Github
 import dateutil
 from dateutil.parser import parse
 
-gh = Github(login_or_token=os.environ['GITHUB_API_TOKEN'])
+gh = Github(login_or_token=os.environ['GITHUB_API_TOKEN'].strip())
 
 
 def get_all_contributors(repo, from_date, to_date):
@@ -68,6 +68,7 @@ def get_all_contributors(repo, from_date, to_date):
 
 
 if __name__ == '__main__':
+    # Dates below should be updated before releasing a new version of the helm chart
     users = get_all_contributors('jupyterhub/zero-to-jupyterhub', parse('Wed Dec 13 10:23:01 2017 -0800'), parse('Mon Jan 29 13:37:51 2018 -0800'))
     users |= get_all_contributors('jupyterhub/kubespawner', parse('Tue Nov 28 13:28:24 2017 -0800'), parse('Wed Jan 24 13:31:03 2018 +0100'))
 

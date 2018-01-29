@@ -52,3 +52,21 @@ development.
 
 8. Make the changes you want. You need to re-run step 6 if you changed anything
    under `images`, but only step 7 if you changed things only under `jupyterhub`
+
+
+## Releasing a new version of the Helm Chart
+
+In order to release a new version of the Helm Chart, make sure to perform each
+of the following steps:
+
+1. Generate a release document. This should follow the structure of previous
+   entries in the [CHANGELOG](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md).
+2. Double-check that there aren't any un-documented breaking changes.
+3. If applicable, include a section in the [CHANGELOG](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md)
+   that contains upgrade instructions (usually only applicable for major changes to the code).
+4. Generate a list of contributors since the latest release. Use the script
+  in `tools/contributors.py` to list all contributions (anyone who made a
+  commit or a comment)    since the latest release. Update the dates in that
+  script, run it, and paste the output into the changelog. For an example,
+  see [the v0.5 list of contributors](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/v0.5/CHANGELOG.md#contributors).
+5. ...
