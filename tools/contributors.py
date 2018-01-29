@@ -45,11 +45,8 @@ def get_all_contributors(repo, from_date, to_date):
 
 
 if __name__ == '__main__':
-    users = get_all_contributors('jupyterhub/zero-to-jupyterhub', parse('Tue Jun 27 15:18:55 2017 -0700'), parse('Mon Dec  4 21:16:03 2017 -0700'))
-    users |= get_all_contributors('jupyterhub/helm-chart', parse('Tue Jun 27 15:18:55 2017 -0700'), parse('Mon Dec  4 21:16:03 2017 -0700'))
-    users |= get_all_contributors('jupyterhub/jupyterhub', parse('Tue Jan 10 16:12:52 2017 +0100'), parse('Tue Nov 7 13:39:21 2017 +0100'))
-    users |= get_all_contributors('jupyterhub/kubespawner', parse('Tue Jun 20 20:44:47 2017 -0700'), parse('Tue Nov 28 13:28:24 2017 -0800'))
-    users |= get_all_contributors('jupyterhub/oauthenticator', parse('Wed Oct 5 13:44:01 2016 +0200'), parse('Fri Oct 27 17:01:09 2017 +0200'))
+    users = get_all_contributors('jupyterhub/zero-to-jupyterhub', parse('Wed Dec 13 10:23:01 2017 -0800'), parse('Mon Jan 29 13:37:51 2018 -0800'))
+    users |= get_all_contributors('jupyterhub/kubespawner', parse('Tue Nov 28 13:28:24 2017 -0800'), parse('Wed Jan 24 13:31:03 2018 +0100'))
 
 
     for login, name in sorted(users, key=lambda u: u[1].casefold() if u[1] else u[0].casefold()):
