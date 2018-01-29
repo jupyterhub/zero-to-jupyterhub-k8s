@@ -49,7 +49,7 @@ This section covers upgrade information specific to the following:
 ### `helm upgrade` command
 
 After modifying your `config.yaml` file according to the CHANGELOG, you will need
-<YOUR-RELEASE-NAME> to run the upgrade commands. To find <YOUR-RELEASE-NAME>:
+<YOUR-HELM-RELEASE-NAME> to run the upgrade commands. To find <YOUR-RELEASE-NAME>:
 
 ```
 helm list
@@ -61,13 +61,13 @@ a production system!
 To run the upgrade:
 
 ```
-helm upgrade <YOUR-RELEASE-NAME> jupyterhub/jupyterhub --version=<RELEASE-VERSION> -f config.yaml
+helm upgrade <YOUR-HELM-RELEASE-NAME> jupyterhub/jupyterhub --version=<RELEASE-VERSION> -f config.yaml
 ```
 
-For example, to upgrade to v0.6, enter and substituting <YOUR-RELEASE-NAME> and version v0.6:
+For example, to upgrade to v0.6, enter and substituting <YOUR-HELM-RELEASE-NAME> and version v0.6:
 
 ```
-helm upgrade <YOUR-RELEASE-NAME> jupyterhub/jupyterhub --version=v0.6 -f config.yaml
+helm upgrade <YOUR-HELM-RELEASE-NAME> jupyterhub/jupyterhub --version=v0.6 -f config.yaml
 ```
 
 ### Database
@@ -132,3 +132,14 @@ you would use:
 ```Dockerfile
 RUN pip install --no-cache-dir jupyterhub==0.8.1
 ```
+
+## Troubleshooting
+
+If the upgrade is failing on a test system or a system that does not serve users, you can try
+deleting the helm chart using:
+
+```
+helm delete <YOUR-HELM-RELEASE-NAME> --purge
+```
+
+`helm list` may be used to find <YOUR-HELM-RELEASE-NAME>.
