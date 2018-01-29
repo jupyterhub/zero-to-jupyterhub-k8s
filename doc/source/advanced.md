@@ -290,7 +290,7 @@ of additional images.
 ```yaml
 prePuller:
    extraImages:
-     ubuntu:
+     ubuntu-xenial:
        name: ubuntu
        tag: 16.04
 ```
