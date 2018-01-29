@@ -4,7 +4,7 @@ python:
 services:
 - docker
 install:
-- pip install --no-cache-dir ruamel.yaml python-dateutil
+- pip install --no-cache-dir -r dev-requirements.txt
 - . ci/minikube.env
 - ./ci/install.sh
 script:

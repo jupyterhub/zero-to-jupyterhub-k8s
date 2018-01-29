@@ -21,10 +21,10 @@ development.
    git clone git@github.com:jupyterhub/zero-to-jupyterhub-k8s.git
    cd zero-to-jupyterhub-k8s
    ```
-5. Create a virtualenv & install the library required for builds to happen:
+5. Create a virtualenv & install the libraries required for builds to happen:
    ```bash
    python3 -m venv .
-   pip install ruamel.yaml
+   pip install -r dev-requirements.txt
    ```
  6. Now run `build.py` to build the requisite docker images inside minikube:
     ```bash
