@@ -3,7 +3,7 @@
 ## General upgrade tips
 
 - We **recommend** a full fresh installation instead of upgrade if you can, 
-  but recognize it is not possible all the time. 
+  but recognize that it is not possible all the time. 
 - Minor revisions: It should be safe to upgrade a minor revision of the chart to
   receive bugfixes and improvements.
 - Major chart upgrades (e.g. v0.5 to 0.6): This is more challenging than a
@@ -16,7 +16,7 @@
 These steps are **critical** before performing a major upgrade.
 
 1. Always backup your database!
-2. Review the CHANGELOG for incompatible changes and upgrade instructions.
+2. Review the [CHANGELOG](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md) for incompatible changes and upgrade instructions.
 3. Update your configuration accordingly.
 4. User servers may need be stopped prior to the upgrade,
    or restarted after it.
@@ -26,7 +26,7 @@ These steps are **critical** before performing a major upgrade.
 
 ### v0.5 to v0.6
 
-See [CHANGELOG]().
+See the [CHANGELOG]().
 
 ### v0.4 to v0.5
 
@@ -35,21 +35,23 @@ Since it is a major upgrade of JupyterHub that changes how authentication is
 implemented, user servers must be stopped during the upgrade.
 The database schema has also changed, so a database upgrade must be performed.
 
-See [documentation for v0.5 for the upgrade process](https://zero-to-jupyterhub.readthedocs.io/en/v0.5-doc/upgrading.html).
+See the [documentation for v0.5 for the upgrade process](https://zero-to-jupyterhub.readthedocs.io/en/v0.5-doc/upgrading.html)
+as well as the [CHANGELOG](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md#05---hamid-hassan---2017-12-05)
+for this release for more information about changes.
 
 ## Subtopics
 
 This section covers upgrade information specific to the following:
 
 - `helm upgrade` command
-- Database
+- Databases
 - RBAC (Role Based Access Control)
-- Custom Docker image
+- Custom Docker images
 
 ### `helm upgrade` command
 
 After modifying your `config.yaml` file according to the CHANGELOG, you will need
-<YOUR-HELM-RELEASE-NAME> to run the upgrade commands. To find <YOUR-RELEASE-NAME>:
+`<YOUR-HELM-RELEASE-NAME>` to run the upgrade commands. To find `<YOUR-RELEASE-NAME>`, run:
 
 ```
 helm list
@@ -64,7 +66,7 @@ To run the upgrade:
 helm upgrade <YOUR-HELM-RELEASE-NAME> jupyterhub/jupyterhub --version=<RELEASE-VERSION> -f config.yaml
 ```
 
-For example, to upgrade to v0.6, enter and substituting <YOUR-HELM-RELEASE-NAME> and version v0.6:
+For example, to upgrade to v0.6, enter and substituting `<YOUR-HELM-RELEASE-NAME>` and version v0.6:
 
 ```
 helm upgrade <YOUR-HELM-RELEASE-NAME> jupyterhub/jupyterhub --version=v0.6 -f config.yaml
