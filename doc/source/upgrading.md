@@ -1,33 +1,78 @@
-# Upgrading The helm chart
+# Upgrading the helm chart
 
-## General upgrade advice
+## General upgrade tips
 
-In general, it should be safe to upgrade a minor revision of the chart to
-receive bugfixes and improvements. A major chart upgrade (e.g. v0.4 to v0.5)
-can be more challenging, but is possible. We still recommend a full fresh
-installation if you can, but recognize it is not possible all the time. We've
-provided and tested the following upgrade instructions. If you are planning an
-upgrade of a critical major installation, we recommend you test it out on a
-staging cluster first before applying it to production. Feel free to reach out
-to us on [gitter](http://gitter.im/jupyterhub/jupyterhub) or the [mailing
-list](https://groups.google.com/forum/#!forum/jupyter) for upgrade help!
+- We **recommend** a full fresh installation instead of upgrade if you can, 
+  but recognize that it is not possible all the time. 
+- Minor revisions: It should be safe to upgrade a minor revision of the chart to
+  receive bugfixes and improvements.
+- Major chart upgrades (e.g. v0.5 to 0.6): This is more challenging than a
+  minor revision, but is possible.
+- Additional help: Feel free to reach out to us on [gitter](http://gitter.im/jupyterhub/jupyterhub)
+  or the [mailing list](https://groups.google.com/forum/#!forum/jupyter) for upgrade help!
 
-General helm-chart upgrade considerations:
+## Major helm-chart upgrades
+
+These steps are **critical** before performing a major upgrade.
 
 1. Always backup your database!
-2. Review incompatible changes for your upgrade (most should be on this page)
-   and update your configuration accordingly.
-3. For major upgrades, user servers may need be stopped prior to the upgrade,
+2. Review the [CHANGELOG](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md) for incompatible changes and upgrade instructions.
+3. Update your configuration accordingly.
+4. User servers may need be stopped prior to the upgrade,
    or restarted after it.
+5. If you are planning an upgrade of a critical major installation,
+   we recommend you test the upgrade out on a staging cluster first
+   before applying it to production. 
 
-## v0.4 to v0.5
+### v0.5 to v0.6
+
+See the [CHANGELOG]().
+
+### v0.4 to v0.5
 
 Release 0.5 contains a major JupyterHub version bump (from 0.7.2 to 0.8).
 Since it is a major upgrade of JupyterHub that changes how authentication is
 implemented, user servers must be stopped during the upgrade.
 The database schema has also changed, so a database upgrade must be performed.
 
-### Database upgrade
+See the [documentation for v0.5 for the upgrade process](https://zero-to-jupyterhub.readthedocs.io/en/v0.5-doc/upgrading.html)
+as well as the [CHANGELOG](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md#05---hamid-hassan---2017-12-05)
+for this release for more information about changes.
+
+## Subtopics
+
+This section covers upgrade information specific to the following:
+
+- `helm upgrade` command
+- Databases
+- RBAC (Role Based Access Control)
+- Custom Docker images
+
+### `helm upgrade` command
+
+After modifying your `config.yaml` file according to the CHANGELOG, you will need
+`<YOUR-HELM-RELEASE-NAME>` to run the upgrade commands. To find `<YOUR-RELEASE-NAME>`, run:
+
+```
+helm list
+```
+
+Make sure to test the upgrade on a staging environment before doing the upgrade on
+a production system!
+
+To run the upgrade:
+
+```
+helm upgrade <YOUR-HELM-RELEASE-NAME> jupyterhub/jupyterhub --version=<RELEASE-VERSION> -f config.yaml
+```
+
+For example, to upgrade to v0.6, enter and substituting `<YOUR-HELM-RELEASE-NAME>` and version v0.6:
+
+```
+helm upgrade <YOUR-HELM-RELEASE-NAME> jupyterhub/jupyterhub --version=v0.6 -f config.yaml
+```
+
+### Database
 
 This release contains a major JupyterHub version bump (from 0.7.2 to 0.8). If
 you are using the default database provider (SQLite), then the required db upgrades
@@ -80,71 +125,23 @@ when doing the upgrade!
 ### Custom Docker Images: JupyterHub version match
 
 If you are using a custom built image, make sure that the version of the
-JupyterHub package installed in it is now 0.8. It needs to be version 0.7.2 for
-it to work with v0.4 of the helm chart, and needs to be 0.8 for it to work with
-v0.5 of the helm chart.
+JupyterHub package installed in it is now 0.8.1. It needs to be 0.8.1 for it to work with
+v0.6 of the helm chart.
 
-For example, if you are using pip to install JupyterHub in your custom Docker Image,
+For example, if you are using `pip` to install JupyterHub in your custom Docker Image,
 you would use:
 
 ```Dockerfile
-RUN pip install --no-cache-dir jupyterhub==0.8.*
+RUN pip install --no-cache-dir jupyterhub==0.8.1
 ```
 
-### Ingress config incompatibilities
+## Troubleshooting
 
-We've made HTTPS [much easier to set up](http://zero-to-jupyterhub.readthedocs.io/en/latest/extending-jupyterhub.html#setting-up-https),
-with automated certificates from [Let's Encrypt](https://letsencrypt.org/).
-However, this means that some of the keys used to set up your own ingress has
-changed.
-
-If you were using config under `ingress` purely to get HTTPS, we recommend
-that you delete your entire config section under `ingress` & instead follow
-the new [docs](http://zero-to-jupyterhub.readthedocs.io/en/latest/extending-jupyterhub.html#setting-up-https)
-on getting HTTPS set up. It's much easier & a lot less error prone than the method recommended on 0.4.
-
-If you were using config under `ingress` for other reasons, you may continue
-to do so. The keys under `ingress` have changed, and are now much more in line
-with how many other projects use `ingress` in the [official charts repo](https://github.com/kubernetes/charts/).
-See [our ingress documentation](http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html#ingress)
-for more details on how to set up ingress properly. This is the most likely issue if
-you are getting an error like the following when upgrading:
+If the upgrade is failing on a test system or a system that does not serve users, you can try
+deleting the helm chart using:
 
 ```
-Ingress.extensions "jupyterhub" is invalid: spec: Invalid value: []extensions.IngressRule(nil): either `backend` or `rules` must be specified
+helm delete <YOUR-HELM-RELEASE-NAME> --purge
 ```
 
-### Admin config incompatibility
-
-If you had used the `admin` config section before, you now need to move it under
-`auth`. So if you had config like:
-
-```yaml
-admin:
-   access: true
-   users:
-    - yuvipanda
-```
-
-it should now be:
-
-```yaml
-auth:
-  admin:
-    access: true
-    users:
-      - yuvipanda
-```
-
-### Upgrade command
-
-After modifying your config.yaml file to match, you can run the actual upgrade with
-the following helm command:
-
-```
-helm upgrade <YOUR-RELEASE-NAME> jupyterhub/jupyterhub --version=v0.5 -f config.yaml
-```
-
-This should perform the upgrade! If you have forgotten your release name, you can find
-out with `helm list`. Make sure to test the upgrade on a staging environment
-before doing the upgrade!
+`helm list` may be used to find <YOUR-HELM-RELEASE-NAME>.
