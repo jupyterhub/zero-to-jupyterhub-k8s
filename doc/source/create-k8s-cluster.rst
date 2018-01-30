@@ -124,7 +124,7 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
    the Azure interactive shell, the other is to install the Azure command-line
    tools locally. Instructions for each are below.
 
-   * **Using the Azure interactive shell**. The `Azure Portal <portal.azure.com>`_
+   * **Using the Azure interactive shell**. The `Azure Portal <https://portal.azure.com>`_
      contains an interactive shell that you can use to communicate with your
      Kubernetes cluster. To access this shell, go to `portal.azure.com <https://portal.azure.com>`_
      and click on the button below.
@@ -167,7 +167,7 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
 
    .. code-block:: bash
 
-      az account set -s <YOUR-CHOSEN-SUBSCRIPTION>
+      az account set -s <YOUR-CHOSEN-SUBSCRIPTION-NAME>
 
 
 3. Create a resource group. Azure uses the concept of
@@ -186,7 +186,8 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
 
   * ``--name`` specifies the name of your resource group. We recommend using something
     that uniquely identifies this hub. For example, if you are creating a resource group
-    for UC Berkeley's 2018 Spring Data100 Course, you should call it ucb_2018sp_data100_hub.
+    for UC Berkeley's 2018 Spring Data100 Course, you may give it a 
+    ``<RESOURCE-GROUP-NAME>`` of ``ucb_2018sp_data100_hub``.
   * ``--location`` specifies the location of the data center you want your resource to be in.
     In this case, we used the ``centralus`` location. For other options, see the
     `Azure list of locations that support AKS
