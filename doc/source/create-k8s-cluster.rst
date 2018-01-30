@@ -124,7 +124,7 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
    the Azure interactive shell, the other is to install the Azure command-line
    tools locally. Instructions for each are below.
 
-   * **Using the Azure interactive shell**. The `Azure Portal <portal.azure.com>`_
+   * **Using the Azure interactive shell**. The `Azure Portal <https://portal.azure.com>`_
      contains an interactive shell that you can use to communicate with your
      Kubernetes cluster. To access this shell, go to `portal.azure.com <https://portal.azure.com>`_
      and click on the button below.
