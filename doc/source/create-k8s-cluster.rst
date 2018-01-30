@@ -186,7 +186,7 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
 
   * ``--name`` specifies the name of your resource group. We recommend using something
     that uniquely identifies this hub. For example, if you are creating a resource group
-    for UC Berkeley's 2018 Spring Data100 Course, you should may give it a 
+    for UC Berkeley's 2018 Spring Data100 Course, you may give it a 
     ``<RESOURCE-GROUP-NAME>`` of ``ucb_2018sp_data100_hub``.
   * ``--location`` specifies the location of the data center you want your resource to be in.
     In this case, we used the ``centralus`` location. For other options, see the
