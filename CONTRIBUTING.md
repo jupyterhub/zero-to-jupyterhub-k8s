@@ -54,19 +54,144 @@ development.
    under `images`, but only step 7 if you changed things only under `jupyterhub`
 
 
-## Releasing a new version of the Helm Chart
+## Releasing a new version of the helm chart
 
-In order to release a new version of the Helm Chart, make sure to perform each
-of the following steps:
+The following steps can be followed to release a new version of the Helm Chart.
+This should happen approximately once every 5-7 weeks.
 
-1. Generate a release document. This should follow the structure of previous
-   entries in the [CHANGELOG](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md).
-2. Double-check that there aren't any un-documented breaking changes.
-3. If applicable, include a section in the [CHANGELOG](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md)
-   that contains upgrade instructions (usually only applicable for major changes to the code).
-4. Generate a list of contributors since the latest release. Use the script
-  in `tools/contributors.py` to list all contributions (anyone who made a
-  commit or a comment)    since the latest release. Update the dates in that
-  script, run it, and paste the output into the changelog. For an example,
-  see [the v0.5 list of contributors](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/v0.5/CHANGELOG.md#contributors).
-5. ...
+### Make a CHANGELOG
+
+This needs to be manually created, following the format of
+current [CHANGELOG](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md). The general structure should be:
+
+* A short description of the general theme / points of interest for
+ this release.
+* Breaking changes + a link to the [upgrade instructions](https://zero-to-jupyterhub.readthedocs.io/en/v0.5-doc/upgrading.html) in the docs
+* A list of features with brief descriptions under each.
+* The contributor list mentioned in the section below.
+
+### Add list of contributors
+
+We try to recognize *all* sorts of contributors, rather
+than just code committers.
+
+Use the script in `tools/contributors.py` to list all
+contributions (anyone who made a commit or a comment)
+since the latest release. For each
+release, you'll need to find the versions of all repos
+involved:
+
+* [z2jh](https://github.com/jupyterhub/zero-to-jupyterhub-k8s)
+* [KubeSpawner](https://github.com/jupyterhub/kubespawner)
+* [JupyterHub](https://github.com/jupyterhub/jupyterhub)
+* [OAuthenticator](https://github.com/jupyterhub/oauthenticator))
+
+edit `contributors.py` to have the appropriate dates
+for each of these versions. Then, run the script and paste
+the output into the changelog. For an
+example, see [the v0.5 list of contributors](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/v0.5/CHANGELOG.md#contributors).
+
+
+### Push built images to DockerHub + bump version
+
+The JupyterHub helm chart uses a Docker image that's registered
+on DockerHub. When releasing a new version of the helm chart,
+you also need to push a new version of this image. To do so,
+you must have:
+
+1. Docker running locally
+2. An account on DockerHub that you are logged into from
+  your local docker installation.
+3. Push rights for images under `jupyterhub/` on
+  the DockerHub registry.
+4. Push rights to the `jupyterhub/helm-chart` repository on GitHub.
+5. A local SSH key that will let you push to the `helm-chart` repository
+  on GitHub. See [these instructions](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) for information on how to create this.
+
+**Note**: If you don't have a DockerHub account, or don't have push rights to
+the DockerHub registry, open an issue and ping one of the core devs.
+
+If you have all of this, you can then:
+
+1. Check out latest master of [z2jh](https://github.com/jupyterhub/zero-to-jupyterhub-k8s)
+2. Run `./build.py --tag <VERSION> --push --publish-chart`.
+  * For example, to relase `v0.5`, you would run
+  `./build.py --tag v0.5 --push --publish-chart`.
+  Note the `v` before version.
+3. This will also modify the files `Chart.yaml` and `values.yaml`.
+  Commit these changes.
+4. Look through the [z2jh documentation](https://zero-to-jupyterhub.readthedocs.io) and find any references to
+  the Helm Chart version (e.g., look for the flag `--version`, as well
+  as for all `helm upgrade` and `helm install` commands).
+  Update these references to point to the new version you are releasing.
+5. Make a PR to the z2jh repository and notify the team to take a look.
+
+After this PR gets merged:
+
+1. Go to https://zero-to-jupyterhub.readthedocs.io/en/latest and
+  deploy a JupyterHub using the instructions (make sure that
+  you're reading from `/en/latest`). Make sure your latest
+  changes are present, and that the JupyterHub successfully deploys
+  and functions properly.
+
+Next, move on to making a GitHub release, described below.
+
+### Tagging and making a GitHub release
+
+Now that our Docker image is pushed and we have updated the documentation
+for z2jh, it's time to make a new GitHub release. To do this, you must have:
+
+1. Push rights to the `jupyterhub/zero-to-jupyterhub-k8s` repo
+
+You will need to make a git tag, and then create a GitHub release.
+
+1. Make sure you're on branch `master` with your latest changes from
+  the section above pulled.
+2. Make a git tag with:
+  ```
+  git tag -a <VERSION>
+  ```
+
+  Where `<VERSION>` should be the new version that you're releasing.
+  Note the `v` before the version number.
+
+  Git will ask you to include a message with the tag.
+  Paste the entire contents of the CHANGELOG for this particular release.
+  An easy way to do this is to paste the contents in a text file, and
+  then refer to that text file with the call to commit:
+  `git tag -a <VERSION> -F <PATH-TO-FILE.txt>`
+3. Push the tags to the `jupyterhub/zero-to-jupyterhub-k8s` repo with
+  `git push <REMOTE-NAME> --tags`.
+  Note that `<REMOTE-NAME>` is whatever your local git uses to refer
+  to the `jupyerhub/` organization's repository (e.g., `official`
+  or `upstream`)
+3. Make a **GitHub Release**:
+  * go to https://github.com/jupyterhub/zero-to-jupyterhub-k8s/releases and click 'Draft new release'.
+  * The title should be the new version, followed by the name of the cricketer for the release. Like so:`v0.5: "Hamid Hassan"`.
+  * The description should include the entire changelog entry for this release.
+  * Make sure the title/description/tag name look correct, and then click
+    on `Publish Release`.
+
+You've just made a GitHub release!
+
+
+### RTD update
+
+Wait a few hours to let the release 'cool' and make sure that links,
+webpages, etc have updated. Then, update our documentation settings on
+readthedocs to show `latest` by default. This marks the official
+'release' of the version!
+
+### Last step - release a blog post and tell the world!
+
+The final step is to release a blog post. This doesn't have to be
+done by the person who performed all of the above actions.
+
+To release a blog post for the new version, start a draft on the Jupyter Medium
+blog. Copy/paste the section of the CHANGELOG corresponding to the new
+release, then make minor modifications to make it more blog-friendly.
+
+Don't forget to tell the JupyterHub community about the new release, and
+to encourage people to talk about it on social media!
+
+That's it! Congratulations on making a new release of JupyterHub!
