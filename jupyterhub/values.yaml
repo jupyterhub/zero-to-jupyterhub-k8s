@@ -30,7 +30,7 @@ hub:
   extraVolumeMounts: []
   image:
     name: jupyterhub/k8s-hub
-    tag: v0.5.0
+    tag: v0.6
   resources:
     requests:
       cpu: 0.2
@@ -118,7 +118,7 @@ singleuser:
   networkTools:
     image:
       name: jupyterhub/k8s-network-tools
-      tag: a21cecb
+      tag: v0.6
   cloudMetadata:
     enabled: false
     ip: 169.254.169.254
@@ -144,7 +144,7 @@ singleuser:
       storageClass:
   image:
     name: jupyterhub/k8s-singleuser-sample
-    tag: v0.5.0
+    tag: v0.6
   startTimeout: 300
   cpu:
     limit:
@@ -161,13 +161,13 @@ prePuller:
     extraEnv: {}
     image:
       name: jupyterhub/k8s-pre-puller
-      tag: 2b02899
+      tag: v0.6
   continuous:
     enabled: false
   pause:
     image:
       name: gcr.io/google_containers/pause
-      tag: "3.0"
+      tag: '3.0'
 
 ingress:
   enabled: false
