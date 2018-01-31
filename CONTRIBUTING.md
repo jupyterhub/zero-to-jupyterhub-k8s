@@ -59,6 +59,38 @@ development.
 The following steps can be followed to release a new version of the Helm Chart.
 This should happen approximately once every 5-7 weeks.
 
+### Create an issue for the new release
+
+Use this issue to coordinate efforts and keep track of progress. You can
+copy / paste the raw Markdown from the following list, which will be covered
+in more detail below.
+
+```
+Title: Release {{release-name}}
+Content:
+
+This issue will be used to coordinate the next release of the helm
+chart, {{release-name}}. Instructions for creating the release can be found in
+[CONTRIBUTING.md](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CONTRIBUTING.md#releasing-a-new-version-of-the-helm-chart).
+Below is the checklist for this release.
+
+- [ ] Make a CHANGELOG
+- [ ] Generate and add the list of contributors
+- [ ] Build and push a new Docker image to DockerHub
+- [ ] Commit version bump in `Chartyaml` and `Values.yaml`
+- [ ] Update references in documentation to the new version
+- [ ] Confirm that a new deployment using the updated instructions works
+- [ ] Create and push a new tag for this release
+- [ ] Create and publish a new GitHub release
+- [ ] Write / publish a blog post based largely off of the CHANGELOG
+- [ ] Set ReadTheDocs to begin using `latest` by default
+- [ ] Wait at least several days
+- [ ] Spot-check any remaining documentation improvements
+- [ ] Create a new tag for a documentation release (same release name with `-doc` at the end)
+- [ ] Publish this tag
+- [ ] Set ReadTheDocs to point to the new tag by default instead of `latest`
+- [ ] Celebrate!
+```
 ### Make a CHANGELOG
 
 This needs to be manually created, following the format of
@@ -195,3 +227,16 @@ Don't forget to tell the JupyterHub community about the new release, and
 to encourage people to talk about it on social media!
 
 That's it! Congratulations on making a new release of JupyterHub!
+
+### Extra step - release a documentation release
+
+It is common that documentation changes are made shortly after a new release.
+To handle this, we often create a documentation release a few days after a
+major release.
+
+To do this, confirm that all changes to the documentation
+are merged into master, then create a new tag with the same release name and
+`-doc` appended to the end. Create a GitHub release with the new tag and a
+description that points to the original release description. Finally, set
+our ReadTheDocs settings to point users to the new `-doc` tag by default instead
+of `latest`.
