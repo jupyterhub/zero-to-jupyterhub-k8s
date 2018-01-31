@@ -45,7 +45,11 @@ by running `helm list`.
 
 #### Troubleshooting
 
-If your helm upgrade fails due to the error `no Ingress with the name "jupyterhub-internal" found`, you may be experiencing a [helm bug](https://github.com/kubernetes/helm/issues/3275). To workaround this you will need to run `kubectl --namespace=<YOUR-NAMESPACE> delete ingress jupyterhub-internal` and re-run the helm upgrade. Note that your hub will not be available over https after the ingress object has been deleted up until the deployment completes.
+If your helm upgrade fails due to the error `no Ingress with the name "jupyterhub-internal" found`,
+you may be experiencing a [helm bug](https://github.com/kubernetes/helm/issues/3275). To work
+around this, run `kubectl --namespace=<YOUR-NAMESPACE> delete ingress jupyterhub-internal` and
+re-run the `helm upgrade` command. Note that this will cause a short unavailability of your hub
+over HTTPS, which will resume normal availability once the deployment upgrade completes.
 
 ### New Features
 
