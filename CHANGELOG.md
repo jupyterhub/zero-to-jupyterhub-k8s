@@ -61,11 +61,12 @@ which can add / remove nodes depending on how much your
 cluster is being used. In this release, we made a few
 changes to let z2jh interact better with the autoscaler!
 
-- Configure z2jh to 'pack' your users onto nodes, rather
-  than 'spread' them across nodes. ([link](http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html#picking-a-scheduler-strategy))
-- A 'continuous' pre-puller that allows user images to
+- Configure z2jh to ['pack' your users](http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html#picking-a-scheduler-strategy)
+  onto nodes, rather than 'spread' them across nodes.
+- A ['continuous' pre-puller](http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html?highlight=prepull#pre-pulling-images-for-faster-startup)
+  that allows user images to
   be pulled on new nodes easily, leading to faster startup
-  times for users on new nodes. ([link](http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html?highlight=prepull#pre-pulling-images-for-faster-startup))
+  times for users on new nodes. ([link])
 - Hub and Proxy pod will not be disrupted by autoscaler,
   by using [PodDisruptionBudget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/)s. The Hub & Proxy will also stick
   together if possible, thus minimizing the number of nodes
@@ -94,13 +95,13 @@ We now have better documentation and bug fixes for configurability!
 - `extraConfig` can be a dictionary instead of just a
   string. This helps when you have to split your `config.yaml`
   into multiple files for complex deployments
-- How user storage works by default is better documented! ([link](http://zero-to-jupyterhub.readthedocs.io/en/latest/user-storage.html))
+- How user storage works by default is [better documented](http://zero-to-jupyterhub.readthedocs.io/en/latest/user-storage.html)
 - Reading config in `extraConfig` from `extraConfigMap` now actually works!
 - You can configure the URL that users are directed to after they log in.
-  This allows [defaulting users to JupyterLab](http://zero-to-jupyterhub.readthedocs.io/en/latest/user-environment.html#use-jupyterlab-by-default))
+  This allows [defaulting users to JupyterLab](http://zero-to-jupyterhub.readthedocs.io/en/latest/user-environment.html#use-jupyterlab-by-default)
 - You can pre-pull multiple images now, for custom configuration that needs multiple images
-- Better instructions on pre-populating your user's filesystem
-  using `nbgitpuller` ([link](http://zero-to-jupyterhub.readthedocs.io/en/latest/user-environment.html#pre-populating-user-s-home-directory-with-files))
+- [Better instructions](http://zero-to-jupyterhub.readthedocs.io/en/latest/user-environment.html#pre-populating-user-s-home-directory-with-files)
+  on pre-populating your user's filesystem using [nbgitpuller](https://github.com/data-8/nbgitpuller)
 
 ### [Ellyse Perry](https://en.wikipedia.org/wiki/Ellyse_Perry)
 
