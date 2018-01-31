@@ -43,6 +43,14 @@ If you are running v0.4 of the chart, you should upgrade to v0.5 first
 before upgrading to v0.6. You can find out what version you are using
 by running `helm list`.
 
+#### Troubleshooting
+
+If your helm upgrade fails due to the error `no Ingress with the name "jupyterhub-internal" found`,
+you may be experiencing a [helm bug](https://github.com/kubernetes/helm/issues/3275). To work
+around this, run `kubectl --namespace=<YOUR-NAMESPACE> delete ingress jupyterhub-internal` and
+re-run the `helm upgrade` command. Note that this will cause a short unavailability of your hub
+over HTTPS, which will resume normal availability once the deployment upgrade completes.
+
 ### New Features
 
 #### More secure by default
