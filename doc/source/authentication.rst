@@ -83,6 +83,30 @@ tape archive, public cloud, or your own laptop. Start a Globus app
           callbackUrl: "https://<your_jupyterhub_host>/hub/oauth_callback"
           identityProvider: "youruniversity.edu"
 
+Keycloak (OpenID Connect)
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+OpenID Connect endpoint discovery is not supported by oauthentiator,
+but you can still configure JupyterHub to authenticate with it.
+
+.. code-block:: yaml
+
+      hub:
+        extraEnv:
+          OAUTH2_AUTHORIZE_URL: https://${host}/auth/realms/${realm}/protocol/openid-connect/auth
+          OAUTH2_TOKEN_URL: https://${host}/auth/realms/${realm}/protocol/openid-connect/token
+      auth:
+        type: custom
+        custom:
+          className: oauthenticator.generic.GenericOAuthenticator
+          config:
+            client_id: "y0urc1logonc1ient1d"
+            client_secret: "an0ther1ongs3cretstr1ng"
+            token_url: https://${host}/auth/realms/${realm}/protocol/openid-connect/token
+            userdata_url: https://${host}/auth/realms/${realm}/protocol/openid-connect/userinfo
+            userdata_method: GET
+            userdata_params: {'state': 'state'}
+            username_key: preferred_username
 
 Full Example of Google OAuth2
 -----------------------------
