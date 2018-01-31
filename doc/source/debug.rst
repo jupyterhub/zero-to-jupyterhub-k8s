@@ -110,7 +110,7 @@ To fix this, let's add a tag to our ``config.yaml`` file::
 
 Then run a helm upgrade::
 
-    helm upgrade jhub jupyterhub/jupyterhub --version=v0.5 -f config.yaml
+    helm upgrade jhub jupyterhub/jupyterhub --version=v0.6 -f config.yaml
 
 where ``jhub`` is the helm release name (substitute the release name that you
 chose during setup).
