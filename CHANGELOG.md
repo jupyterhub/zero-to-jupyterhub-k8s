@@ -6,6 +6,172 @@
 
 Releases are now named after famous [Cricket](https://en.wikipedia.org/wiki/Cricket) players.
 
+## [0.6] - [Ellyse Perry](https://en.wikipedia.org/wiki/Ellyse_Perry) - 2017-01-29
+
+This release is primarily focused on better support
+for Autoscaling, Microsoft Azure support & better
+default security. There are also a number of bug fixes
+and configurability improvements!
+
+### Breaking changes
+
+#### Pre-puller configuration
+In prior versions (v0.5), if you wanted to disable the pre-puller,
+you would use:
+
+```yaml
+prePuller:
+   enabled: false
+```
+
+Now, to disable the pre-puller, you need to use:
+
+```yaml
+prePuller:
+   hook:
+     enabled: false
+```
+
+See the [pre-puller docs](http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html#pre-pulling-images-for-faster-startup) for more info!
+
+### Upgrading from 0.5
+
+This release does not require any special steps to upgrade from v0.5. See the [upgrade documentation](https://zero-to-jupyterhub.readthedocs.io/en/latest/upgrading.html)
+for general upgrading steps.
+
+If you are running v0.4 of the chart, you should upgrade to v0.5 first
+before upgrading to v0.6. You can find out what version you are using
+by running `helm list`.
+
+### New Features
+
+#### More secure by default
+
+z2jh is more secure by default with 0.6. We now
+block access to cloud security metadata endpoints by
+default.
+
+See the [security documentation](http://zero-to-jupyterhub.readthedocs.io/en/latest/security.html) for more details. It has seen a number of improvements, and we recommend
+you read through it!
+
+#### Autoscaling improvements
+
+Some cloud providers support the [kubernetes node autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler),
+which can add / remove nodes depending on how much your
+cluster is being used. In this release, we made a few
+changes to let z2jh interact better with the autoscaler!
+
+- Configure z2jh to ['pack' your users](http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html#picking-a-scheduler-strategy)
+  onto nodes, rather than 'spread' them across nodes.
+- A ['continuous' pre-puller](http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html?highlight=prepull#pre-pulling-images-for-faster-startup)
+  that allows user images to
+  be pulled on new nodes easily, leading to faster startup
+  times for users on new nodes. ([link])
+- Hub and Proxy pod will not be disrupted by autoscaler,
+  by using [PodDisruptionBudget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/)s. The Hub & Proxy will also stick
+  together if possible, thus minimizing the number of nodes
+  that can not be downsized by the autoscaler.
+
+There is more work to be done for good autoscaling support,
+but this is a good start!
+
+#### Better Azure support
+
+Azure's new managed Kubernetes service ([AKS](https://docs.microsoft.com/en-us/azure/aks/)) is much
+better supported by this version!
+
+- We have much better documentation on using z2jh with Azure!
+- We rewrote our pre-puller so it works on Azure (previously it did not)
+
+Azure AKS is still in preview mode, so be aware of that
+before using it in any production workloads!
+
+See the [setting up Kubernetes on Microsoft AKS](http://zero-to-jupyterhub.readthedocs.io/en/latest/create-k8s-cluster.html#setting-up-kubernetes-on-microsoft-azure-container-service-aks) section for more information.
+
+#### Better configurability
+
+We now have better documentation and bug fixes for configurability!
+
+- `extraConfig` can be a dictionary instead of just a
+  string. This helps when you have to split your `config.yaml`
+  into multiple files for complex deployments
+- How user storage works by default is [better documented](http://zero-to-jupyterhub.readthedocs.io/en/latest/user-storage.html)
+- Reading config in `extraConfig` from `extraConfigMap` now actually works!
+- You can configure the URL that users are directed to after they log in.
+  This allows [defaulting users to JupyterLab](http://zero-to-jupyterhub.readthedocs.io/en/latest/user-environment.html#use-jupyterlab-by-default)
+- You can pre-pull multiple images now, for custom configuration that needs multiple images
+- [Better instructions](http://zero-to-jupyterhub.readthedocs.io/en/latest/user-environment.html#pre-populating-user-s-home-directory-with-files)
+  on pre-populating your user's filesystem using [nbgitpuller](https://github.com/data-8/nbgitpuller)
+
+### [Ellyse Perry](https://en.wikipedia.org/wiki/Ellyse_Perry)
+
+_(excerpt from https://www.cricket.com.au/players/ellyse-perry/1aMxKNyEOUiJqhq7N5Tlwg)_
+
+Arguably the best athlete in Australia, Ellyse Perry’s profile continues to rise
+with the dual cricket and soccer international having played World Cups for both sports.
+
+Perry became the youngest Australian ever to play senior international cricket when
+she made her debut in the second ODI of the Rose Bowl Series in Darwin in July 2007
+before her 17th birthday.
+
+She went on to make her domestic debut in the 2007-08 Women’s National Cricket League
+season, taking 2-29 from 10 overs in her first match.
+
+Since her national debut, Perry has become a regular fixture for the Southern Stars,
+playing in the 2009 ICC Women’s World Cup and the ICC Women’s World Twenty20 in the same year.  
+
+Leading Australia’s bowling attack, Perry played a crucial role in the ICC Women’s
+World Twenty20 Final in the West Indies in 2010.
+
+The match came down to the wire, with New Zealand requiring five runs off the last
+ball to claim the title. Under immense pressure, Perry bowled the final ball of the
+tournament, which New Zealand’s Sophie Devine struck straight off the bat.
+
+The talented footballer stuck out her boot to deflect the ball to Lisa Sthalekar at
+mid-on, securing the trophy for Australia. Perry’s figures of 3-18 in the final saw
+her take home the Player of the Match award.
+
+Perry featured prominently in Australia's three-peat of World T20 victories,
+selected for the Team of the Tournament in 2012 and 2014.
+
+She was named [ICC Female Cricketer of the Year](http://www.abc.net.au/news/2017-12-22/ellyse-perry-named-iccs-womens-cricketer-of-the-year/9280538) in 2017.
+
+### Contributors
+
+This release wouldn't have been possible without the wonderful contributors
+to the [zero-to-jupyterhub](https://github.com/jupyterhub/zero-to-jupyterhub-k8s),
+and [KubeSpawner](https://github.com/jupyterhub/kubespawner) repos.
+We'd like to thank everyone who contributed in any form - Issues, commenting
+on issues, PRs and reviews since the last Zero to JupyterHub release.
+
+In alphabetical order,
+
+- [Aaron Culich](https://github.com/aculich)
+- [Anirudh Ramanathan](https://github.com/foxish)
+- [Antoine Dao](https://github.com/twanito)
+- [BerserkerTroll](https://github.com/BerserkerTroll)
+- [Carol Willing](https://github.com/willingc)
+- [Chris Holdgraf](https://github.com/choldgraf)
+- [Christian Mesh](https://github.com/cam72cam)
+- [Erik Sundell](https://github.com/consideRatio)
+- [forbxy](https://github.com/forbxy)
+- [Graham Dumpleton](https://github.com/GrahamDumpleton)
+- [gweis](https://github.com/gweis)
+- [Ian Allison](https://github.com/ianabc)
+- [Jason Kuruzovich](https://github.com/jkuruzovich)
+- [Jesse Kinkead](https://github.com/jkinkead)
+- [madanam1](https://github.com/madanam1)
+- [Matthew Rocklin](https://github.com/mrocklin)
+- [Matthias Bussonnier](https://github.com/Carreau)
+- [Min RK](https://github.com/minrk)
+- [Ryan Lovett](https://github.com/ryanlovett)
+- [Simon Li](https://github.com/manics)
+- [Steve Buckingham](https://github.com/stevebuckingham)
+- [Steven Normore](https://github.com/snormore)
+- [Tim Head](https://github.com/betatim)
+- [Yuvi Panda](https://github.com/yuvipanda)
+- [ZachGlassman](https://github.com/ZachGlassman)
+
 ## [0.5] - [Hamid Hassan](http://www.espncricinfo.com/afghanistan/content/player/311427.html) - 2017-12-05
 
 JupyterHub 0.8, HTTPS & scalability.

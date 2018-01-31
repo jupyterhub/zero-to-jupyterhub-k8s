@@ -1,15 +1,15 @@
 # Upgrading the helm chart
 
-## General upgrade tips
+This page covers best-practices in upgrading your JupyterHub deployment via updates
+to the Helm Chart.
 
-- We **recommend** a full fresh installation instead of upgrade if you can, 
-  but recognize that it is not possible all the time. 
-- Minor revisions: It should be safe to upgrade a minor revision of the chart to
-  receive bugfixes and improvements.
-- Major chart upgrades (e.g. v0.5 to 0.6): This is more challenging than a
-  minor revision, but is possible.
-- Additional help: Feel free to reach out to us on [gitter](http://gitter.im/jupyterhub/jupyterhub)
-  or the [mailing list](https://groups.google.com/forum/#!forum/jupyter) for upgrade help!
+Upgrading from one version of the Helm Chart to the
+next should be as seamless as possible, and generally shouldn't require major
+changes to your deployment. Check the [CHANGELOG](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md)
+for each release to find out if there are any breaking changes in the newest version.
+
+For additional help, feel free to reach out to us on [gitter](http://gitter.im/jupyterhub/jupyterhub)
+or the [mailing list](https://groups.google.com/forum/#!forum/jupyter)!
 
 ## Major helm-chart upgrades
 
@@ -22,11 +22,11 @@ These steps are **critical** before performing a major upgrade.
    or restarted after it.
 5. If you are planning an upgrade of a critical major installation,
    we recommend you test the upgrade out on a staging cluster first
-   before applying it to production. 
+   before applying it to production.
 
 ### v0.5 to v0.6
 
-See the [CHANGELOG]().
+See the [CHANGELOG](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/d1b2804d887033f5d0e1f5315cfe8d3c7bbf41d2/CHANGELOG.md#06---ellyse-perry---2017-01-29).
 
 ### v0.4 to v0.5
 
