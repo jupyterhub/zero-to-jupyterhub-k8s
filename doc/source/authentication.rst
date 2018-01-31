@@ -83,11 +83,16 @@ tape archive, public cloud, or your own laptop. Start a Globus app
           callbackUrl: "https://<your_jupyterhub_host>/hub/oauth_callback"
           identityProvider: "youruniversity.edu"
 
-Keycloak (OpenID Connect)
-^^^^^^^^^^^^^^^^^^^^^^^^^
+OpenID Connect
+^^^^^^^^^^^^^^
 
-OpenID Connect endpoint discovery is not supported by oauthentiator,
-but you can still configure JupyterHub to authenticate with it.
+`OpenID Connect <https://openid.net/connect>`_ is an identity layer on top of the
+OAuth 2.0 protocol, implemented by
+`various servers and services <https://openid.net/developers/certified/#OPServices>`_.
+While OpenID Connect endpoint discovery is not supported by oauthentiator,
+you can still configure JupyterHub to authenticate with OpenID Connect providers
+by specifying all endpoints in GenericOAuthenticator.  Here's an example for
+authenticating against `keycloak <http://www.keycloak.org/docs/3.4/securing_apps/index.html#endpoints>`_.
 
 .. code-block:: yaml
 
