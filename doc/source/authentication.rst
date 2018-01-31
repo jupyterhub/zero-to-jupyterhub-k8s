@@ -84,16 +84,6 @@ tape archive, public cloud, or your own laptop. Start a Globus app
           identityProvider: "youruniversity.edu"
 
 
-To add a whitelist of usernames add to the config file under `auth`:
-
-.. code-block:: yaml
-
-     auth:
-         whitelist:
-             users:
-                - user1
-                - user2
-
 Full Example of Google OAuth2
 -----------------------------
 
