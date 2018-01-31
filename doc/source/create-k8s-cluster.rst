@@ -112,7 +112,9 @@ connect your credit card or other payment method to your google cloud account.
 
    .. code-block:: bash
 
-      kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=<YOUR-EMAIL-ADDRESS>
+      kubectl create clusterrolebinding cluster-admin-binding \
+          --clusterrole=cluster-admin \
+          --user=<YOUR-EMAIL-ADDRESS>
 
 
 .. _microsoft-azure:
