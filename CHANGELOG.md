@@ -16,7 +16,7 @@ and configurability improvements!
 ### Breaking changes
 
 #### Pre-puller configuration
-In prior versions, if you wanted to disable the pre-puller,
+In prior versions (v0.5), if you wanted to disable the pre-puller,
 you would use:
 
 ```yaml
@@ -24,7 +24,7 @@ prePuller:
    enabled: false
 ```
 
-Now, to get the same effect, you need to use:
+Now, to disable the pre-puller, you need to use:
 
 ```yaml
 prePuller:
@@ -32,12 +32,16 @@ prePuller:
      enabled: false
 ```
 
-See the pre-puller docs for more info!
+See the [pre-puller docs](http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html#pre-pulling-images-for-faster-startup) for more info!
 
 ### Upgrading from 0.5
 
-This release does not require any special steps to upgrade from v0.4. See the [upgrade documentation](https://zero-to-jupyterhub.readthedocs.io/en/latest/upgrading.html)
+This release does not require any special steps to upgrade from v0.5. See the [upgrade documentation](https://zero-to-jupyterhub.readthedocs.io/en/latest/upgrading.html)
 for general upgrading steps.
+
+If you are running v0.4 of the chart, you should upgrade to v0.5 first
+before upgrading to v0.6. You can find out what version you are using
+by running `helm list`.
 
 ### New Features
 
@@ -63,9 +67,12 @@ changes to let z2jh interact better with the autoscaler!
   be pulled on new nodes easily, leading to faster startup
   times for users on new nodes. ([link](http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html?highlight=prepull#pre-pulling-images-for-faster-startup))
 - Hub and Proxy pod will not be disrupted by autoscaler,
-  by using [PodDisruptionBudget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/)s. They will also stick
+  by using [PodDisruptionBudget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/)s. The Hub & Proxy will also stick
   together if possible, thus minimizing the number of nodes
   that can not be downsized by the autoscaler.
+
+There is more work to be done for good autoscaling support,
+but this is a good start!
 
 #### Better Azure support
 
@@ -89,7 +96,8 @@ We now have better documentation and bug fixes for configurability!
   into multiple files for complex deployments
 - How user storage works by default is better documented! ([link](http://zero-to-jupyterhub.readthedocs.io/en/latest/user-storage.html))
 - Reading config in `extraConfig` from `extraConfigMap` now actually works!
-- You can configure the URL users are spawned into. This allows defaulting users to JupyterLab. ([link](http://zero-to-jupyterhub.readthedocs.io/en/latest/user-environment.html#use-jupyterlab-by-default))
+- You can configure the URL that users are directed to after they log in.
+  This allows [defaulting users to JupyterLab](http://zero-to-jupyterhub.readthedocs.io/en/latest/user-environment.html#use-jupyterlab-by-default))
 - You can pre-pull multiple images now, for custom configuration that needs multiple images
 - Better instructions on pre-populating your user's filesystem
   using `nbgitpuller` ([link](http://zero-to-jupyterhub.readthedocs.io/en/latest/user-environment.html#pre-populating-user-s-home-directory-with-files))
