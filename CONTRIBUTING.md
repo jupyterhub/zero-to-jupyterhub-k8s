@@ -57,7 +57,8 @@ development.
 ## Releasing a new version of the helm chart
 
 The following steps can be followed to release a new version of the Helm Chart.
-This should happen approximately once every 5-7 weeks.
+Presently, we expect a release approximately every 5-7 weeks.
+
 
 ### Create an issue for the new release
 
@@ -74,23 +75,40 @@ chart, {{release-name}}. Instructions for creating the release can be found in
 [CONTRIBUTING.md](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CONTRIBUTING.md#releasing-a-new-version-of-the-helm-chart).
 Below is the checklist for this release.
 
+- [ ] Code, tests, and documentation to support a release are stable.
 - [ ] Make a CHANGELOG
 - [ ] Generate and add the list of contributors
 - [ ] Build and push a new Docker image to DockerHub
-- [ ] Commit version bump in `Chartyaml` and `Values.yaml`
-- [ ] Update references in documentation to the new version
+- [ ] Commit version bump in `Chart.yaml` and `Values.yaml`
+- [ ] Update references in documentation to the new version (note: documentation
+      should be stable and there should be no anticipated major changes to content).
 - [ ] Confirm that a new deployment using the updated instructions works
 - [ ] Create and push a new tag for this release
 - [ ] Create and publish a new GitHub release
 - [ ] Write / publish a blog post based largely off of the CHANGELOG
 - [ ] Set ReadTheDocs to begin using `latest` by default
-- [ ] Wait at least several days
-- [ ] Spot-check any remaining documentation improvements
-- [ ] Create a new tag for a documentation release (same release name with `-doc` at the end)
-- [ ] Publish this tag
-- [ ] Set ReadTheDocs to point to the new tag by default instead of `latest`
 - [ ] Celebrate!
 ```
+
+As there are often many documentation improvements following the release of
+a new version, we set ReadTheDocs to serve `latest/` until the first docs are
+written that are next-version-specific. As soon as documentation must be
+written for the **next** version of the Helm Chart, you can use the following
+checklist:
+
+```
+- [ ] Create a new tag for a documentation release (same release name with `-doc` at the end)
+- [ ] Publish this tag
+- [ ] Set ReadTheDocs to point to the **new tag** by default instead of `latest`
+- [ ] Continue making next-version-specific changes to the documentation.
+```
+
+**Note**: Switching the documentation to `latest` after a new release is a stop-gap
+measure to accomodate the fact that the documentation is still changing relatively
+rapidly. Once the documentation as a whole stabilizes (after a few more release
+cycles), we plan to begin switching straight from the last version to the new version
+of documentation without going through latest.
+
 ### Make a CHANGELOG
 
 This needs to be manually created, following the format of
@@ -118,7 +136,7 @@ involved:
 * [JupyterHub](https://github.com/jupyterhub/jupyterhub)
 * [OAuthenticator](https://github.com/jupyterhub/oauthenticator))
 
-edit `contributors.py` to have the appropriate dates
+Edit `contributors.py` to have the appropriate dates
 for each of these versions. Then, run the script and paste
 the output into the changelog. For an
 example, see [the v0.5 list of contributors](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/v0.5/CHANGELOG.md#contributors).
