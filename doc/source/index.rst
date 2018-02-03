@@ -75,7 +75,7 @@ cloud-based deployments and tips for maintaining your deployment.
    debug
    cost
    security
-   troubleshooting
+   faq
    upgrading
    advanced
 
