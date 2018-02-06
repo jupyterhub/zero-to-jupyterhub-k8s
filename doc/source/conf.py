@@ -115,6 +115,7 @@ html_theme_options = {
     'github_user': 'jupyterhub',
     'github_repo': 'zero-to-jupyterhub-k8s',
     'github_banner': False,
+    'github_button': False,
     'show_powered_by': False,
     'extra_nav_links': {
         'GitHub Repo': 'http://github.com/jupyterhub/zero-to-jupyterhub-k8s',
