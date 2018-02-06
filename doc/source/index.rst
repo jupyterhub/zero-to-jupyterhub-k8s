@@ -71,6 +71,7 @@ cloud-based deployments and tips for maintaining your deployment.
    :maxdepth: 2
    :caption: Administrator Guide
 
+   architecture
    debug
    authentication
    optimization
