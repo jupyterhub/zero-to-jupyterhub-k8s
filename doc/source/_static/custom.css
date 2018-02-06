@@ -61,3 +61,26 @@ img.logo {
 .prev-next-top {
   margin-bottom: 1em;
 }
+
+/* Sidebar TOC and headers */
+
+div.sphinxsidebar h3 {
+    font-size: 1.3em;
+    padding-top: .8em;
+    font-weight: 800;
+}
+
+div.sphinxsidebar p.caption {
+    font-size: 1.2em;
+    margin-bottom: 0px;
+}
+
+div.sphinxsidebar ul {
+    font-size: .8em;
+    margin-top: 0px;
+    padding-left: 3%;
+}
+
+div.relations ul {
+    font-size: 1em;
+}
