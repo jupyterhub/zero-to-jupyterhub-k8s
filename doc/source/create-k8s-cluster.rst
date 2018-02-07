@@ -81,7 +81,7 @@ connect your credit card or other payment method to your google cloud account.
           --num-nodes=3 \
           --machine-type=n1-standard-2 \
           --zone=us-central1-b \
-          --cluster-version=1.8.6-gke.0
+          --cluster-version=1.8.7-gke.1
 
    where:
 
@@ -98,6 +98,15 @@ connect your credit card or other payment method to your google cloud account.
      too far away from your users. You can find a list of them `here <https://cloud.google.com/compute/docs/regions-zones/regions-zones#available>`_.
    * ``--cluster-version`` specifies the version of kubernetes we want. Here,
      we specify the minimum that the default configuration will support.
+
+   .. note::
+
+      Google Cloud is rapidly iterating through Kubernetes versions, and they
+      occasionally deprecate older versions which prevents new clusters from
+      being created with the deprecated version. If you get an error that
+      includes ``"1.8.7-gke.1" is invalid``, you can try using another version
+      specified in the `Google Cloud Kubernetes version list <https://cloud.google.com/kubernetes-engine/versioning-and-upgrades>`_.
+      See section ``Versions available for new cluster masters``.
 
 6. To test if your cluster is initialized, run:
 
@@ -188,7 +197,7 @@ Setting up Kubernetes on Microsoft Azure Container Service (AKS)
 
   * ``--name`` specifies the name of your resource group. We recommend using something
     that uniquely identifies this hub. For example, if you are creating a resource group
-    for UC Berkeley's 2018 Spring Data100 Course, you may give it a 
+    for UC Berkeley's 2018 Spring Data100 Course, you may give it a
     ``<RESOURCE-GROUP-NAME>`` of ``ucb_2018sp_data100_hub``.
   * ``--location`` specifies the location of the data center you want your resource to be in.
     In this case, we used the ``centralus`` location. For other options, see the
