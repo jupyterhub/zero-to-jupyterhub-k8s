@@ -16,6 +16,6 @@ singleuser:
   memory:
     guarantee: null
 
-prePuller:
+imagePuller:
   hook:
     enabled: false

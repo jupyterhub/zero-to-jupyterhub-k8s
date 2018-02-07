@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- pre-puller naming split into a image-puller daemonset and a image-awaiter job
+  with associated Dockerfile.
+
 ## Releases
 
 Releases are now named after famous [Cricket](https://en.wikipedia.org/wiki/Cricket) players.
@@ -15,8 +18,8 @@ and configurability improvements!
 
 ### Breaking changes
 
-#### Pre-puller configuration
-In prior versions (v0.5), if you wanted to disable the pre-puller,
+#### Image-puller configuration
+In prior versions (v0.5), if you wanted to disable the pre-pulling of images,
 you would use:
 
 ```yaml
@@ -24,15 +27,15 @@ prePuller:
    enabled: false
 ```
 
-Now, to disable the pre-puller, you need to use:
+Now, to disable the image-puller, you need to use:
 
 ```yaml
-prePuller:
+imagePuller:
    hook:
      enabled: false
 ```
 
-See the [pre-puller docs](http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html#pre-pulling-images-for-faster-startup) for more info!
+See the [image-puller docs](http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html#pre-pulling-images-for-faster-startup) for more info!
 
 ### Upgrading from 0.5
 
@@ -76,7 +79,7 @@ changes to let z2jh interact better with the autoscaler!
 
 - Configure z2jh to ['pack' your users](http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html#picking-a-scheduler-strategy)
   onto nodes, rather than 'spread' them across nodes.
-- A ['continuous' pre-puller](http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html?highlight=prepull#pre-pulling-images-for-faster-startup)
+- A ['continuous' image-puller](http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html?highlight=prepull#pre-pulling-images-for-faster-startup)
   that allows user images to
   be pulled on new nodes easily, leading to faster startup
   times for users on new nodes. ([link])
@@ -94,7 +97,7 @@ Azure's new managed Kubernetes service ([AKS](https://docs.microsoft.com/en-us/a
 better supported by this version!
 
 - We have much better documentation on using z2jh with Azure!
-- We rewrote our pre-puller so it works on Azure (previously it did not)
+- We rewrote our image-puller so it works on Azure (previously it did not)
 
 Azure AKS is still in preview mode, so be aware of that
 before using it in any production workloads!

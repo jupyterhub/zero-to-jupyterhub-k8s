@@ -155,12 +155,12 @@ singleuser:
   cmd: jupyterhub-singleuser
   defaultUrl:
 
-prePuller:
+imagePuller:
   hook:
     enabled: true
     extraEnv: {}
     image:
-      name: jupyterhub/k8s-pre-puller
+      name: jupyterhub/k8s-image-awaiter
       tag: v0.6
   continuous:
     enabled: false
