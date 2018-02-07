@@ -52,8 +52,8 @@ then you have run into this bug. You can downgrade helm by:
 
 ```bash
 curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > install-helm.bash
-bash install-helm.bash --version 2.6.2
-helm install --upgrade
+bash install-helm.bash --version v2.6.2
+helm init --upgrade
 ```
 
 ### New Features

@@ -16,7 +16,7 @@ terminal:
    .. code:: bash
 
       curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > install-helm.bash
-      bash install-helm.bash --version 2.6.2
+      bash install-helm.bash --version v2.6.2
 
 
 `Alternative methods for helm installation <https://github.com/kubernetes/helm/blob/master/docs/install.md>`_
