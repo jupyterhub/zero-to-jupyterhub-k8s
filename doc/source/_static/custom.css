@@ -61,3 +61,39 @@ img.logo {
 .prev-next-top {
   margin-bottom: 1em;
 }
+
+/* Sidebar TOC and headers */
+
+div.sphinxsidebarwrapper div {
+    margin-bottom: .8em;
+}
+div.sphinxsidebar h3 {
+    font-size: 1.3em;
+    padding-top: 0px;
+    font-weight: 800;
+    margin-left: 0px !important;
+}
+
+div.sphinxsidebar p.caption {
+    font-size: 1.2em;
+    margin-bottom: 0px;
+    margin-left: 0px !important;
+    font-weight: 900;
+    color: #767676;
+}
+
+div.sphinxsidebar ul {
+    font-size: .8em;
+    margin-top: 0px;
+    padding-left: 3%;
+    margin-left: 0px !important;
+}
+
+div.relations ul {
+    font-size: 1em;
+    margin-left: 0px !important;
+}
+
+div#searchbox form {
+    margin-left: 0px !important;
+}
