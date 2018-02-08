@@ -43,13 +43,18 @@ If you are running v0.4 of the chart, you should upgrade to v0.5 first
 before upgrading to v0.6. You can find out what version you are using
 by running `helm list`.
 
-#### Troubleshooting
+### Helm Version recommendation
 
-If your helm upgrade fails due to the error `no Ingress with the name "jupyterhub-internal" found`,
-you may be experiencing a [helm bug](https://github.com/kubernetes/helm/issues/3275). To work
-around this, run `kubectl --namespace=<YOUR-NAMESPACE> delete ingress jupyterhub-internal` and
-re-run the `helm upgrade` command. Note that this will cause a short unavailability of your hub
-over HTTPS, which will resume normal availability once the deployment upgrade completes.
+Due to a [severe bug](https://github.com/kubernetes/helm/issues/3275) in helm v2.7 and 2.8,
+we currently recommend users stick to helm version 2.6 if possible.
+If you run into an error along the lines of `no Ingress with the name "jupyterhub-internal" found`,
+then you have run into this bug. You can downgrade helm by:
+
+```bash
+curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > install-helm.bash
+bash install-helm.bash --version v2.6.2
+helm init --upgrade
+```
 
 ### New Features
 

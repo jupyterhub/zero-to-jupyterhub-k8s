@@ -15,10 +15,15 @@ terminal:
 
    .. code:: bash
 
-      curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
+      curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > install-helm.bash
+      bash install-helm.bash --version v2.6.2
+
 
 `Alternative methods for helm installation <https://github.com/kubernetes/helm/blob/master/docs/install.md>`_
 exist if you prefer to install without using the script.
+
+We highly recommend sticking to version 2.6.2 of helm until this severe
+`bug <https://github.com/kubernetes/helm/issues/3275>`_ is fixed.
 
 .. _helm-rbac:
 
@@ -72,10 +77,11 @@ It should provide output like:
 
    .. code-block:: bash
 
-      Client: &version.Version{SemVer:"v2.4.1", GitCommit:"46d9ea82e2c925186e1fc620a8320ce1314cbb02", GitTreeState:"clean"}
-      Server: &version.Version{SemVer:"v2.4.1", GitCommit:"46d9ea82e2c925186e1fc620a8320ce1314cbb02", GitTreeState:"clean"}
+      Client: &version.Version{SemVer:"v2.6.2", GitCommit:"46d9ea82e2c925186e1fc620a8320ce1314cbb02", GitTreeState:"clean"}
+      Server: &version.Version{SemVer:"v2.6.2", GitCommit:"46d9ea82e2c925186e1fc620a8320ce1314cbb02", GitTreeState:"clean"}
 
-Make sure you have at least version 2.4.1!
+Make sure you have at least version 2.6.2, but not newer (until
+`this bug <https://github.com/kubernetes/helm/issues/3275>`_ is fixed)
 
 If you receive an error that the Server is unreachable, do another `helm version`
 in 15-30 seconds, and it should display the Server version.
