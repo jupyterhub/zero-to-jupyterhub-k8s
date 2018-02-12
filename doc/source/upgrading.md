@@ -26,7 +26,7 @@ These steps are **critical** before performing a major upgrade.
 
 ### v0.5 to v0.6
 
-See the [CHANGELOG](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/d1b2804d887033f5d0e1f5315cfe8d3c7bbf41d2/CHANGELOG.md#06---ellyse-perry---2017-01-29).
+See the [CHANGELOG](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.html#06---ellyse-perry---2017-01-29).
 
 ### v0.4 to v0.5
 
