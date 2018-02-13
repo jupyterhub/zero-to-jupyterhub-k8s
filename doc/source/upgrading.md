@@ -1,4 +1,4 @@
-# Upgrading the helm chart
+# Upgrading your JupyterHub Kubernetes deployment
 
 This page covers best-practices in upgrading your JupyterHub deployment via updates
 to the Helm Chart.
