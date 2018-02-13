@@ -71,12 +71,13 @@ cloud-based deployments and tips for maintaining your deployment.
    :maxdepth: 2
    :caption: Administrator Guide
 
-   authentication
    debug
-   cost
+   authentication
+   optimization
    security
-   faq
    upgrading
+   cost
+   faq
    advanced
 
 .. _reference:
