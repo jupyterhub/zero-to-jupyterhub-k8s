@@ -11,6 +11,10 @@ script:
 - ./build.py --commit-range ${TRAVIS_COMMIT_RANGE}
 - ./ci/test.sh
 
+branches:
+  only:
+  - master
+
 deploy:
   provider: script
   skip_cleanup: true
