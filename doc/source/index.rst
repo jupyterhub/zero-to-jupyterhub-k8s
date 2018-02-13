@@ -96,7 +96,6 @@ cloud-based deployments and tips for maintaining your deployment.
    authentication
    optimization
    security
-   FAQ <troubleshooting>
    upgrading
    troubleshooting
    advanced
