@@ -67,8 +67,8 @@ resources you request.
 
    Some cloud providers have a limited number of disks that can be attached to
    each node. Since JupyterHub allocates one disk per user for
-   persistent storage, this limits the number of users that can be present in
-   each node (and usually this is not configurable). If you need users to have
+   persistent storage, this limits the number of users that can be running in
+   a each node at any point of time. If you need users to have
    persistent storage, and you end up hitting this limit, you must use
    *more* nodes in order to accommodate the disk for each user. In this
    case, we recommend allocating *fewer* resources per node (e.g. RAM) since
