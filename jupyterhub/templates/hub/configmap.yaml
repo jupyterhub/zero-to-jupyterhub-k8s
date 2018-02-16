@@ -25,6 +25,10 @@ data:
   auth.github.client-id: {{.Values.auth.github.clientId | quote}}
   auth.github.client-secret: {{.Values.auth.github.clientSecret | quote}}
   auth.github.callback-url: {{.Values.auth.github.callbackUrl | quote}}
+  {{ if .Values.auth.github.org_whitelist -}}
+  auth.github.org_whitelist: |
+{{ toYaml .Values.auth.github.org_whitelist | indent 4}}
+  {{- end }}
   {{- end }}
   {{ if eq .Values.auth.type "cilogon" -}}
   auth.cilogon.client-id: {{.Values.auth.cilogon.clientId | quote}}
