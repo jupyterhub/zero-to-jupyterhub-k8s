@@ -2,8 +2,10 @@
 
 ## [Unreleased]
 
-- pre-puller naming split into a image-puller daemonset and a image-awaiter job
-  with associated Dockerfile.
+- pre-puller referred to multiple things, there are now two image-puller daemonsets
+  named hook-image-puller and continuous-image-puller. The image-awaiter image
+  is used by the image-awaiter job to wait for the hook-image-puller to pull new
+  images before the actual helm upgrade.
 
 ## Releases
 
@@ -27,7 +29,7 @@ prePuller:
    enabled: false
 ```
 
-Now, to disable the image-puller, you need to use:
+Now, to disable the image-puller to wait before helm upgrades, you need to use:
 
 ```yaml
 imagePuller:

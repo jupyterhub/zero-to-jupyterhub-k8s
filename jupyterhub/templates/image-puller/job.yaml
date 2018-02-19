@@ -1,12 +1,16 @@
-# a job hooked with helm to await the image-puller deamonset to finish its work
+# This job has a part to play in a helm upgrade process. It simply waits for the
+# hook-image-puller daemonset which is started slightly before this job to get 
+# its' pods running. If all those pods are running they must have pulled all the
+# required images on all nodes as they are used as init containers with a dummy
+# command.
 {{ if .Values.imagePuller.hook.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: image-awaiter-{{.Release.Name}}-{{.Release.Revision}}-{{.Release.Time.Seconds}}
+  name: image-awaiter
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
     "helm.sh/hook-weight": "10"
 spec:
   template:
@@ -20,11 +24,10 @@ spec:
           name: image-awaiter
           imagePullPolicy: IfNotPresent
           command:
-            - /await-images
+            - /image-awaiter
             - -ca-path=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
             - -auth-token-path=/var/run/secrets/kubernetes.io/serviceaccount/token
             - -api-server-address=https://$(KUBERNETES_SERVICE_HOST):$(KUBERNETES_SERVICE_PORT)
-            - -namespace=$(NAMESPACE)
               # This is explicitly *not* quoted, since we are passing
               # This to a go program without any shell interpolation
             - {{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}

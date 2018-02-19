@@ -1,24 +1,41 @@
+# Setup of permissions to be used by the image-awaiter job which needs to list
+# pods within the cluster.
+
 {{ if .Values.imagePuller.hook.enabled }}
 {{ if .Values.rbac.enabled }}
+# This service account...
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"
+  name: image-awaiter
+---
+# needs this role...
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: image-awaiter
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"
 rules:
 - apiGroups: [""] # "" indicates the core API group
-  resources: ["nodes"]
-  verbs: ["list", "get"]
+  resources: ["pods"]
+  verbs: ["list"]
 ---
+# and this part declares that service account to have that role.
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: image-awaiter
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "0"
 subjects:
 - kind: ServiceAccount
   namespace: {{ .Release.Namespace }}
@@ -27,13 +44,5 @@ roleRef:
   kind: ClusterRole
   name: image-awaiter
   apiGroup: rbac.authorization.k8s.io
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  annotations:
-    "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-delete-policy": hook-succeeded
-  name: image-awaiter
 {{ end }}
 {{ end }}

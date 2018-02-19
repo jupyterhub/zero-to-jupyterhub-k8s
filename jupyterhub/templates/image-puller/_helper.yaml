@@ -1,0 +1,69 @@
+{{ define "jupyterhub.imagePuller.daemonset" }}
+# template that returns a image-puller daemonset, used for
+# - pre-upgrade image pulling before helm makes an upgrade (auto-deleted on completion)
+# - continuous image pulling for newly added nodes
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: {{ .name }}
+  annotations:
+    {{ if .hook }}
+    # create it before installs/upgrades ...
+    "helm.sh/hook": pre-install,pre-upgrade
+    # ... before the image-awaiter job ...
+    "helm.sh/hook-weight": "-10"
+    # ... and delete it after
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+    {{ end }}
+  labels:
+    app: jupyterhub
+    component: {{ .name }}
+    release: {{ .top.Release.Name }}
+    heritage: {{ .top.Release.Service }}
+spec:
+  selector:
+    matchLabels:
+        app: jupyterhub
+        component: {{ .name }}
+        release: {{ .top.Release.Name }}
+        heritage: {{ .top.Release.Service }}
+  template:
+    metadata:
+      labels:
+        app: jupyterhub
+        component: {{ .name }}
+        release: {{ .top.Release.Name }}
+        heritage: {{ .top.Release.Service }}
+    spec:
+      terminationGracePeriodSeconds: 0
+      automountServiceAccountToken: false
+      initContainers:
+      - name: image-pull-singleuser
+        image: {{ .top.Values.singleuser.image.name }}:{{ .top.Values.singleuser.image.tag }}
+        imagePullPolicy: IfNotPresent
+        command:
+          - /bin/sh
+          - -c
+          - echo "Pulling complete"
+      {{ if not .top.Values.singleuser.cloudMetadata.enabled }}
+      - name: image-pull-metadata-block
+        image: {{ .top.Values.singleuser.networkTools.image.name }}:{{ .top.Values.singleuser.networkTools.image.tag }}
+        imagePullPolicy: IfNotPresent
+        command:
+          - /bin/sh
+          - -c
+          - echo "Pulling complete"
+      {{ end }}
+      {{ range $k, $v := .top.Values.imagePuller.extraImages }}
+      - name: image-pull-{{ $k }}
+        image: {{ $v.name }}:{{ $v.tag }}
+        imagePullPolicy: IfNotPresent
+        command:
+          - /bin/sh
+          - -c
+          - echo "Pulling complete"
+      {{ end }}
+      containers:
+      - name: pause
+        image: {{ .top.Values.imagePuller.pause.image.name }}:{{ .top.Values.imagePuller.pause.image.tag }}
+{{- end }}

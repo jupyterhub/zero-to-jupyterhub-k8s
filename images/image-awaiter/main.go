@@ -1,14 +1,38 @@
-// Pulls a given list of images on all nodes on a cluster.
-//
-// This program will perform the following sequence of actions
-//
-// 1. Check if the given list of images already exist on all scheduleable nodes.
-//    If they do, exit!
-// 2. If they don't, create a deamonset (the spec for which is passed in
-//    as the `daemonset-spec` commandline parameter)
-// 3. Check every 2s if the images are present in all scheduleable nodes.
-// 4. Once image is in all schedulable nodes, kill the daemonset created in (2) and exit
-//
+// This program will be run as a helm hook before an actual helm upgrade have
+// started. It will simply wait for image pulling to complete by the
+// helm-image-puller daemonset's pods, it will poll these pods and exit when
+// they are all running.
+
+// TODO:
+// - Consider what the query param called 'includeUninitialized' will do
+// - Consider unschedulable nodes and how the DS will schedule pods on them
+//   make sure the daemonsets schedules the pods wisely.
+
+/*
+FUTURE REWORK:
+Stop using /api/v1/pods and instead use /api/v1/namespaces/<ns>/daemonsets/hook-image-puller/status
+- Current solution: curl http://localhost:8080/api/v1/pods?labelSelector=component=hook-image-puller
+- K8s 1.8 solution: curl http://localhost:8080/apis/apps/v1beta2/namespaces/<ns>/demonsets/hook-image-puller/status
+- K8s 1.9 solution: curl http://localhost:8080/api/v1/namespaces/<ns>/demonsets/hook-image-puller/status
+
+{
+	"kind": "DaemonSet",
+	"apiVersion": "apps/v1beta2",
+
+	...
+
+	"status": {
+		"currentNumberScheduled": 2,
+		"numberMisscheduled": 0,
+		"desiredNumberScheduled": 2,
+		"numberReady": 2,
+		"observedGeneration": 1,
+		"updatedNumberScheduled": 2,
+		"numberAvailable": 2
+	}
+}
+*/
+
 package main
 
 import (
@@ -18,12 +42,19 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"time"
 )
 
 // Return a HTTPS transport that has TLS configuration specified properly
-func makeHttpTransport(caPath string, clientCertPath string, clientKeyPath string) (*http.Transport, error) {
+func makeHTTPTransport(debug bool, caPath string, clientCertPath string, clientKeyPath string) (*http.Transport, error) {
+	idleConnTimeout := 30 * 60 * time.Second
+
+	// If you debug through a kubectl proxy, certificates etc. isn't required
+	if debug {
+		transportPtr := &http.Transport{IdleConnTimeout: idleConnTimeout}
+		return transportPtr, nil
+	}
+
 	// Load client cert/key if they exist
 	certificates := []tls.Certificate{}
 
@@ -49,12 +80,16 @@ func makeHttpTransport(caPath string, clientCertPath string, clientKeyPath strin
 		RootCAs:      caCertPool,
 	}
 	tlsConfig.BuildNameToCertificate()
-	transport := &http.Transport{TLSClientConfig: tlsConfig}
+	transportPtr := &http.Transport{TLSClientConfig: tlsConfig, IdleConnTimeout: idleConnTimeout}
 
-	return transport, nil
+	return transportPtr, nil
 }
 
-func makeHeaders(authTokenPath string) (map[string]string, error) {
+func makeHeaders(debug bool, authTokenPath string) (map[string]string, error) {
+	if debug {
+		return map[string]string{}, nil
+	}
+
 	authToken, err := ioutil.ReadFile(authTokenPath)
 	if err != nil {
 		return nil, err
@@ -65,54 +100,41 @@ func makeHeaders(authTokenPath string) (map[string]string, error) {
 }
 
 func main() {
-	caPathPtr := flag.String("ca-path", "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt", "Path to CA bundle used to verify kubernetes master")
-	clientCertPathPtr := flag.String("client-certificate-path", "", "Path to client certificate used to authenticate with kubernetes server")
-	clientKeyPathPtr := flag.String("client-key-path", "", "Path to client certificate key used to authenticate with kubernetes server")
-	authTokenPathPtr := flag.String("auth-token-path", "/var/run/secrets/kubernetes.io/serviceaccount/token", "Auth Token to use when making API requests")
-	apiServerAddressPtr := flag.String("api-server-address", "", "Address of the Kubernetes API Server to contact")
-	namespacePtr := flag.String("namespace", "", "Namespace to spawn daemonset in")
-	daemonsetSpecPtr := flag.String("daemonset-spec", "", "Full JSON spec of daemonset to create when pulling images")
+	var caPath, clientCertPath, clientKeyPath, authTokenPath, apiServerAddress string
+	var debug bool
+	flag.StringVar(&caPath, "ca-path", "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt", "Path to CA bundle used to verify kubernetes master")
+	flag.StringVar(&clientCertPath, "client-certificate-path", "", "Path to client certificate used to authenticate with kubernetes server")
+	flag.StringVar(&clientKeyPath, "client-key-path", "", "Path to client certificate key used to authenticate with kubernetes server")
+	flag.StringVar(&authTokenPath, "auth-token-path", "/var/run/secrets/kubernetes.io/serviceaccount/token", "Auth Token to use when making API requests")
+	flag.StringVar(&apiServerAddress, "api-server-address", "", "Address of the Kubernetes API Server to contact")
+	flag.BoolVar(&debug, "debug", false, "Communicate through a 'kubectl proxy --port 8080' setup instead.")
 	flag.Parse()
 
-	transport, err := makeHttpTransport(*caPathPtr, *clientCertPathPtr, *clientKeyPathPtr)
+	if debug {
+		apiServerAddress = "http://localhost:8080"
+	}
+
+	transportPtr, err := makeHTTPTransport(debug, caPath, clientCertPath, clientKeyPath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	headers, err := makeHeaders(*authTokenPathPtr)
+	headers, err := makeHeaders(debug, authTokenPath)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	nodes, err := getNodes(transport, *apiServerAddressPtr, headers)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	images := flag.Args()
-
-	if imagesPresent(nodes, images) {
-		log.Printf("All images present on all nodes! Exiting...")
-		os.Exit(0)
-	}
-
-	daemonsetName, _ := makeDaemonset(transport, *apiServerAddressPtr, headers, *namespacePtr, *daemonsetSpecPtr)
-
-	log.Printf("DaemonSet %s created", daemonsetName)
 
 	for {
-		nodes, err = getNodes(transport, *apiServerAddressPtr, headers)
+		pods, err := getImagePullerPods(transportPtr, apiServerAddress, headers)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		if imagesPresent(nodes, images) {
+		if isImagesPresent(pods) {
 			log.Printf("All images present on all nodes!")
 			break
 		}
 
 		time.Sleep(2 * time.Second)
 	}
-
-	deleteDaemonset(transport, *apiServerAddressPtr, headers, *namespacePtr, daemonsetName)
 }
