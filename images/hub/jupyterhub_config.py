@@ -285,6 +285,18 @@ if scheduler_strategy == 'pack':
         'affinity': {
             'podAffinity': {
                 'preferredDuringSchedulingIgnoredDuringExecution': [{
+                    'weight': 1000,
+                    'podAffinityTerm': {
+                        'labelSelector': {
+                            'matchExpressions': [{
+                                'key': 'component',
+                                'operator': 'In',
+                                'values': ['hub']
+                            }]
+                        },
+                        'topologyKey': 'kubernetes.io/hostname'
+                    }
+                }, {
                     'weight': 100,
                     'podAffinityTerm': {
                         'labelSelector': {
