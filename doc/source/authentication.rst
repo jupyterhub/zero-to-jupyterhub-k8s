@@ -42,6 +42,8 @@ For more information see the full example of Google OAuth2 in the next section.
 GitHub
 ^^^^^^
 
+The org_whitelist is optional and will require the use to accept the read:org github oath scope when logging in.
+
 .. code-block:: yaml
 
       auth:
@@ -50,6 +52,8 @@ GitHub
           clientId: "y0urg1thubc1ient1d"
           clientSecret: "an0ther1ongs3cretstr1ng"
           callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
+          org_whitelist:
+            - "SomeOrgName"
 
 CILogon
 ^^^^^^^
