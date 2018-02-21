@@ -1,7 +1,5 @@
-# Setup of permissions to be used by the image-awaiter job which needs to list
-# pods within the cluster.
-
-{{ if .Values.imagePuller.hook.enabled }}
+# Setup of permissions to be used by the image-awaiter job
+{{ if .Values.prePuller.hook.enabled }}
 {{ if .Values.rbac.enabled }}
 # This service account...
 apiVersion: v1
@@ -23,9 +21,9 @@ metadata:
     "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
     "helm.sh/hook-weight": "0"
 rules:
-- apiGroups: [""] # "" indicates the core API group
-  resources: ["pods"]
-  verbs: ["list"]
+- apiGroups: ["apps"] # "" indicates the core API group
+  resources: ["daemonsets"]
+  verbs: ["get"]
 ---
 # and this part declares that service account to have that role.
 kind: ClusterRoleBinding

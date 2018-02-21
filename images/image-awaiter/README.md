@@ -1,21 +1,23 @@
-# Image Image-Awaiter
+# Image-Awaiter
 
-## What is the image image-awaiter?
+## What is the image-awaiter?
 
-The image awaiter is designed to await a set of user-specified images to become
-present on all nodes that may have user pods assigned to them. It is a small go
-program that repeatedly checks if the given list of images exists on all 
-scheduleable nodes and then exits.
+The image awaiter works in conjunction with a daemonset that will schedule pods
+that pull images to all nodes. It works by repeatedly checking the daemonset's
+pods are ready, and exits when they are.
 
 ## Why would one use it?
 
-This is used as a [helm hook](https://github.com/kubernetes/helm/blob/master/docs/charts_hooks.md)
-to wait for user images to be present on all nodes before we restart the
-hub. This cuts down the amount of time it takes for a user server to start,
-since the image no longer needs to be pulled. For large images this can cut down
-startup time from almost ten minutes to a few seconds.
+Because it can delay the hub to be upgraded before the relevant images are made
+available, and that can for large images cut down startup time from almost ten 
+minutes to a few seconds.
 
 ## FAQ
+
+### What technical knowledge is needed to understand this?
+
+You need to know about [Kubernetes Jobs](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/) and [Kubernetes DaemonSets](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/), about [Helm and helm hooks](https://github.com/kubernetes/helm/blob/master/docs/charts_hooks.md), 
+and about the programming language Go.
 
 ### Why is this project in Go? Isn't the Jupyter Infrastructure ecosystem mostly Python?
 

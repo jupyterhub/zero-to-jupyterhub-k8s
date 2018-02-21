@@ -1,9 +1,9 @@
 # will delete itself unless the helm upgrade process is aborted
-{{ if .Values.imagePuller.hook.enabled }}
+{{ if .Values.prePuller.hook.enabled }}
 {{ template "jupyterhub.imagePuller.daemonset" (dict "hook" true "name" "hook-image-puller" "top" .) }}
 {{- end }}
 ---
 # will remain running and pull images on new nodes added to the cluster
-{{ if .Values.imagePuller.continuous.enabled }}
+{{ if .Values.prePuller.continuous.enabled }}
 {{ template "jupyterhub.imagePuller.daemonset" (dict "hook" false "name" "continuous-image-puller" "top" .) }}
 {{- end }}

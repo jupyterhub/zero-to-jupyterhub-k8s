@@ -1,36 +1,12 @@
-// This program will be run as a helm hook before an actual helm upgrade have
-// started. It will simply wait for image pulling to complete by the
-// helm-image-puller daemonset's pods, it will poll these pods and exit when
-// they are all running.
-
-// TODO:
-// - Consider what the query param called 'includeUninitialized' will do
-// - Consider unschedulable nodes and how the DS will schedule pods on them
-//   make sure the daemonsets schedules the pods wisely.
+// Program used to delay a helm upgrade process until all relevant nodes have
+// pulled required images. It is an image-awaiter. It can simply wait because
+// the hook-image-puller daemonset that will get the images pulled is already
+// started when this job starts. When all images are pulled, this job exits.
 
 /*
-FUTURE REWORK:
-Stop using /api/v1/pods and instead use /api/v1/namespaces/<ns>/daemonsets/hook-image-puller/status
-- Current solution: curl http://localhost:8080/api/v1/pods?labelSelector=component=hook-image-puller
-- K8s 1.8 solution: curl http://localhost:8080/apis/apps/v1beta2/namespaces/<ns>/demonsets/hook-image-puller/status
-- K8s 1.9 solution: curl http://localhost:8080/api/v1/namespaces/<ns>/demonsets/hook-image-puller/status
-
-{
-	"kind": "DaemonSet",
-	"apiVersion": "apps/v1beta2",
-
-	...
-
-	"status": {
-		"currentNumberScheduled": 2,
-		"numberMisscheduled": 0,
-		"desiredNumberScheduled": 2,
-		"numberReady": 2,
-		"observedGeneration": 1,
-		"updatedNumberScheduled": 2,
-		"numberAvailable": 2
-	}
-}
+K8s API options - currently using 1.8
+- K8s 1.8 API: curl http://localhost:8080/apis/apps/v1beta2/namespaces/<ns>/demonsets/<ds>
+- K8s 1.9 API: curl http://localhost:8080/apis/apps/v1/namespaces/<ns>/demonsets/<ds>
 */
 
 package main
@@ -100,14 +76,17 @@ func makeHeaders(debug bool, authTokenPath string) (map[string]string, error) {
 }
 
 func main() {
-	var caPath, clientCertPath, clientKeyPath, authTokenPath, apiServerAddress string
-	var debug bool
+	var caPath, clientCertPath, clientKeyPath, authTokenPath, apiServerAddress, namespace, daemonSet string
 	flag.StringVar(&caPath, "ca-path", "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt", "Path to CA bundle used to verify kubernetes master")
 	flag.StringVar(&clientCertPath, "client-certificate-path", "", "Path to client certificate used to authenticate with kubernetes server")
 	flag.StringVar(&clientKeyPath, "client-key-path", "", "Path to client certificate key used to authenticate with kubernetes server")
 	flag.StringVar(&authTokenPath, "auth-token-path", "/var/run/secrets/kubernetes.io/serviceaccount/token", "Auth Token to use when making API requests")
 	flag.StringVar(&apiServerAddress, "api-server-address", "", "Address of the Kubernetes API Server to contact")
+	flag.StringVar(&namespace, "namespace", "", "Namespace of the DaemonSet that will perform image pulling")
+	flag.StringVar(&daemonSet, "daemonset", "hook-image-puller", "The name DaemonSet that will perform image pulling")
+	var debug bool
 	flag.BoolVar(&debug, "debug", false, "Communicate through a 'kubectl proxy --port 8080' setup instead.")
+
 	flag.Parse()
 
 	if debug {
@@ -125,12 +104,12 @@ func main() {
 	}
 
 	for {
-		pods, err := getImagePullerPods(transportPtr, apiServerAddress, headers)
+		ds, err := getDaemonSet(transportPtr, apiServerAddress, headers, namespace, daemonSet)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		if isImagesPresent(pods) {
+		if isImagesPresent(ds) {
 			log.Printf("All images present on all nodes!")
 			break
 		}

@@ -3,7 +3,7 @@
 # its' pods running. If all those pods are running they must have pulled all the
 # required images on all nodes as they are used as init containers with a dummy
 # command.
-{{ if .Values.imagePuller.hook.enabled }}
+{{ if .Values.prePuller.hook.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -20,7 +20,7 @@ spec:
       serviceAccountName: image-awaiter
       {{- end }}
       containers:
-        - image: {{ .Values.imagePuller.hook.image.name }}:{{ .Values.imagePuller.hook.image.tag }}
+        - image: {{ .Values.prePuller.hook.image.name }}:{{ .Values.prePuller.hook.image.tag }}
           name: image-awaiter
           imagePullPolicy: IfNotPresent
           command:
@@ -28,19 +28,6 @@ spec:
             - -ca-path=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
             - -auth-token-path=/var/run/secrets/kubernetes.io/serviceaccount/token
             - -api-server-address=https://$(KUBERNETES_SERVICE_HOST):$(KUBERNETES_SERVICE_PORT)
-              # This is explicitly *not* quoted, since we are passing
-              # This to a go program without any shell interpolation
-            - {{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}
-
-              {{ if not .Values.singleuser.cloudMetadata.enabled }}
-            - {{ .Values.singleuser.networkTools.image.name }}:{{ .Values.singleuser.networkTools.image.tag }}
-              {{ end }}
-              {{ range $key, $value := .Values.imagePuller.extraImages }}
-            - {{ $value.name }}:{{ $value.tag }}
-              {{ end }}
-          env:
-            - name: NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
+            - -namespace={{ .Release.Namespace }}
+            - -daemonset=hook-image-puller
 {{ end }}

@@ -13,10 +13,14 @@ COPY --from=0 /go/image-awaiter /image-awaiter
 
 
 
-# To debug this image locally with some cluster...
+# To debug / develop this code
+# ----------------------------
+# 1. Setup a kubectl proxy
 # > kubectl proxy --port=8080
-# > docker build --tag <name:tag> .
-# > docker run -it --rm --net=host <name:tag>
 
-ENTRYPOINT [ "/image-awaiter" ]
-CMD [ "-debug" ]
+# 2. Try the API using the proxy...
+# > curl http://localhost:8080/apis/apps/v1beta2/namespaces/<namespace>/demonsets/hook-image-puller
+
+# 3. Try the container using the proxy...
+# > docker build --tag <name:tag> .
+# > docker run -it --rm --net=host <name:tag> /image-awaiter -debug -namespace <namespace> -daemonset hook-image-puller

@@ -13,7 +13,7 @@ charts:
       network-tools:
         valuesPath: singleuser.networkTools.image
       image-awaiter:
-        valuesPath: imagePuller.hook.image
+        valuesPath: prePuller.hook.image
       singleuser-sample:
         valuesPath: singleuser.image
         buildArgs:
