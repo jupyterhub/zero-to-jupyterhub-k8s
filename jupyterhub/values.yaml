@@ -127,6 +127,8 @@ singleuser:
   lifecycleHooks:
   initContainers:
   nodeSelector: {}
+  pdb:
+    enabled: true
   uid: 1000
   fsGid: 1000
   serviceAccountName:
