@@ -5,7 +5,7 @@ hub:
   cookieSecret:
   publicURL:
   uid: 1000
-  fsGid: 1000
+  fsGid: 100
   nodeSelector: {}
   concurrentSpawnLimit: 64
   activeServerLimit:
@@ -128,7 +128,7 @@ singleuser:
   initContainers:
   nodeSelector: {}
   uid: 1000
-  fsGid: 1000
+  fsGid: 100
   serviceAccountName:
   schedulerStrategy:
   storage:
@@ -155,12 +155,12 @@ singleuser:
   cmd: jupyterhub-singleuser
   defaultUrl:
 
-imagePuller:
+prePuller:
   hook:
     enabled: true
     extraEnv: {}
     image:
-      name: jupyterhub/k8s-image-awaiter
+      name: jupyterhub/k8s-pre-puller
       tag: v0.6
   continuous:
     enabled: false
