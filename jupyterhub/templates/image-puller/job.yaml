@@ -7,9 +7,9 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: hook-image-awaiter
+  name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
   labels:
-    hook-type: temporary
+    hub.jupyter.org/deletable: "true"
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded,hook-failed

@@ -12,7 +12,7 @@ metadata:
     release: {{ .top.Release.Name }}
     heritage: {{ .top.Release.Service }}
     {{ if .hook }}
-    hook-type: temporary
+    hub.jupyter.org/deletable: "true"
     {{ end}}
   annotations:
     {{ if .hook }}
