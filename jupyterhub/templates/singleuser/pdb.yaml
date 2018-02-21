@@ -1,0 +1,15 @@
+{{ if .Values.singleuser.pdb.enabled }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: singleuser-server
+  labels:
+    app: jupyterhub
+    component: singleuser-server
+spec:
+  maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: jupyterhub
+      component: singleuser-server
+{{- end }}
