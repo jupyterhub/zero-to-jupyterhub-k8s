@@ -6,6 +6,14 @@ apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
   name: {{ .name }}
+  labels:
+    app: jupyterhub
+    component: {{ .name }}
+    release: {{ .top.Release.Name }}
+    heritage: {{ .top.Release.Service }}
+    {{ if .hook }}
+    hook-type: temporary
+    {{ end}}
   annotations:
     {{ if .hook }}
     # create it before installs/upgrades ...
@@ -15,11 +23,6 @@ metadata:
     # ... but then delete it
     "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
     {{ end }}
-  labels:
-    app: jupyterhub
-    component: {{ .name }}
-    release: {{ .top.Release.Name }}
-    heritage: {{ .top.Release.Service }}
 spec:
   selector:
     matchLabels:

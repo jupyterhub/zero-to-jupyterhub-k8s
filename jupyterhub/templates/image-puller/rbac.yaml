@@ -1,21 +1,25 @@
-# Setup of permissions to be used by the image-awaiter job
+# Setup of permissions to be used by the hook-image-awaiter job
 {{ if .Values.prePuller.hook.enabled }}
 {{ if .Values.rbac.enabled }}
 # This service account...
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: hook-image-awaiter
+  labels:
+    hook-type: temporary
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
     "helm.sh/hook-weight": "0"
-  name: image-awaiter
 ---
 # needs this role...
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: image-awaiter
+  name: hook-image-awaiter
+  labels:
+    hook-type: temporary
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
@@ -29,7 +33,9 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: image-awaiter
+  name: hook-image-awaiter
+  labels:
+    hook-type: temporary
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
@@ -37,10 +43,10 @@ metadata:
 subjects:
 - kind: ServiceAccount
   namespace: {{ .Release.Namespace }}
-  name: image-awaiter
+  name: hook-image-awaiter
 roleRef:
   kind: ClusterRole
-  name: image-awaiter
+  name: hook-image-awaiter
   apiGroup: rbac.authorization.k8s.io
 {{ end }}
 {{ end }}

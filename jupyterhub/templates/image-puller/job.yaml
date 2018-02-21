@@ -7,7 +7,9 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: image-awaiter
+  name: hook-image-awaiter
+  labels:
+    hook-type: temporary
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
@@ -17,11 +19,11 @@ spec:
     spec:
       restartPolicy: Never
       {{ if .Values.rbac.enabled }}
-      serviceAccountName: image-awaiter
+      serviceAccountName: hook-image-awaiter
       {{- end }}
       containers:
         - image: {{ .Values.prePuller.hook.image.name }}:{{ .Values.prePuller.hook.image.tag }}
-          name: image-awaiter
+          name: hook-image-awaiter
           imagePullPolicy: IfNotPresent
           command:
             - /image-awaiter
