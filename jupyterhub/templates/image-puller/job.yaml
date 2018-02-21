@@ -19,11 +19,11 @@ spec:
     spec:
       restartPolicy: Never
       {{ if .Values.rbac.enabled }}
-      serviceAccountName: hook-image-awaiter
+      serviceAccountName: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
       {{- end }}
       containers:
         - image: {{ .Values.prePuller.hook.image.name }}:{{ .Values.prePuller.hook.image.tag }}
-          name: hook-image-awaiter
+          name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
           imagePullPolicy: IfNotPresent
           command:
             - /image-awaiter
@@ -31,5 +31,5 @@ spec:
             - -auth-token-path=/var/run/secrets/kubernetes.io/serviceaccount/token
             - -api-server-address=https://$(KUBERNETES_SERVICE_HOST):$(KUBERNETES_SERVICE_PORT)
             - -namespace={{ .Release.Namespace }}
-            - -daemonset=hook-image-puller
+            - -daemonset=hook-image-puller-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
 {{ end }}
