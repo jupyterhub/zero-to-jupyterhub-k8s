@@ -21,28 +21,22 @@ declare the values in the helm chart (``config.yaml``).
 
 Here are example configurations for common authentication services. Note
 that in each case, you need to get the authentication credential information
-before you can configure the helmchart for authentication.
-
-Google
-^^^^^^
-
-For more information see the full example of Google OAuth2 in the next section.
-
-.. code-block:: yaml
-
-    auth:
-      type: google
-      google:
-        clientId: "yourlongclientidstring.apps.googleusercontent.com"
-        clientSecret: "adifferentlongstring"
-        callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
-        hostedDomain: "youruniversity.edu"
-        loginService: "Your University"
+before you can configure the helm chart for authentication.
 
 GitHub
 ^^^^^^
 
-The org_whitelist is optional and will require the use to accept the read:org github oath scope when logging in.
+GitHub is the largest hub for git repositories. It is free to create an account
+at GitHub, and relatively straightforward to set up OAuth credentials so that
+users can authenticate with their GitHUb username/password.
+
+To create OAuth credentials on GitHub, follow these steps:
+
+* Click your profile picture -> settings -> developer settings
+* Make sure you're on the "OAuth Apps" tab, then click "New OAuth App"
+* Fill out the forms (you'll need your hub address) and generate your ID/Secret.
+
+Below is the structure to use in order to authenticate with GitHub.
 
 .. code-block:: yaml
 
@@ -54,6 +48,30 @@ The org_whitelist is optional and will require the use to accept the read:org gi
           callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
           org_whitelist:
             - "SomeOrgName"
+
+
+.. note::
+
+   The org_whitelist is optional and will require users to accept the read:org github oath scope when logging in.
+
+Google
+^^^^^^
+
+Google authentication is used by many universities (it is part of the "G Suite").
+Note that using Google authentication requires your Hub to have a domain name
+(it cannot **only** be accessible via an IP address).
+For more information on authenticating with Google oauth, see the :ref:`google_oauth`.
+
+.. code-block:: yaml
+
+    auth:
+      type: google
+      google:
+        clientId: "yourlongclientidstring.apps.googleusercontent.com"
+        clientSecret: "adifferentlongstring"
+        callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
+        hostedDomain: "youruniversity.edu"
+        loginService: "Your University"
 
 CILogon
 ^^^^^^^
@@ -119,6 +137,8 @@ and obtain the confidential client credentials.
             userdata_method: GET
             userdata_params: {'state': 'state'}
             username_key: preferred_username
+
+.. _google_oauth:
 
 Full Example of Google OAuth2
 -----------------------------
