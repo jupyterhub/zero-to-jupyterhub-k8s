@@ -52,8 +52,9 @@ Below is the structure to use in order to authenticate with GitHub.
 
 .. note::
 
-   The org_whitelist is optional and will require users to accept the read:org github OAuth scope when
-   logging in.
+   The ``org_whitelist`` section is optional, it lets you only allow users from particular GitHub
+   organizations that you list. Enabling it will require users to accept the read:org github OAuth scope when
+   logging in. If it is *not* included, then all GitHub users will be allowed to access your JupyterHub.
 
 Google
 ^^^^^^
