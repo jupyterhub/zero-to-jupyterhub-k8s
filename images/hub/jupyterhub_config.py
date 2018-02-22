@@ -141,7 +141,7 @@ elif auth_type == 'github':
     if len(org_whitelist) != 0:
         c.GitHubOAuthenticator.github_organization_whitelist = org_whitelist
         if not auth_scopes:
-            c.Authenticator.scope = ['read:org'] # required for private membership
+            c.OAuthenticator.scope = ['read:org'] # required for private membership
 elif auth_type == 'cilogon':
     c.JupyterHub.authenticator_class = 'oauthenticator.CILogonOAuthenticator'
     c.CILogonOAuthenticator.oauth_callback_url = get_config('auth.cilogon.callback-url')
