@@ -80,8 +80,7 @@ connect your credit card or other payment method to your google cloud account.
       gcloud container clusters create <YOUR-CLUSTER> \
           --num-nodes=3 \
           --machine-type=n1-standard-2 \
-          --zone=us-central1-b \
-          --cluster-version=1.8.7-gke.1
+          --zone=us-central1-b
 
    where:
 
@@ -96,17 +95,6 @@ connect your credit card or other payment method to your google cloud account.
      be a good fit for all use cases!
    * ``--zone`` specifies which data center to use. Pick something that is not
      too far away from your users. You can find a list of them `here <https://cloud.google.com/compute/docs/regions-zones/regions-zones#available>`_.
-   * ``--cluster-version`` specifies the version of kubernetes we want. Here,
-     we specify the minimum that the default configuration will support.
-
-   .. note::
-
-      Google Cloud is rapidly iterating through Kubernetes versions, and they
-      occasionally deprecate older versions which prevents new clusters from
-      being created with the deprecated version. If you get an error that
-      includes ``"1.8.7-gke.1" is invalid``, you can try using another version
-      specified in the `Google Cloud Kubernetes version list <https://cloud.google.com/kubernetes-engine/versioning-and-upgrades>`_.
-      See section ``Versions available for new cluster masters``.
 
 6. To test if your cluster is initialized, run:
 
