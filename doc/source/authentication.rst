@@ -52,7 +52,8 @@ Below is the structure to use in order to authenticate with GitHub.
 
 .. note::
 
-   The org_whitelist is optional and will require users to accept the read:org github oath scope when logging in.
+   The org_whitelist is optional and will require users to accept the read:org github OAuth scope when
+   logging in.
 
 Google
 ^^^^^^
