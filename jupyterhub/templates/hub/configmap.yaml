@@ -71,6 +71,11 @@ data:
   auth.custom.config : {{ toJson .Values.auth.custom.config | quote }}
   {{- end }}
 
+  {{ if .Values.auth.scopes -}}
+  auth.scopes: |
+{{ toYaml .Values.auth.scopes | indent 4}}
+  {{- end }}
+
   auth.state.enabled: {{ .Values.auth.state.enabled | quote }}
 
   {{ if .Values.singleuser.lifecycleHooks -}}
