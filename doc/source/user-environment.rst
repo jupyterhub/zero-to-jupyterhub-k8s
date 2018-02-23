@@ -221,7 +221,7 @@ optional interface and as a default.
 
 .. note::
 
-   JupyterLab is just about to go into beta, so use with caution!
+   JupyterLab is in beta, so use with caution!
 
 Set environment variables
 -------------------------
