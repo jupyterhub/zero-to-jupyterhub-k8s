@@ -75,6 +75,8 @@ def cull_idle(url, api_token, timeout, cull_users=False):
                 msg = "Server for {} is slow to stop.".format(user['name'])
                 if cull_users:
                     app_log.warning(msg + " Not culling user yet.")
+                    # return here so we don't continue to cull the user
+                    # which will fail if the server is still trying to shutdown
                     return
                 app_log.warning(msg)
         if cull_users:
@@ -93,6 +95,8 @@ def cull_idle(url, api_token, timeout, cull_users=False):
             continue
         last_activity = parse_date(user['last_activity'])
         if last_activity < cull_limit:
+            # user might be in a transition (e.g. starting or stopping)
+            # don't try to cull if this is happening
             if user['pending']:
                 app_log.warning("Not culling user %s with pending %s", user['name'], user['pending'])
                 continue
