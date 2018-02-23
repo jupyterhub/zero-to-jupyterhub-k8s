@@ -72,10 +72,10 @@ It should provide output like:
 
    .. code-block:: bash
 
-      Client: &version.Version{SemVer:"v2.4.1", GitCommit:"46d9ea82e2c925186e1fc620a8320ce1314cbb02", GitTreeState:"clean"}
-      Server: &version.Version{SemVer:"v2.4.1", GitCommit:"46d9ea82e2c925186e1fc620a8320ce1314cbb02", GitTreeState:"clean"}
+      Client: &version.Version{SemVer:"v2.8.1", GitCommit:"46d9ea82e2c925186e1fc620a8320ce1314cbb02", GitTreeState:"clean"}
+      Server: &version.Version{SemVer:"v2.8.1", GitCommit:"46d9ea82e2c925186e1fc620a8320ce1314cbb02", GitTreeState:"clean"}
 
-Make sure you have at least version 2.4.1!
+Make sure you have at least version 2.8.1!
 
 If you receive an error that the Server is unreachable, do another `helm version`
 in 15-30 seconds, and it should display the Server version.
