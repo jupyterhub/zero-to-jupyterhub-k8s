@@ -70,7 +70,13 @@ def cull_idle(url, api_token, timeout, cull_users=False):
                 method='DELETE',
                 headers=auth_header,
             )
-            yield client.fetch(req)
+            resp = yield client.fetch(req)
+            if resp.code == 202:
+                msg = "Server for {} is slow to stop.".format(user['name'])
+                if cull_users:
+                    app_log.warning(msg + " Not culling user yet.")
+                    return
+                app_log.warning(msg)
         if cull_users:
             app_log.info("Culling user %s (inactive since %s)", user['name'], last_activity)
             req = HTTPRequest(url=url + '/users/%s' % user['name'],
@@ -83,12 +89,17 @@ def cull_idle(url, api_token, timeout, cull_users=False):
         if not user['server'] and not cull_users:
             # server not running and not culling users, nothing to do
             continue
+        if not user['last_activity']:
+            continue
         last_activity = parse_date(user['last_activity'])
         if last_activity < cull_limit:
+            if user['pending']:
+                app_log.warning("Not culling user %s with pending %s", user['name'], user['pending'])
+                continue
             futures.append((user['name'], cull_one(user, last_activity)))
         else:
             app_log.debug("Not culling %s (active since %s)", user['name'], last_activity)
-    
+
     for (name, f) in futures:
         yield f
         app_log.debug("Finished culling %s", name)
