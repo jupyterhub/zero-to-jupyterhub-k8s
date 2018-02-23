@@ -163,7 +163,7 @@ prePuller:
       name: jupyterhub/k8s-pre-puller
       tag: v0.6
   continuous:
-    enabled: true
+    enabled: false
   pause:
     image:
       name: gcr.io/google_containers/pause

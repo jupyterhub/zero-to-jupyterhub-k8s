@@ -82,21 +82,22 @@ A user using this new node would be forced to wait while the image is pulled
 from scratch. Ideally, it would be helpful to pre-pull images when the new node
 is added to the cluster.
 
-With the **continuous pre-puller**, which is enabled by default, the user's
-container image will be pre-pulled when adding a new node. The **continuous
+With the **continuous pre-puller** enabled (disabled by default), the user's
+container image will be pre-pulled when a new node is added. New nodes can for
+example be added manually or by a cluster autoscaler. The **continuous
 pre-puller** uses a
 [daemonset](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)
 to force kubernetes to pull the user image on all nodes as soon as a node is
 present. The continuous pre-puller uses minimal resources on all nodes and
 greatly speeds up the user pod start time.
 
-The continuous pre-puller is enabled by default. To disable it, use the
+The continuous pre-puller is disabled by default. To enable it, use the
 following snippet in your `config.yaml`:
 
 ```yaml
 prePuller:
   continuous:
-    enabled: false
+    enabled: true
 ```
 
 ### Pre-pulling additional images
