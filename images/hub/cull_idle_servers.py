@@ -113,16 +113,17 @@ if __name__ == '__main__':
         help="""Cull users in addition to servers.
                 This is for use in temporary-user cases such as tmpnb.""",
     )
-    
+
     parse_command_line()
     if not options.cull_every:
         options.cull_every = options.timeout // 2
     api_token = os.environ['JUPYTERHUB_API_TOKEN']
-    
+
     loop = IOLoop.current()
     cull = lambda : cull_idle(options.url, api_token, options.timeout, options.cull_users)
-    # run once before scheduling periodic call
-    loop.run_sync(cull)
+    # schedule first cull immediately
+    # because PeriodicCallback doesn't start until the end of the first interval
+    loop.add_callback(cull)
     # schedule periodic cull
     pc = PeriodicCallback(cull, 1e3 * options.cull_every)
     pc.start()
