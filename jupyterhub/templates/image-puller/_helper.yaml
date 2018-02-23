@@ -1,28 +1,40 @@
-{{ define "jupyterhub.prePuller.daemonset" }}
-# template that returns an prePuller daemonset
+{{ define "jupyterhub.imagePuller.daemonset" }}
+# template that returns a image-puller daemonset, used for
+# - pre-helm-upgrade image pulling (pulls images before helm upgrades, temporary)
+# - continuous image pulling (pulls images for cluster autoscalers, persistent)
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
   name: {{ .name }}
   labels:
     app: jupyterhub
-    component: image-puller
+    component: {{ .name }}
     release: {{ .top.Release.Name }}
     heritage: {{ .top.Release.Service }}
+    {{ if .hook }}
+    hub.jupyter.org/deletable: "true"
+    {{ end}}
+  annotations:
+    {{ if .hook }}
+    # create it before installs/upgrades ...
+    "helm.sh/hook": pre-install,pre-upgrade
+    # ... and before the image-awaiter job ...
+    "helm.sh/hook-weight": "-10"
+    # ... but then delete it
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+    {{ end }}
 spec:
-  updateStrategy:
-    type: RollingUpdate
   selector:
     matchLabels:
         app: jupyterhub
-        component: image-puller
+        component: {{ .name }}
         release: {{ .top.Release.Name }}
         heritage: {{ .top.Release.Service }}
   template:
     metadata:
       labels:
         app: jupyterhub
-        component: image-puller
+        component: {{ .name }}
         release: {{ .top.Release.Name }}
         heritage: {{ .top.Release.Service }}
     spec:

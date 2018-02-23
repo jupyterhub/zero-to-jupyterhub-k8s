@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Pre-puller related bugfixes, see [PR #502](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/502).
+
 ## Releases
 
 Releases are now named after famous [Cricket](https://en.wikipedia.org/wiki/Cricket) players.

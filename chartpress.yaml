@@ -12,7 +12,7 @@ charts:
           JUPYTERHUB_VERSION: 0.8.1
       network-tools:
         valuesPath: singleuser.networkTools.image
-      pre-puller:
+      image-awaiter:
         valuesPath: prePuller.hook.image
       singleuser-sample:
         valuesPath: singleuser.image
