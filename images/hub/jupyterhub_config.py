@@ -185,7 +185,9 @@ elif auth_type == 'custom':
 else:
     raise ValueError("Unhandled auth type: %r" % auth_type)
 
-c.OAuthenticator.scope = get_config('auth.scopes', [])
+auth_scopes = get_config('auth.scopes')
+if auth_scopes:
+    c.OAuthenticator.scope = auth_scopes
 
 c.Authenticator.enable_auth_state = get_config('auth.state.enabled', False)
 
