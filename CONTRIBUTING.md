@@ -26,9 +26,9 @@ development.
    python3 -m venv .
    pip install -r dev-requirements.txt
    ```
- 6. Now run `build.py` to build the requisite docker images inside minikube:
+ 6. Now run `chartpress` to build the requisite docker images inside minikube:
     ```bash
-    ./build.py
+    chartpress
     ```
 
     This will build the docker images inside minikube & modify
@@ -164,9 +164,9 @@ the DockerHub registry, open an issue and ping one of the core devs.
 If you have all of this, you can then:
 
 1. Check out latest master of [z2jh](https://github.com/jupyterhub/zero-to-jupyterhub-k8s)
-2. Run `./build.py --tag <VERSION> --push --publish-chart`.
+2. Run `chartpress --tag <VERSION> --push --publish-chart`.
   * For example, to relase `v0.5`, you would run
-  `./build.py --tag v0.5 --push --publish-chart`.
+  `chartpress --tag v0.5 --push --publish-chart`.
   Note the `v` before version.
 3. This will also modify the files `Chart.yaml` and `values.yaml`.
   Commit these changes.
