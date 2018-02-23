@@ -70,7 +70,15 @@ def cull_idle(url, api_token, timeout, cull_users=False):
                 method='DELETE',
                 headers=auth_header,
             )
-            yield client.fetch(req)
+            resp = yield client.fetch(req)
+            if resp.code == 202:
+                msg = "Server for {} is slow to stop.".format(user['name'])
+                if cull_users:
+                    app_log.warning(msg + " Not culling user yet.")
+                    # return here so we don't continue to cull the user
+                    # which will fail if the server is still trying to shutdown
+                    return
+                app_log.warning(msg)
         if cull_users:
             app_log.info("Culling user %s (inactive since %s)", user['name'], last_activity)
             req = HTTPRequest(url=url + '/users/%s' % user['name'],
@@ -83,12 +91,19 @@ def cull_idle(url, api_token, timeout, cull_users=False):
         if not user['server'] and not cull_users:
             # server not running and not culling users, nothing to do
             continue
+        if not user['last_activity']:
+            continue
         last_activity = parse_date(user['last_activity'])
         if last_activity < cull_limit:
+            # user might be in a transition (e.g. starting or stopping)
+            # don't try to cull if this is happening
+            if user['pending']:
+                app_log.warning("Not culling user %s with pending %s", user['name'], user['pending'])
+                continue
             futures.append((user['name'], cull_one(user, last_activity)))
         else:
             app_log.debug("Not culling %s (active since %s)", user['name'], last_activity)
-    
+
     for (name, f) in futures:
         yield f
         app_log.debug("Finished culling %s", name)
@@ -102,16 +117,17 @@ if __name__ == '__main__':
         help="""Cull users in addition to servers.
                 This is for use in temporary-user cases such as tmpnb.""",
     )
-    
+
     parse_command_line()
     if not options.cull_every:
         options.cull_every = options.timeout // 2
     api_token = os.environ['JUPYTERHUB_API_TOKEN']
-    
+
     loop = IOLoop.current()
     cull = lambda : cull_idle(options.url, api_token, options.timeout, options.cull_users)
-    # run once before scheduling periodic call
-    loop.run_sync(cull)
+    # schedule first cull immediately
+    # because PeriodicCallback doesn't start until the end of the first interval
+    loop.add_callback(cull)
     # schedule periodic cull
     pc = PeriodicCallback(cull, 1e3 * options.cull_every)
     pc.start()
