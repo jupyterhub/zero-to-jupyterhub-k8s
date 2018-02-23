@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- Pre-puller related bugfixes, see [PR #502](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/502).
+- The continuous pre-puller is now enabled by default.
+
 ## Releases
 
 Releases are now named after famous [Cricket](https://en.wikipedia.org/wiki/Cricket) players.
