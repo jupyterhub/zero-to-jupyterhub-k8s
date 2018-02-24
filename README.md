@@ -31,7 +31,7 @@ maintainable deployments of JupyterHub with Kubernetes.
 
 ## History and inspiration
 
-Much of the intial groundwork for this documentation is information learned from
+Much of the initial groundwork for this documentation is information learned from
 the successful use of JupyterHub and Kubernetes at UC Berkeley in their
 [Data 8](http://data8.org/) program.
 
