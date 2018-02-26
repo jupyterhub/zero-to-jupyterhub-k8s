@@ -127,6 +127,11 @@ if __name__ == '__main__':
         options.cull_every = options.timeout // 2
     api_token = os.environ['JUPYTERHUB_API_TOKEN']
 
+    try:
+        AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
+    except ImportError as e:
+        app_log.warning("Could not load pycurl: %s\npycurl is recommended if you have a large number of users.", e)
+
     loop = IOLoop.current()
     cull = lambda : cull_idle(options.url, api_token, options.timeout, options.cull_users)
     # schedule first cull immediately
