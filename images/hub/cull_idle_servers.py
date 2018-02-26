@@ -105,8 +105,12 @@ def cull_idle(url, api_token, timeout, cull_users=False):
             app_log.debug("Not culling %s (active since %s)", user['name'], last_activity)
 
     for (name, f) in futures:
-        yield f
-        app_log.debug("Finished culling %s", name)
+        try:
+            yield f
+        except Exception:
+            app_log.exception("Error culling %s", name)
+        else:
+            app_log.debug("Finished culling %s", name)
 
 
 if __name__ == '__main__':
