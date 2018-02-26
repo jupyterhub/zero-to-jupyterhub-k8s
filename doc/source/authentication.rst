@@ -46,15 +46,30 @@ Below is the structure to use in order to authenticate with GitHub.
           clientId: "y0urg1thubc1ient1d"
           clientSecret: "an0ther1ongs3cretstr1ng"
           callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
+
+
+By default this will allow *any* GitHub user to access your JupyterHub.
+You can restrict access to members of one or more GitHub organisations.
+
+.. code-block:: yaml
+
+      auth:
+        type: github
+        github:
+          ...
           org_whitelist:
             - "SomeOrgName"
+        scopes:
+          - "read:org"
 
 
 .. note::
 
-   The ``org_whitelist`` section is optional, it lets you only allow users from particular GitHub
-   organizations that you list. Enabling it will require users to accept the read:org github OAuth scope when
-   logging in. If it is *not* included, then all GitHub users will be allowed to access your JupyterHub.
+   ``auth.scopes`` is optional.
+   Without this members of an organisation must `set their membership to Public <https://help.github.com/articles/publicizing-or-hiding-organization-membership/>`_ to login.
+   If this is set to ``read:org`` private members can login, but users must grant JupyterHub `additional privileges <https://developer.github.com/apps/building-oauth-apps/scopes-for-oauth-apps/>`_ to read some private information.
+   Changing ``auth.scopes`` will not change the scope for existing OAuth tokens, you must invalidate them.
+
 
 Google
 ^^^^^^
