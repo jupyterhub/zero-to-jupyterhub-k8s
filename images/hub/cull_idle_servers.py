@@ -105,8 +105,12 @@ def cull_idle(url, api_token, timeout, cull_users=False):
             app_log.debug("Not culling %s (active since %s)", user['name'], last_activity)
 
     for (name, f) in futures:
-        yield f
-        app_log.debug("Finished culling %s", name)
+        try:
+            yield f
+        except Exception:
+            app_log.exception("Error culling %s", name)
+        else:
+            app_log.debug("Finished culling %s", name)
 
 
 if __name__ == '__main__':
@@ -122,6 +126,11 @@ if __name__ == '__main__':
     if not options.cull_every:
         options.cull_every = options.timeout // 2
     api_token = os.environ['JUPYTERHUB_API_TOKEN']
+
+    try:
+        AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
+    except ImportError as e:
+        app_log.warning("Could not load pycurl: %s\npycurl is recommended if you have a large number of users.", e)
 
     loop = IOLoop.current()
     cull = lambda : cull_idle(options.url, api_token, options.timeout, options.cull_users)
