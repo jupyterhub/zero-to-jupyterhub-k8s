@@ -180,3 +180,7 @@ cull:
   users: false
   timeout: 3600
   every: 600
+
+scheduler:
+  enabled: false
+  replicas: 1
