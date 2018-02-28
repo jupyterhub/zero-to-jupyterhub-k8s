@@ -26,7 +26,7 @@ before you can configure the helm chart for authentication.
 GitHub
 ^^^^^^
 
-GitHub is the largest hub for git repositories. It is free to create an account
+GitHub is the largest hosting service for git repositories. It is free to create an account
 at GitHub, and relatively straightforward to set up OAuth credentials so that
 users can authenticate with their GitHUb username/password.
 
