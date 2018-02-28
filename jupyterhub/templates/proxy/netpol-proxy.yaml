@@ -1,0 +1,55 @@
+{{- if and .Values.proxy.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: proxy-network-policy
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      name: proxy
+      component: proxy
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 443
+  - from:
+    - podSelector:
+        matchLabels:
+          name: hub
+          app: jupyterhub
+          component: hub
+    ports:
+    - protocol: TCP
+      port: 8000
+    - protocol: TCP
+      port: 8001
+    - protocol: TCP
+      port: 8080
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          name: hub
+          app: jupyterhub
+          component: hub
+    ports:
+    - protocol: TCP
+      port: 8081
+  - to:
+    - podSelector:
+        matchLabels:
+          app: jupyterhub
+          component: singleuser-server
+    ports:
+    - protocol: TCP
+      port: 8888
+{{- if .Values.proxy.networkPolicy.egress }}
+{{ toYaml .Values.proxy.networkPolicy.egress | indent 2 }}
+{{- end }}
+{{- end }}

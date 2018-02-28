@@ -1,0 +1,50 @@
+{{- if and .Values.hub.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: hub-network-policy
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      name: hub
+      app: jupyterhub
+      component: hub
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          name: proxy
+          component: proxy
+    - podSelector:
+        matchLabels:
+          app: jupyterhub
+          component: singleuser-server
+    ports:
+    - protocol: TCP
+      port: 8081
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          name: proxy
+          component: proxy
+    ports:
+    - protocol: TCP
+      port: 8001
+  - to:
+    - podSelector:
+        matchLabels:
+          app: jupyterhub
+          component: singleuser-server
+    ports:
+    - protocol: TCP
+      port: 8888
+    # FIXME: Find a rule to explicitly allow access to kubernetes API
+{{ if .Values.hub.networkPolicy.egress }}
+{{ toYaml .Values.hub.networkPolicy.egress | indent 2 }}
+{{- end }}
+{{- end }}
