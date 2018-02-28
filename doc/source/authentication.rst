@@ -21,12 +21,63 @@ declare the values in the helm chart (``config.yaml``).
 
 Here are example configurations for common authentication services. Note
 that in each case, you need to get the authentication credential information
-before you can configure the helmchart for authentication.
+before you can configure the helm chart for authentication.
+
+GitHub
+^^^^^^
+
+GitHub is the largest hub for git repositories. It is free to create an account
+at GitHub, and relatively straightforward to set up OAuth credentials so that
+users can authenticate with their GitHUb username/password.
+
+To create OAuth credentials on GitHub, follow these steps:
+
+* Click your profile picture -> settings -> developer settings
+* Make sure you're on the "OAuth Apps" tab, then click "New OAuth App"
+* Fill out the forms (you'll need your hub address) and generate your ID/Secret.
+
+Below is the structure to use in order to authenticate with GitHub.
+
+.. code-block:: yaml
+
+      auth:
+        type: github
+        github:
+          clientId: "y0urg1thubc1ient1d"
+          clientSecret: "an0ther1ongs3cretstr1ng"
+          callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
+
+
+By default this will allow *any* GitHub user to access your JupyterHub.
+You can restrict access to members of one or more GitHub organisations.
+
+.. code-block:: yaml
+
+      auth:
+        type: github
+        github:
+          ...
+          org_whitelist:
+            - "SomeOrgName"
+        scopes:
+          - "read:org"
+
+
+.. note::
+
+   ``auth.scopes`` is optional.
+   Without this members of an organisation must `set their membership to Public <https://help.github.com/articles/publicizing-or-hiding-organization-membership/>`_ to login.
+   If this is set to ``read:org`` private members can login, but users must grant JupyterHub `additional privileges <https://developer.github.com/apps/building-oauth-apps/scopes-for-oauth-apps/>`_ to read some private information.
+   Changing ``auth.scopes`` will not change the scope for existing OAuth tokens, you must invalidate them.
+
 
 Google
 ^^^^^^
 
-For more information see the full example of Google OAuth2 in the next section.
+Google authentication is used by many universities (it is part of the "G Suite").
+Note that using Google authentication requires your Hub to have a domain name
+(it cannot **only** be accessible via an IP address).
+For more information on authenticating with Google oauth, see the :ref:`google_oauth`.
 
 .. code-block:: yaml
 
@@ -38,22 +89,6 @@ For more information see the full example of Google OAuth2 in the next section.
         callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
         hostedDomain: "youruniversity.edu"
         loginService: "Your University"
-
-GitHub
-^^^^^^
-
-The org_whitelist is optional and will require the use to accept the read:org github oath scope when logging in.
-
-.. code-block:: yaml
-
-      auth:
-        type: github
-        github:
-          clientId: "y0urg1thubc1ient1d"
-          clientSecret: "an0ther1ongs3cretstr1ng"
-          callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
-          org_whitelist:
-            - "SomeOrgName"
 
 CILogon
 ^^^^^^^
@@ -119,6 +154,8 @@ and obtain the confidential client credentials.
             userdata_method: GET
             userdata_params: {'state': 'state'}
             username_key: preferred_username
+
+.. _google_oauth:
 
 Full Example of Google OAuth2
 -----------------------------
