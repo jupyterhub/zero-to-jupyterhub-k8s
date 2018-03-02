@@ -10,7 +10,7 @@ development.
 1. [Download & install minikube](https://github.com/kubernetes/minikube#installation)
 
    For MacOS, you may find installing from https://github.com/kubernetes/minikube/releases
-   may be more stable than using Homebrew.
+   is more stable than using Homebrew.
 
 2. Start minikube
    ```
