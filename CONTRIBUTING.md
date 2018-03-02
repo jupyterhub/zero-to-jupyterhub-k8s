@@ -2,34 +2,46 @@
 
 Welcome! As a [Jupyter](https://jupyter.org) project, we follow the [Jupyter contributor guide](https://jupyter.readthedocs.io/en/latest/contributor/content-contributor.html).
 
-## Local development
+## Setting up minikube for local development
 
 We recommend using [minikube](https://github.com/kubernetes/minikube) for local
 development.
 
-1. [Download & install minikube](https://github.com/kubernetes/minikube#installation)
+1. [Download & install minikube](https://github.com/kubernetes/minikube#installation):
 
    For MacOS, you may find installing from https://github.com/kubernetes/minikube/releases
-   may be more stable than using Homebrew.
+   may be more stable than using Homebrew. If you have not yet installed Docker for Mac or
+   a vm such as VirtualBox, please do so.
 
-2. Start minikube
-   ```
+2. Start minikube:
+   ```bash
    minikube start
    ```
-3. Use the docker daemon inside minikube for building:
+
+   On MacOS:
+   ```bash
+   minikube start --vm-driver=virtualbox \
+       --kubernetes-version=v1.9.0 \
+       --extra-config=apiserver.Authorization.Mode=RBAC
    ```
+
+3. Use the docker daemon inside minikube for building:
+   ```bash
    eval $(minikube docker-env)
    ```
+
 4. Clone the zero-to-jupyterhub repo:
-   ```
+   ```bash
    git clone git@github.com:jupyterhub/zero-to-jupyterhub-k8s.git
    cd zero-to-jupyterhub-k8s
    ```
+
 5. Create a virtualenv & install the libraries required for builds to happen:
    ```bash
    python3 -m venv .
    pip install -r dev-requirements.txt
    ```
+
  6. Now run `chartpress` to build the requisite docker images inside minikube:
     ```bash
     chartpress
@@ -39,7 +51,16 @@ development.
     `jupyterhub/values.yaml` with the appropriate values to make the chart
     installable!
 
-7. Install / Upgrade JupyterHub Chart!
+7. Configure helm and minikube for RBAC:
+   ```bash
+   kubectl --namespace kube-system create sa tiller
+   kubectl create clusterrolebinding tiller \
+       --clusterrole cluster-admin \
+       --serviceaccount=kube-system:tiller
+   helm init --service-account tiller
+   ```
+
+8. Install / Upgrade JupyterHub Chart!
    ```bash
    helm upgrade --wait --install --namespace=hub hub jupyterhub/ -f minikube-config.yaml
    ```
@@ -48,15 +69,16 @@ development.
    you want, or create another `config.yaml` file & pass that as an additional
    `-f config.yaml` file to the `helm upgrade` command.
 
-8. Open the URL for your instance of JupyterHub!
+9. Open the URL for your instance of JupyterHub!
 
    ```bash
    minikube service --namespace=hub proxy-public
    ```
 
-8. Make the changes you want. You need to re-run step 6 if you changed anything
-   under `images`, but only step 7 if you changed things only under `jupyterhub`
+10. Make the changes you want. You need to re-run step 6 if you changed anything
+   under `images`, but only step 8 if you changed things only under `jupyterhub`
 
+---
 
 ## Releasing a new version of the helm chart
 
@@ -138,7 +160,7 @@ involved:
 * [z2jh](https://github.com/jupyterhub/zero-to-jupyterhub-k8s)
 * [KubeSpawner](https://github.com/jupyterhub/kubespawner)
 * [JupyterHub](https://github.com/jupyterhub/jupyterhub)
-* [OAuthenticator](https://github.com/jupyterhub/oauthenticator))
+* [OAuthenticator](https://github.com/jupyterhub/oauthenticator)
 
 Edit `contributors.py` to have the appropriate dates
 for each of these versions. Then, run the script and paste
