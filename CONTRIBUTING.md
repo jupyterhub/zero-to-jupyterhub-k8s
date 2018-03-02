@@ -8,6 +8,10 @@ We recommend using [minikube](https://github.com/kubernetes/minikube) for local
 development.
 
 1. [Download & install minikube](https://github.com/kubernetes/minikube#installation)
+
+   For MacOS, you may find installing from https://github.com/kubernetes/minikube/releases
+   is more stable than using Homebrew.
+
 2. Start minikube
    ```
    minikube start
