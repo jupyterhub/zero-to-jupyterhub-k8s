@@ -28,7 +28,7 @@ GitHub
 
 GitHub is the largest hosting service for git repositories. It is free to create an account
 at GitHub, and relatively straightforward to set up OAuth credentials so that
-users can authenticate with their GitHUb username/password.
+users can authenticate with their GitHub username/password.
 
 To create OAuth credentials on GitHub, follow these steps:
 
