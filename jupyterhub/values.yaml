@@ -1,3 +1,7 @@
+# Default values for jupyterhub.
+# This is a YAML-formatted file.
+
+# hub is the main JupyterHub server
 hub:
   service:
     type: ClusterIP
@@ -40,9 +44,12 @@ hub:
   pdb:
     enabled: true
 
+# rbac is role based access control.
+# **caution** disabling rbac will give root access.
 rbac:
   enabled: true
 
+# proxy is a user-facing object for user access to JupyterHub 
 proxy:
   secretToken: ''
   service:
@@ -99,8 +106,9 @@ proxy:
     hosts: []
 
 
-# Google OAuth secrets
+# auth is the authenticator used i.e. Google OAuth secrets
 auth:
+  # type is the specific authenticator used by the hub
   type: dummy
   whitelist:
     users:
@@ -113,7 +121,7 @@ auth:
     enabled: false
     cryptoKey:
 
-
+# singleuser is the Jupyter singleuser notebook server
 singleuser:
   networkTools:
     image:
@@ -155,6 +163,7 @@ singleuser:
   cmd: jupyterhub-singleuser
   defaultUrl:
 
+# prePuller is used to pre-pull images to nodes and decrease user startup time
 prePuller:
   hook:
     enabled: true
@@ -169,12 +178,14 @@ prePuller:
       name: gcr.io/google_containers/pause
       tag: '3.0'
 
+# ingress is the object used to manage external access to the cluster
 ingress:
   enabled: false
   annotations: {}
   hosts: []
   tls:
 
+# cull is the service used to remove inactive user notebook pods
 cull:
   enabled: true
   users: false
