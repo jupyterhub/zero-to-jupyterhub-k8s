@@ -35,10 +35,11 @@ Note that you need to install and configure an
 [Ingress Controller](https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-controllers)
 for the ingress object to work.
 
-We recommend the [nginx ingress](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress)
+We recommend the community-maintained [nginx ingress](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress)
 controller, [**kubernetes/ingress-nginx**](https://github.com/kubernetes/ingress-nginx),
 maintained by the community. Note that Nginx maintains two additional ingress controllers.
-For most use cases, we recommend the community maintained **kubernetes/ingress-nginx**.
+For most use cases, we recommend the community maintained **kubernetes/ingress-nginx** since that
+is the ingress controller that the development team has the most experience using.
 
 ### Ingress and Automatic HTTPS with kube-lego & Let's Encrypt
 
@@ -48,10 +49,11 @@ yourself.
 
 Here's a method that uses [kube-lego](https://github.com/jetstack/kube-lego)
 to automatically fetch and renew HTTPS certificates from [Let's Encrypt](https://letsencrypt.org/).
-This approach currently only works with the community maintained *nginx ingress controller*
-and *google cloud's ingress controller*.
+This approach with kube-lego and Let's Encrypt currently only works with two ingress controllers:
+the community-maintained [**kubernetes/ingress-nginx**](https://github.com/kubernetes/ingress-nginx)
+and **google cloud's ingress controller**.
 
-1. Make sure that DNS is properly set up (this may vary wildly depending on the ingress
+1. Make sure that DNS is properly set up (configuration depends on the ingress
    controller you are using and how your cluster was set up). Accessing
    `<hostname>` from a browser should route traffic to the hub.
 2. Install & configure kube-lego using the
