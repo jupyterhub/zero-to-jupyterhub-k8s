@@ -36,8 +36,8 @@ Note that you need to install and configure an
 for the ingress object to work.
 
 We recommend the community-maintained [nginx ingress](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress)
-controller, [**kubernetes/ingress-nginx**](https://github.com/kubernetes/ingress-nginx),
-maintained by the community. Note that Nginx maintains two additional ingress controllers.
+controller, [**kubernetes/ingress-nginx**](https://github.com/kubernetes/ingress-nginx).
+Note that Nginx maintains two additional ingress controllers.
 For most use cases, we recommend the community maintained **kubernetes/ingress-nginx** since that
 is the ingress controller that the development team has the most experience using.
 
