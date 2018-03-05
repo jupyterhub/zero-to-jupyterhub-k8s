@@ -199,25 +199,46 @@ Use JupyterLab by default
 user interface for Project Jupyter. It can be used with JupyterHub, both as an
 optional interface and as a default.
 
-1. `Install JupyterLab <https://github.com/jupyterlab/jupyterlab#installation>`_
-   in your user image.
-2. `Install JupyterLab Hub extension
-   <https://github.com/jupyterhub/jupyterlab-hub#installation>`_ in your user
-   image. This provides a nice UI for accessing JupyterHub control panel from
-   JupyterLab. You only need the ``jupyter labextension`` command.
+1. Install `JupyterLab <https://github.com/jupyterlab/jupyterlab#installation>`_
+   and `JupyterLab Hub extension <https://github.com/jupyterhub/jupyterlab-hub#installation>`_ 
+   in your user image, for example in your Dockerfile:
+
+   .. code-block::
+
+      FROM jupyter/base-notebook:27ba57364579
+
+      ...
+      ARG JUPYTERLAB_VERSION=0.31.12
+      RUN     pip install jupyterlab==$JUPYTERLAB_VERSION \
+          &&  jupyter labextension install @jupyterlab/hub-extension
+      ...
+
+   "JupyterLab Hub" provides a nice UI for accessing JupyterHub control panel from
+   JupyterLab.
+   
+   Without "JupyterLab Hub", users can always switch to classic Jupyter Notebook by 
+   replacing the ``/lab`` in the URL after their server starts with ``/tree``.
+   Similarly, you can access JupyterLab even if it is not the default by 
+   replacing ``/tree`` in the URL with ``/lab``
+2. Enable JupterLab in your Helm value file by adding the following snippet:
+
+   .. code-block:: yaml
+
+      hub:
+        extraEnv:
+          JUPYTER_ENABLE_LAB: 1
+        extraConfig: |
+          c.KubeSpawner.cmd = ['jupyter-labhub']
+
 3. If you want users to launch automatically into JupyterLab instead of classic
-   notebook, use the following in your ``config.yaml``
+   notebook, set the following setting in your Helm value file:
 
    .. code-block:: yaml
 
       singleuser:
         defaultUrl: "/lab"
 
-   This will put users into JupyterLab when they launch.
-4. Users can always switch to classic Jupyter Notebook by replacing the ``/lab`` 
-   in the URL after their server starts with ``/tree``. Similarly, you can access
-   JupyterLab even if it is not the default by replacing ``/tree`` in the URL
-   with ``/lab``
+   This will put users into JupyterLab when they launch their server.
 
 .. note::
 
