@@ -15,13 +15,7 @@ spec:
   - from:
     - podSelector:
         matchLabels:
-          name: hub
-          app: jupyterhub
-          component: hub
-    - podSelector:
-        matchLabels:
-          name: proxy
-          component: proxy
+          hub.jupyter.org/network-access-singleuser: "true"
     ports:
     - protocol: TCP
       port: 8888

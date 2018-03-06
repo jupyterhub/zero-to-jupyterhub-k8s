@@ -26,12 +26,15 @@ spec:
   - from:
     - podSelector:
         matchLabels:
-          name: hub
-          app: jupyterhub
-          component: hub
+          hub.jupyter.org/network-access-proxy-http: "true"
     ports:
       - protocol: TCP
         port: 8000
+  - from:
+    - podSelector:
+        matchLabels:
+          hub.jupyter.org/network-access-proxy-api: "true"
+    ports:
       - protocol: TCP
         port: 8001
   egress:
