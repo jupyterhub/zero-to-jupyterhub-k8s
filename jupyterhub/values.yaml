@@ -106,7 +106,7 @@ proxy:
     hosts: []
 
 
-# auth is the authenticator used i.e. Google OAuth secrets
+# auth is the authenticator used e.g. Google OAuth secrets
 auth:
   # type is the specific authenticator used by the hub
   type: dummy
