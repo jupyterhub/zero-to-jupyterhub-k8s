@@ -42,7 +42,12 @@ spec:
     ports:
     - protocol: TCP
       port: 8888
-    # FIXME: Find a rule to explicitly allow access to kubernetes API
+  - ports:
+    # Kubernetes api-server
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 6443
 {{ if .Values.hub.networkPolicy.egress }}
 {{ toYaml .Values.hub.networkPolicy.egress | indent 2 }}
 {{- end }}

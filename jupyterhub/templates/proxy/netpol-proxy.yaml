@@ -17,6 +17,12 @@ spec:
       port: 80
     - protocol: TCP
       port: 443
+    # kube-lego /healthz
+    - protocol: TCP
+      port: 8080
+    # nginx /healthz
+    - protocol: TCP
+      port: 10254
   - from:
     - podSelector:
         matchLabels:
@@ -24,12 +30,10 @@ spec:
           app: jupyterhub
           component: hub
     ports:
-    - protocol: TCP
-      port: 8000
-    - protocol: TCP
-      port: 8001
-    - protocol: TCP
-      port: 8080
+      - protocol: TCP
+        port: 8000
+      - protocol: TCP
+        port: 8001
   egress:
   - to:
     - podSelector:
@@ -38,8 +42,8 @@ spec:
           app: jupyterhub
           component: hub
     ports:
-    - protocol: TCP
-      port: 8081
+      - protocol: TCP
+        port: 8081
   - to:
     - podSelector:
         matchLabels:
@@ -48,6 +52,12 @@ spec:
     ports:
     - protocol: TCP
       port: 8888
+  - ports:
+    # Kubernetes api-server
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 6443
 {{- if .Values.proxy.networkPolicy.egress }}
 {{ toYaml .Values.proxy.networkPolicy.egress | indent 2 }}
 {{- end }}

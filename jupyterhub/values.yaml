@@ -42,12 +42,10 @@ hub:
   networkPolicy:
     enabled: false
     egress:
-    # FIXME: Find a rule to explicitly allow access to kubernetes API
-    # Once this is done the following can be removed unless external auth
-    # is required since other egress is handled by other rules
-    - to:
-      - ipBlock:
-          cidr: 0.0.0.0/0
+    # The following can be removed unless external auth is used
+      - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
 
 rbac:
   enabled: true
@@ -110,11 +108,11 @@ proxy:
     enabled: false
     egress:
     # May be required for lets-encrypt? Otherwise should be safe to disable
-    - ports:
-      - protocol: TCP
-        port: 80
-      - protocol: TCP
-        port: 443
+      - ports:
+        - protocol: TCP
+          port: 80
+        - protocol: TCP
+          port: 443
 
 
 # Google OAuth secrets
@@ -144,11 +142,11 @@ singleuser:
     enabled: false
     egress:
     # Required egress is handled by other rules so it's safe to modify this
-    - to:
-      - ipBlock:
-          cidr: 0.0.0.0/0
-          except:
-            - 169.254.169.254/32
+      - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 169.254.169.254/32
   extraLabels: {}
   extraEnv: {}
   lifecycleHooks:
