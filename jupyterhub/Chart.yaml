@@ -1,16 +1,4 @@
+apiVersion: v1
+description: Multi-user Jupyter installation
 name: jupyterhub
 version: v0.7-dev
-apiVersion: v1
-description: JupyterHub is a multi-user Jupyter installation.
-keywords:
-  - jupyterhub
-  - jupyter
-home:
-  - https://zero-to-jupyterhub.readthedocs.io
-  - https://jupyterhub.readthedocs.io
-sources: 
-  - https://github.com/jupyterhub/zero-to-jupyterhub-k8s
-  - https://github.com/jupyterhub/jupyterhub
-maintainers:
-  - name: Yuvi Panda
-  - name: Project Jupyter
