@@ -4,12 +4,11 @@ This page contains a grab bag of various useful topics that don't have an easy
 home elsewhere:
 
 - Ingress
-- Arbitrary code in `jupyterhub_config.py`
+- Arbitrary extra code and configuration in `jupyterhub_config.py`
 
-
-Most people setting up JupyterHubs on popular public clouds
-should not have to use any of this information, but it is essential for more
-complex installations.
+Most people setting up JupyterHubs on popular public clouds should not have
+to use any of this information, but these topics are essential for more complex
+installations.
 
 ## Ingress
 
@@ -34,22 +33,27 @@ under `ingress.hosts`.
 
 Note that you need to install and configure an
 [Ingress Controller](https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-controllers)
-for the ingress object to work. We recommend the
-[nginx ingress](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress)
-controller maintained by the community.
+for the ingress object to work.
 
-### Automatic HTTPS with kube-lego & Let's Encrypt
+We recommend the community-maintained [nginx ingress](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress)
+controller, [**kubernetes/ingress-nginx**](https://github.com/kubernetes/ingress-nginx).
+Note that Nginx maintains two additional ingress controllers.
+For most use cases, we recommend the community maintained **kubernetes/ingress-nginx** since that
+is the ingress controller that the development team has the most experience using.
 
-The default automatic HTTPS support does not work if you are using an ingress
-object. You'd have to set it up yourself.
+### Ingress and Automatic HTTPS with kube-lego & Let's Encrypt
 
+When using an ingress object, the default automatic HTTPS support does not work.
+To have automatic fetch and renewal of HTTPS certificates, you must set it up
+yourself.
 
-This uses [kube-lego](https://github.com/jetstack/kube-lego) to automatically
-fetch and renew HTTPS certificates
-from [Let's Encrypt](https://letsencrypt.org/). This currently only works with
-the nginx ingress controller & google cloud's ingress controller.
+Here's a method that uses [kube-lego](https://github.com/jetstack/kube-lego)
+to automatically fetch and renew HTTPS certificates from [Let's Encrypt](https://letsencrypt.org/).
+This approach with kube-lego and Let's Encrypt currently only works with two ingress controllers:
+the community-maintained [**kubernetes/ingress-nginx**](https://github.com/kubernetes/ingress-nginx)
+and **google cloud's ingress controller**.
 
-1. Make sure that DNS is properly set up (varies wildly depending on the ingress
+1. Make sure that DNS is properly set up (configuration depends on the ingress
    controller you are using and how your cluster was set up). Accessing
    `<hostname>` from a browser should route traffic to the hub.
 2. Install & configure kube-lego using the
@@ -71,7 +75,7 @@ the nginx ingress controller & google cloud's ingress controller.
 This should provision a certificate, and keep renewing it whenever it gets close
 to expiry!
 
-## Arbitrary code in `jupyterhub_config.py`
+## Arbitrary extra code and configuration in `jupyterhub_config.py`
 
 Sometimes the various options exposed via the helm-chart's `values.yaml` is not
 enough, and you need to insert arbitrary extra code / config into
