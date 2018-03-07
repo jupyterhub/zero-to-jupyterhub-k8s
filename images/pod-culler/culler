@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+"""
+Delete all user pods older than a given duration.
+"""
+import os
+
+from kubernetes import config, client
+from datetime import datetime, timedelta, timezone
+
+# Load kubernetes incluster config
+config.load_incluster_config()
+namespace = os.environ['POD_NAMESPACE']
+kube = client.CoreV1Api()
+
+# max age
+max_age = int(os.getenv('MAX_AGE', '0')) or 6 * 3600
+
+def cull_pods(max_age):
+    """Cull pods older than max_age hours"""
+    pods = kube.list_namespaced_pod(namespace, label_selector="component=singleuser-server")
+    total_pods = []
+    age_cutoff = timedelta(seconds=max_age)
+    now = datetime.now(timezone.utc)
+    for pod in pods.items:
+        # API results always use UTC timezone
+        age = now - pod.status.start_time.replace(tzinfo=timezone.utc)
+        if age > age_cutoff:
+            if False:
+                kube.delete_namespaced_pod(pod.metadata.name, namespace, client.V1DeleteOptions())
+                print("Deleted {:.1f}h old pod {}".format(age.total_seconds() / 60 / 60, pod.metadata.name))
+                summary_text = 'Deleted {} pods'
+            else:
+                print("Found {:.1f}h old pod {}".format(age.total_seconds() / 60 / 60, pod.metadata.name))
+                summary_text = 'Found {} pods'
+
+            total_pods.append(pod.metadata.name)
+
+    print('---', '\n', summary_text.format(len(total_pods)))
+
+
+if __name__ == '__main__':
+    cull_pods(max_age)

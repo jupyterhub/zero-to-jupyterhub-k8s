@@ -1,0 +1,32 @@
+{{ if and .Values.cull.enabled .Values.cull.maxAge }}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: pod-culler
+  labels:
+    app: jupyterhub
+    component: pod-culler
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  schedule: "*/{{ .Values.cull.podCuller.intervalMinutes }} * * * *"
+  concurrencyPolicy: Replace
+  jobTemplate:
+    template:
+      metadata:
+        labels:
+          app: jupyterhub
+          component: pod-culler
+          release: {{ .Release.Name }}
+          heritage: {{ .Release.Service }}
+      spec:
+        containers:
+        - name: culler
+          image: {{ .Values.cull.podCuller.image.name }}:{{ .Values.cull.podCuller.image.tag }}
+          resources:
+            requests:
+              memory: 100Mi
+          env:
+          - name: MAX_AGE
+            value: {{ .Values.cull.maxAge | quote }}
+{{ end }}
