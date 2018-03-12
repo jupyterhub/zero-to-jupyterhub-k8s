@@ -206,10 +206,11 @@ show how to install both JupyterLab and JupyterLab-Hub.
 .. note::
 
    If JupyterLab is installed on your hub (and with or without "JupyterLab Hub" installed),
-   users can always switch to the classic Jupyter Notebook by 
-   replacing ``/lab`` with ``/tree`` in the URL (if the server is running).
-   Similarly, you can access JupyterLab even if it is not the default by 
-   replacing ``/tree`` in the URL with ``/lab``.
+   users can always switch to the classic Jupyter Notebook by selecting menu item
+   "Help >> Launch Classic Notebook" or by replacing ``/lab`` with ``/tree`` in the URL
+   (if the server is running).
+   Similarly, you can access JupyterLab even if it is not the default by replacing ``/tree``
+   in the URL with ``/lab``.
 
 1. Install the `JupyterLab <https://github.com/jupyterlab/jupyterlab#installation>`_
    and `JupyterLab Hub<https://github.com/jupyterhub/jupyterlab-hub#installation>`_ extension
@@ -236,7 +237,7 @@ show how to install both JupyterLab and JupyterLab-Hub.
           c.KubeSpawner.cmd = ['jupyter-labhub']
 
 3. If you want users to launch automatically into JupyterLab instead of the classic
-   notebook, set the following setting in your Helm coniguration:
+   notebook, set the following setting in your Helm configuration:
 
    .. code-block:: yaml
 
