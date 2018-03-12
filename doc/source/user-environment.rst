@@ -199,8 +199,20 @@ Use JupyterLab by default
 user interface for Project Jupyter. It can be used with JupyterHub, both as an
 optional interface and as a default.
 
-1. Install `JupyterLab <https://github.com/jupyterlab/jupyterlab#installation>`_
-   and `JupyterLab Hub extension <https://github.com/jupyterhub/jupyterlab-hub#installation>`_ 
+In addition, a JupyterLab extension, called JupyterLab-Hub, provides a nice UI
+for accessing the JupyterHub control panel from JupyterLab. These instructions
+show how to install both JupyterLab and JupyterLab-Hub.
+   
+.. note::
+
+   If JupyterLab is installed on your hub (and with or without "JupyterLab Hub" installed),
+   users can always switch to the classic Jupyter Notebook by 
+   replacing ``/lab`` with ``/tree`` in the URL (if the server is running).
+   Similarly, you can access JupyterLab even if it is not the default by 
+   replacing ``/tree`` in the URL with ``/lab``.
+
+1. Install the `JupyterLab <https://github.com/jupyterlab/jupyterlab#installation>`_
+   and `JupyterLab Hub<https://github.com/jupyterhub/jupyterlab-hub#installation>`_ extension
    in your user image, for example in your Dockerfile:
 
    .. code-block::
@@ -213,14 +225,7 @@ optional interface and as a default.
           &&  jupyter labextension install @jupyterlab/hub-extension
       ...
 
-   "JupyterLab Hub" provides a nice UI for accessing JupyterHub control panel from
-   JupyterLab.
-   
-   Without "JupyterLab Hub", users can always switch to classic Jupyter Notebook by 
-   replacing the ``/lab`` in the URL after their server starts with ``/tree``.
-   Similarly, you can access JupyterLab even if it is not the default by 
-   replacing ``/tree`` in the URL with ``/lab``
-2. Enable JupterLab in your Helm value file by adding the following snippet:
+2. Enable JupyterLab in your Helm configuration by adding the following snippet:
 
    .. code-block:: yaml
 
@@ -230,8 +235,8 @@ optional interface and as a default.
         extraConfig: |
           c.KubeSpawner.cmd = ['jupyter-labhub']
 
-3. If you want users to launch automatically into JupyterLab instead of classic
-   notebook, set the following setting in your Helm value file:
+3. If you want users to launch automatically into JupyterLab instead of the classic
+   notebook, set the following setting in your Helm coniguration:
 
    .. code-block:: yaml
 
@@ -239,6 +244,7 @@ optional interface and as a default.
         defaultUrl: "/lab"
 
    This will put users into JupyterLab when they launch their server.
+
 
 .. note::
 
