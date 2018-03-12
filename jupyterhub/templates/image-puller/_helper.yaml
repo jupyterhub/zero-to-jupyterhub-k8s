@@ -33,9 +33,7 @@ spec:
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:
-      # Arbitrarily large number, since we want all the old daemonsets to die immediately
-      # and new ones to be born
-      maxUnavailable: 1000
+      maxUnavailable: 100%
   template:
     metadata:
       labels:
