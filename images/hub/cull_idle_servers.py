@@ -31,6 +31,11 @@ import datetime
 import json
 import os
 
+try:
+    from urllib.parse import quote
+except ImportError:
+    from urllib import quote
+
 from dateutil.parser import parse as parse_date
 
 from tornado.gen import coroutine
@@ -66,7 +71,7 @@ def cull_idle(url, api_token, timeout, cull_users=False):
         # shutdown server first. Hub doesn't allow deleting users with running servers.
         if user['server']:
             app_log.info("Culling server for %s (inactive since %s)", user['name'], last_activity)
-            req = HTTPRequest(url=url + '/users/%s/server' % user['name'],
+            req = HTTPRequest(url=url + '/users/%s/server' % quote(user['name']),
                 method='DELETE',
                 headers=auth_header,
             )
