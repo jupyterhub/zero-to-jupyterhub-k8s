@@ -75,6 +75,72 @@ and **google cloud's ingress controller**.
 This should provision a certificate, and keep renewing it whenever it gets close
 to expiry!
 
+
+## Using PostgreSQL as database for you Hub.
+
+Four types of settings are allowed for storing hub state, as described in
+the key ``hub.db.type``:
+
+- ``sqlite-pvc``
+- ``sqlite-memory``
+- ``mysql``
+- ``postgres``
+
+Using PostgreSql or MySQL provides the main advantage to allow seemless update
+of your hub without discontinuity of service (logged in users can always
+continue to work on running server, even with SQLite, but the difference between
+SQLite and MySQL/PostgreSQL are for new user, in order to allow them to log in
+even when a new hub is starting).
+
+Please note running PostgreSQL on Kubernetes is hard. You can find an lot of
+detailed articles on the web about this suject, such as: 
+[PostgreSQL on Kubernetes the Right Way](https://medium.com/kokster/postgresql-on-kubernetes-the-right-way-part-one-d174ee8a56e3)
+
+It is advised to use the Database as a Service solution that your Cloud
+provider may provide you.
+
+You have the option to run PostgreSQL for the Hub using Helm 'stable/postgresql'
+chart. Use it with full knowledge of its limitations, and that it may probably
+not be suited for an High Available JupyterHub.
+
+Here is an example of configuring PostgreSQL as Hub database using Helm:
+
+```bash
+$ cat > pg-values.yaml <<EOF
+postgresUser: jupyterhub
+postgresPassword: jupyterhub
+postgresDatabase: jupyterhub
+persistence:
+  enabled: False  # see helm 'stable/postgresql` documentation if you want pesistance
+EOF
+$ helm upgrade --install --name hub-db -f pg-values.yaml stable/postgresql
+```
+
+And then set `hub.db.type` to:
+
+```yaml
+hub:
+  db:
+    type: postgresql
+    url: postpostgres+psycopg2://jupyerhub:jupyterhub@hub-db-postgresql:5432/jupyterhub
+```
+
+Note the following points when using PostgreSQL as database for the Hub:
+
+- When using this Helm chart, you can choose to use a persistant volume claim
+  or not. If you choose to not use a PVC, your hub database will be lost when
+  the PostgreSQL server will restart.
+  Do not use `--recreate-pods` helm option.
+  It will not cause any data loss for user, just the proxy will not be able
+  to route logged users. 
+- without persistance, your hub can still be upgraded smoothly for the
+  users, provided your PostgreSQL pod does not restart
+- if case of DB loss or reset, simply ensure all your server are shutdown
+  (all Kubernetes pods starting with `jupyter-*`) before restarting the Hub.
+- The Hub will use perform a smooth deployment, so a new hub will be started 
+  while the older one is still running and the transition will be transparent
+  for the user.
+
 ## Arbitrary extra code and configuration in `jupyterhub_config.py`
 
 Sometimes the various options exposed via the helm-chart's `values.yaml` is not
