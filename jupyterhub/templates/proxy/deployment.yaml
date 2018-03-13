@@ -9,12 +9,6 @@ metadata:
   name: proxy
 spec:
   replicas: 1
-  strategy:
-      rollingUpdate:
-          # There's no PVCs attached here, so is ok to set maxUnavailable to 1
-          # This means new pod will be spun up and traffic transferred to it
-          # before old pod is shut down.
-          maxUnavailable: 1
   template:
     metadata:
       annotations:
