@@ -30,6 +30,10 @@ spec:
         component: {{ .name }}
         release: {{ .top.Release.Name }}
         heritage: {{ .top.Release.Service }}
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 100%
   template:
     metadata:
       labels:
