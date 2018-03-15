@@ -116,7 +116,7 @@ data:
   {{ if eq $extraConfigType "string" -}}
   hub.extra-config.default.py: |
 {{ .Values.hub.extraConfig | indent 4 }}
-  {{ else if eq $extraConfigType "map[string]interface {}" -}}
+  {{ else if eq $extraConfigType map[string]interface{} -}}
   {{ range $key, $value := .Values.hub.extraConfig -}}
   hub.extra-config.{{ $key }}.py: |
 {{ $value | indent 4 }}
