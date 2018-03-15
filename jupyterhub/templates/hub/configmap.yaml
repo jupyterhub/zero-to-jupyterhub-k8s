@@ -120,7 +120,7 @@ data:
   {{ range $key, $value := .Values.hub.extraConfig -}}
   hub.extra-config.{{ $key }}.py: |
 {{ $value | indent 4 }}
-  {{- end }}
+  {{ end }}
   {{- end }}
   {{- end }}
   {{ if .Values.hub.extraConfigVars -}}
