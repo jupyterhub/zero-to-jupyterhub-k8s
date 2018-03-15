@@ -4,19 +4,6 @@ metadata:
   name: hub
 spec:
   replicas: 1
-  strategy:
-    rollingUpdate:
-      {{ if eq .Values.hub.db.type "sqlite-pvc" }}
-      # If we're using a PVC, set maxUnavailable to 1
-      # This is required, since the pod attached to PVC must die
-      # before new pod can run.
-      maxUnavailable: 1
-      {{ else }}
-      # If we aren't using a PVC, it's ok to spawn up a new pod
-      # before killing the currently running one. This also makes the '--wait'
-      # flag of helm work properly
-      maxUnavailable: 0
-      {{ end }}
   template:
     metadata:
       labels:
