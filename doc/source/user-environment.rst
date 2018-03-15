@@ -195,6 +195,12 @@ how to configure JupyterHub to build off of this image:
 Use JupyterLab by default
 -------------------------
 
+.. warning::
+
+   As JupyterLab is a quickly-evolving tool right now, it is important to use
+   recent versions of JupyterLab. If you install JupyterLab with ``conda``,
+   **make sure to use the ``conda-forge`` channel instead of ``default``**.
+
 `JupyterLab <https://github.com/jupyterlab/jupyterlab>`_ is the next generation
 user interface for Project Jupyter. It can be used with JupyterHub, both as an
 optional interface and as a default.
@@ -202,7 +208,7 @@ optional interface and as a default.
 In addition, a JupyterLab extension, called JupyterLab-Hub, provides a nice UI
 for accessing the JupyterHub control panel from JupyterLab. These instructions
 show how to install both JupyterLab and JupyterLab-Hub.
-   
+
 .. note::
 
    If JupyterLab is installed on your hub (and with or without "JupyterLab Hub" installed),
