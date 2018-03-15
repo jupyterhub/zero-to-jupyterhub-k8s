@@ -22,7 +22,7 @@ hub:
       storageClassName:
     url:
   labels: {}
-  extraConfig: ''
+  extraConfig: {}
   extraConfigMap: {}
   extraEnv: {}
   extraContainers: []
