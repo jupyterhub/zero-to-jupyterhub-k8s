@@ -21,28 +21,11 @@ spec:
     - protocol: TCP
       port: 8081
   egress:
-  - to:
-    - podSelector:
-        matchLabels:
-          name: proxy
-          component: proxy
-    ports:
-    - protocol: TCP
-      port: 8001
-  - to:
-    - podSelector:
-        matchLabels:
-          app: jupyterhub
-          component: singleuser-server
-    ports:
-    - protocol: TCP
-      port: 8888
-  - ports:
-    # Kubernetes api-server
-    - protocol: TCP
-      port: 443
-    - protocol: TCP
-      port: 6443
+  # The default is to allow all egress for hub
+  # If you want to restrict it the following egress is required
+  # proxy:8001
+  # singleuser:8888
+  # Kubernetes api-server
 {{ if .Values.hub.networkPolicy.egress }}
 {{ toYaml .Values.hub.networkPolicy.egress | indent 2 }}
 {{- end }}

@@ -42,7 +42,6 @@ hub:
   networkPolicy:
     enabled: false
     egress:
-    # The following can be removed unless external auth is used
       - to:
         - ipBlock:
             cidr: 0.0.0.0/0
@@ -107,12 +106,9 @@ proxy:
   networkPolicy:
     enabled: false
     egress:
-    # May be required for lets-encrypt? Otherwise should be safe to disable
-      - ports:
-        - protocol: TCP
-          port: 80
-        - protocol: TCP
-          port: 443
+      - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
 
 
 # Google OAuth secrets
