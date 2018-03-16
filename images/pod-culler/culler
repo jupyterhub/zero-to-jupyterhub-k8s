@@ -20,6 +20,7 @@ def cull_pods(max_age):
     pods = kube.list_namespaced_pod(namespace, label_selector="component=singleuser-server")
     total_pods = []
     age_cutoff = timedelta(seconds=max_age)
+    print("Culling pods older than %s" % age_cutoff)
     now = datetime.now(timezone.utc)
     for pod in pods.items:
         # API results always use UTC timezone
