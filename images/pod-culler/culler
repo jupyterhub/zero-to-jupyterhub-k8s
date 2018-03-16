@@ -14,29 +14,31 @@ kube = client.CoreV1Api()
 
 # max age
 max_age = int(os.getenv('MAX_AGE', '0')) or 6 * 3600
+debug = os.getenv('DEBUG') == '1'
 
 def cull_pods(max_age):
     """Cull pods older than max_age hours"""
     pods = kube.list_namespaced_pod(namespace, label_selector="component=singleuser-server")
     total_pods = []
     age_cutoff = timedelta(seconds=max_age)
-    print("Culling pods older than %s" % age_cutoff)
+    print(f"Culling pods older than {age_cutoff}")
     now = datetime.now(timezone.utc)
+    if debug:
+        action = "Would have deleted"
+    else:
+        action = "Deleted"
     for pod in pods.items:
         # API results always use UTC timezone
         age = now - pod.status.start_time.replace(tzinfo=timezone.utc)
         if age > age_cutoff:
-            if False:
+            if not debug:
                 kube.delete_namespaced_pod(pod.metadata.name, namespace, client.V1DeleteOptions())
-                print("Deleted {:.1f}h old pod {}".format(age.total_seconds() / 60 / 60, pod.metadata.name))
-                summary_text = 'Deleted {} pods'
-            else:
-                print("Found {:.1f}h old pod {}".format(age.total_seconds() / 60 / 60, pod.metadata.name))
-                summary_text = 'Found {} pods'
+
+            print(f"{action} {age.total_seconds() / 3600:.1f}h old pod {pod.metadata.name}")
 
             total_pods.append(pod.metadata.name)
 
-    print('---', '\n', summary_text.format(len(total_pods)))
+    print(f'---\n{action} {len(total_pods)} pods')
 
 
 if __name__ == '__main__':
