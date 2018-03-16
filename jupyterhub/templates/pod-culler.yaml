@@ -12,21 +12,23 @@ spec:
   schedule: "*/{{ .Values.cull.podCuller.intervalMinutes }} * * * *"
   concurrencyPolicy: Replace
   jobTemplate:
-    template:
-      metadata:
-        labels:
-          app: jupyterhub
-          component: pod-culler
-          release: {{ .Release.Name }}
-          heritage: {{ .Release.Service }}
-      spec:
-        containers:
-        - name: culler
-          image: {{ .Values.cull.podCuller.image.name }}:{{ .Values.cull.podCuller.image.tag }}
-          resources:
-            requests:
-              memory: 100Mi
-          env:
-          - name: MAX_AGE
-            value: {{ .Values.cull.maxAge | quote }}
+    spec:
+      template:
+        metadata:
+          labels:
+            app: jupyterhub
+            component: pod-culler
+            release: {{ .Release.Name }}
+            heritage: {{ .Release.Service }}
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: culler
+            image: {{ .Values.cull.podCuller.image.name }}:{{ .Values.cull.podCuller.image.tag }}
+            resources:
+              requests:
+                memory: 100Mi
+            env:
+            - name: MAX_AGE
+              value: {{ .Values.cull.maxAge | quote }}
 {{ end }}
