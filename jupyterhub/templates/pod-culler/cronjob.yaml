@@ -22,6 +22,9 @@ spec:
             heritage: {{ .Release.Service }}
         spec:
           restartPolicy: Never
+          {{ if .Values.rbac.enabled }}
+          serviceAccountName: pod-culler
+          {{- end }}
           containers:
           - name: culler
             image: {{ .Values.cull.podCuller.image.name }}:{{ .Values.cull.podCuller.image.tag }}
