@@ -2,19 +2,16 @@
 """
 Delete all user pods older than a given duration.
 """
+
+import asyncio
+import logging
 import os
 
 from kubernetes import config, client
 from datetime import datetime, timedelta, timezone
 
-# Load kubernetes incluster config
-config.load_incluster_config()
-namespace = os.environ['POD_NAMESPACE']
-kube = client.CoreV1Api()
 
-# max age
-max_age = int(os.getenv('MAX_AGE', '0')) or 6 * 3600
-debug = os.getenv('DEBUG') == '1'
+log = logging.getLogger()
 
 
 def format_td(td):
@@ -31,27 +28,69 @@ def format_td(td):
     return f"{h:02}:{m:02}:{seconds:02}"
 
 
-def cull_pods(max_age):
+def cull_pods(kube, namespace, max_age):
     """Cull pods older than max_age hours"""
     pods = kube.list_namespaced_pod(namespace, label_selector="component=singleuser-server")
     deleted_pods = []
     age_cutoff = timedelta(seconds=max_age)
-    print(f"Culling pods older than {format_td(age_cutoff)}")
+    log.info(f"Culling pods older than {format_td(age_cutoff)}")
     now = datetime.now(timezone.utc)
     for pod in pods.items:
         # API results always use UTC timezone
         age = now - pod.status.start_time.replace(tzinfo=timezone.utc)
         age_s = format_td(age)
 
+        log.debug(f"Found pod {pod.metadata.name} (age={age_s})")
         if age > age_cutoff:
-            print(f"Deleting pod {pod.metadata.name} (age={age_s})")
+            log.info(f"Deleting pod {pod.metadata.name} (age={age_s})")
             kube.delete_namespaced_pod(pod.metadata.name, namespace, client.V1DeleteOptions())
             deleted_pods.append(pod.metadata.name)
-        elif debug:
-            print(f"Not deleting pod {pod.metadata.name} (age={age_s})")
 
-    print(f'---\nDeleted {len(deleted_pods)}/{len(pods.items)} pods')
+    log.info(f'Deleted {len(deleted_pods)}/{len(pods.items)} pods')
+
+
+async def main():
+    # setup logging
+    if os.getenv('DEBUG') == '1':
+        log_level = logging.DEBUG
+    else:
+        log_level = logging.INFO
+    logging.basicConfig(level=log_level)
+    log = logging.getLogger()
+    f = logging.Formatter(
+        '[%(levelname)1.1s %(asctime)s %(module)s:%(lineno)d] %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+    )
+    log.handlers[0].setFormatter(f)
+
+    # Load kubernetes incluster config
+    config.load_incluster_config()
+    namespace = os.environ['POD_NAMESPACE']
+    kube = client.CoreV1Api()
+
+    # max age
+    if os.getenv('MAX_AGE'):
+        max_age = int(os.getenv('MAX_AGE'))
+    else:
+        # default: 24 hours
+        log.warning("MAX_AGE not set, using default max age of 24 hours")
+        max_age = 24 * 3600
+
+    # cull interval
+    if os.getenv('CULL_INTERVAL'):
+        interval = int(os.getenv('CULL_INTERVAL'))
+    else:
+        # default: 10 minutes
+        log.warning("CULL_INTERVAL not set, using default interval of ten minutes")
+        interval = 600
+
+    while True:
+        try:
+            cull_pods(kube, namespace, max_age)
+        except Exception:
+            logging.exception("Error culling pods")
+        await asyncio.sleep(interval)
 
 
 if __name__ == '__main__':
-    cull_pods(max_age)
+    asyncio.get_event_loop().run_until_complete(main())
