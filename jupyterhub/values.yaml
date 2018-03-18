@@ -186,5 +186,4 @@ cull:
     image:
       name: jupyterhub/k8s-pod-culler
       tag: generated-by-chartpress
-    intervalMinutes: 10
 
