@@ -31,6 +31,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            - name: LABEL_SELECTOR
+              value: "component=singleuser-server"
             - name: MAX_AGE
               value: {{ .Values.cull.maxAge | quote }}
             - name: CULL_INTERVAL
