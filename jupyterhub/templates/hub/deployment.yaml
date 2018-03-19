@@ -12,6 +12,9 @@ spec:
         component: hub
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
+        hub.jupyter.org/network-access-proxy-api: "true"
+        hub.jupyter.org/network-access-proxy-http: "true"
+        hub.jupyter.org/network-access-singleuser: "true"
         {{ if .Values.hub.labels -}}
         # Because toYaml + indent is super flaky
         {{ range $key, $value := .Values.proxy.labels -}}

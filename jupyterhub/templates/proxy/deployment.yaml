@@ -25,6 +25,8 @@ spec:
         # required for kube-lego to work
         app: kube-lego
         {{- end }}
+        hub.jupyter.org/network-access-hub: "true"
+        hub.jupyter.org/network-access-singleuser: "true"
     spec:
       {{- if .Values.rbac.enabled }}
       serviceAccountName: proxy

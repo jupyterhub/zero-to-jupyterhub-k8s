@@ -173,11 +173,10 @@ data:
   {{ if .Values.singleuser.cpu.guarantee -}}
   singleuser.cpu.guarantee: {{ .Values.singleuser.cpu.guarantee | quote}}
   {{- end }}
-  {{ if .Values.singleuser.extraLabels -}}
   singleuser.extra-labels: |
-    {{ range $key, $value := .Values.singleuser.extraLabels -}}
+    hub.jupyter.org/network-access-hub: "true"
+  {{ range $key, $value := .Values.singleuser.extraLabels -}}
     {{ $key | quote }}: {{ $value | quote }}
-    {{- end }}
   {{- end }}
   {{ if .Values.singleuser.extraEnv -}}
   singleuser.extra-env: |

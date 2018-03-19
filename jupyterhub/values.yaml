@@ -39,6 +39,12 @@ hub:
   imagePullPolicy: IfNotPresent
   pdb:
     enabled: true
+  networkPolicy:
+    enabled: false
+    egress:
+      - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
 
 rbac:
   enabled: true
@@ -97,6 +103,12 @@ proxy:
       key:
       cert:
     hosts: []
+  networkPolicy:
+    enabled: false
+    egress:
+      - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
 
 
 # Google OAuth secrets
@@ -122,6 +134,15 @@ singleuser:
   cloudMetadata:
     enabled: false
     ip: 169.254.169.254
+  networkPolicy:
+    enabled: false
+    egress:
+    # Required egress is handled by other rules so it's safe to modify this
+      - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 169.254.169.254/32
   extraLabels: {}
   extraEnv: {}
   lifecycleHooks:
