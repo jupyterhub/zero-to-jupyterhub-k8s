@@ -15,14 +15,7 @@ development.
 
 2. Start minikube:
    ```bash
-   minikube start
-   ```
-
-   On MacOS:
-   ```bash
-   minikube start --vm-driver=virtualbox \
-       --kubernetes-version=v1.9.0 \
-       --extra-config=apiserver.Authorization.Mode=RBAC
+   minikube start --extra-config=apiserver.Authorization.Mode=RBAC
    ```
 
 3. Use the docker daemon inside minikube for building:
@@ -53,6 +46,7 @@ development.
 
 7. Configure helm and minikube for RBAC:
    ```bash
+   kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
    kubectl --namespace kube-system create sa tiller
    kubectl create clusterrolebinding tiller \
        --clusterrole cluster-admin \
