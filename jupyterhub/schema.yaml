@@ -229,7 +229,7 @@ properties:
           Use this only if you are building your own image & know that a group with this gid
           exists inside the hub container! Advanced feature, handle with care!
 
-          Defaults to 1000, which is the uid of the `jovyan` user that is present in the
+          Defaults to 1000, which is the gid of the `jovyan` user that is present in the
           default hub image.
   proxy:
     type: object

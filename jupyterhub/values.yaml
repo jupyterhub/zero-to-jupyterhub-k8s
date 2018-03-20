@@ -149,7 +149,7 @@ singleuser:
   initContainers:
   nodeSelector: {}
   uid: 1000
-  fsGid: 1000
+  fsGid: 100
   serviceAccountName:
   schedulerStrategy:
   storage:
