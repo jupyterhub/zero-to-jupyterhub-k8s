@@ -1,3 +1,5 @@
+{{ $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled ) }}
+{{ $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt" ) ) }}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -21,7 +23,7 @@ spec:
         component: proxy
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
-        {{- if eq .Values.proxy.https.type "letsencrypt" }}
+        {{- if $autoHTTPS }}
         # required for kube-lego to work
         app: kube-lego
         {{- end }}
@@ -47,6 +49,7 @@ spec:
                       operator: In
                       values: [ {{ .Release.Name | quote }} ]
       containers:
+      {{ if $HTTPS }}
         - name: nginx
           image: "{{ .Values.proxy.nginx.image.name }}:{{ .Values.proxy.nginx.image.tag }}"
           imagePullPolicy: {{ .Values.proxy.nginx.image.pullPolicy }}
@@ -89,7 +92,6 @@ spec:
             - name: https
               containerPort: 443
               protocol: TCP
-        {{ if and .Values.proxy.https.hosts (and .Values.proxy.https.enabled (eq .Values.proxy.https.type "letsencrypt" ) ) -}}
         - name: kube-lego
           image: "{{ .Values.proxy.lego.image.name }}:{{ .Values.proxy.lego.image.tag }}"
           imagePullPolicy: {{ .Values.proxy.lego.image.pullPolicy }}

@@ -1,3 +1,4 @@
+{{ $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled ) }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -11,6 +12,7 @@ spec:
     - protocol: TCP
       port: 8001
       targetPort: 8001
+{{ if $HTTPS }}
 ---
 apiVersion: v1
 kind: Service
@@ -29,6 +31,7 @@ spec:
     - protocol: TCP
       port: 8000
       targetPort: 8000
+{{ end }}
 ---
 apiVersion: v1
 kind: Service
@@ -51,11 +54,16 @@ spec:
     - name: http
       port: 80
       protocol: TCP
+      {{ if $HTTPS }}
       targetPort: 80
+      {{ else }}
+      targetPort: 8000
+      {{ end }}
       # allow proxy.service.nodePort for http
       {{ if .Values.proxy.service.nodePorts.http -}}
       nodePort: {{ .Values.proxy.service.nodePorts.http }}
       {{- end }}
+    {{ if $HTTPS }}
     - name: https
       port: 443
       protocol: TCP
@@ -63,6 +71,7 @@ spec:
       {{ if .Values.proxy.service.nodePorts.https -}}
       nodePort: {{ .Values.proxy.service.nodePorts.https }}
       {{- end }}
+    {{ end }}
   selector:
     name: proxy
     component: proxy
