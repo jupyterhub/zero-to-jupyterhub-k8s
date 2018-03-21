@@ -128,10 +128,9 @@ spec:
             secretKeyRef:
               name: hub-secret
               key: proxy.token
-        {{ range $key, $value := .Values.hub.extraEnv -}}
-        - name: {{ $key | quote }}
-          value: {{ $value | quote }}
-        {{ end -}}
+{{- if .Values.hub.extraEnv }}
+{{ toYaml .Values.hub.extraEnv | indent 8 }}
+{{- end }}
         {{ if .Values.auth.state.enabled }}
         - name: JUPYTERHUB_CRYPT_KEY
           valueFrom:
