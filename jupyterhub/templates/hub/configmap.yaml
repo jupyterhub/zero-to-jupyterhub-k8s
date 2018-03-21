@@ -198,6 +198,9 @@ data:
   auth.admin.users: |
 {{ toYaml .Values.auth.admin.users | indent 4 }}
   {{- end }}
+
+  debug.enabled: {{ .Values.debug.enabled | quote }}
+
   {{ range $key, $value := .Values.hub.extraConfigMap -}}
   custom.{{ $key }}: {{ toJson $value | quote }}
   {{ end -}}

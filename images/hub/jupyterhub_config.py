@@ -325,6 +325,10 @@ else:
     # Set default to {} so subconfigs can easily update it
     c.KubeSpawner.singleuser_extra_pod_config = {}
 
+if get_config('debug.enabled', False):
+    c.JupyterHub.log_level = 'DEBUG'
+    c.Spawner.debug = True
+
 extra_configs = sorted(glob.glob('/etc/jupyterhub/config/hub.extra-config.*.py'))
 for ec in extra_configs:
     load_subconfig(ec)
