@@ -1,0 +1,233 @@
+#!/usr/bin/env python3
+"""
+Delete all user pods older than a given duration.
+"""
+
+import asyncio
+from datetime import datetime, timedelta, timezone
+import logging
+import os
+import sys
+import threading
+import time
+
+from kubernetes import client, config, watch
+
+
+log = logging.getLogger()
+
+
+def format_td(td):
+    """
+    Nicely format a datetime object
+
+    as HH:MM:SS
+    """
+    seconds = int(td.total_seconds())
+    h = seconds // 3600
+    seconds = seconds % 3600
+    m = seconds // 60
+    seconds = seconds % 60
+    return f"{h:02}:{m:02}:{seconds:02}"
+
+
+class PodCuller:
+    """
+    Class for culling old user pods periodically
+
+    Based on KubeSpawner.reflector.NamespacedResourceReflector
+    """
+
+    def __init__(self, api, namespace, label_selector, max_age):
+        self.api = api
+        self.namespace = namespace
+        self.label_selector = label_selector
+        self.max_age = max_age
+
+    def _list_and_update(self):
+        """
+        Update current list of resources by doing a full fetch.
+
+        Overwrites all current resource info.
+        """
+        pods = self.api.list_namespaced_pod(
+            self.namespace,
+            label_selector=self.label_selector,
+        )
+        # This is an atomic operation on the dictionary!
+        self.pods = {p.metadata.name: p for p in pods.items}
+        # return the resource version so we can hook up a watch
+        return pods.metadata.resource_version
+
+    def _watch_and_update(self):
+        """
+        Keeps the current list of resources up-to-date
+
+        This method is to be run not on the main thread!
+
+        We first fetch the list of current resources, and store that. Then we
+        register to be notified of changes to those resources, and keep our
+        local store up-to-date based on these notifications.
+
+        We also perform exponential backoff, giving up after we hit 32s
+        wait time. This should protect against network connections dropping
+        and intermittent unavailability of the api-server. Every time we
+        recover from an exception we also do a full fetch, to pick up
+        changes that might've been missed in the time we were not doing
+        a watch.
+
+        Note that we're playing a bit with fire here, by updating a dictionary
+        in this thread while it is probably being read in another thread
+        without using locks! However, dictionary access itself is atomic,
+        and as long as we don't try to mutate them (do a 'fetch / modify /
+        update' cycle on them), we should be ok!
+        """
+        cur_delay = 0.1
+        while True:
+            log.info("watching for pods with label selector %s in namespace %s",
+                     self.label_selector, self.namespace)
+            w = watch.Watch()
+            try:
+                resource_version = self._list_and_update()
+                for ev in w.stream(
+                        self.api.list_namespaced_pod,
+                        self.namespace,
+                        label_selector=self.label_selector,
+                        resource_version=resource_version,
+                ):
+                    cur_delay = 0.1
+                    pod = ev['object']
+                    if ev['type'] == 'DELETED':
+                        # This is an atomic delete operation on the dictionary!
+                        self.pods.pop(pod.metadata.name, None)
+                    else:
+                        # This is an atomic operation on the dictionary!
+                        self.pods[pod.metadata.name] = pod
+            except Exception:
+                cur_delay = cur_delay * 2
+                if cur_delay > 30:
+                    log.exception(
+                        "Watching resources never recovered, giving up")
+                    sys.exit(1)
+                log.exception(
+                    "Error when watching resources, retrying in %ss", cur_delay)
+                time.sleep(cur_delay)
+                continue
+            finally:
+                w.stop()
+
+    def start_watching(self):
+        """
+        Start the reflection process!
+
+        We'll do a blocking read of all resources first, so that we don't
+        race with any operations that are checking the state of the pod
+        store - such as polls. This should be called only once at the
+        start of program initialization (when the singleton is being created),
+        and not afterwards!
+        """
+        if hasattr(self, 'watch_thread'):
+            raise ValueError(
+                'Thread watching for resources is already running')
+
+        self._list_and_update()
+        self.watch_thread = threading.Thread(target=self._watch_and_update)
+        # If the watch_thread is only thread left alive, exit app
+        self.watch_thread.daemon = True
+        self.watch_thread.start()
+
+    def cull(self):
+        """Cull pods older than max_age"""
+        deleted_pods = []
+        age_cutoff = timedelta(seconds=self.max_age)
+        log.info(f"Culling pods older than {format_td(age_cutoff)}")
+        now = datetime.now(timezone.utc)
+        # copy pod list before deleting
+        # to avoid possible iteration-over-changing-dict errors
+        pods = list(self.pods.values())
+        for pod in pods:
+            name = pod.metadata.name
+            # API results always use UTC timezone
+            age = now - pod.status.start_time.replace(tzinfo=timezone.utc)
+            age_s = format_td(age)
+
+            log.debug(f"Found pod {name} (age={age_s})")
+            if age > age_cutoff:
+                log.info(f"Deleting pod {name} (age={age_s})")
+                self.api.delete_namespaced_pod(
+                    name, self.namespace, client.V1DeleteOptions())
+                deleted_pods.append(name)
+
+        log.info(f'Deleted {len(deleted_pods)}/{len(self.pods)} pods')
+
+
+REQUIRED = object()
+
+
+def _from_env(env, default=REQUIRED, cast=None):
+    """Get a config value from an environment variable
+
+    Arguments:
+    env: str
+        The name of the environment variable to use
+    default: any, optional
+        The default value to use. If REQUIRED, an error will be raised.
+    cast: callable, optional
+        Function to call on env value to cast it to the final value (e.g. int)
+    """
+    env_value = os.getenv(env)
+    if env_value:
+        if cast:
+            return cast(env_value)
+        else:
+            return env_value
+    else:
+        if default is REQUIRED:
+            raise ValueError(f"{env} required")
+        log.warning(f"{env} unset; using default: {default}")
+        return default
+
+
+async def main():
+    # setup logging
+    if os.getenv('DEBUG') == '1':
+        log_level = logging.DEBUG
+    else:
+        log_level = logging.INFO
+    logging.basicConfig(level=log_level)
+    log = logging.getLogger()
+    f = logging.Formatter(
+        '[%(levelname)1.1s %(asctime)s %(module)s:%(lineno)d] %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+    )
+    log.handlers[0].setFormatter(f)
+
+    # Load kubernetes incluster config
+    namespace = _from_env('POD_NAMESPACE')
+    config.load_incluster_config()
+    api = client.CoreV1Api()
+
+    # max age, default=24 hours
+    max_age = _from_env('MAX_AGE', 24 * 3600, cast=int)
+    # cull interval, default=10 minutes
+    interval = _from_env('CULL_INTERVAL', 600, cast=int)
+    # label selector
+    label_selector = _from_env('LABEL_SELECTOR', 'component=singleuser-server')
+
+    culler = PodCuller(
+        api=api,
+        namespace=namespace,
+        label_selector=label_selector,
+        max_age=max_age,
+    )
+    culler.start_watching()
+
+    while True:
+        # specifically do not catch errors in cull
+        # so that the pod's restart/crash stats will indicate our health
+        culler.cull()
+        await asyncio.sleep(interval)
+
+
+if __name__ == '__main__':
+    asyncio.get_event_loop().run_until_complete(main())

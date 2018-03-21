@@ -205,3 +205,10 @@ cull:
   users: false
   timeout: 3600
   every: 600
+  maxAge: 0
+
+  podCuller:
+    image:
+      name: jupyterhub/k8s-pod-culler
+      tag: generated-by-chartpress
+

@@ -18,3 +18,5 @@ charts:
         valuesPath: singleuser.image
         buildArgs:
           JUPYTERHUB_VERSION: 0.8.1
+      pod-culler:
+        valuesPath: cull.podCuller.image
