@@ -93,6 +93,9 @@ data:
 {{ toYaml .Values.singleuser.cloudMetadata | indent 4 }}
 
   singleuser.start-timeout: {{ .Values.singleuser.startTimeout | quote }}
+
+  singleuser.image-pull-policy: {{ .Values.singleuser.image.pullPolicy | quote }}
+
   hub.concurrent-spawn-limit: {{ .Values.hub.concurrentSpawnLimit | quote }}
   {{ if .Values.hub.activeServerLimit }}
   hub.active-server-limit: {{ .Values.hub.activeServerLimit | quote }}
