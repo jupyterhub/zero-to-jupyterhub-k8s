@@ -169,6 +169,7 @@ singleuser:
   image:
     name: jupyterhub/k8s-singleuser-sample
     tag: generated-by-chartpress
+    pullPolicy: IfNotPresent
   startTimeout: 300
   cpu:
     limit:
