@@ -1,0 +1,34 @@
+{{ if .Values.rbac.enabled -}}
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: pod-culler
+rules:
+- apiGroups:
+    - "" # "" indicates the core API group
+  resources:
+    - pods
+  verbs:
+    - delete
+    - get
+    - list
+    - watch
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: pod-culler
+subjects:
+- kind: ServiceAccount
+  namespace: {{ .Release.Namespace }}
+  name: pod-culler
+roleRef:
+  kind: Role
+  name: pod-culler
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pod-culler
+{{- end }}

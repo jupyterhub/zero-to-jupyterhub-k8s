@@ -20,13 +20,25 @@ and configure the following things:
 You already are well on your way to understanding what it means (procedurally)
 to deploy Jupyterhub.
 
-Dependencies for Deploying a JupyterHub Instance
-------------------------------------------------
+Verifying JupyterHub dependencies
+---------------------------------
 
-For a more extensive description of the tools and services that JupyterHub
-depends upon, see our :ref:`tools` page.
+At this point, you should have completed *Step Zero* and have an operational
+Kubernetes cluster. You will already have a cloud provider/infrastructure
+and kubernetes and docker installed.
 
-To begin deploying your JupyterHub on Kubernetes, please move on
-to :ref:`create-k8s-cluster`.
+If you need to create a Kubernetes cluster, see
+:ref:`create-k8s-cluster`.
 
-.. _issues page: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
+We also depend on Helm and the JupyterHub Helm chart for your JupyterHub
+deployment. We'll deploy them in this section. Let's begin by moving on to
+:ref:`setup-helm`.
+
+
+.. note::
+
+   For a more extensive description of the tools and services that JupyterHub
+   depends upon, see our :ref:`tools` page.
+
+
+

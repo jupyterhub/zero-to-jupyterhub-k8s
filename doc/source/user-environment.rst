@@ -77,8 +77,8 @@ existing image, such as the ``scipy-notebook`` image, complete these steps:
 
 .. note::
 
-  Docker images must have the ``jupyterhub`` package installed within them to
-  be used in this manner.
+   Docker images must have the ``jupyterhub`` package installed within them to
+   be used in this manner.
 
 Build a custom Docker image with ``repo2docker``
 ------------------------------------------------
@@ -145,14 +145,14 @@ how to configure JupyterHub to build off of this image:
    This tells ``repo2docker`` to fetch ``master`` of the GitHub repository,
    and uses heuristics to build a docker image of it.
 
-  .. note::
+   .. note::
 
-     - The project name should match your google cloud project's name.
-     - Don’t use underscores in your image name. Other than this, the name can
-       be anything memorable. *This bug with underscores will be fixed soon.*
-     - The tag should be the first 6 characters of the SHA in the GitHub
-       commit desired for building the image since this improves
-       reproducibility.
+      - The project name should match your google cloud project's name.
+      - Don’t use underscores in your image name. Other than this, the name can
+        be anything memorable. *This bug with underscores will be fixed soon.*
+      - The tag should be the first 6 characters of the SHA in the GitHub
+        commit desired for building the image since this improves
+        reproducibility.
 
 5. **Push the newly-built Docker image to the cloud.** You can either push
    this to Docker Hub or to the gcloud docker repository. Here we'll
@@ -201,7 +201,7 @@ Use JupyterLab by default
    recent versions of JupyterLab. If you install JupyterLab with ``conda``,
    **make sure to use the ``conda-forge`` channel instead of ``default``**.
 
-`JupyterLab <https://github.com/jupyterlab/jupyterlab>`_ is the next generation
+`JupyterLab <http://jupyterlab.readthedocs.io/en/stable/index.html>`_ is the next generation
 user interface for Project Jupyter. It can be used with JupyterHub, both as an
 optional interface and as a default.
 
@@ -218,11 +218,11 @@ show how to install both JupyterLab and JupyterLab-Hub.
    Similarly, you can access JupyterLab even if it is not the default by replacing ``/tree``
    in the URL with ``/lab``.
 
-1. Install the `JupyterLab <https://github.com/jupyterlab/jupyterlab#installation>`_
-   and `JupyterLab Hub<https://github.com/jupyterhub/jupyterlab-hub#installation>`_ extension
-   in your user image, for example in your Dockerfile:
+1. `Install JupyterLab <https://github.com/jupyterlab/jupyterlab#installation>`_
+   and the `JupyterLab Hub <https://github.com/jupyterhub/jupyterlab-hub#installation>`_
+   extension in your user image, for example in your Dockerfile:
 
-   .. code-block::
+   .. code-block:: dockerfile
 
       FROM jupyter/base-notebook:27ba57364579
 
