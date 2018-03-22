@@ -97,3 +97,10 @@ div.relations ul {
 div#searchbox form {
     margin-left: 0px !important;
 }
+
+/* body elements */
+.toctree-wrapper span.caption-text {
+    color: #767676;
+    font-style: italic;
+    font-weight: 300;
+}
