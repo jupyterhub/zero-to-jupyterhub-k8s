@@ -212,3 +212,5 @@ cull:
       name: jupyterhub/k8s-pod-culler
       tag: generated-by-chartpress
 
+debug:
+  enabled: false

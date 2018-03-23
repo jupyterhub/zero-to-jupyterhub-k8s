@@ -58,6 +58,9 @@ spec:
             - --configmap={{ .Release.Namespace }}/nginx-proxy-config
             - --ingress-class=jupyterhub-proxy-tls
             - --watch-namespace={{ .Release.Namespace }}
+            {{- if .Values.debug.enabled }}
+            - --v=3
+            {{- end }}
           env:
             - name: POD_NAME
               valueFrom:
