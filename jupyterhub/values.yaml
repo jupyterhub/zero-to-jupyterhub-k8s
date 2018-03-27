@@ -24,7 +24,7 @@ hub:
   labels: {}
   extraConfig: {}
   extraConfigMap: {}
-  extraEnv: {}
+  extraEnv: []
   extraContainers: []
   extraVolumes: []
   extraVolumeMounts: []
