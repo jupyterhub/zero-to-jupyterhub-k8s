@@ -1,0 +1,21 @@
+{{ $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled ) }}
+{{ $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt" ) ) }}
+{{ if $autoHTTPS }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxy-http
+  # toYaml + indent seem a lot more unstable & error prone
+  annotations: {{ toJson .Values.proxy.service.annotations }}
+  labels: {{ toJson .Values.proxy.service.labels }}
+spec:
+  type: ClusterIP
+  selector:
+    name: proxy
+    component: proxy
+    release: {{ .Release.Name }}
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+{{ end }}
