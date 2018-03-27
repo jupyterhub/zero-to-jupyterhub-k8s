@@ -63,15 +63,6 @@ proxy:
       name: jupyterhub/configurable-http-proxy
       tag: 3.0.0
       pullPolicy: IfNotPresent
-    cmd:
-      - configurable-http-proxy
-      - --ip=0.0.0.0
-      - --port=8000
-      - --api-ip=0.0.0.0
-      - --api-port=8001
-      - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
-      - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)/hub/error
-      - --log-level=debug
     resources:
       requests:
         cpu: 0.2

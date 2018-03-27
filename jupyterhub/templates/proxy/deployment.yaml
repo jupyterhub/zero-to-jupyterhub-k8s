@@ -1,3 +1,4 @@
+{{ $manualHTTPS := (and .Values.proxy.https.enabled (eq .Values.proxy.https.type "manual" ) ) }}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -38,13 +39,37 @@ spec:
                     - key: release
                       operator: In
                       values: [ {{ .Release.Name | quote }} ]
+      {{ if $manualHTTPS }}
+      volumes:
+      - name: tls-secret
+        secret:
+          secretName: manual-tls-proxy-{{ .Release.Name }}
+      {{ end }}
       containers:
         - name: chp
           image: {{ .Values.proxy.chp.image.name }}:{{ .Values.proxy.chp.image.tag }}
-          {{- if .Values.proxy.chp.cmd }}
-          command: {{ toJson .Values.proxy.chp.cmd }}
-          {{- end }}
+          command:
+          - configurable-http-proxy
+          - --ip=0.0.0.0
+          - --api-ip=0.0.0.0
+          - --api-port=8001
+          - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
+          - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)/hub/error
+          {{ if $manualHTTPS }}
+          - --port=8443
+          - --redirect-port=8000
+          - --ssl-key=/etc/chp/tls/tls.key
+          - --ssl-cert=/etc/chp/tls/tls.crt
+          {{ else }}
+          - --port=8000
+          {{ end }}
           resources:
+          {{ if $manualHTTPS }}
+          volumeMounts:
+          - name: tls-secret
+            mountPath: /etc/chp/tls
+            readOnly: true
+          {{ end }}
 {{ toYaml .Values.proxy.chp.resources | indent 12 }}
           env:
             - name: CONFIGPROXY_AUTH_TOKEN
@@ -54,6 +79,10 @@ spec:
                   key: proxy.token
           imagePullPolicy: {{ .Values.proxy.chp.image.pullPolicy }}
           ports:
+            {{ if $manualHTTPS }}
+            - containerPort: 8443
+              name: proxy-https
+            {{ end }}
             - containerPort: 8000
               name: proxy-public
             - containerPort: 8001

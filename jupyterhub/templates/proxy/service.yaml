@@ -1,5 +1,6 @@
 {{ $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled ) }}
 {{ $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt" ) ) }}
+{{ $manualHTTPS := (and $HTTPS (eq .Values.proxy.https.type "manual" ) ) }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -48,7 +49,11 @@ spec:
     - name: https
       port: 443
       protocol: TCP
+      {{ if $manualHTTPS }}
+      targetPort: 8443
+      {{ else }}
       targetPort: 443
+      {{ end }}
       {{ if .Values.proxy.service.nodePorts.https -}}
       nodePort: {{ .Values.proxy.service.nodePorts.https }}
       {{- end }}
