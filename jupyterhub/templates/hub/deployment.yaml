@@ -72,6 +72,9 @@ spec:
           - jupyterhub
           - --config
           - /srv/jupyterhub_config.py
+          {{- if .Values.debug.enabled }}
+          - --debug
+          {{- end }}
           # We want to do automatic upgrades for sqlite-pvc by default, but allow users
           # to opt out of that if they want. Users using their own db need to 'opt in'
           # Go Templates treat nil and "" and false as 'false', making this code complex.
