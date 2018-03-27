@@ -13,3 +13,6 @@ spec:
     - protocol: TCP
       port: 8081
       targetPort: 8081
+      {{ if .Values.hub.service.ports.nodePort -}}
+      nodePort: {{ .Values.hub.service.ports.nodePort }}
+      {{- end }}
