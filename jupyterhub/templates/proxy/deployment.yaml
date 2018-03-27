@@ -63,6 +63,9 @@ spec:
           {{ else }}
           - --port=8000
           {{ end }}
+          {{ if .Values.debug.enabled }}
+          - --log-level debug
+          {{ end }}
           resources:
           {{ if $manualHTTPS }}
           volumeMounts:
