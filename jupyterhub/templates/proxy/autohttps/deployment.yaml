@@ -1,0 +1,125 @@
+{{ $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled ) }}
+{{ $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt" ) ) }}
+{{ if $autoHTTPS }}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: autohttps
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: autohttps
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: autohttps
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+        app: kube-lego
+        hub.jupyter.org/network-access-proxy-http: "true"
+    spec:
+      {{- if .Values.rbac.enabled }}
+      serviceAccountName: autohttps
+      {{- end }}
+      nodeSelector: {{ toJson .Values.proxy.nodeSelector }}
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: component
+                      operator: In
+                      values: ['hub']
+                    - key: release
+                      operator: In
+                      values: [ {{ .Release.Name | quote }} ]
+      containers:
+        - name: nginx
+          image: "{{ .Values.proxy.nginx.image.name }}:{{ .Values.proxy.nginx.image.tag }}"
+          imagePullPolicy: {{ .Values.proxy.nginx.image.pullPolicy }}
+          resources:
+{{ toYaml .Values.proxy.nginx.resources | indent 12 }}
+          args:
+            - /nginx-ingress-controller
+            - --default-backend-service={{ .Release.Namespace }}/proxy-http
+            - --configmap={{ .Release.Namespace }}/nginx-proxy-config
+            - --ingress-class=jupyterhub-proxy-tls
+            - --watch-namespace={{ .Release.Namespace }}
+            {{ if .Values.debug.enabled }}
+            - --v=3
+            {{ end }}
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 10254
+              scheme: HTTP
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 10254
+              scheme: HTTP
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            - name: https
+              containerPort: 443
+              protocol: TCP
+        - name: kube-lego
+          image: "{{ .Values.proxy.lego.image.name }}:{{ .Values.proxy.lego.image.tag }}"
+          imagePullPolicy: {{ .Values.proxy.lego.image.pullPolicy }}
+          resources:
+{{ toYaml .Values.proxy.lego.resources | indent 12 }}
+          env:
+            - name: LEGO_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: LEGO_WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: LEGO_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: LEGO_EMAIL
+              # {{ required "proxy.https.letsencrypt.contactEmail is a required field" .Values.proxy.https.letsencrypt.contactEmail }}
+              value: {{ .Values.proxy.https.letsencrypt.contactEmail | quote }}
+            - name: LEGO_SUPPORTED_INGRESS_PROVIDER
+              value: "nginx"
+            - name: LEGO_SUPPORTED_INGRESS_CLASS
+              value: "jupyterhub-proxy-tls,dummy"
+            - name: LEGO_DEFAULT_INGRESS_CLASS
+              value: "jupyterhub-proxy-tls"
+            - name: LEGO_KUBE_ANNOTATION
+              value: "hub.jupyter.org/tls-terminator"
+            - name: LEGO_URL
+              value: "https://acme-v01.api.letsencrypt.org/directory"
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+      terminationGracePeriodSeconds: 60
+{{ end }}
