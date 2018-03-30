@@ -17,6 +17,9 @@ spec:
       port: 80
     - protocol: TCP
       port: 443
+    # Required if no HTTPS
+    - protocol: TCP
+      port: 8000
     # kube-lego /healthz
     - protocol: TCP
       port: 8080
