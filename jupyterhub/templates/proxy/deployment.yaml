@@ -64,7 +64,7 @@ spec:
           - --port=8000
           {{ end }}
           {{ if .Values.debug.enabled }}
-          - --log-level debug
+          - --log-level=debug
           {{ end }}
           resources:
           {{ if $manualHTTPS }}
