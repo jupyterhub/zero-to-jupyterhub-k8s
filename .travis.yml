@@ -9,6 +9,7 @@ install:
 - ./ci/install.sh
 script:
 - chartpress --commit-range ${TRAVIS_COMMIT_RANGE}
+- git diff
 - ./ci/test.sh
 
 deploy:
