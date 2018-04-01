@@ -93,9 +93,9 @@ roleRef:
   kind: ClusterRole
   name: nginx-{{ .Release.Name }}
 subjects:
-  - kind: ServiceAccount
-    name: autohttps
-    namespace: {{ .Release.Namespace }}
+- kind: ServiceAccount
+  name: autohttps
+  namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
@@ -191,9 +191,9 @@ roleRef:
   kind: Role
   name: nginx
 subjects:
-  - kind: ServiceAccount
-    name: autohttps
-    namespace: {{ .Release.Namespace }}
+- kind: ServiceAccount
+  name: autohttps
+  namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
@@ -208,8 +208,8 @@ roleRef:
   kind: Role
   name: kube-lego
 subjects:
-  - kind: ServiceAccount
-    name: autohttps
-    namespace: {{ .Release.Namespace }}
+- kind: ServiceAccount
+  name: autohttps
+  namespace: {{ .Release.Namespace }}
 {{- end }}
 {{ end }}
