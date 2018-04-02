@@ -5,6 +5,16 @@
 # This is way too many permissions, but apparently the nginx-controller
 # is written to sortof assume it is clusterwide ingress provider.
 # So we keep this as is, for now.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: jupyterhub
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: autohttps
+---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
@@ -83,9 +93,9 @@ roleRef:
   kind: ClusterRole
   name: nginx-{{ .Release.Name }}
 subjects:
-  - kind: ServiceAccount
-    name: autohttps
-    namespace: {{ .Release.Namespace }}
+- kind: ServiceAccount
+  name: autohttps
+  namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
@@ -181,9 +191,9 @@ roleRef:
   kind: Role
   name: nginx
 subjects:
-  - kind: ServiceAccount
-    name: autohttps
-    namespace: {{ .Release.Namespace }}
+- kind: ServiceAccount
+  name: autohttps
+  namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
@@ -198,18 +208,8 @@ roleRef:
   kind: Role
   name: kube-lego
 subjects:
-  - kind: ServiceAccount
-    name: autohttps
-    namespace: {{ .Release.Namespace }}
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    app: jupyterhub
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
+- kind: ServiceAccount
   name: autohttps
+  namespace: {{ .Release.Namespace }}
 {{- end }}
 {{ end }}

@@ -26,10 +26,10 @@ metadata:
 spec:
   selector:
     matchLabels:
-        app: jupyterhub
-        component: {{ .name }}
-        release: {{ .top.Release.Name }}
-        heritage: {{ .top.Release.Service }}
+      app: jupyterhub
+      component: {{ .name }}
+      release: {{ .top.Release.Name }}
+      heritage: {{ .top.Release.Service }}
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:
