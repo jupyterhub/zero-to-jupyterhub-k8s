@@ -93,6 +93,8 @@ Procedure:
     Keep running 'kops validate cluster' until you see "Your cluster $NAME is ready" at the end of the output.
    
     ``time until kops validate cluster; do sleep 15 ; done`` can be used to automate the waiting process.
+    
+    If at any point you wish to destroy your cluster after this step, run ``kops delete cluster $NAME --yes``
 
 11. Confirm that ``kubectl`` is connected to your Kubernetes cluster.
     Run::
