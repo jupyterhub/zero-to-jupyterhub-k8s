@@ -1,10 +1,20 @@
-# will delete itself unless the helm upgrade process is aborted
-{{ if .Values.prePuller.hook.enabled }}
-{{ $name := print "hook-image-puller-" .Release.Name "-" .Release.Revision "-" .Release.Time.Seconds }}
-{{ template "jupyterhub.imagePuller.daemonset" (dict "hook" true "name" $name "top" .) }}
-{{- end }}
+{{/*
+The hook-image-puller daemonset will be created with the highest priority during
+helm upgrades. It's task is to pull the required images on all nodes. When the
+image-awaiter job confirms the required images to be pulled, the daemonset is
+deleted. Only then will the actual helm upgrade start.
+*/}}
+{{- if .Values.prePuller.hook.enabled -}}
+{{- $_ := merge (dict "hook" true "componentPrefix" "hook-") . -}}
+{{ include "jupyterhub.imagePuller.daemonset" $_ }}
+{{- end -}}
 ---
-# will remain running and pull images on new nodes added to the cluster
-{{ if .Values.prePuller.continuous.enabled }}
-{{ template "jupyterhub.imagePuller.daemonset" (dict "hook" false "name" "continuous-image-puller" "top" .) }}
-{{- end }}
+{{/*
+The continuous-image-puller daemonset task is to pull required images to nodes
+that are added in between helm upgrades, for example by manually adding a node
+or by the cluster autoscaler.
+*/}}
+{{- if .Values.prePuller.continuous.enabled -}}
+{{- $_ := merge (dict "hook" false "componentPrefix" "continuous-") . -}}
+{{ include "jupyterhub.imagePuller.daemonset" $_ }}
+{{- end -}}
