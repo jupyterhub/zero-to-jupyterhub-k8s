@@ -12,7 +12,7 @@ setup and shape your cluster.
 
 Procedure:
 
-1. Create a AIM Role
+1. Create a IAM Role
 
    This role will be used to give your CI host permission to create and destroy resources on AWS
    
@@ -26,7 +26,7 @@ Procedure:
 
    This instance can be small (t2.micro for example).
    
-   When creating it, assign the AIM role created in step 1.
+   When creating it, assign the IAM role created in step 1.
 
 3. Install kops and kubectl on your CI host
 
