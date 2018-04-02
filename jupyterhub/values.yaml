@@ -43,8 +43,8 @@ hub:
     enabled: false
     egress:
       - to:
-        - ipBlock:
-            cidr: 0.0.0.0/0
+          - ipBlock:
+              cidr: 0.0.0.0/0
 
 rbac:
   enabled: true
@@ -98,8 +98,8 @@ proxy:
     enabled: false
     egress:
       - to:
-        - ipBlock:
-            cidr: 0.0.0.0/0
+          - ipBlock:
+              cidr: 0.0.0.0/0
 
 
 # Google OAuth secrets
@@ -130,10 +130,10 @@ singleuser:
     egress:
     # Required egress is handled by other rules so it's safe to modify this
       - to:
-        - ipBlock:
-            cidr: 0.0.0.0/0
-            except:
-              - 169.254.169.254/32
+          - ipBlock:
+              cidr: 0.0.0.0/0
+              except:
+                - 169.254.169.254/32
   extraLabels: {}
   extraEnv: {}
   lifecycleHooks:
@@ -154,9 +154,9 @@ singleuser:
     homeMountPath: /home/jovyan
     dynamic:
       storageClass:
-      pvcNameTemplate: 'claim-{username}{servername}'
-      volumeNameTemplate: 'volume-{username}{servername}'
-      storageAccessModes: ['ReadWriteOnce']
+      pvcNameTemplate: claim-{username}{servername}
+      volumeNameTemplate: volume-{username}{servername}
+      storageAccessModes: [ReadWriteOnce]
   image:
     name: jupyterhub/k8s-singleuser-sample
     tag: generated-by-chartpress
