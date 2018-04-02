@@ -1,6 +1,8 @@
 hub:
   service:
     type: ClusterIP
+    ports:
+      nodePort:
   baseUrl: /
   cookieSecret:
   publicURL:
