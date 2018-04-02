@@ -1,4 +1,9 @@
-apiVersion: v1
-description: Multi-user Jupyter installation
 name: jupyterhub
 version: v0.7-dev
+description: Multi-user Jupyter installation
+home: https://zero-to-jupyterhub.readthedocs.io
+sources:
+  - https://github.com/jupyterhub/zero-to-jupyterhub-k8s
+icon: http://jupyter.org/assets/hublogo.svg
+kubeVersion: ">1.8.0"
+tillerVersion: ">2.7.0"
