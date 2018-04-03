@@ -148,6 +148,9 @@ class PodCuller:
         for pod in pods:
             name = pod.metadata.name
             # API results always use UTC timezone
+            if pod.status.start_time is None:
+                # no start time, it hasn't started yet!
+                continue
             age = now - pod.status.start_time.replace(tzinfo=timezone.utc)
             age_s = format_td(age)
 
