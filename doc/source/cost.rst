@@ -1,7 +1,19 @@
 .. _cost:
 
-Estimating costs
-================
+Appendix: Projecting deployment costs
+=====================================
+
+.. important:: Clarification on cost projections
+
+   As a non-profit research project, Project Jupyter does not offer,
+   recommend, or sell cloud deployment services for JupyterHub.
+
+   The information in this section is offered as guidance as requested
+   by our users. We **caution** that costs can vary widely based
+   on providers selected and your use cases.
+
+Factors influencing costs
+-------------------------
 
 Cost estimates depend highly on your deployment setup. Several factors that
 significantly influence cost estimates, include:
@@ -11,7 +23,7 @@ significantly influence cost estimates, include:
 - Usage patterns of users
 
 Computational Resources
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~
 
 **Memory (RAM)** makes up the largest part of a cost estimate. More RAM means
 that your users will be able to work with larger datasets with more
@@ -23,14 +35,37 @@ wiped after users finish their sessions. None of their changes will be saved.
 This requires significantly fewer storage resources, and also results in faster
 load times.
 
-For an example of how costs scale with computational resources, see the
+For an indicator of how costs scale with computational resources, see the
 `Google Cloud pricing page <https://cloud.google.com/compute/pricing>`_.
+
+Users
+~~~~~
+
+The number of users has a direct relationship to cost estimates. Since a
+deployment may support different types of users (i.e. researchers, students,
+instructors) with varying hardware and storage needs, take into account both the
+type of users and the number per type.
+
+User usage patterns
+~~~~~~~~~~~~~~~~~~~
+
+Another important factor is what usage pattern your users will have. Will they
+all use the JupyterHub at once, such as during a large class workshop?
+will users use JupyterHub at different times of day?
+
+The usage patterns and peak load on the system have important implications for
+the resources you need to provide. In the future JupyterHub will have
+auto-scaling functionality, but currently it does not. This means that you need
+to provision resources for the *maximum* expected number of users at one time.
+
 
 Interactive Cost Estimator
 --------------------------
 
-We've put together a small notebook that can help you estimate your costs
-for a JupyterHub instance. The button below will take you to an interactive
+This small notebook may help you to make an initial planning estimate of costs
+for your JupyterHub instance.
+
+To use the estimator, the button below will take you to an interactive
 notebook served with `Binder <https://mybinder.org>`_. Run the cells and
 you'll be able to choose the computational requirements you have, as well as
 draw a pattern of usage you expect over time. It will estimate the costs for
@@ -48,35 +83,14 @@ you.
    <a target="_blank" href="http://mybinder.org/v2/gh/jupyterhub/zero-to-jupyterhub-k8s/master?filepath=doc/ntbk/draw_function.ipynb">
    <button style="background-color: rgb(235, 119, 55); border: 1px solid; border-color: black; color: white; padding: 15px 32px; text-align: center; text-decoration: none; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 8px;">Launch the Cost Estimator</button></a>
 
-For a description of how these costs are broken down, see below.
-
-Users
------
-
-The number of users has a direct relationship to cost estimates. Since a
-deployment may support different types of users (i.e. researchers, students,
-instructors) with varying hardware and storage needs, take into account both the
-type of users and the number per type.
-
-User usage patterns
--------------------
-
-Another important factor is what usage pattern your users will have. Will they
-all use the JupyterHub at once, such as during a large class workshop?
-will users use JupyterHub at different times of day?
-
-The usage patterns and peak load on the system have important implications for
-the resources you need to provide. In the future JupyterHub will have
-auto-scaling functionality, but currently it does not. This means that you need
-to provision resources for the *maximum* expected number of users at one time.
-
 
 Examples
 --------
 
-Here are a few examples that describe the use cases and amount of resources
-used by a particular JupyterHub implementation, and how much it might cost.
-Your estimates will vary.
+Here are a few examples that describe different use cases and the amount of
+resources used by a particular JupyterHub implementation. There are many
+factors that go into these estimates, and you should expect that your actual
+costs may vary significantly under other conditions.
 
 Data 8
 ~~~~~~
