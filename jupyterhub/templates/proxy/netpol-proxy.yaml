@@ -1,3 +1,6 @@
+{{ $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled ) }}
+{{ $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt" ) ) }}
+{{ $manualHTTPS := (and .Values.proxy.https.enabled (eq .Values.proxy.https.type "manual" ) ) }}
 {{- if and .Values.proxy.networkPolicy.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -17,6 +20,14 @@ spec:
       port: 80
     - protocol: TCP
       port: 443
+    {{- if not $autoHTTPS }}
+    - protocol: TCP
+      port: 8000
+    {{- end }}
+    {{- if $manualHTTPS }}
+    - protocol: TCP
+      port: 8443
+    {{- end }}
     # kube-lego /healthz
     - protocol: TCP
       port: 8080
