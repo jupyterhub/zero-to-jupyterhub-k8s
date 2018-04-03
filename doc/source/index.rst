@@ -33,6 +33,7 @@ different cloud providers and infrastructure.
    google/step-zero-gcp
    microsoft/step-zero-azure
    amazon/step-zero-aws
+   redhat/step-zero-openshift
 
 .. _creating-your-jupyterhub:
 
