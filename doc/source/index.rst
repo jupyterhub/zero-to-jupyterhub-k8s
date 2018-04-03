@@ -96,9 +96,9 @@ cloud-based deployments and tips for maintaining your deployment.
    optimization
    security
    upgrading
-   cost
    troubleshooting
    advanced
+   cost
 
 .. _community-resources:
 
