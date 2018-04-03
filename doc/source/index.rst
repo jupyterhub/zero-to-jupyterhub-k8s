@@ -26,7 +26,7 @@ This section describes a Kubernetes cluster and outlines how to complete *Step Z
 different cloud providers and infrastructure.
 
 .. toctree::
-   :maxdepth: 2
+   :titlesonly:
    :caption: Step Zero: your Kubernetes cluster
 
    create-k8s-cluster

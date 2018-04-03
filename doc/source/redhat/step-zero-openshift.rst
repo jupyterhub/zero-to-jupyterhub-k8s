@@ -11,8 +11,6 @@ to a running JupyterHub cluster.
 
 From the `README <https://github.com/jupyter-on-openshift/jupyterhub-quickstart/blob/master/README.md>`_:
 
-::
-
 	This repository aims to provide a much easier way of deploying JupyterHub
 	to OpenShift which makes better use of OpenShift specific features,
 	including OpenShift templates, and Source-to-Image (S2I) builders. The
