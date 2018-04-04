@@ -1,7 +1,7 @@
-{{/*
-A template that returns an image-puller daemonset. It will use 
-- pre-helm-upgrade image pulling (pulls images before helm upgrades, temporary)
-- continuous image pulling (pulls images for cluster autoscalers, persistent)
+{{- /*
+Returns an image-puller daemonset. Two daemonsets will be created like this.
+- hook-image-puller: for pre helm upgrade image pulling (lives temporarily)
+- continuous-image-puller: for newly added nodes image pulling
 */}}
 {{- define "jupyterhub.imagePuller.daemonset" -}}
 kind: DaemonSet
@@ -14,12 +14,12 @@ metadata:
     {{- end }}
   {{- if .hook }}
   annotations:
-    # create it before installs/upgrades ...
+    {{- /*
+    Allows the daemonset to be deleted when the image-awaiter job is completed.
+    */}}
     "helm.sh/hook": pre-install,pre-upgrade
-    # ... and before the image-awaiter job ...
-    "helm.sh/hook-weight": "-10"
-    # ... but delete it in the end
     "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+    "helm.sh/hook-weight": "-10"
   {{- end }}
 spec:
   selector:
@@ -44,7 +44,7 @@ spec:
             - /bin/sh
             - -c
             - echo "Pulling complete"
-        {{ if not .Values.singleuser.cloudMetadata.enabled }}
+        {{- if not .Values.singleuser.cloudMetadata.enabled }}
         - name: image-pull-metadata-block
           image: {{ .Values.singleuser.networkTools.image.name }}:{{ .Values.singleuser.networkTools.image.tag }}
           imagePullPolicy: IfNotPresent
@@ -52,17 +52,17 @@ spec:
             - /bin/sh
             - -c
             - echo "Pulling complete"
-        {{ end }}
-        {{ range $k, $v := .Values.prePuller.extraImages }}
-        - name: image-pull-{{ $k }}
+        {{- end }}
+        {{- range $k, $v := .Values.prePuller.extraImages }}
+        - name: image-pull-{{ $v.name }}
           image: {{ $v.name }}:{{ $v.tag }}
           imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
             - -c
             - echo "Pulling complete"
-        {{ end }}
+        {{- end }}
       containers:
         - name: pause
           image: {{ .Values.prePuller.pause.image.name }}:{{ .Values.prePuller.pause.image.tag }}
-{{- end -}}
+{{- end }}
