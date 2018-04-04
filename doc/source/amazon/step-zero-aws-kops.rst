@@ -51,7 +51,7 @@ Procedure:
    
 7. Set the region to deploy in
 
-   ``export REGION=`curl -s http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'``
+   ``export REGION=`curl -s http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'```
 
 8. Set the availability zones for the nodes
 
