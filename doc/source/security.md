@@ -163,8 +163,11 @@ Kubernetes has optional support for [network
 policies](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
 which lets you restrict how pods can communicate with each other and the outside
 world. This can provide additional security within JupyterHub, and can also be
-used to limit network access for users of JupyterHub. By default, the JupyterHub
-helm chart **disables** network policies.
+used to limit network access for users of JupyterHub.
+
+By default, the JupyterHub helm chart **disables** network policies.
+
+### Enabling network policies
 
 **Important**: If you decide to enable network policies, you should be aware
 that a Kubernetes cluster may have partial, full, or no support for network
