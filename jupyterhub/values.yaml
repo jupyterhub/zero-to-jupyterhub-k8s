@@ -26,7 +26,7 @@ hub:
   labels: {}
   extraConfig: {}
   extraConfigMap: {}
-  extraEnv: []
+  extraEnv: {}
   extraContainers: []
   extraVolumes: []
   extraVolumeMounts: []
@@ -48,8 +48,10 @@ hub:
           - ipBlock:
               cidr: 0.0.0.0/0
 
+
 rbac:
   enabled: true
+
 
 proxy:
   secretToken: ''
@@ -104,7 +106,6 @@ proxy:
               cidr: 0.0.0.0/0
 
 
-# Google OAuth secrets
 auth:
   type: dummy
   whitelist:
@@ -173,6 +174,7 @@ singleuser:
   cmd: jupyterhub-singleuser
   defaultUrl:
 
+
 prePuller:
   hook:
     enabled: true
@@ -182,10 +184,12 @@ prePuller:
       tag: generated-by-chartpress
   continuous:
     enabled: false
+  extraImages: []
   pause:
     image:
       name: gcr.io/google_containers/pause
       tag: '3.0'
+
 
 ingress:
   enabled: false
@@ -193,17 +197,18 @@ ingress:
   hosts: []
   tls:
 
+
 cull:
   enabled: true
   users: false
   timeout: 3600
   every: 600
   maxAge: 0
-
   podCuller:
     image:
       name: jupyterhub/k8s-pod-culler
       tag: generated-by-chartpress
+
 
 debug:
   enabled: false
