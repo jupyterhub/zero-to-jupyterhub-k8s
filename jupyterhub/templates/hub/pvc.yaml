@@ -1,20 +1,22 @@
-{{ if eq .Values.hub.db.type "sqlite-pvc" -}}
+{{- if eq .Values.hub.db.type "sqlite-pvc" -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: hub-db-dir
-  {{ if .Values.hub.db.pvc.annotations -}}
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+  {{- if .Values.hub.db.pvc.annotations -}}
   annotations:
     {{- range $key, $value := .Values.hub.db.pvc.annotations }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
   {{- end }}
 spec:
-  {{ if .Values.hub.db.pvc.selector -}}
+  {{- if .Values.hub.db.pvc.selector }}
   selector:
-{{ toYaml .Values.hub.db.pvc.selector | indent 4 }}
+    {{- toYaml .Values.hub.db.pvc.selector | nindent 4 }}
   {{- end }}
-  {{ if typeIs "string" .Values.hub.db.pvc.storageClassName -}}
+  {{- if typeIs "string" .Values.hub.db.pvc.storageClassName }}
   storageClassName: {{ .Values.hub.db.pvc.storageClassName | quote }}
   {{- end }}
   accessModes:
