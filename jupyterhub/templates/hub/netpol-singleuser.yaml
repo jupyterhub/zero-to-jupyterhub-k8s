@@ -8,9 +8,8 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      # TODO: allow for an component override
-      app: jupyterhub
-      component: singleuser-server
+      {{- $_ := merge (dict "componentLabel" "singleuser-server") . }}
+      {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}
   policyTypes:
     - Ingress
     - Egress

@@ -16,5 +16,5 @@ or by the cluster autoscaler.
 */}}
 {{- if .Values.prePuller.continuous.enabled }}
 {{- $_ := merge (dict "hook" false "componentPrefix" "continuous-") . }}
-{{- include "jupyterhub.imagePuller.daemonset" $_ }}
+{{ include "jupyterhub.imagePuller.daemonset" $_ }}
 {{- end }}

@@ -10,7 +10,7 @@ spec:
   loadBalancerIP: {{ .Values.hub.service.loadBalancerIP }}
   {{- end }}
   selector:
-    name: hub
+    {{- include "jupyterhub.matchLabels" . | nindent 4 }}
   ports:
     - protocol: TCP
       port: 8081

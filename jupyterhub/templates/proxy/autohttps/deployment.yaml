@@ -1,18 +1,21 @@
+{{- $_ := merge (dict "appLabel" "kube-lego") . }}
 {{- $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled) }}
 {{- $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt")) }}
 {{- if $autoHTTPS -}}
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   name: autohttps
   labels:
-    {{- include "jupyterhub.labels" . | nindent 4 }}
+    {{- include "jupyterhub.labels" $_ | nindent 4 }}
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- $_ := merge (dict "appLabel" "kube-lego") . }}
         {{- include "jupyterhub.labels" $_ | nindent 8 }}
         hub.jupyter.org/network-access-proxy-http: "true"
     spec:
