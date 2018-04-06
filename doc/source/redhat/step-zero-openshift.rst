@@ -1,13 +1,14 @@
 .. _redhat-openshift:
 
-JupyterHub on OpenShift
------------------------
+JupyterHub on Red Hat OpenShift
+-------------------------------
 
-[OpenShift](https://openshift.org/) from RedHat is a cluster manager based on Kubernetes.
+`OpenShift <https://openshift.org/>`_ from RedHat is a cluster manager based on Kubernetes.
 
-For setting up JupyterHub on OpenShift, checking out the [JupyterHub on OpenShift](https://github.com/jupyter-on-openshift/jupyterhub-quickstart)
+For setting up JupyterHub on OpenShift, check out the `JupyterHub on OpenShift <https://github.com/jupyter-on-openshift/jupyterhub-quickstart>`_
 project. It provides an OpenShift template based JupyterHub deployment. Zero to JupyterHub uses
-[helm](https://helm.sh) which is currently not very compatible with OpenShift.
+`helm <https://helm.sh>`_ which is currently usable with OpenShift; yet deploying helm on OpenShift
+is somewhat complicated (see RedHat's blog post on `Getting Started with Helm on OpenShift <https://blog.openshift.com/getting-started-helm-openshift/>`_).
 
 Additional resources about Jupyter on OpenShift
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
