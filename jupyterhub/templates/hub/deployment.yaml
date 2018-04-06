@@ -48,7 +48,7 @@ spec:
           secret:
             secretName: hub-secret
         {{- if .Values.hub.extraVolumes }}
-        {{- toYaml .Values.hub.extraVolumes | nindent 8 }}
+        {{- .Values.hub.extraVolumes | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
         {{- if eq .Values.hub.db.type "sqlite-pvc" }}
         - name: hub-db-dir
@@ -63,7 +63,7 @@ spec:
         fsGroup: {{ .Values.hub.fsGid }}
       containers:
         {{- if .Values.hub.extraContainers }}
-        {{- toYaml .Values.hub.extraContainers | nindent 8 }}
+        {{- .Values.hub.extraContainers | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
         - name: hub
           image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
@@ -100,7 +100,7 @@ spec:
             - mountPath: /etc/jupyterhub/secret/
               name: secret
             {{- if .Values.hub.extraVolumeMounts }}
-            {{- toYaml .Values.hub.extraVolumeMounts | nindent 12 }}
+            {{- .Values.hub.extraVolumeMounts | toYaml | trimSuffix "\n" | nindent 12 }}
             {{- end }}
             {{- if eq .Values.hub.db.type "sqlite-pvc" }}
             - mountPath: /srv/jupyterhub
@@ -110,7 +110,7 @@ spec:
               {{- end }}
             {{- end }}
           resources:
-            {{- toYaml .Values.hub.resources | nindent 12 }}
+            {{- .Values.hub.resources | toYaml | trimSuffix "\n" | nindent 12 }}
           imagePullPolicy: {{ .Values.hub.imagePullPolicy }}
           env:
             {{- /* Put this here directly so hub will restart when we change this */}}
@@ -136,7 +136,7 @@ spec:
             {{- $extraEnvType := typeOf .Values.hub.extraEnv }}
             {{- /* If we have a list, embed that here directly. This allows for complex configuration from configmap, downward API, etc. */}}
             {{- if eq $extraEnvType "[]interface {}" }}
-            {{- toYaml .Values.hub.extraEnv | indent 12 }}
+            {{- .Values.hub.extraEnv | toYaml | trimSuffix "\n" | indent 12 }}
             {{- else if eq $extraEnvType "map[string]interface {}" }}
             {{- /* If we have a map, treat those as key-value pairs. */}}
             {{- range $key, $value := .Values.hub.extraEnv }}

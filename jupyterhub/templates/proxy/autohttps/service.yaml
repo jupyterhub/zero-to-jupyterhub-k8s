@@ -1,21 +1,22 @@
-{{ $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled ) }}
-{{ $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt" ) ) }}
-{{ if $autoHTTPS }}
+{{- $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled) }}
+{{- $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt")) }}
+{{- if $autoHTTPS -}}
 apiVersion: v1
 kind: Service
 metadata:
   name: proxy-http
+  # TODO: consider this
   # toYaml + indent seem a lot more unstable & error prone
-  annotations: {{ toJson .Values.proxy.service.annotations }}
   labels: {{ toJson .Values.proxy.service.labels }}
+  annotations: {{ toJson .Values.proxy.service.annotations }}
 spec:
   type: ClusterIP
   selector:
-    name: proxy
+    # TODO: consider this.. warning, this is within autohttps and not proxy
     component: proxy
     release: {{ .Release.Name }}
   ports:
     - protocol: TCP
       port: 8000
       targetPort: 8000
-{{ end }}
+{{- end }}

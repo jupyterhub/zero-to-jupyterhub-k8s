@@ -1,30 +1,26 @@
-{{ $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled ) }}
-{{ $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt" ) ) }}
-{{ if $autoHTTPS }}
+{{- $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled) }}
+{{- $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt")) }}
+{{- if $autoHTTPS -}}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  labels:
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: autohttps
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
   name: autohttps
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        component: autohttps
-        release: {{ .Release.Name }}
-        heritage: {{ .Release.Service }}
-        app: kube-lego
+        # TODO: OVERRIDE: app: kube-lego
+        {{- include "jupyterhub.labels" . | nindent 8 }}
         hub.jupyter.org/network-access-proxy-http: "true"
     spec:
       {{- if .Values.rbac.enabled }}
       serviceAccountName: autohttps
       {{- end }}
       nodeSelector: {{ toJson .Values.proxy.nodeSelector }}
+      terminationGracePeriodSeconds: 60
       affinity:
         podAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -38,22 +34,22 @@ spec:
                       values: ['hub']
                     - key: release
                       operator: In
-                      values: [ {{ .Release.Name | quote }} ]
+                      values: [{{ .Release.Name | quote }}]
       containers:
         - name: nginx
           image: "{{ .Values.proxy.nginx.image.name }}:{{ .Values.proxy.nginx.image.tag }}"
           imagePullPolicy: {{ .Values.proxy.nginx.image.pullPolicy }}
           resources:
-{{ toYaml .Values.proxy.nginx.resources | indent 12 }}
+            {{- .Values.proxy.nginx.resources | toYaml | trimSuffix "\n" | nindent 12 }}
           args:
             - /nginx-ingress-controller
             - --default-backend-service={{ .Release.Namespace }}/proxy-http
             - --configmap={{ .Release.Namespace }}/nginx-proxy-config
             - --ingress-class=jupyterhub-proxy-tls
             - --watch-namespace={{ .Release.Namespace }}
-            {{ if .Values.debug.enabled }}
+            {{- if .Values.debug.enabled }}
             - --v=3
-            {{ end }}
+            {{- end }}
           env:
             - name: POD_NAME
               valueFrom:
@@ -86,7 +82,7 @@ spec:
           image: "{{ .Values.proxy.lego.image.name }}:{{ .Values.proxy.lego.image.tag }}"
           imagePullPolicy: {{ .Values.proxy.lego.image.pullPolicy }}
           resources:
-{{ toYaml .Values.proxy.lego.resources | indent 12 }}
+            {{- .Values.proxy.lego.resources | toYaml | trimSuffix "\n" | nindent 12 }}
           env:
             - name: LEGO_NAMESPACE
               valueFrom:
@@ -121,5 +117,4 @@ spec:
               port: 8080
             initialDelaySeconds: 5
             timeoutSeconds: 1
-      terminationGracePeriodSeconds: 60
-{{ end }}
+{{- end }}

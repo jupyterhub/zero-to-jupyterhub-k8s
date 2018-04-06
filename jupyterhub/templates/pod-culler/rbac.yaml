@@ -1,17 +1,21 @@
-{{ if and .Values.cull.enabled .Values.cull.maxAge }}
-{{ if .Values.rbac.enabled -}}
+{{- if and .Values.cull.enabled .Values.cull.maxAge }}
+{{- if .Values.rbac.enabled -}}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: pod-culler
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: pod-culler
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
 rules:
 - apiGroups:
-    - "" # "" indicates the core API group
+    - ""      # "" indicates the core API group
   resources:
     - pods
   verbs:
@@ -24,10 +28,12 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: pod-culler
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
 subjects:
-- kind: ServiceAccount
-  namespace: {{ .Release.Namespace }}
-  name: pod-culler
+  - kind: ServiceAccount
+    namespace: {{ .Release.Namespace }}
+    name: pod-culler
 roleRef:
   kind: Role
   name: pod-culler

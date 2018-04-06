@@ -1,38 +1,49 @@
-{{/*
-Generates labels based on 
-- component: the template parent folder's name / the template's filename
-  - looks for componentPrefix / componentSuffix
+{{- /*
+- component:
+  - A: .componentLabel
+  - B: The template parent folder's name
+  - C: The template's filename if living in the root folder
+  - Extra: Also augments componentPrefix componentSuffix
 - app: 
-  - looks for appLabel
+  - A: .appLabel
+  - B: .Chart.Name
 */}}
-{{- define "jupyterhub.labels" -}}
-{{- $componentFallback := .Template.Name | base | trimSuffix ".yaml" -}}
-{{- $component := .Template.Name | dir | base | trimPrefix "templates" -}}
-{{- $component := default $componentFallback $component -}}
-{{- $component := print (default "" .componentPrefix) $component (default "" .componentSuffix) -}}
-component: {{ $component }}
-app: {{ include "jupyterhub.name" . }}
-chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-release: {{ .Release.Name }}
-heritage: {{ .Release.Service }}
-{{- end -}}
 
-{{/*
-A slimmed jupyterhub.labels template
-*/}}
-{{- define "jupyterhub.matchLabels" -}}
-{{- $componentFallback := .Template.Name | base | trimSuffix ".yaml" -}}
-{{- $component := .Template.Name | dir | base | trimPrefix "templates" -}}
-{{- $component := default $componentFallback $component -}}
-{{- $component := print (default "" .componentPrefix) $component (default "" .componentSuffix) -}}
-app: {{ include "jupyterhub.name" . }}
-component: {{ $component }}
-release: {{ .Release.Name }}
-{{- end -}}
 
-{{/*
-Generates a value for the app label.
+{{- /*
+Sets the app label.
 */}}
 {{- define "jupyterhub.name" -}}
-{{- default .Chart.Name .appLabel | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+{{- .appLabel | default .Chart.Name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+
+{{- /*
+Sets the Helm's recommend labels: component, app, chart, release, heritage.
+*/}}
+{{- define "jupyterhub.labels" }}
+{{- $file := .Template.Name | base | trimSuffix ".yaml" }}
+{{- $parent := .Template.Name | dir | base | trimPrefix "templates" }}
+{{- $component := .componentLabel | default $parent | default $file }}
+{{- $component := print (.componentPrefix | default "") $component (.componentSuffix | default "") -}}
+component: {{ $component }}
+app: {{ include "jupyterhub.name" . }}
+{{- if not .matchLabels }}
+chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+{{- end }}
+release: {{ .Release.Name }}
+{{- if not .matchLabels }}
+heritage: {{ .Release.Service }}
+{{- end }}
+{{- end }}
+
+{{- /*
+Sets labels to select another object with: component, app, release.
+*/}}
+{{- /*
+A slimmed version of jupyterhub.labels template for selection
+*/}}
+{{- define "jupyterhub.matchLabels" }}
+{{- $_ := merge (dict "matchLabels" true) . -}}
+{{- include "jupyterhub.labels" $_ }}
+{{- end }}

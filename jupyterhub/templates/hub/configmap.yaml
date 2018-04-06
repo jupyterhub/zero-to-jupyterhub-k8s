@@ -21,15 +21,15 @@ data:
   auth.admin.access: {{ .Values.auth.admin.access | quote }}
   {{- if .Values.auth.admin.users }}
   auth.admin.users: |
-    {{- toYaml .Values.auth.admin.users | nindent 4 }}
+    {{- .Values.auth.admin.users | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
   {{- if .Values.auth.whitelist.users }}
   auth.whitelist.users: |
-    {{- toYaml .Values.auth.whitelist.users | nindent 4 }}
+    {{- .Values.auth.whitelist.users | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
   {{- if .Values.auth.scopes }}
   auth.scopes: |
-    {{- toYaml .Values.auth.scopes | nindent 4 }}
+    {{- .Values.auth.scopes | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
 
 
@@ -52,7 +52,7 @@ data:
   auth.github.callback-url: {{ .Values.auth.github.callbackUrl | quote }}
   {{- if .Values.auth.github.org_whitelist }}
   auth.github.org_whitelist: |
-    {{- toYaml .Values.auth.github.org_whitelist | nindent 4 }}
+    {{- .Values.auth.github.org_whitelist | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
   {{- end }}
 
@@ -83,7 +83,7 @@ data:
 
   {{- if eq .Values.auth.type "lti" }}
   auth.lti.consumers: |
-    {{- toYaml .Values.auth.lti.consumers | nindent 4 }}
+    {{- .Values.auth.lti.consumers | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
   {{ if eq .Values.auth.type "ldap" -}}
   auth.ldap.server.address: {{ .Values.auth.ldap.server.address | quote }}
@@ -130,7 +130,7 @@ data:
   singleuser.network-tools.image.name: {{ .Values.singleuser.networkTools.image.name | quote }}
   singleuser.network-tools.image.tag: {{ .Values.singleuser.networkTools.image.tag | quote }}
   singleuser.cloud-metadata: |
-    {{- toYaml .Values.singleuser.cloudMetadata | nindent 4 }}
+    {{- .Values.singleuser.cloudMetadata | toYaml | trimSuffix "\n" | nindent 4 }}
   singleuser.start-timeout: {{ .Values.singleuser.startTimeout | quote }}
   singleuser.image-pull-policy: {{ .Values.singleuser.image.pullPolicy | quote }}
   {{- if .Values.singleuser.cmd }}

@@ -1,60 +1,63 @@
-{{ $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled ) }}
-{{ $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt" ) ) }}
-{{ $manualHTTPS := (and .Values.proxy.https.enabled (eq .Values.proxy.https.type "manual" ) ) }}
-{{- if and .Values.proxy.networkPolicy.enabled }}
+{{- $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled) }}
+{{- $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt")) }}
+{{- $manualHTTPS := (and $HTTPS (eq .Values.proxy.https.type "manual")) }}
+{{- if and .Values.proxy.networkPolicy.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: proxy-network-policy
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
   podSelector:
     matchLabels:
-      name: proxy
-      component: proxy
+      {{- include "jupyterhub.matchLabels" . | nindent 6 }}
   policyTypes:
-  - Ingress
-  - Egress
+    - Ingress
+    - Egress
   ingress:
-  - ports:
-    - protocol: TCP
-      port: 80
-    - protocol: TCP
-      port: 443
-    {{- if not $autoHTTPS }}
-    - protocol: TCP
-      port: 8000
-    {{- end }}
-    {{- if $manualHTTPS }}
-    - protocol: TCP
-      port: 8443
-    {{- end }}
-    # kube-lego /healthz
-    - protocol: TCP
-      port: 8080
-    # nginx /healthz
-    - protocol: TCP
-      port: 10254
-  - from:
-    - podSelector:
-        matchLabels:
-          hub.jupyter.org/network-access-proxy-http: "true"
-    ports:
+    - ports:
+      - protocol: TCP
+        port: 80
+      - protocol: TCP
+        port: 443
+      {{- if not $autoHTTPS }}
       - protocol: TCP
         port: 8000
-  - from:
-    - podSelector:
-        matchLabels:
-          hub.jupyter.org/network-access-proxy-api: "true"
-    ports:
+      {{- end }}
+      {{- if $manualHTTPS }}
       - protocol: TCP
-        port: 8001
+        port: 8443
+      {{- end }}
+      # kube-lego /healthz
+      - protocol: TCP
+        port: 8080
+      # nginx /healthz
+      - protocol: TCP
+        port: 10254
+    - from:
+        - podSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-proxy-http: "true"
+      ports:
+        - protocol: TCP
+          port: 8000
+    - from:
+        - podSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-proxy-api: "true"
+      ports:
+        - protocol: TCP
+          port: 8001
   egress:
-  # The default is to allow all egress for proxy
-  # If you want to restrict it the following egress is required
-  # hub:8081
-  # singleuser:8888
-  # Kubernetes api-server
-{{- if .Values.proxy.networkPolicy.egress }}
-{{ toYaml .Values.proxy.networkPolicy.egress | indent 2 }}
-{{- end }}
+    {{- /*
+    The default is to allow all egress for hub If you want to restrict it the
+    following egress is required
+      -  proxy:8001
+      -  singleuser:8888
+      -  Kubernetes api-server
+    */}}
+    {{- if .Values.proxy.networkPolicy.egress }}
+    {{- .Values.proxy.networkPolicy.egress | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- end }}
 {{- end }}

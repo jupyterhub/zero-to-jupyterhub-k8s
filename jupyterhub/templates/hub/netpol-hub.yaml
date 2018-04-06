@@ -29,6 +29,6 @@ spec:
       -  Kubernetes api-server
     */}}
     {{- if .Values.hub.networkPolicy.egress }}
-    {{- toYaml .Values.hub.networkPolicy.egress | nindent 4 }}
+    {{- .Values.hub.networkPolicy.egress | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
 {{- end }}

@@ -11,6 +11,7 @@ kind: ServiceAccount
 metadata:
   name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
   labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
     hub.jupyter.org/deletable: "true"
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
@@ -25,6 +26,7 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
   labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
     hub.jupyter.org/deletable: "true"
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
@@ -43,6 +45,7 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
   labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
     hub.jupyter.org/deletable: "true"
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
@@ -50,8 +53,8 @@ metadata:
     "helm.sh/hook-weight": "0"
 subjects:
   - kind: ServiceAccount
-    namespace: {{ .Release.Namespace }}
     name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
+    namespace: {{ .Release.Namespace }}
 roleRef:
   kind: Role
   name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}

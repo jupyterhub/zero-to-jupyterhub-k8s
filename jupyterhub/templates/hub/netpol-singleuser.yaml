@@ -8,6 +8,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
+      # TODO: allow for an component override
       app: jupyterhub
       component: singleuser-server
   policyTypes:
@@ -30,6 +31,6 @@ spec:
         - protocol: TCP
           port: 8081
     {{- if .Values.singleuser.networkPolicy.egress }}
-    {{- toYaml .Values.singleuser.networkPolicy.egress | nindent 4 }}
+    {{- .Values.singleuser.networkPolicy.egress | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
 {{- end }}

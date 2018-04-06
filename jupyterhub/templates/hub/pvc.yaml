@@ -14,7 +14,7 @@ metadata:
 spec:
   {{- if .Values.hub.db.pvc.selector }}
   selector:
-    {{- toYaml .Values.hub.db.pvc.selector | nindent 4 }}
+    {{- .Values.hub.db.pvc.selector | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
   {{- if typeIs "string" .Values.hub.db.pvc.storageClassName }}
   storageClassName: {{ .Values.hub.db.pvc.storageClassName | quote }}

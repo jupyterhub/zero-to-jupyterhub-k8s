@@ -24,6 +24,6 @@ spec:
     {{- end }}
   {{- if .Values.ingress.tls }}
   tls:
-    {{- toYaml .Values.ingress.tls | nindent 4 }}
+    {{- .Values.ingress.tls | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
 {{- end -}}
