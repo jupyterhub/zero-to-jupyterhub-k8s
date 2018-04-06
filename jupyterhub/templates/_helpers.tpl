@@ -11,7 +11,14 @@
 
 
 {{- /*
-Sets the app label.
+TODO: Set the name field using a helper
+- Optionally add release name and such to it using some setting in .Values.
+- Allow appending stuff for specific objects we already do this.
+*/}}
+
+
+{{- /*
+Sets label: app.
 */}}
 {{- define "jupyterhub.name" -}}
 {{- .appLabel | default .Chart.Name | trunc 63 | trimSuffix "-" }}
@@ -19,7 +26,7 @@ Sets the app label.
 
 
 {{- /*
-Sets the Helm's recommend labels: component, app, chart, release, heritage.
+Sets labels: component, app, chart, release, heritage.
 */}}
 {{- define "jupyterhub.labels" }}
 {{- $file := .Template.Name | base | trimSuffix ".yaml" }}
@@ -37,13 +44,11 @@ heritage: {{ .Release.Service }}
 {{- end }}
 {{- end }}
 
+
 {{- /*
-Sets labels to select another object with: component, app, release.
-*/}}
-{{- /*
-A slimmed version of jupyterhub.labels template for selection
+Sets selection labels: component, app, release.
 */}}
 {{- define "jupyterhub.matchLabels" }}
-{{- $_ := merge (dict "matchLabels" true) . -}}
+{{- $_ := merge (dict "matchLabels" true) . }}
 {{- include "jupyterhub.labels" $_ }}
 {{- end }}

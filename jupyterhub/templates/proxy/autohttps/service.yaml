@@ -5,16 +5,17 @@ apiVersion: v1
 kind: Service
 metadata:
   name: proxy-http
-  # TODO: consider this
-  # toYaml + indent seem a lot more unstable & error prone
-  labels: {{ toJson .Values.proxy.service.labels }}
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+    {{- range $key, $value := .Values.proxy.service.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
   annotations: {{ toJson .Values.proxy.service.annotations }}
 spec:
   type: ClusterIP
   selector:
-    # TODO: consider this.. warning, this is within autohttps and not proxy
-    component: proxy
-    release: {{ .Release.Name }}
+    {{- $_ := merge (dict "componentLabel" "proxy") . }}
+    {{- include "jupyterhub.matchLabels" $_ | nindent 4 }}
   ports:
     - protocol: TCP
       port: 8000

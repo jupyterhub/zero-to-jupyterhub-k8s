@@ -12,8 +12,8 @@ spec:
   template:
     metadata:
       labels:
-        # TODO: OVERRIDE: app: kube-lego
-        {{- include "jupyterhub.labels" . | nindent 8 }}
+        {{- $_ := merge (dict "appLabel" "kube-lego") . }}
+        {{- include "jupyterhub.labels" $_ | nindent 8 }}
         hub.jupyter.org/network-access-proxy-http: "true"
     spec:
       {{- if .Values.rbac.enabled }}
