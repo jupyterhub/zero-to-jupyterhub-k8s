@@ -17,7 +17,7 @@ rules:
     min-spaces-after: 1
     max-spaces-after: 1
   comments:
-    require-starting-space: true
+    require-starting-space: false    # Default: true (*)
     min-spaces-from-content: 2
   comments-indentation: {}
   document-end: disable
@@ -47,3 +47,5 @@ rules:
   trailing-spaces: enable
   truthy:
     level: warning
+
+# (*) Awaiting PR: https://github.com/kubernetes/helm/pull/3811
