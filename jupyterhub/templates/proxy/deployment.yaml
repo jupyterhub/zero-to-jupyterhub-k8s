@@ -17,6 +17,9 @@ spec:
         {{- include "jupyterhub.labels" . | nindent 8 }}
         hub.jupyter.org/network-access-hub: "true"
         hub.jupyter.org/network-access-singleuser: "true"
+        {{- if .Values.proxy.labels }}
+        {{- .Values.proxy.labels | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- end }}
       annotations:
         # This lets us autorestart when the secret changes!
         checksum/hub-secret: {{ include (print $.Template.BasePath "/hub/secret.yaml") . | sha256sum }}
