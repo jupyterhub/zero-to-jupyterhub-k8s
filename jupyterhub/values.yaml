@@ -24,6 +24,7 @@ hub:
       storageClassName:
     url:
   labels: {}
+  annotations: {}
   extraConfig: {}
   extraConfigMap: {}
   extraEnv: {}

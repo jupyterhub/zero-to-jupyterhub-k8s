@@ -24,6 +24,9 @@ spec:
         # This lets us autorestart when the secret changes!
         checksum/config-map: {{ include (print .Template.BasePath "/hub/configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print .Template.BasePath "/hub/secret.yaml") . | sha256sum }}
+        {{- if .Values.hub.annotations }}
+        {{- .Values.hub.annotations | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- end }}
     spec:
       nodeSelector: {{ toJson .Values.hub.nodeSelector }}
       affinity:

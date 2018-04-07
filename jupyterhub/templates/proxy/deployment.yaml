@@ -24,6 +24,9 @@ spec:
         # This lets us autorestart when the secret changes!
         checksum/hub-secret: {{ include (print $.Template.BasePath "/hub/secret.yaml") . | sha256sum }}
         checksum/proxy-secret: {{ include (print $.Template.BasePath "/proxy/secret.yaml") . | sha256sum }}
+        {{- if .Values.proxy.annotations }}
+        {{- .Values.proxy.annotations | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- end }}
     spec:
       nodeSelector: {{ toJson .Values.proxy.nodeSelector }}
       terminationGracePeriodSeconds: 60
