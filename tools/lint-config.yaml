@@ -33,7 +33,7 @@ rules:
     max-spaces-after: 1
   indentation:
     spaces: 2                       # Default: consistent
-    indent-sequences: true
+    indent-sequences: whatever      # Default true (**)
     check-multi-line-strings: false
   key-duplicates: enable
   key-ordering: disable
@@ -48,4 +48,21 @@ rules:
   truthy:
     level: warning
 
-# (*) Awaiting PR: https://github.com/kubernetes/helm/pull/3811
+# (*) Until we can use PR: https://github.com/kubernetes/helm/pull/3811
+
+# (**) toYaml forces us to use false and be indent different amounts of spaced
+# depending on importing lists or dicts. For all fields, where we support both
+# lists and dicts, this would be a hassle.
+# Consider this case...
+
+# # values.yaml
+# list:
+# - key1: value1
+# dict:
+#   key1: value1
+#
+# # template.yaml
+# myList:
+#   {{- .Values.list | toYaml | trimSuffix "\n" | nindent 0 }}
+# myDict:
+#   {{- .Values.dict | toYaml | trimSuffix "\n" | nindent 2 }}
