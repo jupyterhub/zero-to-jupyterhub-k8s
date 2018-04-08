@@ -26,4 +26,4 @@ spec:
   tls:
     {{- .Values.ingress.tls | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
-{{- end -}}
+{{- end }}
