@@ -5,11 +5,9 @@ metadata:
   name: hub-db-dir
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
-  {{- if .Values.hub.db.pvc.annotations -}}
+  {{- if .Values.hub.db.pvc.annotations }}
   annotations:
-    {{- range $key, $value := .Values.hub.db.pvc.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}
+    {{- .Values.hub.db.pvc.annotations | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
 spec:
   {{- if .Values.hub.db.pvc.selector }}
@@ -20,9 +18,7 @@ spec:
   storageClassName: {{ .Values.hub.db.pvc.storageClassName | quote }}
   {{- end }}
   accessModes:
-    {{- range $mode := .Values.hub.db.pvc.accessModes }}
-    - {{ $mode }}
-    {{- end }}
+    {{- .Values.hub.db.pvc.accessModes | toYaml | trimSuffix "\n" | nindent 4 }}
   resources:
     requests:
       storage: {{ .Values.hub.db.pvc.storage | quote }}
