@@ -155,3 +155,61 @@ This is a sensitive security issue (similar to writing sudo rules in a
 traditional computing environment), so be very careful.
 
 There's ongoing work on making this easier!
+
+
+## Kubernetes Network Policies
+
+Kubernetes has optional support for [network
+policies](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
+which lets you restrict how pods can communicate with each other and the outside
+world. This can provide additional security within JupyterHub, and can also be
+used to limit network access for users of JupyterHub.
+
+By default, the JupyterHub helm chart **disables** network policies.
+
+### Enabling network policies
+
+**Important**: If you decide to enable network policies, you should be aware
+that a Kubernetes cluster may have partial, full, or no support for network
+policies. Kubernetes will **silently ignore** policies that aren't supported.
+Please use **caution** if enabling network policies and verify the policies
+behave as expected, especially if you rely on them to restrict what users can
+access.
+
+You can enable network policies in your `config.yaml`:
+
+```yaml
+hub:
+  networkPolicy:
+    enabled: true
+proxy:
+  networkPolicy:
+    enabled: true
+singleuser:
+  networkPolicy:
+    enabled: true
+```
+
+The default singleuser policy allows all outbound network traffic, meaning
+JupyterHub users are able to connect to all resources inside and outside your
+network. To restrict outbound traffic to DNS, HTTP and HTTPS:
+
+```yaml
+singleuser:
+  networkPolicy:
+    enabled: true
+    egress:
+    - ports:
+      - port: 53
+        protocol: UDP
+    - ports:
+      - port: 80
+        protocol: TCP
+    - ports:
+      - port: 433
+        protocol: TCP
+```
+
+See the [Kubernetes
+documentation](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
+for further information on defining policies.
