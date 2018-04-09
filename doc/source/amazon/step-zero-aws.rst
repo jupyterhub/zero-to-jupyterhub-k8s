@@ -132,6 +132,11 @@ Procedure:
     Ideally we would simply be passing the --bastion flag into the kops command above.  However that flag is not functioning as intended at the moment.  https://github.com/kubernetes/kops/issues/2881
    
     Instead we need to follow this guide: https://github.com/kubernetes/kops/blob/master/docs/examples/kops-tests-private-net-bastion-host.md#adding-a-bastion-host-to-our-cluster
+    
+    At this point there are a few public endpoints left open which need to be addressed
+    
+    * Bastion ELB security group defaults to access from 0.0.0.0
+    * API ELB security group defaults to access from 0.0.0.0
       
 
 13. Enable dynamic storage on your Kubernetes cluster.
