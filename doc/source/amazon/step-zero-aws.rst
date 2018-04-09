@@ -62,7 +62,7 @@ Procedure:
 
 9. Create the cluster
 
-   All sizes measured in GB::
+   For a basic setup run the following (All sizes measured in GB)::
 
        kops create cluster $NAME \
          --zones $ZONES \
@@ -73,16 +73,34 @@ Procedure:
          --node-volume-size 10 \
          --yes
 
-   Future settings to consider::
+   For a more secure setup add the following params to the kops command::
+         --topology private \
+         --networking weave \
+
+   This creates a cluster where all of the masters and nodes are in private subnets and don't have external IP addresses.  A mis-configured security group or insecure ssh configuration is less likely to comprimize the cluster.
+   In order to SSH into your cluster you will need to set up a bastion node.  Make sure you do that step below.
+   If you have the default number of elastic IPs (10) you may need to put in a request to AWS support to bump up that limit.  The alternative is reducing the number of zones specified.
    
+   More reading on this subject:
+   https://github.com/kubernetes/kops/blob/master/docs/networking.md
+
+   Settings to consider (not covered in this guide)::
        --vpc
-       --bastion (security)
-       --master-count (redundancy/HA)
+         Allows you to use a custom VPC or share a VPC
+         https://github.com/kubernetes/kops/blob/master/docs/run_in_existing_vpc.md
+       --master-count
+         Spawns more masters in one or more VPCs
+         This improves redudancy and reduces downtime during cluster upgrades
        --master-zones
+         specify zones to run the master in
        --node-count
-       --master/node-security-groups (security)
-       --ssh-access (security)
-       --topology private (security)
+         Increases the total nodes created (default 2)
+       --master/node-security-groups
+         Allows you to specify additional security groups to put the masters and nodes in by default
+       --ssh-access
+         By default SSH access is open to the world (0.0.0.0).
+         If you are using a private topology, this is not a problem.
+         If you are using a public topology make sure your ssh keys are strong and you keep sshd up to date on your cluster's nodes.
 
 10. Wait for the cluster to start-up
 
@@ -95,6 +113,7 @@ Procedure:
     ``time until kops validate cluster; do sleep 15 ; done`` can be used to automate the waiting process.
     
     If at any point you wish to destroy your cluster after this step, run ``kops delete cluster $NAME --yes``
+    
 
 11. Confirm that ``kubectl`` is connected to your Kubernetes cluster.
     Run::
@@ -102,6 +121,14 @@ Procedure:
        kubectl get nodes
 
     you should see a list of two nodes, each beginning with ``ip``.
+
+12. Configure ssh bastion
+   Skip this step if you did not go with the private option above!
+   
+   Ideally we would simply be passing the --bastion flag into the kops command above.  However that flag is not functioning as intended at the moment.  https://github.com/kubernetes/kops/issues/2881
+   
+   Instead we need to follow this guide: https://github.com/kubernetes/kops/blob/master/docs/examples/kops-tests-private-net-bastion-host.md#adding-a-bastion-host-to-our-cluster
+      
 
 12. Enable dynamic storage on your Kubernetes cluster.
     Create a file, ``storageclass.yml`` on your local computer, and enter
