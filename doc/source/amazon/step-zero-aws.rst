@@ -74,6 +74,7 @@ Procedure:
          --yes
 
    For a more secure setup add the following params to the kops command::
+   
          --topology private \
          --networking weave \
 
@@ -85,6 +86,7 @@ Procedure:
    https://github.com/kubernetes/kops/blob/master/docs/networking.md
 
    Settings to consider (not covered in this guide)::
+   
        --vpc
          Allows you to use a custom VPC or share a VPC
          https://github.com/kubernetes/kops/blob/master/docs/run_in_existing_vpc.md
@@ -116,6 +118,7 @@ Procedure:
     
 
 11. Confirm that ``kubectl`` is connected to your Kubernetes cluster.
+
     Run::
 
        kubectl get nodes
@@ -123,14 +126,15 @@ Procedure:
     you should see a list of two nodes, each beginning with ``ip``.
 
 12. Configure ssh bastion
-   Skip this step if you did not go with the private option above!
+
+    Skip this step if you did not go with the private option above!
    
-   Ideally we would simply be passing the --bastion flag into the kops command above.  However that flag is not functioning as intended at the moment.  https://github.com/kubernetes/kops/issues/2881
+    Ideally we would simply be passing the --bastion flag into the kops command above.  However that flag is not functioning as intended at the moment.  https://github.com/kubernetes/kops/issues/2881
    
-   Instead we need to follow this guide: https://github.com/kubernetes/kops/blob/master/docs/examples/kops-tests-private-net-bastion-host.md#adding-a-bastion-host-to-our-cluster
+    Instead we need to follow this guide: https://github.com/kubernetes/kops/blob/master/docs/examples/kops-tests-private-net-bastion-host.md#adding-a-bastion-host-to-our-cluster
       
 
-12. Enable dynamic storage on your Kubernetes cluster.
+13. Enable dynamic storage on your Kubernetes cluster.
     Create a file, ``storageclass.yml`` on your local computer, and enter
     this text::
 
