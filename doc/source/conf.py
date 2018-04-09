@@ -195,7 +195,6 @@ texinfo_documents = [
 ]
 
 
-
 # -- Options for Epub output ----------------------------------------------
 
 # Bibliographic Dublin Core info.
@@ -215,6 +214,7 @@ epub_copyright = copyright
 
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
+
 
 # -- JSON schema markdown file -----------------------------------
 
@@ -252,3 +252,7 @@ new_lines += lines
 
 with open('reference.md', 'w') as ff:
     ff.write('\n'.join(new_lines))
+
+
+# -- Linkcheck options ------------------
+linkcheck_anchors_ignore = ["/#!"]

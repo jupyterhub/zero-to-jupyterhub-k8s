@@ -25,7 +25,7 @@ They provide the following things:
 - Creating, resizing, and deleting clusters
 
 Some of these organizations are companies
-(e.g., `Google <http://cloud.google.com/>`_), though JupyterHub
+(e.g., `Google <https://cloud.google.com/>`_), though JupyterHub
 will work fine with university clusters or custom cluster deployments as well.
 For these materials, any cluster with Kubernetes installed will work
 with JupyterHub.
@@ -176,7 +176,7 @@ For more information about services, see the
 Namespace
 *********
 
-Finally, a `namespace <https://kubernetes.io/docs/admin/namespaces/>`_
+Finally, a `namespace <https://kubernetes.io/docs/tasks/administer-cluster/namespaces/>`_
 defines a collection of objects in Kubernetes. It
 is generally the most "high-level" of the groups we've discussed thus far.
 For example, a namespace could be a single class running with JupyterHub.
