@@ -203,6 +203,7 @@ cull:
   users: false
   timeout: 3600
   every: 600
+  concurrency: 10
   maxAge: 0
   podCuller:
     image:
