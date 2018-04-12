@@ -236,10 +236,20 @@ if get_config('cull.enabled', False):
         '--timeout=%s' % cull_timeout,
         '--cull-every=%s' % cull_every,
         '--concurrency=%s' % cull_concurrency,
-        '--url=http://127.0.0.1:8081' + c.JupyterHub.base_url + 'hub/api'
+        '--url=http://127.0.0.1:8081' + c.JupyterHub.base_url + 'hub/api',
     ]
+
     if get_config('cull.users'):
         cull_cmd.append('--cull-users')
+
+    # FIXME: remove version check when we require jupyterhub 0.9 in the chart
+    # that will also mean we can remove the podCuller image
+    import jupyterhub
+    from distutils.version import LooseVersion as V
+    cull_max_age = get_config('cull.max-age')
+    if cull_max_age and V(jupyterhub.__version__) >= V('0.9'):
+        cull_cmd.append('--max-age=%s' % cull_max_age)
+
     c.JupyterHub.services.append({
         'name': 'cull-idle',
         'admin': True,
