@@ -230,10 +230,12 @@ c.JupyterHub.services = []
 if get_config('cull.enabled', False):
     cull_timeout = get_config('cull.timeout')
     cull_every = get_config('cull.every')
+    cull_concurrency = get_config('cull.concurrency')
     cull_cmd = [
         '/usr/local/bin/cull_idle_servers.py',
         '--timeout=%s' % cull_timeout,
         '--cull-every=%s' % cull_every,
+        '--concurrency=%s' % cull_concurrency,
         '--url=http://127.0.0.1:8081' + c.JupyterHub.base_url + 'hub/api'
     ]
     if get_config('cull.users'):

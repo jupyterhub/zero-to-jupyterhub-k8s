@@ -8,6 +8,7 @@ data:
   cull.users: {{ .Values.cull.users | quote }}
   cull.timeout: {{ .Values.cull.timeout | quote }}
   cull.every: {{ .Values.cull.every | quote }}
+  cull.concurrency: {{ .Values.cull.concurrency | quote }}
   {{- end }}
 
   auth.type: {{ .Values.auth.type | quote }}
