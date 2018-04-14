@@ -351,3 +351,7 @@ or use ``doctl compute size list``.
 !!! warning Do not choose a ``controller_type`` smaller than 2GB.
 Smaller droplets are not sufficient for running a controller and
 bootstrapping will fail.
+
+Congrats. Now that you have your Kubernetes cluster running, it's time to
+begin :ref:`creating-your-jupyterhub`.
+
