@@ -3,7 +3,7 @@ import glob
 from tornado.httpclient import AsyncHTTPClient
 from kubernetes import client
 
-from z2jh import get_config, get_secret
+from z2jh import get_config, get_secret, set_config_if_not_none
 
 # Configure JupyterHub to use the curl backend for making HTTP requests,
 # rather than the pure-python implementations. The default one starts
