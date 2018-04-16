@@ -115,6 +115,11 @@ auth:
     users:
   dummy:
     password:
+  ldap:
+    dn:
+      search: {}
+      user: {}
+    user: {}
   state:
     enabled: false
     cryptoKey:
