@@ -56,6 +56,28 @@ data:
   auth.lti.consumers: |
 {{ toYaml .Values.auth.lti.consumers | indent 4 }}
   {{- end }}
+  {{ if eq .Values.auth.type "ldap" -}}
+  auth.ldap.server.address: {{ .Values.auth.ldap.server.address | quote }}
+  auth.ldap.server.port: {{ .Values.auth.ldap.server.port | quote }}
+  auth.ldap.server.ssl: {{ .Values.auth.ldap.server.ssl | quote }}
+  {{ if .Values.auth.ldap.allowedGroups -}}
+  auth.ldap.allowed-groups: |
+{{ toYaml .Values.auth.ldap.allowedGroups | indent 4 }}
+  {{- end }}
+  {{ if .Values.auth.ldap.dn.templates -}}
+  auth.ldap.dn.templates: |
+{{ toYaml .Values.auth.ldap.dn.templates | indent 4 }}
+  {{- end }}
+  auth.ldap.dn.lookup: {{ .Values.auth.ldap.dn.lookup }}
+  auth.ldap.dn.search.filter: {{ .Values.auth.ldap.dn.search.filter }}
+  auth.ldap.dn.search.user: {{ .Values.auth.ldap.dn.search.user }}
+  auth.ldap.dn.search.password: {{ .Values.auth.ldap.dn.search.password }}
+  auth.ldap.dn.user-dn-attribute: {{ .Values.auth.ldap.dn.userDnAttribute }}
+  auth.ldap.dn.user.escape: {{ .Values.auth.ldap.dn.user.escape }}
+  auth.ldap.dn.user.valid-regex: {{ .Values.auth.ldap.dn.user.validRegex }}
+  auth.ldap.dn.user.search-base: {{ .Values.auth.ldap.dn.user.searchBase }}
+  auth.ldap.user.attribute: {{ .Values.auth.ldap.user.attribute }}
+  {{- end }}
 
   {{ if .Values.auth.whitelist.users -}}
   auth.whitelist.users: |
