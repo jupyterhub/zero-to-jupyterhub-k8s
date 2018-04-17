@@ -76,7 +76,7 @@ data:
   auth.ldap.dn.user.escape: {{ .Values.auth.ldap.dn.user.escape }}
   auth.ldap.dn.user.valid-regex: {{ .Values.auth.ldap.dn.user.validRegex }}
   auth.ldap.dn.user.search-base: {{ .Values.auth.ldap.dn.user.searchBase }}
-  auth.ldap.user.attribute: {{ .Values.auth.ldap.user.attribute }}
+  auth.ldap.dn.user.attribute: {{ .Values.auth.ldap.dn.user.attribute }}
   {{- end }}
 
   {{ if .Values.auth.whitelist.users -}}
