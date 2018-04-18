@@ -1,4 +1,3 @@
-{{- $_ := merge (dict "appLabel" "kube-lego") . }}
 {{- $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled) }}
 {{- $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt")) }}
 {{- if $autoHTTPS -}}
@@ -7,11 +6,23 @@ kind: Deployment
 metadata:
   name: autohttps
   labels:
-    {{- include "jupyterhub.labels" $_ | nindent 4 }}
+      {{- /*
+        NOTE: The deployment's own app label does not have to deviate like it's
+        pod need to.
+      */}}
+    {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
+      {{- /*
+        NOTE: A dynamically created service in the kube-lego project have
+        hardcoded the selection of a pod based on the `app: kube-lego` label.
+        For the details, see:
+        - https://github.com/jetstack/kube-lego/blob/d0c664295772bc5b4bfb95e495c6e0ebe8327319/pkg/service/service.go#L115-L117
+        - https://github.com/jetstack/kube-lego/blob/56fa724cdbc31a241d4bdd875461afcabfbc25d6/pkg/kubelego_const/consts.go#L29
+      */}}
+      {{- $_ := merge (dict "appLabel" "kube-lego") . }}
       {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}
   template:
     metadata:
