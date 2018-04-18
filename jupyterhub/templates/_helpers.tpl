@@ -1,6 +1,6 @@
 {{- /*
   This file contains helpers to systematically name, label and create
-  matchLabels for the Kubernetes objects we define.
+  matchLabels for the Kubernetes objects we define in the .yaml template files.
 
   Typical usage within a Kubernetes object:
 
@@ -25,7 +25,8 @@
 
 {{- /*
   jupyterhub.name:
-    Used to provide the app label's value and construct the fullname
+    Used to provide the app label's value and within the jupyterhub.fullname
+    helper.
 
   NOTE: It will return the provided scope's .appLabel or default to the chart's
         name.
@@ -46,15 +47,11 @@
 
   TODO:
   - [ ] Start setting the name fields using this helper.
-  - [ ] Modify the template to allow appending the name, as a conflict will
-        arise if multiple objects of the same type is defined in the same template
-        folder.
+  - [ ] Update the helper to allow appending the name, as a conflict will
+        arise if multiple objects of the same type is defined in the same
+        template folder.
   - [ ] Optionally prefix the release name based on some setting in .Values to
-        allow for multiple deployments within a single namespace. Before this is
-        done, we should consider if...
-        - kube-lego can support this with it's primitive selection based on only
-        one label.
-        - pod-culler can support it with it's current single label selector...
+        allow for multiple deployments within a single namespace.
 */}}
 {{- define "jupyterhub.fullname" }}
 {{- $name := include "jupyterhub.name" . }}
