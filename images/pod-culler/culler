@@ -161,7 +161,7 @@ class PodCuller:
                     name, self.namespace, client.V1DeleteOptions())
                 deleted_pods.append(name)
 
-        log.info(f'Deleted {len(deleted_pods)}/{len(self.pods)} pods')
+        log.info(f'Deleted {len(deleted_pods)} pods. Pod count={len(self.pods)}')
 
 
 REQUIRED = object()
