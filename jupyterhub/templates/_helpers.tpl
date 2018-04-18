@@ -9,8 +9,10 @@
       {{- include "jupyterhub.labels" . | nindent 4 }}
   ```
 
-  To control the helpers' behavior, augment the scope by merging it with
-  additional key/value pairs like below, in this case the component label had to
+  To control the helpers' behavior, augment the scope passed to the helper by
+  merging it with additional key/value pairs like below. In this case the
+  `component` label had to be set explicitly instead of implicitly from the
+  .yaml files location.
 
   ```yaml
   podSelector:
@@ -92,4 +94,13 @@ heritage: {{ .Release.Service }}
 {{- define "jupyterhub.matchLabels" }}
 {{- $_ := merge (dict "matchLabels" true) . }}
 {{- include "jupyterhub.labels" $_ }}
+{{- end }}
+
+
+{{- /*
+  jupyterhub.podCullerSelector:
+    Used to by the pod culler to select singleuser-server pods.
+*/}}
+{{- define "jupyterhub.podCullerSelector" }}
+"component={{ $component }},app={{ include "jupyterhub.name" . }},release={{ .Release.Name }}"
 {{- end }}
