@@ -153,13 +153,14 @@ Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)
 
    This should take a few minutes and provide you with a working Kubernetes cluster!
 
-8. Install `kubectl <https://kubernetes.io/docs/reference/kubectl/overview/>`_, a tool
+8. If you're using the Azure CLI locally, install `kubectl <https://kubernetes.io/docs/reference/kubectl/overview/>`_, a tool
    for accessing the Kubernetes API from the commandline:
 
    .. code-block:: bash
 
       az aks install-cli
 
+   Note: kubectl is already installed in Azure Cloud Shell.
 
 9. Get credentials from Azure for ``kubectl`` to work:
 
