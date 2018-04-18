@@ -146,7 +146,7 @@ spec:
               value: jupyterhub
             # Label used by the pod culler
             - name: LABEL_SELECTOR
-              value: {{ include "jupyterhub.podCullerSelector" . }}
+              value: {{ include "jupyterhub.podCullerSelector" . | quote }}
             {{- if .Values.hub.extraEnv }}
             {{- $extraEnvType := typeOf .Values.hub.extraEnv }}
             {{- /* If we have a list, embed that here directly. This allows for complex configuration from configmap, downward API, etc. */}}
