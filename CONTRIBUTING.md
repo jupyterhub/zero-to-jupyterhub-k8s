@@ -7,16 +7,28 @@ Welcome! As a [Jupyter](https://jupyter.org) project, we follow the [Jupyter con
 We recommend using [minikube](https://github.com/kubernetes/minikube) for local
 development.
 
-1. [Download & install minikube](https://github.com/kubernetes/minikube#installation):
+1. [Download & install minikube](https://github.com/kubernetes/minikube#installation).
 
-   For MacOS, you may find installing from https://github.com/kubernetes/minikube/releases
-   may be more stable than using Homebrew. If you have not yet installed Docker for Mac or
-   a vm such as VirtualBox, please do so.
+   For MacOS: You may install minikube using Homebrew `brew cask install minikube` or
+   from a binary at https://github.com/kubernetes/minikube/releases.
+   If you need to install Docker Community Edition (CE) for Mac, please
+   follow the [Docker instructions](https://store.docker.com/editions/community/docker-ce-desktop-mac).
 
-2. Start minikube:
+2. Start minikube.
+
+   For minikube version 0.26 and higher:
+   ```bash
+   minikube start
+   ```
+
+   For older minikube versions:
    ```bash
    minikube start --extra-config=apiserver.Authorization.Mode=RBAC
    ```
+
+   Note on troubleshooting: if you recently upgraded minikube and are now seeing
+   errors, you may need to clear out the `~/.minikube` and `~/.kube` directories
+   and reboot.
 
 3. Use the docker daemon inside minikube for building:
    ```bash
@@ -32,7 +44,7 @@ development.
 5. Create a virtualenv & install the libraries required for builds to happen:
    ```bash
    python3 -m venv .
-   pip install -r dev-requirements.txt
+   python3 -m pip install -r dev-requirements.txt
    ```
 
  6. Now run `chartpress` to build the requisite docker images inside minikube:
@@ -63,14 +75,21 @@ development.
    you want, or create another `config.yaml` file & pass that as an additional
    `-f config.yaml` file to the `helm upgrade` command.
 
-9. Open the URL for your instance of JupyterHub!
+9. Retrieve the URL for your instance of JupyterHub:
 
    ```bash
    minikube service --namespace=hub proxy-public
    ```
+  
+   Navigate to the URL in your browser. You should now have JupyterHub running
+   on minikube.
+  
+10. Make the changes you want. 
 
-10. Make the changes you want. You need to re-run step 6 if you changed anything
-   under `images`, but only step 8 if you changed things only under `jupyterhub`
+    To view your changes on the running development instance of JupyterHub:
+
+    - Re-run step 6 if you changed anything under the `images` directory
+    - Re-run step 8 if you changed things only under the `jupyterhub` directory.
 
 ---
 
