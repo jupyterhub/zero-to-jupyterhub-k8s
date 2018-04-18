@@ -99,5 +99,5 @@ heritage: {{ .Release.Service }}
     Used to by the pod culler to select singleuser-server pods.
 */}}
 {{- define "jupyterhub.podCullerSelector" }}
-"component={{ $component }},app={{ include "jupyterhub.name" . }},release={{ .Release.Name }}"
+component={{ "singleuser-server" }},app={{ include "jupyterhub.name" . }},release={{ .Release.Name }}
 {{- end }}
