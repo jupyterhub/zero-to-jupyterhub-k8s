@@ -78,7 +78,7 @@ Procedure:
          --topology private \
          --networking weave \
 
-   This creates a cluster where all of the masters and nodes are in private subnets and don't have external IP addresses.  A mis-configured security group or insecure ssh configuration is less likely to comprimize the cluster.
+   This creates a cluster where all of the masters and nodes are in private subnets and don't have external IP addresses.  A mis-configured security group or insecure ssh configuration is less likely to compromise the cluster.
    In order to SSH into your cluster you will need to set up a bastion node.  Make sure you do that step below.
    If you have the default number of elastic IPs (10) you may need to put in a request to AWS support to bump up that limit.  The alternative is reducing the number of zones specified.
    
