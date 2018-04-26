@@ -186,7 +186,7 @@ authenticate users to your JupyterHub using Google for authentication.
 6. Set "Authorized JavaScript origins" to be your hub's URL.
 
 7. Set "Authorized redirect URIs" to be your hub's URL followed by
-   "/hub/oauth_callback". For example, http://example.com/hub/oauth_callback.
+   "/hub/oauth_callback". For example, `http://{example.com}/hub/oauth_callback`.
 
 8. When you click "Create", the console will generate and display a Client ID
    and Client Secret. Save these values.

@@ -40,7 +40,7 @@ cluster. At the terminal, enter:
 
 2. Give the ``ServiceAccount`` `RBAC
    <https://kubernetes.io/docs/admin/authorization/rbac/>`_ full permissions to
-   manage the cluser.
+   manage the cluster.
 
    While most clusters have RBAC enabled and you need this
    line, you **must** skip this step if your kubernetes cluster does not have

@@ -3,7 +3,7 @@ import glob
 from tornado.httpclient import AsyncHTTPClient
 from kubernetes import client
 
-from z2jh import get_config, get_secret
+from z2jh import get_config, get_secret, set_config_if_not_none
 
 # Configure JupyterHub to use the curl backend for making HTTP requests,
 # rather than the pure-python implementations. The default one starts
@@ -175,6 +175,22 @@ elif auth_type == 'tmp':
 elif auth_type == 'lti':
     c.JupyterHub.authenticator_class = 'ltiauthenticator.LTIAuthenticator'
     c.LTIAuthenticator.consumers = get_config('auth.lti.consumers')
+elif auth_type == 'ldap':
+    c.JupyterHub.authenticator_class = 'ldapauthenticator.LDAPAuthenticator'
+    c.LDAPAuthenticator.server_address = get_config('auth.ldap.server.address')
+    set_config_if_not_none(c.LDAPAuthenticator, 'server_port', 'auth.ldap.server.port')
+    set_config_if_not_none(c.LDAPAuthenticator, 'use_ssl', 'auth.ldap.server.ssl')
+    set_config_if_not_none(c.LDAPAuthenticator, 'allowed_groups', 'auth.ldap.allowed-groups')
+    c.LDAPAuthenticator.bind_dn_template = get_config('auth.ldap.dn.templates')
+    set_config_if_not_none(c.LDAPAuthenticator, 'lookup_dn', 'auth.ldap.dn.lookup')
+    set_config_if_not_none(c.LDAPAuthenticator, 'lookup_dn_search_filter', 'auth.ldap.dn.search.filter')
+    set_config_if_not_none(c.LDAPAuthenticator, 'lookup_dn_search_user', 'auth.ldap.dn.search.user')
+    set_config_if_not_none(c.LDAPAuthenticator, 'lookup_dn_search_password', 'auth.ldap.dn.search.password')
+    set_config_if_not_none(c.LDAPAuthenticator, 'lookup_dn_user_dn_attribute', 'auth.ldap.dn.user.dn-attribute')
+    set_config_if_not_none(c.LDAPAuthenticator, 'escape_userdn', 'auth.ldap.dn.user.escape')
+    set_config_if_not_none(c.LDAPAuthenticator, 'valid_username_regex', 'auth.ldap.dn.user.valid-regex')
+    set_config_if_not_none(c.LDAPAuthenticator, 'user_search_base', 'auth.ldap.dn.user.search-base')
+    set_config_if_not_none(c.LDAPAuthenticator, 'user_attribute', 'auth.ldap.dn.user.attribute')
 elif auth_type == 'custom':
     # full_class_name looks like "myauthenticator.MyAuthenticator".
     # To create a docker image with this class availabe, you can just have the
@@ -230,14 +246,26 @@ c.JupyterHub.services = []
 if get_config('cull.enabled', False):
     cull_timeout = get_config('cull.timeout')
     cull_every = get_config('cull.every')
+    cull_concurrency = get_config('cull.concurrency')
     cull_cmd = [
         '/usr/local/bin/cull_idle_servers.py',
         '--timeout=%s' % cull_timeout,
         '--cull-every=%s' % cull_every,
-        '--url=http://127.0.0.1:8081' + c.JupyterHub.base_url + 'hub/api'
+        '--concurrency=%s' % cull_concurrency,
+        '--url=http://127.0.0.1:8081' + c.JupyterHub.base_url + 'hub/api',
     ]
+
     if get_config('cull.users'):
         cull_cmd.append('--cull-users')
+
+    # FIXME: remove version check when we require jupyterhub 0.9 in the chart
+    # that will also mean we can remove the podCuller image
+    import jupyterhub
+    from distutils.version import LooseVersion as V
+    cull_max_age = get_config('cull.max-age')
+    if cull_max_age and V(jupyterhub.__version__) >= V('0.9'):
+        cull_cmd.append('--max-age=%s' % cull_max_age)
+
     c.JupyterHub.services.append({
         'name': 'cull-idle',
         'admin': True,

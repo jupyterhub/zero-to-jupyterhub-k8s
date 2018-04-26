@@ -29,3 +29,12 @@ def get_secret(key, default=None):
             return f.read().strip()
     except FileNotFoundError:
         return default
+
+def set_config_if_not_none(cparent, name, key):
+    """
+    Find a config item of a given name, set the corresponding Jupyter
+    configuration item if not None
+    """
+    data = get_config(key)
+    if data is not None:
+        setattr(cparent, name, data)

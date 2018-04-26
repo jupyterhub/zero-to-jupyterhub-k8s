@@ -26,13 +26,14 @@ This section describes a Kubernetes cluster and outlines how to complete *Step Z
 different cloud providers and infrastructure.
 
 .. toctree::
-   :maxdepth: 2
+   :titlesonly:
    :caption: Step Zero: your Kubernetes cluster
 
    create-k8s-cluster
    google/step-zero-gcp
    microsoft/step-zero-azure
    amazon/step-zero-aws
+   redhat/step-zero-openshift
 
 .. _creating-your-jupyterhub:
 
@@ -96,9 +97,9 @@ cloud-based deployments and tips for maintaining your deployment.
    optimization
    security
    upgrading
-   cost
    troubleshooting
    advanced
+   cost
 
 .. _community-resources:
 
@@ -149,9 +150,9 @@ This guide and the associated helm chart would not be possible without the
 amazing institutional support from the following
 organizations (and the organizations that support them!)
 
-* `UC Berkeley Data Science Division <http://data.berkeley.edu/>`_
+* `UC Berkeley Data Science Division <https://data.berkeley.edu/>`_
 * `Berkeley Institute for Data Science <https://bids.berkeley.edu/>`_
-* `Cal Poly, San Luis Obispo <http://www.calpoly.edu/>`_
+* `Cal Poly, San Luis Obispo <https://www.calpoly.edu/>`_
 * `Simula Research Institute <https://www.simula.no/>`_
 
 

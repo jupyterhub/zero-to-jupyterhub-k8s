@@ -148,6 +148,9 @@ class PodCuller:
         for pod in pods:
             name = pod.metadata.name
             # API results always use UTC timezone
+            if pod.status.start_time is None:
+                # no start time, it hasn't started yet!
+                continue
             age = now - pod.status.start_time.replace(tzinfo=timezone.utc)
             age_s = format_td(age)
 
@@ -158,7 +161,7 @@ class PodCuller:
                     name, self.namespace, client.V1DeleteOptions())
                 deleted_pods.append(name)
 
-        log.info(f'Deleted {len(deleted_pods)}/{len(self.pods)} pods')
+        log.info(f'Deleted {len(deleted_pods)} pods. Pod count={len(self.pods)}')
 
 
 REQUIRED = object()

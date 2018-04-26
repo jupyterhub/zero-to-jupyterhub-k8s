@@ -133,11 +133,11 @@ spec:
               key: proxy.token
         {{ if .Values.hub.extraEnv -}}
         {{ $extraEnvType := typeOf .Values.hub.extraEnv -}}
-        {# If we have a list, embed that here directly. This allows for complex configuration from configmap, downward API, etc #}
-        {{ if eq $extraEnvType "[]interface {}" -}}
+        {{/* If we have a list, embed that here directly. This allows for complex configuration from configmap, downward API, etc. */}}
+        {{ if eq $extraEnvType "[]interface {}" }}
 {{ toYaml .Values.hub.extraEnv | indent 8 }}
         {{ else if eq $extraEnvType "map[string]interface {}" -}}
-        {# If we have a map, treat those as key-value pairs #}
+        {{/* If we have a map, treat those as key-value pairs. */}}
         {{ range $key, $value := .Values.hub.extraEnv }}
         - name: {{ $key | quote }}
           value: {{ $value | quote }}

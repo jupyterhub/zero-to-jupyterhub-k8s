@@ -11,9 +11,7 @@ infrastructure:
 - :ref:`Google Cloud <google-cloud>`
 - :ref:`Microsoft Azure <microsoft-azure>`
 - :ref:`Amazon AWS <amazon-aws>`
-- Red Hat OpenShift
-- OpenStack
-- Others
+- :ref:`Red Hat OpenShift <redhat-openshift>`
 
 .. note::
 
