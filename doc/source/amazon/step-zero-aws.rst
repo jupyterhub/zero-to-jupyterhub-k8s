@@ -3,15 +3,17 @@
 Step Zero: Kubernetes on Amazon Web Services (AWS)
 --------------------------------------------------
 
-AWS does not have native support for Kubernetes, however there are
-many organizations that have put together their own solutions and
-guides for setting up Kubernetes on AWS.
+AWS support for Kubernetes is evolving quickly. Therefore, you have several
+options for setting up a Kubernetes cluster using AWS.
 
-We like the `Heptio guide`_, and recommend using this for setting up your cluster for clusters
-that span short periods of time (a week long workshop, for example). However, if
-you are setting up a cluster that would need to run for much longer, we recommend you use
-[kops](https://kubernetes.io/docs/getting-started-guides/kops/). It is a bit more complex,
-but provides features (such as log collection & cluster upgrades) that are necessary to
+An option that we like is the `Heptio guide`_, and recommend using this 
+for setting up your cluster for clusters that span short periods of time
+(a week long workshop, for example). 
+
+If you are setting up a cluster that would need to run for much longer,
+we recommend you use the AWS workshop as a starting point or use `kops <https://kubernetes.io/docs/getting-started-guides/kops/>`_. 
+The `kops` approach is a bit more complex than the Heptio guide but provides
+features (such as log collection & cluster upgrades) that are necessary to
 run a longer term cluster.
 
 .. note::
@@ -168,5 +170,16 @@ run a longer term cluster.
 
 Congrats. Now that you have your Kubernetes cluster running, it's time to
 begin :ref:`creating-your-jupyterhub`.
+
+.. tip::
+
+    *AWS and Kubernetes resources*
+
+        - `Amazon AWS workshop for Kubernetes <https://github.com/aws-samples/aws-workshop-for-kubernetes>`_
+          This workshop takes several hours to complete and provides Amazon's
+          view about Kubernetes on AWS. 
+        - `Heptio Kubernetes tutorial <http://docs.heptio.com/content/tutorials/aws-cloudformation-k8s.html>`_
+        - `Getting started with kops <https://kubernetes.io/docs/getting-started-guides/kops/>`_
+
 
 .. _Heptio guide: https://s3.amazonaws.com/quickstart-reference/heptio/latest/doc/heptio-kubernetes-on-the-aws-cloud.pdf
