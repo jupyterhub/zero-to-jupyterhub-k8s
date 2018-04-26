@@ -58,7 +58,7 @@ Procedure:
    For this guide we will be allowing nodes to be deployed in all AZs::
   
        export ZONES=$(aws ec2 describe-availability-zones --region $REGION | grep ZoneName | awk '{print $2}' | tr -d '"')
-       export ZONES=$(echo $ZONES | tr -d " " | rev | cut -c 2- | rev)``
+       export ZONES=$(echo $ZONES | tr -d " " | rev | cut -c 2- | rev)
 
 9. Create the cluster
 
@@ -123,7 +123,12 @@ Procedure:
 
        kubectl get nodes
 
-    you should see a list of two nodes, each beginning with ``ip``.
+    You should see a list of two nodes, each beginning with ``ip``.
+    
+    If you want to run kubectl from a box not on AWS, you can use run the following on AWS: ``kubectl export kubecfg``
+       
+    To use kubctl and helm from a local machine, copy the contents of ``~/.kube/config`` to the same place on your local system.  If you wish to put the kube config file in a different location, you will need to ``export KUBECONFIG=<other kube config location>``
+    
 
 12. Configure ssh bastion
 
