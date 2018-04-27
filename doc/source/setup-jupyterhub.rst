@@ -153,7 +153,7 @@ Install JupyterHub
       If the IP for ``proxy-public`` is too long to fit into the window, you
       can find the longer version by calling::
 
-        kubectl --namespace=<YOUR-NAMESPACE> describe svc proxy-public
+        kubectl --namespace=<YOUR-NAMESPACE> describe svc proxy-public --output=wide
 
 5. To use JupyterHub, enter the external IP for the `proxy-public` service in
    to a browser. JupyterHub is running with a default *dummy* authenticator so
