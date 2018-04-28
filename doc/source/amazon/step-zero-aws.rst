@@ -3,183 +3,171 @@
 Step Zero: Kubernetes on Amazon Web Services (AWS)
 --------------------------------------------------
 
-AWS support for Kubernetes is evolving quickly. Therefore, you have several
-options for setting up a Kubernetes cluster using AWS.
+AWS does not have native support for Kubernetes, however there are
+many organizations that have put together their own solutions and
+guides for setting up Kubernetes on AWS.
 
-An option that we like is the `Heptio guide`_, and recommend using this 
-for setting up your cluster for clusters that span short periods of time
-(a week long workshop, for example). 
+This guide uses kops to setup a cluster on AWS.  This should be seen as a rough template you will use to
+setup and shape your cluster.
 
-If you are setting up a cluster that would need to run for much longer,
-we recommend you use the AWS workshop as a starting point or use `kops <https://kubernetes.io/docs/getting-started-guides/kops/>`_. 
-The `kops` approach is a bit more complex than the Heptio guide but provides
-features (such as log collection & cluster upgrades) that are necessary to
-run a longer term cluster.
+Procedure:
 
-.. note::
+1. Create a IAM Role
 
-   The Heptio deployment of Kubernetes on AWS should not be considered
-   production-ready. See `the introduction in the Heptio Kubernetes tutorial <http://docs.heptio.com/content/tutorials/aws-cloudformation-k8s.html>`_
-   for information about what to expect.
+   This role will be used to give your CI host permission to create and destroy resources on AWS
+   
+   * AmazonEC2FullAccess 
+   * IAMFullAccess 
+   * AmazonS3FullAccess 
+   * AmazonVPCFullAccess 
+   * Route53FullAccess (Optional)
+   
+2. Create a new instance to use as your CI host.  This node will deal with provisioning and tearing down the cluster.
 
-1. Follow Step 1 of the `Heptio guide`_, called **Prepare your AWS Account**.
+   This instance can be small (t2.micro for example).
+   
+   When creating it, assign the IAM role created in step 1.
 
-   This sets up your Amazon account with the credentials needed to run Kubernetes.
+3. Install kops and kubectl on your CI host
 
-   .. note::
+   Follow the instructions here: https://github.com/kubernetes/kops/blob/master/docs/install.md
 
-      * Make sure that you keep the file downloaded when you create the SSH
-        key. This will be needed later to allow ``kubectl`` to interact with
-        your Kubernetes cluster.
+4. Setup an ssh keypair to use with the cluster
 
-      * You may find it helpful to "pin" the services we'll be using to your AWS
-        navbar. This makes it easier to navigate in subsequent sessions.
-        Click the "pin" icon at the top, then drag ``CloudFormation`` and
-        ``EC2`` into your navbar.
+   ``ssh-keygen``
 
-2. Deploy a Kubernetes template from Heptio.
+5. Choose a cluster name
 
-   .. note::
+   Since we are not using pre-configured DNS we will use the suffix ".k8s.local".  Per the docs, if the DNS name ends in .k8s.local the cluster will use internal hosted DNS.
+   
+   ``export NAME=<somename>.k8s.local``
 
-      This section largely follows Step 2 of the `Heptio guide`_.
+6. Create a S3 bucket to store your cluster configuration
 
-   AWS makes it possible to deploy computational resources in a "stack" using
-   templates. Heptio has put together a template for running Kubernetes on AWS.
-   Click the button below to select the Heptio template, then follow the
-   instructions below.
+   Since we are on AWS we can use a S3 backing store.  It is recommended to enabling versioning on the S3 bucket.
+   We don't need to pass this into the KOPS commands.  It is automatically detected by the kops tool as an env variable.
+   
+   ``export KOPS_STATE_STORE=s3://<your_s3_bucket_name_here>``
+   
+7. Set the region to deploy in
 
-   .. raw:: html
+   ``export REGION=`curl -s http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'```
 
-      <a target="_blank" href="https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=Heptio-Kubernetes&templateURL=https://s3.amazonaws.com/quickstart-reference/heptio/latest/templates/kubernetes-cluster-with-new-vpc.template">
-      <button style="background-color: rgb(235, 119, 55); border: 1px solid; border-color: black; color: white; padding: 15px 32px; text-align: center; text-decoration: none; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 8px;">Deploy the Heptio Template</button></a>
+8. Set the availability zones for the nodes
 
-   You'll be taken to an AWS page with a field already
-   chosen under "Choose a template". Simply hit "Next".
+   For this guide we will be allowing nodes to be deployed in all AZs::
+  
+       export ZONES=$(aws ec2 describe-availability-zones --region $REGION | grep ZoneName | awk '{print $2}' | tr -d '"')
+       export ZONES=$(echo $ZONES | tr -d " " | rev | cut -c 2- | rev)
 
-   **Enter AWS instance information (page 1)**: On this page you'll tell AWS
-   what kind of hardware you need. Fill in the following required fields:
+9. Create the cluster
 
-   * ``Stack Name`` can be anything you like.
-   * ``Availability Zone`` is related to the location of the AWS
-     resources. Choose an AWS location close to your physical location or
-     any other desired AWS location.
-   * ``Admin Ingress Location`` defines the locations from which you
-     can access this cluster as an administrator. Enter ``0.0.0.0/0``
-     for the most permissive approach.
-   * ``SSH Key`` is a dropdown list of keys attached to your account.
-     The one you created in Step 1 should be listed here. This will allow
-     you to SSH into the machines if you desire.
-   * ``Node Capacity`` defines the number of machines you've got available.
-     This will depend on the ``Instance Type`` that you choose. E.g., if you
-     want each user to have 2GB and you expect 10 users, choose a combination
-     of ``Instance Type`` and ``Node Capacity`` that meets this requirement.
-   * ``Instance Type`` defines what kind of machine you're requesting. See
-     this `list of instance types with Amazon <https://aws.amazon.com/ec2/instance-types/>`_
-     as well as this list of `pricing for each instance type <https://aws.amazon.com/ec2/pricing/on-demand/>`_.
-   * ``Disk Size`` corresponds to the hard disk for each node. Note that this is
-     different from the disks that users will use for their own notebooks/data.
-     This disk should be large enough to contain the size of any Docker
-     images you're serving with the JupyterHub.
-   * ``Instance Type (Bastion Host)`` corresponds to a computer that allows
-     for easy SSH access to your Kubernetes cluster. This does not need to
-     be a fancy computer. You may leave these as defaults. For more information
-     on the Bastion Host, `see here <http://docs.aws.amazon.com/quickstart/latest/linux-bastion/architecture.html>`_.
+   For a basic setup run the following (All sizes measured in GB)::
 
-   **Enter AWS instance information (page 2)**: On the second page you may leave
-   all of these fields as is or customize as you wish. When done, hit ``Next``. Then
-   confirm and hit ``Next`` once more.
+       kops create cluster $NAME \
+         --zones $ZONES \
+         --authorization RBAC \
+         --master-size t2.micro \
+         --master-volume-size 10 \
+         --node-size t2.medium \
+         --node-volume-size 10 \
+         --yes
 
-   AWS will now create the computational resources defined in the Heptio
-   template (and according to the options that you chose).
+   For a more secure setup add the following params to the kops command::
+   
+         --topology private \
+         --networking weave \
 
-   To see the status of the resources you've requested,
-   see the ``CloudFormation`` page. You should see two stacks being created,
-   each will have the name you've requested. When they're done creating,
-   continue with the guide.
+   This creates a cluster where all of the masters and nodes are in private subnets and don't have external IP addresses.  A mis-configured security group or insecure ssh configuration is less likely to compromise the cluster.
+   In order to SSH into your cluster you will need to set up a bastion node.  Make sure you do that step below.
+   If you have the default number of elastic IPs (10) you may need to put in a request to AWS support to bump up that limit.  The alternative is reducing the number of zones specified.
+   
+   More reading on this subject:
+   https://github.com/kubernetes/kops/blob/master/docs/networking.md
 
-   .. note::
+   Settings to consider (not covered in this guide)::
+   
+       --vpc
+         Allows you to use a custom VPC or share a VPC
+         https://github.com/kubernetes/kops/blob/master/docs/run_in_existing_vpc.md
+       --master-count
+         Spawns more masters in one or more VPCs
+         This improves redudancy and reduces downtime during cluster upgrades
+       --master-zones
+         specify zones to run the master in
+       --node-count
+         Increases the total nodes created (default 2)
+       --master/node-security-groups
+         Allows you to specify additional security groups to put the masters and nodes in by default
+       --ssh-access
+         By default SSH access is open to the world (0.0.0.0).
+         If you are using a private topology, this is not a problem.
+         If you are using a public topology make sure your ssh keys are strong and you keep sshd up to date on your cluster's nodes.
 
-      This often takes 15-20 minutes to finish. You'll know it's done when
-      both stacks show the status ``CREATE_COMPLETE``.
+10. Wait for the cluster to start-up
 
-3. Ensure that the *latest* version of `kubectl <https://kubernetes.io/docs/user-guide/prereqs/>`_ is
-   installed on your machine be following the `install instructions <https://kubernetes.io/docs/user-guide/prereqs>`_.
+    Running the 'kops validate cluster' command will tell us what the current state of setup is.
+    If you see "can not get nodes" initially, just be patient as the cluster can't report until a
+    few basic services are up and running.
+   
+    Keep running 'kops validate cluster' until you see "Your cluster $NAME is ready" at the end of the output.
+   
+    ``time until kops validate cluster; do sleep 15 ; done`` can be used to automate the waiting process.
+    
+    If at any point you wish to destroy your cluster after this step, run ``kops delete cluster $NAME --yes``
+    
 
-4. Configure your ``kubectl`` to send instructions to the newly-created
-   Kubernetes cluster. To do this, you'll need to copy a security file
-   onto your computer. Heptio has pre-configured the command needed to do this.
-   To access it, from the ``CloudFormation`` page click on the stack you just
-   created (the one without "k8s-stack" in it). Below, there is an "Outputs"
-   tab. Click on this, and look for a field called ``GetKubeConfigCommand``.
-   Copy / paste that text into your terminal, replacing the ``path/to/myKey.pem``
-   with the path to the key you downloaded in Step 1. It looks something like::
+11. Confirm that ``kubectl`` is connected to your Kubernetes cluster.
 
-     SSH_KEY="<path/to/varMyKey.pem>"; scp -i $SSH_KEY -o
-     ProxyCommand="ssh -i \"${SSH_KEY}\" ubuntu@<BastionHostPublicIP> nc
-     %h %p" ubuntu@<MasterPrivateIP>:~/kubeconfig ./kubeconfig
+    Run::
 
-5. Tell Kubernetes to use this configuration file. Run::
+       kubectl get nodes
 
-     export KUBECONFIG=$(pwd)/kubeconfig
+    You should see a list of two nodes, each beginning with ``ip``.
+    
+    If you want to run kubectl from a box not on AWS, you can use run the following on AWS: ``kops export kubecfg``
+       
+    To use kubctl and helm from a local machine, copy the contents of ``~/.kube/config`` to the same place on your local system.  If you wish to put the kube config file in a different location, you will need to ``export KUBECONFIG=<other kube config location>``
+    
 
-6. Confirm that ``kubectl`` is connected to your Kubernetes cluster.
-   Run::
+12. Configure ssh bastion
 
-      kubectl get nodes
+    Skip this step if you did not go with the private option above!
+   
+    Ideally we would simply be passing the --bastion flag into the kops command above.  However that flag is not functioning as intended at the moment.  https://github.com/kubernetes/kops/issues/2881
+   
+    Instead we need to follow this guide: https://github.com/kubernetes/kops/blob/master/docs/examples/kops-tests-private-net-bastion-host.md#adding-a-bastion-host-to-our-cluster
+    
+    At this point there are a few public endpoints left open which need to be addressed
+    
+    * Bastion ELB security group defaults to access from 0.0.0.0
+    * API ELB security group defaults to access from 0.0.0.0
+      
 
-   you should see a list of three nodes, each beginning with ``ip``.
+13. Enable dynamic storage on your Kubernetes cluster.
+    Create a file, ``storageclass.yml`` on your local computer, and enter
+    this text::
 
-7. Enable dynamic storage on your Kubernetes cluster.
-   Create a file, ``storageclass.yml`` on your local computer, and enter
-   this text::
+        kind: StorageClass
+        apiVersion: storage.k8s.io/v1
+        metadata:
+          annotations:
+             storageclass.beta.kubernetes.io/is-default-class: "true"
+          name: gp2
+        provisioner: kubernetes.io/aws-ebs
+        parameters:
+          type: gp2
 
-       kind: StorageClass
-       apiVersion: storage.k8s.io/v1
-       metadata:
-         annotations:
-            storageclass.beta.kubernetes.io/is-default-class: "true"
-         name: gp2
-       provisioner: kubernetes.io/aws-ebs
-       parameters:
-         type: gp2
+    Next, run this command:
 
-   Next, run this command:
+        .. code-block:: bash
 
-       .. code-block:: bash
+           kubectl apply -f storageclass.yml
 
-          kubectl apply -f storageclass.yml
-
-   This enables `dynamic provisioning
-   <https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic>`_ of
-   disks, allowing us to automatically assign a disk per user when they log
-   in to JupyterHub.
-
-
-8. Enable legacy authorization mode. This is temporarily required since the newer
-   and more secure authorization mode is not out of beta yet.
-
-      .. code-block:: bash
-
-         kubectl create clusterrolebinding permissive-binding \
-          --clusterrole=cluster-admin \
-          --user=admin \
-          --user=kubelet \
-          --group=system:serviceaccounts
-
-  This step should hopefully go away soon!
+    This enables `dynamic provisioning
+    <https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic>`_ of
+    disks, allowing us to automatically assign a disk per user when they log
+    in to JupyterHub.
 
 Congrats. Now that you have your Kubernetes cluster running, it's time to
 begin :ref:`creating-your-jupyterhub`.
-
-.. tip::
-
-    *AWS and Kubernetes resources*
-
-        - `Amazon AWS workshop for Kubernetes <https://github.com/aws-samples/aws-workshop-for-kubernetes>`_
-          This workshop takes several hours to complete and provides Amazon's
-          view about Kubernetes on AWS. 
-        - `Heptio Kubernetes tutorial <http://docs.heptio.com/content/tutorials/aws-cloudformation-k8s.html>`_
-        - `Getting started with kops <https://kubernetes.io/docs/getting-started-guides/kops/>`_
-
-
-.. _Heptio guide: https://s3.amazonaws.com/quickstart-reference/heptio/latest/doc/heptio-kubernetes-on-the-aws-cloud.pdf
