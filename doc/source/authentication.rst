@@ -214,6 +214,63 @@ earlier. Set ``hostedDomain`` to your institution's domain name. The value of
 ``loginService`` is a descriptive term for your institution that reminds your
 users which account they are using to login.
 
+
+Authenticating with LDAP
+--------------------------
+
+JupyterHub supports LDAP and Active Directory authentication.
+Read the `ldapauthenticator <https://github.com/jupyterhub/ldapauthenticator>`_
+documentation for a full explanation of the available parameters.
+
+Example LDAP Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+`auth.ldap.server.address` and `auth.ldap.dn.templates` are required. Other
+fields are optional.
+
+.. code-block:: yaml
+
+    auth:
+      type: ldap
+      ldap:
+        server:
+          address: ldap.EXAMPLE.org
+        dn:
+          templates:
+            - 'cn={username},ou=edir,ou=people,ou=EXAMPLE-UNIT,o=EXAMPLE'
+
+Example Active Directory Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This example is equivalent to that given in the
+`ldapauthenticator README <https://github.com/jupyterhub/ldapauthenticator/blob/master/README.md>`_.
+
+.. code-block:: yaml
+
+    auth:
+      type: ldap
+      ldap:
+        server:
+          address: ad.EXAMPLE.org
+        dn:
+          lookup: true
+          search:
+            filter: '({login_attr}={login})'
+            user: 'ldap_search_user_technical_account'
+            password: 'secret'
+            dnAttribute: 'cn'
+          templates:
+            - 'uid={username},ou=people,dc=wikimedia,dc=org'
+            - 'uid={username},ou=developers,dc=wikimedia,dc=org'
+          user:
+            searchBase: 'ou=people,dc=wikimedia,dc=org'
+            escape: False
+            attribute: 'sAMAccountName'
+        allowedGroups:
+          - 'cn=researcher,ou=groups,dc=wikimedia,dc=org'
+          - 'cn=operations,ou=groups,dc=wikimedia,dc=org'
+
+
 Adding a Whitelist
 ------------------
 
