@@ -132,7 +132,7 @@ if auth_type == 'google':
     c.GoogleOAuthenticator.client_id = get_config('auth.google.client-id')
     c.GoogleOAuthenticator.client_secret = get_config('auth.google.client-secret')
     c.GoogleOAuthenticator.oauth_callback_url = get_config('auth.google.callback-url')
-    c.GoogleOAuthenticator.hosted_domain = get_config('auth.google.hosted-domain')
+    set_config_if_not_none(c.GoogleOAuthenticator, 'hosted_domain', 'auth.google.hosted-domain')
     c.GoogleOAuthenticator.login_service = get_config('auth.google.login-service')
     email_domain = get_config('auth.google.hosted-domain')
 elif auth_type == 'github':
