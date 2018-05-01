@@ -4,6 +4,16 @@ The information in this document focuses primarily on cloud based deployments. F
 
 Brad Geesamen gave a wonderful talk titled [Hacking and Hardening Kubernetes by Example](https://kccncna17.sched.com/event/CU6z/hacking-and-hardening-kubernetes-clusters-by-example-i-brad-geesaman-symantec) at Kubecon NA 2017. You can [watch the talk](https://www.youtube.com/watch?v=vTgQLzeBfRU) or [read the slides](https://schd.ws/hosted_files/kccncna17/47/Hacking%20and%20Hardening%20Kubernetes%20By%20Example%20v1.pdf). Highly recommended that you do so to understand the security issues you are up against when using Kubernetes to run JupyterHub.
 
+## Reporting a security issue
+
+If you find a security vulnerability in JupyterHub, either a failure of the
+code to properly implement the model described here, or a failure of the
+model itself, please report it to [security@ipython.org](mailto:security@ipython.org).
+
+If you prefer to encrypt your security reports, you can use
+[this PGP public key](https://jupyter-notebook.readthedocs.io/en/stable/_downloads/ipython_security.asc).
+
+
 ## HTTPS
 
 This section describes how to enable HTTPS on your JupyterHub. The easiest way to do so is by using [Let's Encrypt](https://letsencrypt.org/), though we'll also cover how to set up your own HTTPS credentials. For more information

@@ -79,6 +79,12 @@ Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)
     format, rather than the default JSON output. We shall use this with most
     commands when executing them by hand.
 
+    .. note::
+
+       Consider `setting a cloud budget <https://docs.microsoft.com/en-us/partner-center/set-an-azure-spending-budget-for-your-customers>`_
+       for your Azure account in order to make sure you don't accidentally
+       spend more than you wish to.
+
 4. Enable the cloud APIs required before creating a cluster.
 
    The following commands enable various Azure tools that we'll need in

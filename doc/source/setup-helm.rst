@@ -26,7 +26,8 @@ Initialization
 --------------
 
 After installing helm on your machine, initialize helm on your Kubernetes
-cluster. At the terminal, enter:
+cluster. At a terminal for your local machine (or within an interactive cloud
+shell from your provider), enter:
 
 1. Set up a `ServiceAccount
    <https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/>`_

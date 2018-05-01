@@ -6,8 +6,11 @@ Step Zero: Kubernetes on `Google Cloud <https://cloud.google.com/>`_
 `Google Kubernetes Engine <https://cloud.google.com/kubernetes-engine/>`_
 (GKE) is the simplest and most common way of setting
 up a Kubernetes Cluster. You may be able to receive `free credits
-<https://cloud.google.com/free/>`_ for trying it out. You will need to
-connect your credit card or other payment method to your google cloud account.
+<https://cloud.google.com/free/>`_ for trying it out (though note that a
+free account `comes with limitations
+<https://cloud.google.com/free/docs/frequently-asked-questions#limitations>`_).
+Either way, you will need to connect your credit card or other payment method to
+your google cloud account.
 
 1. Go to ``https://console.cloud.google.com`` and log in.
 
@@ -70,6 +73,12 @@ connect your credit card or other payment method to your google cloud account.
      be a good fit for all use cases!
    * ``--zone`` specifies which data center to use. Pick something that is not
      too far away from your users. You can find a list of them `here <https://cloud.google.com/compute/docs/regions-zones/regions-zones#available>`_.
+
+   .. note::
+
+      Consider `setting a cloud budget <https://cloud.google.com/billing/docs/how-to/budgets>`_
+      for your Google Cloud account in order to make sure you don't accidentally
+      spend more than you wish to.
 
 6. To test if your cluster is initialized, run:
 
