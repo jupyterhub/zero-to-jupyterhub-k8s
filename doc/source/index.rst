@@ -115,6 +115,11 @@ up, managing, and maintaining JupyterHub.
    members to share their collective Kubernetes knowledge and JupyterHub
    experiences.
 
+.. note::
+   **Contibuting to Z2JH**. If you would like to help improve the Zero to
+   JupyterHub guide, please see the `issues page`_ as well as the `contributor guide
+   <https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CONTRIBUTING.md>`_.
+
 We hope that you will use this section to share deployments with on a variety
 of infrastructure and for different use cases.
 There is also a `community maintained list <users-list.html>`_ of users of this

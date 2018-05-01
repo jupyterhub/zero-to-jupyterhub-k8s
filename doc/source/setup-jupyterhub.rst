@@ -120,7 +120,11 @@ Install JupyterHub
         ``helm delete --purge <YOUR-RELEASE-NAME>``. Then reinstall by repeating this
         step. If it persists, also do ``kubectl delete <YOUR-NAMESPACE>`` and try again.
 
-        If you're pulling from a large Docker image you may get a
+      * In general, if something goes *wrong* with the install step, delete the
+        Helm namespace by running ``helm delete --purge <YOUR-RELEASE-NAME>``
+        before re-running the install command.
+
+      * If you're pulling from a large Docker image you may get a
         ``Error: timed out waiting for the condition`` error,
         add a ``--timeout=SOME-LARGE-NUMBER``
         parameter to the ``helm install`` command.

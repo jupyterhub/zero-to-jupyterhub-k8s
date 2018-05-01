@@ -80,6 +80,8 @@ existing image, such as the ``scipy-notebook`` image, complete these steps:
    Docker images must have the ``jupyterhub`` package installed within them to
    be used in this manner.
 
+.. _r2d-custom-image:
+
 Build a custom Docker image with ``repo2docker``
 ------------------------------------------------
 
@@ -315,8 +317,8 @@ However, keep in mind that this command will be run **each time** a user
 starts their server. For this reason, we recommend using ``nbgitpuller`` to
 synchronize your user folders with a git repository.
 
-Using ``nbgitpuller`` for synchronizing a folder
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Using ``nbgitpuller`` to synchronize a folder
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We recommend using the tool `nbgitpuller <https://github.com/data-8/nbgitpuller>`_
 to synchronize a folder in your user's filesystem with a ``git`` repository.
@@ -344,6 +346,28 @@ for more information on using this tool.
    your user's repository has changed since the last sync. You should familiarize
    yourself with the `nbgitpuller merging behavior <https://github.com/data-8/nbgitpuller#merging-behavior>`_
    prior to using the tool in production.
+
+Allow users to create their own ``conda`` environments
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Sometimes you want users to be able to create their own ``conda`` environments.
+By default, any environments created in a JupyterHub session will not persist
+across sessions. To resolve this, take the following steps:
+
+1. Ensure the ``nb_conda_kernels`` package is installed in the root
+   environment (e.g., see :ref:`r2d-custom-image`)
+2. Configure Anaconda to install user environments to a folder within ``$HOME``.
+
+   Create a file called ``.condarc`` in the home folder for all users, and make
+   sure that the following lines are inside:
+
+   ```
+   envs_dirs:
+     - /home/jovyan/my-conda-envs/
+   ```
+
+   The text above will cause Anaconda to install new environments to this
+   folder, which will persist across sessions.
 
 .. _apply the changes: extending-jupyterhub.html#apply-config-changes
 .. _downloading and installing Docker: https://store.docker.com/search?offering=community&platform=desktop%2Cserver&q=&type=edition
