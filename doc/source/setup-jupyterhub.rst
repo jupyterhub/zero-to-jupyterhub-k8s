@@ -121,7 +121,7 @@ Install JupyterHub
         step. If it persists, also do ``kubectl delete <YOUR-NAMESPACE>`` and try again.
 
       * In general, if something goes *wrong* with the install step, delete the
-        Helm namespace by running ````helm delete --purge <YOUR-RELEASE-NAME>``
+        Helm namespace by running ``helm delete --purge <YOUR-RELEASE-NAME>``
         before re-running the install command.
 
       * If you're pulling from a large Docker image you may get a

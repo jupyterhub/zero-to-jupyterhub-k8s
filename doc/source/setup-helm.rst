@@ -7,6 +7,11 @@ Setting up Helm
 to install, upgrade and manage applications on a Kubernetes cluster. We will be
 using Helm to install and manage JupyterHub on our cluster.
 
+Helm works by initializing itself both locally (on your computer) and remotely
+(on your kubernetes cluster). When you run ``helm`` commands, your local helm
+client sends instructions to the ``Tiller``, which exists on your
+Kubernetes cluster, and is controlled by the server-side ``helm`` install.
+
 Installation
 ------------
 
@@ -58,6 +63,22 @@ shell from your provider), enter:
       helm init --service-account tiller
 
 This command only needs to run once per Kubernetes cluster.
+
+.. note::
+
+   The local and remote version of ``helm`` must be the same in order to
+   ensure they can talk to each other. If you wish to run ``helm`` commands
+   from a *new* computer than the one used to run the commands above, you
+   must re-initialize it by running the following modified version of
+   the ``init`` command:
+
+   ``helm init --client-only --service-account tiller``
+
+   This will initialize ``helm`` locally, according to the version that is
+   running remotely on the cluster. Note that this requires ``kubectl``
+   to point to the correct kubernetes cluster. See `the kubernetes context
+   manager <https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/>`_
+   for more details.
 
 Verify
 ------
