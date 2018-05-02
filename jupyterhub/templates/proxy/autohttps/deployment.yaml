@@ -32,9 +32,7 @@ spec:
         {{- include "jupyterhub.matchLabels" $_ | nindent 8 }}
         hub.jupyter.org/network-access-proxy-http: "true"
     spec:
-      {{- if .Values.rbac.enabled }}
-      serviceAccountName: autohttps
-      {{- end }}
+      serviceAccountName: {{ .Values.serviceAccounts.scheduling.userScheduler.name }}
       {{- if .Values.scheduling.podPriority.enabled }}
       priorityClassName: {{ .Release.Name }}-default-priority
       {{- end }}

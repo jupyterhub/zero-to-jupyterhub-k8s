@@ -19,9 +19,7 @@ spec:
         # This lets us autorestart when the configmap changes!
         checksum/config-map: {{ include (print $.Template.BasePath "/scheduling/user-scheduler/configmap.yaml") . | sha256sum }}
     spec:
-      {{- if .Values.rbac.enabled }}
-      serviceAccountName: user-scheduler
-      {{- end }}
+      serviceAccountName:  {{ .Values.serviceAccounts.scheduling.userScheduler.name }}
       {{- if .Values.scheduling.podPriority.enabled }}
       priorityClassName: {{ .Release.Name }}-default-priority
       {{- end }}

@@ -25,9 +25,7 @@ spec:
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
     spec:
       restartPolicy: Never
-      {{- if .Values.rbac.enabled }}
-      serviceAccountName: hook-image-awaiter
-      {{- end }}
+      serviceAccountName: {{ .Values.serviceAccounts.imagePuller.name }}
       containers:
         - image: {{ .Values.prePuller.hook.image.name }}:{{ .Values.prePuller.hook.image.tag }}
           name: hook-image-awaiter

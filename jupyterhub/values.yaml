@@ -73,6 +73,23 @@ rbac:
   enabled: true
 
 
+serviceAccounts:
+  hub:
+    create: false
+    name: "hub"
+  imagePuller:
+    create: false
+    name: 'hook-image-awaiter'
+  proxy:
+    autohttps:
+      create: false
+      name: 'autohttps'
+  scheduling:
+    userScheduler:
+      create: false
+      name: 'user-scheduler'
+
+
 proxy:
   secretToken: ''
   service:

@@ -50,15 +50,13 @@ spec:
           persistentVolumeClaim:
             claimName: hub-db-dir
         {{- end }}
-      {{- if .Values.rbac.enabled }}
-      serviceAccountName: hub
-      {{- end }}
+      serviceAccountName: {{ .Values.serviceAccounts.hub.name }}
       securityContext:
         fsGroup: {{ .Values.hub.fsGid }}
       {{- if .Values.hub.imagePullSecret.enabled }}
       imagePullSecrets:
         - name: hub-image-credentials
-      {{- end }}  
+      {{- end }}
       {{- if .Values.hub.initContainers }}
       initContainers:
         {{- .Values.hub.initContainers | toYaml | trimSuffix "\n" | nindent 8 }}

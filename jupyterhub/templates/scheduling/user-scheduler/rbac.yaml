@@ -1,22 +1,22 @@
 {{- if .Values.scheduling.userScheduler.enabled -}}
-{{- if .Values.rbac.enabled }}
+{{- if .Values.serviceAccounts.scheduling.userScheduler.create }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: user-scheduler
+  name: {{ .Values.serviceAccounts.scheduling.userScheduler.name }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ .Release.Name }}-user-scheduler-base
+  name: {{ .Release.Name }}-{{ .Values.serviceAccounts.scheduling.userScheduler.name }}-base
   labels:
     {{- $_ := merge (dict "componentSuffix" "-base") . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
 subjects:
   - kind: ServiceAccount
-    name: user-scheduler
+    name: {{ .Values.serviceAccounts.scheduling.userScheduler.name }}
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
@@ -26,14 +26,14 @@ roleRef:
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ .Release.Name }}-user-scheduler-complementary
+  name: {{ .Release.Name }}-{{ .Values.serviceAccounts.scheduling.userScheduler.name }}-complementary
   labels:
     {{- $_ := merge (dict "componentSuffix" "-complementary") . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
 rules:
   # Support leader elections
   - apiGroups: [""]
-    resourceNames: ["user-scheduler"]
+    resourceNames: ["{{ .Values.serviceAccounts.scheduling.userScheduler.name }}"]
     resources: ["configmaps"]
     verbs: ["get", "update"]
   # Workaround for missing permission in system:kube-scheduler as of k8s 1.10.4
@@ -44,17 +44,17 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ .Release.Name }}-user-scheduler-complementary
+  name: {{ .Release.Name }}-{{ .Values.serviceAccounts.scheduling.userScheduler.name }}-complementary
   labels:
     {{- $_ := merge (dict "componentSuffix" "-complementary") . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
 subjects:
   - kind: ServiceAccount
-    name: user-scheduler
+    name: {{ .Values.serviceAccounts.scheduling.userScheduler.name }}
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
-  name: {{ .Release.Name }}-user-scheduler-complementary
+  name: {{ .Release.Name }}-{{ .Values.serviceAccounts.scheduling.userScheduler.name }}-complementary
   apiGroup: rbac.authorization.k8s.io
 {{- end }}
 {{- end }}

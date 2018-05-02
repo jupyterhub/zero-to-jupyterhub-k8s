@@ -1,13 +1,13 @@
 {{- $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled) }}
 {{- $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt")) }}
-{{- if (and $autoHTTPS .Values.rbac.enabled) -}}
+{{- if (and $autoHTTPS .Values.serviceAccounts.proxy.autohttps.create) -}}
 # This is way too many permissions, but apparently the nginx-controller
 # is written to sortof assume it is clusterwide ingress provider.
 # So we keep this as is, for now.
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: autohttps
+  name: {{ .Values.serviceAccounts.proxy.autohttps.name }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 ---
@@ -86,7 +86,7 @@ roleRef:
   name: nginx-{{ .Release.Name }}
 subjects:
   - kind: ServiceAccount
-    name: autohttps
+    name: {{ .Values.serviceAccounts.proxy.autohttps.name }}
     namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -178,7 +178,7 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
 subjects:
   - kind: ServiceAccount
-    name: autohttps
+    name: {{ .Values.serviceAccounts.proxy.autohttps.name }}
     namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -193,6 +193,6 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
 subjects:
   - kind: ServiceAccount
-    name: autohttps
+    name: {{ .Values.serviceAccounts.proxy.autohttps.name }}
     namespace: {{ .Release.Namespace }}
 {{- end }}
