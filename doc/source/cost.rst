@@ -12,6 +12,15 @@ Appendix: Projecting deployment costs
    by our users. We **caution** that costs can vary widely based
    on providers selected and your use cases.
 
+Cost calculators for cloud providers
+------------------------------------
+
+Below are several links to cost estimators for cloud providers:
+
+* `Google Cloud Platform cost calculator <https://cloud.google.com/products/calculator/>`_
+* `Amazon AWS cost calculator <https://calculator.s3.amazonaws.com/index.html>`_
+* `Microsoft Azure cost claculator <https://azure.microsoft.com/en-us/pricing/calculator/>`_
+
 Factors influencing costs
 -------------------------
 
@@ -59,8 +68,8 @@ auto-scaling functionality, but currently it does not. This means that you need
 to provision resources for the *maximum* expected number of users at one time.
 
 
-Interactive Cost Estimator
---------------------------
+Interactive Cost Estimator (rough estimate)
+-------------------------------------------
 
 This small notebook may help you to make an initial planning estimate of costs
 for your JupyterHub instance.

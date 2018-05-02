@@ -133,6 +133,7 @@ Please submit a pull request to add to this section. Thanks.
 
    additional-resources
    users-list
+   tips
 
 .. _reference:
 
