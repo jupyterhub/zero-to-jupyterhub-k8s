@@ -51,7 +51,7 @@ hub:
 
 rbac:
   enabled: true
-
+  customServiceAccount: ''
 
 proxy:
   secretToken: ''

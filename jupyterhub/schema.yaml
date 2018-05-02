@@ -326,3 +326,18 @@ properties:
               The tag of the image to use.
 
               This is the value after the `:` in your full image name.
+
+  rbac:
+    type: object
+    properties:
+      enabled:
+        type: boolean
+        description: enable RBAC configuration
+      customServiceAccount:
+        type: string
+        description: |
+            Allow to force the service account to use for the puller, culler and https proxy.
+            If let to the default value (empty string), the service account will be automatically
+            created.
+            Please note it does not impact the singleuser pod
+            (see `singleuser.serviceAccountName`).

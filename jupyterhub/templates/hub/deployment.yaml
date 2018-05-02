@@ -57,7 +57,11 @@ spec:
           claimName: hub-db-dir
       {{- end }}
       {{- if .Values.rbac.enabled }}
+      {{- if eq .Values.rbac.customServiceAccount "" }}
       serviceAccountName: hub
+      {{ else }}
+      serviceAccountName: {{ .Values.rbac.customServiceAccount }}
+      {{- end }}
       {{- end }}
       securityContext:
         runAsUser: {{ .Values.hub.uid }}
