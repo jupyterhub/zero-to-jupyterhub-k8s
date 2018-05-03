@@ -63,8 +63,25 @@ than referring to them by their name. You can attach an arbitrary set of
 _labels_ to a Kubernetes object, and can then refer to those labels when
 searching with ``kubectl``.
 
-To search based on a label value, use the ``-l`` or ``--label`` keyword
+To search based on a label value, use the ``-l`` or ``--selector=`` keyword
 arguments. For example, JupyterHub creates a specific subset of labels for all
 user pods. You can search for all user pods with the following label query:
 
     kubectl --namespace=<YOUR-NAMESPACE> get pod -l "component=singleuser-server"
+    
+For more information, see the `Kubernetes labels and selectors page <https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/>`_.
+
+Asking for a more verbose or structured output
+----------------------------------------------
+
+Sometimes the information that's in the default output for ``kubectl get <XXX>``
+is not enough for your needs, or isn't structured the way you'd like. We
+recommend looking into the different kubernetes output options, which can be
+modified like so:
+
+    kubectl --namespace=<NAMESPACE> get pod -o <json|yaml|wide|name...>
+    
+You can find more information on what kinds of output you can generate at
+`the kubectl information page <https://kubernetes.io/docs/reference/kubectl/overview/>`_.
+(click and search for the text "Output Options")
+
