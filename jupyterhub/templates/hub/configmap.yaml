@@ -191,6 +191,12 @@ data:
   {{- end }}
   
   
+  {{- /* KubeSpawner */}}
+  kubespawner.common-labels: |
+    {{- $_ := merge (dict "heritageLabel" "jupyterhub") . }}
+    {{- include "jupyterhub.commonLabels" $_ | nindent 4 }}
+
+
   {{- /* Hub */}}
   hub.concurrent-spawn-limit: {{ .Values.hub.concurrentSpawnLimit | quote }}
   {{- if .Values.hub.activeServerLimit }}

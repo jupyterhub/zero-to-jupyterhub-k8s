@@ -135,15 +135,6 @@ spec:
                 secretKeyRef:
                   name: hub-secret
                   key: proxy.token
-            # Labels used by kubespawner
-            - name: LABEL_APP
-              value: jupyterhub
-            - name: LABEL_RELEASE
-              value: {{ .Release.Name }}
-            - name: LABEL_CHART
-              value: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-            - name: LABEL_HERITAGE
-              value: jupyterhub
             # Label used by the pod culler
             - name: LABEL_SELECTOR
               value: {{ include "jupyterhub.podCullerSelector" . | quote }}

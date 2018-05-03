@@ -75,11 +75,20 @@
 {{- $component := .componentLabel | default $parent | default $file }}
 {{- $component := print (.componentPrefix | default "") $component (.componentSuffix | default "") -}}
 component: {{ $component }}
+{{- include "jupyterhub.commonLabels" . }}
+{{- end }}
+
+
+{{- /*
+  jupyterhub.commonLabels:
+    Used to provide labels: app, release, (chart and heritage).
+*/}}
+{{- define "jupyterhub.commonLabels" }}
 app: {{ include "jupyterhub.name" . }}
 release: {{ .Release.Name }}
 {{- if not .matchLabels }}
 chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-heritage: {{ .Release.Service }}
+heritage: {{ .heritageLabel | default .Release.Service }}
 {{- end }}
 {{- end }}
 
