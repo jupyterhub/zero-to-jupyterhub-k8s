@@ -31,7 +31,13 @@ on HTTPS security see the certificates section of [this blog post](https://blog.
 
 ### Set up automatic HTTPS
 
-1. Specify the two bits of information that we need to automatically provision HTTPS certificates - your domain name & a contact email address.
+JupyterHub uses [Let's Encrypt](https://letsencrypt.org/) to automatically create
+HTTPS certificates for your deployment. This will cause your HTTPS certificate
+to automatically renew every few months. To enable this, make the following
+changes to your `config.yaml` file:
+
+1. Specify the two bits of information that we need to automatically provision
+HTTPS certificates - your domain name & a contact email address.
 
    ```yaml
    proxy:
@@ -42,7 +48,7 @@ on HTTPS security see the certificates section of [this blog post](https://blog.
          contactEmail: <your-email-address>
    ```
 
-2. Apply the config changes by running helm upgrade ....
+2. Apply the config changes by running `helm upgrade ...`
 3. Wait for about a minute, now your hub should be HTTPS enabled!
 
 ### Set up manual HTTPS
@@ -71,6 +77,16 @@ If you have your own HTTPS certificates & want to use those instead of the autom
 2. Apply the config changes by running helm upgrade ....
 3. Wait for about a minute, now your hub should be HTTPS enabled!
 
+### Confirm that your domain is running HTTPS
+
+There are many ways to confirm that a domain is running trusted HTTPS
+certificates. One options is to use the [Qualys SSL Labs](https://ssllabs.com)
+security report generator. Use the following URL structure to test your domain:
+
+    ```
+    http://ssllabs.com/ssltest/analyze.html?d=<YOUR-DOMAIN>
+    ```
+    
 ## Secure access to Helm
 
 In its default configuration, helm pretty much allows root access to all other
