@@ -14,7 +14,7 @@ metadata:
     "helm.sh/hook-weight": "0"
 ---
 # needs this role...
-kind: ClusterRole
+kind: Role
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
@@ -30,7 +30,7 @@ rules:
   verbs: ["get"]
 ---
 # and this part declares that service account to have that role.
-kind: ClusterRoleBinding
+kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
@@ -45,7 +45,7 @@ subjects:
   namespace: {{ .Release.Namespace }}
   name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
 roleRef:
-  kind: ClusterRole
+  kind: Role
   name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
   apiGroup: rbac.authorization.k8s.io
 {{ end }}
