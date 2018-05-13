@@ -1,67 +1,96 @@
 {{- /*
-  This file contains helpers to systematically name, label and create
-  matchLabels for the Kubernetes objects we define in the .yaml template files.
+  ## TODO
+  - [ ] Figure out how to use "jupyterhub.name" and "jupyterhub.fullname".
 
-  Typical usage within a Kubernetes object:
+  ## About
+  This file contains helpers to systematically name, label and select Kubernetes
+  objects we define in the .yaml template files.
 
+
+  ## Declared helpers
+  - name              |
+  - fullName          | uses name
+  - commonLabels      |
+  - labels            | uses commonLabels
+  - matchLabels       | uses labels
+  - podCullerSelector | uses matchLabels
+
+
+  ## Example
   ```yaml
+  # Excerpt from proxy/autohttps/deployment.yaml
+  apiVersion: apps/v1beta2
+  kind: Deployment
+  metadata:
+    name: {{ include "jupyterhub.fullname" . }}
     labels:
       {{- include "jupyterhub.labels" . | nindent 4 }}
+  spec:
+    selector:
+      matchLabels:
+        {{- $_ := merge (dict "appLabel" "kube-lego") . }}
+        {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}
+    template:
+      metadata:
+        labels:
+          {{- include "jupyterhub.labels" $_ | nindent 8 }}
+          hub.jupyter.org/network-access-proxy-http: "true"
   ```
 
-  To control the helpers' behavior, augment the scope passed to the helper by
-  merging it with additional key/value pairs like below. In this case the
-  `component` label had to be set explicitly instead of implicitly from the
-  .yaml files location.
-
-  ```yaml
-  podSelector:
-    matchLabels:
-      {{- $_ := merge (dict "componentLabel" "singleuser-server") . }}
-      {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}
-  ```
+  NOTE:
+    The "jupyterhub.matchLabels" and "jupyterhub.labels" is passed an augmented
+    scope that will influence the helpers' behavior. It get the current scope
+    "." but merged with a dictionary containing extra key/value pairs. In this
+    case the "." scope was merged with a small dictionary containing only one
+    key/value pair "appLabel: kube-lego". It is required for kube-lego to
+    function properly. It is a way to override the default app label's value.
 */}}
 
 
 {{- /*
   jupyterhub.name:
-    Used to provide the app label's value and within the jupyterhub.fullname
-    helper.
-
-  NOTE: It will return the provided scope's .appLabel or default to the chart's
-        name.
-
-  TODO:
-  - [ ] Support overriding this value with some setting in .Values as is common
-        within kubernetes/charts projects
+    Default for the app label's value.
+    Foundation for "jupyterhub.fullname".
 */}}
 {{- define "jupyterhub.name" -}}
-{{ .appLabel | default .Chart.Name }}
+{{- .Values.nameOverride | default .Chart.Name | trunc 63 | trimSuffix "-" -}}
 {{- end }}
 
 
 {{- /*
   jupyterhub.fullname:
-    Used to populate the name field value.
+    Populates the name field's value.
     NOTE: some name fields are limited to 63 characters by the DNS naming spec.
 
   TODO:
-  - [ ] Start setting the name fields using this helper.
-  - [ ] Update the helper to allow appending the name, as a conflict will
-        arise if multiple objects of the same type is defined in the same
-        template folder.
-  - [ ] Optionally prefix the release name based on some setting in .Values to
-        allow for multiple deployments within a single namespace.
+  - [ ] Set all name fields using this helper.
+  - [ ] Optionally prefix the release name based on some setting in
+        .Values to allow for multiple deployments within a single namespace.
 */}}
 {{- define "jupyterhub.fullname" }}
-{{- $name := include "jupyterhub.name" . -}}
+{{- $name := print (.namePrefix | default "") (include "jupyterhub.name" .) (.nameSuffix | default "") -}}
 {{ printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 
 {{- /*
+  jupyterhub.commonLabels:
+    Foundation for "jupyterhub.labels".
+    Provides labels: app, release, (chart and heritage).
+*/}}
+{{- define "jupyterhub.commonLabels" -}}
+app: {{ .appLabel | default (include "jupyterhub.name" .) }}
+release: {{ .Release.Name }}
+{{- if not .matchLabels }}
+chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+heritage: {{ .heritageLabel | default .Release.Service }}
+{{- end }}
+{{- end }}
+
+
+{{- /*
   jupyterhub.labels:
-    Used to provide the labels: component, app, release, (chart and heritage).
+    Provides labels: component, app, release, (chart and heritage).
 
   NOTE: The component label is determined by either...
         - 1: The provided scope's .componentLabel 
@@ -80,20 +109,6 @@ component: {{ $component }}
 
 
 {{- /*
-  jupyterhub.commonLabels:
-    Used to provide labels: app, release, (chart and heritage).
-*/}}
-{{- define "jupyterhub.commonLabels" -}}
-app: {{ include "jupyterhub.name" . }}
-release: {{ .Release.Name }}
-{{- if not .matchLabels }}
-chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-heritage: {{ .heritageLabel | default .Release.Service }}
-{{- end }}
-{{- end }}
-
-
-{{- /*
   jupyterhub.matchLabels:
     Used to provide pod selection labels: component, app, release.
 */}}
@@ -105,7 +120,8 @@ heritage: {{ .heritageLabel | default .Release.Service }}
 
 {{- /*
   jupyterhub.podCullerSelector:
-    Used to by the pod culler to select singleuser-server pods.
+    Used to by the pod-culler to select singleuser-server pods. 
+    It simply reformats "jupyterhub.matchLabels".
 */}}
 {{- define "jupyterhub.podCullerSelector" -}}
 {{ include "jupyterhub.matchLabels" . | replace ": " "=" | replace "\n" "," | quote }}
