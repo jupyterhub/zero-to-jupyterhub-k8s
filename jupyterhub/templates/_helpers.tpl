@@ -35,8 +35,8 @@
   - [ ] Support overriding this value with some setting in .Values as is common
         within kubernetes/charts projects
 */}}
-{{- define "jupyterhub.name" }}
-{{- .appLabel | default .Chart.Name }}
+{{- define "jupyterhub.name" -}}
+{{ .appLabel | default .Chart.Name }}
 {{- end }}
 
 
@@ -54,8 +54,8 @@
         allow for multiple deployments within a single namespace.
 */}}
 {{- define "jupyterhub.fullname" }}
-{{- $name := include "jupyterhub.name" . }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- $name := include "jupyterhub.name" . -}}
+{{ printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 
@@ -75,7 +75,7 @@
 {{- $component := .componentLabel | default $parent | default $file }}
 {{- $component := print (.componentPrefix | default "") $component (.componentSuffix | default "") -}}
 component: {{ $component }}
-{{- include "jupyterhub.commonLabels" . }}
+{{ include "jupyterhub.commonLabels" . }}
 {{- end }}
 
 
@@ -83,7 +83,7 @@ component: {{ $component }}
   jupyterhub.commonLabels:
     Used to provide labels: app, release, (chart and heritage).
 */}}
-{{- define "jupyterhub.commonLabels" }}
+{{- define "jupyterhub.commonLabels" -}}
 app: {{ include "jupyterhub.name" . }}
 release: {{ .Release.Name }}
 {{- if not .matchLabels }}
@@ -98,8 +98,8 @@ heritage: {{ .heritageLabel | default .Release.Service }}
     Used to provide pod selection labels: component, app, release.
 */}}
 {{- define "jupyterhub.matchLabels" }}
-{{- $_ := merge (dict "matchLabels" true) . }}
-{{- include "jupyterhub.labels" $_ }}
+{{- $_ := merge (dict "matchLabels" true) . -}}
+{{ include "jupyterhub.labels" $_ }}
 {{- end }}
 
 
@@ -107,6 +107,6 @@ heritage: {{ .heritageLabel | default .Release.Service }}
   jupyterhub.podCullerSelector:
     Used to by the pod culler to select singleuser-server pods.
 */}}
-{{- define "jupyterhub.podCullerSelector" }}
-"component=singleuser-server,app={{ include "jupyterhub.name" . }},release={{ .Release.Name }}"
+{{- define "jupyterhub.podCullerSelector" -}}
+{{ include "jupyterhub.matchLabels" . | replace ": " "=" | replace "\n" "," | quote }}
 {{- end }}
