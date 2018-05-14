@@ -1,28 +1,26 @@
 {{- /*
-  ## TODO
-  - [ ] Figure out how to use "jupyterhub.name" and "jupyterhub.fullname".
-
   ## About
   This file contains helpers to systematically name, label and select Kubernetes
   objects we define in the .yaml template files.
 
 
   ## Declared helpers
-  - name              |
-  - fullName          | uses name
-  - commonLabels      |
+  - appLabel          |
+  - componentLabel    |
+  - nameField         | uses componentLabel
+  - commonLabels      | uses appLabel
   - labels            | uses commonLabels
   - matchLabels       | uses labels
   - podCullerSelector | uses matchLabels
 
 
-  ## Example
+  ## Example usage
   ```yaml
   # Excerpt from proxy/autohttps/deployment.yaml
   apiVersion: apps/v1beta2
   kind: Deployment
   metadata:
-    name: {{ include "jupyterhub.fullname" . }}
+    name: {{ include "jupyterhub.nameField" . }}
     labels:
       {{- include "jupyterhub.labels" . | nindent 4 }}
   spec:
@@ -48,17 +46,35 @@
 
 
 {{- /*
-  jupyterhub.name:
-    Default for the app label's value.
-    Foundation for "jupyterhub.fullname".
+  jupyterhub.appLabel:
+    Used by "jupyterhub.labels".
 */}}
-{{- define "jupyterhub.name" -}}
-{{- .Values.nameOverride | default .Chart.Name | trunc 63 | trimSuffix "-" -}}
+{{- define "jupyterhub.appLabel" -}}
+{{ .Values.nameOverride | default .Chart.Name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 
 {{- /*
-  jupyterhub.fullname:
+  jupyterhub.componentLabel:
+    Used by "jupyterhub.labels" and "jupyterhub.nameField".
+
+    NOTE: The component label is determined by either...
+    - 1: The provided scope's .componentLabel 
+    - 2: The template's filename if living in the root folder
+    - 3: The template parent folder's name
+    -  : ...and is combined with .componentPrefix and .componentSuffix
+*/}}
+{{- define "jupyterhub.componentLabel" -}}
+{{- $file := .Template.Name | base | trimSuffix ".yaml" -}}
+{{- $parent := .Template.Name | dir | base | trimPrefix "templates" -}}
+{{- $component := .componentLabel | default $parent | default $file -}}
+{{- $component := print (.componentPrefix | default "") $component (.componentSuffix | default "") -}}
+{{ $component }}
+{{- end }}
+
+
+{{- /*
+  jupyterhub.nameField:
     Populates the name field's value.
     NOTE: some name fields are limited to 63 characters by the DNS naming spec.
 
@@ -67,8 +83,8 @@
   - [ ] Optionally prefix the release name based on some setting in
         .Values to allow for multiple deployments within a single namespace.
 */}}
-{{- define "jupyterhub.fullname" }}
-{{- $name := print (.namePrefix | default "") (include "jupyterhub.name" .) (.nameSuffix | default "") -}}
+{{- define "jupyterhub.nameField" -}}
+{{- $name := print (.namePrefix | default "") (include "jupyterhub.componentLabel" .) (.nameSuffix | default "") -}}
 {{ printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -79,7 +95,7 @@
     Provides labels: app, release, (chart and heritage).
 */}}
 {{- define "jupyterhub.commonLabels" -}}
-app: {{ .appLabel | default (include "jupyterhub.name" .) }}
+app: {{ .appLabel | default (include "jupyterhub.appLabel" .) }}
 release: {{ .Release.Name }}
 {{- if not .matchLabels }}
 chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
@@ -91,19 +107,9 @@ heritage: {{ .heritageLabel | default .Release.Service }}
 {{- /*
   jupyterhub.labels:
     Provides labels: component, app, release, (chart and heritage).
-
-  NOTE: The component label is determined by either...
-        - 1: The provided scope's .componentLabel 
-        - 2: The template's filename if living in the root folder
-        - 3: The template parent folder's name
-        ... and is combined with .componentPrefix and .componentSuffix
 */}}
-{{- define "jupyterhub.labels" }}
-{{- $file := .Template.Name | base | trimSuffix ".yaml" }}
-{{- $parent := .Template.Name | dir | base | trimPrefix "templates" }}
-{{- $component := .componentLabel | default $parent | default $file }}
-{{- $component := print (.componentPrefix | default "") $component (.componentSuffix | default "") -}}
-component: {{ $component }}
+{{- define "jupyterhub.labels" -}}
+component: {{ include "jupyterhub.componentLabel" . }}
 {{ include "jupyterhub.commonLabels" . }}
 {{- end }}
 
@@ -112,7 +118,7 @@ component: {{ $component }}
   jupyterhub.matchLabels:
     Used to provide pod selection labels: component, app, release.
 */}}
-{{- define "jupyterhub.matchLabels" }}
+{{- define "jupyterhub.matchLabels" -}}
 {{- $_ := merge (dict "matchLabels" true) . -}}
 {{ include "jupyterhub.labels" $_ }}
 {{- end }}
