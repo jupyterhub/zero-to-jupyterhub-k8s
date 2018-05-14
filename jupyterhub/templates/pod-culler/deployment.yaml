@@ -30,7 +30,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: LABEL_SELECTOR
-              value: "component=singleuser-server"
+              value: {{ include "jupyterhub.podCullerSelector" . }}
             - name: MAX_AGE
               value: {{ .Values.cull.maxAge | quote }}
             - name: CULL_INTERVAL
