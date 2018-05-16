@@ -48,8 +48,18 @@ Below is the structure to use in order to authenticate with GitHub.
           callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
 
 
-By default this will allow *any* GitHub user to access your JupyterHub.
-You can restrict access to members of one or more GitHub organisations.
+Giving access to organizations on GitHub
+++++++++++++++++++++++++++++++++++++++++
+
+The configuration above will allow *any* GitHub user to access your JupyterHub.
+You can also restrict access to members of one or more GitHub organizations.
+To do so, see the configuration below.
+
+.. note::
+
+   A user's membership with the GitHub organization `must be public
+   <https://help.github.com/articles/publicizing-or-hiding-organization-membership/>`_
+   for organization-based whitelisting to work.
 
 .. code-block:: yaml
 
