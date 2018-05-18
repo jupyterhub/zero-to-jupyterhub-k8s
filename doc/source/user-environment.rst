@@ -142,7 +142,7 @@ how to configure JupyterHub to build off of this image:
 
    .. code-block:: bash
 
-      jupyter-repo2docker <YOUR-GITHUB-REPOSITORY> --image=gcr.io/<PROJECT-NAME>/<IMAGE-NAME>:<TAG> --no-run
+      jupyter-repo2docker <YOUR-GITHUB-REPOSITORY> --user-name=jovyan --image=gcr.io/<PROJECT-NAME>/<IMAGE-NAME>:<TAG> --no-run
 
    This tells ``repo2docker`` to fetch ``master`` of the GitHub repository,
    and uses heuristics to build a docker image of it.
