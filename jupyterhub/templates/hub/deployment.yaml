@@ -66,7 +66,7 @@ spec:
       {{- if .Values.hub.extraContainers }}
 {{ toYaml .Values.hub.extraContainers | indent 6 }}
       {{ end }}
-      - name: hub-container
+      - name: hub
         image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
         command:
           - jupyterhub
