@@ -80,22 +80,23 @@ data:
   auth.globus.callback-url: {{ .Values.auth.globus.callbackUrl | quote }}
   auth.globus.identity-provider: {{ .Values.auth.globus.identityProvider | quote }}
   {{- end }}
-
+  
   {{- if eq .Values.auth.type "lti" }}
   auth.lti.consumers: |
     {{- .Values.auth.lti.consumers | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
-  {{ if eq .Values.auth.type "ldap" -}}
+
+  {{- if eq .Values.auth.type "ldap" }}
   auth.ldap.server.address: {{ .Values.auth.ldap.server.address | quote }}
   auth.ldap.server.port: {{ .Values.auth.ldap.server.port | quote }}
   auth.ldap.server.ssl: {{ .Values.auth.ldap.server.ssl | quote }}
-  {{ if .Values.auth.ldap.allowedGroups -}}
+  {{- if .Values.auth.ldap.allowedGroups }}
   auth.ldap.allowed-groups: |
-{{ toYaml .Values.auth.ldap.allowedGroups | indent 4 }}
+    {{- .Values.auth.ldap.allowedGroups | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
-  {{ if .Values.auth.ldap.dn.templates -}}
+  {{- if .Values.auth.ldap.dn.templates }}
   auth.ldap.dn.templates: |
-{{ toYaml .Values.auth.ldap.dn.templates | indent 4 }}
+    {{- .Values.auth.ldap.dn.templates | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
   auth.ldap.dn.lookup: {{ .Values.auth.ldap.dn.lookup }}
   auth.ldap.dn.search.filter: {{ .Values.auth.ldap.dn.search.filter }}
@@ -107,7 +108,7 @@ data:
   auth.ldap.dn.user.search-base: {{ .Values.auth.ldap.dn.user.searchBase }}
   auth.ldap.dn.user.attribute: {{ .Values.auth.ldap.dn.user.attribute }}
   {{- end }}
-
+  
   {{- if eq .Values.auth.type "dummy" }}
   {{- if .Values.auth.dummy.password }}
   auth.dummy.password: {{ .Values.auth.dummy.password | quote }}
@@ -118,7 +119,6 @@ data:
   auth.custom.class-name: {{ .Values.auth.custom.className | quote }}
   auth.custom.config : {{ toJson .Values.auth.custom.config | quote }}
   {{- end }}
-
 
   {{- /* Singleuser */}}
   {{- if .Values.singleuser.lifecycleHooks }}
