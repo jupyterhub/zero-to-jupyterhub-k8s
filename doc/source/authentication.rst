@@ -55,12 +55,6 @@ The configuration above will allow *any* GitHub user to access your JupyterHub.
 You can also restrict access to members of one or more GitHub organizations.
 To do so, see the configuration below.
 
-.. note::
-
-   A user's membership with the GitHub organization `must be public
-   <https://help.github.com/articles/publicizing-or-hiding-organization-membership/>`_
-   for organization-based whitelisting to work.
-
 .. code-block:: yaml
 
       auth:
@@ -70,14 +64,24 @@ To do so, see the configuration below.
           org_whitelist:
             - "SomeOrgName"
         scopes:
-          - "read:org"
+          - "read:user"
 
+``auth.scopes`` can take other values as described in the `GitHub Oauth scopes
+documentation
+<https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/>`_
+but we recommend ``read:user`` as this requires no additional configuration by
+GitHub organisations and users.
+For example, omitting the scope means members of an organisation must `set
+their membership to Public
+<https://help.github.com/articles/publicizing-or-hiding-organization-membership/>`_
+to login, whereas setting it to ``read:org`` may require approval of the
+application by a GitHub organisation admin.
+Please see `this issue
+<https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/687>`_ for further
+information.
 
 .. note::
 
-   ``auth.scopes`` is optional.
-   Without this members of an organisation must `set their membership to Public <https://help.github.com/articles/publicizing-or-hiding-organization-membership/>`_ to login.
-   If this is set to ``read:org`` private members can login, but users must grant JupyterHub `additional privileges <https://developer.github.com/apps/building-oauth-apps/scopes-for-oauth-apps/>`_ to read some private information.
    Changing ``auth.scopes`` will not change the scope for existing OAuth tokens, you must invalidate them.
 
 
