@@ -10,5 +10,5 @@ mwoauth==0.3.2
 globus_sdk[jwt]==1.2.1
 oauthenticator==0.7.2
 cryptography==2.0.3
-https://github.com/jupyterhub/kubespawner/archive/6d5993c.tar.gz
+https://github.com/jupyterhub/kubespawner/archive/cff7f01.tar.gz
 https://github.com/jupyterhub/ldapauthenticator/archive/1bb93f3.tar.gz
