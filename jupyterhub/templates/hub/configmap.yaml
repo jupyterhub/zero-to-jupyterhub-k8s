@@ -68,15 +68,15 @@ data:
   auth.ldap.dn.templates: |
 {{ toYaml .Values.auth.ldap.dn.templates | indent 4 }}
   {{- end }}
-  auth.ldap.dn.lookup: {{ .Values.auth.ldap.dn.lookup }}
-  auth.ldap.dn.search.filter: {{ .Values.auth.ldap.dn.search.filter }}
-  auth.ldap.dn.search.user: {{ .Values.auth.ldap.dn.search.user }}
-  auth.ldap.dn.search.password: {{ .Values.auth.ldap.dn.search.password }}
-  auth.ldap.dn.user.dn-attribute: {{ .Values.auth.ldap.dn.user.dnAttribute }}
-  auth.ldap.dn.user.escape: {{ .Values.auth.ldap.dn.user.escape }}
-  auth.ldap.dn.user.valid-regex: {{ .Values.auth.ldap.dn.user.validRegex }}
-  auth.ldap.dn.user.search-base: {{ .Values.auth.ldap.dn.user.searchBase }}
-  auth.ldap.dn.user.attribute: {{ .Values.auth.ldap.dn.user.attribute }}
+  auth.ldap.dn.lookup: {{ .Values.auth.ldap.dn.lookup | quote }}
+  auth.ldap.dn.search.filter: {{ .Values.auth.ldap.dn.search.filter | quote }}
+  auth.ldap.dn.search.user: {{ .Values.auth.ldap.dn.search.user | quote }}
+  auth.ldap.dn.search.password: {{ .Values.auth.ldap.dn.search.password | quote }}
+  auth.ldap.dn.user.dn-attribute: {{ .Values.auth.ldap.dn.user.dnAttribute | quote }}
+  auth.ldap.dn.user.escape: {{ .Values.auth.ldap.dn.user.escape | quote }}
+  auth.ldap.dn.user.valid-regex: {{ .Values.auth.ldap.dn.user.validRegex | quote }}
+  auth.ldap.dn.user.search-base: {{ .Values.auth.ldap.dn.user.searchBase | quote }}
+  auth.ldap.dn.user.attribute: {{ .Values.auth.ldap.dn.user.attribute | quote }}
   {{- end }}
 
   {{ if .Values.auth.whitelist.users -}}
