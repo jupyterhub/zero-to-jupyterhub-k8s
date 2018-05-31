@@ -175,6 +175,80 @@ Procedure:
     <https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic>`_ of
     disks, allowing us to automatically assign a disk per user when they log
     in to JupyterHub.
+    
+**Encryption**
 
+There are simple methods for encrypting your Kubernetes cluster. Illustrated here are simple methods for encryption at rest and encryption in transit.
+
+**Encryption at Rest**
+Instead of performing step 13 above. Create the following ``storageclass.yml`` file on your local computer::
+
+        kind: StorageClass
+        apiVersion: storage.k8s.io/v1
+        metadata:
+          annotations:
+             storageclass.beta.kubernetes.io/is-default-class: "true"
+          name: gp2
+        provisioner: kubernetes.io/aws-ebs
+        parameters:
+          type: gp2
+          encrypted: "true"
+
+The main difference is the addition of the line `encrypted: "true"` and make note that `true` is in double quotes.
+
+Next run these commands:
+       
+        .. code-block:: bash
+           
+           kubectl delete storageclass gp2
+           kubectl apply -f storageclass.yml
+
+Kubernetes will not allow you to modify storageclass gp2 in order to add the `encrypted` flag so you will have to delete it first.
+This will encrypt any dynamic volumes (such as your notebook)created by Kubernetes, it will not encrypt the storage on the Kubernetes nodes themselves.
+
+**Encryption in Transit**
+In step 9 above, set up the cluster with weave by including the `--networking weave` flag in the `kops create` command above.
+Then perform the following steps:
+1. Verify weave is running::
+
+    .. code-block:: bash
+           
+        kubectl --namespace kube-system get pods
+
+    You should see several pods of the form `weave-net-abcde`
+
+2.  Create Kubernetes secret with a private password of sufficient strength. A random 128 bytes is used in this example
+
+    .. code-block:: bash
+           
+        openssl rand -hex 128 >weave-passwd
+        kubectl create secret -n kube-system generic weave-passwd --from-file=./weave-passwd
+
+    It is important that the secret name and its value (taken from the filename) are the same. If they do not match you may get a `ConfigError`
+
+3. Patch Weave with the password::
+
+    .. code-block:: bash
+           
+        kubectl patch --namespace=kube-system daemonset/weave-net --type json -p '[ { "op": "add", "path": "/spec/template/spec/containers/0/env/0", "value": { "name": "WEAVE_PASSWORD", "valueFrom": { "secretKeyRef": { "key": "weave-passwd", "name": "weave-passwd" } } } } ]'
+
+    If you want to remove the encryption you can use the following patch
+
+     .. code-block:: bash
+           
+        kubectl patch --namespace=kube-system daemonset/weave-net --type json -p '[ { "op": "add", "path": "/spec/template/spec/containers/0/env/0", "value": { "name": "WEAVE_PASSWORD", "valueFrom": { "secretKeyRef": { "key"\ : "weave-passwd", "name": "weave-passwd" } } } } ]'
+    
+4. Check to see that the pods are restarted. To expedite the process you can delete the old pods.
+5. You can verify encryption is turned on with the following command:
+
+    .. code-block:: bash
+    
+        kubectl exec -n kube-system weave-net-<pod> -c weave -- /home/weave/weave --local status
+        
+    You should see `encryption: enabled`
+    
+    If you really want to insure encryption is working, you can listen on port `6783` of any node. If the traffic looks like gibberish, you know it is on.
+
+    
 Congrats. Now that you have your Kubernetes cluster running, it's time to
 begin :ref:`creating-your-jupyterhub`.
