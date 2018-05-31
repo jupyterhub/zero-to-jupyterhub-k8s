@@ -181,6 +181,7 @@ Procedure:
 There are simple methods for encrypting your Kubernetes cluster. Illustrated here are simple methods for encryption at rest and encryption in transit.
 
 **Encryption at Rest**
+
 Instead of performing step 13 above. Create the following ``storageclass.yml`` file on your local computer::
 
         kind: StorageClass
@@ -196,7 +197,7 @@ Instead of performing step 13 above. Create the following ``storageclass.yml`` f
 
 The main difference is the addition of the line `encrypted: "true"` and make note that `true` is in double quotes.
 
-Next run these commands:
+Next run these commands::
        
         .. code-block:: bash
            
@@ -207,6 +208,7 @@ Kubernetes will not allow you to modify storageclass gp2 in order to add the `en
 This will encrypt any dynamic volumes (such as your notebook)created by Kubernetes, it will not encrypt the storage on the Kubernetes nodes themselves.
 
 **Encryption in Transit**
+
 In step 9 above, set up the cluster with weave by including the `--networking weave` flag in the `kops create` command above.
 Then perform the following steps:
 
@@ -233,7 +235,8 @@ Then perform the following steps:
            
         kubectl patch --namespace=kube-system daemonset/weave-net --type json -p '[ { "op": "add", "path": "/spec/template/spec/containers/0/env/0", "value": { "name": "WEAVE_PASSWORD", "valueFrom": { "secretKeyRef": { "key": "weave-passwd", "name": "weave-passwd" } } } } ]'
 
-    If you want to remove the encryption you can use the following patch::
+
+	If you want to remove the encryption you can use the following patch::
 
      .. code-block:: bash
            
