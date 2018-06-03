@@ -1,5 +1,6 @@
 {{ if and .Values.cull.enabled .Values.cull.maxAge }}
 {{ if .Values.rbac.enabled -}}
+{{ if eq .Values.rbac.customServiceAccount "" }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -32,5 +33,6 @@ roleRef:
   kind: Role
   name: pod-culler
   apiGroup: rbac.authorization.k8s.io
+{{- end }}
 {{- end }}
 {{- end }}

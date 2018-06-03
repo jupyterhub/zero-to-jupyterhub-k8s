@@ -18,7 +18,11 @@ spec:
         heritage: {{ .Release.Service }}
     spec:
       {{ if .Values.rbac.enabled }}
+      {{- if eq .Values.rbac.customServiceAccount "" }}
       serviceAccountName: pod-culler
+      {{ else }}
+      serviceAccountName: {{ .Values.rbac.customServiceAccount }}
+      {{- end }}
       {{- end }}
       containers:
         - name: culler

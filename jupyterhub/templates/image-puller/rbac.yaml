@@ -1,6 +1,7 @@
 # Setup of permissions to be used by the hook-image-awaiter job
 {{ if .Values.prePuller.hook.enabled }}
 {{ if .Values.rbac.enabled }}
+{{ if eq .Values.rbac.customServiceAccount "" }}
 # This service account...
 apiVersion: v1
 kind: ServiceAccount
@@ -48,5 +49,6 @@ roleRef:
   kind: Role
   name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
   apiGroup: rbac.authorization.k8s.io
+{{ end }}
 {{ end }}
 {{ end }}
