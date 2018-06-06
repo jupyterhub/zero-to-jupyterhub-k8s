@@ -9,7 +9,7 @@ command.
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
+  name: hook-image-awaiter-{{ .Release.Time.Seconds }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
     hub.jupyter.org/deletable: "true"
@@ -20,17 +20,18 @@ metadata:
 spec:
   template:
     metadata:
+      name: hook-image-awaiter
       labels:
         {{- /* Changes here will cause the Deployment to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
     spec:
       restartPolicy: Never
       {{- if .Values.rbac.enabled }}
-      serviceAccountName: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
+      serviceAccountName: hook-image-awaiter-{{ .Release.Time.Seconds }}
       {{- end }}
       containers:
         - image: {{ .Values.prePuller.hook.image.name }}:{{ .Values.prePuller.hook.image.tag }}
-          name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
+          name: hook-image-awaiter
           imagePullPolicy: IfNotPresent
           command:
             - /image-awaiter
@@ -38,5 +39,5 @@ spec:
             - -auth-token-path=/var/run/secrets/kubernetes.io/serviceaccount/token
             - -api-server-address=https://$(KUBERNETES_SERVICE_HOST):$(KUBERNETES_SERVICE_PORT)
             - -namespace={{ .Release.Namespace }}
-            - -daemonset=hook-image-puller-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
+            - -daemonset=hook-image-puller-{{ .Release.Time.Seconds }}
 {{- end }}

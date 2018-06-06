@@ -12,6 +12,7 @@ spec:
       {{- include "jupyterhub.matchLabels" . | nindent 6 }}
   template:
     metadata:
+      name: pod-culler
       labels:
         {{- /* Changes here will cause the Deployment to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}

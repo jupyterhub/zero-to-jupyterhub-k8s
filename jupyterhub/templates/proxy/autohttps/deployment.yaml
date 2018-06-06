@@ -26,6 +26,7 @@ spec:
       {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}
   template:
     metadata:
+      name: autohttps
       labels:
         {{- /* Changes here will cause the Deployment to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
