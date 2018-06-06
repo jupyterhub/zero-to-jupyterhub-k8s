@@ -19,6 +19,10 @@ metadata:
     "helm.sh/hook-weight": "10"
 spec:
   template:
+    metadata:
+      labels:
+        {{- /* Changes here will cause the Deployment to restart the pods. */}}
+        {{- include "jupyterhub.matchLabels" . | nindent 8 }}
     spec:
       restartPolicy: Never
       {{- if .Values.rbac.enabled }}

@@ -13,7 +13,8 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "jupyterhub.labels" . | nindent 8 }}
+        {{- /* Changes here will cause the Deployment to restart the pods. */}}
+        {{- include "jupyterhub.matchLabels" . | nindent 8 }}
     spec:
       {{- if .Values.rbac.enabled }}
       serviceAccountName: pod-culler
