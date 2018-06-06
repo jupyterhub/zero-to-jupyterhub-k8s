@@ -1,52 +1,63 @@
-# Setup of permissions to be used by the hook-image-awaiter job
-{{ if .Values.prePuller.hook.enabled }}
-{{ if .Values.rbac.enabled }}
-# This service account...
+{{- /*
+Permissions to be used by the hook-image-awaiter job
+*/}}
+{{- if .Values.prePuller.hook.enabled }}
+{{- if .Values.rbac.enabled }}
+{{- /*
+This service account...
+*/ -}}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
   labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
     hub.jupyter.org/deletable: "true"
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
     "helm.sh/hook-weight": "0"
 ---
-# needs this role...
+{{- /*
+... will be used by this role...
+*/}}
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
   labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
     hub.jupyter.org/deletable: "true"
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
     "helm.sh/hook-weight": "0"
 rules:
-- apiGroups: ["apps"] # "" indicates the core API group
-  resources: ["daemonsets"]
-  verbs: ["get"]
+  - apiGroups: ["apps"]       # "" indicates the core API group
+    resources: ["daemonsets"]
+    verbs: ["get"]
 ---
-# and this part declares that service account to have that role.
+{{- /*
+... as declared by this binding.
+*/}}
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
   labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
     hub.jupyter.org/deletable: "true"
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
     "helm.sh/hook-weight": "0"
 subjects:
-- kind: ServiceAccount
-  namespace: {{ .Release.Namespace }}
-  name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
+  - kind: ServiceAccount
+    name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
+    namespace: {{ .Release.Namespace }}
 roleRef:
   kind: Role
   name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
   apiGroup: rbac.authorization.k8s.io
-{{ end }}
-{{ end }}
+{{- end }}
+{{- end }}

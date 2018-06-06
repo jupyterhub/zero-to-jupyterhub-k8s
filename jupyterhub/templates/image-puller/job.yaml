@@ -1,14 +1,17 @@
-# This job has a part to play in a helm upgrade process. It simply waits for the
-# hook-image-puller daemonset which is started slightly before this job to get 
-# its' pods running. If all those pods are running they must have pulled all the
-# required images on all nodes as they are used as init containers with a dummy
-# command.
-{{ if .Values.prePuller.hook.enabled }}
+{{- /*
+This job has a part to play in a helm upgrade process. It simply waits for the
+hook-image-puller daemonset which is started slightly before this job to get
+its' pods running. If all those pods are running they must have pulled all the
+required images on all nodes as they are used as init containers with a dummy
+command.
+*/}}
+{{- if .Values.prePuller.hook.enabled -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
   labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
     hub.jupyter.org/deletable: "true"
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
@@ -18,7 +21,7 @@ spec:
   template:
     spec:
       restartPolicy: Never
-      {{ if .Values.rbac.enabled }}
+      {{- if .Values.rbac.enabled }}
       serviceAccountName: hook-image-awaiter-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
       {{- end }}
       containers:
@@ -32,4 +35,4 @@ spec:
             - -api-server-address=https://$(KUBERNETES_SERVICE_HOST):$(KUBERNETES_SERVICE_PORT)
             - -namespace={{ .Release.Namespace }}
             - -daemonset=hook-image-puller-{{ .Release.Name }}-{{ .Release.Revision }}-{{ .Release.Time.Seconds }}
-{{ end }}
+{{- end }}

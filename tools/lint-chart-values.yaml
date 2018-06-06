@@ -1,13 +1,10 @@
 hub:
   service:
-    type: ClusterIP
     ports:
       nodePort:
   baseUrl: /
-  cookieSecret:
+  cookieSecret: ''
   publicURL:
-  uid: 1000
-  fsGid: 1000
   nodeSelector: {}
   concurrentSpawnLimit: 64
   activeServerLimit:
@@ -17,33 +14,25 @@ hub:
     pvc:
       annotations: {}
       selector: {}
-      accessModes:
-        - ReadWriteOnce
-      storage: 1Gi
       subPath:
       storageClassName:
     url:
-  labels: {}
-  annotations: {}
+  labels:
+    test-label: test-value
+  annotations:
+    test-annotation: test-value
   extraConfig: {}
   extraConfigMap: {}
   extraEnv: {}
   extraContainers: []
   extraVolumes: []
   extraVolumeMounts: []
-  image:
-    name: jupyterhub/k8s-hub
-    tag: generated-by-chartpress
-  resources:
-    requests:
-      cpu: 200m
-      memory: 512Mi
   services: {}
   imagePullPolicy: IfNotPresent
   pdb:
     enabled: true
   networkPolicy:
-    enabled: false
+    enabled: true
     egress:
       - to:
           - ipBlock:
@@ -55,7 +44,7 @@ rbac:
 
 
 proxy:
-  secretToken: ''
+  secretToken: '0000000000000000000000000000000000000000000000000000000000000000'
   service:
     type: LoadBalancer
     labels: {}
@@ -63,15 +52,6 @@ proxy:
     nodePorts:
       http:
       https:
-  chp:
-    image:
-      name: jupyterhub/configurable-http-proxy
-      tag: 3.0.0
-      pullPolicy: IfNotPresent
-    resources:
-      requests:
-        cpu: 200m
-        memory: 512Mi
   nginx:
     image:
       name: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
@@ -86,7 +66,8 @@ proxy:
       # When 0.1.6 is released, switch to that!
       tag: master-2368
     resources: {}
-  labels:
+  labels: {}
+  annotations: {}
   nodeSelector: {}
   pdb:
     enabled: true
@@ -100,7 +81,7 @@ proxy:
       cert:
     hosts: []
   networkPolicy:
-    enabled: false
+    enabled: true
     egress:
       - to:
           - ipBlock:
@@ -116,14 +97,9 @@ auth:
     users:
   dummy:
     password:
-  ldap:
-    dn:
-      search: {}
-      user: {}
-    user: {}
   state:
-    enabled: false
-    cryptoKey:
+    enabled: true
+    cryptoKey: '0000000000000000000000000000000000000000000000000000000000000000'
 
 
 singleuser:
@@ -132,10 +108,10 @@ singleuser:
       name: jupyterhub/k8s-network-tools
       tag: generated-by-chartpress
   cloudMetadata:
-    enabled: false
+    enabled: true
     ip: 169.254.169.254
   networkPolicy:
-    enabled: false
+    enabled: true
     egress:
     # Required egress is handled by other rules so it's safe to modify this
       - to:
@@ -165,7 +141,8 @@ singleuser:
       storageClass:
       pvcNameTemplate: claim-{username}{servername}
       volumeNameTemplate: volume-{username}{servername}
-      storageAccessModes: [ReadWriteOnce]
+      storageAccessModes:
+        - ReadWriteOnce
   image:
     name: jupyterhub/k8s-singleuser-sample
     tag: generated-by-chartpress
@@ -189,8 +166,7 @@ prePuller:
       name: jupyterhub/k8s-image-awaiter
       tag: generated-by-chartpress
   continuous:
-    enabled: false
-  extraImages: []
+    enabled: true
   pause:
     image:
       name: gcr.io/google_containers/pause
@@ -198,7 +174,7 @@ prePuller:
 
 
 ingress:
-  enabled: false
+  enabled: true
   annotations: {}
   hosts: []
   tls:
@@ -207,15 +183,7 @@ ingress:
 cull:
   enabled: true
   users: false
-  timeout: 3600
-  every: 600
-  concurrency: 10
-  maxAge: 0
-  podCuller:
-    image:
-      name: jupyterhub/k8s-pod-culler
-      tag: generated-by-chartpress
 
 
 debug:
-  enabled: false
+  enabled: true

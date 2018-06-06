@@ -1,3 +1,7 @@
+### Zero to JupyterHub Kubernetes ###
+tools/lint-output/
+
+
 ### macOS ###
 *.DS_Store
 .AppleDouble
