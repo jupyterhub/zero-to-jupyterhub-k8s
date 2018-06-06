@@ -33,7 +33,6 @@ spec:
       maxUnavailable: 100%
   template:
     metadata:
-      name: {{ print .componentPrefix "image-puller" }}
       labels:
         {{- /* Changes here will cause the Deployment to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
