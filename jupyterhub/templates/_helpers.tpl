@@ -92,13 +92,17 @@
 {{- /*
   jupyterhub.commonLabels:
     Foundation for "jupyterhub.labels".
-    Provides labels: app, release, (chart and heritage).
+    Provides labels: app, release, (heritage).
 */}}
 {{- define "jupyterhub.commonLabels" -}}
 app: {{ .appLabel | default (include "jupyterhub.appLabel" .) }}
 release: {{ .Release.Name }}
 {{- if not .matchLabels }}
+{{- /*
+  chart label disabled because it causes unnecessary relaunches of pods
+  on every upgrade
 chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+*/}}
 heritage: {{ .heritageLabel | default .Release.Service }}
 {{- end }}
 {{- end }}
@@ -106,7 +110,7 @@ heritage: {{ .heritageLabel | default .Release.Service }}
 
 {{- /*
   jupyterhub.labels:
-    Provides labels: component, app, release, (chart and heritage).
+    Provides labels: component, app, release, (heritage).
 */}}
 {{- define "jupyterhub.labels" -}}
 component: {{ include "jupyterhub.componentLabel" . }}
