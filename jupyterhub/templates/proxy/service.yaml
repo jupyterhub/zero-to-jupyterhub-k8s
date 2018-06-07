@@ -10,7 +10,7 @@ metadata:
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
 spec:
   selector:
-    {{- include "jupyterhub.labels" . | nindent 4 }}
+    {{- include "jupyterhub.matchLabels" . | nindent 4 }}
   ports:
     - protocol: TCP
       port: 8001

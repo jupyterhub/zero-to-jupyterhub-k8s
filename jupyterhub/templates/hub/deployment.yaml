@@ -11,9 +11,9 @@ spec:
       {{- include "jupyterhub.matchLabels" . | nindent 6 }}
   template:
     metadata:
-      name: hub
       labels:
-        {{- include "jupyterhub.labels" . | nindent 8 }}
+        {{- /* Changes here will cause the Deployment to restart the pods. */}}
+        {{- include "jupyterhub.matchLabels" . | nindent 8 }}
         hub.jupyter.org/network-access-proxy-api: "true"
         hub.jupyter.org/network-access-proxy-http: "true"
         hub.jupyter.org/network-access-singleuser: "true"
