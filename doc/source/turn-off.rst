@@ -108,14 +108,23 @@ Amazon Web Services (AWS)
 1. Perform the steps in :ref:`delete-namespace`. These cloud provider agnostic steps will
    delete the helm chart and delete the hub's namespace. This must be done before proceeding.
 
-2. The easiest way to delete your cloud resources on AWS is to use their
-   website. Go to the ``CloudFormation`` page. This should have a list of all
-   running AWS stacks that you've created.
+2. on CI host:
 
-   If you followed the JupyterHub guide, there should be two items, both containing the name
-   that you chose for this stack. For each item, click the checkbox next to it. Then, click
-   ``Actions`` and finally ``Delete Stack``. Answer "yes" to any confirmation dialogues, and
-   this should begin the process of deleting your Kubernetes cluster.
+.. code-block:: bash
+
+   kops delete cluster <CLUSTER-NAME> --yes
+   exit #(leave CI host)
+   Terminicate CI Host
+   aws ec2 stop-instances --intance-ids <aws-instance id of CI HOST>
+   aws ec2 terminate-instances --instance-ids <aws-instance id of CI HOST>
+
+.. note:: 
+
+   cluster name was set as an env var aka: `NAME=<somename>.k8s.local`
+   Stoping the CI host will still incure disk storage and Ip address costs, 
+   but the host can be restarted at a later date to resume using.  
+   
+
 
 .. note::
 
