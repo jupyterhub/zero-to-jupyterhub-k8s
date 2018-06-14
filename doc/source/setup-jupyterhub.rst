@@ -164,6 +164,6 @@ Install JupyterHub
    entering any username and password combination will let you enter the hub.
 
 Congratulations! Now that you have JupyterHub running, you can
-`extend it <extending-jupyterhub.html>`_ in many ways. You can use a pre-built
+`extend it <extending-jupyterhub>`_ in many ways. You can use a pre-built
 image for the user container, build your own image, configure different
 authenticators, and more!
