@@ -1,4 +1,5 @@
 {{- $manualHTTPS := (and .Values.proxy.https.enabled (eq .Values.proxy.https.type "manual")) -}}
+{{- $manualHTTPSwithsecret := (and .Values.proxy.https.enabled (eq .Values.proxy.https.type "manualsecret")) -}}
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
@@ -44,6 +45,12 @@ spec:
                     - key: release
                       operator: In
                       values: [{{ .Release.Name | quote }}]
+      {{- if $manualHTTPSwithsecret }}
+      volumes:
+        - name: tls-secret
+          secret:
+            secretName: {{ .Values.proxy.https.secret }}
+      {{- end }}
       {{- if $manualHTTPS }}
       volumes:
         - name: tls-secret
@@ -65,13 +72,18 @@ spec:
             - --redirect-port=8000
             - --ssl-key=/etc/chp/tls/tls.key
             - --ssl-cert=/etc/chp/tls/tls.crt
+            {{- else if $manualHTTPSwithsecret }}
+            - --port=8443
+            - --redirect-port=8000
+            - --ssl-key=/etc/chp/tls/{{ .Values.proxy.https.keyname }}
+            - --ssl-cert=/etc/chp/tls/{{ .Values.proxy.https.crtname }}
             {{- else }}
             - --port=8000
             {{- end }}
             {{- if .Values.debug.enabled }}
             - --log-level=debug
             {{- end }}
-          {{- if $manualHTTPS }}
+          {{- if or $manualHTTPS $manualHTTPSwithsecret }}
           volumeMounts:
             - name: tls-secret
               mountPath: /etc/chp/tls
@@ -87,7 +99,7 @@ spec:
                   key: proxy.token
           imagePullPolicy: {{ .Values.proxy.chp.image.pullPolicy }}
           ports:
-            {{- if $manualHTTPS }}
+            {{- if or $manualHTTPS $manualHTTPSwithsecret }}
             - containerPort: 8443
               name: proxy-https
             {{- end }}

@@ -1,6 +1,7 @@
 {{- $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled) }}
 {{- $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt")) }}
 {{- $manualHTTPS := (and $HTTPS (eq .Values.proxy.https.type "manual")) }}
+{{- $manualHTTPSwithsecret := (and .Values.proxy.https.enabled (eq .Values.proxy.https.type "manualsecret")) -}}
 {{- if and .Values.proxy.networkPolicy.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -25,7 +26,7 @@ spec:
       - protocol: TCP
         port: 8000
       {{- end }}
-      {{- if $manualHTTPS }}
+      {{- if or $manualHTTPS $manualHTTPSwithsecret}}
       - protocol: TCP
         port: 8443
       {{- end }}
