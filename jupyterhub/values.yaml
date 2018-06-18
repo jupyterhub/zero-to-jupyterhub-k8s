@@ -24,7 +24,9 @@ hub:
       storageClassName:
     url:
   labels: {}
-  annotations: {}
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: /hub/metrics
   extraConfig: {}
   extraConfigMap: {}
   extraEnv: {}
