@@ -77,16 +77,14 @@ proxy:
   nginx:
     image:
       name: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
-      tag: 0.9.0
+      tag: 0.15.0
       pullPolicy: IfNotPresent
     proxyBodySize: 64m
     resources: {}
   lego:
     image:
       name: jetstack/kube-lego
-      # We need a couple of fixes related to ingress.provider that are in master
-      # When 0.1.6 is released, switch to that!
-      tag: master-2368
+      tag: 0.1.6
     resources: {}
   labels:
   nodeSelector: {}
