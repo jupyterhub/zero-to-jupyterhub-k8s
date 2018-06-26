@@ -1,23 +1,22 @@
-{{ if and .Values.cull.enabled .Values.cull.maxAge }}
-apiVersion: extensions/v1beta1
+{{- if and .Values.cull.enabled .Values.cull.maxAge -}}
+apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   name: pod-culler
   labels:
-    app: jupyterhub
-    component: pod-culler
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "jupyterhub.matchLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: jupyterhub
-        component: pod-culler
-        release: {{ .Release.Name }}
-        heritage: {{ .Release.Service }}
+        {{- /* Changes here will cause the Deployment to restart the pods. */}}
+        {{- include "jupyterhub.matchLabels" . | nindent 8 }}
     spec:
-      {{ if .Values.rbac.enabled }}
+      {{- if .Values.rbac.enabled }}
       serviceAccountName: pod-culler
       {{- end }}
       containers:
@@ -32,9 +31,9 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: LABEL_SELECTOR
-              value: "component=singleuser-server"
+              value: {{ include "jupyterhub.podCullerSelector" . }}
             - name: MAX_AGE
               value: {{ .Values.cull.maxAge | quote }}
             - name: CULL_INTERVAL
               value: {{ .Values.cull.every | quote }}
-{{ end }}
+{{- end }}

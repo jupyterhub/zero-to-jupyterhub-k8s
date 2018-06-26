@@ -2,8 +2,11 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: hub-config
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
 data:
-  {{ if .Values.cull.enabled -}}
+  {{- /* Cull */}}
+  {{- if .Values.cull.enabled }}
   cull.enabled: "true"
   cull.users: {{ .Values.cull.users | quote }}
   cull.timeout: {{ .Values.cull.timeout | quote }}
@@ -11,222 +14,236 @@ data:
   cull.concurrency: {{ .Values.cull.concurrency | quote }}
   {{- end }}
 
+
+  {{- /* Auth */}}
   auth.type: {{ .Values.auth.type | quote }}
-  {{ if eq .Values.auth.type "hmac" -}}
+  auth.state.enabled: {{ .Values.auth.state.enabled | quote }}
+  auth.admin.access: {{ .Values.auth.admin.access | quote }}
+  {{- if .Values.auth.admin.users }}
+  auth.admin.users: |
+    {{- .Values.auth.admin.users | toYaml | trimSuffix "\n" | nindent 4 }}
+  {{- end }}
+  {{- if .Values.auth.whitelist.users }}
+  auth.whitelist.users: |
+    {{- .Values.auth.whitelist.users | toYaml | trimSuffix "\n" | nindent 4 }}
+  {{- end }}
+  {{- if .Values.auth.scopes }}
+  auth.scopes: |
+    {{- .Values.auth.scopes | toYaml | trimSuffix "\n" | nindent 4 }}
+  {{- end }}
+
+
+  {{- /* Auth.Provider */}}
+  {{- if eq .Values.auth.type "hmac" }}
   auth.hmac.secret-key: {{ .Values.auth.hmac.secretKey | quote }}
   {{- end }}
-  {{ if eq .Values.auth.type "google" -}}
-  auth.google.client-id: {{.Values.auth.google.clientId | quote}}
-  auth.google.client-secret: {{.Values.auth.google.clientSecret | quote}}
-  auth.google.hosted-domain: {{.Values.auth.google.hostedDomain | quote}}
-  auth.google.login-service: {{.Values.auth.google.loginService | quote}}
-  auth.google.callback-url: {{.Values.auth.google.callbackUrl | quote}}
+
+  {{- if eq .Values.auth.type "google" }}
+  auth.google.client-id: {{ .Values.auth.google.clientId | quote }}
+  auth.google.client-secret: {{ .Values.auth.google.clientSecret | quote }}
+  auth.google.hosted-domain: {{ .Values.auth.google.hostedDomain | quote }}
+  auth.google.login-service: {{ .Values.auth.google.loginService | quote }}
+  auth.google.callback-url: {{ .Values.auth.google.callbackUrl | quote }}
   {{- end }}
-  {{ if eq .Values.auth.type "github" -}}
-  auth.github.client-id: {{.Values.auth.github.clientId | quote}}
-  auth.github.client-secret: {{.Values.auth.github.clientSecret | quote}}
-  auth.github.callback-url: {{.Values.auth.github.callbackUrl | quote}}
-  {{ if .Values.auth.github.org_whitelist -}}
+
+  {{- if eq .Values.auth.type "github" }}
+  auth.github.client-id: {{ .Values.auth.github.clientId | quote }}
+  auth.github.client-secret: {{ .Values.auth.github.clientSecret | quote }}
+  auth.github.callback-url: {{ .Values.auth.github.callbackUrl | quote }}
+  {{- if .Values.auth.github.org_whitelist }}
   auth.github.org_whitelist: |
-{{ toYaml .Values.auth.github.org_whitelist | indent 4}}
+    {{- .Values.auth.github.org_whitelist | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
   {{- end }}
-  {{ if eq .Values.auth.type "cilogon" -}}
-  auth.cilogon.client-id: {{.Values.auth.cilogon.clientId | quote}}
-  auth.cilogon.client-secret: {{.Values.auth.cilogon.clientSecret | quote}}
-  auth.cilogon.callback-url: {{.Values.auth.cilogon.callbackUrl | quote}}
+
+  {{- if eq .Values.auth.type "cilogon" }}
+  auth.cilogon.client-id: {{ .Values.auth.cilogon.clientId | quote }}
+  auth.cilogon.client-secret: {{ .Values.auth.cilogon.clientSecret | quote }}
+  auth.cilogon.callback-url: {{ .Values.auth.cilogon.callbackUrl | quote }}
   {{- end }}
-  {{ if eq .Values.auth.type "gitlab" -}}
-  auth.gitlab.client-id: {{.Values.auth.gitlab.clientId | quote}}
-  auth.gitlab.client-secret: {{.Values.auth.gitlab.clientSecret | quote}}
-  auth.gitlab.callback-url: {{.Values.auth.gitlab.callbackUrl | quote}}
+
+  {{- if eq .Values.auth.type "gitlab" }}
+  auth.gitlab.client-id: {{ .Values.auth.gitlab.clientId | quote }}
+  auth.gitlab.client-secret: {{ .Values.auth.gitlab.clientSecret | quote }}
+  auth.gitlab.callback-url: {{ .Values.auth.gitlab.callbackUrl | quote }}
   {{- end }}
-  {{ if eq .Values.auth.type "mediawiki" -}}
-  auth.mediawiki.client-id: {{.Values.auth.mediawiki.clientId | quote}}
-  auth.mediawiki.client-secret: {{.Values.auth.mediawiki.clientSecret | quote}}
-  auth.mediawiki.index-url: {{.Values.auth.mediawiki.indexUrl | quote}}
+  
+  {{- if eq .Values.auth.type "mediawiki" }}
+  auth.mediawiki.client-id: {{ .Values.auth.mediawiki.clientId | quote }}
+  auth.mediawiki.client-secret: {{ .Values.auth.mediawiki.clientSecret | quote }}
+  auth.mediawiki.index-url: {{ .Values.auth.mediawiki.indexUrl | quote }}
   {{- end }}
-  {{ if eq .Values.auth.type "globus" -}}
-  auth.globus.client-id: {{.Values.auth.globus.clientId | quote}}
-  auth.globus.client-secret: {{.Values.auth.globus.clientSecret | quote}}
-  auth.globus.callback-url: {{.Values.auth.globus.callbackUrl | quote}}
-  auth.globus.identity-provider: {{.Values.auth.globus.identityProvider | quote}}
+
+  {{- if eq .Values.auth.type "globus" }}
+  auth.globus.client-id: {{ .Values.auth.globus.clientId | quote }}
+  auth.globus.client-secret: {{ .Values.auth.globus.clientSecret | quote }}
+  auth.globus.callback-url: {{ .Values.auth.globus.callbackUrl | quote }}
+  auth.globus.identity-provider: {{ .Values.auth.globus.identityProvider | quote }}
   {{- end }}
-  {{ if eq .Values.auth.type "lti" -}}
+  
+  {{- if eq .Values.auth.type "lti" }}
   auth.lti.consumers: |
-{{ toYaml .Values.auth.lti.consumers | indent 4 }}
+    {{- .Values.auth.lti.consumers | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
-  {{ if eq .Values.auth.type "ldap" -}}
+
+  {{- if eq .Values.auth.type "ldap" }}
   auth.ldap.server.address: {{ .Values.auth.ldap.server.address | quote }}
   auth.ldap.server.port: {{ .Values.auth.ldap.server.port | quote }}
   auth.ldap.server.ssl: {{ .Values.auth.ldap.server.ssl | quote }}
-  {{ if .Values.auth.ldap.allowedGroups -}}
+  {{- if .Values.auth.ldap.allowedGroups }}
   auth.ldap.allowed-groups: |
-{{ toYaml .Values.auth.ldap.allowedGroups | indent 4 }}
+    {{- .Values.auth.ldap.allowedGroups | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
-  {{ if .Values.auth.ldap.dn.templates -}}
+  {{- if .Values.auth.ldap.dn.templates }}
   auth.ldap.dn.templates: |
-{{ toYaml .Values.auth.ldap.dn.templates | indent 4 }}
+    {{- .Values.auth.ldap.dn.templates | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
-  auth.ldap.dn.lookup: {{ .Values.auth.ldap.dn.lookup }}
-  auth.ldap.dn.search.filter: {{ .Values.auth.ldap.dn.search.filter }}
-  auth.ldap.dn.search.user: {{ .Values.auth.ldap.dn.search.user }}
-  auth.ldap.dn.search.password: {{ .Values.auth.ldap.dn.search.password }}
-  auth.ldap.dn.user.dn-attribute: {{ .Values.auth.ldap.dn.user.dnAttribute }}
-  auth.ldap.dn.user.escape: {{ .Values.auth.ldap.dn.user.escape }}
-  auth.ldap.dn.user.valid-regex: {{ .Values.auth.ldap.dn.user.validRegex }}
-  auth.ldap.dn.user.search-base: {{ .Values.auth.ldap.dn.user.searchBase }}
-  auth.ldap.dn.user.attribute: {{ .Values.auth.ldap.dn.user.attribute }}
+  auth.ldap.dn.lookup: {{ .Values.auth.ldap.dn.lookup | quote }}
+  auth.ldap.dn.search.filter: {{ .Values.auth.ldap.dn.search.filter | quote }}
+  auth.ldap.dn.search.user: {{ .Values.auth.ldap.dn.search.user | quote }}
+  auth.ldap.dn.search.password: {{ .Values.auth.ldap.dn.search.password | quote }}
+  auth.ldap.dn.user.dn-attribute: {{ .Values.auth.ldap.dn.user.dnAttribute | quote }}
+  auth.ldap.dn.user.escape: {{ .Values.auth.ldap.dn.user.escape | quote }}
+  auth.ldap.dn.user.valid-regex: {{ .Values.auth.ldap.dn.user.validRegex | quote }}
+  auth.ldap.dn.user.search-base: {{ .Values.auth.ldap.dn.user.searchBase | quote }}
+  auth.ldap.dn.user.attribute: {{ .Values.auth.ldap.dn.user.attribute | quote }}
   {{- end }}
-
-  {{ if .Values.auth.whitelist.users -}}
-  auth.whitelist.users: |
-{{ toYaml .Values.auth.whitelist.users | indent 4}}
-  {{- end }}
-  {{ if eq .Values.auth.type "dummy" -}}
-  {{ if .Values.auth.dummy.password -}}
+  
+  {{- if eq .Values.auth.type "dummy" }}
+  {{- if .Values.auth.dummy.password }}
   auth.dummy.password: {{ .Values.auth.dummy.password | quote }}
   {{- end }}
   {{- end }}
 
-  {{ if eq .Values.auth.type "custom" -}}
+  {{- if eq .Values.auth.type "custom" }}
   auth.custom.class-name: {{ .Values.auth.custom.className | quote }}
   auth.custom.config : {{ toJson .Values.auth.custom.config | quote }}
   {{- end }}
 
-  {{ if .Values.auth.scopes -}}
-  auth.scopes: |
-{{ toYaml .Values.auth.scopes | indent 4}}
-  {{- end }}
-
-  auth.state.enabled: {{ .Values.auth.state.enabled | quote }}
-
-  {{ if .Values.singleuser.lifecycleHooks -}}
+  {{- /* Singleuser */}}
+  {{- if .Values.singleuser.lifecycleHooks }}
   singleuser.lifecycle-hooks: {{ toJson .Values.singleuser.lifecycleHooks | quote }}
   {{- end }}
-
-  {{ if .Values.singleuser.initContainers -}}
+  {{- if .Values.singleuser.initContainers }}
   singleuser.init-containers: {{ toJson .Values.singleuser.initContainers | quote }}
   {{- end }}
-
   singleuser.network-tools.image.name: {{ .Values.singleuser.networkTools.image.name | quote }}
   singleuser.network-tools.image.tag: {{ .Values.singleuser.networkTools.image.tag | quote }}
-
   singleuser.cloud-metadata: |
-{{ toYaml .Values.singleuser.cloudMetadata | indent 4 }}
-
+    {{- .Values.singleuser.cloudMetadata | toYaml | trimSuffix "\n" | nindent 4 }}
   singleuser.start-timeout: {{ .Values.singleuser.startTimeout | quote }}
-
   singleuser.image-pull-policy: {{ .Values.singleuser.image.pullPolicy | quote }}
-
-  hub.concurrent-spawn-limit: {{ .Values.hub.concurrentSpawnLimit | quote }}
-  {{ if .Values.hub.activeServerLimit }}
-  hub.active-server-limit: {{ .Values.hub.activeServerLimit | quote }}
-  {{- end }}
-
-  {{ if .Values.hub.services -}}
-  hub.services: |
-    # include hub.services *except* api_tokens
-    {{ range $name, $service := .Values.hub.services -}}
-    {{$name}}:
-      {{ range $key, $value := $service -}}
-      {{ if ne $key "apiToken" -}}
-      # Use toJson since values can be more than just strings
-      {{$key}}: {{ toJson $value }}
-      {{- end }}
-      {{ end }}
-    {{ end }}
-  {{- end }}
-  {{ if .Values.hub.extraConfig -}}
-  {{ $extraConfigType := typeOf .Values.hub.extraConfig -}}
-  {{ if eq $extraConfigType "string" -}}
-  hub.extra-config.default.py: |
-{{ .Values.hub.extraConfig | indent 4 }}
-  {{ else if eq $extraConfigType "map[string]interface {}" -}}
-  {{ range $key, $value := .Values.hub.extraConfig -}}
-  hub.extra-config.{{ $key }}.py: |
-{{ $value | indent 4 }}
-  {{ end }}
-  {{- end }}
-  {{- end }}
-  {{ if .Values.hub.extraConfigVars -}}
-  hub.extra-vars: {{ toJson .Values.hub.extraConfigVars | quote }}
-  {{- end }}
-  {{ if .Values.singleuser.cmd -}}
+  {{- if .Values.singleuser.cmd }}
   singleuser.cmd: {{ .Values.singleuser.cmd | quote }}
   {{- end }}
-  {{ if .Values.singleuser.defaultUrl }}
+  {{- if .Values.singleuser.defaultUrl }}
   singleuser.default-url: {{ .Values.singleuser.defaultUrl | quote }}
   {{- end }}
-
   singleuser.uid: {{ .Values.singleuser.uid | quote }}
   singleuser.fs-gid: {{ .Values.singleuser.fsGid | quote }}
-  {{ if .Values.singleuser.serviceAccountName }}
+  {{- if .Values.singleuser.serviceAccountName }}
   singleuser.service-account-name: {{ .Values.singleuser.serviceAccountName | quote }}
   {{- end }}
   singleuser.node-selector: {{ toJson .Values.singleuser.nodeSelector | quote }}
-
-  {{ if .Values.singleuser.schedulerStrategy }}
+  {{- if .Values.singleuser.schedulerStrategy }}
   singleuser.scheduler-strategy: {{ .Values.singleuser.schedulerStrategy | quote }}
   {{- end }}
   singleuser.storage.type: {{ .Values.singleuser.storage.type | quote }}
   singleuser.storage.home_mount_path: {{ .Values.singleuser.storage.homeMountPath | quote }}
   singleuser.storage.extra-volumes: {{ toJson .Values.singleuser.storage.extraVolumes | quote }}
   singleuser.storage.extra-volume-mounts: {{ toJson .Values.singleuser.storage.extraVolumeMounts | quote }}
-  {{ if eq .Values.singleuser.storage.type "dynamic" -}}
-  singleuser.storage.capacity: {{.Values.singleuser.storage.capacity | quote }}
+  {{- if eq .Values.singleuser.storage.type "dynamic" }}
+  singleuser.storage.capacity: {{ .Values.singleuser.storage.capacity | quote }}
   singleuser.storage.dynamic.pvc-name-template: {{ .Values.singleuser.storage.dynamic.pvcNameTemplate | quote }}
   singleuser.storage.dynamic.volume-name-template: {{ .Values.singleuser.storage.dynamic.volumeNameTemplate | quote }}
   singleuser.storage.dynamic.storage-access-modes: {{ .Values.singleuser.storage.dynamic.storageAccessModes | quote }}
-  {{ if .Values.singleuser.storage.dynamic.storageClass -}}
+  {{- if .Values.singleuser.storage.dynamic.storageClass }}
   singleuser.storage.dynamic.storage-class: {{ .Values.singleuser.storage.dynamic.storageClass | quote }}
   {{- end }}
-  {{ else if eq .Values.singleuser.storage.type "static" -}}
+  {{- else if eq .Values.singleuser.storage.type "static" }}
   singleuser.storage.static.pvc-name: {{ .Values.singleuser.storage.static.pvcName | quote }}
   singleuser.storage.static.sub-path: {{ .Values.singleuser.storage.static.subPath | quote }}
-  {{ else if eq .Values.singleuser.storage.type "hostPath" -}}
+  {{- else if eq .Values.singleuser.storage.type "hostPath" }}
   singleuser.storage.home_host_path_template: {{ .Values.singleuser.storage.homeHostPathTemplate | quote }}
   {{- end }}
-  {{ if .Values.singleuser.memory.limit -}}
-  singleuser.memory.limit: {{ .Values.singleuser.memory.limit | quote}}
+  {{- if .Values.singleuser.memory.limit }}
+  singleuser.memory.limit: {{ .Values.singleuser.memory.limit | quote }}
   {{- end }}
-  {{ if .Values.singleuser.memory.guarantee -}}
-  singleuser.memory.guarantee: {{ .Values.singleuser.memory.guarantee | quote}}
+  {{- if .Values.singleuser.memory.guarantee }}
+  singleuser.memory.guarantee: {{ .Values.singleuser.memory.guarantee | quote }}
   {{- end }}
-  {{ if .Values.singleuser.cpu.limit -}}
-  singleuser.cpu.limit: {{ .Values.singleuser.cpu.limit | quote}}
+  {{- if .Values.singleuser.cpu.limit }}
+  singleuser.cpu.limit: {{ .Values.singleuser.cpu.limit | quote }}
   {{- end }}
-  {{ if .Values.singleuser.cpu.guarantee -}}
-  singleuser.cpu.guarantee: {{ .Values.singleuser.cpu.guarantee | quote}}
+  {{- if .Values.singleuser.cpu.guarantee }}
+  singleuser.cpu.guarantee: {{ .Values.singleuser.cpu.guarantee | quote }}
   {{- end }}
   singleuser.extra-labels: |
     hub.jupyter.org/network-access-hub: "true"
-  {{ range $key, $value := .Values.singleuser.extraLabels -}}
+    {{- range $key, $value := .Values.singleuser.extraLabels }}
     {{ $key | quote }}: {{ $value | quote }}
-  {{- end }}
-  {{ if .Values.singleuser.extraEnv -}}
+    {{- end }}
+  {{- if .Values.singleuser.extraEnv }}
   singleuser.extra-env: |
-    {{ range $key, $value := .Values.singleuser.extraEnv }}
+    {{- range $key, $value := .Values.singleuser.extraEnv }}
     {{ $key | quote }}: {{ $value | quote }}
-    {{ end }}
+    {{- end }}
   {{- end }}
-  token.cookie_secret: {{ .Values.hub.cookieSecret | quote }}
+  
+  
+  {{- /* KubeSpawner */}}
+  kubespawner.common-labels: |
+    {{- $_ := merge (dict "heritageLabel" "jupyterhub") . }}
+    {{- include "jupyterhub.commonLabels" $_ | nindent 4 }}
+
+
+  {{- /* Hub */}}
+  hub.concurrent-spawn-limit: {{ .Values.hub.concurrentSpawnLimit | quote }}
+  {{- if .Values.hub.activeServerLimit }}
+  hub.active-server-limit: {{ .Values.hub.activeServerLimit | quote }}
+  {{- end }}
+  {{- if .Values.hub.services }}
+  hub.services: |
+    {{- /* include hub.services *except* api_tokens */}}
+    {{- range $name, $service := .Values.hub.services }}
+    {{ $name }}:
+      {{- range $key, $value := $service }}
+      {{- if ne $key "apiToken" }}
+      {{- /* Use toJson since values can be more than just strings */}}
+      {{ $key }}: {{ toJson $value }}
+      {{- end }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+  {{- if .Values.hub.extraConfig }}
+  {{- $extraConfigType := typeOf .Values.hub.extraConfig }}
+  {{- if eq $extraConfigType "string" }}
+  hub.extra-config.default.py: |
+    {{- .Values.hub.extraConfig | nindent 4 }}
+  {{- else if eq $extraConfigType "map[string]interface {}" }}
+  {{- range $key, $value := .Values.hub.extraConfig }}
+  hub.extra-config.{{ $key }}.py: |
+    {{- $value | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  {{- end }}
+  {{- if .Values.hub.extraConfigVars }}
+  hub.extra-vars: {{ toJson .Values.hub.extraConfigVars | quote }}
+  {{- end }}
   hub.base_url: {{ .Values.hub.baseUrl | quote }}
-  {{ if eq .Values.hub.db.type "sqlite-pvc" -}}
+  {{- if eq .Values.hub.db.type "sqlite-pvc" }}
   hub.db_url: "sqlite:///jupyterhub.sqlite"
-  {{ else if eq .Values.hub.db.type "sqlite-memory" -}}
+  {{- else if eq .Values.hub.db.type "sqlite-memory" }}
   hub.db_url: "sqlite://"
-  {{ else -}}
+  {{- else }}
   hub.db_url: {{ .Values.hub.db.url | quote }}
   {{- end }}
-  auth.admin.access: {{ .Values.auth.admin.access | quote }}
-  {{ if .Values.auth.admin.users -}}
-  auth.admin.users: |
-{{ toYaml .Values.auth.admin.users | indent 4 }}
+  {{- if .Values.hub.cookieSecret }}
+  token.cookie_secret: {{ .Values.hub.cookieSecret | quote }}
   {{- end }}
 
+  {{- /* Other */}}
   debug.enabled: {{ .Values.debug.enabled | quote }}
-
-  {{ range $key, $value := .Values.hub.extraConfigMap -}}
+  {{- range $key, $value := .Values.hub.extraConfigMap }}
   custom.{{ $key }}: {{ toJson $value | quote }}
-  {{ end -}}
+  {{- end }}

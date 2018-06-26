@@ -28,7 +28,6 @@ c.JupyterHub.last_activity_interval = 60
 c.JupyterHub.concurrent_spawn_limit = get_config('hub.concurrent-spawn-limit')
 
 active_server_limit = get_config('hub.active-server-limit', None)
-
 if active_server_limit is not None:
     c.JupyterHub.active_server_limit = int(active_server_limit)
 
@@ -37,6 +36,8 @@ c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
 
 # the hub should listen on all interfaces, so the proxy can access it
 c.JupyterHub.hub_ip = '0.0.0.0'
+
+c.KubeSpawner.common_labels = get_config('kubespawner.common-labels')
 
 c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
 

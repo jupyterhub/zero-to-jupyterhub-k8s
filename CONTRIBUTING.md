@@ -93,6 +93,10 @@ development.
 
 ---
 
+## Best practices
+
+We strive to follow the guidelines provided by [kubernetes/charts](https://github.com/kubernetes/charts/blob/master/REVIEW_GUIDELINES.md) and the [Helm Chart Best Practices Guide](https://github.com/kubernetes/helm/tree/master/docs/chart_best_practices) they refer to.
+
 ## Releasing a new version of the helm chart
 
 The following steps can be followed to release a new version of the Helm Chart.

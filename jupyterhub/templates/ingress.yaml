@@ -4,30 +4,26 @@ kind: Ingress
 metadata:
   name: jupyterhub
   labels:
-    app: jupyterhub
-    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
-  {{ if .Values.ingress.annotations }}
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+  {{- if .Values.ingress.annotations }}
   annotations:
     {{- range $key, $value := .Values.ingress.annotations }}
-      {{ $key }}: {{ $value | quote }}
+    {{ $key }}: {{ $value | quote }}
     {{- end }}
   {{- end }}
 spec:
   rules:
-    {{- $root := . -}}
     {{- range $host := .Values.ingress.hosts }}
     - host: {{ $host }}
       http:
         paths:
-          - path: {{ $root.Values.hub.baseUrl }}
+          - path: {{ $.Values.hub.baseUrl }}
             backend:
               serviceName: proxy-public
               servicePort: 80
-    {{- end -}}
+    {{- end }}
   {{- if .Values.ingress.tls }}
   tls:
-{{ toYaml .Values.ingress.tls | indent 4 }}
-  {{- end -}}
-{{- end -}}
+    {{- .Values.ingress.tls | toYaml | trimSuffix "\n" | nindent 4 }}
+  {{- end }}
+{{- end }}
