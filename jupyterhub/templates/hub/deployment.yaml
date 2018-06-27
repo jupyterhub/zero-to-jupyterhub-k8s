@@ -1,40 +1,32 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   name: hub
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
   replicas: 1
-  strategy:
-    rollingUpdate:
-      {{ if eq .Values.hub.db.type "sqlite-pvc" }}
-      # If we're using a PVC, set maxUnavailable to 1
-      # This is required, since the pod attached to PVC must die
-      # before new pod can run.
-      maxUnavailable: 1
-      {{ else }}
-      # If we aren't using a PVC, it's ok to spawn up a new pod
-      # before killing the currently running one. This also makes the '--wait'
-      # flag of helm work properly
-      maxUnavailable: 0
-      {{ end }}
+  selector:
+    matchLabels:
+      {{- include "jupyterhub.matchLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        name: hub
-        app: jupyterhub
-        component: hub
-        release: {{ .Release.Name }}
-        heritage: {{ .Release.Service }}
-        {{ if .Values.hub.labels -}}
-        # Because toYaml + indent is super flaky
-        {{ range $key, $value := .Values.proxy.labels -}}
-        {{ $key }}: {{ $value | quote }}
-        {{- end }}
+        {{- /* Changes here will cause the Deployment to restart the pods. */}}
+        {{- include "jupyterhub.matchLabels" . | nindent 8 }}
+        hub.jupyter.org/network-access-proxy-api: "true"
+        hub.jupyter.org/network-access-proxy-http: "true"
+        hub.jupyter.org/network-access-singleuser: "true"
+        {{- if .Values.hub.labels }}
+        {{- .Values.hub.labels | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
       annotations:
-        # This lets us autorestart when the configmap changes!
-        checksum/config-map: {{ include (print $.Template.BasePath "/hub/configmap.yaml") . | sha256sum }}
-        checksum/secret: {{ include (print $.Template.BasePath "/hub/secret.yaml") . | sha256sum }}
+        # This lets us autorestart when the secret changes!
+        checksum/config-map: {{ include (print .Template.BasePath "/hub/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print .Template.BasePath "/hub/secret.yaml") . | sha256sum }}
+        {{- if .Values.hub.annotations }}
+        {{- .Values.hub.annotations | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- end }}
     spec:
       nodeSelector: {{ toJson .Values.hub.nodeSelector }}
       affinity:
@@ -50,22 +42,22 @@ spec:
                       values: ['proxy']
                     - key: release
                       operator: In
-                      values: [ {{ .Release.Name | quote }} ]
+                      values: [{{ .Release.Name | quote }}]
       volumes:
-      - name: config
-        configMap:
-          name: hub-config
-      - name: secret
-        secret:
-          secretName: hub-secret
-      {{ if .Values.hub.extraVolumes }}
-{{ toYaml .Values.hub.extraVolumes | indent 6 }}
-      {{ end }}
-      {{ if eq .Values.hub.db.type "sqlite-pvc" }}
-      - name: hub-db-dir
-        persistentVolumeClaim:
-          claimName: hub-db-dir
-      {{- end }}
+        - name: config
+          configMap:
+            name: hub-config
+        - name: secret
+          secret:
+            secretName: hub-secret
+        {{- if .Values.hub.extraVolumes }}
+        {{- .Values.hub.extraVolumes | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- end }}
+        {{- if eq .Values.hub.db.type "sqlite-pvc" }}
+        - name: hub-db-dir
+          persistentVolumeClaim:
+            claimName: hub-db-dir
+        {{- end }}
       {{- if .Values.rbac.enabled }}
       serviceAccountName: hub
       {{- end }}
@@ -73,82 +65,96 @@ spec:
         runAsUser: {{ .Values.hub.uid }}
         fsGroup: {{ .Values.hub.fsGid }}
       containers:
-      {{- if .Values.hub.extraContainers }}
-{{ toYaml .Values.hub.extraContainers | indent 6 }}
-      {{ end }}
-      - name: hub-container
-        image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
-        command:
-          - jupyterhub
-          - --config
-          - /srv/jupyterhub_config.py
-          # We want to do automatic upgrades for sqlite-pvc by default, but allow users
-          # to opt out of that if they want. Users using their own db need to 'opt in'
-          # Go Templates treat nil and "" and false as 'false', making this code complex.
-          # We can probably make this a one-liner, but doing combinations of boolean vars
-          # in go templates is very inelegant & hard to reason about.
-          {{- $upgradeType := typeOf .Values.hub.db.upgrade }}
-          {{- if eq $upgradeType "bool" }}
-          # .Values.hub.db.upgrade has been explicitly set to true or false
-          {{- if .Values.hub.db.upgrade }}
-          - --upgrade-db
-          {{- end }}
-          {{- else if eq $upgradeType "<nil>" }}
-          # .Values.hub.db.upgrade is nil
-          {{- if eq .Values.hub.db.type "sqlite-pvc" }}
-          - --upgrade-db
-          {{- end }}
-          {{- end }}
-        volumeMounts:
-          - mountPath: /etc/jupyterhub/config/
-            name: config
-          - mountPath: /etc/jupyterhub/secret/
-            name: secret
-          {{ if .Values.hub.extraVolumeMounts }}
-{{ toYaml .Values.hub.extraVolumeMounts | indent 10 }}
-          {{ end }}
-        {{ if eq .Values.hub.db.type "sqlite-pvc" }}
-          - mountPath: /srv/jupyterhub
-            name: hub-db-dir
-            {{ if .Values.hub.db.pvc.subPath -}}
-            subPath: {{ .Values.hub.db.pvc.subPath | quote }}
+        {{- if .Values.hub.extraContainers }}
+        {{- .Values.hub.extraContainers | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- end }}
+        - name: hub
+          image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
+          command:
+            - jupyterhub
+            - --config
+            - /srv/jupyterhub_config.py
+            {{- if .Values.debug.enabled }}
+            - --debug
             {{- end }}
-        {{- end }}
-        resources:
-{{ toYaml .Values.hub.resources | indent 12}}
-        imagePullPolicy: {{ .Values.hub.imagePullPolicy }}
-        env:
-        # Put this here directly so hub will restart when we
-        # change this
-        - name: SINGLEUSER_IMAGE
-          value:  "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"
-        {{ if .Values.hub.cookieSecret }}
-        - name: JPY_COOKIE_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: hub-secret
-              key: hub.cookie-secret
-        {{- end }}
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: CONFIGPROXY_AUTH_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: hub-secret
-              key: proxy.token
-        {{ range $key, $value := .Values.hub.extraEnv -}}
-        - name: {{ $key | quote }}
-          value: {{ $value | quote }}
-        {{ end -}}
-        {{ if .Values.auth.state.enabled }}
-        - name: JUPYTERHUB_CRYPT_KEY
-          valueFrom:
-            secretKeyRef:
-              name: hub-secret
-              key: auth.state.crypto-key
-        {{ end }}
-        ports:
-          - containerPort: 8081
-            name: hub
+            {{- /*
+            We want to do automatic upgrades for sqlite-pvc by default, but
+            allow users to opt out of that if they want. Users using their own
+            db need to 'opt in' Go Templates treat nil and "" and false as
+            'false', making this code complex. We can probably make this a
+            one-liner, but doing combinations of boolean vars in go templates is
+            very inelegant & hard to reason about.
+            */}}
+            {{- $upgradeType := typeOf .Values.hub.db.upgrade }}
+            {{- if eq $upgradeType "bool" }}
+            {{- /* .Values.hub.db.upgrade has been explicitly set to true or false */}}
+            {{- if .Values.hub.db.upgrade }}
+            - --upgrade-db
+            {{- end }}
+            {{- else if eq $upgradeType "<nil>" }}
+            {{- /* .Values.hub.db.upgrade is nil */}}
+            {{- if eq .Values.hub.db.type "sqlite-pvc" }}
+            - --upgrade-db
+            {{- end }}
+            {{- end }}
+          volumeMounts:
+            - mountPath: /etc/jupyterhub/config/
+              name: config
+            - mountPath: /etc/jupyterhub/secret/
+              name: secret
+            {{- if .Values.hub.extraVolumeMounts }}
+            {{- .Values.hub.extraVolumeMounts | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- end }}
+            {{- if eq .Values.hub.db.type "sqlite-pvc" }}
+            - mountPath: /srv/jupyterhub
+              name: hub-db-dir
+              {{- if .Values.hub.db.pvc.subPath }}
+              subPath: {{ .Values.hub.db.pvc.subPath | quote }}
+              {{- end }}
+            {{- end }}
+          resources:
+            {{- .Values.hub.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+          imagePullPolicy: {{ .Values.hub.imagePullPolicy }}
+          env:
+            {{- /* Put this here directly so hub will restart when we change this */}}
+            - name: SINGLEUSER_IMAGE
+              value: "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"
+            {{- if .Values.hub.cookieSecret }}
+            - name: JPY_COOKIE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: hub-secret
+                  key: hub.cookie-secret
+            {{- end }}
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: CONFIGPROXY_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: hub-secret
+                  key: proxy.token
+            {{- if .Values.auth.state.enabled }}
+            - name: JUPYTERHUB_CRYPT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: hub-secret
+                  key: auth.state.crypto-key
+            {{- end }}
+            {{- if .Values.hub.extraEnv }}
+            {{- $extraEnvType := typeOf .Values.hub.extraEnv }}
+            {{- /* If we have a list, embed that here directly. This allows for complex configuration from configmap, downward API, etc. */}}
+            {{- if eq $extraEnvType "[]interface {}" }}
+            {{- .Values.hub.extraEnv | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- else if eq $extraEnvType "map[string]interface {}" }}
+            {{- /* If we have a map, treat those as key-value pairs. */}}
+            {{- range $key, $value := .Values.hub.extraEnv }}
+            - name: {{ $key | quote }}
+              value: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
+          ports:
+            - containerPort: 8081
+              name: hub

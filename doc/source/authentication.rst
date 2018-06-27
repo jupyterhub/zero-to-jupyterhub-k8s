@@ -21,12 +21,77 @@ declare the values in the helm chart (``config.yaml``).
 
 Here are example configurations for common authentication services. Note
 that in each case, you need to get the authentication credential information
-before you can configure the helmchart for authentication.
+before you can configure the helm chart for authentication.
+
+GitHub
+^^^^^^
+
+GitHub is the largest hosting service for git repositories. It is free to create an account
+at GitHub, and relatively straightforward to set up OAuth credentials so that
+users can authenticate with their GitHub username/password.
+
+To create OAuth credentials on GitHub, follow these steps:
+
+* Click your profile picture -> settings -> developer settings
+* Make sure you're on the "OAuth Apps" tab, then click "New OAuth App"
+* Fill out the forms (you'll need your hub address) and generate your ID/Secret.
+
+Below is the structure to use in order to authenticate with GitHub.
+
+.. code-block:: yaml
+
+      auth:
+        type: github
+        github:
+          clientId: "y0urg1thubc1ient1d"
+          clientSecret: "an0ther1ongs3cretstr1ng"
+          callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
+
+
+Giving access to organizations on GitHub
+++++++++++++++++++++++++++++++++++++++++
+
+The configuration above will allow *any* GitHub user to access your JupyterHub.
+You can also restrict access to members of one or more GitHub organizations.
+To do so, see the configuration below.
+
+.. code-block:: yaml
+
+      auth:
+        type: github
+        github:
+          ...
+          org_whitelist:
+            - "SomeOrgName"
+        scopes:
+          - "read:user"
+
+``auth.scopes`` can take other values as described in the `GitHub Oauth scopes
+documentation
+<https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/>`_
+but we recommend ``read:user`` as this requires no additional configuration by
+GitHub organisations and users.
+For example, omitting the scope means members of an organisation must `set
+their membership to Public
+<https://help.github.com/articles/publicizing-or-hiding-organization-membership/>`_
+to login, whereas setting it to ``read:org`` may require approval of the
+application by a GitHub organisation admin.
+Please see `this issue
+<https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/687>`_ for further
+information.
+
+.. note::
+
+   Changing ``auth.scopes`` will not change the scope for existing OAuth tokens, you must invalidate them.
+
 
 Google
 ^^^^^^
 
-For more information see the full example of Google OAuth2 in the next section.
+Google authentication is used by many universities (it is part of the "G Suite").
+Note that using Google authentication requires your Hub to have a domain name
+(it cannot **only** be accessible via an IP address).
+For more information on authenticating with Google oauth, see the :ref:`google_oauth`.
 
 .. code-block:: yaml
 
@@ -38,22 +103,6 @@ For more information see the full example of Google OAuth2 in the next section.
         callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
         hostedDomain: "youruniversity.edu"
         loginService: "Your University"
-
-GitHub
-^^^^^^
-
-The org_whitelist is optional and will require the use to accept the read:org github oath scope when logging in.
-
-.. code-block:: yaml
-
-      auth:
-        type: github
-        github:
-          clientId: "y0urg1thubc1ient1d"
-          clientSecret: "an0ther1ongs3cretstr1ng"
-          callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
-          org_whitelist:
-            - "SomeOrgName"
 
 CILogon
 ^^^^^^^
@@ -120,6 +169,8 @@ and obtain the confidential client credentials.
             userdata_params: {'state': 'state'}
             username_key: preferred_username
 
+.. _google_oauth:
+
 Full Example of Google OAuth2
 -----------------------------
 
@@ -149,7 +200,7 @@ authenticate users to your JupyterHub using Google for authentication.
 6. Set "Authorized JavaScript origins" to be your hub's URL.
 
 7. Set "Authorized redirect URIs" to be your hub's URL followed by
-   "/hub/oauth_callback". For example, http://example.com/hub/oauth_callback.
+   "/hub/oauth_callback". For example, `http://{example.com}/hub/oauth_callback`.
 
 8. When you click "Create", the console will generate and display a Client ID
    and Client Secret. Save these values.
@@ -176,6 +227,63 @@ The ``callbackUrl`` key is set to the authorized redirect URI you specified
 earlier. Set ``hostedDomain`` to your institution's domain name. The value of
 ``loginService`` is a descriptive term for your institution that reminds your
 users which account they are using to login.
+
+
+Authenticating with LDAP
+--------------------------
+
+JupyterHub supports LDAP and Active Directory authentication.
+Read the `ldapauthenticator <https://github.com/jupyterhub/ldapauthenticator>`_
+documentation for a full explanation of the available parameters.
+
+Example LDAP Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+`auth.ldap.server.address` and `auth.ldap.dn.templates` are required. Other
+fields are optional.
+
+.. code-block:: yaml
+
+    auth:
+      type: ldap
+      ldap:
+        server:
+          address: ldap.EXAMPLE.org
+        dn:
+          templates:
+            - 'cn={username},ou=edir,ou=people,ou=EXAMPLE-UNIT,o=EXAMPLE'
+
+Example Active Directory Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This example is equivalent to that given in the
+`ldapauthenticator README <https://github.com/jupyterhub/ldapauthenticator/blob/master/README.md>`_.
+
+.. code-block:: yaml
+
+    auth:
+      type: ldap
+      ldap:
+        server:
+          address: ad.EXAMPLE.org
+        dn:
+          lookup: true
+          search:
+            filter: '({login_attr}={login})'
+            user: 'ldap_search_user_technical_account'
+            password: 'secret'
+            dnAttribute: 'cn'
+          templates:
+            - 'uid={username},ou=people,dc=wikimedia,dc=org'
+            - 'uid={username},ou=developers,dc=wikimedia,dc=org'
+          user:
+            searchBase: 'ou=people,dc=wikimedia,dc=org'
+            escape: False
+            attribute: 'sAMAccountName'
+        allowedGroups:
+          - 'cn=researcher,ou=groups,dc=wikimedia,dc=org'
+          - 'cn=operations,ou=groups,dc=wikimedia,dc=org'
+
 
 Adding a Whitelist
 ------------------

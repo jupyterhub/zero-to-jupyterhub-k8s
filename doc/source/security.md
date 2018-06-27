@@ -4,6 +4,16 @@ The information in this document focuses primarily on cloud based deployments. F
 
 Brad Geesamen gave a wonderful talk titled [Hacking and Hardening Kubernetes by Example](https://kccncna17.sched.com/event/CU6z/hacking-and-hardening-kubernetes-clusters-by-example-i-brad-geesaman-symantec) at Kubecon NA 2017. You can [watch the talk](https://www.youtube.com/watch?v=vTgQLzeBfRU) or [read the slides](https://schd.ws/hosted_files/kccncna17/47/Hacking%20and%20Hardening%20Kubernetes%20By%20Example%20v1.pdf). Highly recommended that you do so to understand the security issues you are up against when using Kubernetes to run JupyterHub.
 
+## Reporting a security issue
+
+If you find a security vulnerability in JupyterHub, either a failure of the
+code to properly implement the model described here, or a failure of the
+model itself, please report it to [security@ipython.org](mailto:security@ipython.org).
+
+If you prefer to encrypt your security reports, you can use
+[this PGP public key](https://jupyter-notebook.readthedocs.io/en/stable/_downloads/ipython_security.asc).
+
+
 ## HTTPS
 
 This section describes how to enable HTTPS on your JupyterHub. The easiest way to do so is by using [Let's Encrypt](https://letsencrypt.org/), though we'll also cover how to set up your own HTTPS credentials. For more information
@@ -21,7 +31,13 @@ on HTTPS security see the certificates section of [this blog post](https://blog.
 
 ### Set up automatic HTTPS
 
-1. Specify the two bits of information that we need to automatically provision HTTPS certificates - your domain name & a contact email address.
+JupyterHub uses [Let's Encrypt](https://letsencrypt.org/) to automatically create
+HTTPS certificates for your deployment. This will cause your HTTPS certificate
+to automatically renew every few months. To enable this, make the following
+changes to your `config.yaml` file:
+
+1. Specify the two bits of information that we need to automatically provision
+HTTPS certificates - your domain name & a contact email address.
 
    ```yaml
    proxy:
@@ -32,7 +48,7 @@ on HTTPS security see the certificates section of [this blog post](https://blog.
          contactEmail: <your-email-address>
    ```
 
-2. Apply the config changes by running helm upgrade ....
+2. Apply the config changes by running `helm upgrade ...`
 3. Wait for about a minute, now your hub should be HTTPS enabled!
 
 ### Set up manual HTTPS
@@ -61,6 +77,16 @@ If you have your own HTTPS certificates & want to use those instead of the autom
 2. Apply the config changes by running helm upgrade ....
 3. Wait for about a minute, now your hub should be HTTPS enabled!
 
+### Confirm that your domain is running HTTPS
+
+There are many ways to confirm that a domain is running trusted HTTPS
+certificates. One options is to use the [Qualys SSL Labs](https://ssllabs.com)
+security report generator. Use the following URL structure to test your domain:
+
+    ```
+    http://ssllabs.com/ssltest/analyze.html?d=<YOUR-DOMAIN>
+    ```
+    
 ## Secure access to Helm
 
 In its default configuration, helm pretty much allows root access to all other
@@ -155,3 +181,61 @@ This is a sensitive security issue (similar to writing sudo rules in a
 traditional computing environment), so be very careful.
 
 There's ongoing work on making this easier!
+
+
+## Kubernetes Network Policies
+
+Kubernetes has optional support for [network
+policies](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
+which lets you restrict how pods can communicate with each other and the outside
+world. This can provide additional security within JupyterHub, and can also be
+used to limit network access for users of JupyterHub.
+
+By default, the JupyterHub helm chart **disables** network policies.
+
+### Enabling network policies
+
+**Important**: If you decide to enable network policies, you should be aware
+that a Kubernetes cluster may have partial, full, or no support for network
+policies. Kubernetes will **silently ignore** policies that aren't supported.
+Please use **caution** if enabling network policies and verify the policies
+behave as expected, especially if you rely on them to restrict what users can
+access.
+
+You can enable network policies in your `config.yaml`:
+
+```yaml
+hub:
+  networkPolicy:
+    enabled: true
+proxy:
+  networkPolicy:
+    enabled: true
+singleuser:
+  networkPolicy:
+    enabled: true
+```
+
+The default singleuser policy allows all outbound network traffic, meaning
+JupyterHub users are able to connect to all resources inside and outside your
+network. To restrict outbound traffic to DNS, HTTP and HTTPS:
+
+```yaml
+singleuser:
+  networkPolicy:
+    enabled: true
+    egress:
+    - ports:
+      - port: 53
+        protocol: UDP
+    - ports:
+      - port: 80
+        protocol: TCP
+    - ports:
+      - port: 433
+        protocol: TCP
+```
+
+See the [Kubernetes
+documentation](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
+for further information on defining policies.

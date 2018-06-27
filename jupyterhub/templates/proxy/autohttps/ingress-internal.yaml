@@ -1,9 +1,13 @@
-{{- if and .Values.proxy.https.enabled .Values.proxy.https.hosts }}
+{{- $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled) }}
+{{- $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt")) }}
+{{- if $autoHTTPS -}}
 # This is solely used to provide auto HTTPS with our bundled kube-lego
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: jupyterhub-internal
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/ingress.provider: nginx
     kubernetes.io/ingress.class: jupyterhub-proxy-tls
@@ -20,15 +24,7 @@ spec:
       host: {{ $host }}
     {{- end }}
   tls:
-    {{- if eq .Values.proxy.https.type "letsencrypt" }}
     - secretName: kubelego-tls-proxy-{{ .Release.Name }}
-    {{- else if eq .Values.proxy.https.type "manual" }}
-    - secretName: manual-tls-proxy-{{ .Release.Name }}
-    {{- else }}
-    # unhandled type
-    # it would be nice if helm had an `error` function
-    {{ required (printf "https.type must be 'manual' or 'letsencrypt', not '%s'" .Values.proxy.https.type)  ._undefined }}
-    {{- end }}
       hosts:
-{{ toYaml .Values.proxy.https.hosts | indent 8 }}
+        {{- .Values.proxy.https.hosts | toYaml | trimSuffix "\n" | nindent 8 }}
 {{- end }}

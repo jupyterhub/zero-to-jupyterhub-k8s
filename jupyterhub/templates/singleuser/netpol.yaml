@@ -1,0 +1,35 @@
+{{- if and .Values.singleuser.networkPolicy.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: singleuser-network-policy
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- $_ := merge (dict "componentLabel" "singleuser-server") . }}
+      {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-singleuser: "true"
+      ports:
+        - protocol: TCP
+          port: 8888
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              {{- include "jupyterhub.matchLabels" . | nindent 14 }}
+      ports:
+        - protocol: TCP
+          port: 8081
+    {{- if .Values.singleuser.networkPolicy.egress }}
+    {{- .Values.singleuser.networkPolicy.egress | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- end }}
+{{- end }}

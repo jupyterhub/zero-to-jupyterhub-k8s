@@ -1,19 +1,13 @@
-{{ if .Values.proxy.pdb.enabled }}
+{{- if .Values.proxy.pdb.enabled -}}
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   name: proxy
   labels:
-    app: jupyterhub
-    component: proxy
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
   minAvailable: 1
   selector:
     matchLabels:
-      # Explicitly not using 'app' since sometimes app needs to be 'kube-lego' for proxy
-      component: proxy
-      release: {{ .Release.Name }}
-      heritage: {{ .Release.Service }}
+      {{- include "jupyterhub.matchLabels" . | nindent 6 }}
 {{- end }}

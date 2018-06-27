@@ -62,7 +62,7 @@ existing image, such as the ``scipy-notebook`` image, complete these steps:
 
    .. note::
 
-      Container image name cannot be longer than 63 characters.
+      Container image names cannot be longer than 63 characters.
 
       Always use an explicit ``tag``, such as a specific commit.
 
@@ -77,8 +77,10 @@ existing image, such as the ``scipy-notebook`` image, complete these steps:
 
 .. note::
 
-  Docker images must have the ``jupyterhub`` package installed within them to
-  be used in this manner.
+   Docker images must have the ``jupyterhub`` package installed within them to
+   be used in this manner.
+
+.. _r2d-custom-image:
 
 Build a custom Docker image with ``repo2docker``
 ------------------------------------------------
@@ -132,27 +134,31 @@ how to configure JupyterHub to build off of this image:
 
    .. code-block:: bash
 
+      jupyterhub==0.8.*
       numpy==1.12.1
       scipy==0.19.0
       matplotlib==2.0
+
+   As noted above, the requirements must include ``jupyterhub``, pinned to a
+   version compatible with the version of JupyterHub used by Helm chart.
 
 4. **Use repo2docker to build a Docker image.**
 
    .. code-block:: bash
 
-      jupyter-repo2docker <YOUR-GITHUB-REPOSITORY> --image=gcr.io/<PROJECT-NAME>/<IMAGE-NAME>:<TAG> --no-run
+      jupyter-repo2docker <YOUR-GITHUB-REPOSITORY> --user-name=jovyan --image=gcr.io/<PROJECT-NAME>/<IMAGE-NAME>:<TAG> --no-run
 
    This tells ``repo2docker`` to fetch ``master`` of the GitHub repository,
    and uses heuristics to build a docker image of it.
 
-  .. note::
+   .. note::
 
-     - The project name should match your google cloud project's name.
-     - Don’t use underscores in your image name. Other than this, the name can
-       be anything memorable. *This bug with underscores will be fixed soon.*
-     - The tag should be the first 6 characters of the SHA in the GitHub
-       commit desired for building the image since this improves
-       reproducibility.
+      - The project name should match your google cloud project's name.
+      - Don’t use underscores in your image name. Other than this, the name can
+        be anything memorable. *This bug with underscores will be fixed soon.*
+      - The tag should be the first 6 characters of the SHA in the GitHub
+        commit desired for building the image since this improves
+        reproducibility.
 
 5. **Push the newly-built Docker image to the cloud.** You can either push
    this to Docker Hub or to the gcloud docker repository. Here we'll
@@ -185,7 +191,7 @@ how to configure JupyterHub to build off of this image:
    .. note::
 
       The contents of your GitHub repository might not show up if you have
-      enabled `persistent storage <user_storage>`_. Disable persistent storage
+      enabled `persistent storage <user-storage.html>`_. Disable persistent storage
       if you want the
       GitHub repository contents to show up.
 
@@ -195,29 +201,63 @@ how to configure JupyterHub to build off of this image:
 Use JupyterLab by default
 -------------------------
 
-`JupyterLab <https://github.com/jupyterlab/jupyterlab>`_ is the next generation
+.. warning::
+
+   As JupyterLab is a quickly-evolving tool right now, it is important to use
+   recent versions of JupyterLab. If you install JupyterLab with ``conda``,
+   **make sure to use the ``conda-forge`` channel instead of ``default``**.
+
+`JupyterLab <http://jupyterlab.readthedocs.io/en/stable/index.html>`_ is the next generation
 user interface for Project Jupyter. It can be used with JupyterHub, both as an
 optional interface and as a default.
 
+In addition, a JupyterLab extension, called JupyterLab-Hub, provides a nice UI
+for accessing the JupyterHub control panel from JupyterLab. These instructions
+show how to install both JupyterLab and JupyterLab-Hub.
+
+.. note::
+
+   If JupyterLab is installed on your hub (and with or without "JupyterLab Hub" installed),
+   users can always switch to the classic Jupyter Notebook by selecting menu item
+   "Help >> Launch Classic Notebook" or by replacing ``/lab`` with ``/tree`` in the URL
+   (if the server is running).
+   Similarly, you can access JupyterLab even if it is not the default by replacing ``/tree``
+   in the URL with ``/lab``.
+
 1. `Install JupyterLab <https://github.com/jupyterlab/jupyterlab#installation>`_
-   in your user image.
-2. `Install JupyterLab Hub extension
-   <https://github.com/jupyterhub/jupyterlab-hub#installation>`_ in your user
-   image. This provides a nice UI for accessing JupyterHub control panel from
-   JupyterLab. You only need the ``jupyter labextension`` command.
-3. If you want users to launch automatically into JupyterLab instead of classic
-   notebook, use the following in your ``config.yaml``
+   and the `JupyterLab Hub <https://github.com/jupyterhub/jupyterlab-hub#installation>`_
+   extension in your user image, for example in your Dockerfile:
+
+   .. code-block:: dockerfile
+
+      FROM jupyter/base-notebook:27ba57364579
+
+      ...
+      ARG JUPYTERLAB_VERSION=0.31.12
+      RUN     pip install jupyterlab==$JUPYTERLAB_VERSION \
+          &&  jupyter labextension install @jupyterlab/hub-extension
+      ...
+
+2. Enable JupyterLab in your Helm configuration by adding the following snippet:
+
+   .. code-block:: yaml
+
+      hub:
+        extraEnv:
+          JUPYTER_ENABLE_LAB: 1
+        extraConfig: |
+          c.KubeSpawner.cmd = ['jupyter-labhub']
+
+3. If you want users to launch automatically into JupyterLab instead of the classic
+   notebook, set the following setting in your Helm configuration:
 
    .. code-block:: yaml
 
       singleuser:
         defaultUrl: "/lab"
 
-   This will put users into JupyterLab when they launch.
-4. Users can always switch to classic Jupyter Notebook by replacing the ``/lab`` 
-   in the URL after their server starts with ``/tree``. Similarly, you can access
-   JupyterLab even if it is not the default by replacing ``/tree`` in the URL
-   with ``/lab``
+   This will put users into JupyterLab when they launch their server.
+
 
 .. note::
 
@@ -281,8 +321,8 @@ However, keep in mind that this command will be run **each time** a user
 starts their server. For this reason, we recommend using ``nbgitpuller`` to
 synchronize your user folders with a git repository.
 
-Using ``nbgitpuller`` for synchronizing a folder
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Using ``nbgitpuller`` to synchronize a folder
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We recommend using the tool `nbgitpuller <https://github.com/data-8/nbgitpuller>`_
 to synchronize a folder in your user's filesystem with a ``git`` repository.
@@ -310,6 +350,28 @@ for more information on using this tool.
    your user's repository has changed since the last sync. You should familiarize
    yourself with the `nbgitpuller merging behavior <https://github.com/data-8/nbgitpuller#merging-behavior>`_
    prior to using the tool in production.
+
+Allow users to create their own ``conda`` environments
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Sometimes you want users to be able to create their own ``conda`` environments.
+By default, any environments created in a JupyterHub session will not persist
+across sessions. To resolve this, take the following steps:
+
+1. Ensure the ``nb_conda_kernels`` package is installed in the root
+   environment (e.g., see :ref:`r2d-custom-image`)
+2. Configure Anaconda to install user environments to a folder within ``$HOME``.
+
+   Create a file called ``.condarc`` in the home folder for all users, and make
+   sure that the following lines are inside:
+
+   ```
+   envs_dirs:
+     - /home/jovyan/my-conda-envs/
+   ```
+
+   The text above will cause Anaconda to install new environments to this
+   folder, which will persist across sessions.
 
 .. _apply the changes: extending-jupyterhub.html#apply-config-changes
 .. _downloading and installing Docker: https://store.docker.com/search?offering=community&platform=desktop%2Cserver&q=&type=edition

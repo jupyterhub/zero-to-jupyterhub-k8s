@@ -1,6 +1,8 @@
 language: python
 python:
 - 3.6
+git:
+  depth: false
 services:
 - docker
 install:
@@ -9,6 +11,7 @@ install:
 - ./ci/install.sh
 script:
 - chartpress --commit-range ${TRAVIS_COMMIT_RANGE}
+- git diff
 - ./ci/test.sh
 
 deploy:

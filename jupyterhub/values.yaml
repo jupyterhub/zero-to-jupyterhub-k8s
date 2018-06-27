@@ -1,6 +1,8 @@
 hub:
   service:
     type: ClusterIP
+    ports:
+      nodePort:
   baseUrl: /
   cookieSecret:
   publicURL:
@@ -22,7 +24,10 @@ hub:
       storageClassName:
     url:
   labels: {}
-  extraConfig: ''
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: /hub/metrics
+  extraConfig: {}
   extraConfigMap: {}
   extraEnv: {}
   extraContainers: []
@@ -33,15 +38,23 @@ hub:
     tag: generated-by-chartpress
   resources:
     requests:
-      cpu: 0.2
+      cpu: 200m
       memory: 512Mi
   services: {}
   imagePullPolicy: IfNotPresent
   pdb:
     enabled: true
+  networkPolicy:
+    enabled: false
+    egress:
+      - to:
+          - ipBlock:
+              cidr: 0.0.0.0/0
+
 
 rbac:
   enabled: true
+
 
 proxy:
   secretToken: ''
@@ -57,32 +70,21 @@ proxy:
       name: jupyterhub/configurable-http-proxy
       tag: 3.0.0
       pullPolicy: IfNotPresent
-    cmd:
-      - configurable-http-proxy
-      - --ip=0.0.0.0
-      - --port=8000
-      - --api-ip=0.0.0.0
-      - --api-port=8001
-      - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
-      - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)/hub/error
-      - --log-level=debug
     resources:
       requests:
-        cpu: 0.2
+        cpu: 200m
         memory: 512Mi
   nginx:
     image:
       name: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
-      tag: 0.9.0
+      tag: 0.15.0
       pullPolicy: IfNotPresent
     proxyBodySize: 64m
     resources: {}
   lego:
     image:
       name: jetstack/kube-lego
-      # We need a couple of fixes related to ingress.provider that are in master
-      # When 0.1.6 is released, switch to that!
-      tag: master-2368
+      tag: 0.1.6
     resources: {}
   labels:
   nodeSelector: {}
@@ -97,9 +99,14 @@ proxy:
       key:
       cert:
     hosts: []
+  networkPolicy:
+    enabled: false
+    egress:
+      - to:
+          - ipBlock:
+              cidr: 0.0.0.0/0
 
 
-# Google OAuth secrets
 auth:
   type: dummy
   whitelist:
@@ -109,6 +116,11 @@ auth:
     users:
   dummy:
     password:
+  ldap:
+    dn:
+      search: {}
+      user: {}
+    user: {}
   state:
     enabled: false
     cryptoKey:
@@ -122,13 +134,22 @@ singleuser:
   cloudMetadata:
     enabled: false
     ip: 169.254.169.254
+  networkPolicy:
+    enabled: false
+    egress:
+    # Required egress is handled by other rules so it's safe to modify this
+      - to:
+          - ipBlock:
+              cidr: 0.0.0.0/0
+              except:
+                - 169.254.169.254/32
   extraLabels: {}
   extraEnv: {}
   lifecycleHooks:
   initContainers:
   nodeSelector: {}
   uid: 1000
-  fsGid: 1000
+  fsGid: 100
   serviceAccountName:
   schedulerStrategy:
   storage:
@@ -142,9 +163,13 @@ singleuser:
     homeMountPath: /home/jovyan
     dynamic:
       storageClass:
+      pvcNameTemplate: claim-{username}{servername}
+      volumeNameTemplate: volume-{username}{servername}
+      storageAccessModes: [ReadWriteOnce]
   image:
     name: jupyterhub/k8s-singleuser-sample
     tag: generated-by-chartpress
+    pullPolicy: IfNotPresent
   startTimeout: 300
   cpu:
     limit:
@@ -155,6 +180,7 @@ singleuser:
   cmd: jupyterhub-singleuser
   defaultUrl:
 
+
 prePuller:
   hook:
     enabled: true
@@ -164,10 +190,12 @@ prePuller:
       tag: generated-by-chartpress
   continuous:
     enabled: false
+  extraImages: []
   pause:
     image:
       name: gcr.io/google_containers/pause
       tag: '3.0'
+
 
 ingress:
   enabled: false
@@ -175,12 +203,22 @@ ingress:
   hosts: []
   tls:
 
+
 cull:
   enabled: true
   users: false
   timeout: 3600
   every: 600
+  concurrency: 10
+  maxAge: 0
+  podCuller:
+    image:
+      name: jupyterhub/k8s-pod-culler
+      tag: generated-by-chartpress
 
 scheduler:
   enabled: false
   replicas: 1
+
+debug:
+  enabled: false

@@ -169,13 +169,12 @@ properties:
           See [the kubernetes documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
           to learn more about labels.
       extraEnv:
-        type: object
+        type: list
         description: |
           Extra environment variables that should be set for the hub pod.
 
-          A dictionary of key value pairs (both strings), where the key is the name of the
-          environment value and the value is the value of the environment variable that should
-          be set on the hub pod.
+          A list of [EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.9/#envvar-v1-core)
+          objects.
 
           These are usually used in two circumstances:
             - Passing parameters to some custom code specified with `extraConfig`
@@ -229,7 +228,7 @@ properties:
           Use this only if you are building your own image & know that a group with this gid
           exists inside the hub container! Advanced feature, handle with care!
 
-          Defaults to 1000, which is the uid of the `jovyan` user that is present in the
+          Defaults to 1000, which is the gid of the `jovyan` user that is present in the
           default hub image.
   proxy:
     type: object

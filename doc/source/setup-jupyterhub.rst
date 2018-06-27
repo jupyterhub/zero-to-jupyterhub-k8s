@@ -120,7 +120,11 @@ Install JupyterHub
         ``helm delete --purge <YOUR-RELEASE-NAME>``. Then reinstall by repeating this
         step. If it persists, also do ``kubectl delete <YOUR-NAMESPACE>`` and try again.
 
-        If you're pulling from a large Docker image you may get a
+      * In general, if something goes *wrong* with the install step, delete the
+        Helm namespace by running ``helm delete --purge <YOUR-RELEASE-NAME>``
+        before re-running the install command.
+
+      * If you're pulling from a large Docker image you may get a
         ``Error: timed out waiting for the condition`` error,
         add a ``--timeout=SOME-LARGE-NUMBER``
         parameter to the ``helm install`` command.
@@ -153,13 +157,13 @@ Install JupyterHub
       If the IP for ``proxy-public`` is too long to fit into the window, you
       can find the longer version by calling::
 
-        kubectl --namespace=<YOUR-NAMESPACE> describe svc proxy-public
+        kubectl --namespace=<YOUR-NAMESPACE> describe svc proxy-public --output=wide
 
 5. To use JupyterHub, enter the external IP for the `proxy-public` service in
    to a browser. JupyterHub is running with a default *dummy* authenticator so
    entering any username and password combination will let you enter the hub.
 
 Congratulations! Now that you have JupyterHub running, you can
-`extend it <extending-jupyterhub.html>`_ in many ways. You can use a pre-built
+`extend it <extending-jupyterhub>`_ in many ways. You can use a pre-built
 image for the user container, build your own image, configure different
 authenticators, and more!

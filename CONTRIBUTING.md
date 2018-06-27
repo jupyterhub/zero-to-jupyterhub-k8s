@@ -2,30 +2,51 @@
 
 Welcome! As a [Jupyter](https://jupyter.org) project, we follow the [Jupyter contributor guide](https://jupyter.readthedocs.io/en/latest/contributor/content-contributor.html).
 
-## Local development
+## Setting up minikube for local development
 
 We recommend using [minikube](https://github.com/kubernetes/minikube) for local
 development.
 
-1. [Download & install minikube](https://github.com/kubernetes/minikube#installation)
-2. Start minikube
-   ```
+1. [Download & install minikube](https://github.com/kubernetes/minikube#installation).
+
+   For MacOS: You may install minikube using Homebrew `brew cask install minikube` or
+   from a binary at https://github.com/kubernetes/minikube/releases.
+   If you need to install Docker Community Edition (CE) for Mac, please
+   follow the [Docker instructions](https://store.docker.com/editions/community/docker-ce-desktop-mac).
+
+2. Start minikube.
+
+   For minikube version 0.26 and higher:
+   ```bash
    minikube start
    ```
-3. Use the docker daemon inside minikube for building:
+
+   For older minikube versions:
+   ```bash
+   minikube start --extra-config=apiserver.Authorization.Mode=RBAC
    ```
+
+   Note on troubleshooting: if you recently upgraded minikube and are now seeing
+   errors, you may need to clear out the `~/.minikube` and `~/.kube` directories
+   and reboot.
+
+3. Use the docker daemon inside minikube for building:
+   ```bash
    eval $(minikube docker-env)
    ```
+
 4. Clone the zero-to-jupyterhub repo:
-   ```
+   ```bash
    git clone git@github.com:jupyterhub/zero-to-jupyterhub-k8s.git
    cd zero-to-jupyterhub-k8s
    ```
+
 5. Create a virtualenv & install the libraries required for builds to happen:
    ```bash
    python3 -m venv .
-   pip install -r dev-requirements.txt
+   python3 -m pip install -r dev-requirements.txt
    ```
+
  6. Now run `chartpress` to build the requisite docker images inside minikube:
     ```bash
     chartpress
@@ -35,7 +56,17 @@ development.
     `jupyterhub/values.yaml` with the appropriate values to make the chart
     installable!
 
-7. Install / Upgrade JupyterHub Chart!
+7. Configure helm and minikube for RBAC:
+   ```bash
+   kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
+   kubectl --namespace kube-system create sa tiller
+   kubectl create clusterrolebinding tiller \
+       --clusterrole cluster-admin \
+       --serviceaccount=kube-system:tiller
+   helm init --service-account tiller
+   ```
+
+8. Install / Upgrade JupyterHub Chart!
    ```bash
    helm upgrade --wait --install --namespace=hub hub jupyterhub/ -f minikube-config.yaml
    ```
@@ -44,15 +75,27 @@ development.
    you want, or create another `config.yaml` file & pass that as an additional
    `-f config.yaml` file to the `helm upgrade` command.
 
-8. Open the URL for your instance of JupyterHub!
+9. Retrieve the URL for your instance of JupyterHub:
 
    ```bash
    minikube service --namespace=hub proxy-public
    ```
+  
+   Navigate to the URL in your browser. You should now have JupyterHub running
+   on minikube.
+  
+10. Make the changes you want. 
 
-8. Make the changes you want. You need to re-run step 6 if you changed anything
-   under `images`, but only step 7 if you changed things only under `jupyterhub`
+    To view your changes on the running development instance of JupyterHub:
 
+    - Re-run step 6 if you changed anything under the `images` directory
+    - Re-run step 8 if you changed things only under the `jupyterhub` directory.
+
+---
+
+## Best practices
+
+We strive to follow the guidelines provided by [kubernetes/charts](https://github.com/kubernetes/charts/blob/master/REVIEW_GUIDELINES.md) and the [Helm Chart Best Practices Guide](https://github.com/kubernetes/helm/tree/master/docs/chart_best_practices) they refer to.
 
 ## Releasing a new version of the helm chart
 
@@ -134,7 +177,7 @@ involved:
 * [z2jh](https://github.com/jupyterhub/zero-to-jupyterhub-k8s)
 * [KubeSpawner](https://github.com/jupyterhub/kubespawner)
 * [JupyterHub](https://github.com/jupyterhub/jupyterhub)
-* [OAuthenticator](https://github.com/jupyterhub/oauthenticator))
+* [OAuthenticator](https://github.com/jupyterhub/oauthenticator)
 
 Edit `contributors.py` to have the appropriate dates
 for each of these versions. Then, run the script and paste

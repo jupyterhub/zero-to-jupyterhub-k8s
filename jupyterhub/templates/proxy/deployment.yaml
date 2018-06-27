@@ -1,41 +1,35 @@
-apiVersion: extensions/v1beta1
+{{- $manualHTTPS := (and .Values.proxy.https.enabled (eq .Values.proxy.https.type "manual")) -}}
+apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  labels:
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: proxy
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
   name: proxy
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
   replicas: 1
-  strategy:
-      rollingUpdate:
-          # There's no PVCs attached here, so is ok to set maxUnavailable to 1
-          # This means new pod will be spun up and traffic transferred to it
-          # before old pod is shut down.
-          maxUnavailable: 1
+  selector:
+    matchLabels:
+      {{- include "jupyterhub.matchLabels" . | nindent 6 }}
   template:
     metadata:
+      labels:
+        {{- /* Changes here will cause the Deployment to restart the pods. */}}
+        {{- include "jupyterhub.matchLabels" . | nindent 8 }}
+        hub.jupyter.org/network-access-hub: "true"
+        hub.jupyter.org/network-access-singleuser: "true"
+        {{- if .Values.proxy.labels }}
+        {{- .Values.proxy.labels | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- end }}
       annotations:
         # This lets us autorestart when the secret changes!
         checksum/hub-secret: {{ include (print $.Template.BasePath "/hub/secret.yaml") . | sha256sum }}
         checksum/proxy-secret: {{ include (print $.Template.BasePath "/proxy/secret.yaml") . | sha256sum }}
-        hub.jupyter.org/https-type: {{ .Values.proxy.https.type }}
-      labels:
-        name: proxy
-        component: proxy
-        release: {{ .Release.Name }}
-        heritage: {{ .Release.Service }}
-        {{- if eq .Values.proxy.https.type "letsencrypt" }}
-        # required for kube-lego to work
-        app: kube-lego
+        {{- if .Values.proxy.annotations }}
+        {{- .Values.proxy.annotations | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
     spec:
-      {{- if .Values.rbac.enabled }}
-      serviceAccountName: proxy
-      {{- end }}
       nodeSelector: {{ toJson .Values.proxy.nodeSelector }}
+      terminationGracePeriodSeconds: 60
       affinity:
         podAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -49,95 +43,42 @@ spec:
                       values: ['hub']
                     - key: release
                       operator: In
-                      values: [ {{ .Release.Name | quote }} ]
+                      values: [{{ .Release.Name | quote }}]
+      {{- if $manualHTTPS }}
+      volumes:
+        - name: tls-secret
+          secret:
+            secretName: manual-tls-proxy-{{ .Release.Name }}
+      {{- end }}
       containers:
-        - name: nginx
-          image: "{{ .Values.proxy.nginx.image.name }}:{{ .Values.proxy.nginx.image.tag }}"
-          imagePullPolicy: {{ .Values.proxy.nginx.image.pullPolicy }}
-          resources:
-{{ toYaml .Values.proxy.nginx.resources | indent 12 }}
-          args:
-            - /nginx-ingress-controller
-            - --default-backend-service={{ .Release.Namespace }}/proxy-http
-            - --configmap={{ .Release.Namespace }}/nginx-proxy-config
-            - --ingress-class=jupyterhub-proxy-tls
-            - --watch-namespace={{ .Release.Namespace }}
-          env:
-            - name: POD_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: POD_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 10254
-              scheme: HTTP
-            initialDelaySeconds: 10
-            timeoutSeconds: 1
-          readinessProbe:
-            httpGet:
-              path: /healthz
-              port: 10254
-              scheme: HTTP
-          ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-            - name: https
-              containerPort: 443
-              protocol: TCP
-        {{ if and .Values.proxy.https.hosts (and .Values.proxy.https.enabled (eq .Values.proxy.https.type "letsencrypt" ) ) -}}
-        - name: kube-lego
-          image: "{{ .Values.proxy.lego.image.name }}:{{ .Values.proxy.lego.image.tag }}"
-          imagePullPolicy: {{ .Values.proxy.lego.image.pullPolicy }}
-          resources:
-{{ toYaml .Values.proxy.lego.resources | indent 12 }}
-          env:
-            - name: LEGO_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: LEGO_WATCH_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: LEGO_POD_IP
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
-            - name: LEGO_EMAIL
-              # {{ required "proxy.https.letsencrypt.contactEmail is a required field" .Values.proxy.https.letsencrypt.contactEmail }}
-              value: {{ .Values.proxy.https.letsencrypt.contactEmail | quote }}
-            - name: LEGO_SUPPORTED_INGRESS_PROVIDER
-              value: "nginx"
-            - name: LEGO_SUPPORTED_INGRESS_CLASS
-              value: "jupyterhub-proxy-tls,dummy"
-            - name: LEGO_DEFAULT_INGRESS_CLASS
-              value: "jupyterhub-proxy-tls"
-            - name: LEGO_KUBE_ANNOTATION
-              value: "hub.jupyter.org/tls-terminator"
-            - name: LEGO_URL
-              value: "https://acme-v01.api.letsencrypt.org/directory"
-          ports:
-            - containerPort: 8080
-          readinessProbe:
-            httpGet:
-              path: /healthz
-              port: 8080
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
-        {{- end }}
         - name: chp
           image: {{ .Values.proxy.chp.image.name }}:{{ .Values.proxy.chp.image.tag }}
-          {{- if .Values.proxy.chp.cmd }}
-          command: {{ toJson .Values.proxy.chp.cmd }}
+          command:
+            - configurable-http-proxy
+            - --ip=0.0.0.0
+            - --api-ip=0.0.0.0
+            - --api-port=8001
+            - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
+            - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)/hub/error
+            {{- if $manualHTTPS }}
+            - --port=8443
+            - --redirect-port=8000
+            - --ssl-key=/etc/chp/tls/tls.key
+            - --ssl-cert=/etc/chp/tls/tls.crt
+            {{- else }}
+            - --port=8000
+            {{- end }}
+            {{- if .Values.debug.enabled }}
+            - --log-level=debug
+            {{- end }}
+          {{- if $manualHTTPS }}
+          volumeMounts:
+            - name: tls-secret
+              mountPath: /etc/chp/tls
+              readOnly: true
           {{- end }}
           resources:
-{{ toYaml .Values.proxy.chp.resources | indent 12 }}
+            {{- .Values.proxy.chp.resources | toYaml | trimSuffix "\n" | nindent 12 }}
           env:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
@@ -146,8 +87,11 @@ spec:
                   key: proxy.token
           imagePullPolicy: {{ .Values.proxy.chp.image.pullPolicy }}
           ports:
+            {{- if $manualHTTPS }}
+            - containerPort: 8443
+              name: proxy-https
+            {{- end }}
             - containerPort: 8000
               name: proxy-public
             - containerPort: 8001
               name: api
-      terminationGracePeriodSeconds: 60

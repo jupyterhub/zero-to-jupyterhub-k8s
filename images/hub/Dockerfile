@@ -1,4 +1,4 @@
-FROM ubuntu:17.10
+FROM ubuntu:18.04
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -26,7 +26,7 @@ RUN adduser --disabled-password \
     --force-badname \
     ${NB_USER}
 
-ARG JUPYTERHUB_VERSION=0.8.*
+ARG JUPYTERHUB_VERSION=0.9.*
 
 ADD requirements.txt /tmp/requirements.txt
 RUN pip3 install --no-cache-dir \

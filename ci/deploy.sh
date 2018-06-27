@@ -6,3 +6,4 @@ chmod 0400 travis
 docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
 export GIT_SSH_COMMAND="ssh -i ${PWD}/travis"
 chartpress --commit-range "${TRAVIS_COMMIT_RANGE}" --push --publish-chart
+git diff

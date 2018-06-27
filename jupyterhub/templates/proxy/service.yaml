@@ -1,12 +1,16 @@
+{{- $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled) }}
+{{- $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt")) }}
+{{- $manualHTTPS := (and $HTTPS (eq .Values.proxy.https.type "manual")) -}}
 apiVersion: v1
 kind: Service
 metadata:
   name: proxy-api
+  labels:
+    {{- $_ := merge (dict "componentSuffix" "-api") . }}
+    {{- include "jupyterhub.labels" $_ | nindent 4 }}
 spec:
   selector:
-    name: proxy
-    component: proxy
-    release: {{ .Release.Name }}
+    {{- include "jupyterhub.matchLabels" . | nindent 4 }}
   ports:
     - protocol: TCP
       port: 8001
@@ -15,59 +19,53 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: proxy-http
-  # toYaml + indent seem a lot more unstable & error prone
-  annotations: {{ toJson .Values.proxy.service.annotations }}
-  labels: {{ toJson .Values.proxy.service.labels }}
-spec:
-  type: ClusterIP
-  selector:
-    name: proxy
-    component: proxy
-    release: {{ .Release.Name }}
-  ports:
-    - protocol: TCP
-      port: 8000
-      targetPort: 8000
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: proxy
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
-  {{ if .Values.proxy.service.labels -}}
-{{ toYaml .Values.proxy.service.labels | indent 4 }}
-  {{- end }}
-  {{ if .Values.proxy.service.annotations -}}
-  annotations:
-{{ toYaml .Values.proxy.service.annotations | indent 4 }}
-  {{- end }}
   name: proxy-public
+  labels:
+    {{- $_ := merge (dict "componentSuffix" "-public") . }}
+    {{- include "jupyterhub.labels" $_ | nindent 4 }}
+    {{- if .Values.proxy.service.labels }}
+    {{- .Values.proxy.service.labels | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- end }}
+  {{- if .Values.proxy.service.annotations }}
+  annotations:
+    {{- .Values.proxy.service.annotations | toYaml | trimSuffix "\n" | nindent 4 }}
+  {{- end }}
 spec:
+  selector:
+    # TODO: Refactor to utilize the helpers
+    {{- if $autoHTTPS }}
+    component: autohttps
+    {{- else }}
+    component: proxy
+    {{- end }}
+    release: {{ .Release.Name }}
   ports:
     - name: http
       port: 80
       protocol: TCP
+      {{- if $autoHTTPS }}
       targetPort: 80
+      {{- else }}
+      targetPort: 8000
+      {{- end }}
       # allow proxy.service.nodePort for http
-      {{ if .Values.proxy.service.nodePorts.http -}}
+      {{- if .Values.proxy.service.nodePorts.http }}
       nodePort: {{ .Values.proxy.service.nodePorts.http }}
       {{- end }}
+    {{- if $HTTPS }}
     - name: https
       port: 443
       protocol: TCP
+      {{- if $manualHTTPS }}
+      targetPort: 8443
+      {{- else }}
       targetPort: 443
-      {{ if .Values.proxy.service.nodePorts.https -}}
+      {{- end }}
+      {{- if .Values.proxy.service.nodePorts.https }}
       nodePort: {{ .Values.proxy.service.nodePorts.https }}
       {{- end }}
-  selector:
-    name: proxy
-    component: proxy
-    release: {{ .Release.Name }}
+    {{- end }}
   type: {{ .Values.proxy.service.type }}
-  {{ if .Values.proxy.service.loadBalancerIP -}}
+  {{- if .Values.proxy.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.proxy.service.loadBalancerIP }}
   {{- end }}

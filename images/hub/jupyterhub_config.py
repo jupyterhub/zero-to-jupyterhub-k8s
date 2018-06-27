@@ -3,7 +3,7 @@ import glob
 from tornado.httpclient import AsyncHTTPClient
 from kubernetes import client
 
-from z2jh import get_config, get_secret
+from z2jh import get_config, get_secret, set_config_if_not_none
 
 # Configure JupyterHub to use the curl backend for making HTTP requests,
 # rather than the pure-python implementations. The default one starts
@@ -28,7 +28,6 @@ c.JupyterHub.last_activity_interval = 60
 c.JupyterHub.concurrent_spawn_limit = get_config('hub.concurrent-spawn-limit')
 
 active_server_limit = get_config('hub.active-server-limit', None)
-
 if active_server_limit is not None:
     c.JupyterHub.active_server_limit = int(active_server_limit)
 
@@ -38,12 +37,16 @@ c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
 # the hub should listen on all interfaces, so the proxy can access it
 c.JupyterHub.hub_ip = '0.0.0.0'
 
+c.KubeSpawner.common_labels = get_config('kubespawner.common-labels')
+
 c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
 
 c.KubeSpawner.start_timeout = get_config('singleuser.start-timeout')
 
 # Use env var for this, since we want hub to restart when this changes
 c.KubeSpawner.singleuser_image_spec = os.environ['SINGLEUSER_IMAGE']
+
+c.KubeSpawner.singleuser_image_pull_policy = get_config('singleuser.image-pull-policy')
 
 c.KubeSpawner.singleuser_extra_labels = get_config('singleuser.extra-labels', {})
 
@@ -58,27 +61,29 @@ c.KubeSpawner.singleuser_node_selector = get_config('singleuser.node-selector')
 # Configure dynamically provisioning pvc
 storage_type = get_config('singleuser.storage.type')
 if storage_type == 'dynamic':
-    c.KubeSpawner.pvc_name_template = 'claim-{username}{servername}'
+    pvc_name_template = get_config('singleuser.storage.dynamic.pvc-name-template')
+    volume_name_template = get_config('singleuser.storage.dynamic.volume-name-template')
+    c.KubeSpawner.pvc_name_template = pvc_name_template
     c.KubeSpawner.user_storage_pvc_ensure = True
     storage_class = get_config('singleuser.storage.dynamic.storage-class', None)
     if storage_class:
         c.KubeSpawner.user_storage_class = storage_class
-    c.KubeSpawner.user_storage_access_modes = ['ReadWriteOnce']
+    c.KubeSpawner.user_storage_access_modes = get_config('singleuser.storage.dynamic.storage-access-modes')
     c.KubeSpawner.user_storage_capacity = get_config('singleuser.storage.capacity')
 
     # Add volumes to singleuser pods
     c.KubeSpawner.volumes = [
         {
-            'name': 'volume-{username}{servername}',
+            'name': volume_name_template,
             'persistentVolumeClaim': {
-                'claimName': 'claim-{username}{servername}'
+                'claimName': pvc_name_template
             }
         }
     ]
     c.KubeSpawner.volume_mounts = [
         {
             'mountPath': get_config('singleuser.storage.home_mount_path'),
-            'name': 'volume-{username}{servername}'
+            'name': volume_name_template
         }
     ]
 elif storage_type == 'static':
@@ -128,7 +133,7 @@ if auth_type == 'google':
     c.GoogleOAuthenticator.client_id = get_config('auth.google.client-id')
     c.GoogleOAuthenticator.client_secret = get_config('auth.google.client-secret')
     c.GoogleOAuthenticator.oauth_callback_url = get_config('auth.google.callback-url')
-    c.GoogleOAuthenticator.hosted_domain = get_config('auth.google.hosted-domain')
+    set_config_if_not_none(c.GoogleOAuthenticator, 'hosted_domain', 'auth.google.hosted-domain')
     c.GoogleOAuthenticator.login_service = get_config('auth.google.login-service')
     email_domain = get_config('auth.google.hosted-domain')
 elif auth_type == 'github':
@@ -171,6 +176,22 @@ elif auth_type == 'tmp':
 elif auth_type == 'lti':
     c.JupyterHub.authenticator_class = 'ltiauthenticator.LTIAuthenticator'
     c.LTIAuthenticator.consumers = get_config('auth.lti.consumers')
+elif auth_type == 'ldap':
+    c.JupyterHub.authenticator_class = 'ldapauthenticator.LDAPAuthenticator'
+    c.LDAPAuthenticator.server_address = get_config('auth.ldap.server.address')
+    set_config_if_not_none(c.LDAPAuthenticator, 'server_port', 'auth.ldap.server.port')
+    set_config_if_not_none(c.LDAPAuthenticator, 'use_ssl', 'auth.ldap.server.ssl')
+    set_config_if_not_none(c.LDAPAuthenticator, 'allowed_groups', 'auth.ldap.allowed-groups')
+    c.LDAPAuthenticator.bind_dn_template = get_config('auth.ldap.dn.templates')
+    set_config_if_not_none(c.LDAPAuthenticator, 'lookup_dn', 'auth.ldap.dn.lookup')
+    set_config_if_not_none(c.LDAPAuthenticator, 'lookup_dn_search_filter', 'auth.ldap.dn.search.filter')
+    set_config_if_not_none(c.LDAPAuthenticator, 'lookup_dn_search_user', 'auth.ldap.dn.search.user')
+    set_config_if_not_none(c.LDAPAuthenticator, 'lookup_dn_search_password', 'auth.ldap.dn.search.password')
+    set_config_if_not_none(c.LDAPAuthenticator, 'lookup_dn_user_dn_attribute', 'auth.ldap.dn.user.dn-attribute')
+    set_config_if_not_none(c.LDAPAuthenticator, 'escape_userdn', 'auth.ldap.dn.user.escape')
+    set_config_if_not_none(c.LDAPAuthenticator, 'valid_username_regex', 'auth.ldap.dn.user.valid-regex')
+    set_config_if_not_none(c.LDAPAuthenticator, 'user_search_base', 'auth.ldap.dn.user.search-base')
+    set_config_if_not_none(c.LDAPAuthenticator, 'user_attribute', 'auth.ldap.dn.user.attribute')
 elif auth_type == 'custom':
     # full_class_name looks like "myauthenticator.MyAuthenticator".
     # To create a docker image with this class availabe, you can just have the
@@ -226,14 +247,26 @@ c.JupyterHub.services = []
 if get_config('cull.enabled', False):
     cull_timeout = get_config('cull.timeout')
     cull_every = get_config('cull.every')
+    cull_concurrency = get_config('cull.concurrency')
     cull_cmd = [
         '/usr/local/bin/cull_idle_servers.py',
         '--timeout=%s' % cull_timeout,
         '--cull-every=%s' % cull_every,
-        '--url=http://127.0.0.1:8081' + c.JupyterHub.base_url + 'hub/api'
+        '--concurrency=%s' % cull_concurrency,
+        '--url=http://127.0.0.1:8081' + c.JupyterHub.base_url + 'hub/api',
     ]
+
     if get_config('cull.users'):
         cull_cmd.append('--cull-users')
+
+    # FIXME: remove version check when we require jupyterhub 0.9 in the chart
+    # that will also mean we can remove the podCuller image
+    import jupyterhub
+    from distutils.version import LooseVersion as V
+    cull_max_age = get_config('cull.max-age')
+    if cull_max_age and V(jupyterhub.__version__) >= V('0.9'):
+        cull_cmd.append('--max-age=%s' % cull_max_age)
+
     c.JupyterHub.services.append({
         'name': 'cull-idle',
         'admin': True,
@@ -322,6 +355,10 @@ if scheduler_strategy == 'pack':
 else:
     # Set default to {} so subconfigs can easily update it
     c.KubeSpawner.singleuser_extra_pod_config = {}
+
+if get_config('debug.enabled', False):
+    c.JupyterHub.log_level = 'DEBUG'
+    c.Spawner.debug = True
 
 extra_configs = sorted(glob.glob('/etc/jupyterhub/config/hub.extra-config.*.py'))
 for ec in extra_configs:

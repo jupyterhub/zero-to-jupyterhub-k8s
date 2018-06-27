@@ -1,4 +1,4 @@
-# Zero to JupyterHub Gallery
+# Zero to JupyterHub Gallery of Deployments
 
 This is a community maintained list of organizations / people using the Zero to
 JupyterHub guide / helm-chart to maintain their JupyterHub. Send us a Pull
