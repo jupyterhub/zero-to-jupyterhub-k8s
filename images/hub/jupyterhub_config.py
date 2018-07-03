@@ -44,32 +44,32 @@ c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
 c.KubeSpawner.start_timeout = get_config('singleuser.start-timeout')
 
 # Use env var for this, since we want hub to restart when this changes
-c.KubeSpawner.singleuser_image_spec = os.environ['SINGLEUSER_IMAGE']
+c.KubeSpawner.image_spec = os.environ['SINGLEUSER_IMAGE']
 
-c.KubeSpawner.singleuser_image_pull_policy = get_config('singleuser.image-pull-policy')
+c.KubeSpawner.image_pull_policy = get_config('singleuser.image-pull-policy')
 
-c.KubeSpawner.singleuser_extra_labels = get_config('singleuser.extra-labels', {})
+c.KubeSpawner.extra_labels = get_config('singleuser.extra-labels', {})
 
-c.KubeSpawner.singleuser_uid = get_config('singleuser.uid')
-c.KubeSpawner.singleuser_fs_gid = get_config('singleuser.fs-gid')
+c.KubeSpawner.uid = get_config('singleuser.uid')
+c.KubeSpawner.fs_gid = get_config('singleuser.fs-gid')
 
 service_account_name = get_config('singleuser.service-account-name', None)
 if service_account_name:
-    c.KubeSpawner.singleuser_service_account = service_account_name
+    c.KubeSpawner.service_account = service_account_name
 
-c.KubeSpawner.singleuser_node_selector = get_config('singleuser.node-selector')
+c.KubeSpawner.node_selector = get_config('singleuser.node-selector')
 # Configure dynamically provisioning pvc
 storage_type = get_config('singleuser.storage.type')
 if storage_type == 'dynamic':
     pvc_name_template = get_config('singleuser.storage.dynamic.pvc-name-template')
     volume_name_template = get_config('singleuser.storage.dynamic.volume-name-template')
     c.KubeSpawner.pvc_name_template = pvc_name_template
-    c.KubeSpawner.user_storage_pvc_ensure = True
+    c.KubeSpawner.storage_pvc_ensure = True
     storage_class = get_config('singleuser.storage.dynamic.storage-class', None)
     if storage_class:
-        c.KubeSpawner.user_storage_class = storage_class
-    c.KubeSpawner.user_storage_access_modes = get_config('singleuser.storage.dynamic.storage-access-modes')
-    c.KubeSpawner.user_storage_capacity = get_config('singleuser.storage.capacity')
+        c.KubeSpawner.storage_class = storage_class
+    c.KubeSpawner.storage_access_modes = get_config('singleuser.storage.dynamic.storage-access-modes')
+    c.KubeSpawner.storage_capacity = get_config('singleuser.storage.capacity')
 
     # Add volumes to singleuser pods
     c.KubeSpawner.volumes = [
@@ -106,11 +106,11 @@ c.KubeSpawner.volume_mounts.extend(get_config('singleuser.storage.extra-volume-m
 
 lifecycle_hooks = get_config('singleuser.lifecycle-hooks')
 if lifecycle_hooks:
-    c.KubeSpawner.singleuser_lifecycle_hooks = lifecycle_hooks
+    c.KubeSpawner.lifecycle_hooks = lifecycle_hooks
 
 init_containers = get_config('singleuser.init-containers')
 if init_containers:
-    c.KubeSpawner.singleuser_init_containers.extend(init_containers)
+    c.KubeSpawner.init_containers.extend(init_containers)
 
 # Gives spawned containers access to the API of the hub
 c.KubeSpawner.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
@@ -315,13 +315,13 @@ if not cloud_metadata.get('enabled', False):
         )
     )
 
-    c.KubeSpawner.singleuser_init_containers.append(ip_block_container)
+    c.KubeSpawner.init_containers.append(ip_block_container)
 
 scheduler_strategy = get_config('singleuser.scheduler-strategy', 'spread')
 
 if scheduler_strategy == 'pack':
     # FIXME: Support setting affinity directly in KubeSpawner
-    c.KubeSpawner.singleuser_extra_pod_config = {
+    c.KubeSpawner.extra_pod_config = {
         'affinity': {
             'podAffinity': {
                 'preferredDuringSchedulingIgnoredDuringExecution': [{
@@ -352,9 +352,6 @@ if scheduler_strategy == 'pack':
             }
         }
     }
-else:
-    # Set default to {} so subconfigs can easily update it
-    c.KubeSpawner.singleuser_extra_pod_config = {}
 
 if get_config('debug.enabled', False):
     c.JupyterHub.log_level = 'DEBUG'
