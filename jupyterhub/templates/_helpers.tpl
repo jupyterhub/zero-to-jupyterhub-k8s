@@ -7,36 +7,39 @@
   ## How helpers work
   Helm helper functions is a good way to avoid repeating something. They will
   generate some output based on one single dictionary of input that we call the
-  helpers scope.
+  helpers scope. When you are in helm, you access your current scope with a
+  single a single punctuation (.).
+  
+  When you ask a helper to render its content, one often forward the current
+  scope to the helper in order to allow it to access .Release.Name,
+  .Values.rbac.enabled and similar values.
 
-  Often the current scope (.) is passed to the helper as it give the helper
-  access to the current scope containing .Release.Name, .Values.rbac.enabled and
-  similar values.
-
+  #### Example - Passing the current scope
   {{ include "jupyterhub.commonLabels" . }}
 
-  Sometimes the helper function is passed something specific instead of the
-  current scope (.), that would make .Release.Name etc. inaccessible.
+  It would be possible to pass something specific instead of the current scope
+  (.), but that would make .Release.Name etc. inaccessible by the helper which
+  is something we aim to avoid.
 
+  #### Example - Passing a new scope
   {{ include "demo.bananaPancakes" (dict "pancakes" 5 "bananas" 3) }}
 
-  To let a helper acces the current scope along with additional values we can
-  merge a dictionary containing additional values the current scope.
-
-  spec:
-    selector:
-      matchLabels:
-        {{- $_ := merge (dict "appLabel" "kube-lego") . }}
-        {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}
+  To let a helper access the current scope along with additional values we have
+  opted to create dictionary containing additional values that is then populated
+  with additional values from the current scope through a the merge function.
+  
+  #### Example - Passing a new scope augmented with the old
+  {{- $_ := merge (dict "appLabel" "kube-lego") . }}
+  {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}
 
   In this way, the code within the definition of `jupyterhub.matchLabels` will
   be able to access .Release.Name and .appLabel.
 
   NOTE:
-    The ordering of merge is crucial, the latter argument is copied and merged
-    into the former. So if you would swap the order you would influence the
-    current scope. Therefore, always put the fresh dictionary first and the
-    current scope last.
+    The ordering of merge is crucial, the latter argument is merged into the
+    former. So if you would swap the order you would influence the current scope
+    risking unintentional behavior. Therefore, always put the fresh unreferenced
+    dictionary (dict "key1" "value1") first and the current scope (.) last.
 
 
   ## Declared helpers
@@ -163,7 +166,7 @@ component: {{ include "jupyterhub.componentLabel" . }}
   jupyterhub.podCullerSelector:
     Used to by the pod-culler to select singleuser-server pods. It simply
     reformats "jupyterhub.matchLabels" and sets the componentLabel value so
-    `component=singleuser-server` is outputted.
+    `component=singleuser-server` is output.
 */}}
 {{- define "jupyterhub.podCullerSelector" -}}
 {{- $_ := merge (dict "componentLabel" "singleuser-server") . -}}
