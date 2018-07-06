@@ -4,6 +4,41 @@
   objects we define in the .yaml template files.
 
 
+  ## How helpers work
+  Helm helper functions is a good way to avoid repeating something. They will
+  generate some output based on one single dictionary of input that we call the
+  helpers scope.
+
+  Often the current scope (.) is passed to the helper as it give the helper
+  access to the current scope containing .Release.Name, .Values.rbac.enabled and
+  similar values.
+
+  {{ include "jupyterhub.commonLabels" . }}
+
+  Sometimes the helper function is passed something specific instead of the
+  current scope (.), that would make .Release.Name etc. inaccessible.
+
+  {{ include "demo.bananaPancakes" (dict "pancakes" 5 "bananas" 3) }}
+
+  To let a helper acces the current scope along with additional values we can
+  merge a dictionary containing additional values the current scope.
+
+  spec:
+    selector:
+      matchLabels:
+        {{- $_ := merge (dict "appLabel" "kube-lego") . }}
+        {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}
+
+  In this way, the code within the definition of `jupyterhub.matchLabels` will
+  be able to access .Release.Name and .appLabel.
+
+  NOTE:
+    The ordering of merge is crucial, the latter argument is copied and merged
+    into the former. So if you would swap the order you would influence the
+    current scope. Therefore, always put the fresh dictionary first and the
+    current scope last.
+
+
   ## Declared helpers
   - appLabel          |
   - componentLabel    |
