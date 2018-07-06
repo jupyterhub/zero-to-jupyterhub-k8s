@@ -126,9 +126,11 @@ component: {{ include "jupyterhub.componentLabel" . }}
 
 {{- /*
   jupyterhub.podCullerSelector:
-    Used to by the pod-culler to select singleuser-server pods. 
-    It simply reformats "jupyterhub.matchLabels".
+    Used to by the pod-culler to select singleuser-server pods. It simply
+    reformats "jupyterhub.matchLabels" and sets the componentLabel value so
+    `component=singleuser-server` is outputted.
 */}}
 {{- define "jupyterhub.podCullerSelector" -}}
-{{ include "jupyterhub.matchLabels" . | replace ": " "=" | replace "\n" "," | quote }}
+{{- $_ := merge (dict "componentLabel" "singleuser-server") . -}}
+{{ include "jupyterhub.matchLabels" $_ | replace ": " "=" | replace "\n" "," | quote }}
 {{- end }}
