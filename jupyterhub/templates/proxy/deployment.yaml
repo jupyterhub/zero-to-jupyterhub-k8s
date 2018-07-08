@@ -1,5 +1,5 @@
 {{- $manualHTTPS := (and .Values.proxy.https.enabled (eq .Values.proxy.https.type "manual")) -}}
-{{- $manualHTTPSwithsecret := (and .Values.proxy.https.enabled (eq .Values.proxy.https.type "manualsecret")) -}}
+{{- $manualHTTPSwithsecret := (and .Values.proxy.https.enabled (eq .Values.proxy.https.type "secret")) -}}
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
@@ -49,7 +49,7 @@ spec:
       volumes:
         - name: tls-secret
           secret:
-            secretName: {{ .Values.proxy.https.secret }}
+            secretName: {{ .Values.proxy.https.secret.name }}
       {{- end }}
       {{- if $manualHTTPS }}
       volumes:
@@ -75,8 +75,8 @@ spec:
             {{- else if $manualHTTPSwithsecret }}
             - --port=8443
             - --redirect-port=8000
-            - --ssl-key=/etc/chp/tls/{{ .Values.proxy.https.keyname }}
-            - --ssl-cert=/etc/chp/tls/{{ .Values.proxy.https.crtname }}
+            - --ssl-key=/etc/chp/tls/{{ .Values.proxy.https.secret.key }}
+            - --ssl-cert=/etc/chp/tls/{{ .Values.proxy.https.secret.crt }}
             {{- else }}
             - --port=8000
             {{- end }}
