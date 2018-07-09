@@ -41,25 +41,46 @@ Note that Nginx maintains two additional ingress controllers.
 For most use cases, we recommend the community maintained **kubernetes/ingress-nginx** since that
 is the ingress controller that the development team has the most experience using.
 
-### Ingress and Automatic HTTPS with kube-lego & Let's Encrypt
+### Ingress and Automatic HTTPS with cert-manager & Let's Encrypt
 
 When using an ingress object, the default automatic HTTPS support does not work.
 To have automatic fetch and renewal of HTTPS certificates, you must set it up
 yourself.
 
-Here's a method that uses [kube-lego](https://github.com/jetstack/kube-lego)
+Here's a method that uses [cert-manager](https://github.com/jetstack/cert-manager)
 to automatically fetch and renew HTTPS certificates from [Let's Encrypt](https://letsencrypt.org/).
-This approach with kube-lego and Let's Encrypt currently only works with two ingress controllers:
-the community-maintained [**kubernetes/ingress-nginx**](https://github.com/kubernetes/ingress-nginx)
-and **google cloud's ingress controller**.
 
 1. Make sure that DNS is properly set up (configuration depends on the ingress
    controller you are using and how your cluster was set up). Accessing
    `<hostname>` from a browser should route traffic to the hub.
-2. Install & configure kube-lego using the
-   [kube-lego helm-chart](https://github.com/kubernetes/charts/tree/master/stable/kube-lego).
-   Remember to change `config.LEGO_EMAIL` and `config.LEGO_URL` at the least.
-3. Add an annotation + TLS config to the ingress so kube-lego knows to get certificates for
+
+2. Install & configure cert-manager using the
+   [cert-manager helm-chart](https://github.com/kubernetes/charts/tree/master/stable/cert-manager) with ingressShim enabled: `--set ingressShim.defaultIssuerName=letsencrypt-prod --set ingressShim.defaultIssuerKind=ClusterIssuer`.
+
+3. Create the default ClusterIssuer:
+
+   ```yaml
+   apiVersion: certmanager.k8s.io/v1alpha1
+   kind: ClusterIssuer
+   metadata:
+     name: letsencrypt-prod
+     namespace: default
+   spec:
+     acme:
+       # The ACME server URL
+       server: https://acme-v02.api.letsencrypt.org/directory
+       # Email address used for ACME registration
+       email: $EMAIL
+       # Name of a secret used to store the ACME account private key
+       privateKeySecretRef:
+         name: letsencrypt
+       # Enable the HTTP-01 challenge provider
+       http01: {}
+   ```
+
+   Remember to change `$EMAIL`.
+
+4. Add an annotation + TLS config to the ingress so cert-manager knows to get certificates for
    it:
 
    ```yaml
@@ -69,11 +90,10 @@ and **google cloud's ingress controller**.
      tls:
       - hosts:
          - <hostname>
-        secretName: kubelego-tls-jupyterhub
+        secretName: jupyterhub-tls
    ```
 
-This should provision a certificate, and keep renewing it whenever it gets close
-to expiry!
+This should provision a certificate, and keep renewing it whenever it gets close to expiry!
 
 ## Arbitrary extra code and configuration in `jupyterhub_config.py`
 

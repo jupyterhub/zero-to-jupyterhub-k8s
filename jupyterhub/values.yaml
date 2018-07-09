@@ -81,20 +81,12 @@ proxy:
       pullPolicy: IfNotPresent
     proxyBodySize: 64m
     resources: {}
-  lego:
-    image:
-      name: jetstack/kube-lego
-      tag: 0.1.6
-    resources: {}
   labels:
   nodeSelector: {}
   pdb:
     enabled: true
   https:
     enabled: true
-    type: letsencrypt
-    letsencrypt:
-      contactEmail: ''
     manual:
       key:
       cert:

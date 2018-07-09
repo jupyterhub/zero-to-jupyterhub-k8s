@@ -1,5 +1,4 @@
 {{- $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled) }}
-{{- $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt")) }}
 {{- $manualHTTPS := (and $HTTPS (eq .Values.proxy.https.type "manual")) -}}
 apiVersion: v1
 kind: Service
@@ -33,21 +32,13 @@ metadata:
 spec:
   selector:
     # TODO: Refactor to utilize the helpers
-    {{- if $autoHTTPS }}
-    component: autohttps
-    {{- else }}
     component: proxy
-    {{- end }}
     release: {{ .Release.Name }}
   ports:
     - name: http
       port: 80
       protocol: TCP
-      {{- if $autoHTTPS }}
-      targetPort: 80
-      {{- else }}
       targetPort: 8000
-      {{- end }}
       # allow proxy.service.nodePort for http
       {{- if .Values.proxy.service.nodePorts.http }}
       nodePort: {{ .Values.proxy.service.nodePorts.http }}
