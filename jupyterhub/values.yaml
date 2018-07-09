@@ -86,7 +86,8 @@ proxy:
   pdb:
     enabled: true
   https:
-    enabled: true
+    enabled: false
+    type: manual
     manual:
       key:
       cert:
