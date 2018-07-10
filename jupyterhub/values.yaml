@@ -218,6 +218,9 @@ scheduling:
     enabled: true
     replicas: 0
     resources:
+  userDummy:
+    enabled: true
+    replicas: 0
   corePods:
     nodeAffinity:
       matchNodePurpose: "prefer"

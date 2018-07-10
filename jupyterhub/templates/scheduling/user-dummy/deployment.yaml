@@ -1,0 +1,55 @@
+{{- /* 
+These user-dummy pods can be used to test cluster autoscaling in a
+controlled fashion.
+
+Example:
+$ echo 'Simulating four users...'
+$ kubectl patch deployment user-dummy --patch '{"spec": {"replicas": 4}}'
+*/}}
+{{- if .Values.scheduling.userDummy.enabled -}}
+{{- $_ := merge (dict "componentLabel" "singleuser-server") . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-dummy
+  labels:
+    {{- include "jupyterhub.labels" $_ | nindent 4 }}
+spec:
+  replicas: {{ .Values.scheduling.userDummy.replicas }}
+  selector:
+    matchLabels:
+      {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 100%
+      maxSurge: 100%
+  template:
+    metadata:
+      labels:
+        {{- /* Changes here will cause the Deployment to restart the pods. */}}
+        {{- include "jupyterhub.matchLabels" $_ | nindent 8 }}
+        hub.jupyter.org/pod-kind: "user"
+    spec:
+      {{- if .Values.scheduling.podPriority.enabled }}
+      priorityClassName: jupyterhub-default-priority
+      {{- end }}
+      {{- if .Values.scheduling.userScheduler.enabled }}
+      schedulerName: user-scheduler
+      {{- end }}
+      {{- $_ := merge (dict "podKind" "user") . }}
+      {{- $dummy := include "jupyterhub.prepareScope" $_ }}
+      {{- if $_.hasTolerations }}
+      {{- include "jupyterhub.tolerations" $_ | nindent 6 }}
+      {{- end }}
+      {{- if $_.hasAffinity }}
+      {{- include "jupyterhub.affinity" $_ | nindent 6 }}
+      {{- end }}
+      terminationGracePeriodSeconds: 0
+      automountServiceAccountToken: false
+      containers:
+        - name: pause
+          image: {{ .Values.prePuller.pause.image.name }}:{{ .Values.prePuller.pause.image.tag }}
+          resources:
+            {{- $__ := merge (dict "type" "user-dummy") $_ -}}
+            {{- include "jupyterhub.resources" $__ | nindent 12 }}
+{{- end }}

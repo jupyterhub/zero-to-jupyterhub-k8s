@@ -449,6 +449,36 @@ properties:
             description: |
               Unless specified here, the placeholder pods will request the same
               resources specified for the real singleuser pods.
+      userDummy:
+        type: object
+        description: |
+          User dummies can help you ensure your cluster autoscaler,
+          user-scheduler and pod priority is setup to your liking. User
+          dummies behave like placeholders but they have their pod priority
+          setup like real users and can evict placeholders.
+
+          To test your setup efficiently, you can adjust the amount of user
+          dummies with the following command.
+
+          # First let there be for example 3 user dummies
+          kubectl patch deployment user-dummy --patch '{"spec": {"replicas": 3}}'
+
+          # Then perhaps let there be 10 user dummies
+          kubectl patch deployment user-dummy --patch '{"spec": {"replicas": 10}}'
+        properties:
+          enabled:
+            type: bool
+          replicas:
+            type: int
+            description: |
+              How many user-dummy pods would you like to have? Note that it
+              makes more sense to have this set at 0 but then adjust it with a
+              kubectl patch command during testing.
+          resources:
+            type: object
+            description: |
+              Unless specified here, the user-dummy pods will request the same
+              resources specified for the real singleuser pods.
       corePods:
         type: object
         description: |
