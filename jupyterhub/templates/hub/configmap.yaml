@@ -12,6 +12,7 @@ data:
   cull.timeout: {{ .Values.cull.timeout | quote }}
   cull.every: {{ .Values.cull.every | quote }}
   cull.concurrency: {{ .Values.cull.concurrency | quote }}
+  cull.max-age: {{ .Values.cull.maxAge | quote }}
   {{- end }}
 
 
