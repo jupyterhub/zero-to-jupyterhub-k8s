@@ -214,6 +214,10 @@ scheduling:
       tag: v1.11.1-beta.0
   podPriority:
     enabled: true
+  userPlaceholder:
+    enabled: true
+    replicas: 0
+    resources:
   corePods:
     nodeAffinity:
       matchNodePurpose: "prefer"

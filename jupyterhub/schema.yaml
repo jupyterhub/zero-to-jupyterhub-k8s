@@ -422,6 +422,33 @@ properties:
             description: |
             Generally available since kubernetes 1.11, Pod Priority is used to
             allow real users evict placeholder pods.
+      userPlaceholder:
+        type: object
+        description: |
+          User placeholders simulate users but will thanks to PodPriority be
+          evicted by the cluster autoscaler if a real user shows up. Thanks to
+          placeholders, you are able to create a headroom for the real users and
+          reduce the risk of a user having to wait for a node to be added. It is
+          highly recommended to use the continuous pre-puller as well along with
+          placeholders, so the images are also available when real users arrive.
+
+          To test your setup efficiently, you can adjust the amount of user
+          placeholders with the following command.
+
+          # First let there be for example 3 user placeholders
+          kubectl patch deployment user-placeholder --patch '{"spec": {"replicas": 3}}'
+        properties:
+          enabled:
+            type: bool
+          replicas:
+            type: int
+            description: |
+              How many placeholder pods would you like to have?
+          resources:
+            type: object
+            description: |
+              Unless specified here, the placeholder pods will request the same
+              resources specified for the real singleuser pods.
       corePods:
         type: object
         description: |
