@@ -24,7 +24,7 @@ chmod +x minikube
 mv minikube bin/
 
 echo "starting minikube with RBAC"
-sudo CHANGE_MINIKUBE_NONE_USER=true $PWD/bin/minikube start --vm-driver=none --kubernetes-version=v${KUBE_VERSION} --extra-config=apiserver.Authorization.Mode=RBAC
+sudo CHANGE_MINIKUBE_NONE_USER=true $PWD/bin/minikube start --vm-driver=none --kubernetes-version=v${KUBE_VERSION} --extra-config=apiserver.Authorization.Mode=RBAC --bootstrapper=localkube
 minikube update-context
 
 echo "waiting for kubernetes"
