@@ -226,10 +226,6 @@ cull:
   every: 600
   concurrency: 10
   maxAge: 0
-  podCuller:
-    image:
-      name: jupyterhub/k8s-pod-culler
-      tag: generated-by-chartpress
 
 
 debug:
