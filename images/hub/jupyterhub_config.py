@@ -69,6 +69,14 @@ if service_account_name:
     c.KubeSpawner.service_account = service_account_name
 
 c.KubeSpawner.node_selector = get_config('singleuser.node-selector')
+
+c.KubeSpawner.tolerations.extend(get_config('singleuser.tolerations-list', []))
+c.KubeSpawner.node_affinity_required.extend(get_config('singleuser.node-affinity-required', []))
+c.KubeSpawner.node_affinity_preferred.extend(get_config('singleuser.node-affinity-preferred', []))
+c.KubeSpawner.pod_affinity_required.extend(get_config('singleuser.pod-affinity-required', []))
+c.KubeSpawner.pod_affinity_preferred.extend(get_config('singleuser.pod-affinity-preferred', []))
+c.KubeSpawner.pod_anti_affinity_required.extend(get_config('singleuser.pod-anti-affinity-required', []))
+c.KubeSpawner.pod_anti_affinity_preferred.extend(get_config('singleuser.pod-anti-affinity-preferred', []))
 # Configure dynamically provisioning pvc
 storage_type = get_config('singleuser.storage.type')
 if storage_type == 'dynamic':

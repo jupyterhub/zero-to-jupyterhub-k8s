@@ -46,13 +46,20 @@ spec:
                     - key: release
                       operator: In
                       values: [{{ .Release.Name | quote }}]
+      {{- $_ := merge (dict "podKind" "core") . }}
+      {{- $dummy := include "jupyterhub.prepareScope" $_ }}
+      {{- if $_.hasTolerations }}
+      {{- include "jupyterhub.tolerations" $_ | nindent 6 }}
+      {{- end }}
+      {{- if $_.hasAffinity }}
+      {{- include "jupyterhub.affinity" $_ | nindent 6 }}
+      {{- end }}
       {{- if $manualHTTPSwithsecret }}
       volumes:
         - name: tls-secret
           secret:
             secretName: {{ .Values.proxy.https.secret.name }}
-      {{- end }}
-      {{- if $manualHTTPS }}
+      {{- else if $manualHTTPS }}
       volumes:
         - name: tls-secret
           secret:
