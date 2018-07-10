@@ -133,6 +133,7 @@ data:
   singleuser.cloud-metadata: |
     {{- .Values.singleuser.cloudMetadata | toYaml | trimSuffix "\n" | nindent 4 }}
   singleuser.start-timeout: {{ .Values.singleuser.startTimeout | quote }}
+  singleuser.image-spec: {{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}
   singleuser.image-pull-policy: {{ .Values.singleuser.image.pullPolicy | quote }}
   {{- if .Values.singleuser.imagePullSecret }}
   singleuser.image-pull-secret-name: singleuser-image-credentials
