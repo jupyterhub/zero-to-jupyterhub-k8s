@@ -1,0 +1,60 @@
+{{- if .Values.scheduling.userScheduler.enabled -}}
+{{- if .Values.rbac.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: user-scheduler
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: user-scheduler-base
+  labels:
+    {{- $_ := merge (dict "componentSuffix" "-base") . }}
+    {{- include "jupyterhub.labels" $_ | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: user-scheduler
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: system:kube-scheduler
+  apiGroup: rbac.authorization.k8s.io
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: user-scheduler-complementary
+  labels:
+    {{- $_ := merge (dict "componentSuffix" "-complementary") . }}
+    {{- include "jupyterhub.labels" $_ | nindent 4 }}
+rules:
+  # Support leader elections
+  - apiGroups: [""]
+    resourceNames: ["user-scheduler"]
+    resources: ["configmaps"]
+    verbs: ["get", "update"]
+  # Workaround for missing permission in system:kube-scheduler as of k8s 1.10.4
+  - apiGroups: ["storage.k8s.io"]
+    resources: ["storageclasses"]
+    verbs: ["get", "list", "watch"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: user-scheduler-complementary
+  labels:
+    {{- $_ := merge (dict "componentSuffix" "-complementary") . }}
+    {{- include "jupyterhub.labels" $_ | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: user-scheduler
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: user-scheduler-complementary
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}
+{{- end }}

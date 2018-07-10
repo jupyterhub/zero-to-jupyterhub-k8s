@@ -1,0 +1,74 @@
+{{- if .Values.scheduling.userScheduler.enabled -}}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: user-scheduler
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+
+data:
+  policy.cfg: |
+    {
+      "kind": "Policy",
+      "apiVersion": "v1",
+      "predicates": [
+        { "name": "PodFitsResources" },
+        { "name": "HostName" },
+        { "name": "PodFitsHostPorts" },
+        { "name": "MatchNodeSelector" },
+        { "name": "NoDiskConflict" },
+        { "name": "PodToleratesNodeTaints" },
+        { "name": "MaxEBSVolumeCount" },
+        { "name": "MaxGCEPDVolumeCount" },
+        { "name": "MaxAzureDiskVolumeCount" },
+        { "name": "CheckVolumeBinding" },
+        { "name": "NoVolumeZoneConflict" },
+        { "name": "MatchInterPodAffinity" }
+      ],
+      "priorities": [
+        { "name": "NodePreferAvoidPodsPriority",  "weight": 10000 },
+        { "name": "NodeAffinityPriority",         "weight": 1000 },
+        { "name": "InterPodAffinityPriority",     "weight": 100 },
+        { "name": "MostRequestedPriority",        "weight": 50 },
+      ],
+      "hardPodAffinitySymmetricWeight" : 100,
+      "alwaysCheckAllPredicates" : true
+    }
+{{- end }}
+
+{{- /*
+# Notes about the GeneralPredicates
+The following predicates was not found by kube-scheduler 1.11.1-beta.0
+{ "name": "CheckNodePIDPressure" },
+{ "name": "CheckNodeUnschedulable" },
+{ "name": "CheckNodeCondition" },
+{ "name": "General" },
+{ "name": "PodToleratesNodeNoExecuteTaints" },
+{ "name": "CheckNodeMemoryPressure" },
+{ "name": "CheckNodeDiskPressure" },
+
+# Notes about the priorities
+NodePreferAvoidPodsPriority: What does this really mean?
+HardPodAffinitySymmetricWeight: "It represents the weight of implicit
+PreferredDuringScheduling affinity rule." - preferred node affinity or preferred
+pod/anti-pod affinity or those affinities in general? How does this relate to
+the InterPodAffinityPriority and NodeAffinityPriority?
+
+AlwaysCheckAllPredicates: scheduler checks all the configured predicates even
+after one or more of them fails.
+
+GeneralPredicates checks whether noncriticalPredicates and EssentialPredicates
+pass. noncriticalPredicates are the predicates that only non-critical pods need
+and EssentialPredicates are the predicates that all pods, including critical
+pods, need
+
+MostRequestedPriority: Is using the default MostRequestedPriorityMap that is a
+priority function that favors nodes with most requested resources. It calculates
+the percentage of memory and CPU requested by pods scheduled on the node, and
+prioritizes based on the maximum of the average of the fraction of requested to
+capacity.
+
+Details: (cpu(10 * sum(requested) / capacity) + memory(10 * sum(requested) /
+capacity)) / 2
+
+*/}}

@@ -69,6 +69,7 @@ if service_account_name:
     c.KubeSpawner.service_account = service_account_name
 
 c.KubeSpawner.node_selector = get_config('singleuser.node-selector')
+c.KubeSpawner.scheduler_name = get_config('kubespawner.scheduler-name', "default-scheduler")
 
 c.KubeSpawner.tolerations.extend(get_config('singleuser.tolerations-list', []))
 c.KubeSpawner.node_affinity_required.extend(get_config('singleuser.node-affinity-required', []))
