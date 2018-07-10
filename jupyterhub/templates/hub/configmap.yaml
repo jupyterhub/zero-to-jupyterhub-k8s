@@ -198,6 +198,12 @@ data:
     {{- range $key, $value := .Values.singleuser.extraLabels }}
     {{ $key | quote }}: {{ $value | quote }}
     {{- end }}
+  {{- if .Values.singleuser.storageExtraLabels }}
+  singleuser.storage-extra-labels: |
+    {{- range $key, $value := .Values.singleuser.storageExtraLabels }}
+    {{ $key | quote }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
   {{- if .Values.singleuser.extraEnv }}
   singleuser.extra-env: |
     {{- range $key, $value := .Values.singleuser.extraEnv }}

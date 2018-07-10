@@ -167,6 +167,7 @@ singleuser:
                 - 169.254.169.254/32
   events: false
   extraLabels: {}
+  storageExtraLabels: {}
   extraEnv: {}
   lifecycleHooks:
   initContainers:
