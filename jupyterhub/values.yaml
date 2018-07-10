@@ -195,6 +195,13 @@ singleuser:
   defaultUrl:
 
 
+scheduling:
+  corePods:
+    nodeAffinity:
+      matchNodePurpose: "prefer"
+  userPods:
+    nodeAffinity:
+      matchNodePurpose: "prefer"
 prePuller:
   hook:
     enabled: true

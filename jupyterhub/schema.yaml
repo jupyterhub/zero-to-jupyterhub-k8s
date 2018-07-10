@@ -247,6 +247,7 @@ properties:
     required:
       - secretToken
 
+
   auth:
     type: object
     properties:
@@ -271,6 +272,7 @@ properties:
               This can be generated with `openssl rand -hex 32`.
 
               If encryption is unavailable, auth_state cannot be persisted.
+
 
   singleuser:
     type: object
@@ -368,3 +370,55 @@ properties:
               The tag of the image to use.
 
               This is the value after the `:` in your full image name.
+
+
+  scheduling:
+    type: object
+    description: |
+      Objects for customizing the scheduling of various pods on the nodes and
+      related labels.
+    properties:
+      corePods:
+        type: object
+        description: |
+          These settings influence the core pods like the hub, proxy and
+          scheduler pods.
+        properties:
+          nodeAffinity:
+            type: object
+            description: |
+              Where should pods be scheduled? Perhaps on nodes with a certain
+              label is preferred or even required?
+            properties:
+              matchNodePurpose:
+                type: string
+                enum:
+                  - ignore
+                  - prefer
+                  - require
+                description: |
+                  Decide if core pods "ignore", "prefer" or "require" to
+                  schedule on nodes with the label
+                  "hub.jupyter.org/node-purpose=core".
+      userPods:
+        type: object
+        description: |
+          These settings influence the user pods like the user-placeholder,
+          user-dummy and actual user pods named like jupyter-someusername.
+        properties:
+          nodeAffinity:
+            type: object
+            description: |
+              Where should pods be scheduled? Perhaps on nodes with a certain
+              label is preferred or even required?
+            properties:
+              matchNodePurpose:
+                type: string
+                enum:
+                  - ignore
+                  - prefer
+                  - require
+                description: |
+                  Decide if core pods "ignore", "prefer" or "require" to
+                  schedule on nodes with the label
+                  "hub.jupyter.org/node-purpose=user".
