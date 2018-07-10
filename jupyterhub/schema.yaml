@@ -411,6 +411,17 @@ properties:
                         description: |
                         The tag will default to the clusters kubernetes version.
                         - https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/kube-scheduler-amd64
+      podPriority:
+        type: object
+        description: |
+        Generally available since kubernetes 1.11, Pod Priority is used to
+        allow real users evict placeholder pods.
+        properties:
+          enabled:
+            type: bool
+            description: |
+            Generally available since kubernetes 1.11, Pod Priority is used to
+            allow real users evict placeholder pods.
       corePods:
         type: object
         description: |

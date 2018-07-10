@@ -32,6 +32,9 @@ spec:
         {{- end }}
     spec:
       nodeSelector: {{ toJson .Values.hub.nodeSelector }}
+      {{- if .Values.scheduling.podPriority.enabled }}
+      priorityClassName: jupyterhub-default-priority
+      {{- end }}
       {{- $_ := merge (dict "podKind" "core") . }}
       {{- $dummy := include "jupyterhub.prepareScope" $_ }}
       {{- if $_.hasTolerations }}

@@ -235,13 +235,17 @@ data:
     {{- $_.podAntiAffinityPreferred | nindent 4 }}
   {{- end }}
 
+  {{- if .Values.scheduling.userScheduler.enabled }}
+  singleuser.scheduler-name: "user-scheduler"
+  {{- end }}
+  {{- if .Values.scheduling.podPriority }}
+  singleuser.priority_class: "jupyterhub-default-priority"
+  {{- end }}
+
   {{- /* KubeSpawner */}}
   kubespawner.common-labels: |
     {{- $_ := merge (dict "heritageLabel" "jupyterhub") . }}
     {{- include "jupyterhub.commonLabels" $_ | nindent 4 }}
-  {{- if .Values.scheduling.userScheduler.enabled }}
-  kubespawner.scheduler-name: "user-scheduler"
-  {{- end }}
 
 
   {{- /* Hub */}}
