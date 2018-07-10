@@ -325,41 +325,6 @@ if not cloud_metadata.get('enabled', False):
 
     c.KubeSpawner.init_containers.append(ip_block_container)
 
-scheduler_strategy = get_config('singleuser.scheduler-strategy', 'spread')
-
-if scheduler_strategy == 'pack':
-    # FIXME: Support setting affinity directly in KubeSpawner
-    c.KubeSpawner.extra_pod_config = {
-        'affinity': {
-            'podAffinity': {
-                'preferredDuringSchedulingIgnoredDuringExecution': [{
-                    'weight': 50,
-                    'podAffinityTerm': {
-                        'labelSelector': {
-                            'matchExpressions': [{
-                                'key': 'component',
-                                'operator': 'In',
-                                'values': ['hub']
-                            }]
-                        },
-                        'topologyKey': 'kubernetes.io/hostname'
-                    }
-                }, {
-                    'weight': 5,
-                    'podAffinityTerm': {
-                        'labelSelector': {
-                            'matchExpressions': [{
-                                'key': 'component',
-                                'operator': 'In',
-                                'values': ['singleuser-server']
-                            }]
-                        },
-                        'topologyKey': 'kubernetes.io/hostname'
-                    }
-                }],
-            }
-        }
-    }
 
 if get_config('debug.enabled', False):
     c.JupyterHub.log_level = 'DEBUG'
