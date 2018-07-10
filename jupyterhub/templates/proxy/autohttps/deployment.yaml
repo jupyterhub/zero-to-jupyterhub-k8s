@@ -38,20 +38,6 @@ spec:
       {{- end }}
       nodeSelector: {{ toJson .Values.proxy.nodeSelector }}
       terminationGracePeriodSeconds: 60
-      affinity:
-        podAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 1
-              podAffinityTerm:
-                topologyKey: kubernetes.io/hostname
-                labelSelector:
-                  matchExpressions:
-                    - key: component
-                      operator: In
-                      values: ['hub']
-                    - key: release
-                      operator: In
-                      values: [{{ .Release.Name | quote }}]
       {{- $_ := merge (dict "podKind" "core") . }}
       {{- $dummy := include "jupyterhub.prepareScope" $_ }}
       {{- if $_.hasTolerations }}
