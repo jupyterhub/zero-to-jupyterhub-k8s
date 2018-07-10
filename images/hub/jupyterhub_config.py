@@ -87,7 +87,7 @@ c.KubeSpawner.fs_gid = get_config('singleuser.fs-gid')
 c.KubeSpawner.node_selector = get_config('singleuser.node-selector')
 c.KubeSpawner.service_account = get_config('singleuser.service-account-name', "default")
 c.KubeSpawner.scheduler_name = get_config('singleuser.scheduler-name', "default-scheduler")
-c.KubeSpawner.priority_class = get_config('singleuser.priority-class')
+c.KubeSpawner.priority_class_name = get_config('singleuser.priority-class-name')
 
 cmd = get_config('singleuser.cmd', None)
 if cmd:

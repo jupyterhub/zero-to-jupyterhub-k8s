@@ -246,7 +246,7 @@ data:
   singleuser.scheduler-name: "user-scheduler"
   {{- end }}
   {{- if .Values.scheduling.podPriority }}
-  singleuser.priority_class: "jupyterhub-default-priority"
+  singleuser.priority_class_name: "jupyterhub-default-priority"
   {{- end }}
 
   {{- /* KubeSpawner */}}
