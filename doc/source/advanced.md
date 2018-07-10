@@ -50,12 +50,26 @@ yourself.
 Here's a method that uses [cert-manager](https://github.com/jetstack/cert-manager)
 to automatically fetch and renew HTTPS certificates from [Let's Encrypt](https://letsencrypt.org/).
 
+Note that this makes cert-manager watch ingress objects cluster-wide with
+`kubernetes.io/tls-acme` annotation, with http-based challenge.
+Please refer to [cert-manager docs](https://cert-manager.readthedocs.io/) for advanced behavior such
+as dns-based domain verification and manual certificate management.
+
 1. Make sure that DNS is properly set up (configuration depends on the ingress
    controller you are using and how your cluster was set up). Accessing
    `<hostname>` from a browser should route traffic to the hub.
 
 2. Install & configure cert-manager using the
-   [cert-manager helm-chart](https://github.com/kubernetes/charts/tree/master/stable/cert-manager) with ingressShim enabled: `--set ingressShim.defaultIssuerName=letsencrypt-prod --set ingressShim.defaultIssuerKind=ClusterIssuer`.
+   [cert-manager helm-chart](https://github.com/kubernetes/charts/tree/master/stable/cert-manager) with ingressShim enabled:
+
+   ```
+   helm install stable/cert-manager \
+     --name cert-manager \
+     --namespace cert-manager \
+     --set ingressShim.defaultIssuerName=letsencrypt-prod \
+     --set ingressShim.defaultIssuerKind=ClusterIssuer`
+   ```
+
 
 3. Create the default ClusterIssuer:
 
