@@ -180,3 +180,27 @@ component: {{ include "jupyterhub.componentLabel" . }}
 {{- define "singleuser.imagePullSecret" }}
 {{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.singleuser.imagePullSecret.registry (printf "%s:%s" .Values.singleuser.imagePullSecret.username .Values.singleuser.imagePullSecret.password | b64enc) | b64enc }}
 {{- end }}
+
+{{- /*
+The default resource request - whatever a singleuser requests.
+*/}}
+{{- define "jupyterhub.default-resources" -}}
+requests:
+  cpu: {{- print " " .Values.singleuser.cpu.guarantee }}
+  memory: {{- print " " .Values.singleuser.memory.guarantee }}
+limits:
+  cpu: {{- print " " .Values.singleuser.cpu.limit }}
+  memory: {{- print " " .Values.singleuser.memory.limit }}
+{{- end }}
+
+{{- /*
+A custom resource request.
+*/}}
+{{- define "jupyterhub.resources" -}}
+{{- if and .Values.scheduling.userPlaceholder.resources (eq .type "user-placeholder") -}}
+{{ .Values.scheduling.userPlaceholder.resources | toYaml | trimSuffix "\n" }}
+{{- else if and .Values.scheduling.userDummy.resources (eq .type "user-dummy") -}}
+{{ .Values.scheduling.userDummy.resources | toYaml | trimSuffix "\n" }}
+{{- else -}}
+{{ include "jupyterhub.default-resources" . }}
+{{- end }}
