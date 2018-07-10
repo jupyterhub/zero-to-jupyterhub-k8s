@@ -523,3 +523,24 @@ properties:
                   Decide if core pods "ignore", "prefer" or "require" to
                   schedule on nodes with the label
                   "hub.jupyter.org/node-purpose=user".
+          podAffinity:
+            type: object
+            description: |
+              When a pod is to be scheduled, the scheduled can be made to prefer
+              of require having other pods within the same domain (commonly the
+              same
+              node).
+            properties:
+              preferScheduleNextToRealUsers:
+                type: bool
+                description: |
+                  Consider two nodes, one with two user-placeholder pods and one
+                  with two actual users. With this preconfigured affinity option
+                  set, the pod will schedule next to the real users which is
+                  what you would want in order to accomplish efficient cluster
+                  autoscaling.
+
+                  NOTE: This is recommended for clusters with less than 100
+                  nodes, but since pod affinities are computationally expensive
+                  and cause the scheduler to leave new pods in Pending state for
+                  seconds upwards if the cluster grows large.
