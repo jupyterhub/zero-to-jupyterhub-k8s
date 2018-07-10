@@ -22,7 +22,7 @@ metadata:
 ... will be used by this role...
 */}}
 kind: Role
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: hook-image-awaiter-{{ .Release.Time.Seconds }}
   labels:
@@ -30,7 +30,7 @@ metadata:
     hub.jupyter.org/deletable: "true"
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
     "helm.sh/hook-weight": "0"
 rules:
   - apiGroups: ["apps"]       # "" indicates the core API group
@@ -41,7 +41,7 @@ rules:
 ... as declared by this binding.
 */}}
 kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: hook-image-awaiter-{{ .Release.Time.Seconds }}
   labels:
