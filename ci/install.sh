@@ -35,7 +35,7 @@ done
 kubectl get nodes
 
 echo "installing helm"
-curl -ssL https://storage.googleapis.com/kubernetes-helm/helm-v2.7.2-linux-amd64.tar.gz \
+curl -ssL https://storage.googleapis.com/kubernetes-helm/helm-v${HELM_VERSION}-linux-amd64.tar.gz \
   | tar -xz -C bin --strip-components 1 linux-amd64/helm
 chmod +x bin/helm
 
