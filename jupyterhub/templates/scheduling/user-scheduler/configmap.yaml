@@ -5,7 +5,6 @@ metadata:
   name: user-scheduler
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
-
 data:
   policy.cfg: |
     {
@@ -29,7 +28,7 @@ data:
         { "name": "NodePreferAvoidPodsPriority",  "weight": 10000 },
         { "name": "NodeAffinityPriority",         "weight": 1000 },
         { "name": "InterPodAffinityPriority",     "weight": 100 },
-        { "name": "MostRequestedPriority",        "weight": 50 },
+        { "name": "MostRequestedPriority",        "weight": 50 }
       ],
       "hardPodAffinitySymmetricWeight" : 100,
       "alwaysCheckAllPredicates" : true

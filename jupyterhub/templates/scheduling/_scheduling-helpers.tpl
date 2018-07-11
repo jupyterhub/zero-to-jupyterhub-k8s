@@ -91,12 +91,17 @@ tolerations:
 {{- end }}
 
 {{- define "jupyterhub.podAffinityRequired" -}}
+{{- if eq .podKind "core" -}}
+{{- else if eq .podKind "user" -}}
 {{- if .Values.singleuser.extraPodAffinity.required }}
 {{- .Values.singleuser.extraPodAffinity.required | toYaml | trimSuffix "\n" | nindent 0 }}
 {{- end }}
 {{- end }}
+{{- end }}
 
 {{- define "jupyterhub.podAffinityPreferred" -}}
+{{- if eq .podKind "core" -}}
+{{- else if eq .podKind "user" -}}
 {{- if .Values.scheduling.userPods.podAffinity.preferScheduleNextToRealUsers -}}
 - weight: 100
   podAffinityTerm:
@@ -111,26 +116,33 @@ tolerations:
 {{- .Values.singleuser.extraPodAffinity.preferred | toYaml | trimSuffix "\n" | nindent 0 }}
 {{- end }}
 {{- end }}
+{{- end }}
 
 {{- define "jupyterhub.podAntiAffinityRequired" -}}
+{{- if eq .podKind "core" -}}
+{{- else if eq .podKind "user" -}}
 {{- if .Values.singleuser.extraPodAntiAffinity.required -}}
 {{- .Values.singleuser.extraPodAntiAffinity.required | toYaml | trimSuffix "\n" | nindent 0 }}
 {{- end }}
 {{- end }}
+{{- end }}
 
 {{- define "jupyterhub.podAntiAffinityPreferred" -}}
-{{- if eq .component "scheduler" -}}
+{{- if eq .podKind "core" -}}
+{{- if eq .component "user-scheduler" -}}
 - weight: 100
   podAffinityTerm:
     labelSelector:
       matchExpressions:
         - key: component
           operator: In
-          values: [scheduler]
+          values: [user-scheduler]
     topologyKey: kubernetes.io/hostname
 {{- end }}
+{{- else if eq .podKind "user" -}}
 {{- if .Values.singleuser.extraPodAntiAffinity.preferred -}}
 {{- .Values.singleuser.extraPodAntiAffinity.preferred | toYaml | trimSuffix "\n" | nindent 0 }}
+{{- end }}
 {{- end }}
 {{- end }}
 
