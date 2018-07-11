@@ -24,7 +24,7 @@ chmod +x minikube
 mv minikube bin/
 
 echo "starting minikube with RBAC"
-sudo CHANGE_MINIKUBE_NONE_USER=true $PWD/bin/minikube start --vm-driver=none --kubernetes-version=v${KUBE_VERSION} --extra-config=apiserver.Authorization.Mode=RBAC
+sudo CHANGE_MINIKUBE_NONE_USER=true $PWD/bin/minikube start --vm-driver=none --kubernetes-version=v${KUBE_VERSION} --extra-config=apiserver.Authorization.Mode=RBAC --bootstrapper=localkube
 minikube update-context
 
 echo "waiting for kubernetes"
@@ -35,7 +35,7 @@ done
 kubectl get nodes
 
 echo "installing helm"
-curl -ssL https://storage.googleapis.com/kubernetes-helm/helm-v2.7.2-linux-amd64.tar.gz \
+curl -ssL https://storage.googleapis.com/kubernetes-helm/helm-v${HELM_VERSION}-linux-amd64.tar.gz \
   | tar -xz -C bin --strip-components 1 linux-amd64/helm
 chmod +x bin/helm
 
