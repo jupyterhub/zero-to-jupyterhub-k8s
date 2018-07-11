@@ -139,6 +139,7 @@ data:
   {{- if .Values.singleuser.defaultUrl }}
   singleuser.default-url: {{ .Values.singleuser.defaultUrl | quote }}
   {{- end }}
+  singleuser.events: {{ .Values.singleuser.events | quote }}
   singleuser.uid: {{ .Values.singleuser.uid | quote }}
   singleuser.fs-gid: {{ .Values.singleuser.fsGid | quote }}
   {{- if .Values.singleuser.serviceAccountName }}
