@@ -214,7 +214,7 @@ scheduling:
       name: gcr.io/google_containers/kube-scheduler-amd64
       tag: v1.11.1-beta.0
   podPriority:
-    enabled: true
+    enabled: false
   userPlaceholder:
     enabled: true
     replicas: 0
