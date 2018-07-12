@@ -197,7 +197,7 @@ Instead of performing step 13 above. Create the following ``storageclass.yml`` f
 
 The main difference is the addition of the line `encrypted: "true"` and make note that `true` is in double quotes.
 
-Next run these commands::
+Next run these commands:
        
         .. code-block:: bash
            
@@ -212,15 +212,15 @@ This will encrypt any dynamic volumes (such as your notebook)created by Kubernet
 In step 9 above, set up the cluster with weave by including the `--networking weave` flag in the `kops create` command above.
 Then perform the following steps:
 
-1. Verify weave is running::
+1. Verify weave is running:
 
-    .. code-block:: bash
-           
-        kubectl --namespace kube-system get pods
+   .. code-block:: bash
+            
+      kubectl --namespace kube-system get pods
 
-    You should see several pods of the form `weave-net-abcde`
+   You should see several pods of the form `weave-net-abcde`
 
-2.  Create Kubernetes secret with a private password of sufficient strength. A random 128 bytes is used in this example::
+2.  Create Kubernetes secret with a private password of sufficient strength. A random 128 bytes is used in this example:
 
     .. code-block:: bash
            
@@ -229,27 +229,27 @@ Then perform the following steps:
 
     It is important that the secret name and its value (taken from the filename) are the same. If they do not match you may get a `ConfigError`
 
-3. Patch Weave with the password::
+3. Patch Weave with the password:
 
     .. code-block:: bash
            
         kubectl patch --namespace=kube-system daemonset/weave-net --type json -p '[ { "op": "add", "path": "/spec/template/spec/containers/0/env/0", "value": { "name": "WEAVE_PASSWORD", "valueFrom": { "secretKeyRef": { "key": "weave-passwd", "name": "weave-passwd" } } } } ]'
 
 
-	If you want to remove the encryption you can use the following patch::
+    If you want to remove the encryption you can use the following patch:
 
-     .. code-block:: bash
+    .. code-block:: bash
            
-        kubectl patch --namespace=kube-system daemonset/weave-net --type json -p '[ { "op": "add", "path": "/spec/template/spec/containers/0/env/0", "value": { "name": "WEAVE_PASSWORD", "valueFrom": { "secretKeyRef": { "key"\ : "weave-passwd", "name": "weave-passwd" } } } } ]'
+        kubectl patch --namespace=kube-system daemonset/weave-net --type json -p '[ { "op": "remove", "path": "/spec/template/spec/containers/0/env/0"} ]'
     
 4. Check to see that the pods are restarted. To expedite the process you can delete the old pods.
 
-5. You can verify encryption is turned on with the following command::
+5. You can verify encryption is turned on with the following command:
 
     .. code-block:: bash
     
         kubectl exec -n kube-system weave-net-<pod> -c weave -- /home/weave/weave --local status
-        
+
     You should see `encryption: enabled`
     
     If you really want to insure encryption is working, you can listen on port `6783` of any node. If the traffic looks like gibberish, you know it is on.
