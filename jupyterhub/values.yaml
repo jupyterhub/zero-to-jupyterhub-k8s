@@ -11,6 +11,11 @@ hub:
   nodeSelector: {}
   concurrentSpawnLimit: 64
   activeServerLimit:
+  deploymentStrategy:
+    # sqlite-pvc backed hub requires Recreate strategy to work
+    type: Recreate
+    # This is required for upgrading to work
+    rollingUpdate: null
   db:
     type: sqlite-pvc
     upgrade:
