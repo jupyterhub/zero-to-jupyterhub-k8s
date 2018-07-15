@@ -266,7 +266,7 @@ properties:
               auth_state will be encrypted and stored in the Hub’s database. This can include things like authentication tokens, etc. to be passed to Spawners as environment variables.
               Encrypting auth_state requires the cryptography package.
               It must contain one (or more, separated by ;) 32B encryption keys. These can be either base64 or hex-encoded.
-              The JUPYTERHUB_CRYPTO_KEY envirionment variable will be used to set this key.
+              The JUPYTERHUB_CRYPT_KEY envirionment variable will be used to set this key.
 
               This can be generated with `openssl rand -hex 32`.
 
