@@ -1,3 +1,4 @@
+
 {{- /* 
 These user-dummy pods can be used to test cluster autoscaling in a
 controlled fashion.
@@ -6,32 +7,28 @@ Example:
 $ echo 'Simulating four users...'
 $ kubectl patch deployment user-dummy --patch '{"spec": {"replicas": 4}}'
 */}}
-{{- if .Values.scheduling.userDummy.enabled -}}
-{{- $_ := merge (dict "componentLabel" "singleuser-server") . -}}
+{{- if .Values.scheduling.userPlaceholder.enabled -}}
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: user-dummy
+  name: user-placeholder
   labels:
-    {{- include "jupyterhub.labels" $_ | nindent 4 }}
+    {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.scheduling.userDummy.replicas }}
+  podManagementPolicy: Parallel
+  replicas: {{ .Values.scheduling.userPlaceholder.replicas }}
   selector:
     matchLabels:
-      {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}
-  strategy:
-    rollingUpdate:
-      maxUnavailable: 100%
-      maxSurge: 100%
+      {{- include "jupyterhub.matchLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
         {{- /* Changes here will cause the Deployment to restart the pods. */}}
-        {{- include "jupyterhub.matchLabels" $_ | nindent 8 }}
+        {{- include "jupyterhub.matchLabels" . | nindent 8 }}
         hub.jupyter.org/pod-kind: "user"
     spec:
       {{- if .Values.scheduling.podPriority.enabled }}
-      priorityClassName: jupyterhub-default-priority
+      priorityClassName: jupyterhub-user-placeholder-priority
       {{- end }}
       {{- if .Values.scheduling.userScheduler.enabled }}
       schedulerName: user-scheduler
@@ -50,6 +47,6 @@ spec:
         - name: pause
           image: {{ .Values.prePuller.pause.image.name }}:{{ .Values.prePuller.pause.image.tag }}
           resources:
-            {{- $__ := merge (dict "type" "user-dummy") $_ -}}
-            {{- include "jupyterhub.resources" $__ | nindent 12 }}
+            {{- $_ := merge (dict "type" "user-placeholder") . -}}
+            {{- include "jupyterhub.resources" $_ | nindent 12 }}
 {{- end }}
