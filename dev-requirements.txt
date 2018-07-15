@@ -1,3 +1,4 @@
 PyGithub>=1
 python-dateutil>=2
 chartpress==0.2.1
+yamllint>=1.1.1

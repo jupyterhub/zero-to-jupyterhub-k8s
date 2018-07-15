@@ -23,6 +23,9 @@ def lint(config, values, kubernetes_version):
 
     print("### Clearing output directory")
     subprocess.check_call([
+        'mkdir', '-p', output,
+    ])
+    subprocess.check_call([
         'rm', '-rf', output + '/*',
     ])
 
