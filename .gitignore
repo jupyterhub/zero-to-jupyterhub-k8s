@@ -1,6 +1,6 @@
 ### Zero to JupyterHub Kubernetes ###
 tools/lint-output/
-
+ci/bin/
 
 ### macOS ###
 *.DS_Store
