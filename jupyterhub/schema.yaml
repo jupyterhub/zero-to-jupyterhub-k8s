@@ -370,6 +370,14 @@ properties:
               The tag of the image to use.
 
               This is the value after the `:` in your full image name.
+      schedulerStrategy:
+        type:
+          - string
+          - "null"
+        description: |
+          Deprecated and no longer does anything. Use the user-scheduler instead
+          in order to accomplish a good packing of the user pods.
+        
 
 
   scheduling:
