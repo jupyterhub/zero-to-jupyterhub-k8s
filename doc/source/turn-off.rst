@@ -65,9 +65,9 @@ Google Cloud Platform
 
    At a minimum, check the following under the Hamburger (left top corner) menu:
 
-   1. Compute Engine -> Disks
-   2. Container Engine -> Container Clusters
-   3. Container Registry -> Images
+   1. Compute -> Compute Engine -> Disks
+   2. Compute -> Kubernetes Engine -> Container Clusters
+   3. Tools -> Container Registry -> Images
    4. Networking -> Network Services -> Load Balancing
 
    These might take several minutes to clear up, but they shouldn't have anything
@@ -118,12 +118,12 @@ Amazon Web Services (AWS)
    aws ec2 stop-instances --intance-ids <aws-instance id of CI HOST>
    aws ec2 terminate-instances --instance-ids <aws-instance id of CI HOST>
 
-.. note:: 
+.. note::
 
    cluster name was set as an env var aka: `NAME=<somename>.k8s.local`
-   Stoping the CI host will still incure disk storage and Ip address costs, 
-   but the host can be restarted at a later date to resume using.  
-   
+   Stopping the CI host will still incure disk storage and Ip address costs,
+   but the host can be restarted at a later date to resume using.
+
 
 
 .. note::
