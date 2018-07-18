@@ -116,6 +116,18 @@ CILogon
           clientSecret: "an0ther1ongs3cretstr1ng"
           callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
 
+In order to overcome the `caveats <https://github.com/jupyterhub/oauthenticator/blob/master/oauthenticator/cilogon.py>`_ of implementing CILogon OAuthAuthenticator for JupyterHub, 
+i.e. default username_claim of ePPN does not work for all providers, e.g. generic OAuth such as Google, Use c.CILogonOAuthenticator.username_claim = 'email' to use email instead of ePPN as the JupyterHub username:
+
+Add to your config.yaml file to `inject extra python based configuration that should be in jupyterhub_config.py <https://zero-to-jupyterhub.readthedocs.io/en/latest/reference.html#hub-extraconfig>`_ as below:
+
+.. code-block:: yaml
+
+      hub:
+        extraConfig: |
+          c.CILogonOAuthenticator.username_claim = 'email'
+      
+
 Globus
 ^^^^^^
 
