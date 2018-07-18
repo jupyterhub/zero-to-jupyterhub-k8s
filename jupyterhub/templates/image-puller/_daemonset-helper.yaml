@@ -57,7 +57,7 @@ spec:
             - echo "Pulling complete"
         {{- end }}
         {{- range $k, $v := .Values.prePuller.extraImages }}
-        - name: image-pull-{{ $v.name }}
+        - name: image-pull-{{ $k }}
           image: {{ $v.name }}:{{ $v.tag }}
           imagePullPolicy: IfNotPresent
           command:
