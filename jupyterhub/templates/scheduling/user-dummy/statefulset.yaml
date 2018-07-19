@@ -38,6 +38,7 @@ spec:
       {{- if $_.hasTolerations }}
       {{- include "jupyterhub.tolerations" $_ | nindent 6 }}
       {{- end }}
+      nodeSelector: {{ toJson .Values.singleuser.nodeSelector }}
       {{- if $_.hasAffinity }}
       {{- include "jupyterhub.affinity" $_ | nindent 6 }}
       {{- end }}
