@@ -20,6 +20,7 @@ spec:
   selector:
     matchLabels:
       {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}
+  serviceName: "user-dummy"
   template:
     metadata:
       labels:

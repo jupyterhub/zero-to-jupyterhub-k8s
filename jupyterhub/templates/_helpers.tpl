@@ -186,11 +186,11 @@ The default resource request - whatever a singleuser requests.
 */}}
 {{- define "jupyterhub.default-resources" -}}
 requests:
-  cpu: {{- print " " .Values.singleuser.cpu.guarantee }}
-  memory: {{- print " " .Values.singleuser.memory.guarantee }}
+  cpu: {{ .Values.singleuser.cpu.guarantee | default "trim_hack" }}
+  memory: {{ .Values.singleuser.memory.guarantee | default "trim_hack" }}
 limits:
-  cpu: {{- print " " .Values.singleuser.cpu.limit }}
-  memory: {{- print " " .Values.singleuser.memory.limit }}
+  cpu: {{ .Values.singleuser.cpu.limit | default "trim_hack" }}
+  memory: {{ .Values.singleuser.memory.limit | default "trim_hack" }}
 {{- end }}
 
 {{- /*
@@ -202,5 +202,5 @@ A custom resource request.
 {{- else if and .Values.scheduling.userDummy.resources (eq .type "user-dummy") -}}
 {{ .Values.scheduling.userDummy.resources | toYaml | trimSuffix "\n" }}
 {{- else -}}
-{{ include "jupyterhub.default-resources" . }}
+{{ include "jupyterhub.default-resources" . | replace " trim_hack" "" }}
 {{- end }}
