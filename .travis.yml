@@ -10,6 +10,7 @@ install:
 - . ci/minikube.env
 - ./ci/install.sh
 script:
+- python tools/lint.py
 - chartpress --commit-range ${TRAVIS_COMMIT_RANGE}
 - git diff
 - ./ci/test.sh
