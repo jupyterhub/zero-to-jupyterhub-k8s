@@ -31,7 +31,7 @@ Use an existing Docker image
    The Docker image you are using must have the ``jupyterhub`` package
    installed in order to work. Moreover, the version of ``jupyterhub`` must
    match the version installed by the helm chart that you're using. For example,
-   ``v0.5`` of the helm chart uses  ``jupyterhub==0.8``.
+   ``v0.6`` of the helm chart uses  ``jupyterhub==0.8.1``.
 
 .. note::
 
