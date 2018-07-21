@@ -188,10 +188,10 @@ scheduling:
     replicas: 1
   corePods:
     nodeAffinity:
-      matchNodePurpose: "prefer"
+      matchNodePurpose: "require"
   userPods:
     nodeAffinity:
-      matchNodePurpose: "prefer"
+      matchNodePurpose: "require"
     podAffinity:
       preferScheduleNextToRealUsers: true
 

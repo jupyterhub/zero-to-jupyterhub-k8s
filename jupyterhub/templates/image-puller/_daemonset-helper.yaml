@@ -47,7 +47,7 @@ spec:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-              {{- $_.nodeAffinityRequired | nindent 8 }}
+              {{- $_.nodeAffinityRequired | nindent 14 }}
       {{- end }}
       terminationGracePeriodSeconds: 0
       automountServiceAccountToken: false
