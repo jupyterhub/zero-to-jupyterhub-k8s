@@ -43,7 +43,7 @@ hub:
     tag: generated-by-chartpress
   resources:
     requests:
-      cpu: 200m
+      cpu: 100m
       memory: 512Mi
   services: {}
   imagePullPolicy: IfNotPresent
@@ -78,7 +78,7 @@ proxy:
       pullPolicy: IfNotPresent
     resources:
       requests:
-        cpu: 200m
+        cpu: 100m
         memory: 512Mi
   nginx:
     image:
