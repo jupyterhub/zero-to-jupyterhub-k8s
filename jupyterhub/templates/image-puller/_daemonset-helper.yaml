@@ -59,7 +59,7 @@ spec:
         {{- range $k, $v := .Values.prePuller.extraImages }}
         - name: image-pull-{{ $k }}
           image: {{ $v.name }}:{{ $v.tag }}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: {{ $v.policy | default "IfNotPresent" }}
           command:
             - /bin/sh
             - -c
