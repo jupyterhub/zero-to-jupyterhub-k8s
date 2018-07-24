@@ -359,20 +359,21 @@ Sometimes you want users to be able to create their own ``conda`` environments.
 By default, any environments created in a JupyterHub session will not persist
 across sessions. To resolve this, take the following steps:
 
-1. Ensure the ``nb_conda_kernels`` package is installed in the root
-   environment (e.g., see :ref:`r2d-custom-image`)
-2. Configure Anaconda to install user environments to a folder within ``$HOME``.
+1.Ensure the ``nb_conda_kernels`` package is installed in the root
+  environment (e.g., see :ref:`r2d-custom-image`)
 
-   Create a file called ``.condarc`` in the home folder for all users, and make
-   sure that the following lines are inside:
+2.Configure Anaconda to install user environments to a folder within ``$HOME``.
 
-   ```
-   envs_dirs:
-     - /home/jovyan/my-conda-envs/
-   ```
+  Create a file called ``.condarc`` in the home folder for all users, and make
+  sure that the following lines are inside:
 
-   The text above will cause Anaconda to install new environments to this
-   folder, which will persist across sessions.
+  .. code-block:: yaml
+
+     envs_dirs:
+       - /home/jovyan/my-conda-envs/
+
+  The text above will cause Anaconda to install new environments to this
+  folder, which will persist across sessions.
 
 .. _apply the changes: extending-jupyterhub.html#apply-config-changes
 .. _downloading and installing Docker: https://store.docker.com/search?offering=community&platform=desktop%2Cserver&q=&type=edition

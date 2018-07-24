@@ -389,62 +389,63 @@ properties:
       userScheduler:
         type: object
         description: |
-        The user scheduler is making sure that user pods are scheduled
-        tight on nodes, this is useful for autoscaling of user node pools.
+          The user scheduler is making sure that user pods are scheduled
+          tight on nodes, this is useful for autoscaling of user node pools.
         properties:
           enabled:
             type: boolean
             description: |
-            Enables the user scheduler.
+              Enables the user scheduler.
             replicas:
               type: integer
               description: |
-              You can have multiple schedulers to share the workload or
-              improve availability on node failure.
+                You can have multiple schedulers to share the workload or
+                improve availability on node failure.
               image:
                 type: object
                 description: |
-                The image containing the kube-scheduler binary.
-                - https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/kube-scheduler-amd64
+                  The image containing the kube-scheduler binary.
+                  - https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/kube-scheduler-amd64
                 properties:
                   name:
                     type: string
                     description: |
-                    The image name containing the kube-scheduler binary.
-                    - https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/kube-scheduler-amd64
+                      The image name containing the kube-scheduler binary.
+                      - https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/kube-scheduler-amd64
                     tag:
                       type:
                         - string
                         - "null"
-                        description: |
+                      description: |
                         The tag will default to the clusters kubernetes version.
                         - https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/kube-scheduler-amd64
       podPriority:
         type: object
         description: |
-        Generally available since kubernetes 1.11, Pod Priority is used to
-        allow real users evict placeholder pods.
+          Generally available since kubernetes 1.11, Pod Priority is used to
+          allow real users evict placeholder pods.
         properties:
           enabled:
             type: bool
             description: |
-            Generally available since kubernetes 1.11, Pod Priority is used to
-            allow real users evict placeholder pods.
+              Generally available since kubernetes 1.11, Pod Priority is used to
+              allow real users evict placeholder pods.
       userPlaceholder:
         type: object
         description: |
           User placeholders simulate users but will thanks to PodPriority be
-          evicted by the cluster autoscaler if a real user shows up. Thanks to
-          placeholders, you are able to create a headroom for the real users and
-          reduce the risk of a user having to wait for a node to be added. It is
-          highly recommended to use the continuous pre-puller as well along with
+          evicted by the cluster autoscaler if a real user shows up. In this way
+          placeholders allow you to create a headroom for the real users and
+          reduce the risk of a user having to wait for a node to be added. Be
+          sure to use the the continuous image puller as well along with
           placeholders, so the images are also available when real users arrive.
 
           To test your setup efficiently, you can adjust the amount of user
-          placeholders with the following command.
-
-          # First let there be for example 3 user placeholders
-          kubectl patch deployment user-placeholder --patch '{"spec": {"replicas": 3}}'
+          placeholders with the following command:
+          ```
+          # Configure to have 3 user placeholders
+          kubectl patch statefulset user-placeholder --patch '{"spec": {"replicas": 3}}'
+          ```
         properties:
           enabled:
             type: bool
@@ -468,11 +469,13 @@ properties:
           To test your setup efficiently, you can adjust the amount of user
           dummies with the following command.
 
-          # First let there be for example 3 user dummies
-          kubectl patch deployment user-dummy --patch '{"spec": {"replicas": 3}}'
+          ```
+          # Configure to have 3 user dummies
+          kubectl patch statefulset user-dummy --patch '{"spec": {"replicas": 3}}'
 
-          # Then perhaps let there be 10 user dummies
-          kubectl patch deployment user-dummy --patch '{"spec": {"replicas": 10}}'
+          # Configure to have 10 user dummies
+          kubectl patch statefulset user-dummy --patch '{"spec": {"replicas": 10}}'
+          ```
         properties:
           enabled:
             type: bool
