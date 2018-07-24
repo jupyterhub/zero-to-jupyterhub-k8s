@@ -134,16 +134,16 @@ Install JupyterHub
         is paired with a specific version of JupyterHub. E.g., v0.5 of the helm
         chart runs JupyterHub v0.8.
 
-2. While Step 1 is running, you can see the pods being created by entering in
+3. While Step 2 is running, you can see the pods being created by entering in
    a different terminal:
 
    .. code-block:: bash
 
       kubectl --namespace=<YOUR-NAMESPACE> get pod
 
-3. Wait for the hub and proxy pod to begin running.
+4. Wait for the hub and proxy pod to begin running.
 
-4. You can find the IP to use for accessing the JupyterHub with:
+5. You can find the IP to use for accessing the JupyterHub with:
 
    .. code-block:: bash
 
@@ -159,7 +159,7 @@ Install JupyterHub
 
         kubectl --namespace=<YOUR-NAMESPACE> describe svc proxy-public --output=wide
 
-5. To use JupyterHub, enter the external IP for the `proxy-public` service in
+6. To use JupyterHub, enter the external IP for the `proxy-public` service in
    to a browser. JupyterHub is running with a default *dummy* authenticator so
    entering any username and password combination will let you enter the hub.
 
