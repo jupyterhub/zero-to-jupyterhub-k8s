@@ -3,7 +3,7 @@ import glob
 from tornado.httpclient import AsyncHTTPClient
 from kubernetes import client
 
-from z2jh import get_config, get_secret, set_config_if_not_none
+from z2jh import get_config, get_secret, set_config_if_not_none, url_path_join
 
 # Configure JupyterHub to use the curl backend for making HTTP requests,
 # rather than the pure-python implementations. The default one starts
@@ -255,7 +255,7 @@ if get_config('cull.enabled', False):
         '--timeout=%s' % cull_timeout,
         '--cull-every=%s' % cull_every,
         '--concurrency=%s' % cull_concurrency,
-        '--url=http://127.0.0.1:8081' + c.JupyterHub.base_url + 'hub/api',
+        '--url=http://127.0.0.1:8081' + url_path_join(c.JupyterHub.base_url, 'hub/api'),
     ]
 
     if get_config('cull.users'):
