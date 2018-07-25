@@ -1,5 +1,5 @@
 ### Zero to JupyterHub Kubernetes ###
-tools/lint-output/
+tools/templates/rendered-templates/
 ci/bin/
 
 ### macOS ###
