@@ -565,8 +565,10 @@ If you need support, reach out to us on
 [issue](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues).
 
 
-[Unreleased]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.4...HEAD
-[0.4]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.3.1...v0.4.0
+[Unreleased]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.6...HEAD
+[0.6]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.5...v0.6
+[0.5]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.4...v0.5
+[0.4]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.3.1...v0.4
 [0.3.1]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.3...v0.3.1
 [0.3]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.2...v0.3
 [0.2]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.1...v0.2
