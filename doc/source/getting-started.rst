@@ -1,27 +1,21 @@
 .. _getting-started:
 
-Getting started with JupyterHub
-===============================
+Getting started
+===============
 
-**JupyterHub** lets you create custom computing environments that
-can be accessed remotely (e.g., at a specific URL) by multiple users.
+**JupyterHub** lets you create custom computing environments that users can
+access on any device by opening up a browser and accessing a webpage. This guide
+will help you deploy and customize your own JupyterHub on a cloud. You will gain
+experience with:
 
-This guide acts as an assistant to guide you through the process of setting
-up your JupyterHub deployment using Kubernetes. It helps you connect
-and configure the following things:
-
-* A **cloud provider** such Google Cloud, Microsoft Azure, Amazon EC2, and
-  others
+* **A cloud provider** such Google Cloud, Microsoft Azure, Amazon EC2...
 * **Kubernetes** to manage resources on the cloud
 * **Helm** to configure and control Kubernetes
 * **Docker** to use containers that standardize computing environments
 * **JupyterHub** to manage users and deploy Jupyter notebooks
 
-You already are well on your way to understanding what it means (procedurally)
-to deploy Jupyterhub.
-
-Verifying JupyterHub dependencies
----------------------------------
+Verify JupyterHub dependencies
+------------------------------
 
 At this point, you should have completed *Step Zero* and have an operational
 Kubernetes cluster. You will already have a cloud provider/infrastructure

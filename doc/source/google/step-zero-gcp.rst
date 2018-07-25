@@ -1,6 +1,6 @@
 .. _google-cloud:
 
-Step Zero: Kubernetes on `Google Cloud <https://cloud.google.com/>`_
+Step Zero: Kubernetes on `Google Cloud <https://cloud.google.com/>`_ (GKE)
 --------------------------------------------------------------------
 
 `Google Kubernetes Engine <https://cloud.google.com/kubernetes-engine/>`_

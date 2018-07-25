@@ -9,17 +9,19 @@ for a class of students or an analytics team), as well as allowing
 people to access the
 hub remotely.
 
-This growing collection of information will help you set up your own
-JupyterHub instance. It is in an early stage, so the information and
-tools may change quickly.
+This growing collection of information will help you set up your own JupyterHub
+instance. It is under active development so the information and tools may
+change.
 
 If you have tips or deployments that you would like to share, see
-:ref:`community-resources`. If you see anything that is incorrect
-or have any questions, feel free to reach out at the `issues page`_.
+:ref:`community-resources`. If you see anything that is incorrect or have any
+questions, feel free to reach out in the `gitter chat
+<https://gitter.im/jupyterhub/jupyterhub>`_ or create an issue at the `issues
+page`_.
 
 .. _getting-to-zero:
 
-Getting to Step Zero: your Kubernetes cluster
+Creating your Kubernetes cluster
 ---------------------------------------------
 
 This section describes a Kubernetes cluster and outlines how to complete *Step Zero: your Kubernetes cluster* for
@@ -27,13 +29,9 @@ different cloud providers and infrastructure.
 
 .. toctree::
    :titlesonly:
-   :caption: Step Zero: your Kubernetes cluster
+   :caption: Creating your Kubernetes cluster
 
    create-k8s-cluster
-   google/step-zero-gcp
-   microsoft/step-zero-azure
-   amazon/step-zero-aws
-   redhat/step-zero-openshift
 
 .. _creating-your-jupyterhub:
 
@@ -44,8 +42,6 @@ This tutorial starts from *Step Zero: your Kubernetes cluster* and describes the
 steps needed for you to create a complete initial JupyterHub deployment.
 This will use the JupyterHub Helm chart which provides sensible defaults for
 an initial deployment.
-
-To begin, go to :ref:`setup-helm`.
 
 .. toctree::
    :maxdepth: 1
