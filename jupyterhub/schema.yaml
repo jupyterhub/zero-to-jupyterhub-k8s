@@ -132,7 +132,7 @@ properties:
                  Note that if you use this, you *must* also set `hub.cookieSecret`.
           pvc:
             type: object
-            descripton: |
+            description: |
               Customize the Persistent Volume Claim used when `hub.db.type` is `sqlite-pvc`.
             properties:
               annotations:

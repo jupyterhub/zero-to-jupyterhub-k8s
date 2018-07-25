@@ -154,6 +154,9 @@ singleuser:
   memory:
     limit:
     guarantee: 1G
+  extraResource:
+    limits: {}
+    guarantees: {}
   cmd: jupyterhub-singleuser
   defaultUrl:
 

@@ -125,6 +125,8 @@ c.KubeSpawner.mem_limit = get_config('singleuser.memory.limit')
 c.KubeSpawner.mem_guarantee = get_config('singleuser.memory.guarantee')
 c.KubeSpawner.cpu_limit = get_config('singleuser.cpu.limit')
 c.KubeSpawner.cpu_guarantee = get_config('singleuser.cpu.guarantee')
+c.KubeSpawner.extra_resource_limits = get_config('singleuser.extra_resource.limits')
+c.KubeSpawner.extra_resource_guarantees = get_config('singleuser.extra_resource.guarantees')
 
 # Allow switching authenticators easily
 auth_type = get_config('auth.type')
