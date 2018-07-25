@@ -19,6 +19,7 @@ deploy:
   skip_cleanup: true
   script: ./ci/deploy.sh
   on:
+    env: KUBE_VERSION=1.10.0
     branch:
     - master
     - v0.7-dev
