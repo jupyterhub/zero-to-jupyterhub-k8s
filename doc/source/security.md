@@ -77,6 +77,36 @@ If you have your own HTTPS certificates & want to use those instead of the autom
 2. Apply the config changes by running helm upgrade ....
 3. Wait for about a minute, now your hub should be HTTPS enabled!
 
+### Off-loading SSL to a Load Balancer
+
+In some environments with a trusted network, you may want to terminate SSL at a
+load balancer. If https is enabled, and `proxy.https.type` is set to `offload`,
+the HTTP and HTTPS front ends target the HTTP port from JupyterHub.
+
+The HTTPS listener on the load balancer will need to be configured based on the
+provider. If you're using AWS and a certificate provided by their certificate
+manager, your config.yml might look something like:
+
+```yaml
+proxy:
+  https:
+    enabled: true
+    type: offload
+  service:
+    annotations:
+      # Certificate ARN
+      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:us-east-1:1234567891011:certificate/uuid"
+      # The protocol to use on the backend, we use TCP since we're using websockets
+      service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "tcp"
+      # Which ports should use SSL
+      service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+      service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '3600'
+```
+
+Annotation options will vary by provider. Kubernetes provides a list for
+popular cloud providers in their
+[documentation](https://kubernetes.io/docs/concepts/cluster-administration/cloud-providers/).
+
 ### Confirm that your domain is running HTTPS
 
 There are many ways to confirm that a domain is running trusted HTTPS
@@ -86,7 +116,7 @@ security report generator. Use the following URL structure to test your domain:
     ```
     http://ssllabs.com/ssltest/analyze.html?d=<YOUR-DOMAIN>
     ```
-    
+
 ## Secure access to Helm
 
 In its default configuration, helm pretty much allows root access to all other
