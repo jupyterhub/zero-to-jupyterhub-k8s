@@ -54,6 +54,8 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
+bin/kubectl
+bin/minikube
 build/
 develop-eggs/
 dist/
