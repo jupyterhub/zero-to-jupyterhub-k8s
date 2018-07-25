@@ -310,8 +310,9 @@ in ``config.yaml``:
      lifecycleHooks:
        postStart:
          exec:
-           command: ["your", "command", "here"]
+           command: ["cp", "-a", "src", "target"]
 
+Each element of the command needs to be a separate item in the list.
 Note that this command will be run from the ``$HOME`` location of the user's
 running container, meaning that commands that place files relative to ``./``
 will result in users seeing those files in their home directory. You can use
