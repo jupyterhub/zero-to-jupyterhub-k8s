@@ -19,10 +19,10 @@ deploy:
   skip_cleanup: true
   script: ./ci/deploy.sh
   on:
-    env: KUBE_VERSION=1.10.0
     branch:
     - master
     - v0.7-dev
+    condition: "$KUBE_VERSION = 1.9.4"
 env:
   matrix:
     - KUBE_VERSION=1.10.0
