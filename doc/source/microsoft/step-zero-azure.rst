@@ -74,7 +74,7 @@ Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)
   * ``--location`` specifies the location of the data center you want your resource to be in.
     In this case, we used the ``centralus`` location. For other options, see the
     `Azure list of locations that support AKS
-    <https://github.com/Azure/AKS/blob/master/preview_regions.md>`_.
+    <https://docs.microsoft.com/en-us/azure/aks/container-service-quotas>`_.
   * ``--output table`` specifies that the output should be in human readable
     format, rather than the default JSON output. We shall use this with most
     commands when executing them by hand.
