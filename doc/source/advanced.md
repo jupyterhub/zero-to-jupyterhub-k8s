@@ -23,9 +23,9 @@ You can enable the required `ingress` object with the following in your
 
 ```yaml
 ingress:
-    enabled: true
-    hosts:
-     - <hostname>
+  enabled: true
+  hosts:
+    - <hostname>
 ```
 
 You can specify multiple hosts that should be routed to the hub by listing them
