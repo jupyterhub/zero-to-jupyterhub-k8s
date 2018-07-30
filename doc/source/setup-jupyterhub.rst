@@ -101,9 +101,8 @@ Install JupyterHub
 
    .. code:: bash
 
-      # WARNING: v0.7 is still not officially released.
       helm upgrade --install jupyterhub/jupyterhub \
-          --version v0.7-80d1391 \
+          --version v0.7 \
           --name jh \
           --namespace jh \
           --values config.yaml

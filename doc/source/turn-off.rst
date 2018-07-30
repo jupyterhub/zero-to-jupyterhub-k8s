@@ -115,14 +115,14 @@ Amazon Web Services (AWS)
    kops delete cluster <CLUSTER-NAME> --yes
    exit #(leave CI host)
    Terminicate CI Host
-   aws ec2 stop-instances --intance-ids <aws-instance id of CI HOST>
+   aws ec2 stop-instances --instance-ids <aws-instance id of CI HOST>
    aws ec2 terminate-instances --instance-ids <aws-instance id of CI HOST>
 
 .. note::
 
-   cluster name was set as an env var aka: `NAME=<somename>.k8s.local`
-   Stopping the CI host will still incure disk storage and Ip address costs,
-   but the host can be restarted at a later date to resume using.
+   cluster name was set as an environment var aka: `NAME=<somename>.k8s.local`
+   Stopping the CI host will still incur disk storage and IP address costs, but
+   the host can be restarted at a later date to resume using.
 
 
 
