@@ -48,6 +48,10 @@ c.KubeSpawner.image_spec = os.environ['SINGLEUSER_IMAGE']
 
 c.KubeSpawner.image_pull_policy = get_config('singleuser.image-pull-policy')
 
+image_secret = get_config('singleuser.image-pull-secret', None)
+if image_secret:
+  c.KubeSpawner.image_pull_secrets = image_secret
+
 c.KubeSpawner.events_enabled = get_config('singleuser.events', False)
 
 c.KubeSpawner.extra_labels = get_config('singleuser.extra-labels', {})
