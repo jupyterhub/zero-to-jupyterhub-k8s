@@ -91,7 +91,7 @@ of your cluster deployment, and allows a user to specify the computational
 requirements that they need (e.g., how many machines, how many CPUs
 per machine, how much RAM). Then, it handles the resources on the cluster and
 ensures that these resources are always available. If something goes down,
-kubernetes will try to automatically bring it back up.
+Kubernetes will try to automatically bring it back up.
 
 Kubernetes can only manage the computing resources that it is
 given. This means that it generally can **not** create new resources on its
@@ -137,7 +137,7 @@ For more information about pods, see the
 Deployments
 ***********
 
-A deployment is a collection of pods on kubernetes. It is how kubernetes
+A deployment is a collection of pods on Kubernetes. It is how Kubernetes
 knows exactly what containers and what machines need to be running at all
 times. For example, if you have two pods: one that does the authenticating
 described above, and another that manages a database, you can specify both
@@ -202,23 +202,23 @@ For more information on Persistent Volume Claims, see the
 Helm
 ----
 
-`Helm <https://helm.sh/>`_ is a way of specifying kubernetes objects
+`Helm <https://helm.sh/>`_ is a way of specifying Kubernetes objects
 with a standard template.
 
 Charts
 ******
 
-The way that Helm controls kubernetes is with templates of structured
+The way that Helm controls Kubernetes is with templates of structured
 information that specify some computational requirements.
 These templates are called "charts", or "helm charts". They contain
-all of the necessary information for kubernetes to generate:
+all of the necessary information for Kubernetes to generate:
 
 - a deployment object
 - a service object
 - a persistent volume object for a deployment.
 - collections of the above components
 
-They can be installed into a namespace, which causes kubernetes to
+They can be installed into a namespace, which causes Kubernetes to
 begin deploying the objects above into that namespace.
 
 Charts have both names and versions, which means that you can easily
@@ -235,7 +235,7 @@ A release is basically a specific instantiation of a helmchart inserted
 into a particular namespace. If you'd like to upgrade your
 kubernetes deployment (say, by changing the amount of RAM that each
 user should get), then you can change the helm chart, then re-deploy
-it to your kubernetes cluster. This generates a new version of the release.
+it to your Kubernetes cluster. This generates a new version of the release.
 
 
 JupyterHub
@@ -243,7 +243,7 @@ JupyterHub
 
 JupyterHub is a way of utilizing the components above in order to
 provide computational environments that users can access remotely.
-It exists as two kubernetes deployments, Proxy and Hub, each of which has
+It exists as two Kubernetes deployments, Proxy and Hub, each of which has
 one pod. Each deployment accomplishes some task that, together, make up JupyterHub.
 Finally, the output of JupyterHub is a user pod, which specifies the
 computational environment in which a single user will operate. So
@@ -277,9 +277,9 @@ Receives traffic from the proxy pod. It has 3 main running processes:
 
 1. An authenticator, which can verify a user's account. It also contains a
    process.
-2. A "KubeSpawner" that talks to the kubernetes API and tells it to spawn
+2. A "KubeSpawner" that talks to the Kubernetes API and tells it to spawn
    pods for users if one doesn't already exist. KubeSpawner will tell
-   kubernetes to create a pod for a new user, then it will tell the
+   Kubernetes to create a pod for a new user, then it will tell the
    the Proxy Pod that the user’s pod has been created.
 3. An admin panel that has information about who has pods created, and
    what kind of usage exists on the cluster.

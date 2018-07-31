@@ -34,7 +34,7 @@ container image will be pre-pulled when a new node is added. New nodes can for
 example be added manually or by a cluster autoscaler. The **continuous
 pre-puller** uses a
 [daemonset](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)
-to force kubernetes to pull the user image on all nodes as soon as a node is
+to force Kubernetes to pull the user image on all nodes as soon as a node is
 present. The continuous pre-puller uses minimal resources on all nodes and
 greatly speeds up the user pod start time.
 

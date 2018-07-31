@@ -33,7 +33,7 @@ properties:
         description: |
           Set the imagePullPolicy on the hub pod.
 
-          See [the kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
+          See [the Kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
           for more info on what the values mean.
       image:
         type: object
@@ -166,7 +166,7 @@ properties:
         description: |
           Extra labels to add to the hub pod.
 
-          See [the kubernetes documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+          See [the Kubernetes documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
           to learn more about labels.
       extraEnv:
         type: list
@@ -417,18 +417,18 @@ properties:
                         - string
                         - "null"
                       description: |
-                        The tag will default to the clusters kubernetes version.
+                        The tag will default to the clusters Kubernetes version.
                         - https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/kube-scheduler-amd64
       podPriority:
         type: object
         description: |
-          Generally available since kubernetes 1.11, Pod Priority is used to
+          Generally available since Kubernetes 1.11, Pod Priority is used to
           allow real users evict placeholder pods.
         properties:
           enabled:
             type: bool
             description: |
-              Generally available since kubernetes 1.11, Pod Priority is used to
+              Generally available since Kubernetes 1.11, Pod Priority is used to
               allow real users evict placeholder pods.
       userPlaceholder:
         type: object

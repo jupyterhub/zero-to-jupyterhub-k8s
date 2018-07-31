@@ -1,55 +1,46 @@
 .. _user-environment:
 
-Customizing the User Environment
-================================
+Customizing User Environment
+============================
 
 .. note::
 
-   For a list of all the options you can configure with your helm
-   chart, see the :ref:`helm-chart-configuration-reference`.
+   For a list of all the options you can configure with your Helm chart, see the
+   :ref:`helm-chart-configuration-reference`.
 
-This page contains instructions for a few common ways you can extend the
-user experience for your kubernetes deployment.
+This page contains instructions for a few common ways you can enhance the user
+experience for the users of your JupyterHub deployment.
 
-The **user environment** is the set of packages, environment variables, and
-various files that are present when the user logs into JupyterHub. The user may
-also see different tools that provide interfaces to perform specialized tasks,
-such as RStudio, RISE, JupyterLab, and others.
+The *user environment* is the set of software packages, environment variables,
+and various files that are present when the user logs into JupyterHub. The user
+may also see different tools that provide interfaces to perform specialized
+tasks, such as RStudio, JupyterLab, RISE and others.
 
-Usually a :term:`docker image` specifies the functionality and
-environment that you wish to provide to users. The following sections will describe
-how to use existing Docker images, how to create custom images, and how to set
-environment variables.
+A :term:`docker image` built from a ``Dockerfile`` will lay the foundation for
+the environment that you will provide for the users. The following sections will
+describe how to find and use existing Docker images, how to build custom images,
+and how to set environment variables.
 
 .. _existing-docker-image:
 
 Use an existing Docker image
 ----------------------------
 
-.. note::
+Using an existing Docker image, that someone else has built and maintained, is
+the simplest approach. For example, Project Jupyter maintains the
+`jupyter/docker-stacks <https://github.com/jupyter/docker-stacks/>`_ repo, which
+contains ready to use Docker images. Each image includes a set of commonly used
+science and data science libraries and tools.
 
-   The Docker image you are using must have the ``jupyterhub`` package
-   installed in order to work. Moreover, the version of ``jupyterhub`` must
-   match the version installed by the helm chart that you're using. For example,
-   ``v0.6`` of the helm chart uses  ``jupyterhub==0.8.1``.
-
-.. note::
-
-   You can find the configuration for the default Docker image used in this
-   guide `here <https://github.com/jupyterhub/zero-to-jupyterhub-k8s/tree/master/images/singleuser-sample>`_.
-
-Using an existing Docker image, that someone else has written and maintained,
-is the simplest approach. For example, Project Jupyter maintains the
-`jupyter/docker-stacks <https://github.com/jupyter/docker-stacks/>`_ repo,
-which contains ready to use Docker images. Each image includes a set of
-commonly used science and data science libraries and tools.
-
-The `scipy-notebook <https://hub.docker.com/r/jupyter/scipy-notebook/>`_
-image, which can be found in the ``docker-stacks`` repo, contains
-`useful scientific programming libraries
+The `scipy-notebook <https://hub.docker.com/r/jupyter/scipy-notebook/>`_ image
+for example, which can be found in the `docker-stacks
+<https://github.com/jupyter/docker-stacks/>`_ repo, contains `useful scientific
+programming libraries
 <https://github.com/jupyter/docker-stacks/tree/master/scipy-notebook>`_
-pre-installed. This image may satisfy your needs. If you wish to use an
-existing image, such as the ``scipy-notebook`` image, complete these steps:
+pre-installed. This image may satisfy your needs.
+
+If you wish to use an existing image, such as the ``scipy-notebook`` image,
+complete these steps:
 
 1. Modify your ``config.yaml`` file to specify the image. For example:
 
@@ -58,43 +49,48 @@ existing image, such as the ``scipy-notebook`` image, complete these steps:
        singleuser:
          image:
            name: jupyter/scipy-notebook
-           tag: c7fb6660d096
+           tag: 135a595d2a93
 
    .. note::
 
       Container image names cannot be longer than 63 characters.
 
-      Always use an explicit ``tag``, such as a specific commit.
-
-      Avoid using ``latest``. Using ``latest`` might cause a several minute
-      delay, confusion, or failures for users when a new version of the image
-      is released.
+      Always use an explicit ``tag``, such as a specific commit. Avoid using
+      ``latest``. Using ``latest`` might cause a several minute delay,
+      confusion, or failures for users when a new version of the image is
+      released.
 
 2. Apply the changes by following the directions listed in
-   `apply the changes`_. These directions will **pre-pull** the image to all
-   the nodes in your cluster. This process may take several minutes to
-   complete.
-
-.. note::
-
-   Docker images must have the ``jupyterhub`` package installed within them to
-   be used in this manner.
+   `apply the changes`_. If you have *prePuller.hook.enabled*, all the nodes in
+   your cluster will pull the image before the actual upgrade of the hub starts.
+   This process may take several minutes to complete.
 
 .. _r2d-custom-image:
 
 Build a custom Docker image with ``repo2docker``
 ------------------------------------------------
 
-If you can't find a pre-existing image that suits your needs, you can
-create your own image. The easiest way to do this is with the package
+.. note::
+
+   Docker images to be used this way must have the ``jupyterhub`` package of a
+   matching version with the Helm chart. This documentation is for Helm chart
+   ``v0.7``, and it uses JupyterHub version ``0.9.1``.
+
+.. note::
+
+   You can find the configuration for the default Docker image used in this
+   guide `here <https://github.com/jupyterhub/zero-to-jupyterhub-k8s/tree/master/images/singleuser-sample>`_.
+
+If you can't find a pre-existing image that suits your needs, you can create
+your own image. The easiest way to do this is with the package
 :term:`repo2docker`.
 
 .. note::
 
    `repo2docker <https://github.com/jupyter/repo2docker>`_ lets you quickly
-   convert a GitHub repository into a Docker image that can be used as a base
-   for your JupyterHub instance. Anything inside the GitHub repository
-   will exist in a user’s environment when they join your JupyterHub:
+   convert a Git repository into a Docker image that can be used as a base for
+   your JupyterHub instance. Anything inside the Git repository will exist in a
+   user’s environment when they join your JupyterHub:
 
    - If you include a ``requirements.txt`` file in the root level of the
      repository, ``repo2docker`` will ``pip install`` the specified packages
@@ -125,35 +121,35 @@ how to configure JupyterHub to build off of this image:
       pip install --user jupyter-repo2docker
 
 
-3. **Create (or find) a GitHub repository you want to use.** This repo should
-   have all materials that you want your users to be able to use. You may want
-   to include a `pip`_ ``requirements.txt`` file to list packages, one per
-   file line, to install such as when using ``pip install``. Specify the
-   versions explicitly so the image is fully reproducible. An example
-   ``requirements.txt`` follows:
+3. **Create (or find) a Git repository you want to use.**
+
+   This repo should have all materials that you want your users to be able to
+   use. You may want to include a `pip`_ ``requirements.txt`` file to list
+   packages, one per file line, to install such as when using ``pip install``.
+   Specify the versions explicitly so the image is fully reproducible. An
+   example ``requirements.txt`` follows:
 
    .. code-block:: bash
 
-      jupyterhub==0.8.*
-      numpy==1.12.1
-      scipy==0.19.0
-      matplotlib==2.0
-
-   As noted above, the requirements must include ``jupyterhub``, pinned to a
-   version compatible with the version of JupyterHub used by Helm chart.
+      jupyterhub==0.9.1
+      numpy==1.14.3
+      scipy==1.1.0
+      matplotlib==2.2.2
 
 4. **Use repo2docker to build a Docker image.**
 
    .. code-block:: bash
 
-      jupyter-repo2docker --user-name=jovyan --image=gcr.io/<PROJECT-NAME>/<IMAGE-NAME>:<TAG> --no-run <YOUR-GITHUB-REPOSITORY>
+      TODO: CONTINUE DOCUMENTATION REVIEW FROM HERE
 
-   This tells ``repo2docker`` to fetch ``master`` of the GitHub repository,
-   and uses heuristics to build a docker image of it.
+      jupyter-repo2docker --user-name=jovyan --image=gcr.io/<PROJECT-NAME>/<IMAGE-NAME>:<TAG> --no-run <YOUR-GIT-REPOSITORY>
+
+   This tells ``repo2docker`` to fetch ``master`` of the Git repository, and
+   uses heuristics to build a Docker image of it.
 
    .. note::
 
-      - The project name should match your google cloud project's name.
+      - The project name should match your Google cloud project's name.
       - Don’t use underscores in your image name. Other than this, the name can
         be anything memorable. *This bug with underscores will be fixed soon.*
       - The tag should be the first 6 characters of the SHA in the GitHub
@@ -376,5 +372,5 @@ across sessions. To resolve this, take the following steps:
   folder, which will persist across sessions.
 
 .. _apply the changes: extending-jupyterhub.html#apply-config-changes
-.. _downloading and installing Docker: https://store.docker.com/search?offering=community&platform=desktop%2Cserver&q=&type=edition
+.. _downloading and installing Docker: https://www.docker.com/community-edition
 .. _pip: https://pip.readthedocs.io/en/latest/user_guide/#requirements-files

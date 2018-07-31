@@ -1,37 +1,36 @@
 index
 
 creating your kubernetes cluster:
-    creating your cluster
-        zero-gke
+    creating your cluster OK
+        zero-gke OK
 
 creating your jupyterhub:
-    getting started
-    setting up helm
-    setting up jupyterhub
-    turning off jupyterhub and computational resources
+    Getting Started OK
+    Setting up Helm OK
+    Setting up JupyterHub OK
+    Tearing down everything OK
 
-customization guide
-    extending your jh setup
-        applying config changes
+Customization guide
+    Customizing your deployment (extending) OK
     
-    customizing user environment
+    Customizing the User Environment
         use an existing docker image
         build a custom docker image with repo2docker
         user jupyterlab by default
         set env variables
         pre-populating users home dir
 
-    user resources
+    Customizing User Resources
         ser user memory and cpu guarantees/limits
         modifying user storage type and size
         expanding and contracting the size of your cluster
 
-    user storage in jupyterhub
+    Customizing User Storage
         how can this process break down
         configuration
         torn off per-user persistent storage
 
-    user management
+    Customizing User Management
         culling user pods
         admin users
         authenticating users

@@ -43,10 +43,11 @@ your google cloud account.
    b. **Use your own computer's terminal:**
 
       1. Download and install the `gcloud` command line tool at its `downloads
-         page <https://cloud.google.com/sdk/downloads>`_.
+         page <https://cloud.google.com/sdk/downloads>`_. It will help you
+         create and communicate with a Kubernetes cluster.
 
-      2. Install ``kubectl`` (read *kube control*), it is a tool for controlling
-         kubernetes. From your terminal, enter:
+      2. Install ``kubectl`` (reads *kube control*), it is a tool for controlling
+         Kubernetes clusters in general. From your terminal, enter:
 
          .. code-block:: bash
 
@@ -69,8 +70,8 @@ your google cloud account.
   
    A single node from the default node pool created below will be responsible
    for running the essential pods of the JupyterHub chart. We recommend choosing
-   a cheap machine type like `n1-standard-1` initially and upgrade it at a later
-   stage if it is found to be overburdened.
+   a cheap machine type like `n1-standard-1` initially and upgrading it at a
+   later stage if it is found to be overburdened.
 
    See the `node pool documentation
    <https://cloud.google.com/kubernetes-engine/docs/concepts/node-pools>`_ for
@@ -85,8 +86,8 @@ your google cloud account.
         --node-labels hub.jupyter.org/node-purpose=core
       
    * ``--machine-type`` specifies the amount of CPU and RAM in each node within
-     this default node pool. There is a `variety of types <https://cloud.google.com/compute/docs/machine-types>`_
-     to choose from.
+     this default node pool. There is a `variety of types
+     <https://cloud.google.com/compute/docs/machine-types>`_ to choose from.
    
    * ``--num-nodes`` specifies how many nodes to spin up.     
        
@@ -97,14 +98,14 @@ your google cloud account.
    means that the amount of nodes is automatically adjusted along with the
    amount of users scheduled.
    
-   The `n1-standard-2` machine type has 2CPUs and 7.5G of RAM each of which
-   about 0.2 CPU will be requested by system pods. It is a suitable choice for
-   a free account that has a limit on a total of 8 CPU cores.
+   The `n1-standard-2` machine type has 2 CPUs and 7.5 GB of RAM each of which
+   about 0.2 CPU will be requested by system pods. It is a suitable choice for a
+   free account that has a limit on a total of 8 CPU cores.
 
    Note that the node pool is *tainted*. Only user pods that is configured
    with a *toleration* for this taint can schedule on the node pool's nodes.
    This is done in order to ensure the autoscaler will be able to scale down
-   when the users have left.
+   when the user pods have stopped.
   
    .. code-block:: bash
 

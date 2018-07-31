@@ -21,22 +21,22 @@ page`_.
 
 .. _getting-to-zero:
 
-Creating your Kubernetes cluster
----------------------------------------------
+Setup a Kubernetes cluster
+--------------------------
 
 This section describes a Kubernetes cluster and outlines how to complete *Step Zero: your Kubernetes cluster* for
 different cloud providers and infrastructure.
 
 .. toctree::
    :titlesonly:
-   :caption: Creating your Kubernetes cluster
+   :caption: Setup a Kubernetes cluster
 
    create-k8s-cluster
 
 .. _creating-your-jupyterhub:
 
-Creating your JupyterHub
-------------------------
+Setup JupyterHub
+----------------
 
 This tutorial starts from *Step Zero: your Kubernetes cluster* and describes the
 steps needed for you to create a complete initial JupyterHub deployment.
@@ -45,7 +45,7 @@ an initial deployment.
 
 .. toctree::
    :maxdepth: 1
-   :caption: Creating your JupyterHub
+   :caption: Setup JupyterHub
 
    getting-started
    setup-helm

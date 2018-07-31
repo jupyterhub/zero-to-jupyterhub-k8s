@@ -12,8 +12,8 @@ Prepare configuration file
 
 This step prepares a `YAML <https://en.wikipedia.org/wiki/YAML>`_ configuration
 file (`config.yaml`) for the generic JupyterHub deployment declared by the Helm
-chart. Helm charts contains templates for kubernetes resources to be installed
-in a kubernetes cluster. This config file will provide values to be used by
+chart. Helm charts contains templates for Kubernetes resources to be installed
+in a Kubernetes cluster. This config file will provide values to be used by
 these templates.
 
 It's important to save the config file in a safe place. The config file is
@@ -43,31 +43,7 @@ For the following steps, use your favorite code editor. We'll use the
    .. code-block:: yaml
 
       proxy:
-        secretToken: "<RANDOM_STRING>"
-
-      singleuser:
-        defaultUrl:
-        cpu:
-          limit:
-          guarantee:
-        memory:
-          limit:
-          guarantee: 1G
-
-      scheduling:
-        podPriority:
-          enabled: true
-        userPlaceholder:
-          replicas: 0
-        userDummy:
-          replicas: 0
-        corePods:
-          nodeAffinity:
-            matchNodePurpose: "require"
-        userPods:
-          nodeAffinity:
-            matchNodePurpose: "require"
-        
+        secretToken: "<RANDOM_STRING>"        
 
 .. Don't put an example here! People will just copy paste that & that's a
    security issue.
@@ -101,47 +77,49 @@ Install JupyterHub
 
    .. code:: bash
 
-      helm upgrade --install jupyterhub/jupyterhub \
-          --version v0.7 \
-          --name jh \
-          --namespace jh \
-          --values config.yaml
+      helm upgrade <YOUR-RELEASE-NAME> jupyterhub/jupyterhub \
+        --install \
+        --namespace <YOUR-NAMESPACE> \
+        --version v0.7 \
+        --values config.yaml
 
    where:
 
-   - ``--name`` refers to a `Helm release name
+   - ``<YOUR-RELEASE-NAME>`` refers to a `Helm release name
      <https://docs.helm.sh/glossary/#release>`_, an identifier used to
      differentiate chart installations. You need it when you are changing or
-     deleting the configuration of this chart installation. If your kubernetes
+     deleting the configuration of this chart installation. If your Kubernetes
      cluster will contain multiple JupyterHubs make sure to differentiate them.
      You can list Helm releases with ``helm list``.
-   - ``--namespace`` refers to a `Kubernetes namespace
+   - ``<YOUR-NAMESPACE>`` refers to a `Kubernetes namespace
      <https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/>`_,
      an identifier used to group Kubernetes resources, in this case all
-     kubernetes resources associated with the JupyterHub chart. You'll need the
+     Kubernetes resources associated with the JupyterHub chart. You'll need the
      namespace identifier for performing any commands with ``kubectl``.
 
-   We recommend providing the same value to ``--name`` and ``--namespace``
-   for now to avoid too much confusion, but advanced users of Kubernetes and
-   helm should feel free to use different values.
+   We recommend providing the same value (*jh* for example) to
+   ``<YOUR-RELEASE-NAME>`` and ``<YOUR-NAMESPACE>`` for now to avoid too much
+   confusion, but advanced users of Kubernetes and helm should feel free to use
+   different values.
 
    .. note::
       * This step may take a moment, during which time there will be no output
         to your terminal. JupyterHub is being installed in the background.
 
-      * If you get a ``release named <YOUR-RELEASE-NAME> already exists`` error, then
-        you should delete the release by running
-        ``helm delete --purge <YOUR-RELEASE-NAME>``. Then reinstall by repeating this
-        step. If it persists, also do ``kubectl delete <YOUR-NAMESPACE>`` and try again.
+      * If you get a ``release named <YOUR-RELEASE-NAME> already exists`` error,
+        then you should delete the release by running ``helm delete --purge
+        <YOUR-RELEASE-NAME>``. Then reinstall by repeating this step. If it
+        persists, also do ``kubectl delete namespace <YOUR-NAMESPACE>`` and try
+        again.
 
       * In general, if something goes *wrong* with the install step, delete the
         Helm release by running ``helm delete --purge <YOUR-RELEASE-NAME>``
         before re-running the install command.
 
       * If you're pulling from a large Docker image you may get a
-        ``Error: timed out waiting for the condition`` error,
-        add a ``--timeout=SOME-LARGE-NUMBER``
-        parameter to the ``helm install`` command.
+        ``Error: timed out waiting for the condition`` error, add a
+        ``--timeout=SOME-LARGE-NUMBER-OF-SECONDS`` parameter to the ``helm
+        install`` command.
 
       * The ``--version`` parameter corresponds to the *version of the helm chart*,
         not the version of JupyterHub. Each version of the JupyterHub helm chart
@@ -190,7 +168,11 @@ Install JupyterHub
    to a browser. JupyterHub is running with a default *dummy* authenticator so
    entering any username and password combination will let you enter the hub.
 
-Congratulations! Now that you have JupyterHub running, you can `extend it
-<extending-jupyterhub>`_ in many ways. You can use a pre-built image for the
-user container, build your own image, configure different authenticators, and
-more!
+Congratulations! Now that you have basic JupyterHub running, you can `extend it
+<extending-jupyterhub.html>`_ and `optimize it <optimization.html>`_ in many
+ways to meet your needs.
+
+* Configure the login to use the account that makes sense to you (Google, GitHub, etc.).
+* Use a suitable pre-built image for the user container or build your own.
+* Host it on https://your-domain.com.
+* ...

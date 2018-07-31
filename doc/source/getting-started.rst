@@ -1,6 +1,6 @@
 .. _getting-started:
 
-Getting started
+Getting Started
 ===============
 
 **JupyterHub** lets you create custom computing environments that users can
@@ -21,7 +21,7 @@ And may end up gaining experience with:
 
 .. note::
 
-   For a more extensive description of the tools and services that JupyterHub
+   For a more elaborate introduction to the tools and services that JupyterHub
    depends upon, see our :ref:`tools` page.
 
 
@@ -29,12 +29,8 @@ Verify JupyterHub dependencies
 ------------------------------
 
 At this point, you should have completed *Step Zero* and have an operational
-Kubernetes cluster. You will already have a cloud provider/infrastructure and
-kubernetes.
+Kubernetes cluster made available through a cloud provider/infrastructure. If
+not, see :ref:`create-k8s-cluster`.
 
-If you need to create a Kubernetes cluster, see
-:ref:`create-k8s-cluster`.
-
-We also depend on Helm and the JupyterHub Helm chart for your JupyterHub
-deployment. We'll deploy them in this section. Let's begin by moving on to
-:ref:`setup-helm`.
+You will use Helm and the JupyterHub Helm chart for your JupyterHub deployment.
+Let's get started by moving on to :ref:`setup-helm`.

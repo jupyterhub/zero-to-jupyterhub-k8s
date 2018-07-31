@@ -150,7 +150,7 @@ Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)
    * ``--name`` is the name you want to use to refer to your cluster
    * ``--resource-group`` is the ResourceGroup you created in step 4
    * ``--ssh-key-value`` is the ssh public key created in step 7
-   * ``--node-count`` is the number of nodes you want in your kubernetes cluster
+   * ``--node-count`` is the number of nodes you want in your Kubernetes cluster
    * ``--node-vm-size`` is the size of the nodes you want to use, which varies based on
      what you are using your cluster for and how much RAM/CPU each of your users need.
      There is a `list of all possible node sizes <https://docs.microsoft.com/en-us/azure/cloud-services/cloud-services-sizes-specs>`_
@@ -188,7 +188,7 @@ Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)
 
       kubectl get node
 
-   The response should list three running nodes and their kubernetes versions!
+   The response should list three running nodes and their Kubernetes versions!
    Each node should have the status of ``Ready``, note that this may take a
    few moments.
 

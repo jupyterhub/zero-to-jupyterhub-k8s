@@ -1,7 +1,7 @@
 .. _user-resources:
 
-User Resources
-==============
+Customizing User Resources
+==========================
 
 .. note::
 

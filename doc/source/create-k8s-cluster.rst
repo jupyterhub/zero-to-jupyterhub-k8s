@@ -1,12 +1,14 @@
 .. _create-k8s-cluster:
 
-Creating your Kubernetes Cluster
-=============================
+Setup a Kubernetes Cluster
+==========================
 
-Kubernetes' documentation describes the many `ways to set up a cluster`_.
-Here, we shall provide quick instructions for the most painless and
-popular ways of getting setup in various cloud providers and on other
-infrastructure. Choose one option and proceed.
+Kubernetes' documentation describes the many `ways to set up a cluster
+<https://kubernetes.io/docs/setup/pick-right-solution/>`_. We provide quick
+instructions for the most painless and popular ways of setting up a Kubernetes
+cluster on various cloud providers and on other infrastructure.
+
+Choose one option and proceed.
 
 .. toctree::
    :titlesonly:

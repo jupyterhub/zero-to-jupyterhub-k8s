@@ -5,15 +5,14 @@ Setting up Helm
 
 `Helm <https://helm.sh/>`_, the package manager for Kubernetes, is a useful tool
 for: installing, upgrading and managing applications on a Kubernetes cluster.
-The Helm packages are called *charts*. We will be install and manage JupyterHub
-on our kubernetes cluster with a Helm chart.
+Helm packages are called *charts*. We will be install and manage JupyterHub on
+our Kubernetes cluster with a Helm chart.
 
 Helm has two parts: a client (`helm`) and a server (`tiller`). Tiller runs
-inside of your Kubernetes cluster as a pod in the kube-system namespace and
+inside of your Kubernetes cluster as a pod in the kube-system namespace. Tiller
 manages *releases* (installations) and *revisions* (versions) of charts deployed
-on the kubernetes cluster. When you run `helm` commands, your local Helm client
-sends instructions to `tiller` in the cluster that in turn make the requested
-changes.
+on the cluster. When you run `helm` commands, your local Helm client sends
+instructions to `tiller` in the cluster that in turn make the requested changes.
 
 Installation
 ------------
@@ -25,8 +24,9 @@ terminal:
 
    curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
 
-`Alternative methods for helm installation <https://github.com/kubernetes/helm/blob/master/docs/install.md>`_
-exist if you prefer to install without using the script.
+`Alternative methods for helm installation
+<https://github.com/kubernetes/helm/blob/master/docs/install.md>`_ exist if you
+prefer or need to install without using the script.
 
 .. _helm-rbac:
 
@@ -50,14 +50,13 @@ cluster:
 
       kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
 
-   See the `RBAC documentation
-   <security.html#use-role-based-access-control-rbac>`_ for more
-   information.
+   See `our RBAC documentation
+   <security.html#use-role-based-access-control-rbac>`_ for more information.
 
    .. note::
 
       While most clusters have RBAC enabled and you need this line, you **must**
-      skip this step if your kubernetes cluster does not have RBAC enabled.
+      skip this step if your Kubernetes cluster does not have RBAC enabled.
 
 3. Initialize `helm` and `tiller`.
 
@@ -120,5 +119,4 @@ Ensure that `tiller is secure <https://engineering.bitnami.com/articles/helm-sec
 Next Step
 ---------
 
-Congratulations. Helm is now set up. The next step is to :ref:`install
-JupyterHub <setup-jupyterhub>`!
+Congratulations, Helm is now set up! Let's continue with :ref:`setup-jupyterhub`!

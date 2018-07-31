@@ -9,10 +9,10 @@ For information on debugging Kubernetes, see :ref:`debug`.
 I thought I had deleted my cloud resources, but they still show up. Why?
 ------------------------------------------------------------------------
 
-You probably deleted the specific nodes, but not the kubernetes cluster that
+You probably deleted the specific nodes, but not the Kubernetes cluster that
 was controlling those nodes. Kubernetes is designed to make sure that a
 specific set of resources is available at all times. This means that if you
-only delete the nodes, but not the kubernetes instance, then it will detect
+only delete the nodes, but not the Kubernetes instance, then it will detect
 the loss of computers and will create two new nodes to compensate.
 
 How does billing for this work?
