@@ -63,7 +63,7 @@ if __name__ == '__main__':
     argparser = argparse.ArgumentParser()
     argparser.add_argument('--yamllint-config', default='yamllint-config.yaml', help='Specify the yamllint config')
     argparser.add_argument('--chart-values', default='chart-values.yaml', help='Specify additional chart value files')
-    argparser.add_argument('--kubernetes-version', default='1.10.5', help='Validate against this kubernetes version')
+    argparser.add_argument('--kubernetes-version', default='1.10.5', help='Validate against this Kubernetes version')
     argparser.add_argument('--output-dir', default='rendered-templates', help='Specify an output directory for the rendered templates')
     args = argparser.parse_args()
     

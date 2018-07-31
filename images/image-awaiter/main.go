@@ -77,9 +77,9 @@ func makeHeaders(debug bool, authTokenPath string) (map[string]string, error) {
 
 func main() {
 	var caPath, clientCertPath, clientKeyPath, authTokenPath, apiServerAddress, namespace, daemonSet string
-	flag.StringVar(&caPath, "ca-path", "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt", "Path to CA bundle used to verify kubernetes master")
-	flag.StringVar(&clientCertPath, "client-certificate-path", "", "Path to client certificate used to authenticate with kubernetes server")
-	flag.StringVar(&clientKeyPath, "client-key-path", "", "Path to client certificate key used to authenticate with kubernetes server")
+	flag.StringVar(&caPath, "ca-path", "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt", "Path to CA bundle used to verify Kubernetes master")
+	flag.StringVar(&clientCertPath, "client-certificate-path", "", "Path to client certificate used to authenticate with Kubernetes server")
+	flag.StringVar(&clientKeyPath, "client-key-path", "", "Path to client certificate key used to authenticate with Kubernetes server")
 	flag.StringVar(&authTokenPath, "auth-token-path", "/var/run/secrets/kubernetes.io/serviceaccount/token", "Auth Token to use when making API requests")
 	flag.StringVar(&apiServerAddress, "api-server-address", "", "Address of the Kubernetes API Server to contact")
 	flag.StringVar(&namespace, "namespace", "", "Namespace of the DaemonSet that will perform image pulling")
