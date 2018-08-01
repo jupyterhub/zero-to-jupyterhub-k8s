@@ -134,7 +134,7 @@ data:
   singleuser.start-timeout: {{ .Values.singleuser.startTimeout | quote }}
   singleuser.image-pull-policy: {{ .Values.singleuser.image.pullPolicy | quote }}
   {{- if .Values.singleuser.image.pullSecret }}
-  singleuser.image-pull-secret: singleuser-image-credentials
+  singleuser.image-pull-secret-name: singleuser-image-credentials
   {{- end }}
   {{- if .Values.singleuser.cmd }}
   singleuser.cmd: {{ .Values.singleuser.cmd | quote }}
