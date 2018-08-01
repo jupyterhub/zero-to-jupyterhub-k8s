@@ -174,9 +174,9 @@ component: {{ include "jupyterhub.componentLabel" . }}
 {{- end }}
 
 {{- /*
-  singleuser.image.pullSecret:
+  singleuser.imagePullSecret:
     allows creating a base64 encoded docker registry json blob
 */}}
-{{- define "singleuser.image.pullSecret" }}
-{{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.singleuser.image.pullSecret.registry (printf "%s:%s" .Values.singleuser.image.pullSecret.username .Values.singleuser.image.pullSecret.password | b64enc) | b64enc }}
+{{- define "singleuser.imagePullSecret" }}
+{{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.singleuser.imagePullSecret.registry (printf "%s:%s" .Values.singleuser.imagePullSecret.username .Values.singleuser.imagePullSecret.password | b64enc) | b64enc }}
 {{- end }}
