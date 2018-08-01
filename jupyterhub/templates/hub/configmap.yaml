@@ -179,6 +179,18 @@ data:
   {{- if .Values.singleuser.cpu.guarantee }}
   singleuser.cpu.guarantee: {{ .Values.singleuser.cpu.guarantee | quote }}
   {{- end }}
+  {{- if .Values.singleuser.extraResource.limits }}
+  singleuser.extra_resource.limits: |
+    {{- range $key, $value := .Values.singleuser.extraResource.limits }}
+    {{ $key | quote }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
+  {{- if .Values.singleuser.extraResource.guarantees }}
+  singleuser.extra_resource.guarantees: |
+    {{- range $key, $value := .Values.singleuser.extraResource.guarantees }}
+    {{ $key | quote }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
   singleuser.extra-labels: |
     hub.jupyter.org/network-access-hub: "true"
     {{- range $key, $value := .Values.singleuser.extraLabels }}
@@ -190,8 +202,8 @@ data:
     {{ $key | quote }}: {{ $value | quote }}
     {{- end }}
   {{- end }}
-  
-  
+
+
   {{- /* KubeSpawner */}}
   kubespawner.common-labels: |
     {{- $_ := merge (dict "heritageLabel" "jupyterhub") . }}
