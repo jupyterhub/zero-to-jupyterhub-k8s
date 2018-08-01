@@ -68,8 +68,10 @@ c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
 
 # the hub should listen on all interfaces, so the proxy can access it
 c.JupyterHub.hub_ip = '0.0.0.0'
-c.JupyterHub.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
-c.JupyterHub.hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])
+c.JupyterHub.hub_connect_url = '{host}:{port}'.format(
+    host=os.environ['HUB_SERVICE_HOST'],
+    port=os.environ['HUB_SERVICE_PORT']
+)
 
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
