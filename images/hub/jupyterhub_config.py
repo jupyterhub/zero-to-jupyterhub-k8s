@@ -78,16 +78,17 @@ c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 # Spawner related
 # ------------------------------------------------------------------------------
 # Gives spawned containers access to the API of the hub
+c.Spawner.cmd = get_config('singleuser.cmd')
+
+c.Spawner.default_url = get_config('singleuser.default-url', '/')
+
 c.KubeSpawner.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
 c.KubeSpawner.hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])
 
-default_url = get_config('singleuser.default-url', None)
-if default_url:
-    c.Spawner.default_url = default_url
 if os.environ.get('POD_NAMESPACE'):
     c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE')
 
-c.KubeSpawner.common_labels = get_config('kubespawner.common-labels')
+c.KubeSpawner.common_labels = get_config('kubespawner.common-labels', {})
 c.KubeSpawner.extra_labels = get_config('singleuser.extra-labels', {})
 c.KubeSpawner.extra_labels.update({
     "hub.jupyter.org/pod-kind": "user"
@@ -112,14 +113,11 @@ c.KubeSpawner.extra_resource_guarantees = get_config('singleuser.extra-resource.
 c.KubeSpawner.uid = get_config('singleuser.uid')
 c.KubeSpawner.fs_gid = get_config('singleuser.fs-gid')
 
-c.KubeSpawner.node_selector = get_config('singleuser.node-selector')
-c.KubeSpawner.service_account = get_config('singleuser.service-account-name', "default")
-c.KubeSpawner.scheduler_name = get_config('singleuser.scheduler-name', "default-scheduler")
+c.KubeSpawner.node_selector.update(get_config('singleuser.node-selector', {}))
+c.KubeSpawner.service_account = get_config('singleuser.service-account-name')
+c.KubeSpawner.scheduler_name = get_config('singleuser.scheduler-name')
 c.KubeSpawner.priority_class_name = get_config('singleuser.priority-class-name')
 
-cmd = get_config('singleuser.cmd', None)
-if cmd:
-    c.Spawner.cmd = cmd
 
 c.KubeSpawner.tolerations.extend(get_config('singleuser.tolerations-list', []))
 c.KubeSpawner.node_affinity_required.extend(get_config('singleuser.node-affinity-required', []))
@@ -129,13 +127,9 @@ c.KubeSpawner.pod_affinity_preferred.extend(get_config('singleuser.pod-affinity-
 c.KubeSpawner.pod_anti_affinity_required.extend(get_config('singleuser.pod-anti-affinity-required', []))
 c.KubeSpawner.pod_anti_affinity_preferred.extend(get_config('singleuser.pod-anti-affinity-preferred', []))
 
-lifecycle_hooks = get_config('singleuser.lifecycle-hooks')
-if lifecycle_hooks:
-    c.KubeSpawner.lifecycle_hooks = lifecycle_hooks
+c.KubeSpawner.lifecycle_hooks.update(get_config('singleuser.lifecycle-hooks', {}))
 
-init_containers = get_config('singleuser.init-containers')
-if init_containers:
-    c.KubeSpawner.init_containers.extend(init_containers)
+c.KubeSpawner.init_containers.extend(get_config('singleuser.init-containers', []))
 
 c.KubeSpawner.events_enabled = get_config('singleuser.events', False)
 
@@ -149,9 +143,7 @@ if storage_type == 'dynamic':
     c.KubeSpawner.pvc_name_template = pvc_name_template
     c.KubeSpawner.storage_pvc_ensure = True
 
-    storage_class = get_config('singleuser.storage.dynamic.storage-class', None)
-    if storage_class:
-        c.KubeSpawner.storage_class = storage_class
+    c.KubeSpawner.storage_class = get_config('singleuser.storage.dynamic.storage-class')
     c.KubeSpawner.storage_access_modes = get_config('singleuser.storage.dynamic.storage-access-modes')
     c.KubeSpawner.storage_capacity = get_config('singleuser.storage.capacity')
 
