@@ -123,10 +123,10 @@ order of the key.
 ```yaml
 hub:
   extraConfig:
-   00-first-config: |
-     # some code
-   10-second-config: |
-     # some other code
+    00-first-config: |
+      # some code
+    10-second-config: |
+      # some other code
 ```
 
 ### `hub.extraConfigMap`
