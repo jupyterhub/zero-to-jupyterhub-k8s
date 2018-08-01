@@ -84,8 +84,9 @@ c.KubeSpawner.hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])
 default_url = get_config('singleuser.default-url', None)
 if default_url:
     c.Spawner.default_url = default_url
+if os.environ.get('POD_NAMESPACE'):
+    c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE')
 
-c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
 c.KubeSpawner.common_labels = get_config('kubespawner.common-labels')
 c.KubeSpawner.extra_labels = get_config('singleuser.extra-labels', {})
 c.KubeSpawner.extra_labels.update({
