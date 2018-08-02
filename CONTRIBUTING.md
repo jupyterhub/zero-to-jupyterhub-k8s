@@ -49,6 +49,7 @@ development.
 6. Create a virtualenv & install the libraries required for builds to happen:
    ```bash
    python3 -m venv .
+   source bin/activate
    python3 -m pip install -r dev-requirements.txt
    ```
 
