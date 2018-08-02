@@ -305,6 +305,17 @@ properties:
             type:
             - string
             - "null"
+      imagePullPolicy:
+        type: string
+        enum:
+          - IfNotPresent
+          - Always
+          - Never
+        description: |
+          Set the imagePullPolicy on the singleuser pods that are spun up by the hub.
+
+          See [the kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
+          for more info on what the values mean.
       imagePullSecret:
         type: object
         description: |
