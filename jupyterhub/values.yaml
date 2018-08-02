@@ -15,7 +15,7 @@ hub:
     # sqlite-pvc backed hub requires Recreate strategy to work
     type: Recreate
     # This is required for upgrading to work
-    rollingUpdate: null
+    rollingUpdate:
   db:
     type: sqlite-pvc
     upgrade:
@@ -30,7 +30,7 @@ hub:
     url:
   labels: {}
   annotations:
-    prometheus.io/scrape: "true"
+    prometheus.io/scrape: 'true'
     prometheus.io/path: /hub/metrics
   extraConfig: {}
   extraConfigMap: {}
@@ -203,7 +203,7 @@ singleuser:
     limits: {}
     guarantees: {}
   cmd: jupyterhub-singleuser
-  defaultUrl: /lab
+  defaultUrl: /
 
 
 scheduling:
@@ -225,10 +225,10 @@ scheduling:
     resources:
   corePods:
     nodeAffinity:
-      matchNodePurpose: "prefer"
+      matchNodePurpose: prefer
   userPods:
     nodeAffinity:
-      matchNodePurpose: "prefer"
+      matchNodePurpose: prefer
     podAffinity:
       preferScheduleNextToRealUsers: true
 
