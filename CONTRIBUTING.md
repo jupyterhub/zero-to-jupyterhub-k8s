@@ -14,7 +14,19 @@ development.
    If you need to install Docker Community Edition (CE) for Mac, please
    follow the [Docker instructions](https://store.docker.com/editions/community/docker-ce-desktop-mac).
 
-2. Start minikube.
+2. [Download & install helm](https://github.com/helm/helm#install).
+
+   You may install Helm using one of the following steps:
+   
+   * With the following curl command:
+   
+     ```
+     curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
+     ```
+   * From one of the binaries at https://github.com/helm/helm/releases
+   * For MacOS, using Homebrew: `brew install kubernetes-helm`
+
+3. Start minikube.
 
    For minikube version 0.26 and higher:
    ```bash
@@ -30,24 +42,25 @@ development.
    errors, you may need to clear out the `~/.minikube` and `~/.kube` directories
    and reboot.
 
-3. Use the docker daemon inside minikube for building:
+4. Use the docker daemon inside minikube for building:
    ```bash
    eval $(minikube docker-env)
    ```
 
-4. Clone the zero-to-jupyterhub repo:
+5. Clone the zero-to-jupyterhub repo:
    ```bash
    git clone git@github.com:jupyterhub/zero-to-jupyterhub-k8s.git
    cd zero-to-jupyterhub-k8s
    ```
 
-5. Create a virtualenv & install the libraries required for builds to happen:
+6. Create a virtualenv & install the libraries required for builds to happen:
    ```bash
    python3 -m venv .
+   source bin/activate
    python3 -m pip install -r dev-requirements.txt
    ```
 
- 6. Now run `chartpress` to build the requisite docker images inside minikube:
+7. Now run `chartpress` to build the requisite docker images inside minikube:
     ```bash
     chartpress
     ```
@@ -56,7 +69,7 @@ development.
     `jupyterhub/values.yaml` with the appropriate values to make the chart
     installable!
 
-7. Configure helm and minikube for RBAC:
+8. Configure helm and minikube for RBAC:
    ```bash
    kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
    kubectl --namespace kube-system create sa tiller
@@ -66,7 +79,7 @@ development.
    helm init --service-account tiller
    ```
 
-8. Install / Upgrade JupyterHub Chart!
+9. Install / Upgrade JupyterHub Chart!
    ```bash
    helm upgrade --wait --install --namespace=hub hub jupyterhub/ -f minikube-config.yaml
    ```
@@ -75,7 +88,7 @@ development.
    you want, or create another `config.yaml` file & pass that as an additional
    `-f config.yaml` file to the `helm upgrade` command.
 
-9. Retrieve the URL for your instance of JupyterHub:
+10. Retrieve the URL for your instance of JupyterHub:
 
    ```bash
    minikube service --namespace=hub proxy-public
@@ -84,7 +97,7 @@ development.
    Navigate to the URL in your browser. You should now have JupyterHub running
    on minikube.
   
-10. Make the changes you want. 
+11. Make the changes you want. 
 
     To view your changes on the running development instance of JupyterHub:
 
