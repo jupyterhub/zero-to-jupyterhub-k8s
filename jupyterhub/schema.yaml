@@ -305,6 +305,37 @@ properties:
             type:
             - string
             - "null"
+      imagePullSecret:
+        type: object
+        description: |
+          Create a custom image pull secert used for spawned users.
+
+          This secret is created in the same namespace as your jupyterhub deployment and will be used to pull your single user image.
+        properties:
+          registry:
+            type: string
+            description: |
+              Name of the private registry you want to create a credential set for.
+
+              Examples:
+                - private.jfrog.io
+                - alexmorreale.privatereg.net
+          username:
+            type: string
+            description: |
+              Name of the user you want to use to connect to your private registry.
+
+              Examples:
+                - alexmorreale
+                - alex@pfc.com
+          password:
+            type: string
+            description: |
+              Password of the user you want to use to connect to your private registry.
+
+              Examples:
+                - plaintextpassword
+                - abc123SECRETzyx098
       image:
         type: object
         description: |
