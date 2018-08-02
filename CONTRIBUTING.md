@@ -16,8 +16,15 @@ development.
 
 2. [Download & install helm](https://github.com/helm/helm#install).
 
-   For MacOS: You may install helm using Homebrew `brew install kubernetes-helm` or
-   from a binary at https://github.com/helm/helm/releases.
+   You may install Helm using one of the following steps:
+   
+   * With the following curl command:
+   
+     ```
+     curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
+     ```
+   * From one of the binaries at https://github.com/helm/helm/releases
+   * For MacOS, using Homebrew: `brew install kubernetes-helm`
 
 3. Start minikube.
 
