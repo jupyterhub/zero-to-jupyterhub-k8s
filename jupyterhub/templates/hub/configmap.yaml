@@ -67,7 +67,7 @@ data:
   auth.gitlab.client-secret: {{ .Values.auth.gitlab.clientSecret | quote }}
   auth.gitlab.callback-url: {{ .Values.auth.gitlab.callbackUrl | quote }}
   {{- end }}
-  
+
   {{- if eq .Values.auth.type "mediawiki" }}
   auth.mediawiki.client-id: {{ .Values.auth.mediawiki.clientId | quote }}
   auth.mediawiki.client-secret: {{ .Values.auth.mediawiki.clientSecret | quote }}
@@ -80,7 +80,7 @@ data:
   auth.globus.callback-url: {{ .Values.auth.globus.callbackUrl | quote }}
   auth.globus.identity-provider: {{ .Values.auth.globus.identityProvider | quote }}
   {{- end }}
-  
+
   {{- if eq .Values.auth.type "lti" }}
   auth.lti.consumers: |
     {{- .Values.auth.lti.consumers | toYaml | trimSuffix "\n" | nindent 4 }}
@@ -108,7 +108,7 @@ data:
   auth.ldap.dn.user.search-base: {{ .Values.auth.ldap.dn.user.searchBase | quote }}
   auth.ldap.dn.user.attribute: {{ .Values.auth.ldap.dn.user.attribute | quote }}
   {{- end }}
-  
+
   {{- if eq .Values.auth.type "dummy" }}
   {{- if .Values.auth.dummy.password }}
   auth.dummy.password: {{ .Values.auth.dummy.password | quote }}
@@ -133,6 +133,9 @@ data:
     {{- .Values.singleuser.cloudMetadata | toYaml | trimSuffix "\n" | nindent 4 }}
   singleuser.start-timeout: {{ .Values.singleuser.startTimeout | quote }}
   singleuser.image-pull-policy: {{ .Values.singleuser.image.pullPolicy | quote }}
+  {{- if .Values.singleuser.imagePullSecret }}
+  singleuser.image-pull-secret-name: singleuser-image-credentials
+  {{- end }}
   {{- if .Values.singleuser.cmd }}
   singleuser.cmd: {{ .Values.singleuser.cmd | quote }}
   {{- end }}

@@ -9,7 +9,7 @@
   generate some output based on one single dictionary of input that we call the
   helpers scope. When you are in helm, you access your current scope with a
   single a single punctuation (.).
-  
+
   When you ask a helper to render its content, one often forward the current
   scope to the helper in order to allow it to access .Release.Name,
   .Values.rbac.enabled and similar values.
@@ -27,7 +27,7 @@
   To let a helper access the current scope along with additional values we have
   opted to create dictionary containing additional values that is then populated
   with additional values from the current scope through a the merge function.
-  
+
   #### Example - Passing a new scope augmented with the old
   {{- $_ := merge (dict "appLabel" "kube-lego") . }}
   {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}
@@ -97,7 +97,7 @@
     Used by "jupyterhub.labels" and "jupyterhub.nameField".
 
     NOTE: The component label is determined by either...
-    - 1: The provided scope's .componentLabel 
+    - 1: The provided scope's .componentLabel
     - 2: The template's filename if living in the root folder
     - 3: The template parent folder's name
     -  : ...and is combined with .componentPrefix and .componentSuffix
@@ -171,4 +171,12 @@ component: {{ include "jupyterhub.componentLabel" . }}
 {{- define "jupyterhub.podCullerSelector" -}}
 {{- $_ := merge (dict "componentLabel" "singleuser-server") . -}}
 {{ include "jupyterhub.matchLabels" $_ | replace ": " "=" | replace "\n" "," | quote }}
+{{- end }}
+
+{{- /*
+  singleuser.imagePullSecret:
+    allows creating a base64 encoded docker registry json blob
+*/}}
+{{- define "singleuser.imagePullSecret" }}
+{{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.singleuser.imagePullSecret.registry (printf "%s:%s" .Values.singleuser.imagePullSecret.username .Values.singleuser.imagePullSecret.password | b64enc) | b64enc }}
 {{- end }}
