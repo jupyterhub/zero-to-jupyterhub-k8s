@@ -204,3 +204,4 @@ A custom resource request.
 {{- else -}}
 {{ include "jupyterhub.default-resources" . | replace " trim_hack" "" }}
 {{- end }}
+{{- end }}
