@@ -23,8 +23,13 @@ curl -Lo minikube https://storage.googleapis.com/minikube/releases/v${MINIKUBE_V
 chmod +x minikube
 mv minikube bin/
 
-echo "starting minikube with RBAC"
-sudo CHANGE_MINIKUBE_NONE_USER=true $PWD/bin/minikube start --vm-driver=none --kubernetes-version=v${KUBE_VERSION} --extra-config=apiserver.Authorization.Mode=RBAC --bootstrapper=localkube
+echo "starting minikube"
+if [[ ${KUBE_VERSION} == 1.9* ]] || [[ ${KUBE_VERSION} == 1.10* ]]; then
+  BOOTSTRAPPER=localkube
+else
+  BOOTSTRAPPER=kubeadm
+fi
+sudo CHANGE_MINIKUBE_NONE_USER=true $PWD/bin/minikube start --kubernetes-version=v${KUBE_VERSION} --vm-driver=none --bootstrapper=${BOOTSTRAPPER}
 minikube update-context
 
 echo "waiting for kubernetes"
@@ -43,7 +48,6 @@ kubectl --namespace kube-system create sa tiller
 kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
 helm init --service-account tiller
 
-
 echo "waiting for tiller"
 kubectl --namespace=kube-system rollout status --watch deployment/tiller-deploy
 
@@ -57,7 +61,3 @@ curl -L https://github.com/garethr/kubeval/releases/download/0.7.1/kubeval-linux
 echo "8259d462bd19e5fc2db2ea304e51ed4db928be4343f6c9530f909dba66e15713  bin/kubeval.tar.gz" | shasum -a 256 -c -
 tar xf bin/kubeval.tar.gz -C bin
 chmod +x bin/kubeval
-
-curl -L https://github.com/minrk/git-crypt-bin/releases/download/0.5.0/git-crypt > bin/git-crypt
-echo "46c288cc849c23a28239de3386c6050e5c7d7acd50b1d0248d86e6efff09c61b  bin/git-crypt" | shasum -a 256 -c -
-chmod +x bin/git-crypt
