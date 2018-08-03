@@ -185,12 +185,41 @@ component: {{ include "jupyterhub.componentLabel" . }}
 The default resource request - whatever a singleuser requests.
 */}}
 {{- define "jupyterhub.default-resources" -}}
+{{- $r1 := .Values.singleuser.cpu.guarantee -}}
+{{- $r2 := .Values.singleuser.memory.guarantee -}}
+{{- $r3 := .Values.singleuser.extraResource.guarantees -}}
+{{- $l1 := .Values.singleuser.cpu.limit -}}
+{{- $l2 := .Values.singleuser.memory.limit -}}
+{{- $l3 := .Values.singleuser.extraResource.limits -}}
+{{- if or $r1 $r2 $r3 -}}
 requests:
-  cpu: {{ .Values.singleuser.cpu.guarantee | default "trim_hack" }}
-  memory: {{ .Values.singleuser.memory.guarantee | default "trim_hack" }}
+  {{- if $r1 }}
+  cpu: {{ .Values.singleuser.cpu.guarantee }}
+  {{- end }}
+  {{- if $r2 }}
+  memory: {{ .Values.singleuser.memory.guarantee }}
+  {{- end }}
+  {{- if $r3 }}
+  {{- range $key, $value := .Values.singleuser.extraResource.guarantees }}
+  {{ $key | quote }}: {{ $value | quote }}
+  {{- end }}
+  {{- end }}
+  {{- println }}
+{{- end }}
+{{- if or $l1 $l2 $l3 -}}
 limits:
-  cpu: {{ .Values.singleuser.cpu.limit | default "trim_hack" }}
-  memory: {{ .Values.singleuser.memory.limit | default "trim_hack" }}
+  {{- if $l1 }}
+  cpu: {{ .Values.singleuser.cpu.limit }}
+  {{- end }}
+  {{- if $l2 }}
+  memory: {{ .Values.singleuser.memory.limit }}
+  {{- end }}
+  {{- if $l3 }}
+  {{- range $key, $value := .Values.singleuser.extraResource.limits }}
+  {{ $key | quote }}: {{ $value | quote }}
+  {{- end }}
+  {{- end }}
+{{- end }}
 {{- end }}
 
 {{- /*
@@ -202,6 +231,6 @@ A custom resource request.
 {{- else if and .Values.scheduling.userDummy.resources (eq .type "user-dummy") -}}
 {{ .Values.scheduling.userDummy.resources | toYaml | trimSuffix "\n" }}
 {{- else -}}
-{{ include "jupyterhub.default-resources" . | replace " trim_hack" "" }}
+{{ include "jupyterhub.default-resources" . }}
 {{- end }}
 {{- end }}

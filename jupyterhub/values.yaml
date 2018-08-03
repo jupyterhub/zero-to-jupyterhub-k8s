@@ -222,6 +222,8 @@ scheduling:
   userDummy:
     enabled: true
     replicas: 0
+    # resources.request and resources.limits must only contain keys with values
+    # and be left out if they don't contain any keys
     resources:
   corePods:
     nodeAffinity:
