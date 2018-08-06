@@ -65,6 +65,7 @@ spec:
             - -c
             - echo "Pulling complete"
         {{- end }}
+      nodeSelector: {{ toJson .Values.singleuser.nodeSelector }}
       containers:
         - name: pause
           image: {{ .Values.prePuller.pause.image.name }}:{{ .Values.prePuller.pause.image.tag }}
