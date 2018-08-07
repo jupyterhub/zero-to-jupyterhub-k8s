@@ -51,9 +51,9 @@ spec:
           port: 8001
   egress:
     {{- /*
-    The default is to allow all egress for hub If you want to restrict it the
+    The default is to allow all egress for proxy If you want to restrict it the
     following egress is required
-      -  proxy:8001
+      -  hub:8081
       -  singleuser:8888
       -  Kubernetes api-server
     */}}
