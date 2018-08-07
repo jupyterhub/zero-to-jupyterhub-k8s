@@ -25,7 +25,12 @@ spec:
     - to:
         - podSelector:
             matchLabels:
-              {{- include "jupyterhub.matchLabels" . | nindent 14 }}
+              {{- /*
+              Override componentLabel because we need the label of the
+              destination, not the source
+              */}}
+              {{- $_ := merge (dict "componentLabel" "hub") . }}
+              {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
       ports:
         - protocol: TCP
           port: 8081
