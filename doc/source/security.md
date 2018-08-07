@@ -232,7 +232,7 @@ singleuser:
       - port: 80
         protocol: TCP
     - ports:
-      - port: 433
+      - port: 443
         protocol: TCP
 ```
 
