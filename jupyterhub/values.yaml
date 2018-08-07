@@ -55,6 +55,7 @@ hub:
       - to:
           - ipBlock:
               cidr: 0.0.0.0/0
+  allowNamedServers: false
 
 
 rbac:
