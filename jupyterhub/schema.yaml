@@ -99,7 +99,7 @@ properties:
 
               3. **mysql**
 
-                 Use an externaly hosted mysql database.
+                 Use an externally hosted mysql database.
 
                  You have to specify an sqlalchemy connection string for the mysql database you
                  want to connect to in `hub.db.url` if using this option.
@@ -116,7 +116,7 @@ properties:
 
               4. **postgres**
 
-                 Use an externaly hosted postgres database.
+                 Use an externally hosted postgres database.
 
                  You have to specify an sqlalchemy connection string for the postgres database you
                  want to connect to in `hub.db.url` if using this option.
