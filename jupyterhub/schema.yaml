@@ -319,7 +319,7 @@ properties:
       imagePullSecret:
         type: object
         description: |
-          Create a custom image pull secert used for spawned users.
+          Create a custom image pull secret used for spawned users.
 
           This secret is created in the same namespace as your jupyterhub deployment and will be used to pull your single user image.
         properties:
