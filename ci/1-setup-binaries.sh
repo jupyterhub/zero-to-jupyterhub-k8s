@@ -20,7 +20,7 @@ set -eux
 # Download binaries
 # -----------------
 # Ensure the bin folder exist
-mkdir -p bin
+mkdir -p ci/bin
 
 # Ensure nsenter exist as needed by kube on Ubuntu 14.04 (trusty)
 if ! which nsenter; then
@@ -32,33 +32,33 @@ if ! which nsenter; then
 fi
 
 echo "installing kubectl"
-if ! [ -f bin/kubectl-${KUBE_VERSION} ]; then
-  curl -sSLo bin/kubectl-${KUBE_VERSION} https://storage.googleapis.com/kubernetes-release/release/v${KUBE_VERSION}/bin/linux/amd64/kubectl
-  chmod +x bin/kubectl-${KUBE_VERSION}
+if ! [ -f ci/bin/kubectl-${KUBE_VERSION} ]; then
+  curl -sSLo ci/bin/kubectl-${KUBE_VERSION} https://storage.googleapis.com/kubernetes-release/release/v${KUBE_VERSION}/bin/linux/amd64/kubectl
+  chmod +x ci/bin/kubectl-${KUBE_VERSION}
 fi
-cp bin/kubectl-${KUBE_VERSION} bin/kubectl
+cp ci/bin/kubectl-${KUBE_VERSION} ci/bin/kubectl
 
 echo "installing helm"
-if ! [ -f bin/helm-${HELM_VERSION} ]; then
-  curl -sSLo bin/helm-${HELM_VERSION}.tar.gz https://storage.googleapis.com/kubernetes-helm/helm-v${HELM_VERSION}-linux-amd64.tar.gz
-  tar --extract --file bin/helm-${HELM_VERSION}.tar.gz --directory bin --strip-components 1 linux-amd64/helm
-  rm bin/helm-${HELM_VERSION}.tar.gz
-  mv bin/helm bin/helm-${HELM_VERSION}
+if ! [ -f ci/bin/helm-${HELM_VERSION} ]; then
+  curl -sSLo ci/bin/helm-${HELM_VERSION}.tar.gz https://storage.googleapis.com/kubernetes-helm/helm-v${HELM_VERSION}-linux-amd64.tar.gz
+  tar --extract --file ci/bin/helm-${HELM_VERSION}.tar.gz --directory ci/bin --strip-components 1 linux-amd64/helm
+  rm ci/bin/helm-${HELM_VERSION}.tar.gz
+  mv ci/bin/helm ci/bin/helm-${HELM_VERSION}
 fi
-cp bin/helm-${HELM_VERSION} bin/helm
+cp ci/bin/helm-${HELM_VERSION} ci/bin/helm
 
 echo "installing minikube"
-if ! [ -f bin/minikube-${MINIKUBE_VERSION} ]; then
-  curl -sSLo bin/minikube-${MINIKUBE_VERSION} https://storage.googleapis.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-linux-amd64
-  chmod +x bin/minikube-${MINIKUBE_VERSION}
+if ! [ -f ci/bin/minikube-${MINIKUBE_VERSION} ]; then
+  curl -sSLo ci/bin/minikube-${MINIKUBE_VERSION} https://storage.googleapis.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-linux-amd64
+  chmod +x ci/bin/minikube-${MINIKUBE_VERSION}
 fi
-cp bin/minikube-${MINIKUBE_VERSION} bin/minikube
+cp ci/bin/minikube-${MINIKUBE_VERSION} ci/bin/minikube
 
 echo "installing kubeval"
-if ! [ -f bin/kubeval-${KUBEVAL_VERSION} ]; then
-  curl -sSLo bin/kubeval-${KUBEVAL_VERSION}.tar.gz https://github.com/garethr/kubeval/releases/download/${KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz
-  tar --extract --file bin/kubeval-${KUBEVAL_VERSION}.tar.gz --directory bin
-  rm bin/kubeval-${KUBEVAL_VERSION}.tar.gz
-  mv bin/kubeval bin/kubeval-${KUBEVAL_VERSION}
+if ! [ -f ci/bin/kubeval-${KUBEVAL_VERSION} ]; then
+  curl -sSLo ci/bin/kubeval-${KUBEVAL_VERSION}.tar.gz https://github.com/garethr/kubeval/releases/download/${KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz
+  tar --extract --file ci/bin/kubeval-${KUBEVAL_VERSION}.tar.gz --directory ci/bin
+  rm ci/bin/kubeval-${KUBEVAL_VERSION}.tar.gz
+  mv ci/bin/kubeval ci/bin/kubeval-${KUBEVAL_VERSION}
 fi
-cp bin/kubeval-${KUBEVAL_VERSION} bin/kubeval
+cp ci/bin/kubeval-${KUBEVAL_VERSION} ci/bin/kubeval

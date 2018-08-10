@@ -9,6 +9,10 @@ hub:
   cookieSecret: 1470700e01f77171c2c67b12130c25081dfbdf2697af8c2f2bd05621b31100bf
   db:
     type: sqlite-memory
+  services:
+    tester:
+      admin: true
+      apiToken: "0cc05feaefeeb29179e924ffc6d3886ffacf0d1a28ab225f5c210436ffc5cfd5"
 
 singleuser:
   storage:
