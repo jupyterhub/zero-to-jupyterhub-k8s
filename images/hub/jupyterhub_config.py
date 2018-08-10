@@ -291,6 +291,7 @@ for name, service in get_config('hub.services', {}).items():
 
 
 c.JupyterHub.db_url = get_config('hub.db_url')
+c.JupyterHub.allow_named_servers = get_config('hub.allow-named-servers', False)
 
 cmd = get_config('singleuser.cmd', None)
 if cmd:
