@@ -5,11 +5,11 @@ Customizing User Resources
 
 .. note::
 
-   For a list of all the options you can configure with your helm
-   chart, see the :ref:`helm-chart-configuration-reference`.
+   For a list of all the Helm chart options you can configure, see the
+   :ref:`helm-chart-configuration-reference`.
 
 User resources include the CPU, RAM, and Storage which JupyterHub provides to
-users. Most of these can be controlled via modifications to the Helm Chart.
+users. Most of these can be controlled via modifications to the Helm chart.
 For information on deploying your modifications to the JupyterHub deployment,
 see :ref:`apply-config-changes`.
 
@@ -47,9 +47,9 @@ changing your ``config.yaml`` file. This is done with the following structure.
     .. code-block:: yaml
 
        singleuser:
-           memory:
-              limit: 1G
-              guarantee: 1G
+         memory:
+           limit: 1G
+           guarantee: 1G
 
 This sets a memory limit and guarantee of 1G. Kubernetes will make sure that
 each user will always have access to 1G of RAM, and requests for more RAM will
@@ -63,9 +63,9 @@ Similarly, you can limit CPU as follows:
     .. code-block:: yaml
 
        singleuser:
-           cpu:
-              limit: .5
-              guarantee: .5
+         cpu:
+           limit: .5
+           guarantee: .5
 
 This would limit your users to a maximum of .5 of a CPU (so 1/2 of a CPU core), as well as guarantee them that same amount.
 
@@ -107,9 +107,9 @@ provide a new cluster size (i.e. number of nodes) as a command line option
 .. code-block:: bash
 
    gcloud container clusters resize \
-                <YOUR-CLUSTER-NAME> \
-                --size <NEW-SIZE> \
-                --zone <YOUR-CLUSTER-ZONE>
+       <YOUR-CLUSTER-NAME> \
+       --size <NEW-SIZE> \
+       --zone <YOUR-CLUSTER-ZONE>
 
 To display the cluster's name, zone, or current size, use the command:
 

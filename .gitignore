@@ -1,6 +1,7 @@
 ### Zero to JupyterHub Kubernetes ###
 tools/templates/rendered-templates/
 ci/bin/
+ci/.vagrant
 
 ### macOS ###
 *.DS_Store

@@ -14,11 +14,11 @@ Customization guide
     Customizing your deployment (extending) OK
     
     Customizing the User Environment
-        use an existing docker image
-        build a custom docker image with repo2docker
-        user jupyterlab by default
+        user jupyterlab by default OK
+        use an existing docker image OK
         set env variables
-        pre-populating users home dir
+        pre-populating users home dir (THINK THROUGH)
+        build a custom docker image with repo2docker (RELOCATE!)
 
     Customizing User Resources
         ser user memory and cpu guarantees/limits
@@ -34,3 +34,7 @@ Customization guide
         culling user pods
         admin users
         authenticating users
+
+EDUCATION SECTION?
+
+schema.yaml fix

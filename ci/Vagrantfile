@@ -1,19 +1,16 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# To test in vagrant:
-# vagrant up
-# vagrant ssh
-# . ci/minikube.env
-# /zero-to-jupyterhub-k8s/install.sh
-# /zero-to-jupyterhub-k8s/test.sh
+# See the readme for more details.
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "ubuntu/bionic64"
   config.vm.provider "virtualbox" do |vb|
      vb.memory = "3072"
      vb.cpus = 2
   end
-  config.vm.provision "shell", path: "trusty-setup.sh"
+  config.vm.provision "shell", path: "vagrant-bionic-setup.sh"
+
+  # this makes changes 
   config.vm.synced_folder "../", "/zero-to-jupyterhub-k8s"
 end

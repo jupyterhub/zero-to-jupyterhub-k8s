@@ -6,25 +6,25 @@ git:
 services:
   - docker
 install:
-  - pip install --no-cache-dir -r dev-requirements.txt
-  - . ci/minikube.env
-  - ./ci/install.sh
+  - . ci/0-setup-env-vars.sh
+  - ci/1-setup-binaries.sh
+  - pip3 install --no-cache-dir -r dev-requirements.txt
 script:
-  - python tools/templates/lint-and-validate-templates.py --chart-values chart-values.yaml
-  - chartpress --commit-range ${TRAVIS_COMMIT_RANGE}
-  - git diff
-  - ./ci/test.sh
+  - python3 tools/templates/lint-and-validate.py --chart-values lint-and-validate-config.yaml
+  . ci/2-setup-k8s.sh
+  - ci/3-build-chart-and-images.sh
+  - ci/4-run-tests.sh
 
 deploy:
   provider: script
   skip_cleanup: true
-  script: ./ci/deploy.sh
+  script: ./cd/publish-chart-and-images.sh
   on:
     branch:
-    - master
-    - v0.7-dev
+      - master
     condition: "$KUBE_VERSION = 1.9.4"
 env:
+  # Run one job for each entry in the matrix
   matrix:
     - KUBE_VERSION=1.10.0
     - KUBE_VERSION=1.9.4
