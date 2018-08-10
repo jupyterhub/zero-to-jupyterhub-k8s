@@ -93,15 +93,16 @@ proxy:
   https:
     enabled: true
     type: letsencrypt
-    #type: manualsecret
+    #type: letsencrypt, manual, secret
     letsencrypt:
       contactEmail: ''
     manual:
       key:
       cert:
-    secret: ""
-    keyname: ""
-    crtname: ""
+    secret:
+      name: ""
+      key: ""
+      crt: ""
     hosts: []
   networkPolicy:
     enabled: false
