@@ -1,5 +1,5 @@
-Zero to JupyterHub
-==================
+Zero to JupyterHub with Kubernetes
+==================================
 
 `JupyterHub`_ is a tool that allows you to quickly utilize cloud computing
 infrastructure to manage a hub that enables your users to interact remotely
@@ -125,11 +125,11 @@ Please submit a pull request to add to this section. Thanks.
 
 .. toctree::
    :maxdepth: 1
-   :caption: Resources from the community
+   :caption: Community section
 
-   additional-resources
-   users-list
    tips
+   users-list
+   additional-resources
 
 .. _reference:
 

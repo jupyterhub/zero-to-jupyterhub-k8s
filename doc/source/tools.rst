@@ -1,7 +1,7 @@
 .. _tools:
 
-Tools used in a JupyterHub Deployment
-=====================================
+Utilized Tools
+==============
 
 JupyterHub is meant to connect with many tools in the world of
 cloud computing and container technology. This page describes these

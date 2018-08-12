@@ -1,6 +1,6 @@
 name: jupyterhub
-version: v0.7-439e2bb8
-appVersion: v0.9.1
+version: v0.7-c14a5462
+appVersion: v0.9.2
 description: Multi-user Jupyter installation
 home: https://z2jh.jupyter.org
 sources:

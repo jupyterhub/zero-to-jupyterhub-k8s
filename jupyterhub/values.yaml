@@ -39,8 +39,8 @@ hub:
   extraVolumes: []
   extraVolumeMounts: []
   image:
-    name: jupyterhub/k8s-hub
-    tag: 23812c8e
+    name: consideratio/k8s-hub
+    tag: '31ed8573'
   resources:
     requests:
       cpu: 100m
@@ -106,9 +106,9 @@ proxy:
       key:
       cert:
     secret:
-      name: ""
-      key: ""
-      crt: ""
+      name: ''
+      key: ''
+      crt: ''
     hosts: []
   networkPolicy:
     enabled: false
@@ -151,8 +151,8 @@ singleuser:
     preferred: []
   networkTools:
     image:
-      name: jupyterhub/k8s-network-tools
-      tag: '3701e112'
+      name: consideratio/k8s-network-tools
+      tag: 'f26726e1'
   cloudMetadata:
     enabled: false
     ip: 169.254.169.254
@@ -189,8 +189,8 @@ singleuser:
       volumeNameTemplate: volume-{username}{servername}
       storageAccessModes: [ReadWriteOnce]
   image:
-    name: jupyterhub/k8s-singleuser-sample
-    tag: 2b6bccc5
+    name: consideratio/k8s-singleuser-sample
+    tag: 'ce83383d'
     pullPolicy: IfNotPresent
   imagePullSecret:
     enabled: false
@@ -246,8 +246,8 @@ prePuller:
     enabled: true
     extraEnv: {}
     image:
-      name: jupyterhub/k8s-image-awaiter
-      tag: 3c1d3294
+      name: consideratio/k8s-image-awaiter
+      tag: '3173b54c'
   continuous:
     enabled: true
   extraImages: []

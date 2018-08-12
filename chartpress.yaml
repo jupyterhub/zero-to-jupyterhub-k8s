@@ -1,15 +1,15 @@
 charts:
   - name: jupyterhub
-    imagePrefix: jupyterhub/k8s-
+    imagePrefix: consideratio/k8s-
     repo:
-      git: jupyterhub/helm-chart
-      published: https://jupyterhub.github.io/helm-chart
+      git: consideratio/helm-chart
+      published: https://consideratio.github.io/helm-chart
 
     images:
       hub:
         valuesPath: hub.image
         buildArgs:
-          JUPYTERHUB_VERSION: 0.9.1
+          JUPYTERHUB_VERSION: 0.9.*
       network-tools:
         valuesPath: singleuser.networkTools.image
       image-awaiter:
@@ -17,4 +17,4 @@ charts:
       singleuser-sample:
         valuesPath: singleuser.image
         buildArgs:
-          JUPYTERHUB_VERSION: 0.9.1
+          JUPYTERHUB_VERSION: 0.9.*

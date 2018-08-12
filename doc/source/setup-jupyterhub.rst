@@ -124,7 +124,7 @@ Install JupyterHub
       * The ``--version`` parameter corresponds to the *version of the helm chart*,
         not the version of JupyterHub. Each version of the JupyterHub helm chart
         is paired with a specific version of JupyterHub. E.g., v0.7 of the helm
-        chart runs JupyterHub v0.9.1.
+        chart runs JupyterHub v0.9.2.
 
 3. While Step 2 is running, you can see the pods being created by entering in
    a different terminal:

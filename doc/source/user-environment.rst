@@ -42,8 +42,8 @@ that is built on top of the `base-notebook image
 the `jupyter/docker-stacks repository
 <https://github.com/jupyter/docker-stacks/>`_. All images in the
 jupyter/docker-stacks come pre-installed with JupyterLab and the `JupyterLab-Hub
-extension <https://github.com/jupyterhub/jupyterlab-hub>`_ but is not set to be
-used by default in the Helm chart.
+extension <https://github.com/jupyterhub/jupyterlab-hub>`_ but the classic UI is
+still used by default in the Helm chart.
 
 This section will help you configure your Helm chart to use JupyterLab by
 default and optionally if you are building your own user image how to install it
@@ -146,7 +146,7 @@ Build a Docker image with ``repo2docker``
 
    Docker images to be used this way must have the ``jupyterhub`` package of a
    matching version with the Helm chart. This documentation is for Helm chart
-   ``v0.7``, and it uses JupyterHub version ``0.9.1``.
+   ``v0.7``, and it uses JupyterHub version ``0.9.2``.
 
 If you can't find a pre-existing image that suits your needs, you can create
 your own image. An easy way to do this is with the package :term:`repo2docker`.
@@ -198,7 +198,7 @@ to configure JupyterHub to build off of this image:
 
    .. code-block:: bash
 
-      jupyterhub==0.9.1
+      jupyterhub==0.9.2
       numpy==1.14.3
       scipy==1.1.0
       matplotlib==2.2.2
@@ -289,7 +289,7 @@ to configure JupyterHub to build off of this image:
 Set environment variables
 -------------------------
 
-Another way to affect your user's environment is by setting values for
+asdasd way to affect your user's environment is by setting values for
 :term:`environment variables`. While you can set them up in your Docker image,
 it is often easier to set them up in your helm chart.
 

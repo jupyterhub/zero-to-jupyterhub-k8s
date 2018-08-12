@@ -1,5 +1,5 @@
-Tips and command snippets
-=========================
+Tips and Snippets
+=================
 
 This is a page to collect a few particularly useful patterns and snippets
 that help you interact with your Kubernetes cluster and JupyterHub.

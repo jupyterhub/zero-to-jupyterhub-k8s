@@ -28,8 +28,8 @@ helm upgrade jh \
 
 echo "waiting for servers to become responsive"
 until curl --fail --silent $HUB_API_URL; do
-    kubectl get pod      --namespace jh --selector 'component in (hub,proxy,user-scheduler)'
     kubectl describe pod --namespace jh --selector 'component in (hub,proxy,user-scheduler)'
+    kubectl get pod      --namespace jh --selector 'component in (hub,proxy,user-scheduler)'
     sleep 10
 done
 
@@ -41,17 +41,8 @@ curl --silent $TEST_URL | grep version
 echo "getting jupyterhub info"
 curl --silent $TEST_URL/info
 
-echo "createing a user"
-curl --silent --request POST --data ''
-# TOOO
-
-echo "spawning a user"
-# TODO
-
-# FIXME:
-# kubectl client v1.12 will have 'kubectl wait'
-echo "waiting for test-user to spawn"
-# TODO
-
-echo "cull user"
-# TODO
+echo "starting pytest"
+# --verbose     : increase verbosity
+# --capture=no  : no capture of output to stdout or stderr
+# --exitfirst   : exit instantly on first error or failed test
+pytest --verbose --capture=no --exitfirst

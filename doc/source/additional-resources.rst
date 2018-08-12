@@ -1,7 +1,7 @@
 .. _additional-resources:
 
-Community-authored documentation
-================================
+Additional Resources
+====================
 
 This page contains links and references to other material in the JupyterHub
 ecosystem. It may include other guides, examples of JupyterHub deployments,

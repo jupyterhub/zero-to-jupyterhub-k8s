@@ -1,26 +1,29 @@
-# Tiniest notebook stack #
+# The default user image
 
-This is the tiniest possible docker image that can run a Jupyter Notebook. It
-is primarily meant for demo purposes where speed of pulling is important.
+This Docker image is the Helm chart's default user image. It contains the
+fundamentals only so that it can get pulled quickly. It is based on the
+[base-notebook image](https://github.com/jupyter/docker-stacks/blob/master/base-notebook/Dockerfile)
+from Project Jupyter's [jupyter/docker-stacks repository](https://github.com/jupyter/docker-stacks)
+which also contains many other images suitable for use with the Helm chart. To
+help you choose another one see [the docker-stacks documentation on selecting a
+user image](http://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html).
 
-Not recommended for non-demo uses!
-
-## What it gives you
-
-It is based on [Alpine Linux](https://alpinelinux.org/). It uses pip to install
-both the notebook and jupyterhub packages - the latter allows us to use this
-image for single-user servers in Kubernetes / Docker spawners.
-
-You can use pip3 to install packages (with `pip3` or `apk`) as root. There
-are no non-root users provisioned.
+For a brief introduction to *Dockerfiles*, *images* and *containers*, see [the
+guide's summary about container technology.](https://z2jh.jupyter.org/en/latest/tools.html#container-technology).
 
 ## Basic usage
 
-You can run a notebook with:
+To quickly try out this Docker image on your computer:
 
-```
-sudo docker run  -it  --rm  -p 8888:8888 jupyter/tiniest-notebook
+```sh
+# with the classic UI
+docker run  -it  --rm  -p 8888:8888 jupyterhub/k8s-singleuser-sample:ec5c487
+
+# with JupyterLab
+docker run  -it  --rm  -p 8888:8888 -e JUPYTER_ENABLE_LAB=true jupyterhub/k8s-singleuser-sample:ec5c487
 ```
 
-The default command is `/usr/bin/jupyter` (not `/usr/local/bin/jupyth`). For
-use with jupyterhub, `/usr/bin/jupyterhub-singleuser` is also available.
+## In the base-notebook image
+- Ubuntu Linux - v18.04 aka. Bionic
+- JupyterHub - required by with Helm chart since KubeSpawner requires it
+- [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) and [JupyterLab-Hub extension](https://jupyterlab.readthedocs.io/en/stable/user/jupyterhub.html) - to activate it over the classical UI by default, see [the guide's instructions](https://z2jh.jupyter.org/en/latest/user-environment.html#use-jupyterlab-by-default).
