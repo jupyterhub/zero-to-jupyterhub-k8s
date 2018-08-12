@@ -9,10 +9,10 @@ properties:
           - string
           - "null"
         description: |
-          A 64-byte cryptographically secure randomly generated string used to sign values of
+          A 32-byte cryptographically secure randomly generated string used to sign values of
           secure cookies set by the hub. If unset, jupyterhub will generate one on startup and
           save it in the file `jupyterhub_cookie_secret` in the `/srv/jupyterhub` directory of
-          the hub container. Value set here will override the value in `jupyterhub_cookie_secret`.
+          the hub container. A value set here will make JupyterHub overwrite any previous file.
 
           You do not need to set this at all if you are using the default configuration for
           storing databases - sqlite on a persistent volume (with `hub.db.type` set to the
@@ -20,10 +20,13 @@ properties:
           value explicitly - or your users will keep getting logged out each time the hub pod
           restarts.
 
-          This must be generated with `openssl rand -hex 32`.
-
           Changing this value will all user logins to be invalidated. If this secret leaks,
           *immediately* change it to something else, or user data can be compromised
+          
+          ```
+          # to generate a value, run
+          openssl rand -hex 32
+          ```
       imagePullPolicy:
         type: string
         enum:
@@ -33,7 +36,7 @@ properties:
         description: |
           Set the imagePullPolicy on the hub pod.
 
-          See [the kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
+          See the [Kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
           for more info on what the values mean.
       image:
         type: object
@@ -49,15 +52,23 @@ properties:
             description: |
               Name of the image, without the tag.
 
-              Examples:
-                - yuvipanda/wikimedia-hub
-                - gcr.io/my-project/my-hub
+              ```
+              # example names
+              yuvipanda/wikimedia-hub
+              gcr.io/my-project/my-hub
+              ```
           tag:
             type: string
             description: |
               The tag of the image to pull.
-
+              
               This is the value after the `:` in your full image name.
+
+              ```
+              # example tags
+              v1.11.1
+              zhy270a
+              ```
       db:
         type: object
         properties:
@@ -80,9 +91,11 @@ properties:
 
                  Use an `sqlite` database kept on a persistent volume attached to the hub.
 
-                 By default, this disk is dynamically created using the default
-                 [dynamic provisioner]. You can customize how this disk is created / attached
-                 by setting various properties under `hub.db.pvc`.
+                 By default, this disk is created by the cloud provider using
+                 *dynamic provisioning* configured by a [storage
+                 class](https://kubernetes.io/docs/concepts/storage/storage-classes/).
+                 You can customize how this disk is created / attached by
+                 setting various properties under `hub.db.pvc`.
 
                  This is the default setting, and should work well for most cloud provider
                  deployments.
@@ -166,7 +179,7 @@ properties:
         description: |
           Extra labels to add to the hub pod.
 
-          See [the kubernetes documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+          See the [Kubernetes docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
           to learn more about labels.
       extraEnv:
         type: list
@@ -236,16 +249,20 @@ properties:
       secretToken:
         type: string
         description: |
-          A 64-byte cryptographically secure randomly generated string used to secure communications
+          A 32-byte cryptographically secure randomly generated string used to secure communications
           between the hub and the configurable-http-proxy.
 
-          This must be generated with `openssl rand -hex 32`.
+          ```
+          # to generate a value, run
+          openssl rand -hex 32
+          ```
 
           Changing this value will cause the proxy and hub pods to restart. It is good security
           practice to rotate these values over time. If this secret leaks, *immediately* change
           it to something else, or user data can be compromised
     required:
       - secretToken
+
 
   auth:
     type: object
@@ -265,12 +282,16 @@ properties:
             description: |
               auth_state will be encrypted and stored in the Hub’s database. This can include things like authentication tokens, etc. to be passed to Spawners as environment variables.
               Encrypting auth_state requires the cryptography package.
-              It must contain one (or more, separated by ;) 32B encryption keys. These can be either base64 or hex-encoded.
+              It must contain one (or more, separated by ;) 32-byte encryption keys. These can be either base64 or hex-encoded.
               The JUPYTERHUB_CRYPT_KEY environment variable for the hub pod is set using this entry.
 
-              This can be generated with `openssl rand -hex 32`.
+              ```
+              # to generate a value, run
+              openssl rand -hex 32
+              ```
 
               If encryption is unavailable, auth_state cannot be persisted.
+
 
   singleuser:
     type: object
@@ -285,26 +306,30 @@ properties:
         properties:
           limit:
             type:
-            - string
-            - "null"
+              - string
+              - "null"
           guarantee:
             type:
-            - string
-            - "null"
+              - string
+              - "null"
       memory:
         type: object
         description: |
           Set Memory limits & guarantees that are enforced for each user.
-          See: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+          
+          See the [Kubernetes docs](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container)
+          for more info.
         properties:
           limit:
             type:
-            - string
-            - "null"
+              - string
+              - "null"
           guarantee:
             type:
-            - string
-            - "null"
+              - string
+              - "null"
+            description: |
+              Note that this field is referred to as *requests* by the Kubernetes API.
       imagePullPolicy:
         type: string
         enum:
@@ -314,14 +339,15 @@ properties:
         description: |
           Set the imagePullPolicy on the singleuser pods that are spun up by the hub.
 
-          See [the kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
-          for more info on what the values mean.
+          See the [Kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
+          for more info.
       imagePullSecret:
         type: object
         description: |
           Create a custom image pull secret used for spawned users.
 
-          This secret is created in the same namespace as your jupyterhub deployment and will be used to pull your single user image.
+          This secret is created in the same namespace as your JupyterHub
+          deployment and will be used to pull your user image.
         properties:
           registry:
             type: string
@@ -368,3 +394,183 @@ properties:
               The tag of the image to use.
 
               This is the value after the `:` in your full image name.
+      schedulerStrategy:
+        type:
+          - string
+          - "null"
+        description: |
+          Deprecated and no longer does anything. Use the user-scheduler instead
+          in order to accomplish a good packing of the user pods.
+        
+
+
+  scheduling:
+    type: object
+    description: |
+      Objects for customizing the scheduling of various pods on the nodes and
+      related labels.
+    properties:
+      userScheduler:
+        type: object
+        description: |
+          The user scheduler is making sure that user pods are scheduled
+          tight on nodes, this is useful for autoscaling of user node pools.
+        properties:
+          enabled:
+            type: boolean
+            description: |
+              Enables the user scheduler.
+          replicas:
+            type: integer
+            description: |
+              You can have multiple schedulers to share the workload or improve
+              availability on node failure.
+          image:
+            type: object
+            description: |
+              The image containing the [kube-scheduler
+              binary](https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/kube-scheduler-amd64).
+            properties:
+              name:
+                type: string
+              tag:
+                type:
+                  - string
+                  - "null"
+      podPriority:
+        type: object
+        description: |
+          Generally available since Kubernetes 1.11, Pod Priority is used to
+          allow real users evict placeholder pods.
+        properties:
+          enabled:
+            type: bool
+            description: |
+              Generally available since Kubernetes 1.11, Pod Priority is used to
+              allow real users evict placeholder pods.
+      userPlaceholder:
+        type: object
+        description: |
+          User placeholders simulate users but will thanks to PodPriority be
+          evicted by the cluster autoscaler if a real user shows up. In this way
+          placeholders allow you to create a headroom for the real users and
+          reduce the risk of a user having to wait for a node to be added. Be
+          sure to use the the continuous image puller as well along with
+          placeholders, so the images are also available when real users arrive.
+
+          To test your setup efficiently, you can adjust the amount of user
+          placeholders with the following command:
+          ```
+          # Configure to have 3 user placeholders
+          kubectl scale sts/user-placeholder --replicas=3
+          ```
+        properties:
+          enabled:
+            type: bool
+          replicas:
+            type: int
+            description: |
+              How many placeholder pods would you like to have?
+          resources:
+            type: object
+            description: |
+              Unless specified here, the placeholder pods will request the same
+              resources specified for the real singleuser pods.
+      userDummy:
+        type: object
+        description: |
+          User dummies can help you ensure your cluster autoscaler,
+          user-scheduler and pod priority is setup to your liking. User
+          dummies behave like placeholders but they have their pod priority
+          setup like real users and can evict placeholders.
+
+          To test your setup efficiently, you can adjust the amount of user
+          dummies with the following command.
+
+          ```
+          # Configure to have 3 user dummies
+          kubectl scale sts/user-dummy --replicas=3
+          ```
+        properties:
+          enabled:
+            type: bool
+          replicas:
+            type: int
+            description: |
+              How many user-dummy pods would you like to have? Note that it
+              makes more sense to have this set at 0 but then adjust it with a
+              kubectl scale command during testing.
+          resources:
+            type: object
+            description: |
+              Unless specified here, the user-dummy pods will request the same
+              resources specified for the real singleuser pods.
+      corePods:
+        type: object
+        description: |
+          These settings influence the core pods like the hub, proxy and
+          scheduler pods.
+        properties:
+          nodeAffinity:
+            type: object
+            description: |
+              Where should pods be scheduled? Perhaps on nodes with a certain
+              label is preferred or even required?
+            properties:
+              matchNodePurpose:
+                type: string
+                enum:
+                  - ignore
+                  - prefer
+                  - require
+                description: |
+                  Decide if core pods *ignore*, *prefer* or *require* to
+                  schedule on nodes with this label:
+                  ```
+                  hub.jupyter.org/node-purpose=core
+                  ```
+      userPods:
+        type: object
+        description: |
+          These settings influence the user pods like the user-placeholder,
+          user-dummy and actual user pods named like jupyter-someusername.
+        properties:
+          nodeAffinity:
+            type: object
+            description: |
+              Where should pods be scheduled? Perhaps on nodes with a certain
+              label is preferred or even required?
+            properties:
+              matchNodePurpose:
+                type: string
+                enum:
+                  - ignore
+                  - prefer
+                  - require
+                description: |
+                  Decide if user pods *ignore*, *prefer* or *require* to
+                  schedule on nodes with this label:
+                  ```
+                  hub.jupyter.org/node-purpose=user
+                  ```
+          podAffinity:
+            type: object
+            description: |
+              When a pod is to be scheduled, the scheduled can be made to prefer
+              of require having other pods within the same domain (commonly the
+              same
+              node).
+            properties:
+              preferScheduleNextToRealUsers:
+                type: bool
+                description: |
+                  Consider two nodes, one with two user-placeholder pods and one
+                  with two actual users. With this preconfigured affinity option
+                  set, the pod will schedule next to the real users which is
+                  what you would want in order to accomplish efficient cluster
+                  autoscaling.
+
+                  NOTE: This is recommended for clusters with less than 100
+                  nodes, but since pod affinities are computationally expensive
+                  and cause the scheduler to leave new pods in Pending state for
+                  seconds upwards if the cluster grows large.

@@ -1,4 +1,4 @@
-# User Management
+# Customizing User Management
 
 This section describes management of users and their
 permissions on JupyterHub.

@@ -1,6 +1,6 @@
 {{- $manualHTTPS := (and .Values.proxy.https.enabled (eq .Values.proxy.https.type "manual")) -}}
 {{- $manualHTTPSwithsecret := (and .Values.proxy.https.enabled (eq .Values.proxy.https.type "secret")) -}}
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: proxy
@@ -16,6 +16,7 @@ spec:
       labels:
         {{- /* Changes here will cause the Deployment to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
+        hub.jupyter.org/pod-kind: "core"
         hub.jupyter.org/network-access-hub: "true"
         hub.jupyter.org/network-access-singleuser: "true"
         {{- if .Values.proxy.labels }}
@@ -31,27 +32,23 @@ spec:
     spec:
       nodeSelector: {{ toJson .Values.proxy.nodeSelector }}
       terminationGracePeriodSeconds: 60
-      affinity:
-        podAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 1
-              podAffinityTerm:
-                topologyKey: kubernetes.io/hostname
-                labelSelector:
-                  matchExpressions:
-                    - key: component
-                      operator: In
-                      values: ['hub']
-                    - key: release
-                      operator: In
-                      values: [{{ .Release.Name | quote }}]
+      {{- if .Values.scheduling.podPriority.enabled }}
+      priorityClassName: jupyterhub-default-priority
+      {{- end }}
+      {{- $_ := merge (dict "podKind" "core") . }}
+      {{- $dummy := include "jupyterhub.prepareScope" $_ }}
+      {{- if $_.hasTolerations }}
+      {{- include "jupyterhub.tolerations" $_ | nindent 6 }}
+      {{- end }}
+      {{- if $_.hasAffinity }}
+      {{- include "jupyterhub.affinity" $_ | nindent 6 }}
+      {{- end }}
       {{- if $manualHTTPSwithsecret }}
       volumes:
         - name: tls-secret
           secret:
             secretName: {{ .Values.proxy.https.secret.name }}
-      {{- end }}
-      {{- if $manualHTTPS }}
+      {{- else if $manualHTTPS }}
       volumes:
         - name: tls-secret
           secret:

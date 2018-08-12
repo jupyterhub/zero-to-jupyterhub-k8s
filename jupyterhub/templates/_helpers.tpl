@@ -55,7 +55,7 @@
   ## Example usage
   ```yaml
   # Excerpt from proxy/autohttps/deployment.yaml
-  apiVersion: apps/v1beta2
+  apiVersion: apps/v1
   kind: Deployment
   metadata:
     name: {{ include "jupyterhub.nameField" . }}
@@ -173,10 +173,93 @@ component: {{ include "jupyterhub.componentLabel" . }}
 {{ include "jupyterhub.matchLabels" $_ | replace ": " "=" | replace "\n" "," | quote }}
 {{- end }}
 
+
 {{- /*
-  singleuser.imagePullSecret:
-    allows creating a base64 encoded docker registry json blob
+  jupyterhub.dockerconfigjson:
+    Creates a base64 encoded docker registry json blob for use in a image pull
+    secret, just like the `kubectl create secret docker-registry` command does
+    for the generated secrets data.dockerconfigjson field.
+    
+    - https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
 */}}
-{{- define "singleuser.imagePullSecret" }}
-{{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.singleuser.imagePullSecret.registry (printf "%s:%s" .Values.singleuser.imagePullSecret.username .Values.singleuser.imagePullSecret.password | b64enc) | b64enc }}
+{{- define "jupyterhub.dockerconfigjson" -}}
+{{ include "jupyterhub.dockerconfigjson.yaml" . | toJson | trimAll "\"" | replace " " "" | replace "\\n" "" | replace "\\\"" "\"" | b64enc }}
+{{- end }}
+
+{{- define "jupyterhub.dockerconfigjson.yaml" -}}
+{{- with .Values.singleuser.imagePullSecret -}}
+{
+  "auths": {
+    {{ .registry | default "https://index.docker.io/v1/" | quote }}: {
+      "username": {{ .username | quote }},
+      "password": {{ .password | quote }},
+      {{- if .email }}
+      "email": {{ .email | quote }},
+      {{- end }}
+      "auth": {{ (print .username ":" .password) | b64enc | quote }}
+    }
+  }
+}
+{{- end }}
+{{- end }}
+
+
+{{- /*
+The default resource request - whatever a singleuser requests.
+*/}}
+{{- define "jupyterhub.default-resources" -}}
+{{- $r1 := .Values.singleuser.cpu.guarantee -}}
+{{- $r2 := .Values.singleuser.memory.guarantee -}}
+{{- $r3 := .Values.singleuser.extraResource.guarantees -}}
+{{- $r := or $r1 $r2 $r3 }}
+{{- $l1 := .Values.singleuser.cpu.limit -}}
+{{- $l2 := .Values.singleuser.memory.limit -}}
+{{- $l3 := .Values.singleuser.extraResource.limits -}}
+{{- $l := or $l1 $l2 $l3 }}
+{{- if $r -}}
+requests:
+  {{- if $r1 }}
+  cpu: {{ .Values.singleuser.cpu.guarantee }}
+  {{- end }}
+  {{- if $r2 }}
+  memory: {{ .Values.singleuser.memory.guarantee }}
+  {{- end }}
+  {{- if $r3 }}
+  {{- range $key, $value := .Values.singleuser.extraResource.guarantees }}
+  {{ $key | quote }}: {{ $value | quote }}
+  {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- if and $r $l -}}
+{{- println }}
+{{- end }}
+
+{{- if $l -}}
+limits:
+  {{- if $l1 }}
+  cpu: {{ .Values.singleuser.cpu.limit }}
+  {{- end }}
+  {{- if $l2 }}
+  memory: {{ .Values.singleuser.memory.limit }}
+  {{- end }}
+  {{- if $l3 }}
+  {{- range $key, $value := .Values.singleuser.extraResource.limits }}
+  {{ $key | quote }}: {{ $value | quote }}
+  {{- end }}
+  {{- end }}
+{{- end }}
+{{- end }}
+
+{{- /*
+A custom resource request.
+*/}}
+{{- define "jupyterhub.resources" -}}
+{{- if and .Values.scheduling.userPlaceholder.resources (eq .type "user-placeholder") -}}
+{{ .Values.scheduling.userPlaceholder.resources | toYaml | trimSuffix "\n" }}
+{{- else if and .Values.scheduling.userDummy.resources (eq .type "user-dummy") -}}
+{{ .Values.scheduling.userDummy.resources | toYaml | trimSuffix "\n" }}
+{{- else -}}
+{{ include "jupyterhub.default-resources" . }}
+{{- end }}
 {{- end }}

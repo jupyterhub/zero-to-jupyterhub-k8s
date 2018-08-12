@@ -2,8 +2,7 @@
 .. _user-storage:
 ```
 
-# User storage in JupyterHub
-
+# Customizing User Storage
 
 For the purposes of this guide, we'll describe "storage" as
 a "volume" - a location on a disk where a user's data resides.

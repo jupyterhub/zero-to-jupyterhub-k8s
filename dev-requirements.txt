@@ -1,3 +1,12 @@
+# PyGithub and python-dateutil is used by tools/contributors.py
 PyGithub>=1
 python-dateutil>=2
+
+# chartpress is crucial
+# - builds images and can pushe them also (--push)
+# - updates image tag in values.yaml
+# - can publish the built Helm chart (--publish)
 chartpress==0.2.1
+
+# yamllint is used by tools/templates/lint-and-validate.py
+yamllint>=1.1.1

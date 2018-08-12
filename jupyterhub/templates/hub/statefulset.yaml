@@ -1,5 +1,5 @@
-apiVersion: apps/v1beta2
-kind: Deployment
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
   name: hub
   labels:
@@ -9,13 +9,13 @@ spec:
   selector:
     matchLabels:
       {{- include "jupyterhub.matchLabels" . | nindent 6 }}
-  strategy:
-    {{- .Values.hub.deploymentStrategy | toYaml | trimSuffix "\n" | nindent 4 }}
+  serviceName: hub
   template:
     metadata:
       labels:
         {{- /* Changes here will cause the Deployment to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
+        hub.jupyter.org/pod-kind: "core"
         hub.jupyter.org/network-access-proxy-api: "true"
         hub.jupyter.org/network-access-proxy-http: "true"
         hub.jupyter.org/network-access-singleuser: "true"
@@ -31,20 +31,17 @@ spec:
         {{- end }}
     spec:
       nodeSelector: {{ toJson .Values.hub.nodeSelector }}
-      affinity:
-        podAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 1
-              podAffinityTerm:
-                topologyKey: kubernetes.io/hostname
-                labelSelector:
-                  matchExpressions:
-                    - key: component
-                      operator: In
-                      values: ['proxy']
-                    - key: release
-                      operator: In
-                      values: [{{ .Release.Name | quote }}]
+      {{- if .Values.scheduling.podPriority.enabled }}
+      priorityClassName: jupyterhub-default-priority
+      {{- end }}
+      {{- $_ := merge (dict "podKind" "core") . }}
+      {{- $dummy := include "jupyterhub.prepareScope" $_ }}
+      {{- if $_.hasTolerations }}
+      {{- include "jupyterhub.tolerations" $_ | nindent 6 }}
+      {{- end }}
+      {{- if $_.hasAffinity }}
+      {{- include "jupyterhub.affinity" $_ | nindent 6 }}
+      {{- end }}
       volumes:
         - name: config
           configMap:
@@ -118,9 +115,6 @@ spec:
             {{- .Values.hub.resources | toYaml | trimSuffix "\n" | nindent 12 }}
           imagePullPolicy: {{ .Values.hub.imagePullPolicy }}
           env:
-            {{- /* Put this here directly so hub will restart when we change this */}}
-            - name: SINGLEUSER_IMAGE
-              value: "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"
             {{- if .Values.hub.cookieSecret }}
             - name: JPY_COOKIE_SECRET
               valueFrom:

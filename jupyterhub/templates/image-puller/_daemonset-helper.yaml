@@ -4,11 +4,10 @@ Returns an image-puller daemonset. Two daemonsets will be created like this.
 - continuous-image-puller: for newly added nodes image pulling
 */}}
 {{- define "jupyterhub.imagePuller.daemonset" -}}
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  {{- $label := print "-" .Release.Time.Seconds }}
-  name: {{ print .componentPrefix "image-puller" }}{{- if .hook }}{{ $label }}{{- end }}
+  name: {{ print .componentPrefix "image-puller" }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
     {{- if .hook }}
@@ -20,7 +19,7 @@ metadata:
     Allows the daemonset to be deleted when the image-awaiter job is completed.
     */}}
     "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
     "helm.sh/hook-weight": "-10"
   {{- end }}
 spec:
@@ -34,11 +33,28 @@ spec:
   template:
     metadata:
       labels:
-        {{- /* Changes here will cause the Deployment to restart the pods. */}}
+        {{- /* Changes here will cause the DaemonSet to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
     spec:
+      {{- $_ := merge (dict "podKind" "user" "daemonSet" true) . }}
+      {{- $dummy := include "jupyterhub.prepareScope" $_ }}
+      {{- if $_.hasTolerations }}
+      {{- include "jupyterhub.tolerations" $_ | nindent 6 }}
+      {{- end }}
+      nodeSelector: {{ toJson .Values.singleuser.nodeSelector }}
+      {{- if $_.nodeAffinityRequired }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              {{- $_.nodeAffinityRequired | nindent 14 }}
+      {{- end }}
       terminationGracePeriodSeconds: 0
       automountServiceAccountToken: false
+      {{- if .Values.singleuser.imagePullSecret.enabled }}
+      imagePullSecrets:
+        - name: singleuser-image-credentials
+      {{- end }}
       initContainers:
         - name: image-pull-singleuser
           image: {{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}

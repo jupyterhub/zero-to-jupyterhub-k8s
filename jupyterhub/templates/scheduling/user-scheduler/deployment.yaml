@@ -1,0 +1,59 @@
+{{- if .Values.scheduling.userScheduler.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-scheduler
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.scheduling.userScheduler.replicas }}
+  selector:
+    matchLabels:
+      {{- include "jupyterhub.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- /* Changes here will cause the Deployment to restart the pods. */}}
+        {{- include "jupyterhub.matchLabels" . | nindent 8 }}
+        hub.jupyter.org/pod-kind: "core"
+      annotations:
+        # This lets us autorestart when the configmap changes!
+        checksum/config-map: {{ include (print $.Template.BasePath "/scheduling/user-scheduler/configmap.yaml") . | sha256sum }}
+    spec:
+      {{- if .Values.rbac.enabled }}
+      serviceAccountName: user-scheduler
+      {{- end }}
+      {{- $_ := merge (dict "podKind" "core") . }}
+      {{- $dummy := include "jupyterhub.prepareScope" $_ }}
+      {{- if $_.hasTolerations }}
+      {{- include "jupyterhub.tolerations" $_ | nindent 6 }}
+      {{- end }}
+      {{- if $_.hasAffinity }}
+      {{- include "jupyterhub.affinity" $_ | nindent 6 }}
+      {{- end }}
+      containers:
+        - name: user-scheduler
+          image: {{ include "jupyterhub.scheduler.image" . }}
+          command:
+            - /usr/local/bin/kube-scheduler
+            - --scheduler-name=user-scheduler
+            - --policy-configmap=user-scheduler
+            - --policy-configmap-namespace={{ .Release.Namespace }}
+            - --lock-object-name=user-scheduler
+            - --lock-object-namespace={{ .Release.Namespace }}
+            - --leader-elect-resource-lock=configmaps
+            - --v=100
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 10251
+            initialDelaySeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 10251
+          resources:
+            requests:
+              cpu: 50m
+              memory: 512Mi
+{{- end }}

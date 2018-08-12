@@ -103,6 +103,17 @@ auth:
 
 
 singleuser:
+  nodeSelector: {}
+  extraTolerations: []
+  extraNodeAffinity:
+    required: []
+    preferred: []
+  extraPodAffinity:
+    required: []
+    preferred: []
+  extraPodAntiAffinity:
+    required: []
+    preferred: []
   networkTools:
     image:
       name: jupyterhub/k8s-network-tools
@@ -123,11 +134,9 @@ singleuser:
   extraEnv: {}
   lifecycleHooks:
   initContainers:
-  nodeSelector: {}
   uid: 1000
   fsGid: 100
   serviceAccountName:
-  schedulerStrategy:
   storage:
     type: dynamic
     extraVolumes: []
@@ -147,6 +156,12 @@ singleuser:
     name: jupyterhub/k8s-singleuser-sample
     tag: generated-by-chartpress
     pullPolicy: IfNotPresent
+  imagePullSecret:
+    enabled: true
+    registry: R
+    username: U
+    email: E
+    password: P
   startTimeout: 300
   cpu:
     limit:
@@ -159,6 +174,32 @@ singleuser:
     guarantees: {}
   cmd: jupyterhub-singleuser
   defaultUrl:
+
+
+scheduling:
+  userScheduler:
+    enabled: true
+    replicas: 1
+    image:
+      name: gcr.io/google_containers/kube-scheduler-amd64
+      tag: v1.11.1-beta.0
+  podPriority:
+    enabled: true
+  userPlaceholder:
+    enabled: true
+    replicas: 1
+    resources:
+  userDummy:
+    enabled: true
+    replicas: 1
+  corePods:
+    nodeAffinity:
+      matchNodePurpose: "require"
+  userPods:
+    nodeAffinity:
+      matchNodePurpose: "require"
+    podAffinity:
+      preferScheduleNextToRealUsers: true
 
 
 prePuller:

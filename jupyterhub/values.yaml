@@ -15,7 +15,7 @@ hub:
     # sqlite-pvc backed hub requires Recreate strategy to work
     type: Recreate
     # This is required for upgrading to work
-    rollingUpdate: null
+    rollingUpdate:
   db:
     type: sqlite-pvc
     upgrade:
@@ -30,7 +30,7 @@ hub:
     url:
   labels: {}
   annotations:
-    prometheus.io/scrape: "true"
+    prometheus.io/scrape: 'true'
     prometheus.io/path: /hub/metrics
   extraConfig: {}
   extraConfigMap: {}
@@ -39,11 +39,11 @@ hub:
   extraVolumes: []
   extraVolumeMounts: []
   image:
-    name: jupyterhub/k8s-hub
-    tag: generated-by-chartpress
+    name: consideratio/k8s-hub
+    tag: '31ed8573'
   resources:
     requests:
-      cpu: 200m
+      cpu: 100m
       memory: 512Mi
   services: {}
   imagePullPolicy: IfNotPresent
@@ -78,7 +78,7 @@ proxy:
       pullPolicy: IfNotPresent
     resources:
       requests:
-        cpu: 200m
+        cpu: 100m
         memory: 512Mi
   nginx:
     image:
@@ -106,9 +106,9 @@ proxy:
       key:
       cert:
     secret:
-      name: ""
-      key: ""
-      crt: ""
+      name: ''
+      key: ''
+      crt: ''
     hosts: []
   networkPolicy:
     enabled: false
@@ -138,10 +138,21 @@ auth:
 
 
 singleuser:
+  nodeSelector: {}
+  extraTolerations: []
+  extraNodeAffinity:
+    required: []
+    preferred: []
+  extraPodAffinity:
+    required: []
+    preferred: []
+  extraPodAntiAffinity:
+    required: []
+    preferred: []
   networkTools:
     image:
-      name: jupyterhub/k8s-network-tools
-      tag: generated-by-chartpress
+      name: consideratio/k8s-network-tools
+      tag: 'f26726e1'
   cloudMetadata:
     enabled: false
     ip: 169.254.169.254
@@ -156,14 +167,13 @@ singleuser:
                 - 169.254.169.254/32
   events: false
   extraLabels: {}
+  storageExtraLabels: {}
   extraEnv: {}
   lifecycleHooks:
   initContainers:
-  nodeSelector: {}
   uid: 1000
   fsGid: 100
   serviceAccountName:
-  schedulerStrategy:
   storage:
     type: dynamic
     extraVolumes: []
@@ -179,9 +189,15 @@ singleuser:
       volumeNameTemplate: volume-{username}{servername}
       storageAccessModes: [ReadWriteOnce]
   image:
-    name: jupyterhub/k8s-singleuser-sample
-    tag: generated-by-chartpress
+    name: consideratio/k8s-singleuser-sample
+    tag: 'ce83383d'
     pullPolicy: IfNotPresent
+  imagePullSecret:
+    enabled: false
+    registry:
+    username:
+    email:
+    password:
   startTimeout: 300
   cpu:
     limit:
@@ -193,7 +209,36 @@ singleuser:
     limits: {}
     guarantees: {}
   cmd: jupyterhub-singleuser
-  defaultUrl:
+  defaultUrl: /
+
+
+scheduling:
+  userScheduler:
+    enabled: true
+    replicas: 1
+    image:
+      name: gcr.io/google_containers/kube-scheduler-amd64
+      tag: v1.11.1
+  podPriority:
+    enabled: false
+  userPlaceholder:
+    enabled: true
+    replicas: 0
+    resources:
+  userDummy:
+    enabled: true
+    replicas: 0
+    # resources.request and resources.limits must only contain keys with values
+    # and be left out if they don't contain any keys
+    resources:
+  corePods:
+    nodeAffinity:
+      matchNodePurpose: prefer
+  userPods:
+    nodeAffinity:
+      matchNodePurpose: prefer
+    podAffinity:
+      preferScheduleNextToRealUsers: true
 
 
 prePuller:
@@ -201,15 +246,15 @@ prePuller:
     enabled: true
     extraEnv: {}
     image:
-      name: jupyterhub/k8s-image-awaiter
-      tag: generated-by-chartpress
+      name: consideratio/k8s-image-awaiter
+      tag: '3173b54c'
   continuous:
-    enabled: false
+    enabled: true
   extraImages: []
   pause:
     image:
       name: gcr.io/google_containers/pause
-      tag: '3.0'
+      tag: '3.1'
 
 
 ingress:
@@ -226,10 +271,6 @@ cull:
   every: 600
   concurrency: 10
   maxAge: 0
-  podCuller:
-    image:
-      name: jupyterhub/k8s-pod-culler
-      tag: generated-by-chartpress
 
 
 debug:

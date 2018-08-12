@@ -3,11 +3,15 @@ DO NOT EDIT THIS LINE. This file is used in `conf.py to generate schema.md`. Edi
 .. _helm-chart-configuration-reference:
 ```
 
-# Helm Chart Configuration Reference
+# Configuration Reference 
 
-The [JupyterHub helm chart](https://github.com/jupyterhub/zero-to-jupyterhub-k8s) is configurable so that you can customize your JupyterHub setup however you'd like. You can extend user resources, build off of different Docker images, manage security and authentication, and more.
+The [JupyterHub Helm
+chart](https://github.com/jupyterhub/zero-to-jupyterhub-k8s) is configurable by
+values in your `config.yaml`. In this way, you can extend user resources, build off
+of different Docker images, manage security and authentication, and more.
 
-Below is a description of the fields that are exposed with the JupyterHub helm chart.
-For more guided information about some specific things you can do with
-modifications to the helm chart, see the [extending jupyterhub](extending-jupyterhub.html)
-and [user environment](user-environment.html) pages.
+```eval_rst
+Below is a description of the fields that are exposed with the JupyterHub Helm
+chart. For more guided information about some specific things you can do with
+modifications to the helm chart, see the :ref:`customization-guide`.
+```
