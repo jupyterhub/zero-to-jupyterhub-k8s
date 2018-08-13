@@ -28,6 +28,10 @@ c.JupyterHub.last_activity_interval = 60
 # Max number of servers that can be spawning at any one time
 c.JupyterHub.concurrent_spawn_limit = get_config('hub.concurrent-spawn-limit')
 
+# Max number of consecutive failures before the Hub restarts itself
+# requires jupyterhub 0.9.2
+c.Spawner.consecutive_failure_limit = get_config('hub.consecutive-failure-limit', 0)
+
 active_server_limit = get_config('hub.active-server-limit', None)
 if active_server_limit is not None:
     c.JupyterHub.active_server_limit = int(active_server_limit)
