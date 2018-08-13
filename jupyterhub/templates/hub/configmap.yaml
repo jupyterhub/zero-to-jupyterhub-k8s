@@ -216,6 +216,7 @@ data:
   {{- /* Hub */}}
   hub.allow-named-servers: {{ .Values.hub.allowNamedServers | quote }}
   hub.concurrent-spawn-limit: {{ .Values.hub.concurrentSpawnLimit | quote }}
+  hub.consecutive-failure-limit: {{ .Values.hub.consecutiveFailureLimit | quote }}
   {{- if .Values.hub.activeServerLimit }}
   hub.active-server-limit: {{ .Values.hub.activeServerLimit | quote }}
   {{- end }}

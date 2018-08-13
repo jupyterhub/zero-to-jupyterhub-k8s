@@ -10,6 +10,7 @@ hub:
   fsGid: 1000
   nodeSelector: {}
   concurrentSpawnLimit: 64
+  consecutiveFailureLimit: 5
   activeServerLimit:
   deploymentStrategy:
     # sqlite-pvc backed hub requires Recreate strategy to work

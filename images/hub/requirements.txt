@@ -1,13 +1,14 @@
-statsd==3.2.2
+# jupyterhub version is defined in chartpress.yaml
 jupyterhub-dummyauthenticator==0.3.1
 jupyterhub-tmpauthenticator==0.5
 jupyterhub-ltiauthenticator==0.3
 jupyterhub-ldapauthenticator==1.2.2
 nullauthenticator==1.0
-oauthenticator==0.7.3
+oauthenticator==0.8.0
 pymysql==0.9.2
 psycopg2==2.7.5
 pycurl==7.43.0.2
+statsd==3.2.2
 mwoauth==0.3.2
 globus_sdk[jwt]==1.5.0
 cryptography==2.3
