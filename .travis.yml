@@ -6,6 +6,7 @@ git:
 services:
 - docker
 install:
+- export CICD=true
 - pip install --no-cache-dir -r dev-requirements.txt
 - . ci/minikube.env
 - ./ci/install.sh
