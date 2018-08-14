@@ -94,7 +94,7 @@ proxy:
       tag: 0.1.6
       pullPolicy: IfNotPresent
     resources: {}
-  labels:
+  labels: {}
   nodeSelector: {}
   pdb:
     enabled: true
