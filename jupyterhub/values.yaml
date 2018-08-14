@@ -16,7 +16,7 @@ hub:
     # sqlite-pvc backed hub requires Recreate strategy to work
     type: Recreate
     # This is required for upgrading to work
-    rollingUpdate: null
+    rollingUpdate:
   db:
     type: sqlite-pvc
     upgrade:
@@ -31,7 +31,7 @@ hub:
     url:
   labels: {}
   annotations:
-    prometheus.io/scrape: "true"
+    prometheus.io/scrape: 'true'
     prometheus.io/path: /hub/metrics
   extraConfig: {}
   extraConfigMap: {}
@@ -107,9 +107,9 @@ proxy:
       key:
       cert:
     secret:
-      name: ""
-      key: ""
-      crt: ""
+      name: ''
+      key: ''
+      crt: ''
     hosts: []
   networkPolicy:
     enabled: false
