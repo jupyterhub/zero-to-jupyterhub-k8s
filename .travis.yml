@@ -8,13 +8,13 @@ services:
 install:
 - export CICD=true
 - pip install --no-cache-dir -r dev-requirements.txt
-- . ci/minikube.env
-- ./ci/install.sh
+- . ci/0-setup-env
+- ./ci/1-setup-binaries
 script:
-- python3 tools/templates/lint-and-validate.py
-- chartpress --commit-range ${TRAVIS_COMMIT_RANGE}
-- git diff
-- ./ci/test.sh
+- ./ci/2-lint-and-validate
+- ./ci/3-setup-k8s
+- ./ci/4-build-chart-and-images
+- ./ci/5-run-tests.sh
 
 deploy:
   provider: script

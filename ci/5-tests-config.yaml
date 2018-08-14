@@ -1,0 +1,25 @@
+proxy:
+  secretToken: 97141abb55ea5321867979cb57bb2e6a86a2f4d6bb166fca45aedb07c212c42d
+  service:
+    type: NodePort
+    nodePorts:
+      http: 31212
+
+hub:
+  cookieSecret: 1470700e01f77171c2c67b12130c25081dfbdf2697af8c2f2bd05621b31100bf
+  db:
+    type: sqlite-memory
+  services:
+    tests:
+      admin: true
+      apiToken: "0cc05feaefeeb29179e924ffc6d3886ffacf0d1a28ab225f5c210436ffc5cfd5"
+
+singleuser:
+  storage:
+    type: none
+  memory:
+    guarantee: null
+
+prePuller:
+  hook:
+    enabled: false

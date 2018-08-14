@@ -1,0 +1,28 @@
+#!/bin/bash
+# NOTE: The script should be executed from the repo directory
+
+# SCRIPT SUMMARY
+# --------------
+# 1. Run chartpress that will do the following
+#    i. Build images
+#   ii. Update jupyterhub/values.yaml with image names and tags
+# 2. Log changes made to jupyterhub/values.yaml
+
+# Set shell options
+# -e : Exit immediately if a command exits with a non-zero status.
+# -u : Treat unset variables as an error when substituting.
+# -x : Print commands and their arguments as they are executed.
+set -eux
+
+# chartpress will...
+# 1. Update Chart.yaml and values.yaml
+# 2. Build images using docker
+# 3. Build chart
+if [[ -z "${CICD}" ]]; then
+  chartpress --commit-range "${TRAVIS_COMMIT_RANGE}"
+else
+  chartpress
+fi
+
+# Log changes to Chart.yaml and values.yaml
+git diff
