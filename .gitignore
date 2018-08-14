@@ -1,6 +1,9 @@
 ### Zero to JupyterHub Kubernetes ###
-tools/lint-output/
+tools/templates/rendered-templates/
+bin/
+ci/.vagrant
 
+.vscode
 
 ### macOS ###
 *.DS_Store

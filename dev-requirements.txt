@@ -1,3 +1,14 @@
+# chartpress is important for local development, CI and CD
+# - builds images and can push them also (--push)
+# - updates image names and tags in values.yaml
+# - can publish the built Helm chart (--publish)
+chartpress==0.2.1
+
+# yamllint is important for local development, CI
+# - used within tools/templates/lint-and-validate.py
+yamllint>=1.1.1
+
+# PyGithub and python-dateutil is rarely used
+# - used within tools/contributors.py
 PyGithub>=1
 python-dateutil>=2
-chartpress==0.2.1

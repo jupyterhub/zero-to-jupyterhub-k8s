@@ -23,6 +23,15 @@ curl -Lo minikube https://storage.googleapis.com/minikube/releases/v${MINIKUBE_V
 chmod +x minikube
 mv minikube bin/
 
+echo "installing kubeval"
+if ! [ -f bin/kubeval-${KUBEVAL_VERSION} ]; then
+  curl -sSLo bin/kubeval-${KUBEVAL_VERSION}.tar.gz https://github.com/garethr/kubeval/releases/download/${KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz
+  tar --extract --file bin/kubeval-${KUBEVAL_VERSION}.tar.gz --directory bin
+  rm bin/kubeval-${KUBEVAL_VERSION}.tar.gz
+  mv bin/kubeval bin/kubeval-${KUBEVAL_VERSION}
+fi
+cp bin/kubeval-${KUBEVAL_VERSION} bin/kubeval
+
 echo "starting minikube with RBAC"
 sudo CHANGE_MINIKUBE_NONE_USER=true $PWD/bin/minikube start --vm-driver=none --kubernetes-version=v${KUBE_VERSION} --extra-config=apiserver.Authorization.Mode=RBAC --bootstrapper=localkube
 minikube update-context
