@@ -10,6 +10,7 @@ install:
 - . ci/minikube.env
 - ./ci/install.sh
 script:
+- python3 tools/templates/lint-and-validate.py
 - chartpress --commit-range ${TRAVIS_COMMIT_RANGE}
 - git diff
 - ./ci/test.sh
@@ -21,7 +22,6 @@ deploy:
   on:
     branch:
     - master
-    - v0.7-dev
     condition: "$KUBE_VERSION = 1.9.4"
 env:
   matrix:
