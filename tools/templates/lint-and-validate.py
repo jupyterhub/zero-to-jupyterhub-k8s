@@ -16,7 +16,7 @@ import subprocess
 
 os.chdir(os.path.dirname(sys.argv[0]))
 
-def lint(yamllint_config, chart_values, kubernetes_version, output_dir):
+def lint(yamllint_config, values, kubernetes_version, output_dir):
     """Calls `helm lint`, `helm template`, `yamllint` and `kubeval`."""
 
     print("### Clearing output directory")
@@ -31,13 +31,13 @@ def lint(yamllint_config, chart_values, kubernetes_version, output_dir):
     print("### 1/4 - helm lint")
     subprocess.check_call([
         'helm', 'lint', '../../jupyterhub',
-        '--values', chart_values,
+        '--values', values,
     ])
 
     print("### 2/4 - helm template")
     subprocess.check_call([
         'helm', 'template', '../../jupyterhub',
-        '--values', chart_values, 
+        '--values', values, 
         '--output-dir', output_dir
     ])
     
@@ -62,9 +62,9 @@ def lint(yamllint_config, chart_values, kubernetes_version, output_dir):
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser()
     argparser.add_argument('--yamllint-config', default='yamllint-config.yaml', help='Specify the yamllint config')
-    argparser.add_argument('--chart-values', default='chart-values.yaml', help='Specify additional chart value files')
-    argparser.add_argument('--kubernetes-version', default='1.10.5', help='Validate against this Kubernetes version')
+    argparser.add_argument('--values', default='lint-and-validate-config.yaml', help='Specify an additional chart value')
+    argparser.add_argument('--kubernetes-version', default='1.9.0', help='Validate against this Kubernetes version')
     argparser.add_argument('--output-dir', default='rendered-templates', help='Specify an output directory for the rendered templates')
     args = argparser.parse_args()
     
-    lint(args.yamllint_config, args.chart_values, args.kubernetes_version, args.output_dir)
+    lint(args.yamllint_config, args.values, args.kubernetes_version, args.output_dir)
