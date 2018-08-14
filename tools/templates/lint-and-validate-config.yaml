@@ -160,7 +160,7 @@ singleuser:
     enabled: true
     registry: R
     username: U
-    email: E
+    email: e@domain.com
     password: P
   startTimeout: 300
   cpu:

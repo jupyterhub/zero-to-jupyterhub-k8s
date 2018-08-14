@@ -23,7 +23,7 @@ properties:
           Changing this value will all user logins to be invalidated. If this secret leaks,
           *immediately* change it to something else, or user data can be compromised
           
-          ```
+          ```sh
           # to generate a value, run
           openssl rand -hex 32
           ```
@@ -153,15 +153,21 @@ properties:
                 description: |
                   Annotations to apply to the PVC containing the sqlite database.
 
-                  TODO: Link to pvc annotations
+                  See [the Kubernetes
+                  documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+                  for more details about annotations.
               selector:
                 type: object
                 description: |
-                  Selectors to set for the PVC containing the sqlite database.
+                  Label selectors to set for the PVC containing the sqlite database.
 
-                  Useful when you are using a static PVC.
+                  Useful when you are using a specific PV, and want to bind to
+                  that and only that.
 
-                  TODO: Link to pvc selector docs.
+                  See [the Kubernetes
+                  documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims)
+                  for more details about using a label selector for what PV to
+                  bind to.
               storage:
                 type: string
                 description: |
@@ -211,7 +217,7 @@ properties:
           [| operator](http://www.yaml.org/spec/1.2/spec.html#id2795688).
 
           For example:
-            ```
+            ```yaml
             hub:
               extraConfig: |
                 c.JupyterHub.something = 'something'
@@ -252,7 +258,7 @@ properties:
           A 32-byte cryptographically secure randomly generated string used to secure communications
           between the hub and the configurable-http-proxy.
 
-          ```
+          ```sh
           # to generate a value, run
           openssl rand -hex 32
           ```
@@ -285,7 +291,7 @@ properties:
               It must contain one (or more, separated by ;) 32-byte encryption keys. These can be either base64 or hex-encoded.
               The JUPYTERHUB_CRYPT_KEY environment variable for the hub pod is set using this entry.
 
-              ```
+              ```sh
               # to generate a value, run
               openssl rand -hex 32
               ```
@@ -344,10 +350,33 @@ properties:
       imagePullSecret:
         type: object
         description: |
-          Create a custom image pull secret used for spawned users.
+          Creates an image pull secret for you and makes the user pods utilize
+          it, allowing them to pull images from private image registries.
+          
+          Using this configuration option automates the following steps that
+          normally is required to pull from private image registries.
+          
+          ```sh
+          # you won't need to run this manually...
+          kubectl create secret docker-registry singleuser-image-credentials \
+            --docker-server=<REGISTRY> \
+            --docker-username=<USERNAME> \
+            --docker-email=<EMAIL> \
+            --docker-password=<PASSWORD>
+          ```
 
-          This secret is created in the same namespace as your JupyterHub
-          deployment and will be used to pull your user image.
+          ```yaml
+          # you won't need to specify this manually...
+          spec:
+            imagePullSecrets:
+              - name: singleuser-image-credentials
+          ```
+
+          To learn the username and password fields to access a gcr.io registry
+          from a Kubernetes cluster not associated with the same google cloud
+          credentials, look into [this
+          guide](http://docs.heptio.com/content/private-registries/pr-gcr.html)
+          and read the notes about the password.
         properties:
           registry:
             type: string
@@ -357,6 +386,7 @@ properties:
               Examples:
                 - private.jfrog.io
                 - alexmorreale.privatereg.net
+                - eu.gcr.io
           username:
             type: string
             description: |
@@ -365,14 +395,31 @@ properties:
               Examples:
                 - alexmorreale
                 - alex@pfc.com
+                - _json_key
           password:
             type: string
             description: |
-              Password of the user you want to use to connect to your private registry.
+              Password of the user you want to use to connect to your private
+              registry.
 
               Examples:
                 - plaintextpassword
                 - abc123SECRETzyx098
+
+              For gcr.io registries the password will be a big JSON blob for a
+              Google cloud service account, it should look something like below.
+
+              Learn more in [this guide](http://docs.heptio.com/content/private-registries/pr-gcr.html).
+              
+              ```yaml
+              password: |-
+                {
+                  "type": "service_account",
+                  "project_id": "jupyter-se",
+                  "private_key_id": "f2ba09118a8d3123b3321bd9a7d6d0d9dc6fdb85",
+                  ...
+                }
+              ```
       image:
         type: object
         description: |
@@ -460,7 +507,7 @@ properties:
 
           To test your setup efficiently, you can adjust the amount of user
           placeholders with the following command:
-          ```
+          ```sh
           # Configure to have 3 user placeholders
           kubectl scale sts/user-placeholder --replicas=3
           ```
@@ -487,7 +534,7 @@ properties:
           To test your setup efficiently, you can adjust the amount of user
           dummies with the following command.
 
-          ```
+          ```sh
           # Configure to have 3 user dummies
           kubectl scale sts/user-dummy --replicas=3
           ```

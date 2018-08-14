@@ -178,27 +178,34 @@ component: {{ include "jupyterhub.componentLabel" . }}
   jupyterhub.dockerconfigjson:
     Creates a base64 encoded docker registry json blob for use in a image pull
     secret, just like the `kubectl create secret docker-registry` command does
-    for the generated secrets data.dockerconfigjson field.
-    
+    for the generated secrets data.dockerconfigjson field. The output is
+    verified to be exactly the same even if you have a password spanning
+    multiple lines as you may need to use a private GCR registry.
+
     - https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
 */}}
 {{- define "jupyterhub.dockerconfigjson" -}}
-{{ include "jupyterhub.dockerconfigjson.yaml" . | toJson | trimAll "\"" | replace " " "" | replace "\\n" "" | replace "\\\"" "\"" | b64enc }}
+{{ include "jupyterhub.dockerconfigjson.yaml" . | b64enc }}
 {{- end }}
 
 {{- define "jupyterhub.dockerconfigjson.yaml" -}}
-{{- with .Values.singleuser.imagePullSecret -}}
+{{- with . -}}
 {
-  "auths": {
-    {{ .registry | default "https://index.docker.io/v1/" | quote }}: {
-      "username": {{ .username | quote }},
-      "password": {{ .password | quote }},
-      {{- if .email }}
-      "email": {{ .email | quote }},
-      {{- end }}
-      "auth": {{ (print .username ":" .password) | b64enc | quote }}
+  {{- /* */ -}}
+  "auths":{
+    {{- .registry | default "https://index.docker.io/v1/" | quote }}:{
+      {{- /* */ -}}
+      "username": {{- .username | quote }},
+      {{- /* */ -}}
+      "password": {{- .password | quote }},
+      {{- if .email -}}
+      "email": {{- .email | quote }},
+      {{- end -}}
+      "auth": {{- (print .username ":" .password) | b64enc | quote -}}
     }
+    {{- /* */ -}}
   }
+  {{- /* */ -}}
 }
 {{- end }}
 {{- end }}
