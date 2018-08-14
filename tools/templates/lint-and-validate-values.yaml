@@ -1,0 +1,248 @@
+hub:
+  service:
+    type: ClusterIP
+    ports:
+      nodePort:
+  baseUrl: /
+  cookieSecret: mock
+  publicURL: mock-public-url
+  nodeSelector:
+    node-type: mock
+  activeServerLimit: 3
+  deploymentStrategy:
+    type: Recreate
+    rollingUpdate:
+  db:
+    type: sqlite-pvc
+    upgrade:
+    pvc:
+      annotations:
+        mock-annotation: mock
+      selector:
+        matchLabels:
+          mock-selector: mock
+      accessModes:
+        - ReadWriteOnce
+      storage: 1Gi
+      subPath: /mock
+      storageClassName: custom-storage-class
+    url: custom-db-url
+  labels:
+    mock: mock
+  annotations:
+    mock: mock
+  extraConfig:
+    test: |-
+      c.Spawner.cmd = 'mock'
+  extraConfigMap:
+    mock.entry: mock-config-map-entry
+  extraEnv:
+    MOCK_HUB_ENV: mock
+  extraContainers: []
+  extraVolumes: []
+  extraVolumeMounts: []
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+  services:
+    tests:
+      apiToken: mocked-api-token
+  imagePullPolicy: Always
+  pdb:
+    enabled: true
+  networkPolicy:
+    enabled: true
+    egress:
+      - to:
+          - ipBlock:
+              cidr: 0.0.0.0/0
+  allowNamedServers: true
+
+
+rbac:
+  enabled: true
+
+
+proxy:
+  secretToken: '0000000000000000000000000000000000000000000000000000000000000000'
+  service:
+    type: LoadBalancer
+    labels:
+      MOCK_PROXY_ENV: mock
+    annotations:
+      hub.jupyter.org/mock-proxy-annotation: mock
+    nodePorts:
+      http:
+      https:
+  chp:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+  nginx:
+    proxyBodySize: 64m
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        cpu: 200m
+        memory: 1Gi
+  lego:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        cpu: 200m
+        memory: 1Gi
+  labels:
+    mock-proxy-label: mock
+  nodeSelector:
+    mock-proxy-node-selector: mock
+  pdb:
+    enabled: true
+  https:
+    enabled: true
+    type: manual
+    #type: letsencrypt, manual, secret
+    letsencrypt:
+      contactEmail: 'e@domain.com'
+    manual:
+      key: mock-key
+      cert: mock-cert
+    secret:
+      name: 'mock-secret-name'
+      key: 'mock-key'
+      crt: 'mock-crt'
+    hosts: [domain.com]
+  networkPolicy:
+    enabled: true
+    egress:
+      - to:
+          - ipBlock:
+              cidr: 0.0.0.0/0
+
+
+auth:
+  type: dummy
+  whitelist:
+    users:
+      - mock
+  admin:
+    access: true
+    users:
+      - mock
+  dummy:
+    password:
+  ldap:
+    dn:
+      search: {}
+      user: {}
+    user: {}
+  state:
+    enabled: true
+    cryptoKey: mock-crypto-key
+
+
+singleuser:
+  nodeSelector:
+    mock-node-selector: mock
+  extraTolerations: []
+  extraNodeAffinity:
+    required: []
+    preferred: []
+  extraPodAffinity:
+    required: []
+    preferred: []
+  extraPodAntiAffinity:
+    required: []
+    preferred: []
+  cloudMetadata:
+    enabled: true
+    ip: 169.254.169.254
+  networkPolicy:
+    enabled: true
+    egress:
+      - to:
+          - ipBlock:
+              cidr: 0.0.0.0/0
+              except:
+                - 169.254.169.254/32
+  events: true
+  extraLabels: {}
+  storageExtraLabels: {}
+  extraEnv: {}
+  lifecycleHooks:
+  initContainers:
+  uid: 1000
+  fsGid: 100
+  serviceAccountName:
+  storage:
+    type: dynamic
+    extraVolumes: []
+    extraVolumeMounts: []
+    static:
+      pvcName:
+      subPath: '{username}'
+    capacity: 10Gi
+    homeMountPath: /home/jovyan
+    dynamic:
+      storageClass:
+      pvcNameTemplate: claim-{username}{servername}
+      volumeNameTemplate: volume-{username}{servername}
+      storageAccessModes: [ReadWriteOnce]
+  imagePullSecret:
+    enabled: true
+    registry: R
+    username: U
+    email: e@domain.com
+    password: P
+  startTimeout: 300
+  cpu:
+    guarantees: 1G
+    limits: 5
+  memory:
+    guarantees: 1G
+    limits:
+  extraResource:
+    guarantees:
+      mock: 3
+    limits:
+      mock: 1
+  cmd: jupyterhub-singleuser
+  defaultUrl: /
+
+
+prePuller:
+  hook:
+    enabled: true
+    extraEnv:
+      MOCK_ENV: mock
+  continuous:
+    enabled: true
+  extraImages:
+    - name: mock-user/mock-image
+      tag: mock-tag
+
+
+ingress:
+  enabled: true
+  annotations:
+    mock: mock
+  hosts: []
+  tls:
+
+
+cull:
+  enabled: true
+  users: true
+  timeout: 3600
+  every: 600
+  concurrency: 10
+  maxAge: 3600*8
+
+
+debug:
+  enabled: true
