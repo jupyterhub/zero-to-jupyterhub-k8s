@@ -19,7 +19,7 @@ script:
 deploy:
   provider: script
   skip_cleanup: true
-  script: ./ci/deploy.sh
+  script: ./cd/publish-chart-and-images
   on:
     branch:
     - master
