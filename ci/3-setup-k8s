@@ -6,17 +6,30 @@
 # 1. Start and await minikube
 # 2. Initialize Helm
 
+# Set shell options
+# -e : Exit immediately if a command exits with a non-zero status.
+# -u : Treat unset variables as an error when substituting.
+# -x : Print commands and their arguments as they are executed.
+set -eux
+
 # Setup Kubernetes
 # ----------------
-echo "starting minikube"
-if [[ -z "${CICD}" ]]; then
-  minikube config set vm-driver none
+if (kubectl get pod -n kube-system --selector app=helm,name=tiller | grep 1/1); then
+  exit 0
 fi
+
+echo "starting minikube"
+# IF CICD ENVIRONMENT
+if set +u && [[ ! -z "${CICD}" ]] && set -u; then
+  minikube config set vm-driver none
+  export CHANGE_MINIKUBE_NONE_USER=true
+fi;
 minikube config set kubernetes-version v${KUBE_VERSION}
 minikube config set WantReportErrorPrompt false
 minikube config set WantKubectlDownloadMsg false
 minikube config set ShowBootstrapperDeprecationNotification false
-export CHANGE_MINIKUBE_NONE_USER=true
+
+# IF CICD ENVIRONMENT
 if [[ ${KUBE_VERSION} == 1.8* ]] || [[ ${KUBE_VERSION} == 1.9* ]] || [[ ${KUBE_VERSION} == 1.10.0* ]]; then
   # WARNING: localkube not supported beyond Kubernetes 1.10.0
   sudo -E $(which minikube) start --bootstrapper=localkube --extra-config=apiserver.Authorization.Mode=RBAC
@@ -28,10 +41,11 @@ else
 fi
 minikube update-context
 
-if [[ ! -z "${CICD}" ]]; then
+# IF LOCAL ENVIRONMENT
+if set +u && [[ -z "${CICD}" ]] && set -u; then
   echo "setup default namespace"
   kubectl config set-context $(kubectl config current-context) --namespace jh
-fi
+fi;
 
 echo "waiting for kubernetes"
 JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'
@@ -40,10 +54,15 @@ until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do
 done
 kubectl get nodes
 
-echo "initialize helm"
-kubectl create serviceaccount tiller --namespace kube-system
-kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
-helm init --service-account tiller
+if ! (kubectl get pod -n kube-system --selector app=helm,name=tiller | grep 1/1); then
+  echo "initialize helm"
+  # Allow resources to pre-exist
+  set +e
+  kubectl create serviceaccount tiller --namespace kube-system
+  kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+  helm init --service-account tiller
+  set -e
 
-echo "waiting for tiller"
-kubectl --namespace=kube-system rollout status --watch=true deployment/tiller-deploy
+  echo "waiting for tiller"
+  kubectl --namespace=kube-system rollout status --watch=true deployment/tiller-deploy
+fi

@@ -18,11 +18,13 @@ set -eux
 # 1. Update Chart.yaml and values.yaml
 # 2. Build images using docker
 # 3. Build chart
-if [[ -z "${CICD}" ]]; then
+
+# IF CICD ENVIRONMENT
+if set +u && [[ ! -z "${CICD}" ]] && set -u; then
   chartpress --commit-range "${TRAVIS_COMMIT_RANGE}"
 else
   chartpress
-fi
+fi; set -u
 
 # Log changes to Chart.yaml and values.yaml
-git diff
+git --no-pager diff

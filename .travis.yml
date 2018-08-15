@@ -6,15 +6,9 @@ git:
 services:
 - docker
 install:
-- export CICD=true
 - pip install --no-cache-dir -r dev-requirements.txt
-- . ci/0-setup-env
-- ./ci/1-setup-binaries
 script:
-- ./ci/2-lint-and-validate
-- ./ci/3-setup-k8s
-- ./ci/4-build-chart-and-images
-- ./ci/5-run-tests.sh
+- CICD=true ci/run
 
 deploy:
   provider: script

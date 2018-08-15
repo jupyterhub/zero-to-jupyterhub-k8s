@@ -2,6 +2,10 @@
 tools/templates/rendered-templates/
 bin/
 ci/.vagrant
+.kube/
+.minikube/
+.helm/
+.pytest_cache/
 
 .vscode
 

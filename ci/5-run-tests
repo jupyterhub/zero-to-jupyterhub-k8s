@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # NOTE: The script should be executed from the repo directory
 
 # SCRIPT SUMMARY
@@ -21,25 +21,22 @@ HUB_API_URL=http://$IP:31212/hub/api
 # Install chart
 echo "installing chart"
 helm upgrade jh \
-    --install \
-    --namespace jh \
-    --values ci/test-config.yaml \
-    ./jupyterhub/
+  --install \
+  --namespace jh \
+  --values ci/5-tests-config.yaml \
+  ./jupyterhub/
 
 echo "waiting for servers to become responsive"
 until curl --fail --silent $HUB_API_URL; do
-    kubectl describe pod --namespace jh --selector --field-selector 'status.phase!=Running'
-    kubectl get pod      --namespace jh --selector
+    kubectl describe pod --namespace jh
+    kubectl get pod      --namespace jh
     sleep 5
 done
 
 # Make various request using the hub's API
 # -
 echo "getting jupyterhub version and info"
-curl --silent $TEST_URL | grep version
-
-echo "getting jupyterhub info"
-curl --silent $TEST_URL/info
+curl --silent $HUB_API_URL | grep version
 
 echo "running pytest"
 # -v --verbose     : increase verbosity

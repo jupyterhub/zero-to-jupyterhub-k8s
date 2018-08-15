@@ -1,13 +1,15 @@
 #!/bin/bash
+
 # NOTE: The script should be executed from the repo directory
 
 # SCRIPT SUMMARY
 # --------------
-# 1. Run the lint-and-validate tool that will:
-#    i. Helm template linting with `helm lint`
-#   ii. Helm template verification with `helm template`
-#  iii. Rendered output linting with `yamllint`
-#   iv. Rendered output validation against the k8s API schema with `kubeval`
+# Everything is just meant to run...
+
+# TROUBLESHOOTING
+# ---------------
+# NOTE: Tested only on Ubuntu
+# rm -rf .kube/ .minikube/ .helm/
 
 # Set shell options
 # -e : Exit immediately if a command exits with a non-zero status.
@@ -15,4 +17,9 @@
 # -x : Print commands and their arguments as they are executed.
 set -eux
 
-python3 tools/templates/lint-and-validate.py
+source ci/0-setup-env
+ci/1-setup-binaries
+ci/2-lint-and-validate
+ci/3-setup-k8s
+ci/4-build-chart-and-images
+ci/5-run-tests

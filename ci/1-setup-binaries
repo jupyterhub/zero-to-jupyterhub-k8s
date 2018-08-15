@@ -66,7 +66,8 @@ if ! [ -f bin/kubeval-${KUBEVAL_VERSION} ]; then
 fi
 cp bin/kubeval-${KUBEVAL_VERSION} bin/kubeval
 
-if [[ ! -z "${CICD}" ]]; then
+# IF LOCAL ENVIRONMENT
+if set +u && [[ -z "${CICD}" ]] && set -u; then
   echo "setting up kubectl and minikube autocomplete"
   source <(kubectl completion bash)
   source <(minikube completion bash)
