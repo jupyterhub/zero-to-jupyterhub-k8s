@@ -23,6 +23,7 @@ set -eux
 if set +u && [[ ! -z "${CICD}" ]] && set -u; then
   chartpress --commit-range "${TRAVIS_COMMIT_RANGE}"
 else
+  eval $(minikube docker-env)
   chartpress
 fi; set -u
 

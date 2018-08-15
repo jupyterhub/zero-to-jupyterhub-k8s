@@ -14,7 +14,7 @@ set -eux
 
 # Setup Kubernetes
 # ----------------
-if (kubectl get pod -n kube-system --selector app=helm,name=tiller | grep 1/1); then
+if (timeout 3 bash -c 'kubectl get pod -n kube-system --selector app=helm,name=tiller | grep 1/1'); then
   exit 0
 fi
 
@@ -23,26 +23,31 @@ echo "starting minikube"
 if set +u && [[ ! -z "${CICD}" ]] && set -u; then
   minikube config set vm-driver none
   export CHANGE_MINIKUBE_NONE_USER=true
+  SUDO='sudo -E'
+else
+  minikube config set vm-driver virtualbox
+  SUDO=''
 fi;
 minikube config set kubernetes-version v${KUBE_VERSION}
 minikube config set WantReportErrorPrompt false
 minikube config set WantKubectlDownloadMsg false
 minikube config set ShowBootstrapperDeprecationNotification false
 
-# IF CICD ENVIRONMENT
 if [[ ${KUBE_VERSION} == 1.8* ]] || [[ ${KUBE_VERSION} == 1.9* ]] || [[ ${KUBE_VERSION} == 1.10.0* ]]; then
   # WARNING: localkube not supported beyond Kubernetes 1.10.0
-  sudo -E $(which minikube) start --bootstrapper=localkube --extra-config=apiserver.Authorization.Mode=RBAC
+    $(echo $SUDO) $(which minikube) start --bootstrapper=localkube --extra-config=apiserver.Authorization.Mode=RBAC
 else
   # WARNING: kubeadm requires systemd. systemd isn't available for Ubuntu 14.04
   # (trusty) VMs as used by Travis and CircleCI. It is available on Ubuntu 16.04
   # (xenial) or 18.04 (bionic) VMs though.
-  sudo -E $(which minikube) start --bootstrapper=kubeadm
+    $(echo $SUDO) $(which minikube) start
 fi
-minikube update-context
 
 # IF LOCAL ENVIRONMENT
 if set +u && [[ -z "${CICD}" ]] && set -u; then
+  echo "setup minikbe context"
+  minikube update-context
+
   echo "setup default namespace"
   kubectl config set-context $(kubectl config current-context) --namespace jh
 fi;

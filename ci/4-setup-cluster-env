@@ -1,0 +1,24 @@
+#!/bin/bash
+# NOTE: The script should be executed from the repo directory
+
+# SCRIPT SUMMARY
+# --------------
+# 1. TODO
+
+# Set shell options
+# -e : Exit immediately if a command exits with a non-zero status.
+# -u : Treat unset variables as an error when substituting.
+# -x : Print commands and their arguments as they are executed.
+set -ux
+
+# Fetch network information
+#IP=$(ifconfig docker0 | grep 'inet ' | awk '{print $2}')
+#IP=$(ifconfig vboxnet0 | grep 'inet ' | awk '{print $2}')
+
+# IF LOCAL DEVELOPMENT
+if set +u && [[ -z "${CICD}" ]] && set -u; then
+  eval $(minikube docker-env)
+fi
+
+export MINIKUBE_IP=$(minikube ip)
+export HUB_API_URL=http://$MINIKUBE_IP:31212/hub/api

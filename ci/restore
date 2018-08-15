@@ -4,12 +4,7 @@
 
 # SCRIPT SUMMARY
 # --------------
-# Everything is just meant to run...
-
-# TROUBLESHOOTING
-# ---------------
-# NOTE: Tested only on Ubuntu
-# rm -rf .kube/ .minikube/ .helm/
+# 1. Deletes
 
 # Set shell options
 # -e : Exit immediately if a command exits with a non-zero status.
@@ -18,9 +13,6 @@
 set -eux
 
 source ci/0-setup-env
-ci/1-setup-binaries
-ci/2-lint-and-validate
-ci/3-setup-k8s
-source ci/4-setup-cluster-env
-ci/5-build-chart-and-images
-ci/6-run-tests
+minikube delete
+
+rm -rf .kube/ .minikube/ .helm/

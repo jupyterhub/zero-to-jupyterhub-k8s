@@ -1,8 +1,10 @@
 #!/bin/bash
 
-#export KUBECONFIG=${PWD}/.kube/config
-#export MINIKUBE_HOME=${PWD}/.minikube
-#export HELM_HOME=${PWD}/.helm
+export KUBECONFIG=${PWD}/.kube/config
+export MINIKUBE_HOME=${PWD}/.minikube
+export HELM_HOME=${PWD}/.helm
+mkdir -p "${PWD}/.kube"
+touch "${PWD}/.kube/config"
 
 export KUBE_VERSION=1.10.0
 export MINIKUBE_VERSION=0.28.2
