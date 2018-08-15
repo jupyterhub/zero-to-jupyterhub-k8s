@@ -50,6 +50,7 @@ def test_api_request_user_spawn(request_data):
 
 def test_api_wait_for_user_to_spawn(request_data):
     while True:
+        # FIXME: This can fail with 503! Make it robuster than this!
         r = requests.get(request_data['hub_url'] + f"/users/{request_data['username']}", headers=request_data['headers'])
         r.raise_for_status()
         user_model = r.json()
@@ -74,6 +75,10 @@ def test_api_wait_for_user_to_spawn(request_data):
     r.raise_for_status()
 
 def test_delete_user(request_data):
+    # FIXME: This is taking too long in general, 50 seconds for example... Can't
+    # we lower the grace period or similar? That may require a kubespawner
+    # setting btw, or custom configuration.
+
     print("deleting the testuser")
     while True:
         r = requests.delete(request_data['hub_url'] + f"/users/{request_data['username']}", headers=request_data['headers'])

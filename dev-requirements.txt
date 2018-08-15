@@ -5,10 +5,6 @@
 chartpress==0.2.2
 
 # yamllint and pytest are important for local development, CI
-yamllint>=1.1.1
 pytest==3.7.1
-
-# PyGithub and python-dateutil is rarely used
-# - used within tools/contributors.py
-PyGithub>=1
-python-dateutil>=2
+requests==2.19.1
+yamllint>=1.1.1
