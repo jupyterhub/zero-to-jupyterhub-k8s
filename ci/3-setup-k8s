@@ -27,7 +27,7 @@ if set +u && [[ ! -z "${CICD}" ]] && set -u; then
   echo "starting minikube - CICD mode"
   minikube config set vm-driver none
   minikube config set WantNoneDriverWarning false
-  CHANGE_MINIKUBE_NONE_USER=true
+  export CHANGE_MINIKUBE_NONE_USER=true
 
   minikube addons disable dashboard
   SUDO='sudo -E'
