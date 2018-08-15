@@ -24,9 +24,13 @@ helm upgrade jh \
 
 echo "waiting for servers to become responsive"
 until curl --fail --silent --show-error $HUB_API_URL; do
-    kubectl describe pod --namespace jh
-    kubectl get pod      --namespace jh
-    sleep 10
+  # FIXME:
+  # At least Travis can get stuck like this...
+  # +curl --fail --silent --show-error http://10.20.0.27:31212/hub/api
+  # curl: (52) Empty reply from server
+  kubectl describe pod --namespace jh
+  kubectl get pod      --namespace jh
+  sleep 10
 done
 
 # Make various request using the hub's API
@@ -36,6 +40,6 @@ curl --silent --show-error $HUB_API_URL | grep version
 
 echo "running pytest"
 # -v --verbose     : increase verbosity
-# ---capture=no  : no capture of output to stdout or stderr
+# -s --capture=no  : no capture of output to stdout or stderr
 # -x --exitfirst   : exit instantly on first error or failed test
 pytest --verbose --capture=no --exitfirst

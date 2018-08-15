@@ -1,0 +1,6 @@
+# These are pip requirements for contributors.py. They were extracted from
+# dev-requirements, as they were seldom used and Travis would install them over
+# and over. It's saving us about five seconds in every PR test to list them here
+# instead of in dev-requirements.txt :D
+PyGithub>=1
+python-dateutil>=2
