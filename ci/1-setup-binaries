@@ -1,5 +1,5 @@
 #!/bin/bash
-# NOTE: The script should be executed from the repo directory
+# NOTE: The script should be executed as a part of ci/run!
 
 # SCRIPT SUMMARY
 # --------------

@@ -1,10 +1,13 @@
 #!/bin/bash
-# NOTE: The script should be executed from the repo directory
+# NOTE: The script should be executed as a part of ci/run!
 
 # SCRIPT SUMMARY
 # --------------
-# 1. Start and await minikube
-# 2. Initialize Helm
+# 1. Start and await minikube, if required
+# 2. Initialize Helm, if required
+
+# FIXME: currently we only check if minikube+helm is ready, not first if
+#        minikube is ready and then if also helm is ready.
 
 # Set shell options
 # -e : Exit immediately if a command exits with a non-zero status.
@@ -14,18 +17,30 @@ set -eux
 
 # Setup Kubernetes
 # ----------------
-if (timeout 3 bash -c 'kubectl get pod -n kube-system --selector app=helm,name=tiller | grep 1/1'); then
-  exit 0
-fi
 
-echo "starting minikube"
-# IF CICD ENVIRONMENT
+# Don't use the default profile: this helps to make it clear whats what while
+# inspecting virtualbox's VMs.
+minikube profile z2jh
+
 if set +u && [[ ! -z "${CICD}" ]] && set -u; then
+  # CICD
+  echo "starting minikube - CICD mode"
   minikube config set vm-driver none
-  export CHANGE_MINIKUBE_NONE_USER=true
+  minikube config set WantNoneDriverWarning false
+  CHANGE_MINIKUBE_NONE_USER=true
+
+  minikube addons disable dashboard
   SUDO='sudo -E'
 else
+  # LOCAL
+  if (timeout 3 bash -c 'kubectl get pod -n kube-system --selector app=helm,name=tiller | grep 1/1'); then
+    echo "minikube cluster was already setup"
+    echo "--- you can re-setup the cluster, remove it first with `ci/clean`"
+    exit 0
+  fi
+  echo "starting minikube - LOCAL mode"
   minikube config set vm-driver virtualbox
+
   SUDO=''
 fi;
 minikube config set kubernetes-version v${KUBE_VERSION}
@@ -45,8 +60,8 @@ fi
 
 # IF LOCAL ENVIRONMENT
 if set +u && [[ -z "${CICD}" ]] && set -u; then
-  echo "setup minikbe context"
-  minikube update-context
+  echo "update minikube context"
+  # minikube update-context
 
   echo "setup default namespace"
   kubectl config set-context $(kubectl config current-context) --namespace jh
@@ -59,15 +74,21 @@ until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do
 done
 kubectl get nodes
 
+set +e # Allow resources to pre-exist by tolerating errors a while
+if set +u && [[ -z "${CICD}" ]] && set -u; then
+  # LOCAL
+  echo "patch kubernetes dashboard to work"
+  echo "--- access it with `minikube dashboard`"
+  kubectl create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
+fi
+
 if ! (kubectl get pod -n kube-system --selector app=helm,name=tiller | grep 1/1); then
   echo "initialize helm"
-  # Allow resources to pre-exist
-  set +e
   kubectl create serviceaccount tiller --namespace kube-system
   kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
   helm init --service-account tiller
-  set -e
-
-  echo "waiting for tiller"
-  kubectl --namespace=kube-system rollout status --watch=true deployment/tiller-deploy
+  # while it would be suitable to wait for tiller here, we could start building
+  # the images at the same time and ensure to wait for tiller (if needed) in the
+  # testing step
 fi
+set -e

@@ -1,13 +1,41 @@
 #!/bin/bash
+# NOTE: While this script is executed as a part of ci/run, it is very useful to
+#       run it standalone with `source ci/0-setup-env` from the repo directory
+#       as that allows you use the in-repo binaries and configuration.
+# NOTE: As this script exports environment variables, it should be run with
+#       `source ci/0-setup-env` in order for them to be made available.
 
-export KUBECONFIG=${PWD}/.kube/config
-export MINIKUBE_HOME=${PWD}/.minikube
-export HELM_HOME=${PWD}/.helm
+# SCRIPT SUMMARY
+# --------------
+# 1. Ensure files and folders exist to avoid permission issues
+# 2. Configure to use an in-repo environment with kubectl, minikube and helm
+# 3. Ensure PATH finds and prioritise in-repo binaries
+# 4. Pin the desired versions of in-repo binaries
+
+# Set shell options
+# -e : Exit immediately if a command exits with a non-zero status.
+# -u : Treat unset variables as an error when substituting.
+# -x : Print commands and their arguments as they are executed.
+set -eux
+
+# 1.
 mkdir -p "${PWD}/.kube"
 touch "${PWD}/.kube/config"
 
+# 2.
+export KUBECONFIG=${PWD}/.kube/config
+export MINIKUBE_HOME=${PWD}/.minikube
+export HELM_HOME=${PWD}/.helm
+
+# 3.
+export PATH="${PWD}/bin:${PATH}"
+
+# 4.
 export KUBE_VERSION=1.10.0
 export MINIKUBE_VERSION=0.28.2
 export HELM_VERSION=2.9.1
 export KUBEVAL_VERSION=0.7.1
-export PATH="${PWD}/bin:${PATH}"
+
+# Since this script will be sourced, revert to previous shell options
+# FIXME: we are just guessing what the previous options were now
+set +eux

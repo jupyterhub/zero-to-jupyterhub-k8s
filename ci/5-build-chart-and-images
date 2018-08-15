@@ -19,10 +19,11 @@ set -eux
 # 2. Build images using docker
 # 3. Build chart
 
-# IF CICD ENVIRONMENT
 if set +u && [[ ! -z "${CICD}" ]] && set -u; then
+  # CICD
   chartpress --commit-range "${TRAVIS_COMMIT_RANGE}"
 else
+  # LOCAL
   eval $(minikube docker-env)
   chartpress
 fi; set -u

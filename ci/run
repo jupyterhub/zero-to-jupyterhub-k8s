@@ -4,23 +4,26 @@
 
 # SCRIPT SUMMARY
 # --------------
-# Everything is just meant to run...
+# Runs everything that needs to run in order to run CI except setup of
+# virtualbox for local developments.
 
 # TROUBLESHOOTING
 # ---------------
-# NOTE: Tested only on Ubuntu
-# rm -rf .kube/ .minikube/ .helm/
+# 0. Make sure you have virtualbox which is required by minikube
+# 1. Run the `ci/clean` script
 
-# Set shell options
-# -e : Exit immediately if a command exits with a non-zero status.
-# -u : Treat unset variables as an error when substituting.
-# -x : Print commands and their arguments as they are executed.
-set -eux
-
-source ci/0-setup-env
+source ci/0-setup-env; set -eux
 ci/1-setup-binaries
 ci/2-lint-and-validate
 ci/3-setup-k8s
-source ci/4-setup-cluster-env
+source ci/4-setup-cluster-env; set -eux
 ci/5-build-chart-and-images
+
 ci/6-run-tests
+
+if set +u && [[ -z "${CICD}" ]] && set -u; then
+  # LOCAL
+  echo "Kubernetes dashboard http://$MINIKUBE_IP:30000"
+  echo "JupyterHub at http://$MINIKUBE_IP:31212"
+  echo "JupyterHub API $HUB_API_URL"
+fi

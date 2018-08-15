@@ -1,10 +1,13 @@
 #!/bin/bash
-
 # NOTE: The script should be executed from the repo directory
 
 # SCRIPT SUMMARY
 # --------------
-# 1. Deletes
+# 1. Deletes the minikube clusterrole
+# 2. Clears folders with caches and configurations
+
+# 0.
+source ci/0-setup-env
 
 # Set shell options
 # -e : Exit immediately if a command exits with a non-zero status.
@@ -12,7 +15,8 @@
 # -x : Print commands and their arguments as they are executed.
 set -eux
 
-source ci/0-setup-env
+# 1.
 minikube delete
 
+# 2.
 rm -rf .kube/ .minikube/ .helm/
