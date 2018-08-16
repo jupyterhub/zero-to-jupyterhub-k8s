@@ -74,7 +74,7 @@ until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do
 done
 kubectl get nodes
 
-set +e # Allow resources to pre-exist by tolerating errors a while
+set +e # Allow resources to pre-exist by tolerating errors for a while
 if set +u && [[ -z "${CICD}" ]] && set -u; then
   # LOCAL
   echo "patch kubernetes dashboard to work"
