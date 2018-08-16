@@ -1,11 +1,11 @@
 .. _extending-jupyterhub:
 
-Extending your JupyterHub setup
-===============================
+Customizing your Deployment
+===========================
 
-The helm chart used to install JupyterHub has a lot of options for you to tweak.
-For a semi-complete list of the changes you can apply via your helm-chart,
-see the :ref:`helm-chart-configuration-reference`.
+The Helm chart used to install your JupyterHub deployment has a lot of options
+for you to tweak. For a semi-complete reference list of the options, see the
+:ref:`helm-chart-configuration-reference`.
 
 .. _apply-config-changes:
 
@@ -14,21 +14,26 @@ Applying configuration changes
 
 The general method to modify your Kubernetes deployment is to:
 
-1. Make a change to the ``config.yaml``
-2. Run a helm upgrade:
+1. Make a change to your ``config.yaml``.
 
-     .. code-block:: bash
+2. Run a ``helm upgrade``:
 
-        helm upgrade <YOUR_RELEASE_NAME> jupyterhub/jupyterhub --version=0.7.0-beta.1 -f config.yaml
+   .. code-block:: bash
 
-   Where ``<YOUR_RELEASE_NAME>`` is the parameter you passed to ``--name`` when
-   `installing jupyterhub <setup-jupyterhub.html#install-jupyterhub>`_ with
-   ``helm install``. If you don't remember it, you can probably find it by doing
-   ``helm list``.
-3. Wait for the upgrade to finish, and make sure that when you do
-   ``kubectl --namespace=<YOUR_NAMESPACE> get pod`` the hub and proxy pods are
-   in ``Ready`` state. Your configuration change has been applied!
+      helm upgrade <YOUR_RELEASE_NAME> jupyterhub/jupyterhub \
+        --install \
+        --version=0.7.0-beta.1 \
+        --values config.yaml
 
-For information about the many things you can customize with changes to
-your helm chart, see :ref:`user-environment`, :ref:`user-resources`, and
-:ref:`helm-chart-configuration-reference`.
+   Note that ``helm list`` should display ``<YOUR_RELEASE_NAME>`` if you forgot it.
+
+3. Verify that the *hub* and *proxy* pods entered the ``Running`` state after
+   the upgrade completed.
+
+   .. code-block:: bash
+
+      kubectl --namespace=<YOUR_NAMESPACE> get pod
+
+For information about the many things you can customize with changes to your
+Helm chart through values provided to its templates through ``config.yaml``, see
+the :ref:`customization-guide`.

@@ -112,7 +112,7 @@ html_logo = '_static/images/logo/logo.png'
 #
 html_theme_options = {
     'show_related': True,
-    'description': 'A tutorial to help install and manage JupyterHub with Kubernetes',
+    'description': 'A tutorial to help install and manage JupyterHub on a cloud with Kubernetes.',
     'github_user': 'jupyterhub',
     'github_repo': 'zero-to-jupyterhub-k8s',
     'github_banner': False,

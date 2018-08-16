@@ -7,7 +7,7 @@ ElasticFileSystem is distributed file system which speaks the NFS protocol.  It 
 
 Drawbacks:
 
-* Setting permissions on persistent volumes is not nailed down in the kubernetes spec yet.  This adds some complications we will discuss later.
+* Setting permissions on persistent volumes is not nailed down in the Kubernetes spec yet.  This adds some complications we will discuss later.
 
 * A crafty user may be able to contact the EFS server directly and read other user's files depending on how the system is setup.
 
