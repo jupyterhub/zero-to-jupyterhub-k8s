@@ -87,8 +87,14 @@ if ! (kubectl get pod -n kube-system --selector app=helm,name=tiller | grep 1/1)
   kubectl create serviceaccount tiller --namespace kube-system
   kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
   helm init --service-account tiller
-  # while it would be suitable to wait for tiller here, we could start building
-  # the images at the same time and ensure to wait for tiller (if needed) in the
-  # testing step
+
+  echo "waiting for tiller"
+  kubectl --namespace=kube-system rollout status --watch=true deployment/tiller-deploy
+  
+  # FIXME: It would be better to have the "waiting for tiller" at a later stage
+  # where we need to utilize tiller, like in the test that will install the
+  # chart. I think we need to wait for till in another way than rollout status,
+  # because apparently I still end up tiller being unavailable when I run the
+  # helm upgrade command after having waited.
 fi
 set -e

@@ -14,9 +14,6 @@
 # -x : Print commands and their arguments as they are executed.
 set -eux
 
-echo "waiting for tiller"
-kubectl --namespace=kube-system rollout status --watch=true deployment/tiller-deploy
-
 # Install chart
 echo "installing chart"
 helm upgrade jh \

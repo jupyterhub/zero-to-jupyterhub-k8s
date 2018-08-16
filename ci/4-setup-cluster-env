@@ -16,7 +16,7 @@ set -ux
 
 # 1.
 if set +u && [[ -z "${CICD}" ]] && set -u; then
-  # LOCAL DEVELOPMENT
+  # LOCAL
   eval $(minikube docker-env)
 fi
 
