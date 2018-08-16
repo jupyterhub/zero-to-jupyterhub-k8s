@@ -67,6 +67,11 @@ img.logo {
 div.sphinxsidebarwrapper div {
     margin-bottom: .8em;
 }
+
+div.sphinxsidebar h1 {
+    font-size: 2.0rem;
+}
+
 div.sphinxsidebar h3 {
     font-size: 1.3em;
     padding-top: 0px;
