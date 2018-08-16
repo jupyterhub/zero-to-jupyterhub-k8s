@@ -185,6 +185,12 @@ singleuser:
     name: jupyterhub/k8s-singleuser-sample
     tag: generated-by-chartpress
     pullPolicy: IfNotPresent
+  imagePullSecret:
+    enabled: false
+    registry:
+    username:
+    email:
+    password:
   startTimeout: 300
   cpu:
     limit:
