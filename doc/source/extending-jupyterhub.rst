@@ -19,7 +19,7 @@ The general method to modify your Kubernetes deployment is to:
 
      .. code-block:: bash
 
-        helm upgrade <YOUR_RELEASE_NAME> jupyterhub/jupyterhub --version=v0.6 -f config.yaml
+        helm upgrade <YOUR_RELEASE_NAME> jupyterhub/jupyterhub --version=0.7 -f config.yaml
 
    Where ``<YOUR_RELEASE_NAME>`` is the parameter you passed to ``--name`` when
    `installing jupyterhub <setup-jupyterhub.html#install-jupyterhub>`_ with
