@@ -18,8 +18,6 @@ Choose one option and proceed.
    amazon/step-zero-aws
    redhat/step-zero-openshift
 
-.. _creating-your-jupyterhub:
-
 .. note::
 
    * During the process of setting up JupyterHub, you'll be creating some

@@ -1,7 +1,7 @@
 .. _redhat-openshift:
 
 Step Zero: Kubernetes on Red Hat OpenShift
--------------------------------
+------------------------------------------
 
 `OpenShift <https://openshift.org/>`_ from RedHat is a cluster manager based on Kubernetes.
 

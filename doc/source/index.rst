@@ -1,23 +1,21 @@
 Zero to JupyterHub with Kubernetes
 ==================================
 
-`JupyterHub`_ is a tool that allows you to quickly utilize cloud computing
-infrastructure to manage a hub that enables your users to interact remotely
-with a computing environment that you specify. JupyterHub offers a useful way
-to standardize the computing environment of a group of people (e.g.,
-for a class of students or an analytics team), as well as allowing
-people to access the
-hub remotely.
+`JupyterHub`_ allows users to interact with a computing environment through a
+webpage. As most devices have access to a web browser, JupyterHub makes it is
+easy to provide and standardize the computing environment of a group of people
+(e.g., for a class of students or an analytics team).
 
-This growing collection of information will help you set up your own JupyterHub
-instance. It is under active development so the information and tools may
-change.
+This project will help you set up your own JupyterHub on a cloud and leverage
+the clouds scalable nature to support large groups of users. Thanks to
+:term:`Kubernetes`, we are not tied to a specific cloud provider.
 
-If you have tips or deployments that you would like to share, see
-:ref:`community-resources`. If you see anything that is incorrect or have any
-questions, feel free to reach out in the `gitter chat
+Note that this project is under active development so information and tools may
+change. *You can be a part of this change!* If you see anything that is incorrect
+or have any questions, feel free to reach out in the `gitter chat
 <https://gitter.im/jupyterhub/jupyterhub>`_ or create an issue at the `issues
-page`_.
+page`_. If you have tips or deployments that you would like to share, see
+:ref:`community-resources`.
 
 .. _getting-to-zero:
 

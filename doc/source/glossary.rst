@@ -21,6 +21,9 @@ details.
       are many authenticators available, like GitHub, Google, MediaWiki,
       Dummy (anyone can log in), etc.
    
+   `config.yaml`
+      TODO...
+
    `Helm chart <https://docs.helm.sh/developing_charts/#charts>`_
       A Helm chart is a group of :term:`Helm templates <Helm template>` that
       can, given its default values and overrides in provided ``yaml`` files,
@@ -60,12 +63,23 @@ details.
       behave on a computer. Some common examples are ``PATH``, ``HOME``, and
       ``EDITOR``.
 
+   Kubernetes
+      For our purposes, you can think of Kubernetes as a way to speak to a cloud
+      and describe what you would like it to do, in a manner that isn't specific
+      for that cloud.
+      
+      - `The Illustrated Children's Guide to Kubernetes <https://www.youtube.com/watch?v=4ht22ReBjno>`_
+      - `The official "What is Kubernetes?" text <https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/>`_
+
    Kubernetes API server
       The `Kubernetes API
       <https://kubernetes.io/docs/concepts/overview/kubernetes-api/>`_ server,
       also referred to as the master, will answer questions and update the
       desired state of the cluster for you. When you use ``kubectl`` you
       communicate with the API server.
+
+   Kubernetes Pod
+      TODO...
    
    Kubernetes resource
       A Kubernetes resource can for example be a `Deployment
@@ -79,6 +93,9 @@ details.
    persistent storage
       A filesystem attached to a user pod that allows the user to store
       notebooks and files that persist across multiple logins.
+
+   Node Pool
+      TODO...
 
    `repo2docker <https://github.com/jupyter/repo2docker>`_
       A tool which lets you quickly convert a Git repository into a
