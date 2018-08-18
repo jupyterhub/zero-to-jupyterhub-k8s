@@ -9,7 +9,7 @@ command.
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: hook-image-awaiter-{{ .Release.Time.Seconds }}
+  name: hook-image-awaiter
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
     hub.jupyter.org/deletable: "true"
