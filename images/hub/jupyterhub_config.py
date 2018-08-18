@@ -22,24 +22,23 @@ c.ConfigurableHTTPProxy.should_start = False
 c.JupyterHub.cleanup_servers = False
 
 # Check that the proxy has routes appropriately setup
-# This isn't the best named setting :D
 c.JupyterHub.last_activity_interval = 60
-
-# Max number of servers that can be spawning at any one time
-c.JupyterHub.concurrent_spawn_limit = get_config('hub.concurrent-spawn-limit')
 
 # Don't wait at all before redirecting a spawning user to the progress page
 c.JupyterHub.tornado_settings = {
     'slow_spawn_timeout': 0,
 }
 
-# Max number of consecutive failures before the Hub restarts itself
-# requires jupyterhub 0.9.2
-c.Spawner.consecutive_failure_limit = get_config('hub.consecutive-failure-limit', 0)
-
-active_server_limit = get_config('hub.active-server-limit', None)
-if active_server_limit is not None:
-    c.JupyterHub.active_server_limit = int(active_server_limit)
+for trait, cfg_key in (
+    # Max number of servers that can be spawning at any one time
+    ('concurrent_spawn_limit', 'concurrent-spawn-limit'),
+    # Max number of consecutive failures before the Hub restarts itself
+    # requires jupyterhub 0.9.2
+    ('consecutive_failure_limit', 'consecutive-failure-limit'),
+    # Max number of servers to be running at one time
+    ('active_server_limit', 'active-server-limit'),
+):
+    set_config_if_not_none(c.JupyterHub, trait, 'hub.' + cfg_key)
 
 c.JupyterHub.ip = os.environ['PROXY_PUBLIC_SERVICE_HOST']
 c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
@@ -47,45 +46,39 @@ c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
 # the hub should listen on all interfaces, so the proxy can access it
 c.JupyterHub.hub_ip = '0.0.0.0'
 
-c.KubeSpawner.common_labels = get_config('kubespawner.common-labels')
+set_config_if_not_none(c.KubeSpawner, 'common_labels', 'kubespawner.common-labels')
 
 c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
 
-c.KubeSpawner.start_timeout = get_config('singleuser.start-timeout')
+set_config_if_not_none(c.KubeSpawner, 'start_timeout', 'singleuser.start-timeout')
 
 # Use env var for this, since we want hub to restart when this changes
 c.KubeSpawner.image_spec = os.environ['SINGLEUSER_IMAGE']
 
-c.KubeSpawner.image_pull_policy = get_config('singleuser.image-pull-policy')
+for trait, cfg_key in (
+    ('start_timeout', 'start-timeout'),
+    ('image_pull_policy', 'image-pull-policy'),
+    ('image_pull_secrets', 'image-pull-secret-name'),
+    ('events_enabled', 'events'),
+    ('extra_labels', 'extra-labels'),
+    ('extra_annotations', 'extra-annotations'),
+    ('uid', 'uid'),
+    ('fs_gid', 'fs-gid'),
+    ('service_account', 'service-account-name'),
+    ('node_selector', 'node-selector'),
+):
+    set_config_if_not_none(c.KubeSpawner, trait, 'singleuser.' + cfg_key)
 
-c.KubeSpawner.image_pull_secrets = get_config('singleuser.image-pull-secret-name', None)
-
-c.KubeSpawner.events_enabled = get_config('singleuser.events', False)
-
-c.KubeSpawner.extra_annotations = get_config('singleuser.extra-annotations', {})
-
-c.KubeSpawner.extra_labels = get_config('singleuser.extra-labels', {})
-
-c.KubeSpawner.uid = get_config('singleuser.uid')
-c.KubeSpawner.fs_gid = get_config('singleuser.fs-gid')
-
-service_account_name = get_config('singleuser.service-account-name', None)
-if service_account_name:
-    c.KubeSpawner.service_account = service_account_name
-
-c.KubeSpawner.node_selector = get_config('singleuser.node-selector')
 # Configure dynamically provisioning pvc
 storage_type = get_config('singleuser.storage.type')
 if storage_type == 'dynamic':
     pvc_name_template = get_config('singleuser.storage.dynamic.pvc-name-template')
-    volume_name_template = get_config('singleuser.storage.dynamic.volume-name-template')
     c.KubeSpawner.pvc_name_template = pvc_name_template
+    volume_name_template = get_config('singleuser.storage.dynamic.volume-name-template')
     c.KubeSpawner.storage_pvc_ensure = True
-    storage_class = get_config('singleuser.storage.dynamic.storage-class', None)
-    if storage_class:
-        c.KubeSpawner.storage_class = storage_class
-    c.KubeSpawner.storage_access_modes = get_config('singleuser.storage.dynamic.storage-access-modes')
-    c.KubeSpawner.storage_capacity = get_config('singleuser.storage.capacity')
+    set_config_if_not_none(c.KubeSpawner, 'storage_class', 'singleuser.storage.dynamic.storage-class')
+    set_config_if_not_none(c.KubeSpawner, 'storage_access_modes', 'singleuser.storage.dynamic.storage-access-modes')
+    set_config_if_not_none(c.KubeSpawner, 'storage_capacity', 'singleuser.storage.capacity')
 
     # Add volumes to singleuser pods
     c.KubeSpawner.volumes = [
@@ -120,27 +113,29 @@ elif storage_type == 'static':
 c.KubeSpawner.volumes.extend(get_config('singleuser.storage.extra-volumes', []))
 c.KubeSpawner.volume_mounts.extend(get_config('singleuser.storage.extra-volume-mounts', []))
 
-lifecycle_hooks = get_config('singleuser.lifecycle-hooks')
-if lifecycle_hooks:
-    c.KubeSpawner.lifecycle_hooks = lifecycle_hooks
+set_config_if_not_none(c.KubeSpawner, 'lifecycle_hooks', 'singleuser.lifecycle-hooks')
 
 init_containers = get_config('singleuser.init-containers')
 if init_containers:
     c.KubeSpawner.init_containers.extend(init_containers)
 
 # Gives spawned containers access to the API of the hub
+# FIXME: KubeSpawner duplicate hub_connect config should be deprecated and removed
 c.KubeSpawner.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
 c.KubeSpawner.hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])
 
 c.JupyterHub.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
 c.JupyterHub.hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])
 
-c.KubeSpawner.mem_limit = get_config('singleuser.memory.limit')
-c.KubeSpawner.mem_guarantee = get_config('singleuser.memory.guarantee')
-c.KubeSpawner.cpu_limit = get_config('singleuser.cpu.limit')
-c.KubeSpawner.cpu_guarantee = get_config('singleuser.cpu.guarantee')
-c.KubeSpawner.extra_resource_limits = get_config('singleuser.extra-resource.limits', {})
-c.KubeSpawner.extra_resource_guarantees = get_config('singleuser.extra-resource.guarantees', {})
+for trait, cfg_key in (
+    ('mem_limit', 'singleuser.memory.limit'),
+    ('mem_guarantee', 'singleuser.memory.guarantee'),
+    ('cpu_limit', 'singleuser.cpu.limit'),
+    ('cpu_guarantee', 'singleuser.cpu.guarantee'),
+    ('extra_resource_limits', 'singleuser.extra-resource.limits'),
+    ('extra_resource_guarantees', 'singleuser.extra-resource.guarantees'),
+):
+    set_config_if_not_none(c.KubeSpawner, trait, cfg_key)
 
 # Allow switching authenticators easily
 auth_type = get_config('auth.type')
@@ -148,59 +143,76 @@ email_domain = 'local'
 
 if auth_type == 'google':
     c.JupyterHub.authenticator_class = 'oauthenticator.GoogleOAuthenticator'
-    c.GoogleOAuthenticator.client_id = get_config('auth.google.client-id')
-    c.GoogleOAuthenticator.client_secret = get_config('auth.google.client-secret')
-    c.GoogleOAuthenticator.oauth_callback_url = get_config('auth.google.callback-url')
-    set_config_if_not_none(c.GoogleOAuthenticator, 'hosted_domain', 'auth.google.hosted-domain')
-    c.GoogleOAuthenticator.login_service = get_config('auth.google.login-service')
+    for trait, cfg_key in (
+        ('client_id', 'client-id'),
+        ('client_secret', 'client-secret'),
+        ('oauth_callback_url', 'callback-url'),
+        ('hosted_domain', 'hosted-domain'),
+        ('login_service', 'login-service'),
+    ):
+        set_config_if_not_none(c.GoogleOAuthenticator, trait, 'auth.google.' + cfg_key)
     email_domain = get_config('auth.google.hosted-domain')
 elif auth_type == 'github':
-    c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
-    c.GitHubOAuthenticator.oauth_callback_url = get_config('auth.github.callback-url')
-    c.GitHubOAuthenticator.client_id = get_config('auth.github.client-id')
-    c.GitHubOAuthenticator.client_secret = get_config('auth.github.client-secret')
-    org_whitelist = get_config('auth.github.org_whitelist', [])
-    if len(org_whitelist) != 0:
-        c.GitHubOAuthenticator.github_organization_whitelist = org_whitelist
+    c.JupyterHub.authenticator_class = 'oauthenticator.github.GitHubOAuthenticator'
+    for trait, cfg_key in (
+        ('client_id', 'client-id'),
+        ('client_secret', 'client-secret'),
+        ('oauth_callback_url', 'callback-url'),
+        ('github_organization_whitelist', 'org_whitelist'),
+    ):
+        set_config_if_not_none(c.GitHubOAuthenticator, trait, 'auth.github.' + cfg_key)
 elif auth_type == 'cilogon':
     c.JupyterHub.authenticator_class = 'oauthenticator.CILogonOAuthenticator'
-    c.CILogonOAuthenticator.oauth_callback_url = get_config('auth.cilogon.callback-url')
-    c.CILogonOAuthenticator.client_id = get_config('auth.cilogon.client-id')
-    c.CILogonOAuthenticator.client_secret = get_config('auth.cilogon.client-secret')
+    for trait, cfg_key in (
+        ('client_id', 'client-id'),
+        ('client_secret', 'client-secret'),
+        ('oauth_callback_url', 'callback-url'),
+    ):
+        set_config_if_not_none(c.CILogonOAuthenticator, trait, 'auth.cilogon.' + cfg_key)
 elif auth_type == 'gitlab':
     c.JupyterHub.authenticator_class = 'oauthenticator.gitlab.GitLabOAuthenticator'
-    c.GitLabOAuthenticator.oauth_callback_url = get_config('auth.gitlab.callback-url')
-    c.GitLabOAuthenticator.client_id = get_config('auth.gitlab.client-id')
-    c.GitLabOAuthenticator.client_secret = get_config('auth.gitlab.client-secret')
+    for trait, cfg_key in (
+        ('client_id', 'client-id'),
+        ('client_secret', 'client-secret'),
+        ('oauth_callback_url', 'callback-url'),
+    ):
+        set_config_if_not_none(c.GitLabOAuthenticator, trait, 'auth.gitlab.' + cfg_key)
 elif auth_type == 'mediawiki':
     c.JupyterHub.authenticator_class = 'oauthenticator.mediawiki.MWOAuthenticator'
-    c.MWOAuthenticator.client_id = get_config('auth.mediawiki.client-id')
-    c.MWOAuthenticator.client_secret = get_config('auth.mediawiki.client-secret')
-    c.MWOAuthenticator.index_url = get_config('auth.mediawiki.index-url')
+    for trait, cfg_key in (
+        ('client_id', 'client-id'),
+        ('client_secret', 'client-secret'),
+        ('oauth_callback_url', 'callback-url'),
+        ('index_url', 'index-url'),
+    ):
+        set_config_if_not_none(c.MWOAuthenticator, trait, 'auth.mediawiki.' + cfg_key)
 elif auth_type == 'globus':
     c.JupyterHub.authenticator_class = 'oauthenticator.globus.GlobusOAuthenticator'
-    c.GlobusOAuthenticator.oauth_callback_url = get_config('auth.globus.callback-url')
-    c.GlobusOAuthenticator.client_id = get_config('auth.globus.client-id')
-    c.GlobusOAuthenticator.client_secret = get_config('auth.globus.client-secret')
-    c.GlobusOAuthenticator.identity_provider = get_config('auth.globus.identity-provider', '')
+    for trait, cfg_key in (
+        ('client_id', 'client-id'),
+        ('client_secret', 'client-secret'),
+        ('oauth_callback_url', 'callback-url'),
+        ('identity_provider', 'identity-provider'),
+    ):
+        set_config_if_not_none(c.GlobusOAuthenticator, trait, 'auth.globus.' + cfg_key)
 elif auth_type == 'hmac':
     c.JupyterHub.authenticator_class = 'hmacauthenticator.HMACAuthenticator'
     c.HMACAuthenticator.secret_key = bytes.fromhex(get_config('auth.hmac.secret-key'))
 elif auth_type == 'dummy':
     c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
-    c.DummyAuthenticator.password = get_config('auth.dummy.password', None)
+    set_config_if_not_none(c.DummyAuthenticator, 'password', 'auth.dummy.password')
 elif auth_type == 'tmp':
     c.JupyterHub.authenticator_class = 'tmpauthenticator.TmpAuthenticator'
 elif auth_type == 'lti':
     c.JupyterHub.authenticator_class = 'ltiauthenticator.LTIAuthenticator'
-    c.LTIAuthenticator.consumers = get_config('auth.lti.consumers')
+    set_config_if_not_none(c.LTIAuthenticator, 'consumers', 'auth.lti.consumers')
 elif auth_type == 'ldap':
     c.JupyterHub.authenticator_class = 'ldapauthenticator.LDAPAuthenticator'
     c.LDAPAuthenticator.server_address = get_config('auth.ldap.server.address')
     set_config_if_not_none(c.LDAPAuthenticator, 'server_port', 'auth.ldap.server.port')
     set_config_if_not_none(c.LDAPAuthenticator, 'use_ssl', 'auth.ldap.server.ssl')
     set_config_if_not_none(c.LDAPAuthenticator, 'allowed_groups', 'auth.ldap.allowed-groups')
-    c.LDAPAuthenticator.bind_dn_template = get_config('auth.ldap.dn.templates')
+    set_config_if_not_none(c.LDAPAuthenticator, 'bind_dn_template', 'auth.ldap.dn.templates')
     set_config_if_not_none(c.LDAPAuthenticator, 'lookup_dn', 'auth.ldap.dn.lookup')
     set_config_if_not_none(c.LDAPAuthenticator, 'lookup_dn_search_filter', 'auth.ldap.dn.search.filter')
     set_config_if_not_none(c.LDAPAuthenticator, 'lookup_dn_search_user', 'auth.ldap.dn.search.user')
@@ -224,9 +236,7 @@ elif auth_type == 'custom':
 else:
     raise ValueError("Unhandled auth type: %r" % auth_type)
 
-auth_scopes = get_config('auth.scopes')
-if auth_scopes:
-    c.OAuthenticator.scope = auth_scopes
+set_config_if_not_none(c.OAuthenticator, 'scope', 'auth.scopes')
 
 c.Authenticator.enable_auth_state = get_config('auth.state.enabled', False)
 
@@ -254,18 +264,19 @@ c.KubeSpawner.environment = {
 c.KubeSpawner.environment.update(get_config('singleuser.extra-env', {}))
 
 # Enable admins to access user servers
-c.JupyterHub.admin_access = get_config('auth.admin.access')
+c.JupyterHub.admin_access = get_config('auth.admin.access', False)
 c.Authenticator.admin_users = get_config('auth.admin.users', [])
 c.Authenticator.whitelist = get_config('auth.whitelist.users', [])
 
+set_config_if_not_none(c.JupyterHub, 'base_url', 'hub.base_url')
 c.JupyterHub.base_url = get_config('hub.base_url')
 
 c.JupyterHub.services = []
 
 if get_config('cull.enabled', False):
-    cull_timeout = get_config('cull.timeout')
-    cull_every = get_config('cull.every')
-    cull_concurrency = get_config('cull.concurrency')
+    cull_timeout = get_config('cull.timeout', 3600)
+    cull_every = get_config('cull.every', 600)
+    cull_concurrency = get_config('cull.concurrency', 10)
     cull_cmd = [
         '/usr/local/bin/cull_idle_servers.py',
         '--timeout=%s' % cull_timeout,
@@ -301,16 +312,11 @@ for name, service in get_config('hub.services', {}).items():
     c.JupyterHub.services.append(service)
 
 
-c.JupyterHub.db_url = get_config('hub.db_url')
-c.JupyterHub.allow_named_servers = get_config('hub.allow-named-servers', False)
+set_config_if_not_none(c.JupyterHub, 'db_url', 'hub.db_url')
+set_config_if_not_none(c.JupyterHub, 'allow_named_servers', 'hub.allow-named-servers')
 
-cmd = get_config('singleuser.cmd', None)
-if cmd:
-    c.Spawner.cmd = cmd
-
-default_url = get_config('singleuser.default-url', None)
-if default_url:
-    c.Spawner.default_url = default_url
+set_config_if_not_none(c.Spawner, 'cmd', 'singleuser.cmd')
+set_config_if_not_none(c.Spawner, 'default_url', 'singleuser.default-url')
 
 cloud_metadata = get_config('singleuser.cloud-metadata', {})
 
