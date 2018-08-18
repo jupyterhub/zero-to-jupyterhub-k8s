@@ -7,8 +7,7 @@ Returns an image-puller daemonset. Two daemonsets will be created like this.
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
-  {{- $label := print "-" .Release.Time.Seconds }}
-  name: {{ print .componentPrefix "image-puller" }}{{- if .hook }}{{ $label }}{{- end }}
+  name: {{ print .componentPrefix "image-puller" }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
     {{- if .hook }}
@@ -20,7 +19,7 @@ metadata:
     Allows the daemonset to be deleted when the image-awaiter job is completed.
     */}}
     "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
     "helm.sh/hook-weight": "-10"
   {{- end }}
 spec:
@@ -34,7 +33,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- /* Changes here will cause the Deployment to restart the pods. */}}
+        {{- /* Changes here will cause the DaemonSet to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
     spec:
       terminationGracePeriodSeconds: 0
