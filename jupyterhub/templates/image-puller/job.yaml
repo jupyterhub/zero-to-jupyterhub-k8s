@@ -21,7 +21,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- /* Changes here will cause the Deployment to restart the pods. */}}
+        {{- /* Changes here will cause the Job to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
     spec:
       restartPolicy: Never
