@@ -2,7 +2,7 @@
 # - builds images and can push them also (--push)
 # - updates image names and tags in values.yaml
 # - can publish the built Helm chart (--publish)
-chartpress==0.2.1
+chartpress==0.2.2
 
 # yamllint is important for local development, CI
 # - used within tools/templates/lint-and-validate.py
