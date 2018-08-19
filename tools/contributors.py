@@ -69,8 +69,11 @@ def get_all_contributors(repo, from_date, to_date):
 
 if __name__ == '__main__':
     # Dates below should be updated before releasing a new version of the helm chart
-    users = get_all_contributors('jupyterhub/zero-to-jupyterhub', parse('Wed Dec 13 10:23:01 2017 -0800'), parse('Mon Jan 29 13:37:51 2018 -0800'))
-    users |= get_all_contributors('jupyterhub/kubespawner', parse('Tue Nov 28 13:28:24 2017 -0800'), parse('Wed Jan 24 13:31:03 2018 +0100'))
+    #users = get_all_contributors('jupyterhub/zero-to-jupyterhub-k8s', parse('Mon Aug 13 13:37:51 2018 -0800'), parse('Sun Aug 19 08:00:00 2018 +0200'))
+    users = get_all_contributors('jupyterhub/zero-to-jupyterhub-k8s', parse('Mon Jan 29 13:37:51 2018 -0800'), parse('Sun Aug 19 08:00:00 2018 +0200'))
+    users |= get_all_contributors('jupyterhub/kubespawner', parse('Wed Jan 24 13:31:03 2018 +0100'), parse('Sun Aug 19 08:00:00 2018 +0200'))
+    users |= get_all_contributors('jupyterhub/jupyterhub', parse('Tue Nov 07 13:40:00 2018 +0200'), parse('Sat Aug 11 14:53:00 2018 +0200'))
+    users |= get_all_contributors('jupyterhub/oauthenticator', parse('Fri Oct 27 17:02:00 2017 +0200'), parse('Sat Aug 11 14:47:00 2018 +0200'))
 
 
     for login, name in sorted(users, key=lambda u: u[1].casefold() if u[1] else u[0].casefold()):
