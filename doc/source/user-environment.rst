@@ -74,6 +74,8 @@ image containing useful scientific programming libraries, complete these steps:
       use the image. The image pulling may take several minutes to complete,
       depending on the size of the image.
 
+
+
 .. _jupyterlab-by-default:
 
 Use JupyterLab by default
@@ -108,19 +110,25 @@ To let users use JupyterLab by default, add the following entries to your
 
 .. _custom-docker-image:
 
-Extend an existing Docker image
--------------------------------
+Customize an existing Docker image
+----------------------------------
 
 If you are missing something in the image that you would like all users to have,
 we recommend that you build a new image on top of an existing Docker image from
 jupyter/docker-stacks.
 
-Below is an example Dockerfile that can be built, pushed to a image registry, and
-finally declared to be used by the Helm chart.
+Below is an example :term:`Dockerfile` building on top of the *minimal-notebook*
+image. This file can be built to a :term:`docker image`, and pushed to a
+:term:`image registry`, and finally configured in :term:`config.yaml` to be used
+by the Helm chart.
 
 .. code-block:: Dockerfile
 
    FROM jupyter/minimal-notebook:177037d09156
+   # Get the latest image tag at:
+   # https://hub.docker.com/r/jupyter/minimal-notebook/tags/
+   # Inspect the Dockerfile at:
+   # https://github.com/jupyter/docker-stacks/tree/master/minimal-notebook/Dockerfile
 
    # install additional package...
    RUN pip install --yes astropy
@@ -139,12 +147,13 @@ Set environment variables
 -------------------------
 
 One way to affect your user's environment is by setting :term:`environment
-variables`. While you can set them up in your Docker image, it is often easier
-to set them up in your Helm chart.
+variables`. While you can set them up in your Docker image if you build it
+yourself, it is often easier to configure your Helm chart through values
+provided in your :term:`config.yaml`.
 
-To set them up in your helm chart, edit your ``config.yaml`` file
-and `apply the changes`_. For example, this code snippet will set the
-environment variable ``EDITOR`` to the value ``vim``:
+To set this up, edit your :term:`config.yaml` and `apply the changes`_. For
+example, this code snippet will set the environment variable ``EDITOR`` to the
+value ``vim``:
 
 .. code-block:: yaml
 
@@ -152,33 +161,50 @@ environment variable ``EDITOR`` to the value ``vim``:
      extraEnv:
        EDITOR: "vim"
 
-You can set any number of static environment variables in the ``config.yaml``
-file.
+You can set any number of static environment variables in the
+:term:`config.yaml` file.
 
 Users can read the environment variables in their code in various ways. In
-Python, for example, the following code will read in an environment variable:
+Python, for example, the following code reads an environment variable's value:
 
 .. code-block:: python
 
    import os
    my_value = os.environ["MY_ENVIRONMENT_VARIABLE"]
 
-Other languages will have their own methods of reading these environment
-variables.
-
 
 
 .. _add-files-to-home:
 
-Adding files to users' home directory
--------------------------------------
+About user storage and adding files to it 
+-----------------------------------------
 
-When persistent storage is enabled (which is the default), the contents of the
-docker image's $HOME directory will be hidden from the user. To make these
+It is important to understand the basics of how user storage is set up. By
+default, each user will get 10GB of space on a harddrive that will persist in
+between restarts of their server. This harddrive will be mounted to their home
+directory. In practice this means that everything a user writes to the home
+directory (`/home/jovyan`) will remain, and everything else will be reset in
+between server restarts.
+
+A server can be shut down by *culling*. By default, JupyterHub's culling service
+is configured to cull a users server that has been inactive for one hour. Note
+that JupyterLab will autosave files, and as long as the file was within the
+users home directory no work is lost.
+
+
+
+
+.. note::
+
+   In Kubernetes, a *PersistantVolume* (PV) represents the harddrive.
+   KubeSpawner will create a PersistantVolumeClaim that requests a PV from the
+   cloud. By default, deleting the PVC will cause the cloud to delete the PV.
+
+Docker image's $HOME directory will be hidden from the user. To make these
 contents visible to the user, you must pre-populate the user's filesystem. To do
 so, you would include commands in the ``config.yaml`` that would be run each
 time a user starts their server. The following pattern can be used in
-``config.yaml``:
+:term:`config.yaml`:
 
 .. code-block:: yaml
 

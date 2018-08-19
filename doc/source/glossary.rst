@@ -22,26 +22,10 @@ details.
       Dummy (anyone can log in), etc.
    
    `config.yaml`
-      TODO...
-
-   `Helm chart <https://docs.helm.sh/developing_charts/#charts>`_
-      A Helm chart is a group of :term:`Helm templates <Helm template>` that
-      can, given its default values and overrides in provided ``yaml`` files,
-      make sure your Kubernetes cluster installs all the rendered
-      :term:`Kubernetes resources <kubernetes resource>`. In other words a Helm
-      chart is like a configurable installation file for software to run on a
-      cloud.
-
-   `Helm template <https://docs.helm.sh/chart_template_guide/#the-chart-template-developer-s-guide>`_
-      A Helm template (``.yaml`` files), can given values, render to a
-      :term:`Kubernetes resource`.
-
-   `Helm values <https://docs.helm.sh/chart_template_guide/#values-files>`_
-      :term:`Helm charts <helm chart>` has a set of predefined values
-      (`values.yaml`) typically overridden by other values in `config.yaml`. The
-      final values are used to generate :term:`Kubernetes resources <kubernetes
-      resource>` from :term:`Helm templates <helm template>` within a
-      :term:`Helm chart`.
+      The :term:`Helm charts <helm chart>` templates are rendered with these
+      :term:`Helm values` as input. The file is written in the `YAML
+      <https://en.wikipedia.org/wiki/YAML>`_ format. The YAML format is esential
+      to grasp if working with Kubernetes and Helm.
 
    container
       A container is a isolated working space which for us gives users the
@@ -63,6 +47,25 @@ details.
       behave on a computer. Some common examples are ``PATH``, ``HOME``, and
       ``EDITOR``.
 
+   `Helm chart <https://docs.helm.sh/developing_charts/#charts>`_
+      A Helm chart is a group of :term:`Helm templates <Helm template>` that
+      can, given its default values and overrides in provided ``yaml`` files,
+      make sure your Kubernetes cluster installs all the rendered
+      :term:`Kubernetes resources <kubernetes resource>`. In other words a Helm
+      chart is like a configurable installation file for software to run on a
+      cloud.
+
+   `Helm template <https://docs.helm.sh/chart_template_guide/#the-chart-template-developer-s-guide>`_
+      A Helm template (``.yaml`` files), can given values, render to a
+      :term:`Kubernetes resource`.
+
+   `Helm values <https://docs.helm.sh/chart_template_guide/#values-files>`_
+      :term:`Helm charts <helm chart>` has a set of predefined values
+      (`values.yaml`) typically overridden by other values in `config.yaml`. The
+      final values are used to generate :term:`Kubernetes resources <kubernetes
+      resource>` from :term:`Helm templates <helm template>` within a
+      :term:`Helm chart`.
+
    Kubernetes
       For our purposes, you can think of Kubernetes as a way to speak to a cloud
       and describe what you would like it to do, in a manner that isn't specific
@@ -79,7 +82,14 @@ details.
       communicate with the API server.
 
    Kubernetes Pod
-      TODO...
+      *Pods* are the smallest deployable units of computing that can be created
+      and managed in Kubernetes. A pod will use a :term:`Docker image` to create
+      a container, and most often a controller such as a Deployment will ensure
+      there is always X running pods of a kind.
+
+      See the `Kubernetes documentation
+      <https://kubernetes.io/docs/concepts/workloads/pods/pod/>`__ for more
+      information.
    
    Kubernetes resource
       A Kubernetes resource can for example be a `Deployment
@@ -95,7 +105,9 @@ details.
       notebooks and files that persist across multiple logins.
 
    Node Pool
-      TODO...
+      A *node pool* or *node group* represents a set of nodes of the same kind.
+      With cluster autoscaling, a node pool can grow and shrink based on demand
+      allowing you to save computational resources.
 
    `repo2docker <https://github.com/jupyter/repo2docker>`_
       A tool which lets you quickly convert a Git repository into a
