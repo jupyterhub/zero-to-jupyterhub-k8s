@@ -4,58 +4,61 @@ Setting up JupyterHub
 =====================
 
 Now that we have a `Kubernetes cluster <create-k8s-cluster.html>`_ and `Helm
-<setup-helm.html>`_ setup, we can proceed by setting up the cloud deployment of
-our JupyterHub.
+<setup-helm.html>`_ setup, we can proceed by using Helm to install JupyterHub
+and related :term:`Kubernetes resources <kubernetes resource>` using a
+:term:`Helm chart`.
 
 Prepare configuration file
 --------------------------
 
-This step prepares a `YAML <https://en.wikipedia.org/wiki/YAML>`_ configuration
-file (`config.yaml`) for the generic JupyterHub deployment declared by the Helm
-chart. Helm charts contains templates for Kubernetes resources to be installed
-in a Kubernetes cluster. This config file will provide values to be used by
-these templates.
+In this step we prepare a `YAML <https://en.wikipedia.org/wiki/YAML>`_
+configuration file that we will refer to as `config.yaml`. It will contain
+:term:`Helm values` that we provide to a JupyterHub :term:`Helm chart` developed
+specifically together with this guide. Helm charts contains :term:`templates
+<helm template>` that with provided values will render to :term:`Kubernetes
+resources <kubernetes resource>` to be installed in a Kubernetes cluster. This
+config file will provide the values to be used by our Helm chart.
 
-It's important to save the config file in a safe place. The config file is
-needed for future changes to JupyterHub's settings.
-
-For the following steps, use your favorite code editor. We'll use the
-`nano <https://en.wikipedia.org/wiki/GNU_nano>`_ editor as an example.
-
-1. Create a file called ``config.yaml``. Using the nano editor, for example,
-   entering ``nano config.yaml`` at the terminal will start the editor and
-   open the config file.
-
-2. Create a random hex string representing 32 bytes to use as a security token.
-   Run this command in a terminal:
+1. Generate a random hex string representing 32 bytes to use as a security
+   token. Run this command in a terminal and copy the output:
 
    .. code-block:: bash
 
-       openssl rand -hex 32
+      openssl rand -hex 32
 
-   Copy the output for use in the next step.
+2. Create and start editing a file called ``config.yaml``. In the code snippet
+   below we start the widely available `nano editor
+   <https://en.wikipedia.org/wiki/GNU_nano>`_, but any editor will do.
 
-3. Insert these lines into the ``config.yaml`` file. When editing YAML files,
-   use straight quotes and spaces and avoid using curly quotes or tabs.
-   Substitute ``<RANDOM_STRING>`` below with the output of ``openssl rand -hex
-   32`` from step 2.
-
+   ```sh
+   nano config.yaml
+   ```
+   
+3. Write the following into the ``config.yaml`` file but instead of writing
+   ``<RANDOM-HEX>`` paste the generated hex string you copied in step 1.
+   
    .. code-block:: yaml
 
       proxy:
-        secretToken: "<RANDOM_STRING>"
+        secretToken: "<RANDOM_HEX>"
+
+   .. note::
+   
+      It is common practice for Helm and Kubernetes YAML files to indent using
+      two spaces.
+
+4. Save the ``config.yaml`` file. In the nano editor this is done by pressing **CTRL+X** or
+   **CMD+X** followed by a confirmation to save the changes. 
 
 .. Don't put an example here! People will just copy paste that & that's a
    security issue.
 
-4. Save the ``config.yaml`` file.
-
 Install JupyterHub
-------------------
+------------------ 
 
-1. Let's add the JupyterHub `Helm repository
-   <https://jupyterhub.github.io/helm-chart/>`_ to your `helm` configuration so
-   you can install the JupyterHub chart from it without a long URL name.
+1. Make Helm aware of the `JupyterHub Helm chart repository
+   <https://jupyterhub.github.io/helm-chart/>`_ so you can install the
+   JupyterHub chart from it without having to use a long URL name.
 
    .. code:: bash
 
@@ -72,37 +75,38 @@ Install JupyterHub
       ...Successfully got an update from the "jupyterhub" chart repository
       Update Complete. ⎈ Happy Helming!⎈
 
-2. Now you can install the chart! Run this command from the directory that contains the
-   ``config.yaml`` file to spin up JupyterHub:
+2. Now install the chart configured by your ``config.yaml`` by running this
+   command from the directory that contains your ``config.yaml``:
 
    .. code:: bash
 
-      helm upgrade <YOUR-RELEASE-NAME> jupyterhub/jupyterhub \
+      # Suggested values: advanced users of Kubernetes and Helm should feel
+      # free to use different values.
+      RELEASE=jh
+      NAMESPACE=jh
+
+      helm upgrade ${RELEASE:-jh} jupyterhub/jupyterhub \
         --install \
-        --namespace <YOUR-NAMESPACE> \
+        --namespace ${NAMESPACE:-jh}  \
         --version 0.7.0-beta.1 \
         --values config.yaml
 
    where:
 
-   - ``<YOUR-RELEASE-NAME>`` refers to a `Helm release name
+   - ``RELEASE`` refers to a `Helm release name
      <https://docs.helm.sh/glossary/#release>`_, an identifier used to
      differentiate chart installations. You need it when you are changing or
      deleting the configuration of this chart installation. If your Kubernetes
      cluster will contain multiple JupyterHubs make sure to differentiate them.
-     You can list Helm releases with ``helm list``.
-   - ``<YOUR-NAMESPACE>`` refers to a `Kubernetes namespace
+     You can list your Helm releases with ``helm list``.
+   - ``NAMESPACE`` refers to a `Kubernetes namespace
      <https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/>`_,
      an identifier used to group Kubernetes resources, in this case all
      Kubernetes resources associated with the JupyterHub chart. You'll need the
      namespace identifier for performing any commands with ``kubectl``.
 
-   We recommend providing the same value (*jh* for example) to
-   ``<YOUR-RELEASE-NAME>`` and ``<YOUR-NAMESPACE>`` for now to avoid too much
-   confusion, but advanced users of Kubernetes and helm should feel free to use
-   different values.
-
    .. note::
+
       * This step may take a moment, during which time there will be no output
         to your terminal. JupyterHub is being installed in the background.
 
@@ -121,38 +125,51 @@ Install JupyterHub
         ``--timeout=SOME-LARGE-NUMBER-OF-SECONDS`` parameter to the ``helm
         install`` command.
 
-      * The ``--version`` parameter corresponds to the *version of the helm chart*,
-        not the version of JupyterHub. Each version of the JupyterHub helm chart
-        is paired with a specific version of JupyterHub. E.g., v0.7 of the helm
-        chart runs JupyterHub v0.9.2.
+      * The ``--version`` parameter corresponds to the *version of the Helm
+        chart*, not the version of JupyterHub. Each version of the JupyterHub
+        Helm chart is paired with a specific version of JupyterHub. E.g.,
+        ``0.7.0-beta.1`` of the Helm chart runs JupyterHub ``0.9.2``.
 
 3. While Step 2 is running, you can see the pods being created by entering in
    a different terminal:
 
    .. code-block:: bash
 
-      kubectl --namespace=<YOUR-NAMESPACE> get pod
+      kubectl get pod --namespace ${NAMESPACE:-jh}
 
    .. note::
 
-      We recommend that you `enable autocompletion for kubectl
+      To remain sane we recommend that you `enable autocompletion for kubectl
       <https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion>`_
       and set a default value for the ``--namespace`` flag:
 
       .. code-block:: bash
 
-         kubectl config set-context $(kubectl config current-context) --namespace=<YOUR-NAMESPACE>
+         kubectl config set-context $(kubectl config current-context) --namespace ${NAMESPACE:-jh}
 
 4. Wait for the *hub* and *proxy* pod to enter the ``Running`` state.
 
-5. Find the IP to use for accessing the JupyterHub with:
+   .. code-block: bash
+
+      NAME                    READY     STATUS    RESTARTS   AGE
+      hub-5d4ffd57cf-k68z8    1/1       Running   0          37s
+      proxy-7cb9bc4cc-9bdlp   1/1       Running   0          37s
+
+5. Find the IP we can use to access the JupyterHub. Run the following command
+   until the ``EXTERNAL-IP`` of the ``proxy-public`` `service
+   <https://kubernetes.io/docs/concepts/services-networking/service/>`__ is
+   available like in the example output.
 
    .. code-block:: bash
 
-      kubectl --namespace=<YOUR-NAMESPACE> get svc
+      kubectl get service --namespace ${NAMESPACE:-jh}
 
-   The external IP for the `proxy-public` service should be accessible in a
-   minute or two.
+   .. code-block:: bash
+
+      NAME           TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)        AGE
+      hub            ClusterIP      10.51.243.14    <none>          8081/TCP       1m
+      proxy-api      ClusterIP      10.51.247.198   <none>          8001/TCP       1m
+      proxy-public   LoadBalancer   10.51.248.230   104.196.41.97   80:31916/TCP   1m
 
    .. note::
 
@@ -161,7 +178,7 @@ Install JupyterHub
 
       .. code-block:: bash
 
-         kubectl --namespace=<YOUR-NAMESPACE> describe svc proxy-public --output=wide
+         kubectl describe service proxy-public --namespace ${NAMESPACE:-jh} --output=wide
 
 
 7. To use JupyterHub, enter the external IP for the `proxy-public` service in

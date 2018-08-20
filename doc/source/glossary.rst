@@ -50,10 +50,10 @@ details.
    `Helm chart <https://docs.helm.sh/developing_charts/#charts>`_
       A Helm chart is a group of :term:`Helm templates <Helm template>` that
       can, given its default values and overrides in provided ``yaml`` files,
-      make sure your Kubernetes cluster installs all the rendered
-      :term:`Kubernetes resources <kubernetes resource>`. In other words a Helm
-      chart is like a configurable installation file for software to run on a
-      cloud.
+      render to a set of :term:`Kubernetes resources <kubernetes resource>` that
+      can be easily installed to your Kubernetes cluster. In other words a Helm
+      chart is like a configurable installation of software and infrastructure
+      to exist on a cloud.
 
    `Helm template <https://docs.helm.sh/chart_template_guide/#the-chart-template-developer-s-guide>`_
       A Helm template (``.yaml`` files), can given values, render to a

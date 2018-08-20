@@ -17,6 +17,34 @@ or have any questions, feel free to reach out in the `gitter chat
 page`_. If you have tips or deployments that you would like to share, see
 :ref:`community-resources`.
 
+
+
+.. _about-guide:
+
+What To Expect
+--------------
+
+This guide will help you deploy and customize your own JupyterHub on a cloud.
+While doing this, you will gain valuable experience with:
+
+* **A cloud provider** such Google Cloud, Microsoft Azure, Amazon EC2...
+* **Kubernetes** to manage resources on the cloud
+* **Helm** to configure and control the packaged JupyterHub installation
+* **JupyterHub** to give users access to a Jupyter computing environment
+* **A terminal interface** on some operating system
+
+It's also possible you end up getting experienced with:
+
+* **Docker** to build customized image for the users
+* **Domain registration** to make the hub available at https://your-domain-name.com
+
+.. note::
+
+   For a more elaborate introduction to the tools and services that JupyterHub
+   depends upon, see our :ref:`tools` page.
+
+
+
 .. _getting-to-zero:
 
 Setup a Kubernetes cluster
