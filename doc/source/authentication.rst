@@ -111,7 +111,7 @@ CILogon
 
       auth:
         type: cilogon
-        github:
+        cilogon:
           clientId: "y0urc1logonc1ient1d"
           clientSecret: "an0ther1ongs3cretstr1ng"
           callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
