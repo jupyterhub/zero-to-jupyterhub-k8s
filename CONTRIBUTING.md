@@ -17,9 +17,9 @@ development.
 2. [Download & install helm](https://github.com/helm/helm#install).
 
    You may install Helm using one of the following steps:
-   
+
    * With the following curl command:
-   
+
      ```
      curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
      ```
@@ -93,16 +93,16 @@ development.
    ```bash
    minikube service --namespace=hub proxy-public
    ```
-  
+
    Navigate to the URL in your browser. You should now have JupyterHub running
    on minikube.
-  
-11. Make the changes you want. 
+
+11. Make the changes you want.
 
     To view your changes on the running development instance of JupyterHub:
 
-    - Re-run step 6 if you changed anything under the `images` directory
-    - Re-run step 8 if you changed things only under the `jupyterhub` directory.
+    - Re-run step 7 if you changed anything under the `images` directory
+    - Re-run step 9 if you changed things only under the `jupyterhub` directory.
 
 ---
 
