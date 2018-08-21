@@ -61,7 +61,9 @@ your google cloud account.
 
    .. code-block:: bash
 
-      ZONE=us-east-1
+      # Enter a zone
+      ZONE=
+
       gcloud config set compute/zone ${ZONE:-us-east-1}
    
    * ZONE specifies which data center to use. Pick something `from
@@ -103,9 +105,12 @@ your google cloud account.
 
    .. code-block:: bash
 
+      # Enter your email
+      EMAIL=
+
       kubectl create clusterrolebinding cluster-admin-binding \
         --clusterrole=cluster-admin \
-        --user=<YOUR-EMAIL-ADDRESS>
+        --user=$EMAIL
 
 Congrats. Now that you have your Kubernetes cluster running, it's time to
 begin :ref:`creating-your-jupyterhub`.

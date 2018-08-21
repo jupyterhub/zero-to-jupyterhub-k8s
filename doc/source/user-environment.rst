@@ -53,7 +53,7 @@ image containing useful scientific programming libraries, complete these steps:
           # Inspect the Dockerfile at:
           # https://github.com/jupyter/docker-stacks/tree/master/scipy-notebook/Dockerfile
           name: jupyter/scipy-notebook
-          tag: 7258a5c29859
+          tag: 177037d09156
 
    .. note::
 
