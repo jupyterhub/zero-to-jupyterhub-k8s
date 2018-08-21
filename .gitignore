@@ -145,3 +145,8 @@ ENV/
 
 # Emacs
 .#*
+
+# generated files
+.pytest_cache
+tools/lint-output
+gh-pages
