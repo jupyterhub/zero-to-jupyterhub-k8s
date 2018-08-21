@@ -85,7 +85,7 @@ Install JupyterHub
    .. code:: bash
 
       helm install jupyterhub/jupyterhub \
-          --version=0.7.0-beta.1 \
+          --version=0.7.0-beta.2 \
           --name=<YOUR-RELEASE-NAME> \
           --namespace=<YOUR-NAMESPACE> \
           -f config.yaml
