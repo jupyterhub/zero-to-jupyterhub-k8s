@@ -30,9 +30,9 @@ config file will provide the values to be used by our Helm chart.
    below we start the widely available `nano editor
    <https://en.wikipedia.org/wiki/GNU_nano>`_, but any editor will do.
 
-   ```sh
-   nano config.yaml
-   ```
+   .. code-block:: bash
+   
+      nano config.yaml
    
 3. Write the following into the ``config.yaml`` file but instead of writing
    ``<RANDOM-HEX>`` paste the generated hex string you copied in step 1.
@@ -82,12 +82,12 @@ Install JupyterHub
 
       # Suggested values: advanced users of Kubernetes and Helm should feel
       # free to use different values.
-      RELEASE=jh
-      NAMESPACE=jh
+      RELEASE=jhub
+      NAMESPACE=jhub
 
-      helm upgrade ${RELEASE:-jh} jupyterhub/jupyterhub \
+      helm upgrade ${RELEASE:-jhub} jupyterhub/jupyterhub \
         --install \
-        --namespace ${NAMESPACE:-jh}  \
+        --namespace ${NAMESPACE:-jhub}  \
         --version 0.7.0-beta.1 \
         --values config.yaml
 
@@ -135,7 +135,7 @@ Install JupyterHub
 
    .. code-block:: bash
 
-      kubectl get pod --namespace ${NAMESPACE:-jh}
+      kubectl get pod --namespace ${NAMESPACE:-jhub}
 
    .. note::
 
@@ -145,7 +145,7 @@ Install JupyterHub
 
       .. code-block:: bash
 
-         kubectl config set-context $(kubectl config current-context) --namespace ${NAMESPACE:-jh}
+         kubectl config set-context $(kubectl config current-context) --namespace ${NAMESPACE:-jhub}
 
 4. Wait for the *hub* and *proxy* pod to enter the ``Running`` state.
 
@@ -162,7 +162,7 @@ Install JupyterHub
 
    .. code-block:: bash
 
-      kubectl get service --namespace ${NAMESPACE:-jh}
+      kubectl get service --namespace ${NAMESPACE:-jhub}
 
    .. code-block:: bash
 
@@ -178,7 +178,7 @@ Install JupyterHub
 
       .. code-block:: bash
 
-         kubectl describe service proxy-public --namespace ${NAMESPACE:-jh} --output=wide
+         kubectl describe service proxy-public --namespace ${NAMESPACE:-jhub} --output=wide
 
 
 7. To use JupyterHub, enter the external IP for the `proxy-public` service in

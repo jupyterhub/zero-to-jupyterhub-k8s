@@ -31,15 +31,16 @@ your google cloud account.
 
    a. **Use a web based terminal:**
    
-      Start the Google Cloud Shell from `console.cloud.google.com
+      Start *Google Cloud Shell* from `console.cloud.google.com
       <https://console.cloud.google.com>`_ by clicking the button shown below.
-      This will start an interactive shell session within Google Cloud.
+      You are now in control of a virtual machine with various tools
+      preinstalled. If you save something in a user folder they will remain
+      avaitlableo you if you return at a later stage. Additional documentation
+      about Google Cloud shell is available `here
+      <https://cloud.google.com/shell/docs/>`__
 
       .. image:: ../_static/images/google/start_interactive_cli.png
          :align: center
-
-      See the `Google Cloud Shell documentation <https://cloud.google.com/shell/docs/>`_
-      for more information.
 
    b. **Use your own computer's terminal:**
 
@@ -60,12 +61,13 @@ your google cloud account.
 
    .. code-block:: bash
 
-      gcloud config set compute/zone <YOUR-ZONE>
+      ZONE=us-east-1
+      gcloud config set compute/zone ${ZONE:-us-east-1}
    
-   * ``<YOUR-ZONE>`` specifies which data center to use. Pick something `from
-     this list <https://cloud.google.com/compute/docs/regions-zones/regions-zones#available>`_.
-     that is not too far away from your users and has the hardware you want to
-     utilize, only some can provide GPUs for example.
+   * ZONE specifies which data center to use. Pick something `from
+     this list
+     <https://cloud.google.com/compute/docs/regions-zones/regions-zones#available>`_.
+     that is not too far away from your users.
 
 5. Create a managed Kubernetes cluster and a default node pool.
 
