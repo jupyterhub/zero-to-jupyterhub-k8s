@@ -1,8 +1,11 @@
 # Changelog
+Here you can find upgrade changes in between releases and upgrade instructions.
+
+Releases are named after famous [Cricket](https://en.wikipedia.org/wiki/Cricket) players.
 
 
 
-## [Unreleased]
+## [Unreleased](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.7.0-beta.2...master)
 
 ### Breaking changes
 
@@ -10,15 +13,218 @@
 
 
 
-## Releases
+## [0.7.0-beta.2](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.6...0.7.0-beta.2) - 2018-07-19
 
-Releases are now named after famous [Cricket](https://en.wikipedia.org/wiki/Cricket) players.
+`0.7.0-beta.2` is a pre-release. It is meant to help gather feedback from the
+community as well as give users a chance to test it out before `0.7.0` is
+officially released.
+
+### Upgrading from 0.6
+
+If you are running v0.5 of the chart, you should upgrade to v0.6 first before
+upgrading to `0.7.0-beta.2`. You can find out what version you are using by
+running `helm list`.
+
+Follow the steps below to upgrade to the new version.
+
+#### 1. (Optional) Ensure the hub's and users' data isn't lost
+This step is optional, but a recommended safeguard when the hub's and users'
+data is considered important. The changes makes the PersistentVolumes (PVs),
+which represent storage (hardrives) remain even if the PersistentVolumeClaims
+(PVCs) are deleted. The downside of this is that it requires you to perform
+manual cleanup of PVs when you want to stop spending money for the storage.
+
+```sh
+# The script is a saftey measure and patches your PersistentVolumes (PV) to
+# not be garbage collected if the PersistentVolumeClaim (PVC) are deleted.
+NAMESPACE=<YOUR-NAMESPACE>
+
+# Ensure the hub's and users' data isn't lost
+hub_and_user_pvs=($(kubectl get persistentvolume | grep -E "$NAMESPACE/(hub-db-dir|claim-)" | awk '{print $1}'))
+for pv in ${hub_and_user_pvs[@]};
+do
+    kubectl patch persistentvolume $pv --patch '{"spec":{"persistentVolumeReclaimPolicy":"Retain"}}'
+done
+```
+
+#### 2. (Optional) Make the safeguard in step 1 the future default
+To ensure future users' data won't be lost, you could choose to do the
+following. This will influence not only your namespace, but the full cluster
+though.
+
+```sh
+# WARNING: This will impact the behavior of the default storage class and all
+#          future PVs created with it in the cluster.
+# 1. Inspect what the default storage class is
+kubectl get storageclass
+
+# 2. Save its name
+DEFAULT_STORAGE_CLASS=<YOUR-DEFAULT-STORAGE-CLASS>
+
+# 3. Save and modify the storage class
+# NOTE: Patching of reclaimPolicy is forbidden so a recreation is required
+kubectl get storageclass $DEFAULT_STORAGE_CLASS -o yaml | sed -E 's/reclaimPolicy: Delete/reclaimPolicy: Retain/g' > /tmp/updated_storageclass.yaml
+
+# 4. Delete and create the modified storage class
+# NOTE: If you don't recreate the storage class quickly after you delete it, the
+#       cloud provider may create one before you manage to do it yourself.
+kubectl delete storageclass $DEFAULT_STORAGE_CLASS
+kubectl create -f /tmp/updated_storageclass.yaml
+```
+
+#### 3. Update Helm (v2.9.1+ required)
+
+```sh
+# Update helm
+curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
+
+# Update tiller (on the cluster)
+helm init --upgrade --service-account=tiller
+
+# Verify the update
+# NOTE: you may need to cancel and re-run the command, it should work within 30
+#       seconds.
+helm version
+# VERIFY: Did it return both the client and server version?
+# Client: &version.Version{SemVer:"v2.10.0", GitCommit:"9ad53aac42165a5fadc6c87be0dea6b115f93090", GitTreeState:"clean"}
+# Server: &version.Version{SemVer:"v2.10.0", GitCommit:"9ad53aac42165a5fadc6c87be0dea6b115f93090", GitTreeState:"clean"}
+```
+
+#### 4. (Optional) Clean up pre-puller resources
+
+```sh
+# This script will delete resources that were meant to be temporary
+# The bug that caused this is fixed in version 0.7.0-beta.2 of the Helm chart
+NAMESPACE=<YOUR-NAMESPACE>
+
+resource_types="daemonset,serviceaccount,clusterrole,clusterrolebinding,job"
+for bad_resource in $(kubectl get $resource_types --namespace $NAMESPACE | grep '/pre-pull' | awk '{print $1}');
+do
+    kubectl delete $bad_resource --namespace $NAMESPACE --now
+done
+
+kubectl delete $resource_types --selector hub.jupyter.org/deletable=true --namespace $NAMESPACE --now
+```
+
+#### 5. (Recommended) Clean up problematic revisions in your Helm release
+This step is recommended due to bugs in Helm that could cause your JupyterHub
+Helm chart installation (release) to get stuck in an invalid state. The symptoms
+are often that `helm upgrade` commands fail with the reason that some resource
+does or doesn't exist.
+
+```sh
+# Look up the name of your Helm release (installation of a Helm chart)
+helm list
+
+# Store the name of the Helm release
+RELEASE_NAME=<YOUR-RELEASE-NAME>
+
+# Give yourself an overview of this release's revisions
+helm history $RELEASE_NAME
+
+# Check if you have multiple revisions in a DEPLOYED status (a bug), or if you
+# have old PENDING_UPGRADES or FAILED revisions (may be problematic).
+helm history $RELEASE_NAME | grep --extended-regexp "DEPLOYED|FAILED|PENDING_UPGRADE"
+
+# If you have multiple revisions in DEPLOYED status, this script will clean up
+# all configmaps except the latest with DEPLOYED status.
+deployed_revisions=($(helm history $RELEASE_NAME | grep DEPLOYED | awk '{print $1}'))
+for revision in ${deployed_revisions[@]::${#deployed_revisions[@]}-1};
+do
+    kubectl delete configmap $RELEASE_NAME.v$revision --namespace kube-system
+done
+
+# It seems plausible that upgrade failures could have to do with revisions
+# having a PENDING_UPGRADE or FAILED status in the revision history. To delete
+# them run the following command.
+kubectl delete configmap --selector "NAME=$RELEASE_NAME,STATUS in (FAILED,PENDING_UPGRADE)" --namespace kube-system
+```
+
+#### 6. Make the upgrade
+```sh
+RELEASE_NAME=<YOUR-RELEASE-NAME>
+NAMESPACE=<YOUR-NAMESPACE>
+
+helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+helm repo update
+
+# NOTE: We need the --force flag to allow recreation of resources that can't be
+#       upgraded to the new state by a patch.
+helm upgrade $RELEASE_NAME jupyterhub/jupyterhub --install \
+    --force \
+    --version=0.7.0-beta.2 \
+    --namespace=$NAMESPACE \
+    --values config.yaml \
+    --timeout 1800
+```
+
+#### Troubleshooting - Cleanup of cluster
+
+If things fail, you can try the following before installing the chart. If you
+decide to take these steps, we recommend step 1 is taken first in order to not
+loose data and that you ensure the old data is made available by the
+troubleshooting step below.
+
+```sh
+RELEASE_NAME=<YOUR-RELEASE-NAME>
+
+# WARNING: Deletes everything installed by the Helm chart!
+# WARNING: If you have not changed the reclaim policy of the hub in step 1, the
+#          hub never be able to remember anything about past users. Also note
+#          that even if you have taken step 1, you must also make the PVs become
+#          `Available` again before the hub starts up again.
+# NOTE: This does not include user pods or user storage PVCs as they have been
+#       indirectly created by KubeSpawner
+helm delete $RELEASE_NAME --purge
+
+# WARNING: Deletes everything within the namespace!
+# WARNING: If you have not changed the reclaim policy of the hub and users in
+#          step 1, the hub's stored information about the users and the user's
+#          storage will be lost forever. Also note that even if you have taken
+#          step 1, you must also make the hub and users PVs become `Available`
+#          before the hub and users startup again.
+kubectl delete namespace <YOUR-NAMESPACE>
+```
+
+If you took these steps and step 1, you should probably right now continue with
+the next troubleshooting section about making `Released` PVs `Available` for
+reuse.
+
+#### Troubleshooting - Make `Released` PVs `Available` for reuse
+If you followed step 1 and 2, you can after cleanup of a cluster reuse the old
+hub's and users' storage if you do this step before you installs the Helm chart
+again.
+
+In more technical words: if you have deleted PVCs such as `hub-db-dir` or
+`claim-anyusername`, their PVs will end in a `Released` state assuming they had
+a `reclaimPolicy` set to `Retain`. To make use of these PVs again, we must make
+them `Available` for the to future PVCs that needs a PV to bind to.
+
+```sh
+NAMESPACE=<YOUR-NAMESPACE>
+
+# Ensure the hub's and users' PVs are made `Available` again
+user_pvs=($(kubectl get persistentvolume | grep -E "Released.+$NAMESPACE/(hub-db-dir|claim-)" | awk '{print $1}'))
+for pv in ${user_pvs[@]};
+do
+    kubectl patch persistentvolume $pv --patch '{"spec":{"claimRef":{"uid":null}}}}'
+done
+
+# Ensure you don't have any PVCs in the lost state
+lost_pvcs=($(kubectl get persistentvolumeclaim --namespace $NAMESPACE | grep -E "(hub-db-dir|claim-).+Lost" | awk '{print $1}'))
+for pvc in ${lost_pvcs[@]};
+do
+    echo kubectl delete persistentvolumeclaim $pvc --namespace $NAMESPACE
+done
+```
 
 
 
-## [0.7.0-beta.1] - 2018-07-19
 
-`0.7.0-beta.1` is a pre-release. It is meant to help gather feedback from the
+
+## [0.7.0-beta.2] - 2018-07-19
+
+`0.7.0-beta.2` is a pre-release. It is meant to help gather feedback from the
 community as well as give users a chance to test it out before v0.7 is
 officially released.
 
@@ -111,7 +317,7 @@ helm repo update
 
 helm upgrade jupyterhub/jupyterhub --install \
     --force \
-    --version=0.7.0-beta.1 \
+    --version=0.7.0-beta.2 \
     --namespace=<YOUR-NAMESPACE> \
     --values config.yaml
 ```
