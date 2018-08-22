@@ -43,17 +43,17 @@ cluster:
 
 2. Give the `ServiceAccount` full permissions to manage the cluster.
 
+   .. note::
+
+      While most clusters have RBAC enabled and you need this line, you **must**
+      skip this step if your Kubernetes cluster does not have RBAC enabled.
+
    .. code-block:: bash
 
       kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
 
    See `our RBAC documentation
    <security.html#use-role-based-access-control-rbac>`_ for more information.
-
-   .. note::
-
-      While most clusters have RBAC enabled and you need this line, you **must**
-      skip this step if your Kubernetes cluster does not have RBAC enabled.
 
 3. Initialize `helm` and `tiller`.
 

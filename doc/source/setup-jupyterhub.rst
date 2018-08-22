@@ -85,10 +85,9 @@ Install JupyterHub
       RELEASE=jhub
       NAMESPACE=jhub
 
-      helm upgrade ${RELEASE:-jhub} jupyterhub/jupyterhub \
-        --install \
-        --namespace ${NAMESPACE:-jhub}  \
-        --version 0.7.0-beta.1 \
+      helm upgrade --install $RELEASE jupyterhub/jupyterhub \
+        --namespace $NAMESPACE  \
+        --version 0.7.0-beta.2 \
         --values config.yaml
 
    where:
@@ -128,14 +127,14 @@ Install JupyterHub
       * The ``--version`` parameter corresponds to the *version of the Helm
         chart*, not the version of JupyterHub. Each version of the JupyterHub
         Helm chart is paired with a specific version of JupyterHub. E.g.,
-        ``0.7.0-beta.1`` of the Helm chart runs JupyterHub ``0.9.2``.
+        ``0.7.0-beta.2`` of the Helm chart runs JupyterHub ``0.9.2``.
 
 3. While Step 2 is running, you can see the pods being created by entering in
    a different terminal:
 
    .. code-block:: bash
 
-      kubectl get pod --namespace ${NAMESPACE:-jhub}
+      kubectl get pod --namespace jhub
 
    .. note::
 
@@ -162,7 +161,7 @@ Install JupyterHub
 
    .. code-block:: bash
 
-      kubectl get service --namespace ${NAMESPACE:-jhub}
+      kubectl get service --namespace jhub
 
    .. code-block:: bash
 
@@ -178,7 +177,7 @@ Install JupyterHub
 
       .. code-block:: bash
 
-         kubectl describe service proxy-public --namespace ${NAMESPACE:-jhub} --output=wide
+         kubectl describe service proxy-public --output=wide --namespace jhub
 
 
 7. To use JupyterHub, enter the external IP for the `proxy-public` service in

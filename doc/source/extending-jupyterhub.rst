@@ -20,9 +20,10 @@ The general method to modify your Kubernetes deployment is to:
 
    .. code-block:: bash
 
-      helm upgrade <YOUR_RELEASE_NAME> jupyterhub/jupyterhub \
-        --install \
-        --version=0.7.0-beta.1 \
+      RELEASE=jhub
+
+      helm upgrade $RELEASE jupyterhub/jupyterhub \
+        --version=0.7.0-beta.2 \
         --values config.yaml
 
    Note that ``helm list`` should display ``<YOUR_RELEASE_NAME>`` if you forgot it.
@@ -32,7 +33,7 @@ The general method to modify your Kubernetes deployment is to:
 
    .. code-block:: bash
 
-      kubectl --namespace=<YOUR_NAMESPACE> get pod
+      kubectl get pod --namespace jhub
 
 For information about the many things you can customize with changes to your
 Helm chart through values provided to its templates through ``config.yaml``, see

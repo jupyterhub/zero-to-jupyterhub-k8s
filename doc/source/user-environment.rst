@@ -38,9 +38,9 @@ to choose a suitable image
 If you wish to use another image from jupyter/docker-stacks than the
 `base-notebook
 <http://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-base-notebook>`_
-used by default, such as the `scipy-notebook
-<http://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-scipy-notebook>`_
-image containing useful scientific programming libraries, complete these steps:
+used by default, such as the `datascience-notebook
+<http://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-datascience-notebook>`_
+image containing useful tools and libraries for datascience, complete these steps:
 
 1. Modify your ``config.yaml`` file to specify the image. For example:
 
@@ -49,10 +49,10 @@ image containing useful scientific programming libraries, complete these steps:
       singleuser:
         image:
           # Get the latest image tag at:
-          # https://hub.docker.com/r/jupyter/scipy-notebook/tags/
+          # https://hub.docker.com/r/jupyter/datascience-notebook/tags/
           # Inspect the Dockerfile at:
-          # https://github.com/jupyter/docker-stacks/tree/master/scipy-notebook/Dockerfile
-          name: jupyter/scipy-notebook
+          # https://github.com/jupyter/docker-stacks/tree/master/datascience-notebook/Dockerfile
+          name: jupyter/datascience-notebook
           tag: 177037d09156
 
    .. note::
@@ -231,8 +231,11 @@ your user folders with a git repository.
 Using ``nbgitpuller`` to synchronize a folder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We recommend using the tool `nbgitpuller <https://github.com/jupyterhub/nbgitpuller>`_
-to synchronize a folder in your user's filesystem with a ``git`` repository.
+We recommend using the tool `nbgitpuller
+<https://github.com/jupyterhub/nbgitpuller>`_ to synchronize a folder in your
+user's filesystem with a ``git`` repository whenever a user starts their server.
+Note that this syncing can also trigger by the users pressing a like
+https://your-domain.com/hub/user-redirect?git-pull?repo=https://github.com/consideratio/data-8/masterials-fa17.
 
 To use ``nbgitpuller``, first make sure that you `install it in your Docker
 image <https://github.com/jupyterhub/nbgitpuller#installation>`_. Once this is done,
