@@ -73,7 +73,6 @@ an initial deployment.
    :maxdepth: 1
    :caption: Setup JupyterHub
 
-   getting-started
    setup-helm
    setup-jupyterhub
    turn-off
