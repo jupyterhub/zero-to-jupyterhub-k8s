@@ -1,5 +1,5 @@
-Tips and command snippets
-=========================
+Tips and Snippets
+=================
 
 This is a page to collect a few particularly useful patterns and snippets
 that help you interact with your Kubernetes cluster and JupyterHub.
@@ -29,7 +29,7 @@ Managing ``kubectl`` contexts
 
 Oftentimes people manage multiple Kubernetes deployments at the same time.
 ``kubectl`` handles this with the idea of "contexts", which specify which
-kubernetes deployment you are referring to when you type ``kubectl get XXX``.
+Kubernetes deployment you are referring to when you type ``kubectl get XXX``.
 
 To see a list of contexts currently available to you, use the following
 command:
@@ -86,7 +86,7 @@ Asking for a more verbose or structured output
 
 Sometimes the information that's in the default output for ``kubectl get <XXX>``
 is not enough for your needs, or isn't structured the way you'd like. We
-recommend looking into the different kubernetes output options, which can be
+recommend looking into the different Kubernetes output options, which can be
 modified like so:
 
 .. code-block:: bash

@@ -1,7 +1,7 @@
 .. _google-cloud:
 
-Step Zero: Kubernetes on `Google Cloud <https://cloud.google.com/>`_
---------------------------------------------------------------------
+Step Zero: Kubernetes on `Google Cloud <https://cloud.google.com/>`_ (GKE)
+--------------------------------------------------------------------------
 
 `Google Kubernetes Engine <https://cloud.google.com/kubernetes-engine/>`_
 (GKE) is the simplest and most common way of setting
@@ -12,67 +12,7 @@ free account `comes with limitations
 Either way, you will need to connect your credit card or other payment method to
 your google cloud account.
 
-1. Go to ``https://console.cloud.google.com`` and log in.
-
-2. Enable the `Kubernetes Engine API <https://console.cloud.google.com/apis/api/container.googleapis.com/overview>`_.
-
-3. Use your preferred command line interface.
-
-   You have two options: a) use the Google Cloud Shell (no installation needed)
-   or b) install and use the gcloud command-line tool.
-   If you are unsure which to choose, we recommend beginning with option
-   "a" and using the Google Cloud Shell. Instructions
-   for each are detailed below:
-
-   a. **Use the Google Cloud Shell**. Start the Google Cloud Shell
-      by clicking the button shown below. This will start an interactive shell
-      session within Google Cloud.
-
-      .. image:: ../_static/images/google/start_interactive_cli.png
-         :align: center
-
-      See the `Google Cloud Shell docs <https://cloud.google.com/shell/docs/>`_
-      for more information.
-
-   b. **Install and use the gcloud command line tool**.
-      This tool sends commands to Google Cloud and lets you do things like create
-      and delete clusters.
-
-      - Go to the `gcloud command line tool downloads page <https://cloud.google.com/sdk/downloads>`_
-        to **download and install the gcloud command line tool**.
-      - See the `gcloud documentation <https://cloud.google.com/pubsub/docs/quickstart-cli>`_ for
-        more information on the gcloud command line tool.
-
-4. Install ``kubectl``, which is a tool for controlling kubernetes. From
-   the terminal, enter:
-
-     .. code-block:: bash
-
-        gcloud components install kubectl
-
-5. Create a Kubernetes cluster on Google Cloud, by typing the following
-   command into either the Google Cloud shell or the gcloud command-line tool:
-
-   .. code-block:: bash
-
-      gcloud container clusters create <YOUR-CLUSTER> \
-          --num-nodes=3 \
-          --machine-type=n1-standard-2 \
-          --zone=us-central1-b
-
-   where:
-
-   * ``--num-nodes`` specifies how many computers to spin up. The higher the
-     number, the greater the cost.
-   * ``--machine-type`` specifies the amount of CPU and RAM in each node. There
-     is a `variety of types <https://cloud.google.com/compute/docs/machine-types>`_
-     to choose from. Picking something appropriate here will have a large effect
-     on how much you pay - smaller machines restrict the max amount of RAM each
-     user can have access to but allow more fine-grained scaling, reducing cost.
-     The default (`n1-standard-2`) has 2CPUs and 7.5G of RAM each, and might not
-     be a good fit for all use cases!
-   * ``--zone`` specifies which data center to use. Pick something that is not
-     too far away from your users. You can find a list of them `here <https://cloud.google.com/compute/docs/regions-zones/regions-zones#available>`_.
+1. Go to `console.cloud.google.com <https://console.cloud.google.com>`_ and log in.
 
    .. note::
 
@@ -80,22 +20,97 @@ your google cloud account.
       for your Google Cloud account in order to make sure you don't accidentally
       spend more than you wish to.
 
+2. Go to and enable the `Kubernetes Engine API <https://console.cloud.google.com/apis/api/container.googleapis.com/overview>`_.
+
+3. Choose a terminal.
+
+   You can either to use a web based terminal or install and run the required
+   command line interfaces on your own computer's terminal. We recommend
+   starting out by using the web based terminal. Choose one set of instructions
+   below.
+
+   a. **Use a web based terminal:**
+   
+      Start *Google Cloud Shell* from `console.cloud.google.com
+      <https://console.cloud.google.com>`_ by clicking the button shown below.
+      You are now in control of a virtual machine with various tools
+      preinstalled. If you save something in a user folder they will remain
+      avaitlableo you if you return at a later stage. Additional documentation
+      about Google Cloud shell is available `here
+      <https://cloud.google.com/shell/docs/>`__
+
+      .. image:: ../_static/images/google/start_interactive_cli.png
+         :align: center
+
+   b. **Use your own computer's terminal:**
+
+      1. Download and install the `gcloud` command line tool at its `downloads
+         page <https://cloud.google.com/sdk/downloads>`_. It will help you
+         create and communicate with a Kubernetes cluster.
+
+      2. Install ``kubectl`` (reads *kube control*), it is a tool for controlling
+         Kubernetes clusters in general. From your terminal, enter:
+
+         .. code-block:: bash
+
+            gcloud components install kubectl
+
+4. Decide and configure to use a specific data center.
+
+   From a terminal, enter:
+
+   .. code-block:: bash
+
+      # Enter a zone
+      ZONE=
+
+      gcloud config set compute/zone ${ZONE:-us-east-1}
+   
+   * ZONE specifies which data center to use. Pick something `from
+     this list
+     <https://cloud.google.com/compute/docs/regions-zones/regions-zones#available>`_.
+     that is not too far away from your users.
+
+5. Create a managed Kubernetes cluster and a default node pool.
+
+   Ask Google Cloud to create a managed Kubernetes cluster and a default `node
+   pool <https://cloud.google.com/kubernetes-engine/docs/concepts/node-pools>`_
+   to get nodes from. *Nodes* represents hardware and a *node pools* will
+   keep track of how much of a certain type of hardware that you would like.
+
+   .. code-block:: bash
+
+      gcloud beta container clusters create <YOUR-CLUSTER-NAME> \
+        --machine-type n1-standard-2 \
+        --num-nodes 1 \
+        --cluster-version latest \
+        --node-labels hub.jupyter.org/node-purpose=core
+      
+   * ``--machine-type`` specifies the amount of CPU and RAM in each node within
+     this default node pool. There is a `variety of types
+     <https://cloud.google.com/compute/docs/machine-types>`_ to choose from.
+   
+   * ``--num-nodes`` specifies how many nodes to spin up. You can change this
+     later through the cloud console or using the `gcloud` command line tool.
+
 6. To test if your cluster is initialized, run:
 
    .. code-block:: bash
 
       kubectl get node
 
-   The response should list three running nodes.
+   The response should list one running node.
 
-7. Give your account super-user permissions, allowing you to perform all
-   the actions needed to set up JupyterHub.
+7. Give your account permissions to perform all administrative actions needed.
 
    .. code-block:: bash
 
+      # Enter your email
+      EMAIL=
+
       kubectl create clusterrolebinding cluster-admin-binding \
-          --clusterrole=cluster-admin \
-          --user=<YOUR-EMAIL-ADDRESS>
+        --clusterrole=cluster-admin \
+        --user=$EMAIL
 
 Congrats. Now that you have your Kubernetes cluster running, it's time to
 begin :ref:`creating-your-jupyterhub`.

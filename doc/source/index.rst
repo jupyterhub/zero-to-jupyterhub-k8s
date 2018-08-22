@@ -1,55 +1,77 @@
-Zero to JupyterHub
-==================
+Zero to JupyterHub with Kubernetes
+==================================
 
-`JupyterHub`_ is a tool that allows you to quickly utilize cloud computing
-infrastructure to manage a hub that enables your users to interact remotely
-with a computing environment that you specify. JupyterHub offers a useful way
-to standardize the computing environment of a group of people (e.g.,
-for a class of students or an analytics team), as well as allowing
-people to access the
-hub remotely.
+`JupyterHub`_ allows users to interact with a computing environment through a
+webpage. As most devices have access to a web browser, JupyterHub makes it is
+easy to provide and standardize the computing environment of a group of people
+(e.g., for a class of students or an analytics team).
 
-This growing collection of information will help you set up your own
-JupyterHub instance. It is in an early stage, so the information and
-tools may change quickly.
+This project will help you set up your own JupyterHub on a cloud and leverage
+the clouds scalable nature to support large groups of users. Thanks to
+:term:`Kubernetes`, we are not tied to a specific cloud provider.
 
-If you have tips or deployments that you would like to share, see
-:ref:`community-resources`. If you see anything that is incorrect
-or have any questions, feel free to reach out at the `issues page`_.
+Note that this project is under active development so information and tools may
+change. *You can be a part of this change!* If you see anything that is incorrect
+or have any questions, feel free to reach out in the `gitter chat
+<https://gitter.im/jupyterhub/jupyterhub>`_ or create an issue at the `issues
+page`_. If you have tips or deployments that you would like to share, see
+:ref:`community-resources`.
+
+
+
+.. _about-guide:
+
+What To Expect
+--------------
+
+This guide will help you deploy and customize your own JupyterHub on a cloud.
+While doing this, you will gain valuable experience with:
+
+* **A cloud provider** such Google Cloud, Microsoft Azure, Amazon EC2...
+* **Kubernetes** to manage resources on the cloud
+* **Helm** to configure and control the packaged JupyterHub installation
+* **JupyterHub** to give users access to a Jupyter computing environment
+* **A terminal interface** on some operating system
+
+It's also possible you end up getting experienced with:
+
+* **Docker** to build customized image for the users
+* **Domain registration** to make the hub available at https://your-domain-name.com
+
+.. note::
+
+   For a more elaborate introduction to the tools and services that JupyterHub
+   depends upon, see our :ref:`tools` page.
+
+
 
 .. _getting-to-zero:
 
-Getting to Step Zero: your Kubernetes cluster
----------------------------------------------
+Setup a Kubernetes cluster
+--------------------------
 
 This section describes a Kubernetes cluster and outlines how to complete *Step Zero: your Kubernetes cluster* for
 different cloud providers and infrastructure.
 
 .. toctree::
    :titlesonly:
-   :caption: Step Zero: your Kubernetes cluster
+   :caption: Setup a Kubernetes cluster
 
    create-k8s-cluster
-   google/step-zero-gcp
-   microsoft/step-zero-azure
-   amazon/step-zero-aws
-   redhat/step-zero-openshift
 
 .. _creating-your-jupyterhub:
 
-Creating your JupyterHub
-------------------------
+Setup JupyterHub
+----------------
 
 This tutorial starts from *Step Zero: your Kubernetes cluster* and describes the
 steps needed for you to create a complete initial JupyterHub deployment.
 This will use the JupyterHub Helm chart which provides sensible defaults for
 an initial deployment.
 
-To begin, go to :ref:`setup-helm`.
-
 .. toctree::
    :maxdepth: 1
-   :caption: Creating your JupyterHub
+   :caption: Setup JupyterHub
 
    getting-started
    setup-helm
@@ -129,11 +151,11 @@ Please submit a pull request to add to this section. Thanks.
 
 .. toctree::
    :maxdepth: 1
-   :caption: Resources from the community
+   :caption: Community section
 
-   additional-resources
-   users-list
    tips
+   users-list
+   additional-resources
 
 .. _reference:
 

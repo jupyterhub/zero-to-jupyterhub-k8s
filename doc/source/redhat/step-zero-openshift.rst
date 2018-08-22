@@ -1,7 +1,7 @@
 .. _redhat-openshift:
 
-JupyterHub on Red Hat OpenShift
--------------------------------
+Step Zero: Kubernetes on Red Hat OpenShift
+------------------------------------------
 
 `OpenShift <https://openshift.org/>`_ from RedHat is a cluster manager based on Kubernetes.
 

@@ -1,7 +1,7 @@
 .. _reference-docs:
 
-Official JupyterHub and Project Jupyter Documentation
-=====================================================
+Related Projects
+================
 
 * The `JupyterHub Documentation <https://jupyterhub.readthedocs.io/en/latest/>`_
   provides information about JupyterHub itself (not the Kubernetes deployment).

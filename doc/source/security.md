@@ -191,7 +191,7 @@ users to grant themselves more privileges, access other users' content without
 permission, run (unprofitable) bitcoin mining operations & various other
 not-legitimate activities. By default, we do not allow access to the [service
 account credentials](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) needed
-to access the kubernetes API from user servers for this reason.
+to access the Kubernetes API from user servers for this reason.
 
 If you want to (carefully!) give access to the Kubernetes API to your users, you
 can do so with the following in your `config.yaml`:

@@ -23,9 +23,9 @@ You can enable the required `ingress` object with the following in your
 
 ```yaml
 ingress:
-    enabled: true
-    hosts:
-     - <hostname>
+  enabled: true
+  hosts:
+    - <hostname>
 ```
 
 You can specify multiple hosts that should be routed to the hub by listing them
@@ -123,10 +123,10 @@ order of the key.
 ```yaml
 hub:
   extraConfig:
-   00-first-config: |
-     # some code
-   10-second-config: |
-     # some other code
+    00-first-config: |
+      # some code
+    10-second-config: |
+      # some other code
 ```
 
 ### `hub.extraConfigMap`
@@ -270,7 +270,7 @@ is added to the cluster.
 By enabling the **continuous pre-puller** (default state is disabled), the user
 image will be pre-pulled when adding a new node. When enabled, the
 **continuous pre-puller** runs as a [daemonset](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)
-to force kubernetes to pull the user image on all nodes as soon as a node is
+to force Kubernetes to pull the user image on all nodes as soon as a node is
 present. The continuous pre-puller uses minimal resources on all nodes and
 greatly speeds up the user pod start time.
 

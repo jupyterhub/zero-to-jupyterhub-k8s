@@ -1,278 +1,159 @@
 .. _user-environment:
 
-Customizing the User Environment
-================================
+Customizing User Environment
+============================
 
-.. note::
+This page contains instructions for common ways to enhance the user experience.
+For a list of all the configurable Helm chart options, see the
+:ref:`helm-chart-configuration-reference`.
 
-   For a list of all the options you can configure with your helm
-   chart, see the :ref:`helm-chart-configuration-reference`.
+The *user environment* is the set of software packages, environment variables,
+and various files that are present when the user logs into JupyterHub. The user
+may also see different tools that provide interfaces to perform specialized
+tasks, such as JupyterLab, RStudio, RISE and others.
 
-This page contains instructions for a few common ways you can extend the
-user experience for your kubernetes deployment.
+A :term:`Docker image` built from a :term:`Dockerfile` will lay the foundation for
+the environment that you will provide for the users. The image will for example
+determine what Linux software (curl, vim ...), programming languages (Julia,
+Python, R, ...) and development environments (JupyterLab, RStudio, ...) are made
+available for use.
 
-The **user environment** is the set of packages, environment variables, and
-various files that are present when the user logs into JupyterHub. The user may
-also see different tools that provide interfaces to perform specialized tasks,
-such as RStudio, RISE, JupyterLab, and others.
+To get started customizing the user environment, see the topics below.
 
-Usually a :term:`docker image` specifies the functionality and
-environment that you wish to provide to users. The following sections will describe
-how to use existing Docker images, how to create custom images, and how to set
-environment variables.
+
 
 .. _existing-docker-image:
 
-Use an existing Docker image
-----------------------------
+Choose and use an existing Docker image
+---------------------------------------
 
-.. note::
+Project Jupyter maintains the `jupyter/docker-stacks repository
+<https://github.com/jupyter/docker-stacks/>`_, which contains ready to use
+Docker images. Each image includes a set of commonly used science and data
+science libraries and tools. They also provide excellent documentation on `how
+to choose a suitable image
+<http://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html>`_.
 
-   The Docker image you are using must have the ``jupyterhub`` package
-   installed in order to work. Moreover, the version of ``jupyterhub`` must
-   match the version installed by the helm chart that you're using. For example,
-   ``v0.6`` of the helm chart uses  ``jupyterhub==0.8.1``.
 
-.. note::
-
-   You can find the configuration for the default Docker image used in this
-   guide `here <https://github.com/jupyterhub/zero-to-jupyterhub-k8s/tree/master/images/singleuser-sample>`_.
-
-Using an existing Docker image, that someone else has written and maintained,
-is the simplest approach. For example, Project Jupyter maintains the
-`jupyter/docker-stacks <https://github.com/jupyter/docker-stacks/>`_ repo,
-which contains ready to use Docker images. Each image includes a set of
-commonly used science and data science libraries and tools.
-
-The `scipy-notebook <https://hub.docker.com/r/jupyter/scipy-notebook/>`_
-image, which can be found in the ``docker-stacks`` repo, contains
-`useful scientific programming libraries
-<https://github.com/jupyter/docker-stacks/tree/master/scipy-notebook>`_
-pre-installed. This image may satisfy your needs. If you wish to use an
-existing image, such as the ``scipy-notebook`` image, complete these steps:
+If you wish to use another image from jupyter/docker-stacks than the
+`base-notebook
+<http://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-base-notebook>`_
+used by default, such as the `scipy-notebook
+<http://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-scipy-notebook>`_
+image containing useful scientific programming libraries, complete these steps:
 
 1. Modify your ``config.yaml`` file to specify the image. For example:
 
    .. code-block:: yaml
 
-       singleuser:
-         image:
-           name: jupyter/scipy-notebook
-           tag: c7fb6660d096
+      singleuser:
+        image:
+          # Get the latest image tag at:
+          # https://hub.docker.com/r/jupyter/scipy-notebook/tags/
+          # Inspect the Dockerfile at:
+          # https://github.com/jupyter/docker-stacks/tree/master/scipy-notebook/Dockerfile
+          name: jupyter/scipy-notebook
+          tag: 177037d09156
 
    .. note::
 
       Container image names cannot be longer than 63 characters.
 
-      Always use an explicit ``tag``, such as a specific commit.
-
-      Avoid using ``latest``. Using ``latest`` might cause a several minute
-      delay, confusion, or failures for users when a new version of the image
-      is released.
+      Always use an explicit ``tag``, such as a specific commit. Avoid using
+      ``latest`` as it might cause a several minute delay, confusion, or
+      failures for users when a new version of the image is released.
 
 2. Apply the changes by following the directions listed in
-   `apply the changes`_. These directions will **pre-pull** the image to all
-   the nodes in your cluster. This process may take several minutes to
-   complete.
-
-.. note::
-
-   Docker images must have the ``jupyterhub`` package installed within them to
-   be used in this manner.
-
-.. _r2d-custom-image:
-
-Build a custom Docker image with ``repo2docker``
-------------------------------------------------
-
-If you can't find a pre-existing image that suits your needs, you can
-create your own image. The easiest way to do this is with the package
-:term:`repo2docker`.
-
-.. note::
-
-   `repo2docker <https://github.com/jupyter/repo2docker>`_ lets you quickly
-   convert a GitHub repository into a Docker image that can be used as a base
-   for your JupyterHub instance. Anything inside the GitHub repository
-   will exist in a user’s environment when they join your JupyterHub:
-
-   - If you include a ``requirements.txt`` file in the root level of the
-     repository, ``repo2docker`` will ``pip install`` the specified packages
-     into the Docker image to be built.
-   - If you have an ``environment.yaml`` file, ``conda`` will create an
-     environment based on this file's specification.
-   - If you have a ``Dockerfile``, ``repo2docker`` will ignore everything
-     else and just use the Dockerfile.
-
-Below we’ll cover how to use ``repo2docker`` to generate a Docker image and
-how to configure JupyterHub to build off of this image:
-
-1. **Download and start Docker.** You can do this by
-   `downloading and installing Docker`_. Once you’ve started Docker,
-   it will show up as a tiny background application.
-
-2. **Install repo2docker** using ``pip``:
-
-   .. code:: bash
-
-      pip install jupyter-repo2docker
-
-   If that command fails due to insufficient permissions, try it with the
-   command option, ``user``:
-
-   .. code:: bash
-
-      pip install --user jupyter-repo2docker
-
-
-3. **Create (or find) a GitHub repository you want to use.** This repo should
-   have all materials that you want your users to be able to use. You may want
-   to include a `pip`_ ``requirements.txt`` file to list packages, one per
-   file line, to install such as when using ``pip install``. Specify the
-   versions explicitly so the image is fully reproducible. An example
-   ``requirements.txt`` follows:
-
-   .. code-block:: bash
-
-      jupyterhub==0.8.*
-      numpy==1.12.1
-      scipy==0.19.0
-      matplotlib==2.0
-
-   As noted above, the requirements must include ``jupyterhub``, pinned to a
-   version compatible with the version of JupyterHub used by Helm chart.
-
-4. **Use repo2docker to build a Docker image.**
-
-   .. code-block:: bash
-
-      jupyter-repo2docker --user-name=jovyan --image=gcr.io/<PROJECT-NAME>/<IMAGE-NAME>:<TAG> --no-run <YOUR-GITHUB-REPOSITORY>
-
-   This tells ``repo2docker`` to fetch ``master`` of the GitHub repository,
-   and uses heuristics to build a docker image of it.
-
+   `apply the changes`_.
+   
+   
    .. note::
+   
+      If you have configured *prePuller.hook.enabled*, all the nodes in your
+      cluster will pull the image before the the hub is upgraded to let users
+      use the image. The image pulling may take several minutes to complete,
+      depending on the size of the image.
 
-      - The project name should match your google cloud project's name.
-      - Don’t use underscores in your image name. Other than this, the name can
-        be anything memorable. *This bug with underscores will be fixed soon.*
-      - The tag should be the first 6 characters of the SHA in the GitHub
-        commit desired for building the image since this improves
-        reproducibility.
 
-5. **Push the newly-built Docker image to the cloud.** You can either push
-   this to Docker Hub or to the gcloud docker repository. Here we'll
-   demonstrate pushing to the gcloud repository:
 
-   .. code-block:: bash
-
-      gcloud docker -- push gcr.io/<project-name>/<image-name>:<tag>
-
-6. **Edit the JupyterHub configuration to build from this image.**
-   Edit ``config.yaml`` file to include these lines in it:
-
-   .. code-block:: yaml
-
-      singleuser:
-        image:
-          name: gcr.io/<project-name>/<image-name>
-          tag: <tag>
-
-   This step can be done automatically by setting a flag if desired.
-
-7. **Tell helm to update JupyterHub to use this configuration.** Use the
-   standard method to `apply the changes`_ to the config.
-
-8. **Restart your notebook if you are already logged in.** If you already have
-   a running JupyterHub session, you’ll need to restart it (by stopping and
-   starting your session from the control panel in the top right). New users
-   won’t have to do this.
-
-   .. note::
-
-      The contents of your GitHub repository might not show up if you have
-      enabled `persistent storage <user-storage.html>`_. Disable persistent storage
-      if you want the
-      GitHub repository contents to show up.
-
-9. **Enjoy your new computing environment!** You should now have a live
-   computing environment built off of the Docker image we’ve created.
+.. _jupyterlab-by-default:
 
 Use JupyterLab by default
 -------------------------
 
-.. warning::
+`JupyterLab <http://jupyterlab.readthedocs.io/en/stable/index.html>`_ is a new
+user interface for Jupyter about to replace the classic user interface (UI).
+While users already can interchange ``/tree`` and ``/lab`` in the URL to switch between
+the classic UI and JupyterLab, they will default to use the classic UI.
 
-   As JupyterLab is a quickly-evolving tool right now, it is important to use
-   recent versions of JupyterLab. If you install JupyterLab with ``conda``,
-   **make sure to use the ``conda-forge`` channel instead of ``default``**.
+To let users use JupyterLab by default, add the following entries to your
+:term:`config.yaml`:
 
-`JupyterLab <http://jupyterlab.readthedocs.io/en/stable/index.html>`_ is the next generation
-user interface for Project Jupyter. It can be used with JupyterHub, both as an
-optional interface and as a default.
+.. code-block:: yaml
 
-In addition, a JupyterLab extension, called JupyterLab-Hub, provides a nice UI
-for accessing the JupyterHub control panel from JupyterLab. These instructions
-show how to install both JupyterLab and JupyterLab-Hub.
+   singleuser:
+     defaultUrl: "/lab"
 
-.. note::
-
-   If JupyterLab is installed on your hub (and with or without "JupyterLab Hub" installed),
-   users can always switch to the classic Jupyter Notebook by selecting menu item
-   "Help >> Launch Classic Notebook" or by replacing ``/lab`` with ``/tree`` in the URL
-   (if the server is running).
-   Similarly, you can access JupyterLab even if it is not the default by replacing ``/tree``
-   in the URL with ``/lab``.
-
-1. `Install JupyterLab <https://github.com/jupyterlab/jupyterlab#installation>`_
-   and the `JupyterLab Hub <https://github.com/jupyterhub/jupyterlab-hub#installation>`_
-   extension in your user image, for example in your Dockerfile:
-
-   .. code-block:: dockerfile
-
-      FROM jupyter/base-notebook:27ba57364579
-
-      ...
-      ARG JUPYTERLAB_VERSION=0.31.12
-      RUN     pip install jupyterlab==$JUPYTERLAB_VERSION \
-          &&  jupyter labextension install @jupyterlab/hub-extension
-      ...
-
-2. Enable JupyterLab in your Helm configuration by adding the following snippet:
-
-   .. code-block:: yaml
-
-      hub:
-        extraEnv:
-          JUPYTER_ENABLE_LAB: 1
-        extraConfig: |
-          c.KubeSpawner.cmd = ['jupyter-labhub']
-
-3. If you want users to launch automatically into JupyterLab instead of the classic
-   notebook, set the following setting in your Helm configuration:
-
-   .. code-block:: yaml
-
-      singleuser:
-        defaultUrl: "/lab"
-
-   This will put users into JupyterLab when they launch their server.
-
+   hub:
+     extraConfig: |-
+       c.Spawner.cmd = ['jupyter-labhub']
 
 .. note::
 
-   JupyterLab is in beta, so use with caution!
+   All images in the `jupyter/docker-stacks repository
+   <https://github.com/jupyter/docker-stacks/>`_ come pre-installed with
+   JupyterLab and the `JupyterLab-Hub extension
+   <https://github.com/jupyterhub/jupyterlab-hub>`_ required for this
+   configuration to work.
+
+
+
+.. _custom-docker-image:
+
+Customize an existing Docker image
+----------------------------------
+
+If you are missing something in the image that you would like all users to have,
+we recommend that you build a new image on top of an existing Docker image from
+jupyter/docker-stacks.
+
+Below is an example :term:`Dockerfile` building on top of the *minimal-notebook*
+image. This file can be built to a :term:`docker image`, and pushed to a
+:term:`image registry`, and finally configured in :term:`config.yaml` to be used
+by the Helm chart.
+
+.. code-block:: Dockerfile
+
+   FROM jupyter/minimal-notebook:177037d09156
+   # Get the latest image tag at:
+   # https://hub.docker.com/r/jupyter/minimal-notebook/tags/
+   # Inspect the Dockerfile at:
+   # https://github.com/jupyter/docker-stacks/tree/master/minimal-notebook/Dockerfile
+
+   # install additional package...
+   RUN pip install --yes astropy
+
+.. note:
+
+   If you are using a private image registry, you may need to setup the image
+   credentials. See the :ref:`helm-chart-configuration-reference` for more
+   details on this.
+
+
+
+.. _set-env-vars:
 
 Set environment variables
 -------------------------
 
-Another way to affect your user's environment is by setting values for
-:term:`environment variables`. While you can set them up in your Docker image,
-it is often easier to set them up in your helm chart.
+One way to affect your user's environment is by setting :term:`environment
+variables`. While you can set them up in your Docker image if you build it
+yourself, it is often easier to configure your Helm chart through values
+provided in your :term:`config.yaml`.
 
-To set them up in your helm chart, edit your ``config.yaml`` file
-and `apply the changes`_. For example, this code snippet will set the
-environment variable ``EDITOR`` to the value ``vim``:
+To set this up, edit your :term:`config.yaml` and `apply the changes`_. For
+example, this code snippet will set the environment variable ``EDITOR`` to the
+value ``vim``:
 
 .. code-block:: yaml
 
@@ -280,29 +161,50 @@ environment variable ``EDITOR`` to the value ``vim``:
      extraEnv:
        EDITOR: "vim"
 
-You can set any number of static environment variables in the ``config.yaml``
-file.
+You can set any number of static environment variables in the
+:term:`config.yaml` file.
 
 Users can read the environment variables in their code in various ways. In
-Python, for example, the following code will read in an environment variable:
+Python, for example, the following code reads an environment variable's value:
 
 .. code-block:: python
 
    import os
    my_value = os.environ["MY_ENVIRONMENT_VARIABLE"]
 
-Other languages will have their own methods of reading these environment
-variables.
 
-Pre-populating user's ``$HOME`` directory with files
-----------------------------------------------------
 
-When persistent storage is enabled (which is the default), the contents of the
-docker image's $HOME directory will be hidden from the user. To make these
-contents visible to the user, you must pre-populate the user's
-filesystem. To do so, you would include commands in the ``config.yaml`` that would
-be run each time a user starts their server. The following pattern can be used
-in ``config.yaml``:
+.. _add-files-to-home:
+
+About user storage and adding files to it 
+-----------------------------------------
+
+It is important to understand the basics of how user storage is set up. By
+default, each user will get 10GB of space on a harddrive that will persist in
+between restarts of their server. This harddrive will be mounted to their home
+directory. In practice this means that everything a user writes to the home
+directory (`/home/jovyan`) will remain, and everything else will be reset in
+between server restarts.
+
+A server can be shut down by *culling*. By default, JupyterHub's culling service
+is configured to cull a users server that has been inactive for one hour. Note
+that JupyterLab will autosave files, and as long as the file was within the
+users home directory no work is lost.
+
+
+
+
+.. note::
+
+   In Kubernetes, a *PersistantVolume* (PV) represents the harddrive.
+   KubeSpawner will create a PersistantVolumeClaim that requests a PV from the
+   cloud. By default, deleting the PVC will cause the cloud to delete the PV.
+
+Docker image's $HOME directory will be hidden from the user. To make these
+contents visible to the user, you must pre-populate the user's filesystem. To do
+so, you would include commands in the ``config.yaml`` that would be run each
+time a user starts their server. The following pattern can be used in
+:term:`config.yaml`:
 
 .. code-block:: yaml
 
@@ -312,26 +214,30 @@ in ``config.yaml``:
          exec:
            command: ["cp", "-a", "src", "target"]
 
-Each element of the command needs to be a separate item in the list.
-Note that this command will be run from the ``$HOME`` location of the user's
-running container, meaning that commands that place files relative to ``./``
-will result in users seeing those files in their home directory. You can use
-commands like ``wget`` to place files where you like.
+Each element of the command needs to be a separate item in the list. Note that
+this command will be run from the ``$HOME`` location of the user's running
+container, meaning that commands that place files relative to ``./`` will result
+in users seeing those files in their home directory. You can use commands like
+``wget`` to place files where you like.
 
-However, keep in mind that this command will be run **each time** a user
-starts their server. For this reason, we recommend using ``nbgitpuller`` to
-synchronize your user folders with a git repository.
+However, keep in mind that this command will be run **each time** a user starts
+their server. For this reason, we recommend using ``nbgitpuller`` to synchronize
+your user folders with a git repository.
+
+
+
+.. use-nbgitpuller:
 
 Using ``nbgitpuller`` to synchronize a folder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We recommend using the tool `nbgitpuller <https://github.com/data-8/nbgitpuller>`_
+We recommend using the tool `nbgitpuller <https://github.com/jupyterhub/nbgitpuller>`_
 to synchronize a folder in your user's filesystem with a ``git`` repository.
 
 To use ``nbgitpuller``, first make sure that you `install it in your Docker
-image <https://github.com/data-8/nbgitpuller#installation>`_.
-Once this is done, you'll have access to the ``nbgitpuller`` CLI from within
-JupyterHub. You can run it with a ``postStart`` hook with the following configuration
+image <https://github.com/jupyterhub/nbgitpuller#installation>`_. Once this is done,
+you'll have access to the ``nbgitpuller`` CLI from within JupyterHub. You can
+run it with a ``postStart`` hook with the following configuration
 
 .. code-block:: yaml
 
@@ -342,15 +248,21 @@ JupyterHub. You can run it with a ``postStart`` hook with the following configur
            command: ["gitpuller", "https://github.com/data-8/materials-fa17", "master", "materials-fa"]
 
 This will synchronize the master branch of the repository to a folder called
-``$HOME/materials-fa`` each time a user logs in. See `the nbgitpuller documentation <https://github.com/data-8/nbgitpuller>`_
-for more information on using this tool.
+``$HOME/materials-fa`` each time a user logs in. See `the nbgitpuller
+documentation <https://github.com/jupyterhub/nbgitpuller>`_ for more information on
+using this tool.
 
 .. warning::
 
-   ``nbgitpuller`` will attempt to automatically resolve merge conflicts if
-   your user's repository has changed since the last sync. You should familiarize
-   yourself with the `nbgitpuller merging behavior <https://github.com/data-8/nbgitpuller#merging-behavior>`_
-   prior to using the tool in production.
+   ``nbgitpuller`` will attempt to automatically resolve merge conflicts if your
+   user's repository has changed since the last sync. You should familiarize
+   yourself with the `nbgitpuller merging behavior
+   <https://github.com/jupyterhub/nbgitpuller#merging-behavior>`_ prior to using the
+   tool in production.
+
+
+
+.. setup-conda-envs:
 
 Allow users to create their own ``conda`` environments
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -361,19 +273,24 @@ across sessions. To resolve this, take the following steps:
 
 1. Ensure the ``nb_conda_kernels`` package is installed in the root
    environment (e.g., see :ref:`r2d-custom-image`)
+
 2. Configure Anaconda to install user environments to a folder within ``$HOME``.
 
    Create a file called ``.condarc`` in the home folder for all users, and make
    sure that the following lines are inside:
 
-   ```
-   envs_dirs:
-     - /home/jovyan/my-conda-envs/
-   ```
+   .. code-block:: yaml
 
-   The text above will cause Anaconda to install new environments to this
-   folder, which will persist across sessions.
+      envs_dirs:
+        - /home/jovyan/my-conda-envs/
+
+  The text above will cause Anaconda to install new environments to this folder,
+  which will persist across sessions.
+
+
+
+.. REFERENCES USED:
 
 .. _apply the changes: extending-jupyterhub.html#apply-config-changes
-.. _downloading and installing Docker: https://store.docker.com/search?offering=community&platform=desktop%2Cserver&q=&type=edition
+.. _downloading and installing Docker: https://www.docker.com/community-edition
 .. _pip: https://pip.readthedocs.io/en/latest/user_guide/#requirements-files
