@@ -141,6 +141,8 @@ kubectl delete configmap --selector "NAME=$RELEASE_NAME,STATUS in (FAILED,PENDIN
 ```
 
 #### 6. Make the upgrade
+IMPORTANT: Do not miss out on the `--force` flag!
+
 ```sh
 RELEASE_NAME=<YOUR-RELEASE-NAME>
 NAMESPACE=<YOUR-NAMESPACE>
@@ -219,138 +221,6 @@ done
 ```
 
 
-
-
-
-## [0.7.0-beta.2] - 2018-07-19
-
-`0.7.0-beta.2` is a pre-release. It is meant to help gather feedback from the
-community as well as give users a chance to test it out before v0.7 is
-officially released.
-
-### Upgrading from 0.6
-
-If you are running v0.5 of the chart, you should upgrade to v0.6 first
-before upgrading to v0.7. You can find out what version you are using
-by running `helm list`.
-
-Follow the steps below to upgrade to the new version.
-
-#### 1. Ensure data isn't lost
-
-
-```sh
-# The script will is a saftey measure and patches your hub's PersistentVolume
-# (PV) to not be garbage collected if the PersistentVolumeClaim (PVC) that the
-# Helm chart has created is deleted.
-NAMESPACE=<YOUR-NAMESPACE>
-
-HUB_DB_PV=$(kubectl get persistentvolume | grep "$NAMESPACE/hub-db-dir" | awk '{print $1}')
-kubectl patch pv $HUB_DB_PV --patch '{"spec":{"persistentVolumeReclaimPolicy":"Retain"}}'
-```
-
-#### 2. Update Helm (v2.9.1+ required)
-
-```sh
-# Update helm
-curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
-
-# Update tiller (on the cluster)
-helm init --upgrade --service-account=tiller
-```
-
-#### 3. Clean up pre-puller resources
-
-```sh
-# The script will delete resources that were meant to be temporary
-# The bug that caused this is fixed in version 0.7b1 of the Helm chart
-NAMESPACE=<YOUR-NAMESPACE>
-
-resource_types="daemonset,serviceaccount,clusterrole,clusterrolebinding,job"
-for bad_resource in $(kubectl get $resource_types --namespace $NAMESPACE | grep '/pre-pull' | awk '{print $1}');
-do
-    kubectl delete $bad_resource --namespace $NAMESPACE --now
-done
-
-kubectl delete $resource_types --selector hub.jupyter.org/deletable=true --namespace $NAMESPACE --now
-```
-
-#### 4. Clean up problematic revisions in your Helm release
-
-```sh
-# Look up the name of your Helm release (installation of a Helm chart)
-helm list
-
-# Store the name of the Helm release
-RELEASE_NAME=<YOUR-RELEASE-NAME>
-
-# Give yourself an overview of this release's revisions
-helm history $RELEASE_NAME
-
-# Check if you have multiple revisions in a DEPLOYED status (a bug), or if you
-# have old PENDING_UPGRADES or FAILED revisions (may be problematic).
-helm history $RELEASE_NAME | grep --extended-regexp "DEPLOYED|FAILED|PENDING_UPGRADE"
-
-# If you have multiple revisions in DEPLOYED status, you this script will clean
-# up all configmaps except the latest with DEPLOYED status.
-deployed_revisions=($(helm history $RELEASE_NAME | grep DEPLOYED | awk '{print $1}'))
-for revision in ${deployed_revisions[@]::${#deployed_revisions[@]}-1};
-do
-    kubectl delete configmap $RELEASE_NAME.v$revision --namespace kube-system
-done
-
-# It seems plausible that upgrade failures could have to do with revisions
-# having a PENDING_UPGRADE or FAILED status in the revision history. To delete
-# them run the following command.
-kubectl delete configmap --selector "NAME=$RELEASE_NAME,STATUS in (FAILED,PENDING_UPGRADE)" --namespace kube-system
-```
-
-#### 5. Make the upgrade
-Don't forget the `--force` flag that allows resources to be recreated if needed.
-
-```sh
-RELEASE_NAME=<YOUR-RELEASE-NAME>
-NAMESPACE=<YOUR-NAMESPACE>
-
-helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
-helm repo update
-
-helm upgrade jupyterhub/jupyterhub --install \
-    --force \
-    --version=0.7.0-beta.2 \
-    --namespace=<YOUR-NAMESPACE> \
-    --values config.yaml
-```
-
-#### Troubleshooting
-
-If things fail, you could try the following before installing the chart.
-
-```sh
-RELEASE_NAME=<YOUR-RELEASE-NAME>
-
-# WARNING: Deletes everything installed by the Helm chart
-# NOTE: This does not include user pods or user storage PVCs as they have been
-#       indirectly created by KubeSpawner
-helm delete $RELEASE_NAME --purge
-
-```sh
-# WARNING: Deletes everything within the namespace, even the user PVCs which
-#          means even user storage PVs will be garbage collected!
-#          See experimental attempt below to avoid user storage being deleted.
-kubectl delete namespace <YOUR-NAMESPACE>
-```
-
-```sh
-# WARNING: To avoid loosing the user storage on a deletion of the full namespace
-#          where the users' PVCs reside.
-```sh
-user_pvcs=($(kubectl get persistentvolume | grep "$NAMESPACE/claim-" | awk '{print $1}'))
-for pvc in ${user_pvcs[@]};
-do
-    kubectl patch pv $pvc --patch '{"spec":{"persistentVolumeReclaimPolicy":"Retain"}}'
-done
-```
 
 ### New Features
 
