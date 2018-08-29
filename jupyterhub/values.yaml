@@ -157,6 +157,7 @@ singleuser:
               except:
                 - 169.254.169.254/32
   events: true
+  extraAnnotations: {}
   extraLabels: {}
   extraEnv: {}
   lifecycleHooks:
