@@ -191,21 +191,16 @@ component: {{ include "jupyterhub.componentLabel" . }}
 {{- define "jupyterhub.dockerconfigjson.yaml" -}}
 {{- with .Values.singleuser.imagePullSecret -}}
 {
-  {{- /* */ -}}
-  "auths":{
-    {{- .registry | default "https://index.docker.io/v1/" | quote }}:{
-      {{- /* */ -}}
-      "username": {{- .username | quote }},
-      {{- /* */ -}}
-      "password": {{- .password | quote }},
-      {{- if .email -}}
-      "email": {{- .email | quote }},
-      {{- end -}}
-      "auth": {{- (print .username ":" .password) | b64enc | quote -}}
+  "auths": {
+    {{ .registry | default "https://index.docker.io/v1/" | quote }}: {
+      "username": {{ .username | quote }},
+      "password": {{ .password | quote }},
+      {{- if .email }}
+      "email": {{ .email | quote }},
+      {{- end }}
+      "auth": {{ (print .username ":" .password) | b64enc | quote }}
     }
-    {{- /* */ -}}
   }
-  {{- /* */ -}}
 }
 {{- end }}
 {{- end }}
