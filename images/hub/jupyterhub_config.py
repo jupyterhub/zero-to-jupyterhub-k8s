@@ -28,6 +28,11 @@ c.JupyterHub.last_activity_interval = 60
 # Max number of servers that can be spawning at any one time
 c.JupyterHub.concurrent_spawn_limit = get_config('hub.concurrent-spawn-limit')
 
+# Don't wait at all before redirecting a spawning user to the progress page
+c.JupyterHub.tornado_settings = {
+    'slow_spawn_timeout': 0,
+}
+
 # Max number of consecutive failures before the Hub restarts itself
 # requires jupyterhub 0.9.2
 c.Spawner.consecutive_failure_limit = get_config('hub.consecutive-failure-limit', 0)
