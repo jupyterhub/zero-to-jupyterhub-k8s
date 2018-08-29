@@ -38,6 +38,10 @@ spec:
     spec:
       terminationGracePeriodSeconds: 0
       automountServiceAccountToken: false
+      {{- if .Values.singleuser.imagePullSecret.enabled }}
+      imagePullSecrets:
+        - name: {{ if .hook -}} hook- {{- end -}} singleuser-image-credentials
+      {{- end }}
       initContainers:
         - name: image-pull-singleuser
           image: {{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}
