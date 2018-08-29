@@ -57,6 +57,8 @@ c.KubeSpawner.image_pull_secrets = get_config('singleuser.image-pull-secret-name
 
 c.KubeSpawner.events_enabled = get_config('singleuser.events', False)
 
+c.KubeSpawner.extra_annotations = get_config('singleuser.extra-annotations', {})
+
 c.KubeSpawner.extra_labels = get_config('singleuser.extra-labels', {})
 
 c.KubeSpawner.uid = get_config('singleuser.uid')
