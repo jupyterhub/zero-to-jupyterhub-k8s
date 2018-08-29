@@ -195,6 +195,12 @@ data:
     {{ $key | quote }}: {{ $value | quote }}
     {{- end }}
   {{- end }}
+  {{- if .Values.singleuser.extraAnnotations }}
+  singleuser.extra-annotations: |
+    {{- range $key, $value := .Values.singleuser.extraAnnotations }}
+    {{ $key | quote }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
   singleuser.extra-labels: |
     hub.jupyter.org/network-access-hub: "true"
     {{- range $key, $value := .Values.singleuser.extraLabels }}
