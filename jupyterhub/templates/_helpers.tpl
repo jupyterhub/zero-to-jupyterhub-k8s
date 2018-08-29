@@ -189,7 +189,7 @@ component: {{ include "jupyterhub.componentLabel" . }}
 {{- end }}
 
 {{- define "jupyterhub.dockerconfigjson.yaml" -}}
-{{- with . -}}
+{{- with .Values.singleuser.imagePullSecret -}}
 {
   {{- /* */ -}}
   "auths":{
