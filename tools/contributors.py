@@ -39,8 +39,8 @@ def get_all_contributors(repo, from_date, to_date):
     def include(date):
         return from_date < date.replace(tzinfo=dateutil.tz.tzlocal()) < to_date
     repo = gh.get_repo(repo)
-    issues = repo.get_issues()
-    pulls = repo.get_pulls()
+    issues = repo.get_issues(state='all')
+    pulls = repo.get_pulls(state='closed')
 
     users = set()
 
@@ -57,7 +57,8 @@ def get_all_contributors(repo, from_date, to_date):
         if include(p.created_at):
             users.add((p.user.login, p.user.name))
 
-        for c in p.get_comments():
+        # get_comments returns review comments too. use get_issue_comments.
+        for c in p.get_issue_comments():
             if include(c.created_at):
                 users.add((c.user.login, c.user.name))
 
