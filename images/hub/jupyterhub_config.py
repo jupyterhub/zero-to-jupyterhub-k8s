@@ -72,6 +72,7 @@ c.KubeSpawner.fs_gid = get_config('singleuser.fs-gid')
 service_account_name = get_config('singleuser.service-account-name', None)
 if service_account_name:
     c.KubeSpawner.service_account = service_account_name
+c.KubeSpawner.scheduler_name = get_config('singleuser.scheduler-name', "")
 
 c.KubeSpawner.node_selector = get_config('singleuser.node-selector')
 # Configure dynamically provisioning pvc

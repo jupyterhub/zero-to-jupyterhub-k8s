@@ -213,6 +213,9 @@ data:
     {{- end }}
   {{- end }}
 
+  {{- if .Values.scheduling.userScheduler.enabled }}
+  singleuser.scheduler-name: "user-scheduler"
+  {{- end }}
 
   {{- /* KubeSpawner */}}
   kubespawner.common-labels: |
