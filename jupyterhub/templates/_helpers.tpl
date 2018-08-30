@@ -55,7 +55,7 @@
   ## Example usage
   ```yaml
   # Excerpt from proxy/autohttps/deployment.yaml
-  apiVersion: apps/v1beta2
+  apiVersion: apps/v1
   kind: Deployment
   metadata:
     name: {{ include "jupyterhub.nameField" . }}
