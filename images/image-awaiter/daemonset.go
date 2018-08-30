@@ -21,7 +21,7 @@ type DaemonSet struct {
 // Return a *DaemonSet and the relevant state its in
 func getDaemonSet(transportPtr *http.Transport, server string, headers map[string]string, namespace string, daemonSet string) (*DaemonSet, error) {
 	client := &http.Client{Transport: transportPtr}
-	url := server + "/apis/apps/v1beta2/namespaces/" + namespace + "/daemonsets/" + daemonSet
+	url := server + "/apis/apps/v1/namespaces/" + namespace + "/daemonsets/" + daemonSet
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {

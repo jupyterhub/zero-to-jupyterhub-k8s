@@ -19,7 +19,7 @@ COPY --from=0 /go/image-awaiter /image-awaiter
 # > kubectl proxy --port=8080
 
 # 2. Try the API using the proxy...
-# > curl http://localhost:8080/apis/apps/v1beta2/namespaces/<namespace>/demonsets/hook-image-puller
+# > curl http://localhost:8080/apis/apps/v1/namespaces/<namespace>/demonsets/hook-image-puller
 
 # 3. Try the container using the proxy...
 # > docker build --tag <name:tag> .
