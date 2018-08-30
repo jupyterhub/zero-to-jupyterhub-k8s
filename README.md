@@ -1,17 +1,17 @@
 # Zero to JupyterHub with Kubernetes
 
 [![Build Status](https://travis-ci.org/jupyterhub/zero-to-jupyterhub-k8s.svg?branch=master)](https://travis-ci.org/jupyterhub/zero-to-jupyterhub-k8s)
-[![Documentation Status](https://readthedocs.org/projects/zero-to-jupyterhub/badge/?version=latest)](http://zero-to-jupyterhub.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/zero-to-jupyterhub/badge/?version=latest)](http://z2jh.jupyter.org/en/latest/?badge=latest)
 
 **This is under active development and subject to change.**
 
 This repo contains resources, such as **Helm charts** and the
-[**Zero to JupyterHub Guide**](https://zero-to-jupyterhub.readthedocs.io), which
+[**Zero to JupyterHub Guide**](https://z2jh.jupyter.org), which
 help you to deploy JupyterHub on Kubernetes.
 
 ## Zero to JupyterHub with Kubernetes Guide
 
-The [Zero to JupyterHub Guide](https://zero-to-jupyterhub.readthedocs.io) gives
+The [Zero to JupyterHub Guide](https://z2jh.jupyter.org) gives
 user-friendly steps to create a new JupyterHub deployment using Kubernetes.
 
 For additional information about JupyterHub, such as a technical overview,
