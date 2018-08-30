@@ -336,17 +336,6 @@ properties:
               - "null"
             description: |
               Note that this field is referred to as *requests* by the Kubernetes API.
-      imagePullPolicy:
-        type: string
-        enum:
-          - IfNotPresent
-          - Always
-          - Never
-        description: |
-          Set the imagePullPolicy on the singleuser pods that are spun up by the hub.
-
-          See the [Kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
-          for more info.
       imagePullSecret:
         type: object
         description: |
@@ -445,6 +434,17 @@ properties:
               The tag of the image to use.
 
               This is the value after the `:` in your full image name.
+          pullPolicy:
+            type: string
+            enum:
+              - IfNotPresent
+              - Always
+              - Never
+            description: |
+              Set the imagePullPolicy on the singleuser pods that are spun up by the hub.
+
+              See the [Kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
+              for more info.
       schedulerStrategy:
         type:
           - string
