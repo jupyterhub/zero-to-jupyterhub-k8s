@@ -166,7 +166,6 @@ singleuser:
   uid: 1000
   fsGid: 100
   serviceAccountName:
-  schedulerStrategy:
   storage:
     type: dynamic
     extraVolumes: []
