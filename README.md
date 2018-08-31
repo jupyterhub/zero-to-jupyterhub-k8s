@@ -1,7 +1,7 @@
 # Zero to JupyterHub with Kubernetes
 
 [![Build Status](https://travis-ci.org/jupyterhub/zero-to-jupyterhub-k8s.svg?branch=master)](https://travis-ci.org/jupyterhub/zero-to-jupyterhub-k8s)
-[![Documentation Status](https://readthedocs.org/projects/zero-to-jupyterhub/badge/?version=latest)](http://z2jh.jupyter.org/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/zero-to-jupyterhub/badge/?version=latest)](https://z2jh.jupyter.org/en/latest/)
 
 **This is under active development and subject to change.**
 
