@@ -87,7 +87,7 @@ Install JupyterHub
 
       helm upgrade --install $RELEASE jupyterhub/jupyterhub \
         --namespace $NAMESPACE  \
-        --version 0.7.0-beta.2 \
+        --version 0.7.0 \
         --values config.yaml
 
    where:
@@ -127,7 +127,7 @@ Install JupyterHub
       * The ``--version`` parameter corresponds to the *version of the Helm
         chart*, not the version of JupyterHub. Each version of the JupyterHub
         Helm chart is paired with a specific version of JupyterHub. E.g.,
-        ``0.7.0-beta.2`` of the Helm chart runs JupyterHub ``0.9.2``.
+        ``0.7.0`` of the Helm chart runs JupyterHub ``0.9.2``.
 
 3. While Step 2 is running, you can see the pods being created by entering in
    a different terminal:

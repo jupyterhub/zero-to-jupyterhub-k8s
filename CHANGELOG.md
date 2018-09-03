@@ -5,7 +5,7 @@ Releases are named after famous [Cricket](https://en.wikipedia.org/wiki/Cricket)
 
 
 
-## [Unreleased](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.7.0-beta.2...master)
+## [Unreleased](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/0.7.0..master)
 
 ### Breaking changes
 
@@ -13,24 +13,23 @@ Releases are named after famous [Cricket](https://en.wikipedia.org/wiki/Cricket)
 
 
 
-## [0.7.0-beta.2](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.6...0.7.0-beta.2) - 2018-07-19
+## [0.7.0](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.6...0.7.0) - [Alex Blackwell](https://en.wikipedia.org/wiki/Alex_Blackwell) - 2018-09-03
 
-`0.7.0-beta.2` is a pre-release. It is meant to help gather feedback from the
-community as well as give users a chance to test it out before `0.7.0` is
-officially released.
+This release contains JupyterHub version 0.9.2, additional configuration options
+and various bug fixes.
 
-### Upgrading from 0.6
+### Upgrading from v0.6
 
-If you are running v0.5 of the chart, you should upgrade to v0.6 first before
-upgrading to `0.7.0-beta.2`. You can find out what version you are using by
+If you are running `v0.5` of the chart, you should upgrade to `v0.6` first
+before upgrading to `0.7.0`. You can find out what version you are using by
 running `helm list`.
 
-Follow the steps below to upgrade to the new version.
+Follow the steps below to upgrade from `v0.6` to `0.7.0`.
 
 #### 1. (Optional) Ensure the hub's and users' data isn't lost
 This step is optional, but a recommended safeguard when the hub's and users'
 data is considered important. The changes makes the PersistentVolumes (PVs),
-which represent storage (hardrives) remain even if the PersistentVolumeClaims
+which represent storage (hard drives) remain even if the PersistentVolumeClaims
 (PVCs) are deleted. The downside of this is that it requires you to perform
 manual cleanup of PVs when you want to stop spending money for the storage.
 
@@ -40,7 +39,7 @@ manual cleanup of PVs when you want to stop spending money for the storage.
 NAMESPACE=<YOUR-NAMESPACE>
 
 # Ensure the hub's and users' data isn't lost
-hub_and_user_pvs=($(kubectl get persistentvolume | grep -E "$NAMESPACE/(hub-db-dir|claim-)" | awk '{print $1}'))
+hub_and_user_pvs=($(kubectl get persistentvolumeclaim --no-headers --namespace $NAMESPACE | awk '{print $3}'))
 for pv in ${hub_and_user_pvs[@]};
 do
     kubectl patch persistentvolume $pv --patch '{"spec":{"persistentVolumeReclaimPolicy":"Retain"}}'
@@ -94,7 +93,7 @@ helm version
 
 ```sh
 # This script will delete resources that were meant to be temporary
-# The bug that caused this is fixed in version 0.7.0-beta.2 of the Helm chart
+# The bug that caused this is fixed in version 0.7.0 of the Helm chart
 NAMESPACE=<YOUR-NAMESPACE>
 
 resource_types="daemonset,serviceaccount,clusterrole,clusterrolebinding,job"
@@ -154,7 +153,7 @@ helm repo update
 #       upgraded to the new state by a patch.
 helm upgrade $RELEASE_NAME jupyterhub/jupyterhub --install \
     --force \
-    --version=0.7.0-beta.2 \
+    --version=0.7.0 \
     --namespace=$NAMESPACE \
     --values config.yaml \
     --timeout 1800
@@ -206,8 +205,8 @@ them `Available` for the to future PVCs that needs a PV to bind to.
 NAMESPACE=<YOUR-NAMESPACE>
 
 # Ensure the hub's and users' PVs are made `Available` again
-user_pvs=($(kubectl get persistentvolume | grep -E "Released.+$NAMESPACE/(hub-db-dir|claim-)" | awk '{print $1}'))
-for pv in ${user_pvs[@]};
+hub_and_user_pvs=($(kubectl get persistentvolume | grep -E "Released.+$NAMESPACE/(hub-db-dir|claim-)" | awk '{print $1}'))
+for pv in ${hub_and_user_pvs[@]};
 do
     kubectl patch persistentvolume $pv --patch '{"spec":{"claimRef":{"uid":null}}}}'
 done
@@ -221,8 +220,6 @@ done
 ```
 
 
-
-### New Features
 
 ## [0.6] - [Ellyse Perry](https://en.wikipedia.org/wiki/Ellyse_Perry) - 2017-01-29
 
