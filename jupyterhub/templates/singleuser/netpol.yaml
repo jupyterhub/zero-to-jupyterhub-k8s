@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: singleuser-network-policy
+  name: singleuser
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
