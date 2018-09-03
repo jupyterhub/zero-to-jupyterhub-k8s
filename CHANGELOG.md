@@ -18,6 +18,10 @@ Releases are named after famous [Cricket](https://en.wikipedia.org/wiki/Cricket)
 This release contains JupyterHub version 0.9.2, additional configuration options
 and various bug fixes.
 
+**IMPORTANT:** This upgrade will require your users to stop their work at some
+point and have their pod restarted. You may want to give them a heads up ahead
+of time or do it during nighttime if none are active then.
+
 ### Upgrading from v0.6
 
 If you are running `v0.5` of the chart, you should upgrade to `v0.6` first
@@ -30,9 +34,10 @@ Follow the steps below to upgrade from `v0.6` to `0.7.0`.
 
 This step is optional, but a recommended safeguard when the hub's and users'
 data is considered important. The changes makes the PersistentVolumes (PVs),
-which represent storage (user data and hub database) remain even if the PersistentVolumeClaims (PVCs) are deleted.
-The downside of this is that it requires you to perform
-manual cleanup of PVs when you want to stop spending money for the storage.
+which represent storage (user data and hub database) remain even if the
+PersistentVolumeClaims (PVCs) are deleted. The downside of this is that it
+requires you to perform manual cleanup of PVs when you want to stop spending
+money for the storage.
 
 ```sh
 # The script is a saftey measure and patches your PersistentVolumes (PV) to
@@ -141,6 +146,28 @@ helm upgrade $RELEASE_NAME jupyterhub/jupyterhub --install \
     --namespace=$NAMESPACE \
     --values config.yaml \
     --timeout 1800
+```
+
+#### 6. Manage active users
+
+Active users with running pods must restart their pods. If they don't the next
+time they attempt to access their server they may end up with `{“error”:
+“invalid_redirect_uri”, “error_description”: “Invalid redirect URI”}`.
+
+You have the power to force this to happen, but it will abort what they are
+doing right now. If you want them to be able to do it in their own pace, you
+could use the `/hub/admin` path and shut them down manually when they are done.
+
+```
+NAMESPACE=<YOUR-NAMESPACE>
+
+# Inspect what users are currently running
+kubectl get pod --selector component=singleuser-server --namespace $NAMESPACE
+
+# Force all of them to shutdown their servers, and ensure the hub gets to
+# realize that happened through a restart.
+kubectl delete pod --selector component=singleuser-server --namespace $NAMESPACE
+kubectl delete pod --selector component=hub --namespace $NAMESPACE
 ```
 
 #### Troubleshooting - Cleanup of cluster
