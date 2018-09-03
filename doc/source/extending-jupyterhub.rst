@@ -23,7 +23,7 @@ The general method to modify your Kubernetes deployment is to:
       RELEASE=jhub
 
       helm upgrade $RELEASE jupyterhub/jupyterhub \
-        --version=0.7.0-beta.2 \
+        --version=0.7.0 \
         --values config.yaml
 
    Note that ``helm list`` should display ``<YOUR_RELEASE_NAME>`` if you forgot it.
