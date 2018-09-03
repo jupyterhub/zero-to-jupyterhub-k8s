@@ -2,6 +2,7 @@
 tools/templates/rendered-templates/
 bin/
 ci/.vagrant
+tools/github.sqlite
 
 .vscode
 

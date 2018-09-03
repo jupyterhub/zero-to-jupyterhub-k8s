@@ -25,39 +25,51 @@ variable. For example,
 Note that if you put a space before your command, it does not
 get stored in your bash history (by default)!. Look up `HISTCONTROL`
 to learn more about this feature of shells.
+
+IMPORTANT:
+You may need to run this script twice or so, utilizing the previous runs cached
+results in order to handle the request limits by GitHub (5000 / hour).
 """
 
 import os
-from github import Github
 import dateutil
+import requests_cache
+from github import Github
 from dateutil.parser import parse
 
+
+requests_cache.install_cache('github')
 gh = Github(login_or_token=os.environ['GITHUB_API_TOKEN'].strip())
 
 
-def get_all_contributors(repo, from_date, to_date):
+def get_all_contributors(repo, since):
+    since = parse(since)
     def include(date):
-        return from_date < date.replace(tzinfo=dateutil.tz.tzlocal()) < to_date
+        return since < date
+
     repo = gh.get_repo(repo)
-    issues = repo.get_issues(state='all')
+    
+    # get all issues created or updated since given date
+    issues = repo.get_issues(state='all', since=since)
     pulls = repo.get_pulls(state='closed')
 
     users = set()
 
-
+    # FIXME: Asking for c.user.name will invoke a request on top of requesting
+    # c.user.login. We are currently doing it multiple times for each user. We
+    # should do it only once, if c.user.login did not already exist in the set,
+    # or at the end when we have added all users to a set.
     for i in issues:
         if include(i.created_at):
             users.add((i.user.login, i.user.name))
-        for c in i.get_comments():
-            if include(c.created_at):
-                users.add((c.user.login, c.user.name))
+        for c in i.get_comments(since=since):
+            users.add((c.user.login, c.user.name))
 
 
     for p in pulls:
         if include(p.created_at):
             users.add((p.user.login, p.user.name))
 
-        # get_comments returns review comments too. use get_issue_comments.
         for c in p.get_issue_comments():
             if include(c.created_at):
                 users.add((c.user.login, c.user.name))
@@ -65,16 +77,22 @@ def get_all_contributors(repo, from_date, to_date):
         for rc in p.get_review_comments():
             if include(rc.created_at):
                 users.add((rc.user.login, rc.user.name))
+
+
     return users
 
 
 if __name__ == '__main__':
-    # Dates below should be updated before releasing a new version of the helm chart
-    #users = get_all_contributors('jupyterhub/zero-to-jupyterhub-k8s', parse('Mon Aug 13 13:37:51 2018 -0800'), parse('Sun Aug 19 08:00:00 2018 +0200'))
-    users = get_all_contributors('jupyterhub/zero-to-jupyterhub-k8s', parse('Mon Jan 29 13:37:51 2018 -0800'), parse('Sun Aug 19 08:00:00 2018 +0200'))
-    users |= get_all_contributors('jupyterhub/kubespawner', parse('Wed Jan 24 13:31:03 2018 +0100'), parse('Sun Aug 19 08:00:00 2018 +0200'))
-    users |= get_all_contributors('jupyterhub/jupyterhub', parse('Tue Nov 07 13:40:00 2018 +0200'), parse('Sat Aug 11 14:53:00 2018 +0200'))
-    users |= get_all_contributors('jupyterhub/oauthenticator', parse('Fri Oct 27 17:02:00 2017 +0200'), parse('Sat Aug 11 14:47:00 2018 +0200'))
+    # Dates below should be updated before releasing a new version of the helm
+    # chart.
+    # NOTE: To save time, all contributions in the associated projects up until
+    # the chart's release are considered, this means that if kubespawner got
+    # something merged to master, but kubespawner wasn't bumped in this chart,
+    # it would still be considered a contribution.
+    users = get_all_contributors('jupyterhub/zero-to-jupyterhub-k8s', '2018-01-29')
+    users |= get_all_contributors('jupyterhub/kubespawner', '2018-01-24')
+    users |= get_all_contributors('jupyterhub/jupyterhub', '2017-11-07')
+    users |= get_all_contributors('jupyterhub/oauthenticator', '2017-10-27')
 
 
     for login, name in sorted(users, key=lambda u: u[1].casefold() if u[1] else u[0].casefold()):
