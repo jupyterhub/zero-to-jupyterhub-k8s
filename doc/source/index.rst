@@ -17,6 +17,7 @@ or have any questions, feel free to reach out in the `gitter chat
 page`_. If you have tips or deployments that you would like to share, see
 :ref:`community-resources`.
 
+This documentation is for jupyterhub chart version |release|, which deploys JupyterHub |hub_version|.
 
 
 .. _about-guide:
