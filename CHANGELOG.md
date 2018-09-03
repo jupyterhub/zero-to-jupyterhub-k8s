@@ -27,10 +27,11 @@ running `helm list`.
 Follow the steps below to upgrade from `v0.6` to `0.7.0`.
 
 #### 1. (Optional) Ensure the hub's and users' data isn't lost
+
 This step is optional, but a recommended safeguard when the hub's and users'
 data is considered important. The changes makes the PersistentVolumes (PVs),
-which represent storage (hard drives) remain even if the PersistentVolumeClaims
-(PVCs) are deleted. The downside of this is that it requires you to perform
+which represent storage (user data and hub database) remain even if the PersistentVolumeClaims (PVCs) are deleted.
+The downside of this is that it requires you to perform
 manual cleanup of PVs when you want to stop spending money for the storage.
 
 ```sh
@@ -46,32 +47,7 @@ do
 done
 ```
 
-#### 2. (Optional) Make the safeguard in step 1 the future default
-To ensure future users' data won't be lost, you could choose to do the
-following. This will influence not only your namespace, but the full cluster
-though.
-
-```sh
-# WARNING: This will impact the behavior of the default storage class and all
-#          future PVs created with it in the cluster.
-# 1. Inspect what the default storage class is
-kubectl get storageclass
-
-# 2. Save its name
-DEFAULT_STORAGE_CLASS=<YOUR-DEFAULT-STORAGE-CLASS>
-
-# 3. Save and modify the storage class
-# NOTE: Patching of reclaimPolicy is forbidden so a recreation is required
-kubectl get storageclass $DEFAULT_STORAGE_CLASS -o yaml | sed -E 's/reclaimPolicy: Delete/reclaimPolicy: Retain/g' > /tmp/updated_storageclass.yaml
-
-# 4. Delete and create the modified storage class
-# NOTE: If you don't recreate the storage class quickly after you delete it, the
-#       cloud provider may create one before you manage to do it yourself.
-kubectl delete storageclass $DEFAULT_STORAGE_CLASS
-kubectl create -f /tmp/updated_storageclass.yaml
-```
-
-#### 3. Update Helm (v2.9.1+ required)
+#### 2. Update Helm (v2.9.1+ required)
 
 ```sh
 # Update helm
@@ -89,7 +65,11 @@ helm version
 # Server: &version.Version{SemVer:"v2.10.0", GitCommit:"9ad53aac42165a5fadc6c87be0dea6b115f93090", GitTreeState:"clean"}
 ```
 
-#### 4. (Optional) Clean up pre-puller resources
+#### 3. (Optional) Clean up pre-puller resources
+
+The pre-puller component of v0.6 could leave leftover resources after it finished,
+instead of cleaning up after itself.
+This script removes the pre-puller resources created by v0.6.
 
 ```sh
 # This script will delete resources that were meant to be temporary
@@ -105,11 +85,11 @@ done
 kubectl delete $resource_types --selector hub.jupyter.org/deletable=true --namespace $NAMESPACE --now
 ```
 
-#### 5. (Recommended) Clean up problematic revisions in your Helm release
+#### 4. (Recommended) Clean up problematic revisions in your Helm release
+
 This step is recommended due to bugs in Helm that could cause your JupyterHub
-Helm chart installation (release) to get stuck in an invalid state. The symptoms
-are often that `helm upgrade` commands fail with the reason that some resource
-does or doesn't exist.
+Helm chart installation (release) to get stuck in an invalid state.
+The symptoms are often that `helm upgrade` commands fail with the reason that some resource does or doesn't exist.
 
 ```sh
 # Look up the name of your Helm release (installation of a Helm chart)
@@ -139,8 +119,12 @@ done
 kubectl delete configmap --selector "NAME=$RELEASE_NAME,STATUS in (FAILED,PENDING_UPGRADE)" --namespace kube-system
 ```
 
-#### 6. Make the upgrade
-IMPORTANT: Do not miss out on the `--force` flag!
+#### 5. Perform the upgrade
+
+**IMPORTANT:** Do not miss out on the `--force` flag!
+`--force` is required due to changes in labelling of jupyterhub resources
+in 0.7.
+Helm cannot upgrade from the labelling scheme in 0.6 to that in 0.7 without `--force`, which deletes and recreates the deployments.
 
 ```sh
 RELEASE_NAME=<YOUR-RELEASE-NAME>
@@ -192,6 +176,7 @@ the next troubleshooting section about making `Released` PVs `Available` for
 reuse.
 
 #### Troubleshooting - Make `Released` PVs `Available` for reuse
+
 If you followed step 1 and 2, you can after cleanup of a cluster reuse the old
 hub's and users' storage if you do this step before you installs the Helm chart
 again.
