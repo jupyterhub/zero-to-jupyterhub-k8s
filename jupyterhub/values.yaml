@@ -166,7 +166,6 @@ singleuser:
   uid: 1000
   fsGid: 100
   serviceAccountName:
-  schedulerStrategy:
   storage:
     type: dynamic
     extraVolumes: []
@@ -203,6 +202,15 @@ singleuser:
     guarantees: {}
   cmd: jupyterhub-singleuser
   defaultUrl:
+
+
+scheduling:
+  userScheduler:
+    enabled: false
+    replicas: 1
+    image:
+      name: gcr.io/google_containers/kube-scheduler-amd64
+      tag: v1.11.2
 
 
 prePuller:

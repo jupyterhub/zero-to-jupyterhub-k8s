@@ -215,6 +215,15 @@ singleuser:
   defaultUrl: /
 
 
+scheduling:
+  userScheduler:
+    enabled: true
+    replicas: 1
+    image:
+      name: gcr.io/google_containers/kube-scheduler-amd64
+      tag: v1.11.2
+
+
 prePuller:
   hook:
     enabled: true

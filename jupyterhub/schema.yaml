@@ -452,3 +452,38 @@ properties:
         description: |
           Deprecated and no longer does anything. Use the user-scheduler instead
           in order to accomplish a good packing of the user pods.
+
+
+  scheduling:
+    type: object
+    description: |
+      Objects for customizing the scheduling of various pods on the nodes and
+      related labels.
+    properties:
+      userScheduler:
+        type: object
+        description: |
+          The user scheduler is making sure that user pods are scheduled
+          tight on nodes, this is useful for autoscaling of user node pools.
+        properties:
+          enabled:
+            type: boolean
+            description: |
+              Enables the user scheduler.
+          replicas:
+            type: integer
+            description: |
+              You can have multiple schedulers to share the workload or improve
+              availability on node failure.
+          image:
+            type: object
+            description: |
+              The image containing the [kube-scheduler
+              binary](https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/kube-scheduler-amd64).
+            properties:
+              name:
+                type: string
+              tag:
+                type:
+                  - string
+                  - "null"
