@@ -367,6 +367,12 @@ properties:
           guide](http://docs.heptio.com/content/private-registries/pr-gcr.html)
           and read the notes about the password.
         properties:
+          enabled:
+            type: boolean
+            description: |
+              Enable the creation of an imagePullSecret `singleuser-image-credentials` and
+              `hook-singleuser-image-credentials` by the helm chart. Set this to `true` in order to use
+              imagePullSecrets. 
           registry:
             type: string
             description: |
