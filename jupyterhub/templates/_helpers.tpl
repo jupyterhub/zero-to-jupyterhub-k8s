@@ -163,18 +163,6 @@ component: {{ include "jupyterhub.componentLabel" . }}
 
 
 {{- /*
-  jupyterhub.podCullerSelector:
-    Used to by the pod-culler to select singleuser-server pods. It simply
-    reformats "jupyterhub.matchLabels" and sets the componentLabel value so
-    `component=singleuser-server` is output.
-*/}}
-{{- define "jupyterhub.podCullerSelector" -}}
-{{- $_ := merge (dict "componentLabel" "singleuser-server") . -}}
-{{ include "jupyterhub.matchLabels" $_ | replace ": " "=" | replace "\n" "," | quote }}
-{{- end }}
-
-
-{{- /*
   jupyterhub.dockerconfigjson:
     Creates a base64 encoded docker registry json blob for use in a image pull
     secret, just like the `kubectl create secret docker-registry` command does
