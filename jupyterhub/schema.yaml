@@ -367,6 +367,14 @@ properties:
           guide](http://docs.heptio.com/content/private-registries/pr-gcr.html)
           and read the notes about the password.
         properties:
+          enabled:
+            type: boolean
+            description: |
+              Enable the creation of a Kubernetes Secret containing credentials
+              to access a image registry. By enabling this, user pods and image
+              puller pods will also be configured to use these credentials when
+              they pull their container images.
+
           registry:
             type: string
             description: |
