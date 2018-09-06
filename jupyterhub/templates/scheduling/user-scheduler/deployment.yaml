@@ -23,6 +23,7 @@ spec:
       {{- if .Values.rbac.enabled }}
       serviceAccountName: user-scheduler
       {{- end }}
+      nodeSelector: {{ toJson .Values.scheduling.userScheduler.nodeSelector }}
       containers:
         - name: user-scheduler
           image: {{ include "jupyterhub.scheduler.image" . }}

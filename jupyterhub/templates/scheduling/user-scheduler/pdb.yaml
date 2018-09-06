@@ -1,12 +1,12 @@
-{{- if .Values.hub.pdb.enabled -}}
+{{- if .Values.scheduling.userScheduler.pdb.enabled -}}
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: hub
+  name: user-scheduler
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
-  minAvailable: {{ .Values.hub.pdb.minAvailable }}
+  minAvailable: {{ .Values.scheduling.userScheduler.pdb.minAvailable }}
   selector:
     matchLabels:
       {{- include "jupyterhub.matchLabels" . | nindent 6 }}
