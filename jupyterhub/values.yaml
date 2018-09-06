@@ -50,6 +50,7 @@ hub:
   imagePullPolicy: IfNotPresent
   pdb:
     enabled: true
+    minAvailable: 1
   networkPolicy:
     enabled: false
     egress:
@@ -98,6 +99,7 @@ proxy:
   nodeSelector: {}
   pdb:
     enabled: true
+    minAvailable: 1
   https:
     enabled: true
     type: letsencrypt
@@ -214,6 +216,9 @@ scheduling:
       name: gcr.io/google_containers/kube-scheduler-amd64
       tag: v1.11.2
     nodeSelector: {}
+    pdb:
+      enabled: true
+      minAvailable: 1
 
 
 prePuller:
