@@ -68,9 +68,9 @@ spec:
             - -c
             - echo "Pulling complete"
         {{- end }}
-        {{- range $k, $v := .Values.singleuser.extraContainers }}
+        {{- range $k, $container := .Values.singleuser.extraContainers }}
         - name: image-pull-singleuser-extra-container-{{ $k }}
-          image: {{ $v.image }}
+          image: {{ $container.image }}
           imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
