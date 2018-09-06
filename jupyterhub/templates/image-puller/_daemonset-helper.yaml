@@ -68,6 +68,15 @@ spec:
             - -c
             - echo "Pulling complete"
         {{- end }}
+        {{- range $k, $container := .Values.singleuser.extraContainers }}
+        - name: image-pull-singleuser-extra-container-{{ $k }}
+          image: {{ $container.image }}
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - echo "Pulling complete"
+        {{- end }}
       nodeSelector: {{ toJson .Values.singleuser.nodeSelector }}
       containers:
         - name: pause
