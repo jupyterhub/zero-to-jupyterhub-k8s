@@ -50,8 +50,6 @@ set_config_if_not_none(c.KubeSpawner, 'common_labels', 'kubespawner.common-label
 
 c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
 
-set_config_if_not_none(c.KubeSpawner, 'start_timeout', 'singleuser.start-timeout')
-
 # Use env var for this, since we want hub to restart when this changes
 c.KubeSpawner.image_spec = os.environ['SINGLEUSER_IMAGE']
 
