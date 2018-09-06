@@ -162,6 +162,7 @@ singleuser:
   extraEnv: {}
   lifecycleHooks:
   initContainers:
+  extraContainers:
   nodeSelector: {}
   uid: 1000
   fsGid: 100

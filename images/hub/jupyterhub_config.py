@@ -129,6 +129,10 @@ init_containers = get_config('singleuser.init-containers')
 if init_containers:
     c.KubeSpawner.init_containers.extend(init_containers)
 
+extra_containers = get_config('singleuser.extra-containers')
+if extra_containers:
+    c.KubeSpawner.extra_containers.extend(extra_containers)
+
 # Gives spawned containers access to the API of the hub
 c.KubeSpawner.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
 c.KubeSpawner.hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])
