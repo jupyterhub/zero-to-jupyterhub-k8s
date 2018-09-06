@@ -34,7 +34,7 @@ spec:
             - --lock-object-name=user-scheduler
             - --lock-object-namespace={{ .Release.Namespace }}
             - --leader-elect-resource-lock=configmaps
-            - --v=100
+            - --v={{ .Values.scheduling.userScheduler.logLevel | default 4 }}
           livenessProbe:
             httpGet:
               path: /healthz
