@@ -176,6 +176,10 @@ singleuser:
   extraEnv: {}
   lifecycleHooks:
   initContainers:
+  extraContainers:
+  - name: mock-extra-container-name
+    image: mock-extra-container-image-name
+    imagePullPolicy: IfNotPresent
   uid: 1000
   fsGid: 100
   serviceAccountName:
