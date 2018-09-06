@@ -19,3 +19,7 @@ singleuser:
 prePuller:
   hook:
     enabled: false
+
+scheduling:
+  userScheduler:
+    enabled: true

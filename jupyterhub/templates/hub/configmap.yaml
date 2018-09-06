@@ -128,6 +128,9 @@ data:
   {{- if .Values.singleuser.initContainers }}
   singleuser.init-containers: {{ toJson .Values.singleuser.initContainers | quote }}
   {{- end }}
+  {{- if .Values.singleuser.extraContainers }}
+  singleuser.extra-containers: {{ toJson .Values.singleuser.extraContainers | quote }}
+  {{- end }}
   singleuser.network-tools.image.name: {{ .Values.singleuser.networkTools.image.name | quote }}
   singleuser.network-tools.image.tag: {{ .Values.singleuser.networkTools.image.tag | quote }}
   singleuser.cloud-metadata: |
@@ -150,9 +153,6 @@ data:
   singleuser.service-account-name: {{ .Values.singleuser.serviceAccountName | quote }}
   {{- end }}
   singleuser.node-selector: {{ toJson .Values.singleuser.nodeSelector | quote }}
-  {{- if .Values.singleuser.schedulerStrategy }}
-  singleuser.scheduler-strategy: {{ .Values.singleuser.schedulerStrategy | quote }}
-  {{- end }}
   singleuser.storage.type: {{ .Values.singleuser.storage.type | quote }}
   singleuser.storage.home_mount_path: {{ .Values.singleuser.storage.homeMountPath | quote }}
   singleuser.storage.extra-volumes: {{ toJson .Values.singleuser.storage.extraVolumes | quote }}
@@ -213,6 +213,9 @@ data:
     {{- end }}
   {{- end }}
 
+  {{- if .Values.scheduling.userScheduler.enabled }}
+  singleuser.scheduler-name: "user-scheduler"
+  {{- end }}
 
   {{- /* KubeSpawner */}}
   kubespawner.common-labels: |

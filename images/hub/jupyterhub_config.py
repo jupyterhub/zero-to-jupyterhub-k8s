@@ -65,6 +65,7 @@ for trait, cfg_key in (
     ('uid', 'uid'),
     ('fs_gid', 'fs-gid'),
     ('service_account', 'service-account-name'),
+    ('scheduler_name', 'scheduler-name'),
     ('node_selector', 'node-selector'),
 ):
     set_config_if_not_none(c.KubeSpawner, trait, 'singleuser.' + cfg_key)
@@ -118,6 +119,10 @@ set_config_if_not_none(c.KubeSpawner, 'lifecycle_hooks', 'singleuser.lifecycle-h
 init_containers = get_config('singleuser.init-containers')
 if init_containers:
     c.KubeSpawner.init_containers.extend(init_containers)
+
+extra_containers = get_config('singleuser.extra-containers')
+if extra_containers:
+    c.KubeSpawner.extra_containers.extend(extra_containers)
 
 # Gives spawned containers access to the API of the hub
 # FIXME: KubeSpawner duplicate hub_connect config should be deprecated and removed
@@ -288,12 +293,8 @@ if get_config('cull.enabled', False):
     if get_config('cull.users'):
         cull_cmd.append('--cull-users')
 
-    # FIXME: remove version check when we require jupyterhub 0.9 in the chart
-    # that will also mean we can remove the podCuller image
-    import jupyterhub
-    from distutils.version import LooseVersion as V
     cull_max_age = get_config('cull.max-age')
-    if cull_max_age and V(jupyterhub.__version__) >= V('0.9'):
+    if cull_max_age:
         cull_cmd.append('--max-age=%s' % cull_max_age)
 
     c.JupyterHub.services.append({
@@ -342,41 +343,6 @@ if not cloud_metadata.get('enabled', False):
 
     c.KubeSpawner.init_containers.append(ip_block_container)
 
-scheduler_strategy = get_config('singleuser.scheduler-strategy', 'spread')
-
-if scheduler_strategy == 'pack':
-    # FIXME: Support setting affinity directly in KubeSpawner
-    c.KubeSpawner.extra_pod_config = {
-        'affinity': {
-            'podAffinity': {
-                'preferredDuringSchedulingIgnoredDuringExecution': [{
-                    'weight': 50,
-                    'podAffinityTerm': {
-                        'labelSelector': {
-                            'matchExpressions': [{
-                                'key': 'component',
-                                'operator': 'In',
-                                'values': ['hub']
-                            }]
-                        },
-                        'topologyKey': 'kubernetes.io/hostname'
-                    }
-                }, {
-                    'weight': 5,
-                    'podAffinityTerm': {
-                        'labelSelector': {
-                            'matchExpressions': [{
-                                'key': 'component',
-                                'operator': 'In',
-                                'values': ['singleuser-server']
-                            }]
-                        },
-                        'topologyKey': 'kubernetes.io/hostname'
-                    }
-                }],
-            }
-        }
-    }
 
 if get_config('debug.enabled', False):
     c.JupyterHub.log_level = 'DEBUG'

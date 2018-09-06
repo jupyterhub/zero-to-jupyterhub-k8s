@@ -367,6 +367,14 @@ properties:
           guide](http://docs.heptio.com/content/private-registries/pr-gcr.html)
           and read the notes about the password.
         properties:
+          enabled:
+            type: boolean
+            description: |
+              Enable the creation of a Kubernetes Secret containing credentials
+              to access a image registry. By enabling this, user pods and image
+              puller pods will also be configured to use these credentials when
+              they pull their container images.
+
           registry:
             type: string
             description: |
@@ -452,3 +460,38 @@ properties:
         description: |
           Deprecated and no longer does anything. Use the user-scheduler instead
           in order to accomplish a good packing of the user pods.
+
+
+  scheduling:
+    type: object
+    description: |
+      Objects for customizing the scheduling of various pods on the nodes and
+      related labels.
+    properties:
+      userScheduler:
+        type: object
+        description: |
+          The user scheduler is making sure that user pods are scheduled
+          tight on nodes, this is useful for autoscaling of user node pools.
+        properties:
+          enabled:
+            type: boolean
+            description: |
+              Enables the user scheduler.
+          replicas:
+            type: integer
+            description: |
+              You can have multiple schedulers to share the workload or improve
+              availability on node failure.
+          image:
+            type: object
+            description: |
+              The image containing the [kube-scheduler
+              binary](https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/kube-scheduler-amd64).
+            properties:
+              name:
+                type: string
+              tag:
+                type:
+                  - string
+                  - "null"
