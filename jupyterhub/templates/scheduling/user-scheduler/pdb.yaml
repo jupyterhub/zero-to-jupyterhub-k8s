@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
-  minAvailable: {{ .Values.scheduling.userScheduler.pdb.minAvailable | default 1 }}
+  minAvailable: {{ .Values.scheduling.userScheduler.pdb.minAvailable }}
   selector:
     matchLabels:
       {{- include "jupyterhub.matchLabels" . | nindent 6 }}
