@@ -72,6 +72,7 @@ data:
   {{- if eq .Values.auth.type "mediawiki" }}
   auth.mediawiki.client-id: {{ .Values.auth.mediawiki.clientId | quote }}
   auth.mediawiki.client-secret: {{ .Values.auth.mediawiki.clientSecret | quote }}
+  auth.mediawiki.callback-url: {{ .Values.auth.mediawiki.callbackUrl | quote }}
   auth.mediawiki.index-url: {{ .Values.auth.mediawiki.indexUrl | quote }}
   {{- end }}
 
