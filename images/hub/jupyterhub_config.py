@@ -243,27 +243,6 @@ set_config_if_not_none(c.OAuthenticator, 'scope', 'auth.scopes')
 
 c.Authenticator.enable_auth_state = get_config('auth.state.enabled', False)
 
-def generate_user_email(spawner):
-    """
-    Used as the EMAIL environment variable
-    """
-    return '{username}@{domain}'.format(
-        username=spawner.user.name, domain=email_domain
-    )
-
-def generate_user_name(spawner):
-    """
-    Used as GIT_AUTHOR_NAME and GIT_COMMITTER_NAME environment variables
-    """
-    return spawner.user.name
-
-c.KubeSpawner.environment = {
-    'EMAIL': generate_user_email,
-    # git requires these committer attributes
-    'GIT_AUTHOR_NAME': generate_user_name,
-    'GIT_COMMITTER_NAME': generate_user_name
-}
-
 c.KubeSpawner.environment.update(get_config('singleuser.extra-env', {}))
 
 # Enable admins to access user servers
