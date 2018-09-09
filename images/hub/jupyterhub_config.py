@@ -65,6 +65,10 @@ for trait, cfg_key in (
     ('node_selector', 'node-selector'),
 ):
     set_config_if_not_none(c.KubeSpawner, trait, 'singleuser.' + cfg_key)
+c.KubeSpawner.storage_extra_labels = get_config('singleuser.storage-extra-labels', {})
+c.KubeSpawner.storage_extra_labels.update({
+    "hub.jupyter.org/storage-kind": "user"
+})
 
 c.KubeSpawner.image_spec = get_config('singleuser.image-spec')
 # Configure dynamically provisioning pvc

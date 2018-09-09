@@ -5,6 +5,7 @@ metadata:
   name: hub-db-dir
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
+    hub.jupyter.org/storage-kind: "core"
   {{- if .Values.hub.db.pvc.annotations }}
   annotations:
     {{- .Values.hub.db.pvc.annotations | toYaml | trimSuffix "\n" | nindent 4 }}

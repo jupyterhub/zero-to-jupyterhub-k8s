@@ -161,6 +161,7 @@ singleuser:
   events: true
   extraAnnotations: {}
   extraLabels: {}
+  storageExtraLabels: {}
   extraEnv: {}
   lifecycleHooks:
   initContainers: []
