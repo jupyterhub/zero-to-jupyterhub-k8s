@@ -232,6 +232,10 @@ scheduling:
       minAvailable: 1
   podPriority:
     enabled: false
+  userPlaceholder:
+    enabled: true
+    replicas: 0
+    resources: {}
   corePods:
     nodeAffinity:
       matchNodePurpose: prefer
