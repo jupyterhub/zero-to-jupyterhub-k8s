@@ -247,6 +247,8 @@ A custom resource request.
 {{- define "jupyterhub.resources" -}}
 {{- if and .Values.scheduling.userPlaceholder.resources (eq .type "user-placeholder") -}}
 {{ .Values.scheduling.userPlaceholder.resources | toYaml | trimSuffix "\n" }}
+{{- else if and .Values.scheduling.userDummy.resources (eq .type "user-dummy") -}}
+{{ .Values.scheduling.userDummy.resources | toYaml | trimSuffix "\n" }}
 {{- else -}}
 {{ include "jupyterhub.default-resources" . }}
 {{- end }}
