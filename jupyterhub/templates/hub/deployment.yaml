@@ -118,9 +118,6 @@ spec:
             {{- .Values.hub.resources | toYaml | trimSuffix "\n" | nindent 12 }}
           imagePullPolicy: {{ .Values.hub.imagePullPolicy }}
           env:
-            {{- /* Put this here directly so hub will restart when we change this */}}
-            - name: SINGLEUSER_IMAGE
-              value: "{{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}"
             {{- if .Values.hub.cookieSecret }}
             - name: JPY_COOKIE_SECRET
               valueFrom:
