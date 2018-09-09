@@ -171,6 +171,7 @@ singleuser:
   serviceAccountName:
   storage:
     type: dynamic
+    extraLabels: {}
     extraVolumes: []
     extraVolumeMounts: []
     static:
