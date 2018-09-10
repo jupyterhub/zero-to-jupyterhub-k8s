@@ -4,7 +4,7 @@ Returns an image-puller daemonset. Two daemonsets will be created like this.
 - continuous-image-puller: for newly added nodes image pulling
 */}}
 {{- define "jupyterhub.imagePuller.daemonset" -}}
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ print .componentPrefix "image-puller" }}

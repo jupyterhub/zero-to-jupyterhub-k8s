@@ -4,7 +4,7 @@
 // started when this job starts. When all images are pulled, this job exits.
 
 /*
-K8s API options - currently using 1.8
+K8s API options - currently using 1.9
 - K8s 1.8 API: curl http://localhost:8080/apis/apps/v1beta2/namespaces/<ns>/demonsets/<ds>
 - K8s 1.9 API: curl http://localhost:8080/apis/apps/v1/namespaces/<ns>/demonsets/<ds>
 */
