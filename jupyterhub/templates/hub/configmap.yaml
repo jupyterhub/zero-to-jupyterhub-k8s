@@ -221,6 +221,13 @@ data:
     {{- end }}
   {{- end }}
 
+  {{- $_ := merge (dict "podKind" "user") . }}
+  {{- include "jupyterhub.prepareScope" $_ }}
+  {{- if $_.hasTolerations }}
+  singleuser.tolerations: |
+    {{- $_.tolerationsList | nindent 4 }}
+  {{- end }}
+
   {{- if .Values.scheduling.userScheduler.enabled }}
   singleuser.scheduler-name: "{{ .Release.Name }}-user-scheduler"
   {{- end }}

@@ -460,6 +460,22 @@ properties:
         description: |
           Deprecated and no longer does anything. Use the user-scheduler instead
           in order to accomplish a good packing of the user pods.
+      tolerations:
+        type: list
+        description: |
+          Tolerations allow a pod to be scheduled on nodes with taints. These
+          are additional tolerations other than the user pods and core pods
+          default ones `hub.jupyter.org/dedicated=user:NoSchedule` or
+          `hub.jupyter.org/dedicated=core:NoSchedule`. Note that a duplicate set
+          of tolerations exist where `/` is replaced with `_` as the Google
+          cloud does not support the character `/` yet in the toleration.
+
+          See the [Kubernetes docs](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)
+          for more info.
+
+          Pass this field an array of
+          [`Toleration`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#toleration-v1-core)
+          objects.
 
 
   scheduling:

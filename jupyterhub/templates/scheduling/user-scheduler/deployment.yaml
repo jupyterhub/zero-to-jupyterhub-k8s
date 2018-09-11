@@ -23,6 +23,11 @@ spec:
       {{- if .Values.rbac.enabled }}
       serviceAccountName: user-scheduler
       {{- end }}
+      {{- $_ := merge (dict "podKind" "core") . }}
+      {{- $dummy := include "jupyterhub.prepareScope" $_ }}
+      {{- if $_.hasTolerations }}
+      {{- include "jupyterhub.tolerations" $_ | nindent 6 }}
+      {{- end }}
       nodeSelector: {{ toJson .Values.scheduling.userScheduler.nodeSelector }}
       containers:
         - name: user-scheduler
