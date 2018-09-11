@@ -460,6 +460,81 @@ properties:
         description: |
           Deprecated and no longer does anything. Use the user-scheduler instead
           in order to accomplish a good packing of the user pods.
+      tolerations:
+        type: list
+        description: |
+          Tolerations allow a pod to be scheduled on nodes with taints. These
+          are additional tolerations other than the user pods and core pods
+          default ones `hub.jupyter.org/dedicated=user:NoSchedule` or
+          `hub.jupyter.org/dedicated=core:NoSchedule`. Note that a duplicate set
+          of tolerations exist where `/` is replaced with `_` as the Google
+          cloud does not support the character `/` yet in the toleration.
+
+          See the [Kubernetes docs](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)
+          for more info.
+
+          Pass this field an array of
+          [`Toleration`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#toleration-v1-core)
+          objects.
+      extraNodeAffinity:
+        type: object
+        description: |
+          Affinities describe where pods prefer or require to be scheduled, they
+          may prefer or require a node where they are to be scheduled to have a
+          certain label (node affinity). They may also require to be scheduled
+          in proximity or with a lack of proximity to another pod (pod affinity
+          and anti pod affinity).
+          
+          See the [Kubernetes
+          docs](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/)
+          for more info.
+        properties:
+          required:
+            type: list
+            description: |
+              Pass this field an array of
+              [`NodeSelectorTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#nodeselectorterm-v1-core)
+              objects.
+          preferred:
+            type: list
+            description: |
+              Pass this field an array of
+              [`PreferredSchedulingTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#preferredschedulingterm-v1-core)
+              objects.
+      extraPodAffinity:
+        type: object
+        description: |
+          See the description of `singleuser.extraNodeAffinity`.
+        properties:
+          required:
+            type: list
+            description: |
+              Pass this field an array of
+              [`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#podaffinityterm-v1-core)
+              objects.
+          preferred:
+            type: list
+            description: |
+              Pass this field an array of
+              [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#weightedpodaffinityterm-v1-core)
+              objects.
+      extraPodAntiAffinity:
+        type: object
+        description: |
+          See the description of `singleuser.extraNodeAffinity`.
+        properties:
+          required:
+            type: list
+            description: |
+              Pass this field an array of
+              [`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#podaffinityterm-v1-core)
+              objects.
+          preferred:
+            type: list
+            description: |
+              Pass this field an array of
+              [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#weightedpodaffinityterm-v1-core)
+              objects.
 
 
   scheduling:
@@ -495,3 +570,111 @@ properties:
                 type:
                   - string
                   - "null"
+      podPriority:
+        type: object
+        description: |
+          Generally available since Kubernetes 1.11, Pod Priority is used to
+          allow real users evict placeholder pods.
+        properties:
+          enabled:
+            type: bool
+            description: |
+              Generally available since Kubernetes 1.11, Pod Priority is used to
+              allow real users evict placeholder pods.
+      userPlaceholder:
+        type: object
+        description: |
+          User placeholders simulate users but will thanks to PodPriority be
+          evicted by the cluster autoscaler if a real user shows up. In this way
+          placeholders allow you to create a headroom for the real users and
+          reduce the risk of a user having to wait for a node to be added. Be
+          sure to use the the continuous image puller as well along with
+          placeholders, so the images are also available when real users arrive.
+
+          To test your setup efficiently, you can adjust the amount of user
+          placeholders with the following command:
+          ```sh
+          # Configure to have 3 user placeholders
+          kubectl scale sts/user-placeholder --replicas=3
+          ```
+        properties:
+          enabled:
+            type: bool
+          replicas:
+            type: int
+            description: |
+              How many placeholder pods would you like to have?
+          resources:
+            type: object
+            description: |
+              Unless specified here, the placeholder pods will request the same
+              resources specified for the real singleuser pods.
+      corePods:
+        type: object
+        description: |
+          These settings influence the core pods like the hub, proxy and
+          user-scheduler pods.
+        properties:
+          nodeAffinity:
+            type: object
+            description: |
+              Where should pods be scheduled? Perhaps on nodes with a certain
+              label is preferred or even required?
+            properties:
+              matchNodePurpose:
+                type: string
+                enum:
+                  - ignore
+                  - prefer
+                  - require
+                description: |
+                  Decide if core pods *ignore*, *prefer* or *require* to
+                  schedule on nodes with this label:
+                  ```
+                  hub.jupyter.org/node-purpose=core
+                  ```
+      userPods:
+        type: object
+        description: |
+          These settings influence the user pods like the user-placeholder,
+          user-dummy and actual user pods named like jupyter-someusername.
+        properties:
+          nodeAffinity:
+            type: object
+            description: |
+              Where should pods be scheduled? Perhaps on nodes with a certain
+              label is preferred or even required?
+            properties:
+              matchNodePurpose:
+                type: string
+                enum:
+                  - ignore
+                  - prefer
+                  - require
+                description: |
+                  Decide if user pods *ignore*, *prefer* or *require* to
+                  schedule on nodes with this label:
+                  ```
+                  hub.jupyter.org/node-purpose=user
+                  ```
+          podAffinity:
+            type: object
+            description: |
+              When a pod is to be scheduled, the scheduled can be made to prefer
+              of require having other pods within the same domain (commonly the
+              same
+              node).
+            properties:
+              preferScheduleNextToRealUsers:
+                type: bool
+                description: |
+                  Consider two nodes, one with two user-placeholder pods and one
+                  with two actual users. With this preconfigured affinity option
+                  set, the pod will schedule next to the real users which is
+                  what you would want in order to accomplish efficient cluster
+                  autoscaling.
+
+                  NOTE: This is recommended for clusters with less than 100
+                  nodes, but since pod affinities are computationally expensive
+                  and cause the scheduler to leave new pods in Pending state for
+                  seconds upwards if the cluster grows large.
