@@ -241,6 +241,8 @@ scheduling:
   userPods:
     nodeAffinity:
       matchNodePurpose: require
+    podAffinity:
+      preferScheduleNextToRealUsers: true
 
 
 prePuller:

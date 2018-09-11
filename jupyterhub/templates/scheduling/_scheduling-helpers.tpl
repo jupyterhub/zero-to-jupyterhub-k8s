@@ -106,6 +106,16 @@ tolerations:
 {{- define "jupyterhub.podAffinityPreferred" -}}
 {{- if eq .podKind "core" -}}
 {{- else if eq .podKind "user" -}}
+{{- if .Values.scheduling.userPods.podAffinity.preferScheduleNextToRealUsers -}}
+- weight: 100
+  podAffinityTerm:
+    labelSelector:
+      matchExpressions:
+        - key: component
+          operator: In
+          values: [singleuser-server]
+    topologyKey: kubernetes.io/hostname
+{{- end }}
 {{- if .Values.singleuser.extraPodAffinity.preferred -}}
 {{- .Values.singleuser.extraPodAffinity.preferred | toYaml | trimSuffix "\n" | nindent 0 }}
 {{- end }}
