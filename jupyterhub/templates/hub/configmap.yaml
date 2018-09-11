@@ -227,6 +227,30 @@ data:
   singleuser.tolerations: |
     {{- $_.tolerationsList | nindent 4 }}
   {{- end }}
+  {{- if $_.nodeAffinityRequired }}
+  singleuser.node-affinity-required: |
+    {{- $_.nodeAffinityRequired | nindent 4 }}
+  {{- end }}
+  {{- if $_.nodeAffinityPreferred }}
+  singleuser.node-affinity-preferred: |
+    {{- $_.nodeAffinityPreferred | nindent 4 }}
+  {{- end }}
+  {{- if $_.podAffinityRequired }}
+  singleuser.pod-affinity-required: |
+    {{- $_.podAffinityRequired | nindent 4 }}
+  {{- end }}
+  {{- if $_.podAffinityPreferred }}
+  singleuser.pod-affinity-preferred: |
+    {{- $_.podAffinityPreferred | nindent 4 }}
+  {{- end }}
+  {{- if $_.podAntiAffinityRequired }}
+  singleuser.pod-anti-affinity-required: |
+    {{- $_.podAntiAffinityRequired | nindent 4 }}
+  {{- end }}
+  {{- if $_.podAntiAffinityPreferred }}
+  singleuser.pod-anti-affinity-preferred: |
+    {{- $_.podAntiAffinityPreferred | nindent 4 }}
+  {{- end }}
 
   {{- if .Values.scheduling.userScheduler.enabled }}
   singleuser.scheduler-name: "{{ .Release.Name }}-user-scheduler"

@@ -41,6 +41,14 @@ spec:
       {{- if $_.hasTolerations }}
       {{- include "jupyterhub.tolerations" $_ | nindent 6 }}
       {{- end }}
+      nodeSelector: {{ toJson .Values.singleuser.nodeSelector }}
+      {{- if $_.nodeAffinityRequired }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              {{- $_.nodeAffinityRequired | nindent 14 }}
+      {{- end }}
       terminationGracePeriodSeconds: 0
       automountServiceAccountToken: false
       {{- if .Values.singleuser.imagePullSecret.enabled }}
@@ -82,7 +90,6 @@ spec:
             - -c
             - echo "Pulling complete"
         {{- end }}
-      nodeSelector: {{ toJson .Values.singleuser.nodeSelector }}
       containers:
         - name: pause
           image: {{ .Values.prePuller.pause.image.name }}:{{ .Values.prePuller.pause.image.tag }}
