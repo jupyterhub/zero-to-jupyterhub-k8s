@@ -230,6 +230,12 @@ scheduling:
     pdb:
       enabled: true
       minAvailable: 1
+  corePods:
+    nodeAffinity:
+      matchNodePurpose: prefer
+  userPods:
+    nodeAffinity:
+      matchNodePurpose: prefer
 
 
 prePuller:

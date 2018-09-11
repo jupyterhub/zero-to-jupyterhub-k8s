@@ -29,6 +29,9 @@ spec:
       {{- include "jupyterhub.tolerations" $_ | nindent 6 }}
       {{- end }}
       nodeSelector: {{ toJson .Values.scheduling.userScheduler.nodeSelector }}
+      {{- if $_.hasAffinity }}
+      {{- include "jupyterhub.affinity" $_ | nindent 6 }}
+      {{- end }}
       containers:
         - name: user-scheduler
           image: {{ include "jupyterhub.scheduler.image" . }}

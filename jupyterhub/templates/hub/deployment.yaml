@@ -31,25 +31,14 @@ spec:
         {{- .Values.hub.annotations | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
     spec:
-      nodeSelector: {{ toJson .Values.hub.nodeSelector }}
-      affinity:
-        podAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 1
-              podAffinityTerm:
-                topologyKey: kubernetes.io/hostname
-                labelSelector:
-                  matchExpressions:
-                    - key: component
-                      operator: In
-                      values: ['proxy']
-                    - key: release
-                      operator: In
-                      values: [{{ .Release.Name | quote }}]
       {{- $_ := merge (dict "podKind" "core") . }}
       {{- $dummy := include "jupyterhub.prepareScope" $_ }}
       {{- if $_.hasTolerations }}
       {{- include "jupyterhub.tolerations" $_ | nindent 6 }}
+      {{- end }}
+      nodeSelector: {{ toJson .Values.hub.nodeSelector }}
+      {{- if $_.hasAffinity }}
+      {{- include "jupyterhub.affinity" $_ | nindent 6 }}
       {{- end }}
       volumes:
         - name: config
