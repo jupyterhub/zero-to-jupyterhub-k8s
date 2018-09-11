@@ -45,6 +45,10 @@ c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
 
 # the hub should listen on all interfaces, so the proxy can access it
 c.JupyterHub.hub_ip = '0.0.0.0'
+c.KubeSpawner.extra_labels = get_config('singleuser.extra-labels', {})
+c.KubeSpawner.extra_labels.update({
+    "hub.jupyter.org/pod-kind": "user"
+})
 
 set_config_if_not_none(c.KubeSpawner, 'common_labels', 'kubespawner.common-labels')
 
@@ -56,7 +60,6 @@ for trait, cfg_key in (
     ('image_pull_policy', 'image-pull-policy'),
     ('image_pull_secrets', 'image-pull-secret-name'),
     ('events_enabled', 'events'),
-    ('extra_labels', 'extra-labels'),
     ('extra_annotations', 'extra-annotations'),
     ('uid', 'uid'),
     ('fs_gid', 'fs-gid'),
