@@ -105,7 +105,7 @@ proxy:
     enabled: true
   https:
     enabled: true
-    type: manual
+    type: letsencrypt
     #type: letsencrypt, manual, secret
     letsencrypt:
       contactEmail: 'e@domain.com'
@@ -229,6 +229,12 @@ scheduling:
     image:
       name: gcr.io/google_containers/kube-scheduler-amd64
       tag: v1.11.2
+  corePods:
+    nodeAffinity:
+      matchNodePurpose: require
+  userPods:
+    nodeAffinity:
+      matchNodePurpose: require
 
 
 prePuller:
