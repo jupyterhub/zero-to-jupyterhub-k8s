@@ -10,7 +10,7 @@ metadata:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: user-scheduler-base
+  name: {{ .Release.Name }}-user-scheduler-base
   labels:
     {{- $_ := merge (dict "componentSuffix" "-base") . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
@@ -26,7 +26,7 @@ roleRef:
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: user-scheduler-complementary
+  name: {{ .Release.Name }}-user-scheduler-complementary
   labels:
     {{- $_ := merge (dict "componentSuffix" "-complementary") . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
@@ -44,7 +44,7 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: user-scheduler-complementary
+  name: {{ .Release.Name }}-user-scheduler-complementary
   labels:
     {{- $_ := merge (dict "componentSuffix" "-complementary") . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
@@ -54,7 +54,7 @@ subjects:
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
-  name: user-scheduler-complementary
+  name: {{ .Release.Name }}-user-scheduler-complementary
   apiGroup: rbac.authorization.k8s.io
 {{- end }}
 {{- end }}
