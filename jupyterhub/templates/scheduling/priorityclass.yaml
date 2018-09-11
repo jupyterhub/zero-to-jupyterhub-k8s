@@ -1,0 +1,17 @@
+{{- if .Values.scheduling.podPriority.enabled }}
+apiVersion: scheduling.k8s.io/v1alpha1
+kind: PriorityClass
+metadata:
+  name: {{ .Release.Name }}-default-priority
+  labels:
+    {{- $_ := merge (dict "componentLabel" "default-priority") . }}
+    {{- include "jupyterhub.labels" $_ | nindent 4 }}
+  annotations:
+    # The default PriorityClass must be added before the other resources.
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation
+    helm.sh/hook-weight: "-100"
+value: 10
+globalDefault: false
+description: "A default priority higher than user placeholders priority."
+{{- end }}

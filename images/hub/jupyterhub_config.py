@@ -45,29 +45,44 @@ c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
 
 # the hub should listen on all interfaces, so the proxy can access it
 c.JupyterHub.hub_ip = '0.0.0.0'
+c.KubeSpawner.extra_labels = get_config('singleuser.extra-labels', {})
+c.KubeSpawner.extra_labels.update({
+    "hub.jupyter.org/pod-kind": "user"
+})
 
 set_config_if_not_none(c.KubeSpawner, 'common_labels', 'kubespawner.common-labels')
 
 c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
 
-# Use env var for this, since we want hub to restart when this changes
-c.KubeSpawner.image_spec = os.environ['SINGLEUSER_IMAGE']
 
 for trait, cfg_key in (
     ('start_timeout', 'start-timeout'),
     ('image_pull_policy', 'image-pull-policy'),
     ('image_pull_secrets', 'image-pull-secret-name'),
     ('events_enabled', 'events'),
-    ('extra_labels', 'extra-labels'),
     ('extra_annotations', 'extra-annotations'),
     ('uid', 'uid'),
     ('fs_gid', 'fs-gid'),
     ('service_account', 'service-account-name'),
     ('scheduler_name', 'scheduler-name'),
-    ('node_selector', 'node-selector'),
 ):
     set_config_if_not_none(c.KubeSpawner, trait, 'singleuser.' + cfg_key)
+c.KubeSpawner.storage_extra_labels = get_config('singleuser.storage-extra-labels', {})
+c.KubeSpawner.storage_extra_labels.update({
+    "hub.jupyter.org/storage-kind": "user"
+})
 
+c.KubeSpawner.image_spec = get_config('singleuser.image-spec')
+c.KubeSpawner.priority_class_name = get_config('singleuser.priority-class-name', "")
+
+c.KubeSpawner.tolerations.extend(get_config('singleuser.tolerations', []))
+c.KubeSpawner.node_selector.update(get_config('singleuser.node-selector', {}))
+c.KubeSpawner.node_affinity_required.extend(get_config('singleuser.node-affinity-required', []))
+c.KubeSpawner.node_affinity_preferred.extend(get_config('singleuser.node-affinity-preferred', []))
+c.KubeSpawner.pod_affinity_required.extend(get_config('singleuser.pod-affinity-required', []))
+c.KubeSpawner.pod_affinity_preferred.extend(get_config('singleuser.pod-affinity-preferred', []))
+c.KubeSpawner.pod_anti_affinity_required.extend(get_config('singleuser.pod-anti-affinity-required', []))
+c.KubeSpawner.pod_anti_affinity_preferred.extend(get_config('singleuser.pod-anti-affinity-preferred', []))
 # Configure dynamically provisioning pvc
 storage_type = get_config('singleuser.storage.type')
 if storage_type == 'dynamic':

@@ -142,6 +142,17 @@ auth:
 
 
 singleuser:
+  extraTolerations: []
+  nodeSelector: {}
+  extraNodeAffinity:
+    required: []
+    preferred: []
+  extraPodAffinity:
+    required: []
+    preferred: []
+  extraPodAntiAffinity:
+    required: []
+    preferred: []
   networkTools:
     image:
       name: jupyterhub/k8s-network-tools
@@ -161,11 +172,11 @@ singleuser:
   events: true
   extraAnnotations: {}
   extraLabels: {}
+  storageExtraLabels: {}
   extraEnv: {}
   lifecycleHooks:
   initContainers: []
   extraContainers: []
-  nodeSelector: {}
   uid: 1000
   fsGid: 100
   serviceAccountName:
@@ -219,6 +230,24 @@ scheduling:
     pdb:
       enabled: true
       minAvailable: 1
+  podPriority:
+    enabled: false
+  userPlaceholder:
+    enabled: true
+    replicas: 0
+    resources: {}
+  userDummy:
+    enabled: true
+    replicas: 0
+    resources: {}
+  corePods:
+    nodeAffinity:
+      matchNodePurpose: prefer
+  userPods:
+    nodeAffinity:
+      matchNodePurpose: prefer
+    podAffinity:
+      preferScheduleNextToRealUsers: false
 
 
 prePuller:

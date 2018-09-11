@@ -137,6 +137,7 @@ data:
   singleuser.cloud-metadata: |
     {{- .Values.singleuser.cloudMetadata | toYaml | trimSuffix "\n" | nindent 4 }}
   singleuser.start-timeout: {{ .Values.singleuser.startTimeout | quote }}
+  singleuser.image-spec: {{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}
   singleuser.image-pull-policy: {{ .Values.singleuser.image.pullPolicy | quote }}
   {{- if .Values.singleuser.imagePullSecret.enabled }}
   singleuser.image-pull-secret-name: singleuser-image-credentials
@@ -207,6 +208,12 @@ data:
     {{- range $key, $value := .Values.singleuser.extraLabels }}
     {{ $key | quote }}: {{ $value | quote }}
     {{- end }}
+  {{- if .Values.singleuser.storageExtraLabels }}
+  singleuser.storage-extra-labels: |
+    {{- range $key, $value := .Values.singleuser.storageExtraLabels }}
+    {{ $key | quote }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
   {{- if .Values.singleuser.extraEnv }}
   singleuser.extra-env: |
     {{- range $key, $value := .Values.singleuser.extraEnv }}
@@ -214,8 +221,42 @@ data:
     {{- end }}
   {{- end }}
 
+  {{- $_ := merge (dict "podKind" "user") . }}
+  {{- include "jupyterhub.prepareScope" $_ }}
+  {{- if $_.hasTolerations }}
+  singleuser.tolerations: |
+    {{- $_.tolerationsList | nindent 4 }}
+  {{- end }}
+  {{- if $_.nodeAffinityRequired }}
+  singleuser.node-affinity-required: |
+    {{- $_.nodeAffinityRequired | nindent 4 }}
+  {{- end }}
+  {{- if $_.nodeAffinityPreferred }}
+  singleuser.node-affinity-preferred: |
+    {{- $_.nodeAffinityPreferred | nindent 4 }}
+  {{- end }}
+  {{- if $_.podAffinityRequired }}
+  singleuser.pod-affinity-required: |
+    {{- $_.podAffinityRequired | nindent 4 }}
+  {{- end }}
+  {{- if $_.podAffinityPreferred }}
+  singleuser.pod-affinity-preferred: |
+    {{- $_.podAffinityPreferred | nindent 4 }}
+  {{- end }}
+  {{- if $_.podAntiAffinityRequired }}
+  singleuser.pod-anti-affinity-required: |
+    {{- $_.podAntiAffinityRequired | nindent 4 }}
+  {{- end }}
+  {{- if $_.podAntiAffinityPreferred }}
+  singleuser.pod-anti-affinity-preferred: |
+    {{- $_.podAntiAffinityPreferred | nindent 4 }}
+  {{- end }}
+
   {{- if .Values.scheduling.userScheduler.enabled }}
   singleuser.scheduler-name: "{{ .Release.Name }}-user-scheduler"
+  {{- end }}
+  {{- if .Values.scheduling.podPriority }}
+  singleuser.priority_class_name: "{{ .Release.Name }}-default-priority"
   {{- end }}
 
   {{- /* KubeSpawner */}}

@@ -1,0 +1,13 @@
+{{- if .Values.scheduling.podPriority.enabled }}
+{{- if .Values.scheduling.userPlaceholder.enabled -}}
+apiVersion: scheduling.k8s.io/v1alpha1
+kind: PriorityClass
+metadata:
+  name: {{ .Release.Name }}-user-placeholder-priority
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+value: 0
+globalDefault: false
+description: "With a non-negative priority, a pod can trigger a cluster scale up. Placeholder pods should have lower than the other pods though."
+{{- end }}
+{{- end }}
