@@ -255,6 +255,9 @@ data:
   {{- if .Values.scheduling.userScheduler.enabled }}
   singleuser.scheduler-name: "{{ .Release.Name }}-user-scheduler"
   {{- end }}
+  {{- if .Values.scheduling.podPriority }}
+  singleuser.priority_class_name: "{{ .Release.Name }}-default-priority"
+  {{- end }}
 
   {{- /* KubeSpawner */}}
   kubespawner.common-labels: |

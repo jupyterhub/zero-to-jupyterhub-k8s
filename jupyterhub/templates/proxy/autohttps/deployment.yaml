@@ -36,6 +36,9 @@ spec:
       {{- if .Values.rbac.enabled }}
       serviceAccountName: autohttps
       {{- end }}
+      {{- if .Values.scheduling.podPriority.enabled }}
+      priorityClassName: {{ .Release.Name }}-default-priority
+      {{- end }}
       terminationGracePeriodSeconds: 60
       {{- $_ := merge (dict "podKind" "core") . }}
       {{- $dummy := include "jupyterhub.prepareScope" $_ }}

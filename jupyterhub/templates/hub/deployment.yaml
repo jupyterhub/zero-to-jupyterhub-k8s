@@ -31,6 +31,9 @@ spec:
         {{- .Values.hub.annotations | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
     spec:
+      {{- if .Values.scheduling.podPriority.enabled }}
+      priorityClassName: {{ .Release.Name }}-default-priority
+      {{- end }}
       {{- $_ := merge (dict "podKind" "core") . }}
       {{- $dummy := include "jupyterhub.prepareScope" $_ }}
       {{- if $_.hasTolerations }}

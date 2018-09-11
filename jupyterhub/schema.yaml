@@ -570,6 +570,17 @@ properties:
                 type:
                   - string
                   - "null"
+      podPriority:
+        type: object
+        description: |
+          Generally available since Kubernetes 1.11, Pod Priority is used to
+          allow real users evict placeholder pods.
+        properties:
+          enabled:
+            type: bool
+            description: |
+              Generally available since Kubernetes 1.11, Pod Priority is used to
+              allow real users evict placeholder pods.
       corePods:
         type: object
         description: |

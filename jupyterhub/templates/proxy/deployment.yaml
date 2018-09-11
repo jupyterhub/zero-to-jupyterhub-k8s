@@ -31,6 +31,9 @@ spec:
         {{- end }}
     spec:
       terminationGracePeriodSeconds: 60
+      {{- if .Values.scheduling.podPriority.enabled }}
+      priorityClassName: {{ .Release.Name }}-default-priority
+      {{- end }}
       {{- $_ := merge (dict "podKind" "core") . }}
       {{- $dummy := include "jupyterhub.prepareScope" $_ }}
       {{- if $_.hasTolerations }}
