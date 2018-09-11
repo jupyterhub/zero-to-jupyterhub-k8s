@@ -29,7 +29,7 @@ spec:
           image: {{ include "jupyterhub.scheduler.image" . }}
           command:
             - /usr/local/bin/kube-scheduler
-            - --scheduler-name=user-scheduler
+            - --scheduler-name={{ .Release.Name }}-user-scheduler
             - --policy-configmap=user-scheduler
             - --policy-configmap-namespace={{ .Release.Namespace }}
             - --lock-object-name=user-scheduler

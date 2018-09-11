@@ -215,7 +215,7 @@ data:
   {{- end }}
 
   {{- if .Values.scheduling.userScheduler.enabled }}
-  singleuser.scheduler-name: "user-scheduler"
+  singleuser.scheduler-name: "{{ .Release.Name }}-user-scheduler"
   {{- end }}
 
   {{- /* KubeSpawner */}}
