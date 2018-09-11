@@ -221,6 +221,9 @@ data:
     {{- end }}
   {{- end }}
 
+  singleuser.tolerations: |
+    {{- include "jupyterhub.userTolerations" . | nindent 4 }}
+
   {{- if .Values.scheduling.userScheduler.enabled }}
   singleuser.scheduler-name: "{{ .Release.Name }}-user-scheduler"
   {{- end }}

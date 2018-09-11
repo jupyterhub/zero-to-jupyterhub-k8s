@@ -68,6 +68,7 @@ for trait, cfg_key in (
 c.KubeSpawner.storage_extra_labels = get_config('singleuser.storage-extra-labels', {})
 
 c.KubeSpawner.image_spec = get_config('singleuser.image-spec')
+c.KubeSpawner.tolerations.extend(get_config('singleuser.tolerations', []))
 # Configure dynamically provisioning pvc
 storage_type = get_config('singleuser.storage.type')
 if storage_type == 'dynamic':

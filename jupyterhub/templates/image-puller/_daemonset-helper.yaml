@@ -36,6 +36,8 @@ spec:
         {{- /* Changes here will cause the DaemonSet to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
     spec:
+      tolerations:
+        {{- include "jupyterhub.userTolerations" . | nindent 8 }}
       terminationGracePeriodSeconds: 0
       automountServiceAccountToken: false
       {{- if .Values.singleuser.imagePullSecret.enabled }}
