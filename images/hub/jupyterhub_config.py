@@ -50,8 +50,6 @@ set_config_if_not_none(c.KubeSpawner, 'common_labels', 'kubespawner.common-label
 
 c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
 
-# Use env var for this, since we want hub to restart when this changes
-c.KubeSpawner.image_spec = os.environ['SINGLEUSER_IMAGE']
 
 for trait, cfg_key in (
     ('start_timeout', 'start-timeout'),
@@ -68,6 +66,7 @@ for trait, cfg_key in (
 ):
     set_config_if_not_none(c.KubeSpawner, trait, 'singleuser.' + cfg_key)
 
+c.KubeSpawner.image_spec = get_config('singleuser.image-spec')
 # Configure dynamically provisioning pvc
 storage_type = get_config('singleuser.storage.type')
 if storage_type == 'dynamic':
