@@ -45,8 +45,5 @@ spec:
             httpGet:
               path: /healthz
               port: 10251
-          resources:
-            requests:
-              cpu: 50m
-              memory: 512Mi
+          resources: {{ toJson .Values.scheduling.userScheduler.resources }}
 {{- end }}

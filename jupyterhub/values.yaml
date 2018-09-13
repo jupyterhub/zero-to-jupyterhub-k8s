@@ -219,6 +219,10 @@ scheduling:
     pdb:
       enabled: true
       minAvailable: 1
+    resources:
+      requests:
+        cpu: 50m
+        memory: 256Mi
 
 
 prePuller:
