@@ -45,5 +45,6 @@ spec:
             httpGet:
               path: /healthz
               port: 10251
-          resources: {{ toJson .Values.scheduling.userScheduler.resources }}
+          resources:
+            {{- .Values.scheduling.userScheduler.resources | toYaml | trimSuffix "\n" | nindent 12 }}
 {{- end }}
