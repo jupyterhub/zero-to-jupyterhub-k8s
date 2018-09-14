@@ -46,7 +46,5 @@ spec:
               path: /healthz
               port: 10251
           resources:
-            requests:
-              cpu: 50m
-              memory: 512Mi
+            {{- .Values.scheduling.userScheduler.resources | toYaml | trimSuffix "\n" | nindent 12 }}
 {{- end }}
