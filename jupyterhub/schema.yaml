@@ -476,6 +476,65 @@ properties:
           Pass this field an array of
           [`Toleration`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#toleration-v1-core)
           objects.
+      extraNodeAffinity:
+        type: object
+        description: |
+          Affinities describe where pods prefer or require to be scheduled, they
+          may prefer or require a node where they are to be scheduled to have a
+          certain label (node affinity). They may also require to be scheduled
+          in proximity or with a lack of proximity to another pod (pod affinity
+          and anti pod affinity).
+          
+          See the [Kubernetes
+          docs](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/)
+          for more info.
+        properties:
+          required:
+            type: list
+            description: |
+              Pass this field an array of
+              [`NodeSelectorTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#nodeselectorterm-v1-core)
+              objects.
+          preferred:
+            type: list
+            description: |
+              Pass this field an array of
+              [`PreferredSchedulingTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#preferredschedulingterm-v1-core)
+              objects.
+      extraPodAffinity:
+        type: object
+        description: |
+          See the description of `singleuser.extraNodeAffinity`.
+        properties:
+          required:
+            type: list
+            description: |
+              Pass this field an array of
+              [`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#podaffinityterm-v1-core)
+              objects.
+          preferred:
+            type: list
+            description: |
+              Pass this field an array of
+              [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#weightedpodaffinityterm-v1-core)
+              objects.
+      extraPodAntiAffinity:
+        type: object
+        description: |
+          See the description of `singleuser.extraNodeAffinity`.
+        properties:
+          required:
+            type: list
+            description: |
+              Pass this field an array of
+              [`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#podaffinityterm-v1-core)
+              objects.
+          preferred:
+            type: list
+            description: |
+              Pass this field an array of
+              [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#weightedpodaffinityterm-v1-core)
+              objects.
 
 
   scheduling:
