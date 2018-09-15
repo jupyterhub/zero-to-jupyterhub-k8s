@@ -32,7 +32,7 @@ data:
         { "name": "ImageLocalityPriority",        "weight": 11}
       ],
       "hardPodAffinitySymmetricWeight" : 100,
-      "alwaysCheckAllPredicates" : true
+      "alwaysCheckAllPredicates" : false
     }
 {{- end }}
 
