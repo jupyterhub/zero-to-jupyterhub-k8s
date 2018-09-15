@@ -24,6 +24,7 @@ spec:
       serviceAccountName: user-scheduler
       {{- end }}
       nodeSelector: {{ toJson .Values.scheduling.userScheduler.nodeSelector }}
+      {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
       containers:
         - name: user-scheduler
           image: {{ include "jupyterhub.scheduler.image" . }}

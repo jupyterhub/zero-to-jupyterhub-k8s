@@ -234,6 +234,12 @@ scheduling:
       requests:
         cpu: 50m
         memory: 256Mi
+  corePods:
+    nodeAffinity:
+      matchNodePurpose: prefer
+  userPods:
+    nodeAffinity:
+      matchNodePurpose: prefer
 
 
 prePuller:

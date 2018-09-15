@@ -29,22 +29,9 @@ spec:
         {{- .Values.proxy.annotations | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
     spec:
-      nodeSelector: {{ toJson .Values.proxy.nodeSelector }}
       terminationGracePeriodSeconds: 60
-      affinity:
-        podAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 1
-              podAffinityTerm:
-                topologyKey: kubernetes.io/hostname
-                labelSelector:
-                  matchExpressions:
-                    - key: component
-                      operator: In
-                      values: ['hub']
-                    - key: release
-                      operator: In
-                      values: [{{ .Release.Name | quote }}]
+      nodeSelector: {{ toJson .Values.proxy.nodeSelector }}
+      {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
       {{- if $manualHTTPSwithsecret }}
       volumes:
         - name: tls-secret

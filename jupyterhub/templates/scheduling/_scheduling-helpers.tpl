@@ -19,12 +19,28 @@
 
 
 {{- define "jupyterhub.userNodeAffinityRequired" -}}
+{{- if eq .Values.scheduling.userPods.nodeAffinity.matchNodePurpose "require" -}}
+- matchExpressions:
+  - key: hub.jupyter.org/node-purpose
+    operator: In
+    values: [user]
+    {{- if .Values.singleuser.extraNodeAffinity.required }}{{ println }}{{ end }}
+{{- end }}
 {{- if .Values.singleuser.extraNodeAffinity.required -}}
 {{ .Values.singleuser.extraNodeAffinity.required | toYaml | trimSuffix "\n" }}
 {{- end }}
 {{- end }}
 
 {{- define "jupyterhub.userNodeAffinityPreferred" -}}
+{{- if eq .Values.scheduling.userPods.nodeAffinity.matchNodePurpose "prefer" -}}
+- weight: 100
+  preference:
+    matchExpressions:
+      - key: hub.jupyter.org/node-purpose
+        operator: In
+        values: [user]
+        {{- if .Values.singleuser.extraNodeAffinity.preferred }}{{ println }}{{ end }}
+{{- end }}
 {{- if .Values.singleuser.extraNodeAffinity.preferred -}}
 {{ .Values.singleuser.extraNodeAffinity.preferred | toYaml | trimSuffix "\n" }}
 {{- end }}
@@ -51,5 +67,33 @@
 {{- define "jupyterhub.userPodAntiAffinityPreferred" -}}
 {{- if .Values.singleuser.extraPodAntiAffinity.preferred -}}
 {{ .Values.singleuser.extraPodAntiAffinity.preferred | toYaml | trimSuffix "\n" }}
+{{- end }}
+{{- end }}
+
+
+
+{{- define "jupyterhub.coreAffinity" -}}
+{{- $require := eq .Values.scheduling.corePods.nodeAffinity.matchNodePurpose "require" -}}
+{{- $prefer := eq .Values.scheduling.corePods.nodeAffinity.matchNodePurpose "prefer" -}}
+{{- if or $require $prefer -}}
+affinity:
+  nodeAffinity:
+    {{- if $require }}
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+          - key: hub.jupyter.org/node-purpose
+            operator: In
+            values: [core]
+    {{- end }}
+    {{- if $prefer }}
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        preference:
+          matchExpressions:
+            - key: hub.jupyter.org/node-purpose
+              operator: In
+              values: [core]
+    {{- end }}
 {{- end }}
 {{- end }}
