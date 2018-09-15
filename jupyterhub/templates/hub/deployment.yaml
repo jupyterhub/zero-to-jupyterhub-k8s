@@ -30,6 +30,9 @@ spec:
         {{- .Values.hub.annotations | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
     spec:
+      {{- if .Values.scheduling.podPriority.enabled }}
+      priorityClassName: {{ .Release.Name }}-default-priority
+      {{- end }}
       nodeSelector: {{ toJson .Values.hub.nodeSelector }}
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
       volumes:

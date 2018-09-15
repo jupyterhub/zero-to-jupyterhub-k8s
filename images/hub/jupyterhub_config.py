@@ -67,6 +67,8 @@ for trait, cfg_key in (
 c.KubeSpawner.storage_extra_labels = get_config('singleuser.storage-extra-labels', {})
 
 c.KubeSpawner.image_spec = get_config('singleuser.image-spec')
+c.KubeSpawner.priority_class_name = get_config('singleuser.priority-class-name', "")
+
 c.KubeSpawner.tolerations.extend(get_config('singleuser.tolerations', []))
 c.KubeSpawner.node_selector.update(get_config('singleuser.node-selector', {}))
 c.KubeSpawner.node_affinity_required.extend(get_config('singleuser.node-affinity-required', []))

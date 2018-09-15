@@ -30,6 +30,9 @@ spec:
         {{- end }}
     spec:
       terminationGracePeriodSeconds: 60
+      {{- if .Values.scheduling.podPriority.enabled }}
+      priorityClassName: {{ .Release.Name }}-default-priority
+      {{- end }}
       nodeSelector: {{ toJson .Values.proxy.nodeSelector }}
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
       {{- if $manualHTTPSwithsecret }}
