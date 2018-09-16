@@ -6,6 +6,28 @@ from kubernetes import client
 from z2jh import get_config, get_secret, set_config_if_not_none
 from jupyterhub.utils import url_path_join
 
+# About traitlets
+# ------------------------------------------------------------------------------
+# In order to understand how this configuration works, it is useful to read the
+# traitlets documentation: https://traitlets.readthedocs.io/en/stable/config.html
+#
+# A Configuration object (traitlets.config.Config) is made available as `c` in
+# this file.
+#
+### Lazy evaluation and default value initialization
+# If you would print c.KubeSpawner.common_labels now within this file, you would
+# get...
+# <traitlets.config.loader.LazyConfigValue object at 0x7f1c53071a20>
+#
+# But if you would run the following...
+# c.KubeSpawner.common_labels.update({'heritage': 'something-new'})
+#
+# You would be fine, and end up with...
+# {'app': 'jupyterhub', 'heritage': 'something-new'}
+#
+# Where these labels had defaults set in c.KubeSpawner.common_labels but you
+# overrode the second labels value.
+
 # Network related
 # ------------------------------------------------------------------------------
 # Configure JupyterHub to use the curl backend for making HTTP requests,
