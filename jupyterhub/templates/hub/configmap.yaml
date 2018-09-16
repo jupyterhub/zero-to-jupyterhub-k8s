@@ -303,9 +303,6 @@ data:
   {{- else }}
   hub.db_url: {{ .Values.hub.db.url | quote }}
   {{- end }}
-  {{- if .Values.hub.cookieSecret }}
-  token.cookie_secret: {{ .Values.hub.cookieSecret | quote }}
-  {{- end }}
 
   {{- /* Other */}}
   debug.enabled: {{ .Values.debug.enabled | quote }}
