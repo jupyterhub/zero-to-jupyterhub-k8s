@@ -295,13 +295,13 @@ data:
   {{- if .Values.hub.extraConfigVars }}
   hub.extra-vars: {{ toJson .Values.hub.extraConfigVars | quote }}
   {{- end }}
-  hub.base_url: {{ .Values.hub.baseUrl | quote }}
+  hub.base-url: {{ .Values.hub.baseUrl | quote }}
   {{- if eq .Values.hub.db.type "sqlite-pvc" }}
-  hub.db_url: "sqlite:///jupyterhub.sqlite"
+  hub.db-url: "sqlite:///jupyterhub.sqlite"
   {{- else if eq .Values.hub.db.type "sqlite-memory" }}
-  hub.db_url: "sqlite://"
+  hub.db-url: "sqlite://"
   {{- else }}
-  hub.db_url: {{ .Values.hub.db.url | quote }}
+  hub.db-url: {{ .Values.hub.db.url | quote }}
   {{- end }}
 
   {{- /* Other */}}
