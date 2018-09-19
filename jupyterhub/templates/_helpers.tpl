@@ -222,11 +222,7 @@ requests:
   {{- end }}
 {{- end }}
 
-{{- if and $r $l }}
-{{- println }}
-{{- end }}
-
-{{- if $l -}}
+{{- if $l }}
 limits:
   {{- if $l1 }}
   cpu: {{ .Values.singleuser.cpu.limit }}

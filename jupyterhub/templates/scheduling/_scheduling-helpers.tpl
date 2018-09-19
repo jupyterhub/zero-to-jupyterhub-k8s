@@ -24,10 +24,9 @@
   - key: hub.jupyter.org/node-purpose
     operator: In
     values: [user]
-    {{- if .Values.singleuser.extraNodeAffinity.required }}{{ println }}{{ end }}
 {{- end }}
-{{- if .Values.singleuser.extraNodeAffinity.required -}}
-{{ .Values.singleuser.extraNodeAffinity.required | toYaml | trimSuffix "\n" }}
+{{- if .Values.singleuser.extraNodeAffinity.required }}
+{{- .Values.singleuser.extraNodeAffinity.required | toYaml | trimSuffix "\n" | nindent 0 }}
 {{- end }}
 {{- end }}
 
@@ -39,10 +38,9 @@
       - key: hub.jupyter.org/node-purpose
         operator: In
         values: [user]
-        {{- if .Values.singleuser.extraNodeAffinity.preferred }}{{ println }}{{ end }}
 {{- end }}
-{{- if .Values.singleuser.extraNodeAffinity.preferred -}}
-{{ .Values.singleuser.extraNodeAffinity.preferred | toYaml | trimSuffix "\n" }}
+{{- if .Values.singleuser.extraNodeAffinity.preferred }}
+{{- .Values.singleuser.extraNodeAffinity.preferred | toYaml | trimSuffix "\n" | nindent 0 }}
 {{- end }}
 {{- end }}
 
