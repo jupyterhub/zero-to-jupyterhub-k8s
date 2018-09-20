@@ -142,6 +142,7 @@ auth:
 
 
 singleuser:
+  extraTolerations: []
   networkTools:
     image:
       name: jupyterhub/k8s-network-tools

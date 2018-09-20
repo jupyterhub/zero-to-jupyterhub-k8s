@@ -149,7 +149,11 @@ auth:
 singleuser:
   nodeSelector:
     mock-node-selector: mock
-  extraTolerations: []
+  extraTolerations:
+    - key: hub.jupyter.org/test
+      operator: Equal
+      value: test
+      effect: NoSchedule
   extraNodeAffinity:
     required: []
     preferred: []
