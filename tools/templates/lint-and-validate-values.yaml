@@ -105,7 +105,7 @@ proxy:
     enabled: true
   https:
     enabled: true
-    type: manual
+    type: letsencrypt
     #type: letsencrypt, manual, secret
     letsencrypt:
       contactEmail: 'e@domain.com'
@@ -155,14 +155,52 @@ singleuser:
       value: test
       effect: NoSchedule
   extraNodeAffinity:
-    required: []
-    preferred: []
+    required:
+      - matchExpressions:
+        - key: hub.jupyter.org/test-required-node
+          operator: In
+          values: [test]
+    preferred:
+      - weight: 10
+        preference:
+          matchExpressions:
+          - key: hub.jupyter.org/test-preferred-node
+            operator: In
+            values: [test]
   extraPodAffinity:
-    required: []
-    preferred: []
+    required:
+      - labelSelector:
+          matchExpressions:
+          - key: hub.jupyter.org/test-required-pod
+            operator: In
+            values: [test]
+        topologyKey: failure-domain.beta.kubernetes.io/zone
+    preferred:
+      - weight: 10
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: hub.jupyter.org/test-preferred-pod
+              operator: In
+              values: [test]
+          topologyKey: kubernetes.io/hostname
   extraPodAntiAffinity:
-    required: []
-    preferred: []
+    required:
+      - labelSelector:
+          matchExpressions:
+          - key: hub.jupyter.org/test-required-anti-pod
+            operator: In
+            values: [test]
+        topologyKey: failure-domain.beta.kubernetes.io/zone
+    preferred:
+      - weight: 10
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+            - key: hub.jupyter.org/test-preferred-anti-pod
+              operator: In
+              values: [test]
+          topologyKey: kubernetes.io/hostname
   cloudMetadata:
     enabled: true
     ip: 169.254.169.254

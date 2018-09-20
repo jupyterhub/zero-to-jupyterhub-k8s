@@ -62,13 +62,19 @@ for trait, cfg_key in (
     ('fs_gid', 'fs-gid'),
     ('service_account', 'service-account-name'),
     ('scheduler_name', 'scheduler-name'),
-    ('node_selector', 'node-selector'),
 ):
     set_config_if_not_none(c.KubeSpawner, trait, 'singleuser.' + cfg_key)
 c.KubeSpawner.storage_extra_labels = get_config('singleuser.storage-extra-labels', {})
 
 c.KubeSpawner.image_spec = get_config('singleuser.image-spec')
 c.KubeSpawner.tolerations.extend(get_config('singleuser.tolerations', []))
+c.KubeSpawner.node_selector.update(get_config('singleuser.node-selector', {}))
+c.KubeSpawner.node_affinity_required.extend(get_config('singleuser.node-affinity-required', []))
+c.KubeSpawner.node_affinity_preferred.extend(get_config('singleuser.node-affinity-preferred', []))
+c.KubeSpawner.pod_affinity_required.extend(get_config('singleuser.pod-affinity-required', []))
+c.KubeSpawner.pod_affinity_preferred.extend(get_config('singleuser.pod-affinity-preferred', []))
+c.KubeSpawner.pod_anti_affinity_required.extend(get_config('singleuser.pod-anti-affinity-required', []))
+c.KubeSpawner.pod_anti_affinity_preferred.extend(get_config('singleuser.pod-anti-affinity-preferred', []))
 # Configure dynamically provisioning pvc
 storage_type = get_config('singleuser.storage.type')
 if storage_type == 'dynamic':

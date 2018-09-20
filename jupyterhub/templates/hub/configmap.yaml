@@ -224,6 +224,31 @@ data:
   singleuser.tolerations: |
     {{- include "jupyterhub.userTolerations" . | nindent 4 }}
 
+  {{- if include "jupyterhub.userNodeAffinityRequired" . }}
+  singleuser.node-affinity-required: |
+    {{- include "jupyterhub.userNodeAffinityRequired" . | nindent 4 }}
+  {{- end }}
+  {{- if include "jupyterhub.userNodeAffinityPreferred" . }}
+  singleuser.node-affinity-preferred: |
+    {{- include "jupyterhub.userNodeAffinityPreferred" . | nindent 4 }}
+  {{- end }}
+  {{- if include "jupyterhub.userPodAffinityRequired" . }}
+  singleuser.pod-affinity-required: |
+    {{- include "jupyterhub.userPodAffinityRequired" . | nindent 4 }}
+  {{- end }}
+  {{- if include "jupyterhub.userPodAffinityPreferred" . }}
+  singleuser.pod-affinity-preferred: |
+    {{- include "jupyterhub.userPodAffinityPreferred" . | nindent 4 }}
+  {{- end }}
+  {{- if include "jupyterhub.userPodAntiAffinityRequired" . }}
+  singleuser.pod-anti-affinity-required: |
+    {{- include "jupyterhub.userPodAntiAffinityRequired" . | nindent 4 }}
+  {{- end }}
+  {{- if include "jupyterhub.userPodAntiAffinityPreferred" . }}
+  singleuser.pod-anti-affinity-preferred: |
+    {{- include "jupyterhub.userPodAntiAffinityPreferred" . | nindent 4 }}
+  {{- end }}
+
   {{- if .Values.scheduling.userScheduler.enabled }}
   singleuser.scheduler-name: "{{ .Release.Name }}-user-scheduler"
   {{- end }}
