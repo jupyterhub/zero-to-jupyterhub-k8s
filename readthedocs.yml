@@ -1,6 +1,5 @@
 name: jhubk8s
 type: sphinx
-conda:
-    file: doc/environment.yml
+requirements_file: doc/requirements.txt
 python:
   version: 3
