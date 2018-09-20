@@ -11,7 +11,7 @@ hub:
   nodeSelector: {}
   concurrentSpawnLimit: 64
   consecutiveFailureLimit: 5
-  activeServerLimit:
+  activeServerLimit: 0
   deploymentStrategy:
     # sqlite-pvc backed hub requires Recreate strategy to work
     type: Recreate
@@ -215,7 +215,7 @@ singleuser:
     limits: {}
     guarantees: {}
   cmd: jupyterhub-singleuser
-  defaultUrl:
+  defaultUrl: /
 
 
 scheduling:

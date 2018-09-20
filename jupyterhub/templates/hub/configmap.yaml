@@ -266,9 +266,7 @@ data:
   hub.allow-named-servers: {{ .Values.hub.allowNamedServers | quote }}
   hub.concurrent-spawn-limit: {{ .Values.hub.concurrentSpawnLimit | quote }}
   hub.consecutive-failure-limit: {{ .Values.hub.consecutiveFailureLimit | quote }}
-  {{- if .Values.hub.activeServerLimit }}
   hub.active-server-limit: {{ .Values.hub.activeServerLimit | quote }}
-  {{- end }}
   {{- if .Values.hub.services }}
   hub.services: |
     {{- /* include hub.services *except* api_tokens */}}
@@ -297,16 +295,13 @@ data:
   {{- if .Values.hub.extraConfigVars }}
   hub.extra-vars: {{ toJson .Values.hub.extraConfigVars | quote }}
   {{- end }}
-  hub.base_url: {{ .Values.hub.baseUrl | quote }}
+  hub.base-url: {{ .Values.hub.baseUrl | quote }}
   {{- if eq .Values.hub.db.type "sqlite-pvc" }}
-  hub.db_url: "sqlite:///jupyterhub.sqlite"
+  hub.db-url: "sqlite:///jupyterhub.sqlite"
   {{- else if eq .Values.hub.db.type "sqlite-memory" }}
-  hub.db_url: "sqlite://"
+  hub.db-url: "sqlite://"
   {{- else }}
-  hub.db_url: {{ .Values.hub.db.url | quote }}
-  {{- end }}
-  {{- if .Values.hub.cookieSecret }}
-  token.cookie_secret: {{ .Values.hub.cookieSecret | quote }}
+  hub.db-url: {{ .Values.hub.db.url | quote }}
   {{- end }}
 
   {{- /* Other */}}
