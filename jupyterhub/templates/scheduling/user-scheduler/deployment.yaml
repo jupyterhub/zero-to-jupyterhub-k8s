@@ -23,7 +23,11 @@ spec:
       {{- if .Values.rbac.enabled }}
       serviceAccountName: user-scheduler
       {{- end }}
+      {{- if .Values.scheduling.podPriority.enabled }}
+      priorityClassName: {{ .Release.Name }}-default-priority
+      {{- end }}
       nodeSelector: {{ toJson .Values.scheduling.userScheduler.nodeSelector }}
+      {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
       containers:
         - name: user-scheduler
           image: {{ include "jupyterhub.scheduler.image" . }}
