@@ -172,7 +172,6 @@ singleuser:
                 - 169.254.169.254/32
   events: true
   extraLabels: {}
-  storageExtraLabels: {}
   extraEnv: {}
   lifecycleHooks:
   initContainers:
@@ -188,6 +187,8 @@ singleuser:
   serviceAccountName:
   storage:
     type: dynamic
+    extraLabels:
+      mock-label: mock-value
     extraVolumes: []
     extraVolumeMounts: []
     static:
