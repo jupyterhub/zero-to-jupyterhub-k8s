@@ -24,10 +24,9 @@
   - key: hub.jupyter.org/node-purpose
     operator: In
     values: [user]
-    {{- if .Values.singleuser.extraNodeAffinity.required }}{{ println }}{{ end }}
 {{- end }}
-{{- if .Values.singleuser.extraNodeAffinity.required -}}
-{{ .Values.singleuser.extraNodeAffinity.required | toYaml | trimSuffix "\n" }}
+{{- if .Values.singleuser.extraNodeAffinity.required }}
+{{- .Values.singleuser.extraNodeAffinity.required | toYaml | trimSuffix "\n" | nindent 0 }}
 {{- end }}
 {{- end }}
 
@@ -39,10 +38,9 @@
       - key: hub.jupyter.org/node-purpose
         operator: In
         values: [user]
-        {{- if .Values.singleuser.extraNodeAffinity.preferred }}{{ println }}{{ end }}
 {{- end }}
-{{- if .Values.singleuser.extraNodeAffinity.preferred -}}
-{{ .Values.singleuser.extraNodeAffinity.preferred | toYaml | trimSuffix "\n" }}
+{{- if .Values.singleuser.extraNodeAffinity.preferred }}
+{{- .Values.singleuser.extraNodeAffinity.preferred | toYaml | trimSuffix "\n" | nindent 0 }}
 {{- end }}
 {{- end }}
 
@@ -68,6 +66,67 @@
 {{- if .Values.singleuser.extraPodAntiAffinity.preferred -}}
 {{ .Values.singleuser.extraPodAntiAffinity.preferred | toYaml | trimSuffix "\n" }}
 {{- end }}
+{{- end }}
+
+
+
+{{- /*
+  jupyterhub.userAffinity:
+    It is used by user-placeholder to set the same affinity on them as the
+    spawned user pods spawned by kubespawner.
+*/}}
+{{- define "jupyterhub.userAffinity" -}}
+
+{{- $dummy := set . "nodeAffinityRequired" (include "jupyterhub.userNodeAffinityRequired" .) -}}
+{{- $dummy := set . "podAffinityRequired" (include "jupyterhub.userPodAffinityRequired" .) -}}
+{{- $dummy := set . "podAntiAffinityRequired" (include "jupyterhub.userPodAntiAffinityRequired" .) -}}
+{{- $dummy := set . "nodeAffinityPreferred" (include "jupyterhub.userNodeAffinityPreferred" .) -}}
+{{- $dummy := set . "podAffinityPreferred" (include "jupyterhub.userPodAffinityPreferred" .) -}}
+{{- $dummy := set . "podAntiAffinityPreferred" (include "jupyterhub.userPodAntiAffinityPreferred" .) -}}
+{{- $dummy := set . "hasNodeAffinity" (or .nodeAffinityRequired .nodeAffinityPreferred) -}}
+{{- $dummy := set . "hasPodAffinity" (or .podAffinityRequired .podAffinityPreferred) -}}
+{{- $dummy := set . "hasPodAntiAffinity" (or .podAntiAffinityRequired .podAntiAffinityPreferred) -}}
+
+{{- if .hasNodeAffinity -}}
+nodeAffinity:
+  {{- if .nodeAffinityRequired }}
+  requiredDuringSchedulingIgnoredDuringExecution:
+    nodeSelectorTerms:
+      {{- .nodeAffinityRequired | nindent 6 }}
+  {{- end }}
+
+  {{- if .nodeAffinityPreferred }}
+  preferredDuringSchedulingIgnoredDuringExecution:
+    {{- .nodeAffinityPreferred | nindent 4 }}
+  {{- end }}
+{{- end }}
+
+{{- if .hasPodAffinity }}
+podAffinity:
+  {{- if .podAffinityRequired }}
+  requiredDuringSchedulingIgnoredDuringExecution:
+    {{- .podAffinityRequired | nindent 4 }}
+  {{- end }}
+
+  {{- if .podAffinityPreferred }}
+  preferredDuringSchedulingIgnoredDuringExecution:
+    {{- .podAffinityPreferred | nindent 4 }}
+  {{- end }}
+{{- end }}
+
+{{- if .hasPodAntiAffinity }}
+podAntiAffinity:
+  {{- if .podAntiAffinityRequired }}
+  requiredDuringSchedulingIgnoredDuringExecution:
+    {{- .podAntiAffinityRequired | nindent 4 }}
+  {{- end }}
+
+  {{- if .podAntiAffinityPreferred }}
+  preferredDuringSchedulingIgnoredDuringExecution:
+    {{- .podAntiAffinityPreferred | nindent 4 }}
+  {{- end }}
+{{- end }}
+
 {{- end }}
 
 

@@ -192,3 +192,48 @@ component: {{ include "jupyterhub.componentLabel" . }}
 }
 {{- end }}
 {{- end }}
+
+
+{{- /*
+  jupyterhub.resources:
+    The resource request of a singleuser.
+*/}}
+{{- define "jupyterhub.resources" -}}
+{{- $r1 := .Values.singleuser.cpu.guarantee -}}
+{{- $r2 := .Values.singleuser.memory.guarantee -}}
+{{- $r3 := .Values.singleuser.extraResource.guarantees -}}
+{{- $r := or $r1 $r2 $r3 -}}
+{{- $l1 := .Values.singleuser.cpu.limit -}}
+{{- $l2 := .Values.singleuser.memory.limit -}}
+{{- $l3 := .Values.singleuser.extraResource.limits -}}
+{{- $l := or $l1 $l2 $l3 -}}
+{{- if $r -}}
+requests:
+  {{- if $r1 }}
+  cpu: {{ .Values.singleuser.cpu.guarantee }}
+  {{- end }}
+  {{- if $r2 }}
+  memory: {{ .Values.singleuser.memory.guarantee }}
+  {{- end }}
+  {{- if $r3 }}
+  {{- range $key, $value := .Values.singleuser.extraResource.guarantees }}
+  {{ $key | quote }}: {{ $value | quote }}
+  {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- if $l }}
+limits:
+  {{- if $l1 }}
+  cpu: {{ .Values.singleuser.cpu.limit }}
+  {{- end }}
+  {{- if $l2 }}
+  memory: {{ .Values.singleuser.memory.limit }}
+  {{- end }}
+  {{- if $l3 }}
+  {{- range $key, $value := .Values.singleuser.extraResource.limits }}
+  {{ $key | quote }}: {{ $value | quote }}
+  {{- end }}
+  {{- end }}
+{{- end }}
+{{- end }}

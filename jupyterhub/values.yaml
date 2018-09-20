@@ -236,6 +236,9 @@ scheduling:
         memory: 256Mi
   podPriority:
     enabled: false
+  userPlaceholder:
+    enabled: true
+    replicas: 0
   corePods:
     nodeAffinity:
       matchNodePurpose: prefer

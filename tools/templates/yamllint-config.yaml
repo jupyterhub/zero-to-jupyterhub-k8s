@@ -44,7 +44,7 @@ rules:
   octal-values:
     forbid-implicit-octal: false
     forbid-explicit-octal: false
-  trailing-spaces: enable
+  trailing-spaces: disable
   truthy:
     level: warning
 
