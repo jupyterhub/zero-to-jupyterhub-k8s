@@ -3,9 +3,49 @@ Utility methods for use in jupyterhub_config.py and dynamic subconfigs.
 
 Methods here can be imported by extraConfig in values.yaml
 """
+from collections import Mapping
+from functools import lru_cache
 import os
-import sys
+
 import yaml
+
+
+# memoize so we only load config once
+@lru_cache()
+def _load_config():
+    """Load configuration from disk
+
+    Memoized to only load once
+    """
+    cfg = {}
+    for source in ('config', 'secret'):
+        path = f"/etc/jupyterhub/{source}/values.yaml"
+        if os.path.exists(path):
+            print(f"Loading {path}")
+            with open(path) as f:
+                values = yaml.safe_load(f)
+            cfg = _merge_dictionaries(cfg, values)
+        else:
+            print(f"No config at {path}")
+    return cfg
+
+
+def _merge_dictionaries(a, b):
+    """Merge two dictionaries recursively.
+
+    Simplified From https://stackoverflow.com/a/7205107
+    """
+    merged = a.copy()
+    for key in b:
+        if key in a:
+            if isinstance(a[key], Mapping) and isinstance(b[key], Mapping):
+                merged[key] = _merge_dictionaries(a[key], b[key])
+            else:
+                merged[key] = b[key]
+        else:
+            merged[key] = b[key]
+    return merged
+
 
 def get_config(key, default=None):
     """
@@ -13,22 +53,15 @@ def get_config(key, default=None):
 
     Parses everything as YAML, so lists and dicts are available too
     """
-    path = os.path.join('/etc/jupyterhub/config', key)
-    try:
-        with open(path) as f:
-            data = yaml.safe_load(f)
-            return data
-    except FileNotFoundError:
-        return default
+    value = _load_config()
+    # resolve path in yaml
+    for level in key.split('.'):
+        if level not in value:
+            return default
+        else:
+            value = value[level]
+    return value
 
-def get_secret(key, default=None):
-    """Get a secret from /etc/jupyterhub/secret"""
-    path = os.path.join('/etc/jupyterhub/secret', key)
-    try:
-        with open(path) as f:
-            return f.read().strip()
-    except FileNotFoundError:
-        return default
 
 def set_config_if_not_none(cparent, name, key):
     """
