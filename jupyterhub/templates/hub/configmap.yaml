@@ -6,6 +6,9 @@ metadata:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 data:
 {{- $values := merge dict .Values -}}
+{{- /* include top-level release and chart info */ -}}
+{{- $_ := set $values "Release" .Release }}
+{{- $_ := set $values "Chart" .Chart }}
 {{- /* trim secret values. Update here if new secrets are added! */ -}}
 {{- $_ := set $values "proxy" (omit $values.proxy "secretToken" "https.manual") -}}
 {{- $_ := set $values.proxy "https" (omit $values.proxy.https "manual") -}}
