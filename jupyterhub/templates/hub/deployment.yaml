@@ -108,6 +108,8 @@ spec:
             {{- .Values.hub.resources | toYaml | trimSuffix "\n" | nindent 12 }}
           imagePullPolicy: {{ .Values.hub.imagePullPolicy }}
           env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
             {{- if .Values.hub.cookieSecret }}
             - name: JPY_COOKIE_SECRET
               valueFrom:
