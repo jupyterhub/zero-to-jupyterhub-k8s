@@ -13,7 +13,7 @@ data:
 {{- $_ := set $values.auth "state" (omit $values.auth.state "cryptoKey") -}}
 {{- range $key, $service := $values.hub.services -}}
   {{- if $service.apiToken -}}
-    {{- $_ := set $values.hub.services $key (omit (pluck $key | first) "apiToken") -}}
+    {{- $_ := set $values.hub.services $key (omit $service "apiToken") -}}
   {{- end -}}
 {{- end }}
   values.yaml: |
