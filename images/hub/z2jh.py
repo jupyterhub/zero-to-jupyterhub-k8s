@@ -52,10 +52,16 @@ def get_config(key, default=None):
     Find a config item of a given name & return it
 
     Parses everything as YAML, so lists and dicts are available too
+
+    get_config("a.b.c") returns config['a']['b']['c']
     """
     value = _load_config()
     # resolve path in yaml
     for level in key.split('.'):
+        if not isinstance(value, dict):
+            # a parent is a scalar or null,
+            # can't resolve full path
+            return default
         if level not in value:
             return default
         else:
