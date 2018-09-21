@@ -40,6 +40,16 @@ def camelCaseify(s):
     return re.sub(r"_([a-z])", lambda m: m.group(1).upper(), s)
 
 
+# configure the hub db connection
+db_type = get_config('hub.db.type')
+if db_type == 'sqlite-pvc':
+    c.JupyterHub.db_url = "sqlite:///jupyterhub.sqlite"
+elif db_type == "sqlite-memory":
+    c.JupyterHub.db_url = "sqlite://"
+else:
+    set_config_if_not_none(c.JupyterHub, "db_url", "hub.db_url")
+
+
 for trait, cfg_key in (
     # Max number of servers that can be spawning at any one time
     ('concurrent_spawn_limit', None),
@@ -69,16 +79,13 @@ c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
 for trait, cfg_key in (
     ('start_timeout', None),
     ('image_pull_policy', None),
-    ('image_pull_secrets', 'imagePullSecretName'), # FIXME
     ('events_enabled', 'events'),
     ('extra_labels', None),
     ('extra_annotations', None),
     ('uid', None),
     ('fs_gid', None),
     ('service_account', 'serviceAccountName'),
-    ('scheduler_name', 'scheduler-name'), # FIXME
     ('storage_extra_labels', 'storage.extraLabels'),
-    ('priority_class_name', 'priority-class-name'), # FIXME
     ('tolerations', None),
     ('node_selector', None),
     ('node_affinity_required', None),
@@ -109,6 +116,16 @@ if image:
         image = "{}:{}".format(image, tag)
 
     c.KubeSpawner.image_spec = image
+
+if get_config('singleuser.imagePullSecret.enabled'):
+    c.KubeSpawner.image_pull_secrets = 'singleuser-image-credentials'
+
+# scheduling:
+release_name = get_config('Release.Name')
+if get_config('scheduling.userScheduler.enabled'):
+    c.KubeSpawner.scheduler_name = "{}-user-scheduler".format(release_name)
+if get_config('scheduling.podPriority.enabled'):
+    c.KubeSpawner.priority_class_name = "{}-default-priority".format(release_name)
 
 
 # Configure dynamically provisioning pvc
@@ -310,8 +327,6 @@ for name, service in get_config('hub.services', {}).items():
         service['api_token'] = api_token
     c.JupyterHub.services.append(service)
 
-
-set_config_if_not_none(c.JupyterHub, 'db_url', 'hub.db_url')
 
 set_config_if_not_none(c.Spawner, 'cmd', 'singleuser.cmd')
 set_config_if_not_none(c.Spawner, 'default_url', 'singleuser.defaultUrl')
