@@ -127,6 +127,44 @@ if get_config('scheduling.userScheduler.enabled'):
 if get_config('scheduling.podPriority.enabled'):
     c.KubeSpawner.priority_class_name = "{}-default-priority".format(release_name)
 
+# add node-purpose affinity
+match_node_purpose = get_config('scheduling.userPods.nodeAffinity.matchNodePurpose')
+if match_node_purpose:
+    node_selector = dict(
+        matchExpressions=[
+            dict(
+                key="hub.jupyter.org/node-purpose",
+                operator="In",
+                values=["user"],
+            )
+        ],
+    )
+    if match_node_purpose == 'prefer':
+        c.KubeSpawner.node_affinity_preferred.append(
+            dict(
+                weight=100,
+                preference=node_selector,
+            ),
+        )
+    elif match_node_purpose == 'require':
+        c.KubeSpawner.node_afinity_required.append(node_selector)
+    else:
+        raise ValueError("Unrecognized value for matchNodePurpose: %r" % match_node_purpose)
+
+# add dedicated-node toleration
+for key in (
+    'hub.jupyter.org/dedicated',
+    # workaround GKE not supporting / in initial node taints
+    'hub.jupyter.org_dedicated',
+):
+    c.KubeSpawner.extra_tolerations.append(
+        dict(
+            key=key,
+            operator='Equal',
+            value='user',
+            effect='NoSchedule',
+        )
+    )
 
 # Configure dynamically provisioning pvc
 storage_type = get_config('singleuser.storage.type')
