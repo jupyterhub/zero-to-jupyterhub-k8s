@@ -121,11 +121,10 @@ if get_config('singleuser.imagePullSecret.enabled'):
     c.KubeSpawner.image_pull_secrets = 'singleuser-image-credentials'
 
 # scheduling:
-release_name = get_config('Release.Name')
 if get_config('scheduling.userScheduler.enabled'):
-    c.KubeSpawner.scheduler_name = "{}-user-scheduler".format(release_name)
+    c.KubeSpawner.scheduler_name = os.environ['HELM_RELEASE_NAME'] + "-user-scheduler"
 if get_config('scheduling.podPriority.enabled'):
-    c.KubeSpawner.priority_class_name = "{}-default-priority".format(release_name)
+    c.KubeSpawner.priority_class_name = os.environ['HELM_RELEASE_NAME'] + "-default-priority"
 
 # add node-purpose affinity
 match_node_purpose = get_config('scheduling.userPods.nodeAffinity.matchNodePurpose')
