@@ -13,6 +13,8 @@ data:
 {{- $_ := set $values "proxy" (omit $values.proxy "secretToken" "https.manual") -}}
 {{- $_ := set $values.proxy "https" (omit $values.proxy.https "manual") -}}
 {{- $_ := set $values "hub" (omit $values.hub "cookieSecret") -}}
+{{- /* make a copy of values.auth to avoid modifying the original */ -}}
+{{- $_ := set $values "auth" (merge dict .Values.auth) -}}
 {{- $_ := set $values.auth "state" (omit $values.auth.state "cryptoKey") -}}
 {{- range $key, $service := $values.hub.services -}}
   {{- if $service.apiToken -}}
