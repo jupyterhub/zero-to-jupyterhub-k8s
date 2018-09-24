@@ -186,13 +186,8 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
 .. note::
 
-   Azure AKS is still in **preview**, and not all features might work as
-   intended. In particular,
-
-   1. You have to `not use RBAC <security.html#use-role-based-access-control-rbac>`_, since AKS does not support it
-      yet.
-   2. You should skip step 2 (granting RBAC rights) with the "initialization"
-      section :ref:`when setting up helm <helm-rbac>`.
+   If you create the cluster using the Azure Portal you must enable RBAC.
+   RBAC is enabled by default when using the command line tools.
 
 
 Congrats. Now that you have your Kubernetes cluster running, it's time to
