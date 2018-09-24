@@ -92,22 +92,6 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
        for your Azure account in order to make sure you don't accidentally
        spend more than you wish to.
 
-4. Enable the cloud APIs required before creating a cluster.
-
-   The following commands enable various Azure tools that we'll need in
-   creating and managing the JupyterHub.
-
-   .. code-block:: bash
-
-      az provider register --name Microsoft.Network --wait
-      az provider register --name Microsoft.Compute --wait
-      az provider register --name Microsoft.Storage --wait
-      az provider register --name Microsoft.ContainerService --wait
-
-   .. note::
-
-      Each of these commands may take up to several minutes to complete.
-
 5. Choose a cluster name.
 
    In the following steps we'll run commands that ask you to input a cluster
