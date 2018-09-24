@@ -145,7 +145,8 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
      what you are using your cluster for and how much RAM/CPU each of your users need.
      There is a `list of all possible node sizes <https://docs.microsoft.com/en-us/azure/cloud-services/cloud-services-sizes-specs>`_
      for you to choose from, but not all might be available in your location.
-   * This will install ther default version of Kubernetes. You can pass ``--kubernetes-version`` to install a different version.
+     If you get an error whilst creating the cluster you can try changing either the region or the node size.
+   * This will install the default version of Kubernetes. You can pass ``--kubernetes-version`` to install a different version.
 
    This should take a few minutes and provide you with a working Kubernetes cluster!
 
