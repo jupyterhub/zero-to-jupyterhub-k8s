@@ -43,7 +43,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
      to log in.
 
 
-2. Activate the correct subscription. Azure uses the concept
+1. Activate the correct subscription. Azure uses the concept
    of **subscriptions** to manage spending. You can
    get a list of subscriptions your account has access to by running:
 
@@ -60,7 +60,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
       az account set -s <YOUR-CHOSEN-SUBSCRIPTION-NAME>
 
 
-3. Create a resource group. Azure uses the concept of
+1. Create a resource group. Azure uses the concept of
    **resource groups** to group related resources together.
    We need to create a resource group in a given data center location. We will create
    computational resources *within* this resource group.
@@ -72,27 +72,27 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
                    --location=centralus \
                    --output table
 
-  where:
+   where:
 
-  * ``--name`` specifies the name of your resource group. We recommend using something
-    that uniquely identifies this hub. For example, if you are creating a resource group
-    for UC Berkeley's 2018 Spring Data100 Course, you may give it a
-    ``<RESOURCE-GROUP-NAME>`` of ``ucb_2018sp_data100_hub``.
-  * ``--location`` specifies the location of the data center you want your resource to be in.
-    In this case, we used the ``centralus`` location. For other options, see the
-    `Azure list of locations that support AKS
-    <https://docs.microsoft.com/en-us/azure/aks/container-service-quotas#region-availability>`_.
-  * ``--output table`` specifies that the output should be in human readable
-    format, rather than the default JSON output. We shall use this with most
-    commands when executing them by hand.
+   * ``--name`` specifies the name of your resource group. We recommend using something
+     that uniquely identifies this hub. For example, if you are creating a resource group
+     for UC Berkeley's 2018 Spring Data100 Course, you may give it a
+     ``<RESOURCE-GROUP-NAME>`` of ``ucb_2018sp_data100_hub``.
+   * ``--location`` specifies the location of the data center you want your resource to be in.
+     In this case, we used the ``centralus`` location. For other options, see the
+     `Azure list of locations that support AKS
+     <https://docs.microsoft.com/en-us/azure/aks/container-service-quotas#region-availability>`_.
+   * ``--output table`` specifies that the output should be in human readable
+     format, rather than the default JSON output. We shall use this with most
+     commands when executing them by hand.
 
-    .. note::
+   .. note::
 
        Consider `setting a cloud budget <https://docs.microsoft.com/en-us/partner-center/set-an-azure-spending-budget-for-your-customers>`_
        for your Azure account in order to make sure you don't accidentally
        spend more than you wish to.
 
-5. Choose a cluster name.
+1. Choose a cluster name.
 
    In the following steps we'll run commands that ask you to input a cluster
    name. We recommend using something descriptive and short. We'll refer to
@@ -105,7 +105,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
       mkdir <CLUSTER-NAME>
       cd <CLUSTER-NAME>
 
-6. Create an ssh key to secure your cluster.
+1. Create an ssh key to secure your cluster.
 
    .. code-block:: bash
 
@@ -121,7 +121,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
       This command will also print out something to your terminal screen. You
       don't need to do anything with this text.
 
-7. Create an AKS cluster.
+1. Create an AKS cluster.
 
    The following command will request a Kubernetes cluster within the resource
    group that we created earlier.
@@ -150,7 +150,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
    This should take a few minutes and provide you with a working Kubernetes cluster!
 
-8. If you're using the Azure CLI locally, install `kubectl <https://kubernetes.io/docs/reference/kubectl/overview/>`_, a tool
+1. If you're using the Azure CLI locally, install `kubectl <https://kubernetes.io/docs/reference/kubectl/overview/>`_, a tool
    for accessing the Kubernetes API from the commandline:
 
    .. code-block:: bash
@@ -159,7 +159,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
    Note: kubectl is already installed in Azure Cloud Shell.
 
-9. Get credentials from Azure for ``kubectl`` to work:
+1. Get credentials from Azure for ``kubectl`` to work:
 
    .. code-block:: bash
 
@@ -168,14 +168,14 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
                    --resource-group <RESOURCE-GROUP-NAME> \
                    --output table
 
-  where:
+   where:
 
-  * ``--name`` is the name you gave your cluster in step 7
-  * ``--resource-group`` is the ResourceGroup you created in step 4
+   * ``--name`` is the name you gave your cluster in step 7
+   * ``--resource-group`` is the ResourceGroup you created in step 4
 
-  This automatically updates your Kubernetes client configuration file.
+   This automatically updates your Kubernetes client configuration file.
 
-10. Check if your cluster is fully functional
+1. Check if your cluster is fully functional
 
    .. code-block:: bash
 
