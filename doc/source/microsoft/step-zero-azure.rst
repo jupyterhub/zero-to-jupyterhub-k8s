@@ -53,6 +53,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
    Pick the subscription you want to use for creating the cluster, and set that
    as your default.
+   If you only have one subscription you can ignore this step.
 
    .. code-block:: bash
 
@@ -187,6 +188,8 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
   * ``--name`` is the name you gave your cluster in step 7
   * ``--resource-group`` is the ResourceGroup you created in step 4
+
+  This automatically updates your Kubernetes client configuration file.
 
 10. Check if your cluster is fully functional
 
