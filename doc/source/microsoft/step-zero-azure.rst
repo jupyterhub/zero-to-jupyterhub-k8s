@@ -3,6 +3,12 @@
 Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)
 ----------------------------------------------------------------
 
+You can create a Kubernetes cluster `either through the Azure portal website, or using the Azure command line tools <https://docs.microsoft.com/en-us/azure/aks/>`_.
+
+This page describes the commands required to setup a Kubernetes cluster using the command line.
+If you prefer to use the Azure portal see the `Azure Kubernetes Service quickstart <https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough-portal>`_.
+
+
 1. Prepare your Azure shell environment. You have two options, one is to use
    the Azure interactive shell, the other is to install the Azure command-line
    tools locally. Instructions for each are below.
