@@ -42,10 +42,10 @@ spec:
             secretName: {{ .Values.proxy.https.secret.name }}
       {{- end }}
       {{- if $manualHTTPS }}
+            secretName: proxy-manual-tls
       volumes:
         - name: tls-secret
           secret:
-            secretName: manual-tls-proxy-{{ .Release.Name }}
       {{- end }}
       containers:
         - name: chp
