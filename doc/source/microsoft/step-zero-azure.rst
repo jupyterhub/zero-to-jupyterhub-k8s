@@ -133,7 +133,6 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
                     --ssh-key-value ssh-key-<CLUSTER-NAME>.pub \
                     --node-count 3 \
                     --node-vm-size Standard_D2s_v3 \
-                    --kubernetes-version 1.8.2 \
                     --output table
 
    where:
@@ -146,7 +145,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
      what you are using your cluster for and how much RAM/CPU each of your users need.
      There is a `list of all possible node sizes <https://docs.microsoft.com/en-us/azure/cloud-services/cloud-services-sizes-specs>`_
      for you to choose from, but not all might be available in your location.
-   * ``--kubernetes-version`` is the version of Kubernetes we want to use.
+   * This will install ther default version of Kubernetes. You can pass ``--kubernetes-version`` to install a different version.
 
    This should take a few minutes and provide you with a working Kubernetes cluster!
 
