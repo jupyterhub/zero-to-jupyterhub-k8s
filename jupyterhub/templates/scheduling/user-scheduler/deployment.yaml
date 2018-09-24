@@ -15,7 +15,6 @@ spec:
       labels:
         {{- /* Changes here will cause the Deployment to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
-        hub.jupyter.org/pod-kind: "core"
       annotations:
         # This lets us autorestart when the configmap changes!
         checksum/config-map: {{ include (print $.Template.BasePath "/scheduling/user-scheduler/configmap.yaml") . | sha256sum }}
