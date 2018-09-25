@@ -48,6 +48,12 @@ hub:
       memory: 512Mi
   services: {}
   imagePullPolicy: IfNotPresent
+  imagePullSecret:
+    enabled: false
+    registry:
+    username:
+    email:
+    password:
   pdb:
     enabled: true
     minAvailable: 1
