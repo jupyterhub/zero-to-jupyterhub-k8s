@@ -284,7 +284,6 @@ This example is equivalent to that given in the
             filter: '({login_attr}={login})'
             user: 'ldap_search_user_technical_account'
             password: 'secret'
-            dnAttribute: 'cn'
           templates:
             - 'uid={username},ou=people,dc=wikimedia,dc=org'
             - 'uid={username},ou=developers,dc=wikimedia,dc=org'
@@ -292,6 +291,7 @@ This example is equivalent to that given in the
             searchBase: 'ou=people,dc=wikimedia,dc=org'
             escape: False
             attribute: 'sAMAccountName'
+            dnAttribute: 'cn'
         allowedGroups:
           - 'cn=researcher,ou=groups,dc=wikimedia,dc=org'
           - 'cn=operations,ou=groups,dc=wikimedia,dc=org'
