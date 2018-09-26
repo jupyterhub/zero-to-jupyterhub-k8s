@@ -127,7 +127,7 @@ of users can access it. You could use a single pod with two containers.
 * One that receives information from the authentication container, and
   does something fancy with it (maybe it runs a python process).
 
-This is useful because it lets you compatmentalize the components of the
+This is useful because it lets you compartmentalize the components of the
 service that you want to run, which makes things easier to manage and
 keeps things more stable.
 
@@ -191,7 +191,7 @@ Persistent Volume Claim
 Persistent Volume Claims are a way to have persistent storage without
 being tied down to one specific computer or machine. Kubernetes is
 about that flexibility, and that means that we don't want to lock ourselves
-in to a particular operating system just because our files are already
+into a particular operating system just because our files are already
 on it. Persistent Volume Claims help deal with this problem by knowing
 how to convert files between disk types (e.g., AWS vs. Google disks).
 
@@ -280,6 +280,6 @@ Receives traffic from the proxy pod. It has 3 main running processes:
 2. A "KubeSpawner" that talks to the Kubernetes API and tells it to spawn
    pods for users if one doesn't already exist. KubeSpawner will tell
    Kubernetes to create a pod for a new user, then it will tell the
-   the Proxy Pod that the user’s pod has been created.
+   Proxy Pod that the user’s pod has been created.
 3. An admin panel that has information about who has pods created, and
    what kind of usage exists on the cluster.
