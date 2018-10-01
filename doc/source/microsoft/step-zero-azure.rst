@@ -9,7 +9,7 @@ This page describes the commands required to setup a Kubernetes cluster using th
 If you prefer to use the Azure portal see the `Azure Kubernetes Service quickstart <https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough-portal>`_.
 
 
-1. Prepare your Azure shell environment. You have two options, one is to use
+#. Prepare your Azure shell environment. You have two options, one is to use
    the Azure interactive shell, the other is to install the Azure command-line
    tools locally. Instructions for each are below.
 
@@ -43,7 +43,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
      to log in.
 
 
-1. Activate the correct subscription. Azure uses the concept
+#. Activate the correct subscription. Azure uses the concept
    of **subscriptions** to manage spending. You can
    get a list of subscriptions your account has access to by running:
 
@@ -60,7 +60,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
       az account set -s <YOUR-CHOSEN-SUBSCRIPTION-NAME>
 
 
-1. Create a resource group. Azure uses the concept of
+#. Create a resource group. Azure uses the concept of
    **resource groups** to group related resources together.
    We need to create a resource group in a given data center location. We will create
    computational resources *within* this resource group.
@@ -92,7 +92,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
        for your Azure account in order to make sure you don't accidentally
        spend more than you wish to.
 
-1. Choose a cluster name.
+#. Choose a cluster name.
 
    In the following steps we'll run commands that ask you to input a cluster
    name. We recommend using something descriptive and short. We'll refer to
@@ -105,7 +105,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
       mkdir <CLUSTER-NAME>
       cd <CLUSTER-NAME>
 
-1. Create an ssh key to secure your cluster.
+#. Create an ssh key to secure your cluster.
 
    .. code-block:: bash
 
@@ -121,7 +121,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
       This command will also print out something to your terminal screen. You
       don't need to do anything with this text.
 
-1. Create an AKS cluster.
+#. Create an AKS cluster.
 
    The following command will request a Kubernetes cluster within the resource
    group that we created earlier.
@@ -150,7 +150,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
    This should take a few minutes and provide you with a working Kubernetes cluster!
 
-1. If you're using the Azure CLI locally, install `kubectl <https://kubernetes.io/docs/reference/kubectl/overview/>`_, a tool
+#. If you're using the Azure CLI locally, install `kubectl <https://kubernetes.io/docs/reference/kubectl/overview/>`_, a tool
    for accessing the Kubernetes API from the commandline:
 
    .. code-block:: bash
@@ -159,7 +159,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
    Note: kubectl is already installed in Azure Cloud Shell.
 
-1. Get credentials from Azure for ``kubectl`` to work:
+#. Get credentials from Azure for ``kubectl`` to work:
 
    .. code-block:: bash
 
@@ -175,7 +175,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
    This automatically updates your Kubernetes client configuration file.
 
-1. Check if your cluster is fully functional
+#. Check if your cluster is fully functional
 
    .. code-block:: bash
 
