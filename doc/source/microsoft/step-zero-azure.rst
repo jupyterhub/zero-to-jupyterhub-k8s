@@ -190,6 +190,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
    If you create the cluster using the Azure Portal you must enable RBAC.
    RBAC is enabled by default when using the command line tools.
 
+   If you use the Azure interactive shell the included version of Helm (2.10) has a known bug so the Secure Helm step in the :ref:`setup-helm` section of this guide will not work. Either skip this step, or download the latest version of Helm.
 
 Congrats. Now that you have your Kubernetes cluster running, it's time to
 begin :ref:`creating-your-jupyterhub`.
