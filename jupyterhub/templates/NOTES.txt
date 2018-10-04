@@ -18,3 +18,14 @@ Note that this is still an alpha release! If you have questions, feel free to
   1. Read the guide at https://z2jh.jupyter.org
   2. Chat with us at https://gitter.im/jupyterhub/jupyterhub
   3. File issues at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
+
+{{- if .Values.hub.extraConfigMap }}
+
+DEPRECATION: hub.extraConfigMap is deprecated in jupyterhub chart 0.7.
+Use top-level `custom` instead:
+
+---
+custom:
+{{- (merge .Values.custom .Values.hub.extraConfigMap) | toYaml | nindent 2}}
+---
+{{- end }}

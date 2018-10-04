@@ -22,7 +22,7 @@ properties:
 
           Changing this value will all user logins to be invalidated. If this secret leaks,
           *immediately* change it to something else, or user data can be compromised
-          
+
           ```sh
           # to generate a value, run
           openssl rand -hex 32
@@ -273,7 +273,6 @@ properties:
           it to something else, or user data can be compromised
     required:
       - secretToken
-
 
   auth:
     type: object
@@ -662,3 +661,19 @@ properties:
                   ```
                   hub.jupyter.org/node-purpose=user
                   ```
+  custom:
+    type: object
+    description: |
+      Additional values to pass to the Hub.
+      JupyterHub will not itself look at these,
+      but you can read values in your own custom config via `hub.extraConfig`.
+      For example:
+
+      ```yaml
+      custom:
+        myHost: "https://example.horse"
+      hub:
+        extraConfig:
+          myConfig.py: |
+            c.MyAuthenticator.host = get_config("custom.myHost")
+      ```
