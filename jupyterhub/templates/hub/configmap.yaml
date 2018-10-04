@@ -10,7 +10,7 @@ data:
 {{- /* make a copy of values.auth to avoid modifying the original */ -}}
 {{- $_ := set $values "auth" (merge dict .Values.auth) }}
 {{- $_ := set $values.auth "state" (omit $values.auth.state "cryptoKey") }}
-{{- $_ := set $values "hub" (omit $values.hub "cookieSecret") -}}
+{{- $_ := set $values "hub" (omit $values.hub "cookieSecret" "extraEnv" "extraConfigMap") -}}
 {{- range $key, $service := $values.hub.services }}
   {{- if $service.apiToken }}
     {{- $_ := set $values.hub.services $key (omit $service "apiToken") }}
@@ -21,3 +21,6 @@ data:
 {{- $_ := set $values.singleuser "imagePullSecret" (omit .Values.singleuser.imagePullSecret "password") }}
   values.yaml: |
     {{- $values | toYaml | nindent 4 }}
+{{- range $key, $value := .Values.hub.extraConfigMap }}
+  custom.{{ $key }}: {{ toJson $value | quote }}
+{{- end }}
