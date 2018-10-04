@@ -200,12 +200,16 @@ properties:
             - Passing parameters to an authenticator or spawner that can be directly customized
               by environment variables (rarer)
       extraConfig:
-        type: string
+        type: object
         description: |
           Arbitrary extra python based configuration that should be in `jupyterhub_config.py`.
 
           This is the *escape hatch* - if you want to configure JupyterHub to do something specific
-          that is not present here as an option, you can just write the raw Python to do it here.
+          that is not present here as an option, you can write the raw Python to do it here.
+
+          extraConfig is a *dict*, so there can be multiple configuration snippets
+          under different names.
+          The configuration sections are run in alphabetical order.
 
           Non-exhaustive examples of things you can do here:
             - Subclass authenticator / spawner to do a custom thing
@@ -219,9 +223,10 @@ properties:
           For example:
             ```yaml
             hub:
-              extraConfig: |
-                c.JupyterHub.something = 'something'
-                c.Spawner.somethingelse = 'something else'
+              extraConfig:
+                myConfig.py: |
+                  c.JupyterHub.something = 'something'
+                  c.Spawner.somethingelse = 'something else'
             ```
 
           No validation of this python is performed! If you make a mistake here, it will probably
