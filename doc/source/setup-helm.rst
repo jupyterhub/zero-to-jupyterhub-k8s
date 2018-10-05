@@ -5,7 +5,7 @@ Setting up Helm
 
 `Helm <https://helm.sh/>`_, the package manager for Kubernetes, is a useful tool
 for: installing, upgrading and managing applications on a Kubernetes cluster.
-Helm packages are called *charts*. We will be install and manage JupyterHub on
+Helm packages are called *charts*. We will be installing and managing JupyterHub on
 our Kubernetes cluster with a Helm chart.
 
 Helm has two parts: a client (`helm`) and a server (`tiller`). Tiller runs
