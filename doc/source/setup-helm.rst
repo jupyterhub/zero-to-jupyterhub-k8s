@@ -85,13 +85,13 @@ by running:
    helm version
 
 It should in less then a minute, when `tiller` on the cluster is ready, be able
-to provide output like below. Make sure you have at least version 2.9.1 and that
+to provide output like below. Make sure you have at least version 2.11.0 and that
 the client (`helm`) and server version (`tiller`) is matching!
 
 .. code-block:: bash
 
-   Client: &version.Version{SemVer:"v2.10.0", GitCommit:"9ad53aac42165a5fadc6c87be0dea6b115f93090", GitTreeState:"clean"}
-   Server: &version.Version{SemVer:"v2.10.0", GitCommit:"9ad53aac42165a5fadc6c87be0dea6b115f93090", GitTreeState:"clean"}
+   Client: &version.Version{SemVer:"v2.11.0", GitCommit:"2e55dbe1fdb5fdb96b75ff144a339489417b146b", GitTreeState:"clean"}
+   Server: &version.Version{SemVer:"v2.11.0", GitCommit:"2e55dbe1fdb5fdb96b75ff144a339489417b146b", GitTreeState:"clean"}
 
 .. note::
 
