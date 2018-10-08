@@ -56,6 +56,10 @@ spec:
       securityContext:
         runAsUser: {{ .Values.hub.uid }}
         fsGroup: {{ .Values.hub.fsGid }}
+      {{- if .Values.hub.imagePullSecret.enabled }}
+      imagePullSecrets:
+        - name: hub-image-credentials
+      {{- end }}  
       containers:
         {{- if .Values.hub.extraContainers }}
         {{- .Values.hub.extraContainers | toYaml | trimSuffix "\n" | nindent 8 }}
