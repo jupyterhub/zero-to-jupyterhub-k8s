@@ -36,7 +36,7 @@ To create OAuth credentials on GitHub, follow these steps:
 * Make sure you're on the "OAuth Apps" tab, then click "New OAuth App"
 * Fill out the forms (you'll need your hub address) and generate your ID/Secret.
 
-Below is the structure to use in order to authenticate with GitHub.
+To enable GitHub authentication, add the following to your `config.yml`:
 
 .. code-block:: yaml
 
@@ -46,6 +46,8 @@ Below is the structure to use in order to authenticate with GitHub.
           clientId: "y0urg1thubc1ient1d"
           clientSecret: "an0ther1ongs3cretstr1ng"
           callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
+
+Make sure that the `callbackUrl` matches the one you set in GitHub.
 
 
 Giving access to organizations on GitHub

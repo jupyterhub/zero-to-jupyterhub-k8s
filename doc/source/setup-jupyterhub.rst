@@ -11,10 +11,12 @@ and related :term:`Kubernetes resources <kubernetes resource>` using a
 Prepare configuration file
 --------------------------
 
-In this step we prepare a `YAML <https://en.wikipedia.org/wiki/YAML>`_
-configuration file that we will refer to as `config.yaml`. It will contain
-:term:`Helm values` that we provide to a JupyterHub :term:`Helm chart` developed
-specifically together with this guide. Helm charts contains :term:`templates
+In this step we will prepare a `YAML <https://en.wikipedia.org/wiki/YAML>`_
+configuration file that we will refer to as `config.yaml`. It will contain the multiple
+:term:`Helm values` to be provided to a JupyterHub :term:`Helm chart` developed
+specifically together with this guide. 
+
+Helm charts contains :term:`templates
 <helm template>` that with provided values will render to :term:`Kubernetes
 resources <kubernetes resource>` to be installed in a Kubernetes cluster. This
 config file will provide the values to be used by our Helm chart.
@@ -187,6 +189,8 @@ Install JupyterHub
 Congratulations! Now that you have basic JupyterHub running, you can `extend it
 <extending-jupyterhub.html>`_ and `optimize it <optimization.html>`_ in many
 ways to meet your needs.
+
+Some examples of customisations are:
 
 * Configure the login to use the account that makes sense to you (Google, GitHub, etc.).
 * Use a suitable pre-built image for the user container or build your own.
