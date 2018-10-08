@@ -262,7 +262,7 @@ prePuller:
       tag: generated-by-chartpress
   continuous:
     enabled: false
-  extraImages: []
+  extraImages: {}
   pause:
     image:
       name: gcr.io/google_containers/pause
