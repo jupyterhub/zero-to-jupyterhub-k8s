@@ -21,7 +21,7 @@ Note that this is still an alpha release! If you have questions, feel free to
 
 {{- if .Values.hub.extraConfigMap }}
 
-DEPRECATION: hub.extraConfigMap is deprecated in jupyterhub chart 0.7.
+DEPRECATION: hub.extraConfigMap is deprecated in jupyterhub chart 0.8.
 Use top-level `custom` instead:
 
 ---
