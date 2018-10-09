@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 data:
-{{- $values := pick .Values "auth" "cull" "custom" "hub" "scheduling" "singleuser" }}
+{{- $values := pick .Values "auth" "cull" "custom" "debug" "hub" "scheduling" "singleuser" }}
 {{- /* trim secret values. Update here if new secrets are added! */ -}}
 {{- /* make a copy of values.auth to avoid modifying the original */ -}}
 {{- $_ := set $values "auth" (merge dict .Values.auth) }}
