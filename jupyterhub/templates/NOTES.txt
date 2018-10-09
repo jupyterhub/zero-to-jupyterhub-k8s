@@ -26,6 +26,6 @@ Use top-level `custom` instead:
 
 ---
 custom:
-{{- (merge .Values.custom .Values.hub.extraConfigMap) | toYaml | nindent 2}}
+{{- (merge dict .Values.custom .Values.hub.extraConfigMap) | toYaml | nindent 2}}
 ---
 {{- end }}
