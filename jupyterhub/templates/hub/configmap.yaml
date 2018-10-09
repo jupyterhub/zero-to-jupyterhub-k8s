@@ -21,5 +21,8 @@ data:
 {{- $_ := set $values.singleuser "imagePullSecret" (omit .Values.singleuser.imagePullSecret "password") }}
 {{- /* preserve behavior of deprecated hub.extraConfigMap */ -}}
 {{- $_ := set $values "custom" (merge dict $values.custom .Values.hub.extraConfigMap) }}
+{{- /* passthrough subset of Chart / Release */ -}}
+{{- $_ := set $values "Chart" (pick Chart "Name" "Version") }}
+{{- $_ := set $values "Release" (pick .Release "Name" "Namespace" "Service") }}
   values.yaml: |
     {{- $values | toYaml | nindent 4 }}

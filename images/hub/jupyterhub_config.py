@@ -72,7 +72,23 @@ c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
 # the hub should listen on all interfaces, so the proxy can access it
 c.JupyterHub.hub_ip = '0.0.0.0'
 
-set_config_if_not_none(c.KubeSpawner, 'common_labels', 'kubespawner.common-labels')
+# implement common labels
+# this duplicates the jupyterhub.commonLabels helper
+common_labels = c.KubeSpawner.common_labels = {}
+common_labels['app'] = get_config(
+    "nameOverride",
+    default=get_config("Chart.Name", "jupyterhub"),
+)
+common_labels['heritage'] = "jupyterhub"
+chart_name = get_config('Chart.Name')
+chart_version = get_config('Chart.Version')
+if chart_name and chart_version:
+    common_labels['chart'] = "{}-{}".format(
+        chart_name, chart_version.replace('+', '_'),
+    )
+release = get_config('Release.Name')
+if release:
+    common_labels['release'] = release
 
 c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
 
