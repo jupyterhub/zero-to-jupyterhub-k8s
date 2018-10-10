@@ -5,12 +5,13 @@ Setting up Helm
 
 `Helm <https://helm.sh/>`_, the package manager for Kubernetes, is a useful tool
 for: installing, upgrading and managing applications on a Kubernetes cluster.
-Helm packages are called *charts*. We will be install and manage JupyterHub on
-our Kubernetes cluster with a Helm chart.
+Helm packages are called *charts*.
+We will be installing and managing JupyterHub on
+our Kubernetes cluster using a Helm chart.
 
 Helm has two parts: a client (`helm`) and a server (`tiller`). Tiller runs
 inside of your Kubernetes cluster as a pod in the kube-system namespace. Tiller
-manages *releases* (installations) and *revisions* (versions) of charts deployed
+manages both, the *releases* (installations) and *revisions* (versions) of charts deployed
 on the cluster. When you run `helm` commands, your local Helm client sends
 instructions to `tiller` in the cluster that in turn make the requested changes.
 
@@ -85,13 +86,13 @@ by running:
    helm version
 
 It should in less then a minute, when `tiller` on the cluster is ready, be able
-to provide output like below. Make sure you have at least version 2.9.1 and that
+to provide output like below. Make sure you have at least version 2.11.0 and that
 the client (`helm`) and server version (`tiller`) is matching!
 
 .. code-block:: bash
 
-   Client: &version.Version{SemVer:"v2.10.0", GitCommit:"9ad53aac42165a5fadc6c87be0dea6b115f93090", GitTreeState:"clean"}
-   Server: &version.Version{SemVer:"v2.10.0", GitCommit:"9ad53aac42165a5fadc6c87be0dea6b115f93090", GitTreeState:"clean"}
+   Client: &version.Version{SemVer:"v2.11.0", GitCommit:"2e55dbe1fdb5fdb96b75ff144a339489417b146b", GitTreeState:"clean"}
+   Server: &version.Version{SemVer:"v2.11.0", GitCommit:"2e55dbe1fdb5fdb96b75ff144a339489417b146b", GitTreeState:"clean"}
 
 .. note::
 

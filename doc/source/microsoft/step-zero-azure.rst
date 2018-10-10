@@ -3,7 +3,13 @@
 Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)
 ----------------------------------------------------------------
 
-1. Prepare your Azure shell environment. You have two options, one is to use
+You can create a Kubernetes cluster `either through the Azure portal website, or using the Azure command line tools <https://docs.microsoft.com/en-us/azure/aks/>`_.
+
+This page describes the commands required to setup a Kubernetes cluster using the command line.
+If you prefer to use the Azure portal see the `Azure Kubernetes Service quickstart <https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough-portal>`_.
+
+
+#. Prepare your Azure shell environment. You have two options, one is to use
    the Azure interactive shell, the other is to install the Azure command-line
    tools locally. Instructions for each are below.
 
@@ -37,7 +43,7 @@ Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)
      to log in.
 
 
-2. Activate the correct subscription. Azure uses the concept
+#. Activate the correct subscription. Azure uses the concept
    of **subscriptions** to manage spending. You can
    get a list of subscriptions your account has access to by running:
 
@@ -47,13 +53,14 @@ Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)
 
    Pick the subscription you want to use for creating the cluster, and set that
    as your default.
+   If you only have one subscription you can ignore this step.
 
    .. code-block:: bash
 
       az account set -s <YOUR-CHOSEN-SUBSCRIPTION-NAME>
 
 
-3. Create a resource group. Azure uses the concept of
+#. Create a resource group. Azure uses the concept of
    **resource groups** to group related resources together.
    We need to create a resource group in a given data center location. We will create
    computational resources *within* this resource group.
@@ -65,43 +72,27 @@ Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)
                    --location=centralus \
                    --output table
 
-  where:
+   where:
 
-  * ``--name`` specifies the name of your resource group. We recommend using something
-    that uniquely identifies this hub. For example, if you are creating a resource group
-    for UC Berkeley's 2018 Spring Data100 Course, you may give it a
-    ``<RESOURCE-GROUP-NAME>`` of ``ucb_2018sp_data100_hub``.
-  * ``--location`` specifies the location of the data center you want your resource to be in.
-    In this case, we used the ``centralus`` location. For other options, see the
-    `Azure list of locations that support AKS
-    <https://docs.microsoft.com/en-us/azure/aks/container-service-quotas#region-availability>`_.
-  * ``--output table`` specifies that the output should be in human readable
-    format, rather than the default JSON output. We shall use this with most
-    commands when executing them by hand.
+   * ``--name`` specifies the name of your resource group. We recommend using something
+     that uniquely identifies this hub. For example, if you are creating a resource group
+     for UC Berkeley's 2018 Spring Data100 Course, you may give it a
+     ``<RESOURCE-GROUP-NAME>`` of ``ucb_2018sp_data100_hub``.
+   * ``--location`` specifies the location of the data center you want your resource to be in.
+     In this case, we used the ``centralus`` location. For other options, see the
+     `Azure list of locations that support AKS
+     <https://docs.microsoft.com/en-us/azure/aks/container-service-quotas#region-availability>`_.
+   * ``--output table`` specifies that the output should be in human readable
+     format, rather than the default JSON output. We shall use this with most
+     commands when executing them by hand.
 
-    .. note::
+   .. note::
 
        Consider `setting a cloud budget <https://docs.microsoft.com/en-us/partner-center/set-an-azure-spending-budget-for-your-customers>`_
        for your Azure account in order to make sure you don't accidentally
        spend more than you wish to.
 
-4. Enable the cloud APIs required before creating a cluster.
-
-   The following commands enable various Azure tools that we'll need in
-   creating and managing the JupyterHub.
-
-   .. code-block:: bash
-
-      az provider register --name Microsoft.Network --wait
-      az provider register --name Microsoft.Compute --wait
-      az provider register --name Microsoft.Storage --wait
-      az provider register --name Microsoft.ContainerService --wait
-
-   .. note::
-
-      Each of these commands may take up to several minutes to complete.
-
-5. Choose a cluster name.
+#. Choose a cluster name.
 
    In the following steps we'll run commands that ask you to input a cluster
    name. We recommend using something descriptive and short. We'll refer to
@@ -114,7 +105,7 @@ Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)
       mkdir <CLUSTER-NAME>
       cd <CLUSTER-NAME>
 
-6. Create an ssh key to secure your cluster.
+#. Create an ssh key to secure your cluster.
 
    .. code-block:: bash
 
@@ -130,7 +121,7 @@ Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)
       This command will also print out something to your terminal screen. You
       don't need to do anything with this text.
 
-7. Create an AKS cluster.
+#. Create an AKS cluster.
 
    The following command will request a Kubernetes cluster within the resource
    group that we created earlier.
@@ -142,7 +133,6 @@ Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)
                     --ssh-key-value ssh-key-<CLUSTER-NAME>.pub \
                     --node-count 3 \
                     --node-vm-size Standard_D2s_v3 \
-                    --kubernetes-version 1.8.2 \
                     --output table
 
    where:
@@ -155,11 +145,12 @@ Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)
      what you are using your cluster for and how much RAM/CPU each of your users need.
      There is a `list of all possible node sizes <https://docs.microsoft.com/en-us/azure/cloud-services/cloud-services-sizes-specs>`_
      for you to choose from, but not all might be available in your location.
-   * ``--kubernetes-version`` is the version of Kubernetes we want to use.
+     If you get an error whilst creating the cluster you can try changing either the region or the node size.
+   * This will install the default version of Kubernetes. You can pass ``--kubernetes-version`` to install a different version.
 
    This should take a few minutes and provide you with a working Kubernetes cluster!
 
-8. If you're using the Azure CLI locally, install `kubectl <https://kubernetes.io/docs/reference/kubectl/overview/>`_, a tool
+#. If you're using the Azure CLI locally, install `kubectl <https://kubernetes.io/docs/reference/kubectl/overview/>`_, a tool
    for accessing the Kubernetes API from the commandline:
 
    .. code-block:: bash
@@ -168,7 +159,7 @@ Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)
 
    Note: kubectl is already installed in Azure Cloud Shell.
 
-9. Get credentials from Azure for ``kubectl`` to work:
+#. Get credentials from Azure for ``kubectl`` to work:
 
    .. code-block:: bash
 
@@ -177,12 +168,14 @@ Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)
                    --resource-group <RESOURCE-GROUP-NAME> \
                    --output table
 
-  where:
+   where:
 
-  * ``--name`` is the name you gave your cluster in step 7
-  * ``--resource-group`` is the ResourceGroup you created in step 4
+   * ``--name`` is the name you gave your cluster in step 7
+   * ``--resource-group`` is the ResourceGroup you created in step 4
 
-10. Check if your cluster is fully functional
+   This automatically updates your Kubernetes client configuration file.
+
+#. Check if your cluster is fully functional
 
    .. code-block:: bash
 
@@ -194,14 +187,10 @@ Step Zero: Kubernetes on Microsoft Azure Container Service (AKS)
 
 .. note::
 
-   Azure AKS is still in **preview**, and not all features might work as
-   intended. In particular,
+   If you create the cluster using the Azure Portal you must enable RBAC.
+   RBAC is enabled by default when using the command line tools.
 
-   1. You have to `not use RBAC <security.html#use-role-based-access-control-rbac>`_, since AKS does not support it
-      yet.
-   2. You should skip step 2 (granting RBAC rights) with the "initialization"
-      section :ref:`when setting up helm <helm-rbac>`.
-
+   If you use the Azure interactive shell the included version of Helm (2.10) has a known bug so the Secure Helm step in the :ref:`setup-helm` section of this guide will not work. Either skip this step, or download the latest version of Helm.
 
 Congrats. Now that you have your Kubernetes cluster running, it's time to
 begin :ref:`creating-your-jupyterhub`.

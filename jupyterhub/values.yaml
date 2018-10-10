@@ -50,6 +50,12 @@ hub:
       memory: 512Mi
   services: {}
   imagePullPolicy: IfNotPresent
+  imagePullSecret:
+    enabled: false
+    registry:
+    username:
+    email:
+    password:
   pdb:
     enabled: true
     minAvailable: 1
@@ -258,7 +264,7 @@ prePuller:
       tag: generated-by-chartpress
   continuous:
     enabled: false
-  extraImages: []
+  extraImages: {}
   pause:
     image:
       name: gcr.io/google_containers/pause
