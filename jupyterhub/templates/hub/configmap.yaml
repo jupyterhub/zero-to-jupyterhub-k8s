@@ -253,7 +253,7 @@ data:
   singleuser.scheduler-name: "{{ .Release.Name }}-user-scheduler"
   {{- end }}
   {{- if .Values.scheduling.podPriority.enabled }}
-  singleuser.priority_class_name: "{{ .Release.Name }}-default-priority"
+  singleuser.priority-class-name: "{{ .Release.Name }}-default-priority"
   {{- end }}
 
   {{- /* KubeSpawner */}}
