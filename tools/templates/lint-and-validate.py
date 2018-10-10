@@ -82,7 +82,6 @@ def lint(yamllint_config, values, kubernetes_version, output_dir, debug):
             'kubeval', filename,
             '--kubernetes-version', kubernetes_version,
             '--strict',
-            '--schema-location', 'https://raw.githubusercontent.com/consideRatio'
         ])
 
     print()
