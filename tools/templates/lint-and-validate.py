@@ -21,18 +21,33 @@ import os
 import sys
 import argparse
 import glob
+import pipes
 import subprocess
 
 os.chdir(os.path.dirname(sys.argv[0]))
+
+def check_call(cmd, **kwargs):
+    """Run a subcommand and exit if it fails"""
+    try:
+        subprocess.check_call(cmd, **kwargs)
+    except subprocess.CalledProcessError as e:
+        print(
+            "`{}` exited with status {}".format(
+                ' '.join(map(pipes.quote, cmd)),
+                e.returncode,
+            ),
+            file=sys.stderr,
+        )
+        sys.exit(e.returncode)
 
 def lint(yamllint_config, values, kubernetes_version, output_dir, debug):
     """Calls `helm lint`, `helm template`, `yamllint` and `kubeval`."""
 
     print("### Clearing output directory")
-    subprocess.check_call([
+    check_call([
         'mkdir', '-p', output_dir,
     ])
-    subprocess.check_call([
+    check_call([
         'rm', '-rf', output_dir + '/*',
     ])
 
@@ -44,7 +59,7 @@ def lint(yamllint_config, values, kubernetes_version, output_dir, debug):
     ]
     if debug:
         helm_lint_cmd.append('--debug')
-    subprocess.check_call(helm_lint_cmd)
+    check_call(helm_lint_cmd)
 
     print("### 2/4 - helm template")
     helm_template_cmd = [
@@ -54,16 +69,16 @@ def lint(yamllint_config, values, kubernetes_version, output_dir, debug):
     ]
     if debug:
         helm_template_cmd.append('--debug')
-    subprocess.check_call(helm_template_cmd)
+    check_call(helm_template_cmd)
 
     print("### 3/4 - yamllint")
-    subprocess.check_call([
+    check_call([
         'yamllint', '-c', yamllint_config, output_dir
     ])
 
     print("### 4/4 - kubeval")
     for filename in glob.iglob(output_dir + '/**/*.yaml', recursive=True):
-        subprocess.check_call([
+        check_call([
             'kubeval', filename,
             '--kubernetes-version', kubernetes_version,
             '--strict',
