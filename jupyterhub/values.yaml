@@ -98,7 +98,7 @@ proxy:
   lego:
     image:
       name: jetstack/kube-lego
-      tag: 0.1.6
+      tag: 0.1.7
       pullPolicy: IfNotPresent
     resources: {}
   labels: {}
