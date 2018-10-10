@@ -1,8 +1,8 @@
-{{- $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled) }}
-{{- $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt")) }}
-{{- $offloadHTTPS := (and $HTTPS (eq .Values.proxy.https.type "offload")) }}
-{{- $manualHTTPS := (and $HTTPS (eq .Values.proxy.https.type "manual")) -}}
-{{- $manualHTTPSwithsecret := (and .Values.proxy.https.enabled (eq .Values.proxy.https.type "secret")) -}}
+{{- $HTTPS := .Values.proxy.https.enabled -}}
+{{- $autoHTTPS := and $HTTPS (and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
+{{- $offloadHTTPS := and $HTTPS (eq .Values.proxy.https.type "offload") -}}
+{{- $manualHTTPS := and $HTTPS (eq .Values.proxy.https.type "manual") -}}
+{{- $manualHTTPSwithsecret := and $HTTPS (eq .Values.proxy.https.type "secret") -}}
 apiVersion: v1
 kind: Service
 metadata:

@@ -1,5 +1,5 @@
-{{- $manualHTTPS := (and .Values.proxy.https.enabled (eq .Values.proxy.https.type "manual")) -}}
-{{- $manualHTTPSwithsecret := (and .Values.proxy.https.enabled (eq .Values.proxy.https.type "secret")) -}}
+{{- $manualHTTPS := and .Values.proxy.https.enabled (eq .Values.proxy.https.type "manual") -}}
+{{- $manualHTTPSwithsecret := and .Values.proxy.https.enabled (eq .Values.proxy.https.type "secret") -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,17 +35,16 @@ spec:
       {{- end }}
       nodeSelector: {{ toJson .Values.proxy.nodeSelector }}
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
-      {{- if $manualHTTPSwithsecret }}
-      volumes:
-        - name: tls-secret
-          secret:
-            secretName: {{ .Values.proxy.https.secret.name }}
-      {{- end }}
       {{- if $manualHTTPS }}
       volumes:
         - name: tls-secret
           secret:
-            secretName: manual-tls-proxy-{{ .Release.Name }}
+            secretName: proxy-manual-tls
+      {{- else if $manualHTTPSwithsecret }}
+      volumes:
+        - name: tls-secret
+          secret:
+            secretName: {{ .Values.proxy.https.secret.name }}
       {{- end }}
       containers:
         - name: chp

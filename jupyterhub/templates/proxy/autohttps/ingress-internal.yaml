@@ -1,5 +1,5 @@
-{{- $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled) }}
-{{- $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt")) }}
+{{- $HTTPS := .Values.proxy.https.enabled -}}
+{{- $autoHTTPS := and $HTTPS (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts -}}
 {{- if $autoHTTPS -}}
 # This is solely used to provide auto HTTPS with our bundled kube-lego
 apiVersion: extensions/v1beta1
