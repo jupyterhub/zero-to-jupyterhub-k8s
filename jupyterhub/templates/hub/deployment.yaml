@@ -112,6 +112,10 @@ spec:
             {{- .Values.hub.resources | toYaml | trimSuffix "\n" | nindent 12 }}
           imagePullPolicy: {{ .Values.hub.imagePullPolicy }}
           env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+            - name: HELM_RELEASE_NAME
+              value: {{ .Release.Name | quote }}
             {{- if .Values.hub.cookieSecret }}
             - name: JPY_COOKIE_SECRET
               valueFrom:

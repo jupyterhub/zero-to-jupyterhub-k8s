@@ -4,11 +4,21 @@ proxy:
     type: NodePort
     nodePorts:
       http: 31212
+  chp:
+    resources:
+      requests:
+        memory: 0
+        cpu: 0
 
 hub:
   cookieSecret: 1470700e01f77171c2c67b12130c25081dfbdf2697af8c2f2bd05621b31100bf
   db:
     type: sqlite-memory
+  resources:
+    requests:
+      memory: 0
+      cpu: 0
+
 
 singleuser:
   storage:
