@@ -11,7 +11,8 @@ data:
 {{- $_ := set $values "auth" (merge dict .Values.auth) }}
 {{- $_ := set $values.auth "state" (omit $values.auth.state "cryptoKey") }}
 {{- $_ := set $values "hub" (omit $values.hub "cookieSecret" "extraEnv" "extraConfigMap") -}}
-{{- range $key, $service := $values.hub.services }}
+{{- $_ := set $values.hub "services" dict }}
+{{- range $key, $service := .Values.hub.services }}
   {{- if $service.apiToken }}
     {{- $_ := set $values.hub.services $key (omit $service "apiToken") }}
   {{- end }}
