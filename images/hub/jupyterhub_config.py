@@ -163,6 +163,8 @@ if match_node_purpose:
         )
     elif match_node_purpose == 'require':
         c.KubeSpawner.node_afinity_required.append(node_selector)
+    elif match_node_purpose == 'ignore':
+        pass
     else:
         raise ValueError("Unrecognized value for matchNodePurpose: %r" % match_node_purpose)
 
