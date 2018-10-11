@@ -11,18 +11,20 @@ install:
 - ./ci/install.sh
 script:
 - python3 tools/templates/lint-and-validate.py
-- chartpress --commit-range ${TRAVIS_COMMIT_RANGE}
+- |
+  # render & publish chart
+  if [[
+    "$TRAVIS_BRANCH" == "master" &&
+    "$KUBE_VERSION" == "1.10.0" &&
+    "$TRAVIS_PULL_REQUEST" == "false"
+  ]]; then
+    ./ci/deploy.sh
+  else
+    chartpress --commit-range ${TRAVIS_COMMIT_RANGE}
+  fi
 - git diff
 - ./ci/test.sh
 
-deploy:
-  provider: script
-  skip_cleanup: true
-  script: ./ci/deploy.sh
-  on:
-    branch:
-    - master
-    condition: "$KUBE_VERSION = 1.9.4"
 env:
   matrix:
     - KUBE_VERSION=1.10.0
