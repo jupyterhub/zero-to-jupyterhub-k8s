@@ -159,6 +159,7 @@ OAuth 2.0 protocol, implemented by
 While OpenID Connect endpoint discovery is not supported by oauthentiator,
 you can still configure JupyterHub to authenticate with OpenID Connect providers
 by specifying all endpoints in GenericOAuthenticator.
+By setting `login_service` you can customize the label on the login button.
 
 Here's an example for authenticating against `keycloak <http://www.keycloak.org/docs/3.4/securing_apps/index.html#endpoints>`_,
 after you `configure an OIDC Client <http://www.keycloak.org/docs/3.4/server_admin/index.html#oidc-clients>`_
@@ -175,6 +176,7 @@ and obtain the confidential client credentials.
         custom:
           className: oauthenticator.generic.GenericOAuthenticator
           config:
+            login_service: "keycloak"
             client_id: "y0urc1logonc1ient1d"
             client_secret: "an0ther1ongs3cretstr1ng"
             token_url: https://${host}/auth/realms/${realm}/protocol/openid-connect/token
