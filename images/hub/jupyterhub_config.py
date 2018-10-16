@@ -47,7 +47,7 @@ if db_type == 'sqlite-pvc':
 elif db_type == "sqlite-memory":
     c.JupyterHub.db_url = "sqlite://"
 else:
-    set_config_if_not_none(c.JupyterHub, "db_url", "hub.db_url")
+    set_config_if_not_none(c.JupyterHub, "db_url", "hub.db.url")
 
 
 for trait, cfg_key in (
