@@ -228,7 +228,7 @@ elif storage_type == 'static':
 c.KubeSpawner.volumes.extend(get_config('singleuser.storage.extraVolumes', []))
 c.KubeSpawner.volume_mounts.extend(get_config('singleuser.storage.extraVolumeMounts', []))
 
-set_config_if_not_none(c.KubeSpawner, 'lifecycle_hooks', 'singleuser.lifecycle-hooks')
+set_config_if_not_none(c.KubeSpawner, 'lifecycle_hooks', 'singleuser.lifecycleHooks')
 
 # Gives spawned containers access to the API of the hub
 # FIXME: KubeSpawner duplicate hub_connect config should be deprecated and removed
@@ -386,7 +386,7 @@ for name, service in get_config('hub.services', {}).items():
 set_config_if_not_none(c.Spawner, 'cmd', 'singleuser.cmd')
 set_config_if_not_none(c.Spawner, 'default_url', 'singleuser.defaultUrl')
 
-cloud_metadata = get_config('singleuser.cloud-metadata', {})
+cloud_metadata = get_config('singleuser.cloudMetadata', {})
 
 if not cloud_metadata.get('enabled', False):
     # Use iptables to block access to cloud metadata by default
