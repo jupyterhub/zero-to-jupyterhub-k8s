@@ -102,14 +102,14 @@ for trait, cfg_key in (
     ('fs_gid', None),
     ('service_account', 'serviceAccountName'),
     ('storage_extra_labels', 'storage.extraLabels'),
-    ('tolerations', None),
+    ('tolerations', 'extraTolerations'),
     ('node_selector', None),
-    ('node_affinity_required', None),
-    ('node_affinity_preferred', None),
-    ('pod_affinity_required', None),
-    ('pod_affinity_preferred', None),
-    ('pod_anti_affinity_required', None),
-    ('pod_anti_affinity_preferred', None),
+    ('node_affinity_required', 'extraNodeAffinity.required'),
+    ('node_affinity_preferred', 'extraNodeAffinity.preferred'),
+    ('pod_affinity_required', 'extraPodAffinity.required'),
+    ('pod_affinity_preferred', 'extraPodAffinity.preferred'),
+    ('pod_anti_affinity_required', 'extraPodAntiAffinity.required'),
+    ('pod_anti_affinity_preferred', 'extraPodAntiAffinity.preferred'),
     ('lifecycle_hooks', None),
     ('init_containers', None),
     ('extra_containers', None),
@@ -162,7 +162,7 @@ if match_node_purpose:
             ),
         )
     elif match_node_purpose == 'require':
-        c.KubeSpawner.node_afinity_required.append(node_selector)
+        c.KubeSpawner.node_affinity_required.append(node_selector)
     elif match_node_purpose == 'ignore':
         pass
     else:
@@ -174,7 +174,7 @@ for key in (
     # workaround GKE not supporting / in initial node taints
     'hub.jupyter.org_dedicated',
 ):
-    c.KubeSpawner.extra_tolerations.append(
+    c.KubeSpawner.tolerations.append(
         dict(
             key=key,
             operator='Equal',
