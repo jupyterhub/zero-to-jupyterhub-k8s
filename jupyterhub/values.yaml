@@ -119,8 +119,8 @@ proxy:
       cert:
     secret:
       name: ''
-      key: ''
-      crt: ''
+      key: 'tls.key'
+      crt: 'tls.crt'
     hosts: []
   networkPolicy:
     enabled: false
