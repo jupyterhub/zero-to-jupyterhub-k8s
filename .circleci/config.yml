@@ -14,8 +14,10 @@ jobs:
           keys:
             - cache-pip
       - run:
-          - pip install --upgrade pip setuptools
-          - pip install -r doc/doc-requirements.txt
+          name: Install doc dependencies
+          command: |
+            pip install --upgrade pip setuptools
+            pip install -r doc/doc-requirements.txt
       - save_cache:
           key: cache-pip
           paths:
