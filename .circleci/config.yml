@@ -13,7 +13,9 @@ jobs:
       - restore_cache:
           keys:
             - cache-pip
-      - run: pip install --user -r doc/doc-requirements.txt
+      - run:
+          - pip install --upgrade pip setuptools
+          - pip install -r doc/doc-requirements.txt
       - save_cache:
           key: cache-pip
           paths:
@@ -29,7 +31,6 @@ jobs:
       - store_artifacts:
           path: doc/build/html/
           destination: html
-
 
 workflows:
   version: 2
