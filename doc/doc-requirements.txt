@@ -1,0 +1,6 @@
+recommonmark==0.4.0
+pyyaml
+sphinx-copybutton
+alabaster
+alabaster_jupyterhub
+sphinx
