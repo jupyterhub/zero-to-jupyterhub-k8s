@@ -10,18 +10,11 @@ jobs:
       # Python env
       - run: echo "export PATH=~/.local/bin:$PATH" >> $BASH_ENV
 
-      - restore_cache:
-          keys:
-            - cache-pip
       - run:
           name: Install doc dependencies
           command: |
             pip install --upgrade pip setuptools
             pip install -r doc/doc-requirements.txt
-      - save_cache:
-          key: cache-pip
-          paths:
-            - ~/.cache/pip
 
       # Build the docs
       - run:
