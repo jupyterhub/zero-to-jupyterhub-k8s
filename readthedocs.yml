@@ -1,5 +1,5 @@
 name: jhubk8s
 type: sphinx
-requirements_file: doc/requirements.txt
+requirements_file: doc/doc-requirements.txt
 python:
   version: 3
