@@ -767,6 +767,12 @@ properties:
         type: list
         description: |
           List of hosts to route requests to the proxy.
+      pathSuffix:
+        type: string
+        description: |
+          Suffix added to Ingress's routing path pattern.
+
+          Specify `*` if your ingress matches path by glob pattern.
       tls:
         description: |
           TLS configurations for Ingress.
