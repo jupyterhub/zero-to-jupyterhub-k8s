@@ -744,6 +744,38 @@ properties:
                   ```
                   hub.jupyter.org/node-purpose=user
                   ```
+  ingress:
+    type: object
+    properties:
+      enabled:
+        type: boolean
+        description: |
+          Enable the creation of a Kubernetes Ingress to proxy-public service.
+
+          See [Advanced Topics — Zero to JupyterHub with Kubernetes 0.7.0 documentation]
+          (https://zero-to-jupyterhub.readthedocs.io/en/stable/advanced.html#ingress)
+          for more details.
+      annotations:
+        type: object
+        description: |
+          Annotations to apply to the Ingress.
+
+          See [the Kubernetes
+          documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+          for more details about annotations.
+      hosts:
+        type: list
+        description: |
+          List of hosts to route requests to the proxy.
+      tls:
+        description: |
+          TLS configurations for Ingress.
+
+          See [the Kubernetes
+          documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls)
+          for more details about annotations.
+
+
   custom:
     type: object
     description: |
