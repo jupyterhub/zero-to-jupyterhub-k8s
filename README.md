@@ -7,12 +7,12 @@
 **This is under active development and subject to change.**
 
 This repo contains resources, such as **Helm charts** and the
-[**Zero to JupyterHub Guide**](https://zero-to-jupyterhub.readthedocs.io/en/stable/), which
+[**Zero to JupyterHub Guide**](https://z2jh.jupyter.org), which
 help you to deploy JupyterHub on Kubernetes.
 
 ## Zero to JupyterHub with Kubernetes Guide
 
-The [Zero to JupyterHub Guide](https://zero-to-jupyterhub.readthedocs.io/en/stable/) gives
+The [Zero to JupyterHub Guide](https://z2jh.jupyter.org) gives
 user-friendly steps to create a new JupyterHub deployment using Kubernetes.
 
 For additional information about JupyterHub, such as a technical overview,
