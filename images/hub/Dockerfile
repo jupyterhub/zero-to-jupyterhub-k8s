@@ -10,6 +10,7 @@ RUN apt-get update && \
       libcurl4-openssl-dev \
       libssl-dev \
       build-essential \
+      sqlite3 \
       && \
     apt-get purge && apt-get clean
 
