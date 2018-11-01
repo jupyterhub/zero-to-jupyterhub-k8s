@@ -337,6 +337,49 @@ properties:
 
           Defaults to 1000, which is the gid of the `jovyan` user that is present in the
           default hub image.
+      service:
+        type: object
+        description: |
+          Object to configure the service the JupyterHub will be exposed on by the Kubernetes server.
+        properties:
+          type:
+            type: string
+            enum:
+              - ClusterIP
+              - NodePort
+              - LoadBalancer
+              - ExternalName
+            description: |
+              The Kubernetes ServiceType to be used.
+
+              The default type is `ClusterIP`.
+              See the [Kubernetes docs](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
+              to learn more about service types.
+          loadBalancerIP:
+            type: string
+            description: |
+              The public IP address the hub service should be exposed on.
+
+              This sets the IP address that should be used by the LoadBalancer for exposing the hub service.
+              Set this if you want the hub service to be provided with a fixed external IP address instead of a dynamically acquired one.
+              Useful to ensure a stable IP to access to the hub with, for example if you have reserved an IP address in your network to communicate with the JupyterHub.
+              
+              To be provided like:
+              ```
+              hub: 
+                service:
+                  loadBalancerIP: xxx.xxx.xxx.xxx
+              ```
+          ports:
+            type: object
+            description: |
+              Object to configure the ports the hub service will be deployed on.
+            properties:
+              nodePort:
+                type: integer
+                description: |
+                  The nodePort to deploy the hub service on.
+                  
   proxy:
     type: object
     properties:
@@ -354,6 +397,56 @@ properties:
           Changing this value will cause the proxy and hub pods to restart. It is good security
           practice to rotate these values over time. If this secret leaks, *immediately* change
           it to something else, or user data can be compromised
+      service:
+        type: object
+        description: |
+          Object to configure the service the JupyterHub's proxy will be exposed on by the Kubernetes server.
+        properties:
+          type: 
+            type: string
+            enum:
+              - ClusterIP
+              - NodePort
+              - LoadBalancer
+              - ExternalName
+            description: |
+              See `hub.service.type`.
+          labels:
+            type: object
+            description: |
+              Extra labels to add to the proxy service.
+
+              See the [Kubernetes docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+              to learn more about labels.
+          annotations:
+            type: object
+            description: |
+              Annotations to apply to the service that is exposing the proxy.
+
+              See [the Kubernetes
+              documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+              for more details about annotations.
+          nodePorts:
+            type: object
+            description: |
+              Object to set NodePorts to expose the service on for http and https.
+
+              See [the Kubernetes
+              documentation](https://kubernetes.io/docs/concepts/services-networking/service/#nodeport)
+              for more details about NodePorts.
+            properties:
+              http:
+                type: integer
+                description: |
+                  The HTTP port the proxy-public service should be exposed on.
+              https:
+                type: integer
+                description: |
+                  The HTTPS port the proxy-public service should be exposed on.
+          loadBalancerIP:
+            type: string
+            description: |
+              See `hub.service.loadBalancerIP`
     required:
       - secretToken
 

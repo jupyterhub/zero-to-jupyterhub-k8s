@@ -5,6 +5,7 @@ hub:
     type: ClusterIP
     ports:
       nodePort:
+    loadBalancerIP:
   baseUrl: /
   cookieSecret:
   publicURL:
@@ -81,6 +82,7 @@ proxy:
     nodePorts:
       http:
       https:
+    loadBalancerIP:
   chp:
     image:
       name: jupyterhub/configurable-http-proxy
