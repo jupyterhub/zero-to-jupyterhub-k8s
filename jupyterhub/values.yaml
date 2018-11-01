@@ -113,7 +113,7 @@ proxy:
   https:
     enabled: true
     type: letsencrypt
-    #type: letsencrypt, manual, secret
+    #type: letsencrypt, manual, offload, secret
     letsencrypt:
       contactEmail: ''
     manual:
