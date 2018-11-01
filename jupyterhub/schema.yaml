@@ -354,9 +354,59 @@ properties:
           Changing this value will cause the proxy and hub pods to restart. It is good security
           practice to rotate these values over time. If this secret leaks, *immediately* change
           it to something else, or user data can be compromised
+      https:
+        type: object
+        description: |
+        properties:
+          enabled:
+            type: boolean
+            description: |
+          type:
+            type: string
+            enum:
+              - letsencrypt
+              - manual
+              - offload
+              - secret
+            description: |
+              Sets the type of HTTPS encryption that is used.
+              The type decides on which ports that are used for communication via HTTPS. Setting this to `secret` sets the type to manual HTTPS with a secret.
+              Setting https.type to letsencrypt together with setting https.enabled to true and providing https.hosts will enable automatic https certificate provision (referred to as autohttps).
+          letsencrypt:
+            type: object
+            description: |
+            properties:
+              contactEmail:
+                type: string
+                description: |
+          manual:
+            type: object
+            description: |
+            properties:
+              key:
+                type: string
+                description: |
+              cert:
+                type: string
+                description: |
+          secret:
+            type: object
+            description: |
+            properties:
+              name:
+                type: string
+                description: |
+              key:
+                type: string
+                description: |
+              crt:
+                type: string
+                description: |
+          hosts:
+            type: list
+            description: |
     required:
       - secretToken
-
   auth:
     type: object
     properties:
