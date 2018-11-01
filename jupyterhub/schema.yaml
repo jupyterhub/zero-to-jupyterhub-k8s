@@ -357,10 +357,13 @@ properties:
       https:
         type: object
         description: |
+          Object for customizing the settings for HTTPS used by the JupyterHub's proxy.
+          For more information on configuring HTTPS for your JupyterHub, see the [HTTPS section in our security guide](https://zero-to-jupyterhub.readthedocs.io/en/stable/security.html?highlight=security#https)
         properties:
           enabled:
             type: boolean
             description: |
+              Indicator to set whether HTTPS should be enabled or not on the proxy. Defaults to `true` if the https object is provided.
           type:
             type: string
             enum:
@@ -369,42 +372,76 @@ properties:
               - offload
               - secret
             description: |
-              Sets the type of HTTPS encryption that is used.
-              The type decides on which ports that are used for communication via HTTPS. Setting this to `secret` sets the type to manual HTTPS with a secret.
-              Setting https.type to letsencrypt together with setting https.enabled to true and providing https.hosts will enable automatic https certificate provision (referred to as autohttps).
+              The type of HTTPS encryption that is used.
+              Decides on which ports and network policies are used for communication via HTTPS. Setting this to `secret` sets the type to manual HTTPS with a secret that has to be provided in the `https.secret` object.
+              Defaults to `letsencrypt`.
           letsencrypt:
             type: object
-            description: |
             properties:
               contactEmail:
                 type: string
                 description: |
+                  The contact email to be used for automatically provisioned HTTPS certificates by Let's Encrypt. For more information see [Set up automatic HTTPS](https://zero-to-jupyterhub.readthedocs.io/en/stable/security.html?highlight=security#set-up-automatic-https).
+                  Required for automatic HTTPS.
           manual:
             type: object
             description: |
+              Object for providing own certificates for manual HTTPS configuration. To be provided when setting `https.type` to `manual`.
+              See [Set up manual HTTPS](https://zero-to-jupyterhub.readthedocs.io/en/stable/security.html?highlight=security#set-up-manual-https)
             properties:
               key:
                 type: string
                 description: |
+                  The RSA private key to be used for HTTPS.
+                  To be provided in the form of
+
+                  ```
+                  key: |
+                    -----BEGIN RSA PRIVATE KEY-----
+                    ...
+                    -----END RSA PRIVATE KEY-----
+                  ```
               cert:
                 type: string
                 description: |
+                  The certificate to be used for HTTPS.
+                  To be provided in the form of
+
+                  ```
+                  cert: |
+                    -----BEGIN CERTIFICATE-----
+                    ...
+                    -----END CERTIFICATE-----
+                  ```
           secret:
             type: object
             description: |
+              Secret to be provided when setting `https.type` to `secret`.
             properties:
               name:
                 type: string
                 description: |
+                  Name of the secret
               key:
                 type: string
                 description: |
+                  Path to the private key to be used for HTTPS. 
+                  Example: `'tls.key'`
               crt:
                 type: string
                 description: |
+                  Path to the certificate to be used for HTTPS. 
+                  Example: `'tls.crt'`
           hosts:
             type: list
             description: |
+              You domain in list form.
+              Required for automatic HTTPS. See [Set up automatic HTTPS](https://zero-to-jupyterhub.readthedocs.io/en/stable/security.html?highlight=security#set-up-automatic-https).
+              To be provided like:
+              ```
+              hosts:
+                - <your-domain-name>
+              ```   
     required:
       - secretToken
   auth:
