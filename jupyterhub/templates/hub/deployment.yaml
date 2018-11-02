@@ -170,3 +170,11 @@ spec:
           ports:
             - containerPort: 8081
               name: hub
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: hub
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: hub

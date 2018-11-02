@@ -96,3 +96,11 @@ spec:
               name: proxy-public
             - containerPort: 8001
               name: api
+          livenessProbe:
+            httpGet:
+              path: /_chp_healthz
+              port: proxy-public
+          readinessProbe:
+            httpGet:
+              path: /health # Wait until hub is ready (this is proxied to hub)
+              port: proxy-public
