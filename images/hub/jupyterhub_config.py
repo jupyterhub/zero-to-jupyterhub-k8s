@@ -53,9 +53,6 @@ else:
 for trait, cfg_key in (
     # Max number of servers that can be spawning at any one time
     ('concurrent_spawn_limit', None),
-    # Max number of consecutive failures before the Hub restarts itself
-    # requires jupyterhub 0.9.2
-    ('consecutive_failure_limit', None),
     # Max number of servers to be running at one time
     ('active_server_limit', None),
     # base url prefix
@@ -91,6 +88,14 @@ if release:
     common_labels['release'] = release
 
 c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
+
+# Max number of consecutive failures before the Hub restarts itself
+# requires jupyterhub 0.9.2
+set_config_if_not_none(
+    c.Spawner,
+    'consecutive_failure_limit',
+    'hub.consecutiveFailureLimit',
+)
 
 for trait, cfg_key in (
     ('start_timeout', None),
