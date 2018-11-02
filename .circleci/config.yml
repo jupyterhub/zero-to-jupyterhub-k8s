@@ -4,17 +4,13 @@ jobs:
     docker:
       - image: circleci/python:3.6-stretch
     steps:
-      # Get our data and merge with upstream
-      - run: sudo apt-get update
       - checkout
-      # Python env
-      - run: echo "export PATH=~/.local/bin:$PATH" >> $BASH_ENV
 
+      # Install documentation requirements
       - run:
           name: Install doc dependencies
           command: |
-            pip install --upgrade pip setuptools
-            pip install --user -r doc/doc-requirements.txt
+            sudo pip install -r doc/doc-requirements.txt
 
       # Build the docs
       - run:
