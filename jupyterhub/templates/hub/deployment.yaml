@@ -139,6 +139,21 @@ spec:
                   name: hub-secret
                   key: auth.state.crypto-key
             {{- end }}
+            {{- if .Values.hub.db.password }}
+            {{- if eq .Values.hub.db.type "mysql" }}
+            - name: MYSQL_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: hub-secret
+                  key: hub.db.password
+            {{- else if eq .Values.hub.db.type "postgres" }}
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hub-secret
+                  key: hub.db.password
+            {{- end }}
+            {{- end }}
             {{- if .Values.hub.extraEnv }}
             {{- $extraEnvType := typeOf .Values.hub.extraEnv }}
             {{- /* If we have a list, embed that here directly. This allows for complex configuration from configmap, downward API, etc. */}}

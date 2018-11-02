@@ -263,6 +263,12 @@ properties:
               Connection string when `hub.db.type` is mysql or postgres.
 
               See documentation for `hub.db.type` for more details on the format of this property.
+          password:
+            type:
+              - string
+              - "null"
+            description: |
+              Password for the database when `hub.db.type` is mysql or postgres.
       labels:
         type: object
         description: |
