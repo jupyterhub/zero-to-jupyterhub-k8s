@@ -107,5 +107,5 @@ spec:
               port: proxy-public
           readinessProbe:
             httpGet:
-              path: /health # Wait until hub is ready (this is proxied to hub)
+              path: /health  # Wait until hub is ready (this is proxied to hub)
               port: proxy-public
