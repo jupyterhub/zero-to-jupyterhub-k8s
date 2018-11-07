@@ -17,7 +17,7 @@ spec:
     - host: {{ $host }}
       http:
         paths:
-          - path: {{ $.Values.hub.baseUrl }}
+          - path: {{ $.Values.hub.baseUrl }}{{ $.Values.ingress.pathSuffix }}
             backend:
               serviceName: proxy-public
               servicePort: 80
