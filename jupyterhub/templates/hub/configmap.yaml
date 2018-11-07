@@ -10,6 +10,13 @@ data:
 {{- /* make a copy of values.auth to avoid modifying the original */ -}}
 {{- $_ := set $values "auth" (merge dict .Values.auth) }}
 {{- $_ := set $values.auth "state" (omit $values.auth.state "cryptoKey") }}
+{{- range $key, $auth := .Values.auth }}
+  {{- if typeIs "map[string]interface {}" $auth }}
+    {{- if (or $auth.clientSecret $auth.password) }}
+      {{- $_ := set $values.auth $key (omit $auth "clientSecret" "password") }}
+    {{- end }}
+  {{- end }}
+{{- end }}
 {{- $_ := set $values "hub" (omit $values.hub "cookieSecret" "extraEnv" "extraConfigMap") -}}
 {{- $_ := set $values.hub "services" dict }}
 {{- range $key, $service := .Values.hub.services }}
