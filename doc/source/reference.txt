@@ -10,8 +10,11 @@ chart](https://github.com/jupyterhub/zero-to-jupyterhub-k8s) is configurable by
 values in your `config.yaml`. In this way, you can extend user resources, build off
 of different Docker images, manage security and authentication, and more.
 
+Below is a description of many *but not all* of the configurable values for the
+Helm chart. To see *all* configurable options, inspect their default values
+defined [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/jupyterhub/values.yaml).
+
 ```eval_rst
-Below is a description of the fields that are exposed with the JupyterHub Helm
-chart. For more guided information about some specific things you can do with
+For more guided information about some specific things you can do with
 modifications to the helm chart, see the :ref:`customization-guide`.
 ```
