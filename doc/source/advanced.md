@@ -301,3 +301,10 @@ prePuller:
 
 This snippet will pre-pull the `ubuntu:16.04` image on all nodes, for example. You can
 pre-pull any number of images.
+
+### Specifying suitable hub storage
+
+By default, the hub's sqlite-pvc setting will dynamically create a disk to store the sqlite database.
+It is possible to [configure other storage classes](https://zero-to-jupyterhub.readthedocs.io/en/latest/reference.html?highlight=pvc#hub-db-type) under hub.db.pvc, but make sure to choose one that
+the hub can write quickly and safely to. Slow or higher latency storage classes can cause hub operations to lag which
+may ultimately lead to HTTP errors in user environments.
