@@ -232,10 +232,12 @@ Using ``nbgitpuller`` to synchronize a folder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We recommend using the tool `nbgitpuller
-<https://github.com/jupyterhub/nbgitpuller>`_ to synchronize a folder in your
-user's filesystem with a ``git`` repository whenever a user starts their server.
-Note that this syncing can also trigger by the users pressing a like
-https://your-domain.com/hub/user-redirect?git-pull?repo=https://github.com/consideratio/data-8/masterials-fa17.
+<https://github.com/jupyterhub/nbgitpuller>`_ to synchronize a folder
+in your user's filesystem with a ``git`` repository whenever a user
+starts their server.  This synchronization can also be triggered by
+letting a user visit a link like
+``https://your-domain.com/hub/user-redirect/git-pull?repo=https://github.com/data-8/materials-fa18``
+(e.g., as alternative start url).
 
 To use ``nbgitpuller``, first make sure that you `install it in your Docker
 image <https://github.com/jupyterhub/nbgitpuller#installation>`_. Once this is done,
