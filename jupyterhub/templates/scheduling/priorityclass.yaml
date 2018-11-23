@@ -12,6 +12,6 @@ metadata:
     helm.sh/hook-delete-policy: before-hook-creation
     helm.sh/hook-weight: "-100"
 value: 10
-globalDefault: false
+globalDefault: true
 description: "A default priority higher than user placeholders priority."
 {{- end }}
