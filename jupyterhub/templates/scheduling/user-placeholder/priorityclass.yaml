@@ -6,6 +6,11 @@ metadata:
   name: {{ .Release.Name }}-user-placeholder-priority
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
+  annotations:
+    # The default PriorityClass must be added before the other resources.
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation
+    helm.sh/hook-weight: "-100"
 value: 0
 globalDefault: false
 description: "With a non-negative priority, a pod can trigger a cluster scale up. Placeholder pods should have lower than the other pods though."
