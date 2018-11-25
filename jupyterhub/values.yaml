@@ -247,6 +247,9 @@ scheduling:
         memory: 256Mi
   podPriority:
     enabled: false
+    globalDefault: false
+    defaultPriority: 0
+    userPlaceholderPriority: -10
   userPlaceholder:
     enabled: true
     replicas: 0

@@ -7,11 +7,11 @@ metadata:
     {{- $_ := merge (dict "componentLabel" "default-priority") . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
   annotations:
-    # The default PriorityClass must be added before the other resources.
+    # PriorityClasses must be added before the other resources reference them.
     helm.sh/hook: pre-install,pre-upgrade
     helm.sh/hook-delete-policy: before-hook-creation
     helm.sh/hook-weight: "-100"
-value: 10
-globalDefault: true
+value: {{ .Values.scheduling.podPriority.defaultPriority }}
+globalDefault: {{ .Values.scheduling.podPriority.globalDefault }}
 description: "A default priority higher than user placeholders priority."
 {{- end }}
