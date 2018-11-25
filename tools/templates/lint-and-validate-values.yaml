@@ -303,7 +303,7 @@ ingress:
   annotations:
     mock: mock
   hosts: []
-  tls:
+  tls: []
 
 
 cull:
