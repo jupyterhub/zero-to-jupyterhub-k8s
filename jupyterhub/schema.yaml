@@ -846,14 +846,63 @@ properties:
       podPriority:
         type: object
         description: |
-          Generally available since Kubernetes 1.11, Pod Priority is used to
-          allow real users evict placeholder pods.
+          Pod Priority is used to allow real users evict placeholder pods that
+          in turn triggers a scale up by a cluster autoscaler. So, enabling this
+          option will only make sense if the following conditions are met:
+
+          1. Your Kubernetes cluster has at least version 1.11
+          2. A cluster autoscaler is installed
+          3. user-placeholer pods is configured to get a priority equal or
+             higher than the cluster autoscaler's priority cutoff
+          4. Normal user pods have a higher priority than the user-placeholder
+             pods
+
+          Note that if the default priority cutoff if not configured on cluster
+          autoscaler, it will currently default to 0, and that in the future
+          this is meant to be lowered. If your cloud provider is installing the
+          cluster autoscaler for you, they may also configure this specifically.
+
+          Recommended settings for a cluster autoscaler...
+
+          ... with a priority cutoff of -10 (GKE):
+
+          ```yaml
+          podPriority:
+            enabled: true
+            globalDefault: false
+            defaultPriority: 0
+            userPlaceholderPriority: -10
+          ```
+
+          ... with a priority cutoff of 0:
+
+          ```yaml
+          podPriority:
+            enabled: true
+            globalDefault: true
+            defaultPriority: 10
+            userPlaceholderPriority: 0
+          ```
         properties:
           enabled:
             type: bool
+          globalDefault:
+            type: bool
             description: |
-              Generally available since Kubernetes 1.11, Pod Priority is used to
-              allow real users evict placeholder pods.
+              Warning! This will influence all pods in the cluster.
+
+              The priority a pod usually get is 0. But this can be overridden
+              with a PriorityClass resource if it is declared to be the global
+              default. This configuration option allows for the creation of such
+              global default.
+          defaultPriority:
+            type: int
+            description: |
+              The actual value for the default pod priority.
+          userPlaceholderPriority:
+            type: int
+            description: |
+              The actual value for the user-placeholder pods' priority.
       userPlaceholder:
         type: object
         description: |
