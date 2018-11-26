@@ -1009,6 +1009,7 @@ properties:
 
           Specify `*` if your ingress matches path by glob pattern.
       tls:
+        type: list
         description: |
           TLS configurations for Ingress.
 
