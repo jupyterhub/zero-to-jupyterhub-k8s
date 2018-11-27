@@ -125,6 +125,7 @@ for trait, cfg_key in (
     ('extra_resource_limits', 'extraResource.limits'),
     ('extra_resource_guarantees', 'extraResource.guarantees'),
     ('environment', 'extraEnv'),
+    ('profile_list', None),
 ):
     if cfg_key is None:
         cfg_key = camelCaseify(trait)
