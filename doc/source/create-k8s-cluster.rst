@@ -17,6 +17,7 @@ Choose one option and proceed.
    microsoft/step-zero-azure
    amazon/step-zero-aws
    redhat/step-zero-openshift
+   ibm/step-zero-ibm
 
 .. note::
 
