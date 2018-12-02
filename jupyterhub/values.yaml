@@ -182,7 +182,8 @@ singleuser:
                 - 169.254.169.254/32
   events: true
   extraAnnotations: {}
-  extraLabels: {}
+  extraLabels:
+    hub.jupyter.org/network-access-hub: "true"
   extraEnv: {}
   lifecycleHooks:
   initContainers: []
