@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 
 from tornado.httpclient import AsyncHTTPClient
 from kubernetes import client
@@ -421,5 +422,33 @@ if get_config('debug.enabled', False):
     c.Spawner.debug = True
 
 
-for key, config_py in sorted(get_config('hub.extraConfig', {}).items()):
+extra_config = get_config('hub.extraConfig', {})
+if isinstance(extra_config, str):
+    from textwrap import indent, dedent
+    msg = dedent(
+    """
+    hub.extraConfig should be a dict of strings,
+    but found a single string instead.
+
+    The keys can be anything identifying the
+    block of extra configuration.
+
+    Try this instead:
+
+        hub:
+          extraConfig:
+            myConfig: |
+              {}
+    """
+    )
+    print(
+        msg.format(
+            indent(extra_config, ' ' * 10).lstrip()
+        ),
+        file=sys.stderr
+    )
+    extra_config = {'deprecated string': extra_config}
+
+for key, config_py in sorted(extra_config.items()):
+    print("Loading extra config: %s" % key)
     exec(config_py)
