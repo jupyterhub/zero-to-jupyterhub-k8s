@@ -138,7 +138,7 @@ if image:
     if tag:
         image = "{}:{}".format(image, tag)
 
-    c.KubeSpawner.image_spec = image
+    c.KubeSpawner.image = image
 
 if get_config('singleuser.imagePullSecret.enabled'):
     c.KubeSpawner.image_pull_secrets = 'singleuser-image-credentials'
