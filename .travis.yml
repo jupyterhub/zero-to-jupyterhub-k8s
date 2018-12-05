@@ -8,7 +8,15 @@ services:
 install:
 - pip install --no-cache-dir -r dev-requirements.txt
 - . ci/minikube.env
+- |
+  if [ -f "ci/minikube-$KUBE_VERSION.env" ]; then
+    . "ci/minikube-$KUBE_VERSION.env"
+  fi
 - ./ci/install.sh
+- |
+  if [ -f "ci/install-$KUBE_VERSION.sh" ]; then
+    . "ci/install-$KUBE_VERSION.sh"
+  fi
 script:
 - python3 tools/templates/lint-and-validate.py
 - |
