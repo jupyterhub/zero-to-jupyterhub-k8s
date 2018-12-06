@@ -3,13 +3,10 @@ set -ex
 
 mkdir -p bin
 
-# install nsenter if missing (needed by kube on trusty)
-if ! which nsenter; then
-  curl -L https://github.com/minrk/git-crypt-bin/releases/download/trusty/nsenter > nsenter
-  echo "5652bda3fbea6078896705130286b491b6b1885d7b13bda1dfc9bdfb08b49a2e  nsenter" | shasum -a 256 -c -
-  chmod +x nsenter
-  sudo mv nsenter /usr/local/bin/
-fi
+# nsenter is included on xenial
+
+# install socat (required by helm)
+sudo apt-get update && sudo apt-get install -y socat
 
 # install kubectl, minikube
 # based on https://blog.travis-ci.com/2017-10-26-running-kubernetes-on-travis-ci-with-minikube
