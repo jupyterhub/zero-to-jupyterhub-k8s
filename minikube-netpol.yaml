@@ -1,0 +1,22 @@
+hub:
+  networkPolicy:
+    enabled: true
+
+proxy:
+  networkPolicy:
+    enabled: true
+
+singleuser:
+  networkPolicy:
+    enabled: true
+    # Block all egress apart from DNS and ebi.ac.uk net
+    egress:
+      - ports:
+        - port: 53
+          protocol: UDP
+      - to:
+        - ipBlock:
+            cidr: 193.60.0.0/14
+
+debug:
+  enabled: true

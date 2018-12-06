@@ -15,6 +15,7 @@ script:
 
 env:
   matrix:
+    - KUBE_VERSION=1.12.3
     - KUBE_VERSION=1.10.0
     - KUBE_VERSION=1.9.4
   global:

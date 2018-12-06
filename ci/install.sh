@@ -33,6 +33,24 @@ echo "starting minikube with RBAC"
 sudo CHANGE_MINIKUBE_NONE_USER=true $PWD/bin/minikube start $MINIKUBE_ARGS
 minikube update-context
 
+# If using CNI the node will not be NotReady until a CNI config exists
+if [ "$INSTALL_CALICO" = "1" ]; then
+  echo "installing calico"
+  # https://github.com/projectcalico/calico/issues/1456#issuecomment-422957446
+  kubectl apply -f https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/etcd.yaml
+  kubectl apply -f https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/rbac.yaml
+  curl -sf https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/calico.yaml -O
+  CALICO_ETCD_IP=$(kubectl get service --namespace=kube-system calico-etcd -o jsonpath='{.spec.clusterIP}')
+  sed -i -e "s/10\.96\.232\.136/$CALICO_ETCD_IP/" calico.yaml
+  kubectl apply -f calico.yaml
+
+  echo "waiting for calico"
+  JSONPATH='{.status.numberReady}'
+  until [ "$(kubectl get daemonsets calico-node -n kube-system -o jsonpath="$JSONPATH")" = "1" ]; do
+    sleep 1
+  done
+fi
+
 echo "waiting for kubernetes"
 JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'
 until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do

@@ -19,7 +19,7 @@ fi
 TEST_NAMESPACE=jupyterhub-test
 TEST_URL=http://$IP:31212
 
-helm install --name jupyterhub-test --namespace $TEST_NAMESPACE ./jupyterhub/ -f minikube-config.yaml
+helm install --name jupyterhub-test --namespace $TEST_NAMESPACE ./jupyterhub/ $Z2JH_HELM_ARGS
 
 echo "waiting for servers to become responsive"
 until curl --fail -s $TEST_URL/hub/api; do
