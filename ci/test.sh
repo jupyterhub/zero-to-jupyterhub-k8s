@@ -2,7 +2,20 @@
 
 set -eux
 
-IP=$(ifconfig eth0 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}')
+# Is there a standard interface name?
+for iface in eth0 ens4 enp0s3; do
+    IP=$(ifconfig $iface | grep 'inet addr' | cut -d: -f2 | awk '{print $1}');
+    if [ -n "$IP" ]; then
+        echo "IP: $IP"
+        break
+    fi
+done
+if [ -z "$IP" ]; then
+    echo "Failed to get IP, current interfaces:"
+    ifconfig -a
+    exit 2
+fi
+
 TEST_NAMESPACE=jupyterhub-test
 TEST_URL=http://$IP:31212
 
