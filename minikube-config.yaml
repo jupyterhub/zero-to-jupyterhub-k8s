@@ -18,6 +18,10 @@ hub:
     requests:
       memory: 0
       cpu: 0
+  services:
+    test:
+      admin: true
+      apiToken: 0cc05feaefeeb29179e924ffc6d3886ffacf0d1a28ab225f5c210436ffc5cfd5
 
 
 singleuser:

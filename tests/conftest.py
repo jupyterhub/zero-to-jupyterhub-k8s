@@ -1,6 +1,7 @@
 import os
 import requests
 import pytest
+import yaml
 
 @pytest.fixture(scope='function')
 def delete_user(request_data):
@@ -8,13 +9,16 @@ def delete_user(request_data):
     r = requests.delete(request_data['hub_url'] + f"/users/{request_data['username']}", headers=request_data['headers'])
     r.raise_for_status()
     print(r.status_code)
-    
+
 @pytest.fixture(scope='function')
 def request_data():
-    token = '0cc05feaefeeb29179e924ffc6d3886ffacf0d1a28ab225f5c210436ffc5cfd5'
+    basedir = os.path.dirname(os.path.dirname(__file__))
+    with open(os.path.join(basedir, 'minikube-config.yaml')) as f:
+        y = yaml.load(f)
+    token = y['hub']['services']['test']['apiToken']
     return {
         'token': token,
-        'hub_url': os.environ['HUB_API_URL'],
+        'hub_url': os.getenv('HUB_API_URL', 'http://localhost:31212/hub/api'),
         'headers': {
             'Authorization': f'token {token}'
         },
