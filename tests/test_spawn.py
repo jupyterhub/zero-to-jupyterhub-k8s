@@ -1,4 +1,3 @@
-import os
 import requests
 import pytest
 import time
@@ -8,54 +7,56 @@ import time
 
 API_TIMEOUT = 300
 
-def test_api(request_data):
+
+def test_api(api_request):
     print("asking for the hub's version")
-    r = requests.get(request_data['hub_url'])
+    r = api_request.get('')
     assert r.status_code == 200
     assert r.json() == {"version": "0.9.4"}
 
-def test_api_info(request_data):
+
+def test_api_info(api_request):
     print("asking for the hub information")
-    r = requests.get(request_data['hub_url'] + '/info', headers=request_data['headers'])
+    r = api_request.get('/info')
     assert r.status_code == 200
     result = r.json()
     assert result['spawner']['class'] == 'kubespawner.spawner.KubeSpawner'
 
 
-def test_api_create_user(jupyter_user, request_data):
+def test_api_create_user(api_request, jupyter_user):
     print("creating the testuser")
     # Already created by the jupyter_user fixture
-    r = requests.get(request_data['hub_url'] + f"/users/{jupyter_user}", headers=request_data['headers'])
+    r = api_request.get('/users/' + jupyter_user)
     assert r.status_code == 200
     assert r.json()['name'] == jupyter_user
 
 
-def test_api_list_users(jupyter_user, request_data):
+def test_api_list_users(api_request, jupyter_user):
     print("asking for information")
-    r = requests.get(request_data['hub_url'] + '/users', headers=request_data['headers'])
+    r = api_request.get('/users')
     assert r.status_code == 200
     assert any(u['name'] == jupyter_user for u in r.json())
 
 
-def test_api_request_user_spawn(jupyter_user, request_data):
+def test_api_request_user_spawn(api_request, jupyter_user, request_data):
     print("asking kubespawner to spawn testusers singleuser-server pod")
-    r = requests.post(request_data['hub_url'] + f"/users/{jupyter_user}/server", headers=request_data['headers'])
+    r = api_request.post('/users/' + jupyter_user + '/server')
     assert r.status_code in (201, 202)
     try:
-        server_model = _wait_for_user_to_spawn(jupyter_user, request_data, API_TIMEOUT)
+        server_model = _wait_for_user_to_spawn(api_request, jupyter_user, API_TIMEOUT)
         assert server_model
         r = requests.get(request_data['hub_url'].partition('/hub/api')[0] + server_model['url'] + "api")
         assert r.status_code == 200
         assert 'version' in r.json()
     finally:
-        _delete_server(jupyter_user, request_data, API_TIMEOUT)
+        _delete_server(api_request, jupyter_user, API_TIMEOUT)
 
 
-def _wait_for_user_to_spawn(jupyter_user, request_data, timeout):
+def _wait_for_user_to_spawn(api_request, jupyter_user, timeout):
     t = 0
     while t < timeout:
         # FIXME: This can fail with 503! Make it robuster than this!
-        r = requests.get(request_data['hub_url'] + f"/users/{jupyter_user}", headers=request_data['headers'])
+        r = api_request.get('/users/' + jupyter_user)
         r.raise_for_status()
         user_model = r.json()
 
@@ -73,12 +74,12 @@ def _wait_for_user_to_spawn(jupyter_user, request_data, timeout):
     return False
 
 
-def _delete_server(jupyter_user, request_data, timeout):
-    r = requests.delete(request_data['hub_url'] + f"/users/{jupyter_user}/server", headers=request_data['headers'])
+def _delete_server(api_request, jupyter_user, timeout):
+    r = api_request.delete('/users/' + jupyter_user + '/server')
     assert r.status_code in (202, 204)
     t = 0
     while t < timeout:
-        r = requests.get(request_data['hub_url'] + f"/users/{jupyter_user}", headers=request_data['headers'])
+        r = api_request.get('/users/' + jupyter_user)
         r.raise_for_status()
         user_model = r.json()
         if '' not in user_model['servers']:

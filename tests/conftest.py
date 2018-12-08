@@ -21,14 +21,44 @@ def request_data():
     }
 
 
+class JupyterRequest(object):
+    def __init__(self, request_data):
+        self.request_data = request_data
+
+    def delete(self, api, **kwargs):
+        if 'headers' not in kwargs:
+            kwargs['headers'] = self.request_data['headers']
+        return requests.delete(self.request_data['hub_url'] + api, **kwargs)
+
+    def get(self, api, **kwargs):
+        if 'headers' not in kwargs:
+            kwargs['headers'] = self.request_data['headers']
+        return requests.get(self.request_data['hub_url'] + api, **kwargs)
+
+    def post(self, api, **kwargs):
+        if 'headers' not in kwargs:
+            kwargs['headers'] = self.request_data['headers']
+        return requests.post(self.request_data['hub_url'] + api, **kwargs)
+
+    def put(self, api, **kwargs):
+        if 'headers' not in kwargs:
+            kwargs['headers'] = self.request_data['headers']
+        return requests.put(self.request_data['hub_url'] + api, **kwargs)
+
+
 @pytest.fixture(scope='function')
-def jupyter_user(request_data):
+def api_request(request_data):
+    return JupyterRequest(request_data)
+
+
+@pytest.fixture(scope='function')
+def jupyter_user(api_request):
     """
     A temporary unique JupyterHub user
     """
     username = 'testuser-' + str(uuid.uuid4())
-    r = requests.post(request_data['hub_url'] + '/users/' + username, headers=request_data['headers'])
+    r = api_request.post('/users/' + username)
     assert r.status_code == 201
     yield username
-    r = requests.delete(request_data['hub_url'] + '/users/' + username, headers=request_data['headers'])
+    r = api_request.delete('/users/' + username)
     assert r.status_code == 204
