@@ -29,3 +29,6 @@ done
 
 echo "getting jupyterhub version"
 curl -s $TEST_URL/hub/api | grep version
+
+echo "running tests"
+pytest

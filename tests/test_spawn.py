@@ -1,6 +1,7 @@
 import os
 import requests
 import pytest
+import subprocess
 import time
 
 # Makes heavy use of JupyterHub's API:
