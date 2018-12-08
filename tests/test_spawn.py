@@ -1,3 +1,4 @@
+import os
 import requests
 import pytest
 import time
@@ -48,6 +49,35 @@ def test_api_request_user_spawn(api_request, jupyter_user, request_data):
         r = requests.get(request_data['hub_url'].partition('/hub/api')[0] + server_model['url'] + "api")
         assert r.status_code == 200
         assert 'version' in r.json()
+    finally:
+        _delete_server(api_request, jupyter_user, API_TIMEOUT)
+
+
+@pytest.mark.skipif(os.getenv('DISABLE_TEST_NETPOL') == '1',
+                    reason="DISABLE_TEST_NETPOL set")
+def test_singleuser_netpol(api_request, jupyter_user, request_data):
+    print("asking kubespawner to spawn a singleuser-server pod to test network policies")
+    r = api_request.post('/users/' + jupyter_user + '/server')
+    assert r.status_code in (201, 202)
+    try:
+        server_model = _wait_for_user_to_spawn(api_request, jupyter_user, API_TIMEOUT)
+        assert server_model
+        print(server_model)
+        pod_name = server_model['state']['pod_name']
+
+        allowed_url = 'http://www.ebi.ac.uk'
+        blocked_url = 'http://www.bbc.co.uk'
+
+        c = subprocess.run([
+            'kubectl', '--namespace=jupyterhub-test', 'exec', pod_name, '--',
+            'wget', '-q', '-t1', '-T5', allowed_url])
+        assert c.returncode == 0, "Unable to get allowed domain"
+
+        c = subprocess.run([
+            'kubectl', '--namespace=jupyterhub-test', 'exec', pod_name, '--',
+            'wget', '-q', '-t1', '-T5', blocked_url])
+        assert c.returncode > 0, "Blocked domain was allowed"
+
     finally:
         _delete_server(api_request, jupyter_user, API_TIMEOUT)
 
