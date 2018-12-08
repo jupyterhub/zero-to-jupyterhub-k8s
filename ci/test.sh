@@ -30,5 +30,9 @@ done
 echo "getting jupyterhub version"
 curl -s $TEST_URL/hub/api | grep version
 
+# Tests seem slightly flakey on travis, automatically retry once on failure
 echo "running tests"
-pytest
+pytest || {
+  echo "tests failed, retrying once"
+  pytest
+}
