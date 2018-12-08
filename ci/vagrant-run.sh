@@ -7,6 +7,7 @@ export TRAVIS_BRANCH=master
 export TRAVIS_PULL_REQUEST=true
 export TRAVIS_COMMIT_RANGE=`git rev-parse --short origin/master`..`git rev-parse --short HEAD`
 
+pip3 install --no-cache-dir -r dev-requirements.txt
 . ./ci/minikube-$KUBE_VERSION.env
 ./ci/install.sh
-./ci/test.sh
+./ci/travis-script.sh

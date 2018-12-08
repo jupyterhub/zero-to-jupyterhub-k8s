@@ -10,11 +10,16 @@
 # vagrant$ ./ci/vagrant-run.sh
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/xenial64"
+  config.vm.box = "generic/ubuntu1604"
   config.vm.provider "virtualbox" do |vb|
      vb.memory = "3072"
      vb.cpus = 2
   end
+  config.vm.provider :libvirt do |lv|
+    lv.memory = 3072
+    lv.cpus = 2
+  end if Vagrant.has_plugin?('vagrant-libvirt')
+
   config.vm.provision "shell", path: "xenial-setup.sh"
   config.vm.synced_folder "../", "/zero-to-jupyterhub-k8s"
 end
