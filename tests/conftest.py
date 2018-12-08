@@ -1,14 +1,9 @@
 import os
 import requests
 import pytest
+import uuid
 import yaml
 
-@pytest.fixture(scope='function')
-def delete_user(request_data):
-    yield
-    r = requests.delete(request_data['hub_url'] + f"/users/{request_data['username']}", headers=request_data['headers'])
-    r.raise_for_status()
-    print(r.status_code)
 
 @pytest.fixture(scope='function')
 def request_data():
@@ -24,3 +19,16 @@ def request_data():
         },
         'username': 'testuser',
     }
+
+
+@pytest.fixture(scope='function')
+def jupyter_user(request_data):
+    """
+    A temporary unique JupyterHub user
+    """
+    username = 'testuser-' + str(uuid.uuid4())
+    r = requests.post(request_data['hub_url'] + '/users/' + username, headers=request_data['headers'])
+    assert r.status_code == 201
+    yield username
+    r = requests.delete(request_data['hub_url'] + '/users/' + username, headers=request_data['headers'])
+    assert r.status_code == 204

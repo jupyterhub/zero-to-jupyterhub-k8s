@@ -6,89 +6,82 @@ import time
 # Makes heavy use of JupyterHub's API:
 # http://petstore.swagger.io/?url=https://raw.githubusercontent.com/jupyterhub/jupyterhub/master/docs/rest-api.yml
 
+API_TIMEOUT = 300
+
 def test_api(request_data):
     print("asking for the hub's version")
     r = requests.get(request_data['hub_url'])
-    r.raise_for_status()
-    print(r.json())
-    return r.json()
+    assert r.status_code == 200
+    assert r.json() == {"version": "0.9.4"}
 
 def test_api_info(request_data):
     print("asking for the hub information")
     r = requests.get(request_data['hub_url'] + '/info', headers=request_data['headers'])
-    r.raise_for_status()
-    print(r.json())
-    return r.json()
+    assert r.status_code == 200
+    result = r.json()
+    assert result['spawner']['class'] == 'kubespawner.spawner.KubeSpawner'
 
-def test_api_create_user(request_data):
+
+def test_api_create_user(jupyter_user, request_data):
     print("creating the testuser")
-    r = requests.post(request_data['hub_url'] + f"/users/{request_data['username']}", headers=request_data['headers'])
-    json = r.json()
-    print(json)
-    if 'message' in json and json['message'] == 'User testuser already exists':
-        print("the testuser already exists, thats okay...")
-        test_delete_user(request_data)
-        print("creating the testuser")
-        r = requests.post(request_data['hub_url'] + f"/users/{request_data['username']}", headers=request_data['headers'])
-        print(r.json())
+    # Already created by the jupyter_user fixture
+    r = requests.get(request_data['hub_url'] + f"/users/{jupyter_user}", headers=request_data['headers'])
+    assert r.status_code == 200
+    assert r.json()['name'] == jupyter_user
 
-    r.raise_for_status()
 
-def test_api_list_users(request_data):
+def test_api_list_users(jupyter_user, request_data):
     print("asking for information")
     r = requests.get(request_data['hub_url'] + '/users', headers=request_data['headers'])
-    if r.status_code == 201:
-        print(r.json())
-    elif r.status_code == 404:
-        print("no users found")
+    assert r.status_code == 200
+    assert any(u['name'] == jupyter_user for u in r.json())
 
-def test_api_request_user_spawn(request_data):
+
+def test_api_request_user_spawn(jupyter_user, request_data):
     print("asking kubespawner to spawn testusers singleuser-server pod")
-    r = requests.post(request_data['hub_url'] + f"/users/{request_data['username']}/server", headers=request_data['headers'])
-    print(r.status_code)
-    r.raise_for_status()
+    r = requests.post(request_data['hub_url'] + f"/users/{jupyter_user}/server", headers=request_data['headers'])
+    assert r.status_code in (201, 202)
+    try:
+        server_model = _wait_for_user_to_spawn(jupyter_user, request_data, API_TIMEOUT)
+        assert server_model
+        r = requests.get(request_data['hub_url'].partition('/hub/api')[0] + server_model['url'] + "api")
+        assert r.status_code == 200
+        assert 'version' in r.json()
+    finally:
+        _delete_server(jupyter_user, request_data, API_TIMEOUT)
 
-def test_api_wait_for_user_to_spawn(request_data):
-    while True:
+
+def _wait_for_user_to_spawn(jupyter_user, request_data, timeout):
+    t = 0
+    while t < timeout:
         # FIXME: This can fail with 503! Make it robuster than this!
-        r = requests.get(request_data['hub_url'] + f"/users/{request_data['username']}", headers=request_data['headers'])
+        r = requests.get(request_data['hub_url'] + f"/users/{jupyter_user}", headers=request_data['headers'])
         r.raise_for_status()
         user_model = r.json()
-        print(user_model)
 
         # will be pending while starting,
         # server will be set when ready
         if '' not in user_model['servers']:
             # spawn failed!
             raise RuntimeError("Server never started!")
-            
+
         server_model = user_model['servers']['']
         if server_model['ready']:
-            break
-        
-        print(f"pending {server_model['pending']}'s singleuser-server startup'")
+            return server_model
+
         time.sleep(1)
+    return False
 
-    print(f"Server running at {server_model['url']}")
-    r = requests.get(request_data['hub_url'].partition('/hub/api')[0] + server_model['url'] + "api")
-    print(r.status_code)
-    r.raise_for_status()
 
-def test_delete_user(request_data):
-    # FIXME: This is taking too long in general, 50 seconds for example... Can't
-    # we lower the grace period or similar? That may require a kubespawner
-    # setting btw, or custom configuration.
-
-    print("deleting the testuser")
-    while True:
-        r = requests.delete(request_data['hub_url'] + f"/users/{request_data['username']}", headers=request_data['headers'])
-        print(r.status_code)
-        if r.status_code == 400 and r.json()['message'].find('in the process of stopping'):
-            print("the user is in the process of stopping")
-        elif r.status_code == 404:
-            print("the user to delete was not found")
-            break
-        elif r.status_code == 204:
-            print("the user was deleted and server fully terminated!")
-            break
+def _delete_server(jupyter_user, request_data, timeout):
+    r = requests.delete(request_data['hub_url'] + f"/users/{jupyter_user}/server", headers=request_data['headers'])
+    assert r.status_code in (202, 204)
+    t = 0
+    while t < timeout:
+        r = requests.get(request_data['hub_url'] + f"/users/{jupyter_user}", headers=request_data['headers'])
+        r.raise_for_status()
+        user_model = r.json()
+        if '' not in user_model['servers']:
+            return True
         time.sleep(1)
+    return False
