@@ -32,7 +32,25 @@ curl -s $TEST_URL/hub/api | grep version
 
 # Tests seem slightly flakey on travis, automatically retry once on failure
 echo "running tests"
+
+display_logs() {
+  echo "***** minikube *****"
+  minikube logs
+  echo "***** node *****"
+  kubectl describe node
+  echo "***** pods *****"
+  kubectl --namespace $TEST_NAMESPACE get pods
+  echo "***** events *****"
+  kubectl --namespace $TEST_NAMESPACE get events
+  echo "***** hub *****"
+  kubectl --namespace $TEST_NAMESPACE logs deploy/hub
+  echo "***** proxy *****"
+  kubectl --namespace $TEST_NAMESPACE logs deploy/proxy
+}
+
 pytest || {
-  echo "tests failed, retrying once"
-  pytest
+  r=$?
+  echo "tests failed"
+  display_logs
+  exit $r
 }
