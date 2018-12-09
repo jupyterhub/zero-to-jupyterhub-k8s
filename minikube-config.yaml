@@ -37,3 +37,6 @@ prePuller:
 scheduling:
   userScheduler:
     enabled: true
+
+debug:
+  enabled: true
