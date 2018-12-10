@@ -30,7 +30,6 @@ done
 echo "getting jupyterhub version"
 curl -s $TEST_URL/hub/api | grep version
 
-# Tests seem slightly flakey on travis, automatically retry once on failure
 echo "running tests"
 
 display_logs() {
@@ -47,6 +46,10 @@ display_logs() {
   echo "***** proxy *****"
   kubectl --namespace $TEST_NAMESPACE logs deploy/proxy
 }
+
+# Run this first to ensure the hub can talk to the proxy
+# (it will automatically retry)
+pytest tests/test_hub_is_ready.py
 
 pytest || {
   r=$?
