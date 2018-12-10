@@ -7,8 +7,6 @@ import time
 # Makes heavy use of JupyterHub's API:
 # http://petstore.swagger.io/?url=https://raw.githubusercontent.com/jupyterhub/jupyterhub/master/docs/rest-api.yml
 
-API_TIMEOUT = 300
-
 
 def test_api(api_request):
     print("asking for the hub's version")
@@ -45,13 +43,13 @@ def test_api_request_user_spawn(api_request, jupyter_user, request_data):
     r = api_request.post('/users/' + jupyter_user + '/server')
     assert r.status_code in (201, 202)
     try:
-        server_model = _wait_for_user_to_spawn(api_request, jupyter_user, API_TIMEOUT)
+        server_model = _wait_for_user_to_spawn(api_request, jupyter_user, request_data['test_timeout'])
         assert server_model
         r = requests.get(request_data['hub_url'].partition('/hub/api')[0] + server_model['url'] + "api")
         assert r.status_code == 200
         assert 'version' in r.json()
     finally:
-        _delete_server(api_request, jupyter_user, API_TIMEOUT)
+        _delete_server(api_request, jupyter_user, request_data['test_timeout'])
 
 
 @pytest.mark.skipif(os.getenv('DISABLE_TEST_NETPOL') == '1',
@@ -61,7 +59,7 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
     r = api_request.post('/users/' + jupyter_user + '/server')
     assert r.status_code in (201, 202)
     try:
-        server_model = _wait_for_user_to_spawn(api_request, jupyter_user, API_TIMEOUT)
+        server_model = _wait_for_user_to_spawn(api_request, jupyter_user, request_data['test_timeout'])
         assert server_model
         print(server_model)
         pod_name = server_model['state']['pod_name']
@@ -80,12 +78,12 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
         assert c.returncode > 0, "Blocked domain was allowed"
 
     finally:
-        _delete_server(api_request, jupyter_user, API_TIMEOUT)
+        _delete_server(api_request, jupyter_user, request_data['test_timeout'])
 
 
 def _wait_for_user_to_spawn(api_request, jupyter_user, timeout):
-    t = 0
-    while t < timeout:
+    endtime = time.time() + timeout
+    while time.time() < endtime:
         # FIXME: This can fail with 503! Make it robuster than this!
         r = api_request.get('/users/' + jupyter_user)
         r.raise_for_status()
@@ -108,8 +106,9 @@ def _wait_for_user_to_spawn(api_request, jupyter_user, timeout):
 def _delete_server(api_request, jupyter_user, timeout):
     r = api_request.delete('/users/' + jupyter_user + '/server')
     assert r.status_code in (202, 204)
-    t = 0
-    while t < timeout:
+
+    endtime = time.time() + timeout
+    while time.time() < endtime:
         r = api_request.get('/users/' + jupyter_user)
         r.raise_for_status()
         user_model = r.json()

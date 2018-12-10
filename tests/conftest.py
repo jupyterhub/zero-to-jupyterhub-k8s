@@ -5,7 +5,7 @@ import uuid
 import yaml
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='module')
 def request_data():
     basedir = os.path.dirname(os.path.dirname(__file__))
     with open(os.path.join(basedir, 'minikube-config.yaml')) as f:
@@ -17,7 +17,8 @@ def request_data():
         'headers': {
             'Authorization': f'token {token}'
         },
-        'username': 'testuser',
+        'test_timeout': 300,
+        'request_timeout': 60,
     }
 
 
@@ -25,24 +26,24 @@ class JupyterRequest(object):
     def __init__(self, request_data):
         self.request_data = request_data
 
+    def _setup_kwargs(self, kwargs):
+        kwargs['headers'] = kwargs.get('headers', self.request_data['headers'])
+        kwargs['timeout'] = kwargs.get('timeout', self.request_data['request_timeout'])
+
     def delete(self, api, **kwargs):
-        if 'headers' not in kwargs:
-            kwargs['headers'] = self.request_data['headers']
+        self._setup_kwargs(kwargs)
         return requests.delete(self.request_data['hub_url'] + api, **kwargs)
 
     def get(self, api, **kwargs):
-        if 'headers' not in kwargs:
-            kwargs['headers'] = self.request_data['headers']
+        self._setup_kwargs(kwargs)
         return requests.get(self.request_data['hub_url'] + api, **kwargs)
 
     def post(self, api, **kwargs):
-        if 'headers' not in kwargs:
-            kwargs['headers'] = self.request_data['headers']
+        self._setup_kwargs(kwargs)
         return requests.post(self.request_data['hub_url'] + api, **kwargs)
 
     def put(self, api, **kwargs):
-        if 'headers' not in kwargs:
-            kwargs['headers'] = self.request_data['headers']
+        self._setup_kwargs(kwargs)
         return requests.put(self.request_data['hub_url'] + api, **kwargs)
 
 
