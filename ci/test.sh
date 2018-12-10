@@ -63,3 +63,6 @@ pytest || {
   display_logs
   exit $r
 }
+
+# If tests succeeded show all pods to see if any were restarted
+kubectl --namespace $TEST_NAMESPACE get pods
