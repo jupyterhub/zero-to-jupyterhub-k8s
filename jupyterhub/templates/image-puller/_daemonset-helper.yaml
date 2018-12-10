@@ -61,13 +61,15 @@ spec:
             - -c
             - echo "Pulling complete"
         {{- range $k, $container := .Values.singleuser.profileList }}
+        {{- if $container.kubespawner_override.image }}
         - name: image-pull-singleuser-profilelist-{{ $k }}
-          image: {{ $container.kubespawner_override.image_spec }} # Update to image on next kubespawner release!
+          image: {{ $container.kubespawner_override.image }}
           imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
             - -c
             - echo "Pulling complete"
+        {{- end }}
         {{- end }}
         {{- if not .Values.singleuser.cloudMetadata.enabled }}
         - name: image-pull-metadata-block
