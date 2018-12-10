@@ -51,6 +51,12 @@ display_logs() {
 # (it will automatically retry)
 pytest tests/test_hub_is_ready.py
 
+# Now sleep, and retry again, in case a race condition meant the two were
+# momentarily able to communicate whilst already shutting down
+sleep 1m
+pytest tests/test_hub_is_ready.py
+
+# Hopefully this works now! If tests still failing output logs
 pytest || {
   r=$?
   echo "tests failed"
