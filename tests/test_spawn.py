@@ -64,8 +64,9 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
         print(server_model)
         pod_name = server_model['state']['pod_name']
 
-        allowed_url = 'http://www.ebi.ac.uk'
-        blocked_url = 'http://www.bbc.co.uk'
+        # Must match CIDR in minikube-netpol.yaml
+        allowed_url = 'http://jupyter.org'
+        blocked_url = 'http://mybinder.org'
 
         c = subprocess.run([
             'kubectl', '--namespace=jupyterhub-test', 'exec', pod_name, '--',

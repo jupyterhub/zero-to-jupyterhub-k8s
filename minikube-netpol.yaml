@@ -9,14 +9,17 @@ proxy:
 singleuser:
   networkPolicy:
     enabled: true
-    # Block all egress apart from DNS and ebi.ac.uk net
+    # Block all egress apart from DNS and jupyter.org
+    # CIDR must match the allowed URL in test_singleuser_netpol
     egress:
       - ports:
         - port: 53
           protocol: UDP
       - to:
         - ipBlock:
-            cidr: 193.60.0.0/14
+            cidr: 104.28.9.110/32
+        - ipBlock:
+            cidr: 104.28.8.110/32
 
 debug:
   enabled: true
