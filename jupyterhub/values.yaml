@@ -3,6 +3,9 @@ custom: {}
 hub:
   service:
     type: ClusterIP
+    annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: /hub/metrics
     ports:
       nodePort:
     loadBalancerIP:
@@ -34,9 +37,7 @@ hub:
     url:
     password:
   labels: {}
-  annotations:
-    prometheus.io/scrape: 'true'
-    prometheus.io/path: /hub/metrics
+  annotations: {}
   extraConfig: {}
   extraConfigMap: {}
   extraEnv: {}
