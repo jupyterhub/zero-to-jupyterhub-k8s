@@ -369,10 +369,10 @@ properties:
               This sets the IP address that should be used by the LoadBalancer for exposing the hub service.
               Set this if you want the hub service to be provided with a fixed external IP address instead of a dynamically acquired one.
               Useful to ensure a stable IP to access to the hub with, for example if you have reserved an IP address in your network to communicate with the JupyterHub.
-              
+
               To be provided like:
               ```
-              hub: 
+              hub:
                 service:
                   loadBalancerIP: xxx.xxx.xxx.xxx
               ```
@@ -385,7 +385,11 @@ properties:
                 type: integer
                 description: |
                   The nodePort to deploy the hub service on.
-                  
+          annotations:
+            type: object
+            description: |
+              Kuberentes annotations to apply to the hub service.
+
   proxy:
     type: object
     properties:
