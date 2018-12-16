@@ -55,23 +55,7 @@ your google cloud account.
 
             gcloud components install kubectl
 
-4. Decide and configure to use a specific data center.
-
-   From a terminal, enter:
-
-   .. code-block:: bash
-
-      # Enter a zone
-      ZONE=us-east1-c
-
-      gcloud config set compute/zone $ZONE
-   
-   * ZONE specifies which data center to use. Pick something `from
-     this list
-     <https://cloud.google.com/compute/docs/regions-zones/regions-zones#available>`_.
-     that is not too far away from your users.
-
-5. Create a managed Kubernetes cluster and a default node pool.
+4. Create a managed Kubernetes cluster and a default node pool.
 
    Ask Google Cloud to create a managed Kubernetes cluster and a default `node
    pool <https://cloud.google.com/kubernetes-engine/docs/concepts/node-pools>`_
@@ -80,23 +64,31 @@ your google cloud account.
 
    .. code-block:: bash
 
-      # Enter a name for your cluster
-      CLUSTERNAME=<YOUR-CLUSTER-NAME>
-
-      gcloud beta container clusters create $CLUSTERNAME \
+      gcloud beta container clusters create \
         --machine-type n1-standard-2 \
         --num-nodes 2 \
+        --zone us-central1-b \
         --cluster-version latest \
-        --node-labels hub.jupyter.org/node-purpose=core
+        --node-labels hub.jupyter.org/node-purpose=core \
+        <CLUSTERNAME>
       
+   * Replace `<CLUSTERNAME>` with a name that can be used to refer to this cluster
+     in the future.
+
    * ``--machine-type`` specifies the amount of CPU and RAM in each node within
      this default node pool. There is a `variety of types
      <https://cloud.google.com/compute/docs/machine-types>`_ to choose from.
+     You can pick something from `this list
+     <https://cloud.google.com/compute/docs/regions-zones/regions-zones#available>`_.
+     that is not too far away from your users.
    
    * ``--num-nodes`` specifies how many nodes to spin up. You can change this
      later through the cloud console or using the `gcloud` command line tool.
 
-6. To test if your cluster is initialized, run:
+   * ``--zone`` specifies the data center zone where your cluster will be created.
+
+
+5. To test if your cluster is initialized, run:
 
    .. code-block:: bash
 
@@ -104,17 +96,17 @@ your google cloud account.
 
    The response should list one running node.
 
-7. Give your account permissions to perform all administrative actions needed.
+6. Give your account permissions to perform all administrative actions needed.
 
    .. code-block:: bash
 
-      # Enter your email
-      EMAIL=
-
       kubectl create clusterrolebinding cluster-admin-binding \
         --clusterrole=cluster-admin \
-        --user=$EMAIL
+        --user=<GOOGLE-EMAIL-ACCOUNT>
     
+   Replace `<GOOGLE-EMAIL-ACCOUNT>` with the exact email of the Google account
+   you used to sign up for Google Cloud.
+
    .. note::
   
       Did you enter your email correctly? If not, you can run `kubectl delete
