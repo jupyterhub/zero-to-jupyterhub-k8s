@@ -78,7 +78,7 @@ your google cloud account.
    * ``--machine-type`` specifies the amount of CPU and RAM in each node within
      this default node pool. There is a `variety of types
      <https://cloud.google.com/compute/docs/machine-types>`_ to choose from.
-     You can pick something from this `this list
+     You can pick something from `this list
      <https://cloud.google.com/compute/docs/regions-zones/regions-zones#available>`_.
      that is not too far away from your users.
    
