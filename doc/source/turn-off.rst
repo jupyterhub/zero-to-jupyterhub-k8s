@@ -35,6 +35,11 @@ before doing the cloud provider specific setup.
 
      helm delete <YOUR-HELM-RELEASE-NAME> --purge
 
+   ``<YOUR-HELM-RELEASE-NAME>`` is the name provided to ``helm upgrade`` when
+   initially setting up the hub. If you had forgotten what you used, you
+   can run ``helm list`` to find all the release names in your cluster.
+   You can also see the ``namespace`` value here that will be used in the next step.
+
 2. Next, delete the Kubernetes namespace the hub was installed in. This deletes
    any disks that may have been created to store user's data, and any IP
    addresses that may have been provisioned.
