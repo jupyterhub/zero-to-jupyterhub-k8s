@@ -1,3 +1,4 @@
+jhub_remote_user_authenticator==0.1.0
 # jupyterhub version is defined in chartpress.yaml
 jupyterhub-dummyauthenticator==0.3.1
 jupyterhub-tmpauthenticator==0.5
