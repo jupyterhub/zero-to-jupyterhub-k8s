@@ -29,3 +29,10 @@ custom:
 {{- (merge dict .Values.custom .Values.hub.extraConfigMap) | toYaml | nindent 2}}
 ---
 {{- end }}
+
+{{- if and (not .Values.scheduling.podPriority.enabled) (and .Values.scheduling.userPlaceholder.enabled .Values.scheduling.userPlaceholder.replicas) }}
+
+WARNING: You are using user placeholders without pod priority enabled, either
+enable pod priority or stop using the user placeholders to avoid wasting cloud
+resources.
+{{- end }}
