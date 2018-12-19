@@ -69,7 +69,6 @@ your google cloud account.
         --num-nodes 2 \
         --zone us-central1-b \
         --cluster-version latest \
-        --node-labels hub.jupyter.org/node-purpose=core \
         <CLUSTERNAME>
       
    * Replace `<CLUSTERNAME>` with a name that can be used to refer to this cluster
