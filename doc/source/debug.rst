@@ -1,7 +1,7 @@
 .. _debug:
 
-Debugging Kubernetes
-====================
+Debugging
+=========
 
 Sometimes your JupyterHub deployment doesn't behave the way you'd expect.
 This section provides some tips on debugging and fixing some common problems.
