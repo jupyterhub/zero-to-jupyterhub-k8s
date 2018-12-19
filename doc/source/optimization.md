@@ -40,12 +40,13 @@ cull:
   timeout: 3600
   every: 300
 
-# The resources requested is very important to consider in relation to your
-# machine type. If you have a n1-highmem-4 node on Google Cloud for example
-# you get 4 cores and 26 GB of memory. With the configuration below you would
-# be able to have at most about 50 users per node. This can be reasonable,
-# but it may not be, it will depend on your users. Are they mostly writing
-# and reading or are they mostly executing code?
+# The resources requested is very important to consider in
+# relation to your machine type. If you have a n1-highmem-4 node
+# on Google Cloud for example you get 4 cores and 26 GB of
+# memory. With the configuration below you would  be able to have
+# at most about 50 users per node. This can be reasonable, but it
+# may not be, it will depend on your users. Are they mostly
+# writing and reading or are they mostly executing code?
 singleuser:
   cpu:
     limit: 4
