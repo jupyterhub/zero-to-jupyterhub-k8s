@@ -1,17 +1,28 @@
 # Optimizations
 
-This page contains information and guidelines for improving the speed,
-stability, and general optimization of your JupyterHub deployment.
+This page contains information and guidelines for improving the reliability,
+flexibility and stability of your JupyterHub deployment.
 
-To summarize, for a good autoscaling experience, we recommend you:
-- Enable the continuous image puller, to prepare added nodes for arriving users
-- Enable pod priority and add user placeholders, to scale up nodes ahead of real user arrivals
-- Enable the user scheduler, to pack users tight on some nodes and let others become empty and scaled down
-- Use a node pool dedicated to user pods, to avoid getting other pods on them that blocks scale down
+To summarize, for a good autoscaling experience, we recommend you to:
+- Enable the *continuous image puller*, to prepare added nodes for arriving
+  users.
+- Enable *pod priority* and add *user placeholders*, to scale up nodes ahead of
+  real user arrivals.
+- Enable the *user scheduler*, to pack users tight on some nodes and let others
+  become empty and scaled down.
+- Set up an autoscaling node pool and dedicate it to user pods by *tainting* the
+  node and requiring user pods, which *tolerate* the nodes' taint, to schedule
+  on these nodes. This is meant to make you avoid getting other pods on these
+  autoscaling node pool that could blocks scale down.
 
-A reasonable final configuration could look something like this:
+A reasonable final configuration for efficient autoscaling could look something
+like this:
 
 ```yaml
+prePuller:
+  continuous:
+    enabled: true
+
 scheduling:
   userScheduler:
     enabled: true
@@ -24,15 +35,27 @@ scheduling:
     nodeAffinity:
       matchNodePurpose: require
 
-prePuller:
-  continuous:
-    enabled: true
-
 cull:
   enabled: true
-  timeout: 7200
+  timeout: 3600
   every: 300
+
+# The resources requested is very important to consider in relation to your
+# machine type. If you have a n1-highmem-4 node on Google Cloud for example
+# you get 4 cores and 26 GB of memory. With the configuration below you would
+# be able to have at most about 50 users per node. This can be reasonable,
+# but it may not be, it will depend on your users. Are they mostly writing
+# and reading or are they mostly executing code?
+singleuser:
+  cpu:
+    limit: 4
+    guarantee: 0.05
+  memory:
+    limit: 4G
+    guarantee: 512M
 ```
+
+**IMPORTANT**: If you want to autoscale, your user pods also needs
 
 ## Pulling images before users arrive
 
@@ -49,6 +72,11 @@ situations:
     referring to how a [Helm
     hook](https://docs.helm.sh/developing_charts/#hooks) is used to accomplish
     this, a more informative name would have been *pre-upgrade-image-puller*.
+    
+    **NOTE**: With this enabled your `helm upgrade` will take a long time if you
+    introduce a new image as it will wait for the pulling to complete. We
+    recommend that you add `--timeout 600` or similar to your `helm upgrade`
+    command to give it enough time.
 
     The hook-image-puller is enabled by default. To disable it, use the
     following snippet in your `config.yaml`:
@@ -92,10 +120,11 @@ situations:
     added, but at that point users are already waiting. To scale up nodes ahead
     of time we can use *user-placeholders*.
 
-### Configuring the pulled images
+### The images that will be pulled
 
-The hook-image-puller and the continuous-image-puller has various sources to
-know what images it should pull. These sources are all found in the values
+The hook-image-puller and the continuous-image-puller has various sources
+influencing what images they will pull, as it does in order to prepare nodes
+ahead of time that may need images. These sources are all found in the values
 provided with the Helm chart (that can be overridden with `config.yaml`) under
 the following paths:
 
@@ -110,21 +139,27 @@ the following paths:
 - `prePuller.pause.image`
 
 For example, with the following configuration, three images would be pulled by
-the image pullers.
+the image pullers in order to prepare the nodes that may end up using these
+images.
 
 ```yaml
 singleuser:
   image:
     name: jupyter/minimal-notebook
     tag: 2343e33dec46
+  profileList:
+    - display_name: "Minimal environment"
+      description: "To avoid too much bells and whistles: Python."
+      default: true
+    - display_name: "Datascience environment"
+      description: "If you want the additional bells and whistles: Python, R, and Julia."
+      kubespawner_override:
+        image: jupyter/datascience-notebook:2343e33dec46
 
 prePuller:
   extraImages:
-    ubuntu-xenial:
-      name: ubuntu
-      tag: 16.04
     myOtherImageIWantPulled:
-      name: jupyter/datascience-notebook
+      name: jupyter/all-spark-notebook
       tag: 2343e33dec46
 ```
 
@@ -187,42 +222,52 @@ reference](reference.html#scheduling-podpriority) for more details.
 Scaling up is the easy part, scaling down is harder. To scale down a node,
 [certain technical
 criteria](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#what-types-of-pods-can-prevent-ca-from-removing-a-node)
-need to be met. The central one is that the node to be scaled down must be free
-of pods that aren't allowed to be disrupted. Pods that are not allowed to be
-disrupted are, for example, real user pods, important system pods, and some
-JupyterHub pods (without a permissive
+need to be met. The central one is in order for a node to be scaled down, it
+must be free from pods that aren't allowed to be disrupted. Pods that are not
+allowed to be disrupted are, for example, real user pods, important system pods,
+and some JupyterHub pods (without a permissive
 [PodDisruptionBudget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/)).
-Consider for example that you add a lot of users during the daytime. New nodes
-are added by the CA. Some system pod ends up on the new nodes along with the
-user pods for some reason. At night when the
+Consider for example that many users arrive to your JupyterHub during the
+daytime. New nodes are added by the CA. Some system pod ends up on the new nodes
+along with the user pods for some reason. At night when the
 [*culler*](user-management.html#culling-user-pods) has removed many inactive
 pods from some nodes. They are now free from user pods but there is still a
 single system pod stopping the CA from removing the node.
 
 To avoid these scale down failures, we recommend using a *dedicated node pool*
-for the user pods. To accomplish this, we can use [*taints and
-tolerations*](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/).
-If we add a taint to all the nodes in the node pool, and a toleration on the
-user pods to tolerate being scheduled on a tainted node, we have practically
-dedicated the node pool to be used by user pods.
+for the user pods. That way, all the important system pods will run at one or a
+limited set of nodes, so the autoscaling user nodes can scale from 0 to X and
+back from X to 0.
+
+This section about scaling down efficiently, will also explains how the *user
+scheduler* can help you reduce the failures to scale down due to blocking user
+pods.
 
 #### Using a user dedicated node pool
 
-To make users schedule on a dedicated node for them, you need to do the following:
+To set up a user dedicated node pool, we can use [*taints and
+tolerations*](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/).
+If we add a taint to all the nodes in the node pool, and a toleration on the
+user pods to tolerate being scheduled on a tainted node, we have practically
+dedicated the node pool to be used only by user pods.
+
+To make user pods schedule on a dedicated node for them, you need to do the
+following:
 
 1. Setup a node pool (with autoscaling), a certain label, and a certain taint.
 
-    How you do this will depend on the cloud provider, also note that cloud
-    providers often have their own labels separate from kubernetes labels. This
-    needs to be a kubernetes label.
+    If you need help on how to do this, please refer to your cloud providers
+    documentation. A node pool may be called a node group.
 
-    ```
-    # label=value
-    hub.jupyter.org/node-purpose=user
+    - The label: `hub.jupyter.org/node-purpose=user`
+
+      **NOTE**: Cloud providers often have their own labels, separate from
+      kubernetes labels, but this label must be a kubernetes label.
+
+    - The taint: `hub.jupyter.org/dedicated=user:NoSchedule`
     
-    # taint=value:effect (you may need to replace '/' with '_')
-    hub.jupyter.org/dedicated=user:NoSchedule
-    ```    
+      **NOTE**: You may need to replace `/` with `_` due cloud provider
+      limitations. Both taints are tolerated by the user pods.
 
 2. Make user pods require to be scheduled on the node pool setup above
 
@@ -240,25 +285,30 @@ To make users schedule on a dedicated node for them, you need to do the followin
     scheduling:
       userPods:
         nodeAffinity:
-          # matchNodePurpos valid options: ignore, prefer (the default), require
+          # matchNodePurpose valid options:
+          # - ignore
+          # - prefer (the default)
+          # - require
           matchNodePurpose: require
     ```
 
-NOTE: If you end up not using a dedicated node pool for users and want to scale
-down efficiently, you will need to learn about PodDisruptionBudget and to quite
-a bit more of work to avoid ending up with almost empty nodes not scaling down.
+**NOTE**: If you end up *not* using a dedicated node pool for users and want to
+scale down efficiently, you will need to learn about PodDisruptionBudget
+resources and to do quite a bit more work in order to avoid ending up with
+almost empty nodes not scaling down.
 
-#### Using resources efficiently (the user scheduler)
+#### Using available nodes efficiently (the user scheduler)
 
 If you have users coming online and others being culled by inactivity, but on
 average you are needing less and less nodes. How will you free up a node so it
 can be scaled down?
 
-This is what the user scheduler can do for you. It will schedule users to the
-most utilized node, allowing the underutilized nodes to free up. To see this in
-action, look at the following graph showing the amount of users on five
-different nodes from the mybinder.org deployment. Five nodes were running, but
-only about three were really needed.
+This is what the user scheduler helps you with. It will schedule new user pods
+to the most utilized node, allowing the underutilized nodes to free up over
+time. To see this in action, look at the following graph from the mybinder.org
+deployment when they enabled the user scheduler, It is showing the amount of
+user pods active on five different nodes. You will notice that when the user
+scheduler is enabled, two nodes are freed up from user pods and scaled down.
 
 [![](_static/images/user_scheduler.png)](_static/images/user_scheduler.png)
 
