@@ -304,12 +304,13 @@ If you have users coming online and others being culled by inactivity, but on
 average you are needing less and less nodes. How will you free up a node so it
 can be scaled down?
 
-This is what the user scheduler helps you with. It will schedule new user pods
+This is what the user scheduler helps you with. It will schedule *new* user pods
 to the most utilized node, allowing the underutilized nodes to free up over
-time. To see this in action, look at the following graph from the mybinder.org
-deployment when they enabled the user scheduler, It is showing the amount of
-user pods active on five different nodes. You will notice that when the user
-scheduler is enabled, two nodes are freed up from user pods and scaled down.
+time as older user pods shut down. To see this in action, look at the following
+graph from the mybinder.org deployment when they enabled the user scheduler, it
+is showing the amount of user pods active on five different nodes. You will
+notice that when the user scheduler is enabled, two nodes are in time freed up
+from user pods and then scaled down.
 
 [![](_static/images/user_scheduler.png)](_static/images/user_scheduler.png)
 
@@ -320,3 +321,7 @@ scheduling:
   userScheduler:
     enabled: true
 ```
+
+**NOTE**: For the user scheduler to work well, you need old user pods to shut
+down at some point. Make sure to configure the
+[*culler*](user-management.html#culling-user-pods) suitable properly.
