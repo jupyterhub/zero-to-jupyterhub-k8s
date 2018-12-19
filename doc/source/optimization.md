@@ -34,20 +34,21 @@ cull:
   every: 300
 ```
 
-## Pulling images before user arrives
+## Pulling images before users arrive
 
 If a user pod is scheduled on a node requesting a Docker image that isn't
-available, the user will have to wait for it. If the image is large, the wait
-can be 5 to 10 minutes. This commonly occur in two situations:
+already pulled onto that node, the user will have to wait for it. If the image
+is large, the wait can be 5 to 10 minutes. This commonly occurs in two
+situations:
 
-1. A new image is introduced (`helm upgrade`)
+1. A new single-user image is introduced (`helm upgrade`)
 
     With the *hook-image-puller* enabled (the default), the user images being
-    introduced will be pulled to the nodes before hub pod is updated to utilize
-    the new image. The name hook-image-puller is a technical name referring to
-    how a [Helm hook](https://docs.helm.sh/developing_charts/#hooks) is used to
-    accomplish this, a more informative name would had been
-    *pre-upgrade-image-puller*.
+    introduced will be pulled to the nodes before the hub pod is updated to
+    utilize the new image. The name hook-image-puller is a technical name
+    referring to how a [Helm
+    hook](https://docs.helm.sh/developing_charts/#hooks) is used to accomplish
+    this, a more informative name would have been *pre-upgrade-image-puller*.
 
     The hook-image-puller is enabled by default. To disable it, use the
     following snippet in your `config.yaml`:
@@ -65,7 +66,7 @@ can be 5 to 10 minutes. This commonly occur in two situations:
     come fresh without any images on their disks, a user pod arriving to this
     node will be forced to wait while the image is pulled.
 
-    With the *continuous-image-puller* enabled (disabled by default), the user's
+    With the *continuous-image-puller* enabled (**disabled** by default), the user's
     container image will be pulled when a new node is added. New nodes can for
     example be added manually or by a cluster autoscaler. The continuous
     image-puller uses a
@@ -132,7 +133,7 @@ prePuller:
 A [*Cluster
 Autoscaler*](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler)
 (CA) will help you add and remove nodes from the cluster. But the CA needs some
-help to function well. Without help, it will both fail scale up before users
+help to function well. Without help, it will both fail to scale up before users
 arrive and scale down nodes aggressively enough without disrupting users.
 
 ### Scaling up in time (user placeholders)
@@ -140,7 +141,7 @@ arrive and scale down nodes aggressively enough without disrupting users.
 A *Cluster Autoscaler* (CA) will add nodes when pods don't fit on available
 nodes but would fit if another node is added. But, this may lead to a long
 waiting time for the pod, and as a pod can represent a user, it can lead to a
-long waiting time for a user. There is now options to combat this.
+long waiting time for a user. There are now options to address this.
 
 With Kubernetes 1.11+ (that requires Helm 2.11+), [Pod Priority and
 Preemption](https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/)
@@ -167,31 +168,36 @@ scheduling:
   podPriority:
     enabled: true
   userPlaceholder:
+    # Specify three dummy user pods will be used as placeholders
     replicas: 3
 ```
 
 For further discussion about user placeholders, see [@MinRK's excellent
 post](https://discourse.jupyter.org/t/planning-placeholders-with-jupyterhub-helm-chart-0-8-tested-on-mybinder-org/213)
-about it where he analyzed its introduction on mybinder.org.
+where he analyzed its introduction on mybinder.org.
 
-IMPORTANT: Further settings may be required for successful use of the pod priority depending on how your cluster autoscaler is configured. This is know to work on GKE, but we don't know how it works on other cloud providers or kubernetes installation. See the [configuration reference](reference.html#scheduling-podpriority) for more details.
+**IMPORTANT**: Further settings may be required for successful use of the pod
+priority depending on how your cluster autoscaler is configured. This is known
+to work on GKE, but we don't know how it works on other cloud providers or
+kubernetes. See the [configuration
+reference](reference.html#scheduling-podpriority) for more details.
 
 ### Scaling down efficiently
 
 Scaling up is the easy part, scaling down is harder. To scale down a node,
 [certain technical
 criteria](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#what-types-of-pods-can-prevent-ca-from-removing-a-node)
-needs to be met. The central one is that the node to be scaled down must be free
-of pods that isn't allowed to be disrupted. Pods that are not allowed to be
-disrupted are for example real user pods, various system pods, and some
+need to be met. The central one is that the node to be scaled down must be free
+of pods that aren't allowed to be disrupted. Pods that are not allowed to be
+disrupted are, for example, real user pods, important system pods, and some
 JupyterHub pods (without a permissive
 [PodDisruptionBudget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/)).
 Consider for example that you add a lot of users during the daytime. New nodes
 are added by the CA. Some system pod ends up on the new nodes along with the
 user pods for some reason. At night when the
 [*culler*](user-management.html#culling-user-pods) has removed many inactive
-pods by some nodes was free from users but there was still a single system pod
-stopping the CA from removing it.
+pods from some nodes. They are now free from user pods but there is still a
+single system pod stopping the CA from removing the node.
 
 To avoid these scale down failures, we recommend using a *dedicated node pool*
 for the user pods. To accomplish this, we can use [*taints and
@@ -222,18 +228,19 @@ To make users schedule on a dedicated node for them, you need to do the followin
 
     If you don't require the user pods to schedule on their dedicated node, you
     may fill up the nodes where the other software runs. This can cause a `helm
-    upgrade` command to fail because you may have run out of resources for
+    upgrade` command to fail. For example, you may have run out of resources for
     non-user pods that cannot schedule on the autoscaling node pool as they need
-    during a rolling update for example.
+    during a rolling update.
 
-    The default setting is to make user pods *prefer* schedule on nodes with the
-    `hub.jupyter.org/node-purpose=user` label, but you can also make it
-    *require* to do so using the configuration below.
+    The default setting is to make user pods *prefer* to be scheduled on nodes
+    with the `hub.jupyter.org/node-purpose=user` label, but you can also make it
+    *required* using the configuration below.
 
     ```yaml
     scheduling:
       userPods:
         nodeAffinity:
+          # matchNodePurpos valid options: ignore, prefer (the default), require
           matchNodePurpose: require
     ```
 
