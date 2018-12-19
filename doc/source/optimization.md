@@ -56,8 +56,6 @@ singleuser:
     guarantee: 512M
 ```
 
-**IMPORTANT**: If you want to autoscale, your user pods also needs
-
 ## Pulling images before users arrive
 
 If a user pod is scheduled on a node requesting a Docker image that isn't
