@@ -31,7 +31,7 @@
 
       Consider adding the ``--preemptible`` flag to reduce the cost
       significantly. You can `compare the prices here
-      <https://cloud.google.com/compute/pricing#predefined_machine_types>`_. See
+      <https://cloud.google.com/compute/docs/machine-types>`_. See
       the `preemptible node documentation
       <https://cloud.google.com/compute/docs/instances/preemptible>`_ for more
       information.

@@ -8,7 +8,7 @@ Step Zero: Kubernetes on `Google Cloud <https://cloud.google.com/>`_ (GKE)
 up a Kubernetes Cluster. You may be able to receive `free credits
 <https://cloud.google.com/free/>`_ for trying it out (though note that a
 free account `comes with limitations
-<https://cloud.google.com/free/docs/frequently-asked-questions#limitations>`_).
+<https://cloud.google.com/free/docs/gcp-free-tier#always-free-usage-limits>`_).
 Either way, you will need to connect your credit card or other payment method to
 your google cloud account.
 
@@ -44,8 +44,8 @@ your google cloud account.
 
    b. **Use your own computer's terminal:**
 
-      1. Download and install the `gcloud` command line tool at its `downloads
-         page <https://cloud.google.com/sdk/downloads>`_. It will help you
+      1. Download and install the `gcloud` command line tool at its `install
+         page <https://cloud.google.com/sdk/install>`_. It will help you
          create and communicate with a Kubernetes cluster.
 
       2. Install ``kubectl`` (reads *kube control*), it is a tool for controlling
@@ -78,7 +78,7 @@ your google cloud account.
      this default node pool. There is a `variety of types
      <https://cloud.google.com/compute/docs/machine-types>`_ to choose from.
      You can pick something from `this list
-     <https://cloud.google.com/compute/docs/regions-zones/regions-zones#available>`_.
+     <https://cloud.google.com/compute/docs/regions-zones/#available>`_.
      that is not too far away from your users.
    
    * ``--num-nodes`` specifies how many nodes to spin up. You can change this

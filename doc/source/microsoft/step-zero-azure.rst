@@ -31,7 +31,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
      a package that you can install locally.
 
      To do so, first follow the `installation instructions
-     <https://docs.microsoft.com/en-us/cli/azure/install-azure-cli>`_ in the
+     <https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest>`_ in the
      Azure documentation. Then run the following command to connect your local
      CLI with your account:
 
