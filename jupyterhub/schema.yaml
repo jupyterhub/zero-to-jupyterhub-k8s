@@ -730,6 +730,29 @@ properties:
 
               See the [Kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
               for more info.
+      profileList:
+        type: list
+        description: |
+          For more information about the profile list, see [KubeSpawner's
+          documentation](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner)
+          as this is simply a passthrough to that configuration.
+
+          **NOTE**: The image-pullers are aware of the overrides of images in
+          `singleuser.profileList` but they won't be if you configure it in
+          JupyterHub's configuration of '`c.KubeSpawner.profile_list`.
+
+          ```yaml
+          singleuser:
+            profileList:
+              - display_name: "Default: Shared, 8 CPU cores"
+                description: "Your code will run on a shared machine with CPU only."
+                default: True
+              - display_name: "Personal, 4 CPU cores & 26GB RAM, 1 NVIDIA Tesla K80 GPU"
+                description: "Your code will run a personal machine with a GPU."
+                kubespawner_override:
+                  extra_resource_limits:
+                    nvidia.com/gpu: "1"
+          ```
       schedulerStrategy:
         type:
           - string
