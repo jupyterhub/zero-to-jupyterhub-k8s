@@ -266,7 +266,6 @@ scheduling:
 prePuller:
   hook:
     enabled: true
-    extraEnv: {}
     image:
       name: jupyterhub/k8s-image-awaiter
       tag: generated-by-chartpress
