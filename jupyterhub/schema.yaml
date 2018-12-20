@@ -1021,6 +1021,38 @@ properties:
           documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls)
           for more details about annotations.
 
+  prePuller:
+    type: object
+    properties:
+      hook:
+        description: |
+          See the [*optimization section*](optimization.html#pulling-images-before-users-arrive) for more details.
+        type: object
+        properties:
+          enabled:
+            type: bool
+      continuous:
+        description: |
+          See the [*optimization section*](optimization.html#pulling-images-before-users-arrive) for more details.
+
+          **NOTE**: If used with a Cluster Autoscaler (an autoscaling node
+          pool), also add user-placeholders and enable pod priority.
+        type: object
+        properties:
+          enabled:
+            type: bool
+      extraImages:
+        type: object
+        description: |
+          See the [*optimization section*](optimization.html#the-images-that-will-be-pulled) for more details.
+
+          ```yaml
+          prePuller:
+            extraImages:
+              myExtraImageIWantPulled:
+                name: jupyter/all-spark-notebook
+                tag: 2343e33dec46
+          ```
 
   custom:
     type: object
