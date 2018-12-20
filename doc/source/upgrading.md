@@ -8,7 +8,7 @@ next should be as seamless as possible, and generally shouldn't require major
 changes to your deployment. Check the [CHANGELOG](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md)
 for each release to find out if there are any breaking changes in the newest version.
 
-For additional help, feel free to reach out to us on [gitter](http://gitter.im/jupyterhub/jupyterhub)
+For additional help, feel free to reach out to us on [gitter](https://gitter.im/jupyterhub/jupyterhub)
 or the [mailing list](https://groups.google.com/forum/#!forum/jupyter)!
 
 ## Major helm-chart upgrades
@@ -97,9 +97,9 @@ will be performed automatically when you do a `helm upgrade`.
 5. Remove the lines added in step 3, and do another [`helm upgrade`](#upgrade-command).
 
 
-### [Role based access control](http://zero-to-jupyterhub.readthedocs.io/en/latest/security.html#role-based-access-control-rbac)
+### [Role based access control](https://zero-to-jupyterhub.readthedocs.io/en/latest/security.html#use-role-based-access-control-rbac)
 
-[RBAC](https://kubernetes.io/docs/admin/authorization/rbac/) is the user security model
+[RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) is the user security model
 in Kubernetes that gives applications only as much access they need to the kubernetes
 API and not more. Prior to this, applications were all running with the equivalent
 of root on your Kubernetes cluster. This release adds appropriate roles for the

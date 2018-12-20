@@ -314,7 +314,7 @@ properties:
             - Anything else you can think of!
 
           Since this is usually a multi-line string, you want to format it using YAML's
-          [| operator](http://www.yaml.org/spec/1.2/spec.html#id2795688).
+          [| operator](https://yaml.org/spec/1.2/spec.html#id2795688).
 
           For example:
             ```yaml
