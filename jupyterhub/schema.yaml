@@ -277,12 +277,19 @@ properties:
           See the [Kubernetes docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
           to learn more about labels.
       extraEnv:
-        type: list
+        type: object
         description: |
           Extra environment variables that should be set for the hub pod.
 
-          A list of [EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.9/#envvar-v1-core)
-          objects.
+          ```yaml
+          hub:
+            extraEnv:
+              MY_ENV_VARS_NAME: "my env vars value"
+          ```
+
+          **NOTE**: We still support this field being a list of
+          [EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#envvar-v1-core)
+          objects as well.
 
           These are usually used in two circumstances:
             - Passing parameters to some custom code specified with `extraConfig`
