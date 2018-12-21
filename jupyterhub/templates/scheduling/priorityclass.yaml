@@ -3,6 +3,7 @@ apiVersion: scheduling.k8s.io/v1beta1
 kind: PriorityClass
 metadata:
   name: {{ .Release.Name }}-default-priority
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- $_ := merge (dict "componentLabel" "default-priority") . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}

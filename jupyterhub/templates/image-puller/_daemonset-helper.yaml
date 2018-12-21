@@ -6,6 +6,7 @@ Returns an image-puller daemonset. Two daemonsets will be created like this.
 {{- define "jupyterhub.imagePuller.daemonset" -}}
 apiVersion: apps/v1
 kind: DaemonSet
+namespace: {{ .Release.Namespace }}
 metadata:
   name: {{ print .componentPrefix "image-puller" }}
   labels:
