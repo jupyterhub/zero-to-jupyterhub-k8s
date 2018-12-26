@@ -1,19 +1,22 @@
 # Optimizations
 
 This page contains information and guidelines for improving the reliability,
-flexibility and stability of your JupyterHub deployment.
+flexibility and stability of your JupyterHub deployment. Many of the settings
+described is only purposeful for a better autoscaling experience.
 
 To summarize, for a good autoscaling experience, we recommend you to:
+
 - Enable the *continuous image puller*, to prepare added nodes for arriving
   users.
 - Enable *pod priority* and add *user placeholders*, to scale up nodes ahead of
-  real user arrivals.
-- Enable the *user scheduler*, to pack users tight on some nodes and let others
-  become empty and scaled down.
+  real users' arrivals.
+- Enable the *user scheduler*, to pack users tight on some nodes and let other
+  nodes become empty and scaled down.
 - Set up an autoscaling node pool and dedicate it to user pods by *tainting* the
   node and requiring user pods, which *tolerate* the nodes' taint, to schedule
-  on these nodes. This is meant to make you avoid getting other pods on these
-  autoscaling node pool that could blocks scale down.
+  on these nodes. This way, only user pods can then block scale down.
+- Set appropriate user resource *requests* and *limits*, to allow a reasonable
+  amount of users to share a node.
 
 A reasonable final configuration for efficient autoscaling could look something
 like this:
