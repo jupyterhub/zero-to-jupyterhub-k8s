@@ -19,7 +19,7 @@ Installation
 ------------
 
 While several `methods to install Helm
-<https://github.com/kubernetes/helm/blob/master/docs/install.md>`_ exists, the
+<https://github.com/helm/helm/blob/master/docs/install.md>`_ exists, the
 simplest way to install Helm is to run Helm's installer script in a terminal:
 
 .. code:: bash
@@ -46,8 +46,8 @@ cluster:
 
    .. note::
 
-      While most clusters have RBAC enabled and you need this line, you **must**
-      skip this step if your Kubernetes cluster does not have RBAC enabled.
+      If you know your kubernetes cluster does not have RBAC enabled, you **must** skip this step.
+      Most users can ignore this note.
 
    .. code-block:: bash
 
@@ -60,7 +60,7 @@ cluster:
 
    .. code-block:: bash
 
-      helm init --service-account tiller
+      helm init --service-account tiller --wait
 
    This command only needs to run once per Kubernetes cluster, it will create a
    `tiller` deployment in the kube-system namespace and setup your local `helm`
@@ -74,6 +74,15 @@ cluster:
       .. code-block:: bash
 
          helm init --client-only
+
+Secure Helm
+-----------
+
+Ensure that `tiller is secure <https://engineering.bitnami.com/articles/helm-security.html>`_ from access inside the cluster:
+
+.. code:: bash
+
+   kubectl patch deployment tiller-deploy --namespace=kube-system --type=json --patch='[{"op": "add", "path": "/spec/template/spec/containers/0/command", "value": ["/tiller", "--listen=localhost:44134"]}]'
 
 Verify
 ------
@@ -94,23 +103,6 @@ the client (`helm`) and server version (`tiller`) is matching!
    Client: &version.Version{SemVer:"v2.11.0", GitCommit:"2e55dbe1fdb5fdb96b75ff144a339489417b146b", GitTreeState:"clean"}
    Server: &version.Version{SemVer:"v2.11.0", GitCommit:"2e55dbe1fdb5fdb96b75ff144a339489417b146b", GitTreeState:"clean"}
 
-.. note::
-
-   If you wish to upgrade the server component of Helm running on the cluster
-   (`tiller`):
-
-   .. code-block:: bash
-
-      helm init --upgrade --service-account tiller
-
-Secure Helm
------------
-
-Ensure that `tiller is secure <https://engineering.bitnami.com/articles/helm-security.html>`_ from access inside the cluster:
-
-.. code:: bash
-
-   kubectl patch deployment tiller-deploy --namespace=kube-system --type=json --patch='[{"op": "add", "path": "/spec/template/spec/containers/0/command", "value": ["/tiller", "--listen=localhost:44134"]}]'
 
 Next Step
 ---------

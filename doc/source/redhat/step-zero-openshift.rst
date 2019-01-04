@@ -3,7 +3,7 @@
 Step Zero: Kubernetes on Red Hat OpenShift
 ------------------------------------------
 
-`OpenShift <https://openshift.org/>`_ from RedHat is a cluster manager based on Kubernetes.
+`OpenShift <https://www.okd.io/>`_ from RedHat is a cluster manager based on Kubernetes.
 
 For setting up JupyterHub on OpenShift, check out the `JupyterHub on OpenShift <https://github.com/jupyter-on-openshift/jupyterhub-quickstart>`_
 project. It provides an OpenShift template based JupyterHub deployment. Zero to JupyterHub uses

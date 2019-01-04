@@ -60,6 +60,17 @@ spec:
             - /bin/sh
             - -c
             - echo "Pulling complete"
+        {{- range $k, $container := .Values.singleuser.profileList }}
+        {{- if $container.kubespawner_override.image }}
+        - name: image-pull-singleuser-profilelist-{{ $k }}
+          image: {{ $container.kubespawner_override.image }}
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - echo "Pulling complete"
+        {{- end }}
+        {{- end }}
         {{- if not .Values.singleuser.cloudMetadata.enabled }}
         - name: image-pull-metadata-block
           image: {{ .Values.singleuser.networkTools.image.name }}:{{ .Values.singleuser.networkTools.image.tag }}

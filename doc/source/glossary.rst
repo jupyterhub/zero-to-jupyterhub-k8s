@@ -16,7 +16,7 @@ details.
       A user who can access the JupyterHub admin panel. They can start/stop user
       pods, and potentially access their notebooks.
 
-   `authenticator <http://jupyterhub.readthedocs.io/en/latest/reference/authenticators.html>`_
+   `authenticator <https://jupyterhub.readthedocs.io/en/latest/reference/authenticators.html>`_
       The way in which users are authenticated to log into JupyterHub. There
       are many authenticators available, like GitHub, Google, MediaWiki,
       Dummy (anyone can log in), etc.
