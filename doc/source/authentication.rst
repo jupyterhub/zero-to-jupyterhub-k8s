@@ -161,8 +161,8 @@ you can still configure JupyterHub to authenticate with OpenID Connect providers
 by specifying all endpoints in GenericOAuthenticator.
 By setting `login_service` you can customize the label on the login button.
 
-Here's an example for authenticating against `keycloak <http://www.keycloak.org/docs/3.4/securing_apps/index.html#endpoints>`_,
-after you `configure an OIDC Client <http://www.keycloak.org/docs/3.4/server_admin/index.html#oidc-clients>`_
+Here's an example for authenticating against `keycloak <https://www.keycloak.org/docs/3.4/securing_apps/index.html#endpoints>`_,
+after you `configure an OIDC Client <https://www.keycloak.org/docs/3.4/server_admin/index.html#oidc-clients>`_
 and obtain the confidential client credentials.
 
 .. code-block:: yaml
@@ -305,7 +305,7 @@ Adding a Whitelist
 ------------------
 
 JupyterHub can be configured to only allow a specified
-`whitelist <http://jupyterhub.readthedocs.io/en/latest/getting-started/authenticators-users-basics.html#create-a-whitelist-of-users>`_
+`whitelist <https://jupyterhub.readthedocs.io/en/latest/getting-started/authenticators-users-basics.html#create-a-whitelist-of-users>`_
 of users to login. This is especially useful if you are
 using an authenticator with an authentication service open to the general
 public, such as GitHub or Google.

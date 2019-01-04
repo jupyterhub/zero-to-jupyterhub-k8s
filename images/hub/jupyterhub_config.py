@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 
 from tornado.httpclient import AsyncHTTPClient
 from kubernetes import client
@@ -125,6 +126,7 @@ for trait, cfg_key in (
     ('extra_resource_limits', 'extraResource.limits'),
     ('extra_resource_guarantees', 'extraResource.guarantees'),
     ('environment', 'extraEnv'),
+    ('profile_list', None),
 ):
     if cfg_key is None:
         cfg_key = camelCaseify(trait)
@@ -136,7 +138,7 @@ if image:
     if tag:
         image = "{}:{}".format(image, tag)
 
-    c.KubeSpawner.image_spec = image
+    c.KubeSpawner.image = image
 
 if get_config('singleuser.imagePullSecret.enabled'):
     c.KubeSpawner.image_pull_secrets = 'singleuser-image-credentials'
@@ -236,10 +238,6 @@ c.KubeSpawner.volume_mounts.extend(get_config('singleuser.storage.extraVolumeMou
 set_config_if_not_none(c.KubeSpawner, 'lifecycle_hooks', 'singleuser.lifecycleHooks')
 
 # Gives spawned containers access to the API of the hub
-# FIXME: KubeSpawner duplicate hub_connect config should be deprecated and removed
-c.KubeSpawner.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
-c.KubeSpawner.hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])
-
 c.JupyterHub.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
 c.JupyterHub.hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])
 
@@ -421,5 +419,33 @@ if get_config('debug.enabled', False):
     c.Spawner.debug = True
 
 
-for key, config_py in sorted(get_config('hub.extraConfig', {}).items()):
+extra_config = get_config('hub.extraConfig', {})
+if isinstance(extra_config, str):
+    from textwrap import indent, dedent
+    msg = dedent(
+    """
+    hub.extraConfig should be a dict of strings,
+    but found a single string instead.
+
+    The keys can be anything identifying the
+    block of extra configuration.
+
+    Try this instead:
+
+        hub:
+          extraConfig:
+            myConfig: |
+              {}
+    """
+    )
+    print(
+        msg.format(
+            indent(extra_config, ' ' * 10).lstrip()
+        ),
+        file=sys.stderr
+    )
+    extra_config = {'deprecated string': extra_config}
+
+for key, config_py in sorted(extra_config.items()):
+    print("Loading extra config: %s" % key)
     exec(config_py)

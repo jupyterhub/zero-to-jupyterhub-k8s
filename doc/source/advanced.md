@@ -35,7 +35,7 @@ Note that you need to install and configure an
 [Ingress Controller](https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-controllers)
 for the ingress object to work.
 
-We recommend the community-maintained [nginx ingress](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress)
+We recommend the community-maintained [nginx-ingress](https://github.com/helm/charts/tree/master/stable/nginx-ingress)
 controller, [**kubernetes/ingress-nginx**](https://github.com/kubernetes/ingress-nginx).
 Note that Nginx maintains two additional ingress controllers.
 For most use cases, we recommend the community maintained **kubernetes/ingress-nginx** since that
@@ -57,7 +57,7 @@ and **google cloud's ingress controller**.
    controller you are using and how your cluster was set up). Accessing
    `<hostname>` from a browser should route traffic to the hub.
 2. Install & configure kube-lego using the
-   [kube-lego helm-chart](https://github.com/kubernetes/charts/tree/master/stable/kube-lego).
+   [kube-lego helm-chart](https://github.com/helm/charts/tree/master/stable/kube-lego).
    Remember to change `config.LEGO_EMAIL` and `config.LEGO_URL` at the least.
 3. Add an annotation + TLS config to the ingress so kube-lego knows to get certificates for
    it:
@@ -94,7 +94,7 @@ Code. Some examples of things you can do:
 1. Override various methods in the Spawner / Authenticator by subclassing them.
    For example, you can use this to pass authentication credentials for the user
    (such as GitHub OAuth tokens) to the environment. See
-   [the JupyterHub docs](http://jupyterhub.readthedocs.io/en/latest/reference/authenticators.html#authentication-state) for
+   [the JupyterHub docs](https://jupyterhub.readthedocs.io/en/latest/reference/authenticators.html#authentication-state) for
    an example.
 2. Specify traitlets that take callables as values, allowing dynamic per-user
    configuration.
@@ -178,9 +178,9 @@ container. You can use this to either pass in additional config to code in your
 ### `hub.extraContainers`
 
 A list of extra containers that are bundled alongside the hub container in the
-same pod. This is a
-[common pattern](http://blog.kubernetes.io/2015/06/the-distributed-system-toolkit-patterns.html) in
-kubernetes that as a long list of cool use cases. Some example use cases are:
+same pod. This is a [common
+pattern](https://kubernetes.io/blog/2015/06/the-distributed-system-toolkit-patterns/)
+in kubernetes that as a long list of cool use cases. Some example use cases are:
 
 1. Database Proxies, which are sometimes required for the hub to talk to its
    configured database
@@ -188,7 +188,7 @@ kubernetes that as a long list of cool use cases. Some example use cases are:
 2. Servers / other daemons that are used by code in your `hub.customConfig`
 
 The items in this list must be valid kubernetes
-[container specifications](https://v1-8.docs.kubernetes.io/docs/api-reference/v1.8/#container-v1-core).
+[container specifications](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#container-v1-core).
 
 ## Picking a Scheduler Strategy
 

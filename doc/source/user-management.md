@@ -52,7 +52,7 @@ cull:
 ## Admin Users
 
 JupyterHub has the concept of
-[admin users](http://jupyterhub.readthedocs.io/en/latest/getting-started/authenticators-users-basics.html#configure-admins-admin-users)
+[admin users](https://jupyterhub.readthedocs.io/en/latest/getting-started/authenticators-users-basics.html#configure-admins-admin-users)
 who have special rights. They can start / stop other user's servers, and
 optionally access user's notebooks. They will see a new **Admin** button in
 their Control Panel which will take them to an **Admin Panel** where they can

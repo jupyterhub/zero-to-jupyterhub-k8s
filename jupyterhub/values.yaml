@@ -3,6 +3,9 @@ custom: {}
 hub:
   service:
     type: ClusterIP
+    annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path: /hub/metrics
     ports:
       nodePort:
     loadBalancerIP:
@@ -34,9 +37,7 @@ hub:
     url:
     password:
   labels: {}
-  annotations:
-    prometheus.io/scrape: 'true'
-    prometheus.io/path: /hub/metrics
+  annotations: {}
   extraConfig: {}
   extraConfigMap: {}
   extraEnv: {}
@@ -182,7 +183,8 @@ singleuser:
                 - 169.254.169.254/32
   events: true
   extraAnnotations: {}
-  extraLabels: {}
+  extraLabels:
+    hub.jupyter.org/network-access-hub: "true"
   extraEnv: {}
   lifecycleHooks:
   initContainers: []
@@ -247,6 +249,9 @@ scheduling:
         memory: 256Mi
   podPriority:
     enabled: false
+    globalDefault: false
+    defaultPriority: 0
+    userPlaceholderPriority: -10
   userPlaceholder:
     enabled: true
     replicas: 0
@@ -261,7 +266,6 @@ scheduling:
 prePuller:
   hook:
     enabled: true
-    extraEnv: {}
     image:
       name: jupyterhub/k8s-image-awaiter
       tag: generated-by-chartpress
@@ -279,7 +283,7 @@ ingress:
   annotations: {}
   hosts: []
   pathSuffix: ''
-  tls:
+  tls: []
 
 
 cull:

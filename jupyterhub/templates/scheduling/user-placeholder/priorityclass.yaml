@@ -6,8 +6,13 @@ metadata:
   name: {{ .Release.Name }}-user-placeholder-priority
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
-value: 0
+  annotations:
+    # PriorityClasses must be added before the other resources reference them.
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation
+    helm.sh/hook-weight: "-100"
+value: {{ .Values.scheduling.podPriority.userPlaceholderPriority }}
 globalDefault: false
-description: "With a non-negative priority, a pod can trigger a cluster scale up. Placeholder pods should have lower than the other pods though."
+description: "With a priority higher or eqaul to a cluster autoscalers priority cutoff, a pod can trigger a cluster scale up. At the same time, placeholder pods priority should be lower than other pods to make them evictable."
 {{- end }}
 {{- end }}

@@ -1,3 +1,4 @@
+dist: xenial
 language: python
 python:
 - 3.6
@@ -6,27 +7,15 @@ git:
 services:
 - docker
 install:
-- pip install --no-cache-dir -r dev-requirements.txt
-- . ci/minikube.env
+- pip3 install --no-cache-dir -r dev-requirements.txt
+- . "ci/minikube-$KUBE_VERSION.env"
 - ./ci/install.sh
 script:
-- python3 tools/templates/lint-and-validate.py
-- |
-  # render & publish chart
-  if [[
-    "$TRAVIS_BRANCH" == "master" &&
-    "$KUBE_VERSION" == "1.10.0" &&
-    "$TRAVIS_PULL_REQUEST" == "false"
-  ]]; then
-    ./ci/deploy.sh
-  else
-    chartpress --commit-range ${TRAVIS_COMMIT_RANGE}
-  fi
-- git diff
-- ./ci/test.sh
+- ./ci/travis-script.sh
 
 env:
   matrix:
+    - KUBE_VERSION=1.12.3
     - KUBE_VERSION=1.10.0
     - KUBE_VERSION=1.9.4
   global:

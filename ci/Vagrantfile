@@ -1,19 +1,28 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# To test in vagrant:
-# vagrant up
-# vagrant ssh
-# . ci/minikube.env
-# /zero-to-jupyterhub-k8s/install.sh
-# /zero-to-jupyterhub-k8s/test.sh
+# Simulate a travis Xenial environment for local travis configuration
+
+# Example:
+# $ vagrant up
+# $ vagrant ssh
+# vagrant$ cd /zero-to-jupyterhub-k8s
+# vagrant$ ./ci/vagrant-run.sh
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "generic/ubuntu1604"
   config.vm.provider "virtualbox" do |vb|
      vb.memory = "3072"
      vb.cpus = 2
   end
-  config.vm.provision "shell", path: "trusty-setup.sh"
+
+  config.vm.provider :libvirt do |lv|
+    lv.memory = 3072
+    lv.cpus = 2
+  end if Vagrant.has_plugin?('vagrant-libvirt')
+
+  config.vm.network "forwarded_port", guest: 31212, host: 31212
+
+  config.vm.provision "shell", path: "xenial-setup.sh"
   config.vm.synced_folder "../", "/zero-to-jupyterhub-k8s"
 end

@@ -32,14 +32,14 @@ Project Jupyter maintains the `jupyter/docker-stacks repository
 Docker images. Each image includes a set of commonly used science and data
 science libraries and tools. They also provide excellent documentation on `how
 to choose a suitable image
-<http://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html>`_.
+<https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html>`_.
 
 
 If you wish to use another image from jupyter/docker-stacks than the
 `base-notebook
-<http://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-base-notebook>`_
+<https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-base-notebook>`_
 used by default, such as the `datascience-notebook
-<http://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-datascience-notebook>`_
+<https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-datascience-notebook>`_
 image containing useful tools and libraries for datascience, complete these steps:
 
 1. Modify your ``config.yaml`` file to specify the image. For example:
@@ -81,7 +81,7 @@ image containing useful tools and libraries for datascience, complete these step
 Use JupyterLab by default
 -------------------------
 
-`JupyterLab <http://jupyterlab.readthedocs.io/en/stable/index.html>`_ is a new
+`JupyterLab <https://jupyterlab.readthedocs.io/en/stable/index.html>`_ is a new
 user interface for Jupyter about to replace the classic user interface (UI).
 While users already can interchange ``/tree`` and ``/lab`` in the URL to switch between
 the classic UI and JupyterLab, they will default to use the classic UI.

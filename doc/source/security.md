@@ -11,7 +11,7 @@ code to properly implement the model described here, or a failure of the
 model itself, please report it to [security@ipython.org](mailto:security@ipython.org).
 
 If you prefer to encrypt your security reports, you can use
-[this PGP public key](https://jupyter-notebook.readthedocs.io/en/stable/_downloads/ipython_security.asc).
+[this PGP public key](https://ipython.org/ipython-doc/2/_downloads/ipython_security.asc).
 
 
 ## HTTPS
@@ -163,7 +163,7 @@ kubectl --namespace=kube-system delete rc kubernetes-dashboard
 
 ## Use Role Based Access Control (RBAC)
 
-Kubernetes supports, and often requires, using [Role Based Access Control (RBAC)](https://kubernetes.io/docs/admin/authorization/rbac/)
+Kubernetes supports, and often requires, using [Role Based Access Control (RBAC)](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)
 to secure which pods / users can perform what kinds of actions on the cluster. RBAC rules can be set to provide users with minimal necessary access based on their administrative needs.
 
 
@@ -204,7 +204,7 @@ singleuser:
 You can either manually create a service account for use by your users and
 specify the name of that here (recommended) or use `default` to give them access
 to the default service account for the namespace. You should ideally also
-(manually) set up [RBAC](https://kubernetes.io/docs/admin/authorization/rbac/)
+(manually) set up [RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)
 rules for this service account to specify what permissions users will have.
 
 This is a sensitive security issue (similar to writing sudo rules in a

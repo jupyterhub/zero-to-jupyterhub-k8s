@@ -4,6 +4,10 @@ metadata:
   name: hub
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
+  annotations:
+    {{- if .Values.hub.service.annotations }}
+    {{- .Values.hub.service.annotations | toYaml | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.hub.service.type }}
   {{- if .Values.hub.service.loadBalancerIP }}
