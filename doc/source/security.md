@@ -112,7 +112,7 @@ There are many ways to confirm that a domain is running trusted HTTPS
 certificates. One options is to use the [Qualys SSL Labs](https://ssllabs.com)
 security report generator. Use the following URL structure to test your domain:
 
-```yaml
+```
 http://ssllabs.com/ssltest/analyze.html?d=<YOUR-DOMAIN>
 ```
 
