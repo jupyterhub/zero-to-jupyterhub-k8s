@@ -65,15 +65,19 @@ image containing useful tools and libraries for datascience, complete these step
 
 2. Apply the changes by following the directions listed in
    `apply the changes`_.
-   
-   
+
+
    .. note::
-   
+
       If you have configured *prePuller.hook.enabled*, all the nodes in your
       cluster will pull the image before the the hub is upgraded to let users
       use the image. The image pulling may take several minutes to complete,
       depending on the size of the image.
 
+.. note::
+
+   If you'd like users to select an environment from **multiple docker images**,
+   see :ref:`multiple-profiles`.
 
 
 .. _jupyterlab-by-default:
@@ -266,7 +270,6 @@ using this tool.
    tool in production.
 
 
-
 .. setup-conda-envs:
 
 Allow users to create their own ``conda`` environments
@@ -292,6 +295,103 @@ across sessions. To resolve this, take the following steps:
   The text above will cause Anaconda to install new environments to this folder,
   which will persist across sessions.
 
+
+.. multiple-profiles:
+
+Using multiple profiles to let users select their environment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can create configurations for multiple user environments,
+and let users select from them once they log in to your JupyterHub. This
+is done by creating multiple **profiles**, each of which is attached to a set
+of configuration options that override your JupyterHub's default configuration
+(specified in your Helm Chart). This can be used to let users choose among many
+Docker images, to select the hardware on which they want their jobs to run,
+or to configure default interfaces such as Jupyter Lab vs. RStudio.
+
+Each configuration is a set of options for `Kubespawner <https://github.com/jupyterhub/kubespawner>`_,
+which defines how Kubernetes should launch a new user server pod. Any
+configuration options passed to the `profileList` configuration will
+overwrite the defaults in Kubespawner (or any configuration you've
+added elsewhere in your helm chart).
+
+Profiles are stored under ``singluser: profileList:``, and are defined as
+a list of profiles with specific configuration options each. Here's an example:
+
+.. code-block:: yaml
+
+   singleuser:
+     profileList:
+       - display_name: "Name to be displayed to users"
+         description: "Longer description for users."
+         # Configuration unique to this profile
+         kubespawner_override:
+           your_config: "Your value"
+         # Defines the default profile - only use for one profile
+         default: true
+
+The above configuration will show a screen with information about this profile
+displayed when users start a new server.
+
+Here's an example with two profiles that lets users select the environment they
+wish to use.
+
+.. code-block:: yaml
+
+   singleuser:
+     # Defines the default image
+     image:
+       name: jupyter/minimal-notebook
+       tag: 2343e33dec46
+     profileList:
+       - display_name: "Minimal environment"
+         description: "To avoid too much bells and whistles: Python."
+         default: true
+       - display_name: "Datascience environment"
+         description: "If you want the additional bells and whistles: Python, R, and Julia."
+         kubespawner_override:
+           image: jupyter/datascience-notebook:2343e33dec46
+       - display_name: "Spark environment"
+         description: "The Jupyter Stacks spark image!"
+         kubespawner_override:
+           image: jupyter/all-spark-notebook:2343e33dec46
+
+This allows users to select from three profiles, each with their own
+environment (defined by each Docker image in the configuration above). This is
+equivalent to the following configuration using `extraCongig` to directly define
+configuration for KubeSpawner:
+
+.. code-block:: yaml
+
+   singleuser:
+     image:
+       name: jupyter/minimal-notebook
+       tag: 2343e33dec46
+   hub:
+     extraConfig: |
+       c.KubeSpawner.profile_list = [
+         {
+           "display_name": "Minimal environment",
+           "description": "To avoid too much bells and whistles: Python.",
+           "default": True,
+         },
+         {
+           "display_name": "Datascience environment",
+           "description": "If you want the additional bells and whistles: Python, R, and Julia.",
+           "kubespawner_override": {'image': "jupyter/datascience-notebook:2343e33dec46"}
+         },
+         {
+           "display_name": "Spark environment",
+           "description": "The Jupyter Stacks spark image!",
+           "kubespawner_override": {'image': "jupyter/all-spark-notebook:2343e33dec46"}
+         }]
+
+.. note::
+
+   You can also **control the HTML used for the profile selection page** by
+   using the Kubespawner ``profile_form_template`` configuration. See the
+   `Kubespawner configuration reference <https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html>`_
+   for more information.
 
 
 .. REFERENCES USED:
