@@ -1,7 +1,7 @@
 .. _debug:
 
-Debugging Kubernetes
-====================
+Debugging
+=========
 
 Sometimes your JupyterHub deployment doesn't behave the way you'd expect.
 This section provides some tips on debugging and fixing some common problems.
@@ -94,7 +94,7 @@ our ``config.yaml`` file for the section where we specify the user's
 Docker image. Here we see our problem::
 
   singleuser:
-  image:
+    image:
       name: jupyter/scipy-notebook
 
 We haven't specified a ``tag`` for our Docker image! Not specifying a tag
@@ -104,7 +104,7 @@ the pod to fail.
 To fix this, let's add a tag to our ``config.yaml`` file::
 
   singleuser:
-  image:
+    image:
       name: jupyter/scipy-notebook
       tag: ae885c0a6226
 
