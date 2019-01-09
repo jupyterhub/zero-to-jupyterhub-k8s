@@ -13,7 +13,6 @@ model itself, please report it to [security@ipython.org](mailto:security@ipython
 If you prefer to encrypt your security reports, you can use
 [this PGP public key](https://ipython.org/ipython-doc/2/_downloads/ipython_security.asc).
 
-
 ## HTTPS
 
 This section describes how to enable HTTPS on your JupyterHub. The easiest way to do so is by using [Let's Encrypt](https://letsencrypt.org/), though we'll also cover how to set up your own HTTPS credentials. For more information
@@ -37,7 +36,7 @@ to automatically renew every few months. To enable this, make the following
 changes to your `config.yaml` file:
 
 1. Specify the two bits of information that we need to automatically provision
-HTTPS certificates - your domain name & a contact email address.
+   HTTPS certificates - your domain name & a contact email address.
 
    ```yaml
    proxy:
@@ -74,8 +73,8 @@ If you have your own HTTPS certificates & want to use those instead of the autom
             -----END CERTIFICATE-----
     ```
 
-2. Apply the config changes by running helm upgrade ....
-3. Wait for about a minute, now your hub should be HTTPS enabled!
+2.  Apply the config changes by running helm upgrade ....
+3.  Wait for about a minute, now your hub should be HTTPS enabled!
 
 ### Off-loading SSL to a Load Balancer
 
@@ -100,7 +99,7 @@ proxy:
       service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "tcp"
       # Which ports should use SSL
       service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
-      service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '3600'
+      service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "3600"
 ```
 
 Annotation options will vary by provider. Kubernetes provides a list for
@@ -113,9 +112,9 @@ There are many ways to confirm that a domain is running trusted HTTPS
 certificates. One options is to use the [Qualys SSL Labs](https://ssllabs.com)
 security report generator. Use the following URL structure to test your domain:
 
-    ```
-    http://ssllabs.com/ssltest/analyze.html?d=<YOUR-DOMAIN>
-    ```
+```
+http://ssllabs.com/ssltest/analyze.html?d=<YOUR-DOMAIN>
+```
 
 ## Secure access to Helm
 
@@ -135,7 +134,7 @@ This limit shouldn't affect helm functionality in any form.
 
 Most cloud providers have a static IP you can hit from any of the compute nodes, including the user pod, to get metadata about the cloud. This metadata can contain very sensitive info, and this metadata, in the wrong hands, can allow attackers to take full control of your cluster and cloud resources. It is **critical** to secure the metadata service. We block access to this IP by default (as of v0.6), so you are protected from this!
 
-The slides beginning at [*Slide 38*](https://schd.ws/hosted_files/kccncna17/d8/Hacking%20and%20Hardening%20Kubernetes%20By%20Example%20v2.pdf) provides more information on the dangers presented by this attack.
+The slides beginning at [_Slide 38_](https://schd.ws/hosted_files/kccncna17/d8/Hacking%20and%20Hardening%20Kubernetes%20By%20Example%20v2.pdf) provides more information on the dangers presented by this attack.
 
 If you need to enable access to the metadata server for some reason, you can do the following in config.yaml:
 
@@ -166,7 +165,6 @@ kubectl --namespace=kube-system delete rc kubernetes-dashboard
 Kubernetes supports, and often requires, using [Role Based Access Control (RBAC)](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)
 to secure which pods / users can perform what kinds of actions on the cluster. RBAC rules can be set to provide users with minimal necessary access based on their administrative needs.
 
-
 It is **critical** to understand that if RBAC is disabled, all pods are given `root` equivalent permission on the Kubernetes cluster and all the nodes in it. This opens up very bad vulnerabilites for your security.
 
 As of the Helm chart v0.5 used with JupyterHub and BinderHub, the helm chart can natively work with RBAC enabled clusters. To provide sensible security defaults, we ship appropriate minimal RBAC rules for the various components we use. We **highly recommend** using these minimal or more restrictive RBAC rules.
@@ -175,7 +173,7 @@ If you want to disable the RBAC rules, for whatever reason, you can do so with t
 
 ```yaml
 rbac:
-   enabled: false
+  enabled: false
 ```
 
 We strongly **discourage disabling** the RBAC rules and remind you that this
@@ -198,7 +196,7 @@ can do so with the following in your `config.yaml`:
 
 ```yaml
 singleuser:
-    serviceAccountName: <service-account-name>
+  serviceAccountName: <service-account-name>
 ```
 
 You can either manually create a service account for use by your users and
@@ -211,7 +209,6 @@ This is a sensitive security issue (similar to writing sudo rules in a
 traditional computing environment), so be very careful.
 
 There's ongoing work on making this easier!
-
 
 ## Kubernetes Network Policies
 
@@ -255,15 +252,15 @@ singleuser:
   networkPolicy:
     enabled: true
     egress:
-    - ports:
-      - port: 53
-        protocol: UDP
-    - ports:
-      - port: 80
-        protocol: TCP
-    - ports:
-      - port: 443
-        protocol: TCP
+      - ports:
+          - port: 53
+            protocol: UDP
+      - ports:
+          - port: 80
+            protocol: TCP
+      - ports:
+          - port: 443
+            protocol: TCP
 ```
 
 See the [Kubernetes
