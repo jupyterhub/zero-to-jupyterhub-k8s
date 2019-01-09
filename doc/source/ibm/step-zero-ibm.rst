@@ -44,6 +44,8 @@ Procedure:
    
      3. Check the status of your **Cluster** and **Worker Nodes** and wait for them to be **ready**.
 
+     Or, if you prefer, create the cluster using the `IBM Cloud CLI tools <https://console.bluemix.net/docs/containers/cs_clusters.html#clusters_cli)>`_
+
 2. Configure kubectl
    
    `kubectl <https://kubernetes.io/docs/user-guide/kubectl-overview/)>`_ is a CLI tool to interact with a Kubernetes cluster. In this occasion, you will use it to point forward to the created Kubernetes cluster.
