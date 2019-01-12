@@ -61,6 +61,7 @@ spec:
             - -c
             - echo "Pulling complete"
         {{- range $k, $container := .Values.singleuser.profileList }}
+        {{- if $container.kubespawner_override }}
         {{- if $container.kubespawner_override.image }}
         - name: image-pull-singleuser-profilelist-{{ $k }}
           image: {{ $container.kubespawner_override.image }}
@@ -69,6 +70,7 @@ spec:
             - /bin/sh
             - -c
             - echo "Pulling complete"
+        {{- end }}
         {{- end }}
         {{- end }}
         {{- if not .Values.singleuser.cloudMetadata.enabled }}
