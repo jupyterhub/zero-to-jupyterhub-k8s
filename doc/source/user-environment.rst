@@ -358,7 +358,7 @@ wish to use.
 
 This allows users to select from three profiles, each with their own
 environment (defined by each Docker image in the configuration above). This is
-equivalent to the following configuration using `extraCongig` to directly define
+equivalent to the following configuration using `hub.extraConfig.someConfigName` to directly define
 configuration for KubeSpawner:
 
 .. code-block:: yaml
