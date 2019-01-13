@@ -315,7 +315,7 @@ configuration options passed to the `profileList` configuration will
 overwrite the defaults in Kubespawner (or any configuration you've
 added elsewhere in your helm chart).
 
-Profiles are stored under ``singluser: profileList:``, and are defined as
+Profiles are stored under ``singluser.profileList``, and are defined as
 a list of profiles with specific configuration options each. Here's an example:
 
 .. code-block:: yaml
