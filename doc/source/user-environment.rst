@@ -180,7 +180,7 @@ Python, for example, the following code reads an environment variable's value:
 
 .. _add-files-to-home:
 
-About user storage and adding files to it 
+About user storage and adding files to it
 -----------------------------------------
 
 It is important to understand the basics of how user storage is set up. By
@@ -357,34 +357,7 @@ wish to use.
            image: jupyter/all-spark-notebook:2343e33dec46
 
 This allows users to select from three profiles, each with their own
-environment (defined by each Docker image in the configuration above). This is
-equivalent to the following configuration using `hub.extraConfig.someConfigName` to directly define
-configuration for KubeSpawner:
-
-.. code-block:: yaml
-
-   singleuser:
-     image:
-       name: jupyter/minimal-notebook
-       tag: 2343e33dec46
-   hub:
-     extraConfig: |
-       c.KubeSpawner.profile_list = [
-         {
-           "display_name": "Minimal environment",
-           "description": "To avoid too much bells and whistles: Python.",
-           "default": True,
-         },
-         {
-           "display_name": "Datascience environment",
-           "description": "If you want the additional bells and whistles: Python, R, and Julia.",
-           "kubespawner_override": {'image': "jupyter/datascience-notebook:2343e33dec46"}
-         },
-         {
-           "display_name": "Spark environment",
-           "description": "The Jupyter Stacks spark image!",
-           "kubespawner_override": {'image': "jupyter/all-spark-notebook:2343e33dec46"}
-         }]
+environment (defined by each Docker image in the configuration above).
 
 .. note::
 
