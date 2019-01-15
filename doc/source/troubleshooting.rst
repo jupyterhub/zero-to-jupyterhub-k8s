@@ -21,3 +21,10 @@ How does billing for this work?
 JupyterHub isn't handling any of the billing for your usage. That's done
 through whatever cloud service you're using. For considerations about
 managing cost with JupyterHub, see :ref:`cost`.
+
+What version of JupyterHub is installed in the Helm Chart?
+----------------------------------------------------------
+
+Each Helm Chart is packaged with a specific version of JupyterHub (and
+other software as well). See see the `Helm Chart repository <https://github.com/jupyterhub/helm-chart#versions-coupled-to-each-chart-release>`_
+for information about the versions of relevant software packages.

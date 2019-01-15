@@ -14,7 +14,7 @@ Prepare configuration file
 In this step we will prepare a `YAML <https://en.wikipedia.org/wiki/YAML>`_
 configuration file that we will refer to as `config.yaml`. It will contain the multiple
 :term:`Helm values` to be provided to a JupyterHub :term:`Helm chart` developed
-specifically together with this guide. 
+specifically together with this guide.
 
 Helm charts contains :term:`templates
 <helm template>` that with provided values will render to :term:`Kubernetes
@@ -33,30 +33,30 @@ config file will provide the values to be used by our Helm chart.
    <https://en.wikipedia.org/wiki/GNU_nano>`_, but any editor will do.
 
    .. code-block:: bash
-   
+
       nano config.yaml
-   
+
 3. Write the following into the ``config.yaml`` file but instead of writing
    ``<RANDOM-HEX>`` paste the generated hex string you copied in step 1.
-   
+
    .. code-block:: yaml
 
       proxy:
         secretToken: "<RANDOM_HEX>"
 
    .. note::
-   
+
       It is common practice for Helm and Kubernetes YAML files to indent using
       two spaces.
 
 4. Save the ``config.yaml`` file. In the nano editor this is done by pressing **CTRL+X** or
-   **CMD+X** followed by a confirmation to save the changes. 
+   **CMD+X** followed by a confirmation to save the changes.
 
 .. Don't put an example here! People will just copy paste that & that's a
    security issue.
 
 Install JupyterHub
------------------- 
+------------------
 
 1. Make Helm aware of the `JupyterHub Helm chart repository
    <https://jupyterhub.github.io/helm-chart/>`_ so you can install the
@@ -130,6 +130,8 @@ Install JupyterHub
         chart*, not the version of JupyterHub. Each version of the JupyterHub
         Helm chart is paired with a specific version of JupyterHub. E.g.,
         ``0.7.0`` of the Helm chart runs JupyterHub ``0.9.2``.
+        For a list of which JupyterHub version is installed in each version
+        of the Z2JH Helm Chart, see the `Helm Chart repository <https://github.com/jupyterhub/helm-chart#versions-coupled-to-each-chart-release>`_.
 
 3. While Step 2 is running, you can see the pods being created by entering in
    a different terminal:

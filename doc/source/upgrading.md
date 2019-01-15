@@ -135,6 +135,12 @@ you would use:
 RUN pip install --no-cache-dir jupyterhub==0.8.1
 ```
 
+## JupyterHub versions installed in each Helm Chart
+
+Each Helm Chart is packaged with a specific version of JupyterHub (and
+other software as well). See the [Helm Chart repository](https://github.com/jupyterhub/helm-chart#versions-coupled-to-each-chart-release>) for
+information about the versions of relevant software packages.
+
 ## Troubleshooting
 
 If the upgrade is failing on a test system or a system that does not serve users, you can try
