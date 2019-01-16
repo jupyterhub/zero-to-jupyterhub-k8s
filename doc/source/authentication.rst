@@ -63,7 +63,7 @@ To do so, see the configuration below.
         type: github
         github:
           ...
-          org_whitelist:
+          orgWhitelist:
             - "SomeOrgName"
         scopes:
           - "read:user"
