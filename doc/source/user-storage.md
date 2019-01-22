@@ -226,7 +226,8 @@ with caution!
 If you already have a `PersistentVolume` and `PersistentVolumeClaim` created
 outside of JupyterHub you can mount them inside the user pods.
 For example, if you have a shared `PersistentVolumeClaim` called
-`jupyterhub-shared-volume` you could mount it in all user pods:
+`jupyterhub-shared-volume` you could mount it as `/home/shared` in all user
+pods:
 
 ```yaml
 singleuser:
@@ -237,7 +238,7 @@ singleuser:
           claimName: jupyterhub-shared-volume
     extraVolumeMounts:
       - name: jupyterhub-shared
-        mountPath: /home/jovyan/shared
+        mountPath: /home/shared
 ```
 
 Note that if you want to mount a volume into multiple pods the volume must
