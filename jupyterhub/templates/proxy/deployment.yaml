@@ -96,3 +96,11 @@ spec:
               name: proxy-public
             - containerPort: 8001
               name: api
+          livenessProbe:
+            httpGet:
+              path: /hub/login
+              port: proxy-public
+          readinessProbe:
+            httpGet:
+              path: /hub/login
+              port: proxy-public
