@@ -220,3 +220,26 @@ kubectl --namespace=<your-namespace> delete pvc <pvc-name>
 
 Remember that deleting someone's `PVC`s will delete all their data, so do so
 with caution!
+
+## Additional storage volumes
+
+If you already have a `PersistentVolume` and `PersistentVolumeClaim` created
+outside of JupyterHub you can mount them inside the user pods.
+For example, if you have a shared `PersistentVolumeClaim` called
+`jupyterhub-shared-volume` you could mount it as `/home/shared` in all user
+pods:
+
+```yaml
+singleuser:
+  storage:
+    extraVolumes:
+      - name: jupyterhub-shared
+        persistentVolumeClaim:
+          claimName: jupyterhub-shared-volume
+    extraVolumeMounts:
+      - name: jupyterhub-shared
+        mountPath: /home/shared
+```
+
+Note that if you want to mount a volume into multiple pods the volume must
+support a suitable [access mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes).
