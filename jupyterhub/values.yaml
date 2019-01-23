@@ -4,7 +4,6 @@ hub:
   service:
     type: ClusterIP
     annotations: {}
-    annotatePrometheus: true
     ports:
       nodePort:
     loadBalancerIP:
