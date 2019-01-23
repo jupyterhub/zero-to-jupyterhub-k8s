@@ -5,13 +5,84 @@ Releases are named after famous [Cricket](https://en.wikipedia.org/wiki/Cricket)
 
 
 
-## [Unreleased](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/0.7.0..master)
+## [Unreleased](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/0.8.0..master)
 
 ### Breaking changes
 
 ### New Features
 
 
+## [0.8.0](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/0.7.0..0.8.0) - [Richie Benaud](https://en.wikipedia.org/wiki/Richie_Benaud) - 2019-01-24
+
+This release contains JupyterHub version 0.9.4. It requires Kubernetes >= 1.11 and Helm >= 2.11.0.
+See [the Helm Chart repository](https://github.com/jupyterhub/helm-chart#versions-coupled-to-each-chart-release) for
+a list of relevant dependencies for all Helm Chart versions.
+
+It contains new features, additional configuration options, and bug fixes.
+
+### Upgrading from 0.7
+
+TODO: Instructions
+
+#### Troubleshooting
+
+TODO: Instructions
+
+### New Features
+
+#### TODO: ITEM 1
+
+
+### [Richie Benaud](https://www.cricket.com.au/players/richie-benaud/gvp5xSjUp0q6Qd7IM5TbCg)
+
+_(excerpt from https://www.cricket.com.au/players/richie-benaud/gvp5xSjUp0q6Qd7IM5TbCg)_
+
+Possibly the most iconic man in Australian cricket, Richie Benaud enjoyed a career spanning nearly
+70 years in the game. On the field, he scored 767 runs at 19.66 in his 27 matches against England,
+while he also picked up 83 wickets. Off the field,
+he has been just as important. His commentary has been second to none since making his radio debut in 1960.
+
+While playing for Australia, fans flocked to the cricket to watch Benaud led sides
+dominate whoever they played. The late 1950’s to early 1960’s was a golden period in
+Australian cricket, with players such as Simpson, Lawry and Harvey
+scoring runs, while Benaud and Davidson did the damage with the ball.
+
+Richie Benaud was responsible for resurrecting cricket in this country. The world was
+changing at that time, and so was cricket. It was being shown on television for the
+first time, while radio coverage was becoming more advanced. Benaud
+felt he had a duty to the Australian public to make the game more entertaining. Sure,
+you could argue that the 1961 series was dull, but at least Australia
+retained the Ashes. Nobody will forget the tied Test against the West Indies, or Benaud’s
+audacious move to bowl around the wicket in Manchester.
+
+Benaud is credited with popularising the tactics we see today. Huddles after a wicket
+were born in the Benaud era. Declaring just before stumps in a bid to steal a late wicket
+was something he thrived upon. Bowling into the rough is now seen
+as common practice.
+
+Benaud was also prepared to try new things with the ball. He worked very hard on
+perfecting his wrong’un, the flipper and the top-spinner. His leg-spinner even had variety
+to it, making him one of the most complete tweakers at the time.
+
+His leadership earned him respect immediately. Players loved being guided the
+likeable larrikin from Penrith. He looked after everyone both as a team, but also on an
+individual basis. His teammates trusted his innovative ideas, while
+he trusted them to execute them to the fullest.
+
+For most Australians, summer means cricket. And cricket means hearing the dulcet
+tones of their favourite commentator, Richie Benaud. From the cream coloured suit, to the
+witty repartee with his colleagues, Benaud is the complete package
+
+
+### Contributors
+
+This release wouldn't have been possible without the wonderful contributors
+to the [zero-to-jupyterhub](https://github.com/jupyterhub/zero-to-jupyterhub-k8s),
+and [KubeSpawner](https://github.com/jupyterhub/kubespawner) repos.
+We'd like to thank everyone who contributed in any form - Issues, commenting
+on issues, PRs and reviews since the last Zero to JupyterHub release.
+
+<TODO: list of contributors>
 
 ## [0.7.0](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/v0.6...0.7.0) - [Alex Blackwell](https://en.wikipedia.org/wiki/Alex_Blackwell) - 2018-09-03
 
@@ -964,7 +1035,7 @@ She went on to make her domestic debut in the 2007-08 Women’s National Cricket
 season, taking 2-29 from 10 overs in her first match.
 
 Since her national debut, Perry has become a regular fixture for the Southern Stars,
-playing in the 2009 ICC Women’s World Cup and the ICC Women’s World Twenty20 in the same year.  
+playing in the 2009 ICC Women’s World Cup and the ICC Women’s World Twenty20 in the same year.
 
 Leading Australia’s bowling attack, Perry played a crucial role in the ICC Women’s
 World Twenty20 Final in the West Indies in 2010.
