@@ -5,6 +5,10 @@ metadata:
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
   annotations:
+    {{- if .Values.hub.service.annotatePrometheus }}
+    prometheus.io/scrape: "true"
+    prometheus.io/path: {{ .Values.hub.baseUrl }}hub/metrics
+    {{- end }}
     {{- if .Values.hub.service.annotations }}
     {{- .Values.hub.service.annotations | toYaml | nindent 4 }}
     {{- end }}

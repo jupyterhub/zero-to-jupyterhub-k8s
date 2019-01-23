@@ -3,9 +3,8 @@ custom: {}
 hub:
   service:
     type: ClusterIP
-    annotations:
-      prometheus.io/scrape: 'true'
-      prometheus.io/path: /hub/metrics
+    annotations: {}
+    annotatePrometheus: true
     ports:
       nodePort:
     loadBalancerIP:
