@@ -332,5 +332,5 @@ scheduling:
 ```
 
 **NOTE**: For the user scheduler to work well, you need old user pods to shut
-down at some point. Make sure to configure the
-[*culler*](user-management.html#culling-user-pods) suitable properly.
+down at some point. Make sure to properly configure the
+[*culler*](user-management.html#culling-user-pods).
