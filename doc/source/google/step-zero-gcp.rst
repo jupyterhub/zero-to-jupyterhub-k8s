@@ -77,14 +77,14 @@ your google cloud account.
    * ``--machine-type`` specifies the amount of CPU and RAM in each node within
      this default node pool. There is a `variety of types
      <https://cloud.google.com/compute/docs/machine-types>`_ to choose from.
-     You can pick something from `this list
-     <https://cloud.google.com/compute/docs/regions-zones/#available>`_.
-     that is not too far away from your users.
    
    * ``--num-nodes`` specifies how many nodes to spin up. You can change this
      later through the cloud console or using the `gcloud` command line tool.
 
    * ``--zone`` specifies the data center zone where your cluster will be created.
+     You can pick something from `this list
+     <https://cloud.google.com/compute/docs/regions-zones/#available>`_
+     that is not too far away from your users.
 
 
 5. To test if your cluster is initialized, run:
