@@ -35,7 +35,7 @@ your google cloud account.
       <https://console.cloud.google.com>`_ by clicking the button shown below.
       You are now in control of a virtual machine with various tools
       preinstalled. If you save something in a user folder they will remain
-      avaitlableo you if you return at a later stage. Additional documentation
+      available to you if you return at a later stage. Additional documentation
       about Google Cloud shell is available `here
       <https://cloud.google.com/shell/docs/>`__
 
