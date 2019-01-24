@@ -49,13 +49,36 @@ To enable GitHub authentication, add the following to your `config.yml`:
 
 Make sure that the `callbackUrl` matches the one you set in GitHub.
 
+Giving access to individual GitHub users
+++++++++++++++++++++++++++++++++++++++++
+The configuration above will allow *any* GitHub user to access your JupyterHub.
+You can restrict access to a white-list of GitHub users by adding the following
+to your configuration.
+
+    .. code-block:: yaml
+
+      auth:
+        type: github
+        github:
+            ...
+        admin:
+            access: true
+            users:
+            - user1
+            ...
+        whitelist:
+            users:
+            - user2
+            ...
+
+In this case, `user1` will have *admin* access and `user2` will have regular
+access to your JupyterHub.
+
 
 Giving access to organizations on GitHub
 ++++++++++++++++++++++++++++++++++++++++
-
-The configuration above will allow *any* GitHub user to access your JupyterHub.
-You can also restrict access to members of one or more GitHub organizations.
-To do so, see the configuration below.
+You can also restrict access to all of the members of one or more GitHub
+organizations. To do so, see the configuration below.
 
 .. code-block:: yaml
 
@@ -118,7 +141,7 @@ CILogon
           clientSecret: "an0ther1ongs3cretstr1ng"
           callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
 
-In order to overcome the `caveats <https://github.com/jupyterhub/oauthenticator/blob/master/oauthenticator/cilogon.py>`_ of implementing CILogon OAuthAuthenticator for JupyterHub, 
+In order to overcome the `caveats <https://github.com/jupyterhub/oauthenticator/blob/master/oauthenticator/cilogon.py>`_ of implementing CILogon OAuthAuthenticator for JupyterHub,
 i.e. default username_claim of ePPN does not work for all providers, e.g. generic OAuth such as Google, Use c.CILogonOAuthenticator.username_claim = 'email' to use email instead of ePPN as the JupyterHub username:
 
 Add to your config.yaml file to `inject extra python based configuration that should be in jupyterhub_config.py <https://zero-to-jupyterhub.readthedocs.io/en/latest/reference.html#hub-extraconfig>`_ as below:
@@ -128,7 +151,7 @@ Add to your config.yaml file to `inject extra python based configuration that sh
       hub:
         extraConfig: |
           c.CILogonOAuthenticator.username_claim = 'email'
-      
+
 
 Globus
 ^^^^^^
