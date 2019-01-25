@@ -2,42 +2,36 @@
 
 [![Build Status](https://travis-ci.org/jupyterhub/zero-to-jupyterhub-k8s.svg?branch=master)](https://travis-ci.org/jupyterhub/zero-to-jupyterhub-k8s)
 [![Documentation Status](https://readthedocs.org/projects/zero-to-jupyterhub/badge/?version=stable)](https://zero-to-jupyterhub.readthedocs.io/en/stable/?badge=stable)
-                
 
-**This is under active development and subject to change.**
+This repo contains a *Helm chart* for JupyterHub and a guide to use it. Together
+they allow you to make a JupyterHub available to a very large group of users
+such as the staff and students of a university.
 
-This repo contains resources, such as **Helm charts** and the
-[**Zero to JupyterHub Guide**](https://z2jh.jupyter.org), which
-help you to deploy JupyterHub on Kubernetes.
+## The guide
 
-## Zero to JupyterHub with Kubernetes Guide
+The [Zero to JupyterHub with Kubernetes guide](https://z2jh.jupyter.org)
+provides user-friendly steps to _deploy_
+[JupyterHub](https://github.com/jupyterhub/jupyterhub) on a cloud using
+[Kubernetes](https://kubernetes.io/) and [Helm](https://helm.sh/).
 
-The [Zero to JupyterHub Guide](https://z2jh.jupyter.org) gives
-user-friendly steps to create a new JupyterHub deployment using Kubernetes.
+The guide is complemented well by the [documentation for JupyterHub](https://jupyterhub.readthedocs.io).
 
-For additional information about JupyterHub, such as a technical overview,
-configuration reference, and API reference, please consult the
-[JupyterHub project documentation](https://jupyterhub.readthedocs.io) which
-contains information that applies to Kubernetes as well as other deployment
-methods. The JupyterHub project documentation provides detailed information
-about authenticators, spawners, and services.
+## The chart
 
-We hope these two documents help you get up and running with your own
-JupyterHub deployment.
+The JupyterHub Helm chart lets a user create a reproducible and maintainable
+deployment of JupyterHub on a Kubernetes cluster in a cloud environment. The
+released charts are made available in our [Helm chart
+repository](https://jupyterhub.github.io/helm-chart).
 
-## Helm charts
+## History
 
-The JupyterHub Helm charts allow a user to create reproducible and
-maintainable deployments of JupyterHub with Kubernetes.
-
-## History and inspiration
-
-Much of the initial groundwork for this documentation is information learned from
-the successful use of JupyterHub and Kubernetes at UC Berkeley in their
+Much of the initial groundwork for this documentation is information learned
+from the successful use of JupyterHub and Kubernetes at UC Berkeley in their
 [Data 8](http://data8.org/) program.
 
+![](doc/source/_static/images/data8_audience.jpg)
 
-### Acknowledgements
+## Acknowledgements
 
 Thank you to the following contributors:
 
@@ -52,7 +46,7 @@ Future contributors are encouraged to add themselves to this README file too.
 
 ## Licensing
 
-This repository is dual licensed under the Apache2 (to match the upstream kubernetes
-[charts](https://github.com/kubernetes/charts) repository) and 3-clause BSD (to
-match the rest of Project Jupyter repositories) licenses. See the `LICENSE` file for
-more information!
+This repository is dual licensed under the Apache2 (to match the upstream
+Kubernetes [charts](https://github.com/helm/charts) repository) and
+3-clause BSD (to match the rest of Project Jupyter repositories) licenses. See
+the `LICENSE` file for more information!
