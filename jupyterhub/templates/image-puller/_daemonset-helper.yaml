@@ -55,7 +55,9 @@ spec:
       initContainers:
         - name: image-pull-singleuser
           image: {{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}
-          imagePullPolicy: IfNotPresent
+          {{- with .Values.singleuser.image.pullPolicy }}
+          imagePullPolicy: {{ . }}
+          {{- end }}
           command:
             - /bin/sh
             - -c
@@ -65,7 +67,6 @@ spec:
         {{- if $container.kubespawner_override.image }}
         - name: image-pull-singleuser-profilelist-{{ $k }}
           image: {{ $container.kubespawner_override.image }}
-          imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
             - -c
@@ -76,7 +77,9 @@ spec:
         {{- if not .Values.singleuser.cloudMetadata.enabled }}
         - name: image-pull-metadata-block
           image: {{ .Values.singleuser.networkTools.image.name }}:{{ .Values.singleuser.networkTools.image.tag }}
-          imagePullPolicy: IfNotPresent
+          {{- with .Values.singleuser.networkTools.image.pullPolicy }}
+          imagePullPolicy: {{ . }}
+          {{- end }}
           command:
             - /bin/sh
             - -c
@@ -85,7 +88,9 @@ spec:
         {{- range $k, $v := .Values.prePuller.extraImages }}
         - name: image-pull-{{ $k }}
           image: {{ $v.name }}:{{ $v.tag }}
-          imagePullPolicy: {{ $v.policy | default "IfNotPresent" }}
+          {{- with $v.pullPolicy }}
+          imagePullPolicy: {{ . }}
+          {{- end }}
           command:
             - /bin/sh
             - -c
@@ -94,7 +99,9 @@ spec:
         {{- range $k, $container := .Values.singleuser.extraContainers }}
         - name: image-pull-singleuser-extra-container-{{ $k }}
           image: {{ $container.image }}
-          imagePullPolicy: IfNotPresent
+          {{- with $container.imagePullPolicy }}
+          imagePullPolicy: {{ . }}
+          {{- end }}
           command:
             - /bin/sh
             - -c

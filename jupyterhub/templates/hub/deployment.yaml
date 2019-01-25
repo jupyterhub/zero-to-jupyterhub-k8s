@@ -110,7 +110,9 @@ spec:
             {{- end }}
           resources:
             {{- .Values.hub.resources | toYaml | trimSuffix "\n" | nindent 12 }}
-          imagePullPolicy: {{ .Values.hub.imagePullPolicy }}
+          {{- with .Values.hub.image.pullPolicy }}
+          imagePullPolicy: {{ . }}
+          {{- end }}
           env:
             - name: PYTHONUNBUFFERED
               value: "1"
