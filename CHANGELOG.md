@@ -8,6 +8,7 @@ Releases are named after famous [Cricket](https://en.wikipedia.org/wiki/Cricket)
 ## [Unreleased](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/0.8.0..master)
 
 ### Breaking changes
+- Github organisation OAuth: `auth.github.org_whitelist` has been renamed to `auth.github.orgWhitelist`
 
 ### New Features
 
