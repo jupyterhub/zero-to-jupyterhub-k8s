@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.org/jupyterhub/zero-to-jupyterhub-k8s.svg?branch=master)](https://travis-ci.org/jupyterhub/zero-to-jupyterhub-k8s)
 [![Documentation Status](https://readthedocs.org/projects/zero-to-jupyterhub/badge/?version=stable)](https://zero-to-jupyterhub.readthedocs.io/en/stable/?badge=stable)
+[![GitHub](https://img.shields.io/badge/issue_tracking-github-e45735.svg)](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues)
+[![Discourse](https://img.shields.io/badge/help_forum-discourse-e45735.svg)](https://discourse.jupyter.org/c/jupyterhub/z2jh-k8s)
+[![Gitter](https://img.shields.io/badge/social_chat-gitter-e45735.svg)](https://gitter.im/jupyterhub/jupyterhub)
+
 
 This repo contains a *Helm chart* for JupyterHub and a guide to use it. Together
 they allow you to make a JupyterHub available to a very large group of users
