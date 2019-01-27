@@ -4,9 +4,9 @@
 [![Documentation Status](https://readthedocs.org/projects/zero-to-jupyterhub/badge/?version=latest)](https://zero-to-jupyterhub.readthedocs.io/en/stable/?badge=stable)
 [![Latest stable release](https://img.shields.io/badge/dynamic/json.svg?label=stable&url=https://api.github.com/repos/jupyterhub/zero-to-jupyterhub-k8s/releases&query=$..[0].tag_name&colorB=orange)](https://jupyterhub.github.io/helm-chart/)
 [![Latest development release](https://img.shields.io/badge/dynamic/yaml.svg?label=dev&url=https%3A%2F%2Fjupyterhub.github.io%2Fhelm-chart%2Findex.yaml&query=%24.entries..jupyterhub[0].version&colorB=orange)](https://jupyterhub.github.io/helm-chart/)
-[![GitHub](https://img.shields.io/badge/issue_tracking-github-e45735.svg)](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues)
-[![Discourse](https://img.shields.io/badge/help_forum-discourse-e45735.svg)](https://discourse.jupyter.org/c/jupyterhub/z2jh-k8s)
-[![Gitter](https://img.shields.io/badge/social_chat-gitter-e45735.svg)](https://gitter.im/jupyterhub/jupyterhub)
+[![GitHub](https://img.shields.io/badge/issue_tracking-github-blue.svg)](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues)
+[![Discourse](https://img.shields.io/badge/help_forum-discourse-blue.svg)](https://discourse.jupyter.org/c/jupyterhub/z2jh-k8s)
+[![Gitter](https://img.shields.io/badge/social_chat-gitter-blue.svg)](https://gitter.im/jupyterhub/jupyterhub)
 
 
 This repo contains a *Helm chart* for JupyterHub and a guide to use it. Together
