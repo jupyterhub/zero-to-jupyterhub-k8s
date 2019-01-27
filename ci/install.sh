@@ -23,6 +23,18 @@ mv minikube bin/
 bin/minikube config set WantKubectlDownloadMsg false
 bin/minikube config set WantReportErrorPrompt false
 
+echo "installing crictl"
+if [ ! -z "${CRICTL_VERSION}" ]; then
+  if ! [ -f bin/crictl-${CRICTL_VERSION} ]; then
+    curl -sSLo bin/crictl-${CRICTL_VERSION}.tar.gz https://github.com/kubernetes-sigs/cri-tools/releases/download/v${CRICTL_VERSION}/crictl-v${CRICTL_VERSION}-linux-amd64.tar.gz
+    tar --extract --file bin/crictl-${CRICTL_VERSION}.tar.gz --directory bin
+    rm bin/crictl-${CRICTL_VERSION}.tar.gz
+    mv bin/crictl bin/crictl-${CRICTL_VERSION}
+  fi
+fi
+cp bin/crictl-${CRICTL_VERSION} bin/crictl
+
+
 echo "installing kubeval"
 if ! [ -f bin/kubeval-${KUBEVAL_VERSION} ]; then
   curl -sSLo bin/kubeval-${KUBEVAL_VERSION}.tar.gz https://github.com/garethr/kubeval/releases/download/${KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz
