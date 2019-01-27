@@ -19,6 +19,9 @@ echo "installing minikube"
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-linux-amd64
 chmod +x minikube
 mv minikube bin/
+# Reduce CI logs clutter
+bin/minikube config set WantKubectlDownloadMsg false
+bin/minikube config set WantReportErrorPrompt false
 
 echo "installing kubeval"
 if ! [ -f bin/kubeval-${KUBEVAL_VERSION} ]; then
