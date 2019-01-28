@@ -1,7 +1,7 @@
 # Zero to JupyterHub with Kubernetes
 
 [![Build Status](https://travis-ci.org/jupyterhub/zero-to-jupyterhub-k8s.svg?branch=master)](https://travis-ci.org/jupyterhub/zero-to-jupyterhub-k8s)
-[![Documentation Status](https://readthedocs.org/projects/zero-to-jupyterhub/badge/?version=latest)](https://zero-to-jupyterhub.readthedocs.io/en/stable/?badge=stable)
+[![Documentation Status](https://readthedocs.org/projects/zero-to-jupyterhub/badge/?version=latest)](https://zero-to-jupyterhub.readthedocs.io/en/latest/?badge=latest)
 [![Latest stable release](https://img.shields.io/badge/dynamic/json.svg?label=stable&url=https://api.github.com/repos/jupyterhub/zero-to-jupyterhub-k8s/releases&query=$..[0].tag_name&colorB=orange)](https://jupyterhub.github.io/helm-chart/)
 [![Latest development release](https://img.shields.io/badge/dynamic/yaml.svg?label=dev&url=https%3A%2F%2Fjupyterhub.github.io%2Fhelm-chart%2Findex.yaml&query=%24.entries..jupyterhub[0].version&colorB=orange)](https://jupyterhub.github.io/helm-chart/)
 [![GitHub](https://img.shields.io/badge/issue_tracking-github-blue.svg)](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues)
