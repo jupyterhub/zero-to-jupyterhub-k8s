@@ -22,7 +22,7 @@ provides user-friendly steps to _deploy_
 
 The guide is complemented well by the [documentation for JupyterHub](https://jupyterhub.readthedocs.io).
 
-## The chart
+## The Helm chart
 
 The JupyterHub Helm chart lets a user create a reproducible and maintainable
 deployment of JupyterHub on a Kubernetes cluster in a cloud environment. The
