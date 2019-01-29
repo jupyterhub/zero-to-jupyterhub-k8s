@@ -104,6 +104,31 @@ development.
     - Re-run step 7 if you changed anything under the `images` directory
     - Re-run step 9 if you changed things only under the `jupyterhub` directory.
 
+
+## Travis CI tests
+
+Travis tests are automatically run on every pull request.
+Since the Travis environment is not accessible it can be difficult to debug CI failures.
+A [`Vagrantfile`](ci/Vagrantfile) which partially simulates the Travis environment is included, and may be useful when updating the CI deployments, though it is by no means an exact replica.
+
+1. Start and login to the Vagrant box:
+
+   ```bash
+   cd ci
+   vagrant up
+   vagrant ssh
+   ```
+
+2. Run the test script.
+   Optionally edit `SCENARIO` in [`./ci/vagrant-run.sh`](./ci/vagrant-run.sh)
+   if you want to test a different scenario
+
+   ```bash
+   cd /zero-to-jupyterhub-k8s
+   ./ci/vagrant-run.sh
+   ```
+
+
 ---
 
 ## Best practices
