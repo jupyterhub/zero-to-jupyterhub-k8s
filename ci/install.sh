@@ -19,6 +19,26 @@ echo "installing minikube"
 curl -Lo minikube https://storage.googleapis.com/minikube/releases/v${MINIKUBE_VERSION}/minikube-linux-amd64
 chmod +x minikube
 mv minikube bin/
+# Reduce CI logs clutter
+bin/minikube config set WantKubectlDownloadMsg false
+bin/minikube config set WantReportErrorPrompt false
+
+# FIXME: Workaround missing crictl on K8s 1.11 only
+# - Issue:   https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1123
+# - CI fail: https://travis-ci.org/jupyterhub/zero-to-jupyterhub-k8s/jobs/485093909
+if [ ! -z "${CRICTL_VERSION}" ]; then
+  echo "installing crictl"
+  if ! [ -f bin/crictl-${CRICTL_VERSION} ]; then
+    curl -sSLo bin/crictl-${CRICTL_VERSION}.tar.gz https://github.com/kubernetes-sigs/cri-tools/releases/download/v${CRICTL_VERSION}/crictl-v${CRICTL_VERSION}-linux-amd64.tar.gz
+    tar --extract --file bin/crictl-${CRICTL_VERSION}.tar.gz --directory bin
+    rm bin/crictl-${CRICTL_VERSION}.tar.gz
+    mv bin/crictl bin/crictl-${CRICTL_VERSION}
+  fi
+  cp bin/crictl-${CRICTL_VERSION} bin/crictl
+  # minikube is run with sudo so the modified PATH is lost
+  sudo ln -s "${PWD}/bin/crictl-${CRICTL_VERSION}" /usr/bin/crictl
+fi
+
 
 echo "installing kubeval"
 if ! [ -f bin/kubeval-${KUBEVAL_VERSION} ]; then

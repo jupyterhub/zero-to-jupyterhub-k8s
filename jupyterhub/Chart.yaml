@@ -6,5 +6,5 @@ home: https://z2jh.jupyter.org
 sources:
   - https://github.com/jupyterhub/zero-to-jupyterhub-k8s
 icon: https://jupyter.org/assets/hublogo.svg
-kubeVersion: '>=1.8.0-0'
-tillerVersion: '>=2.9.1-0'
+kubeVersion: '>=1.11.0-0'
+tillerVersion: '>=2.11.0-0'
