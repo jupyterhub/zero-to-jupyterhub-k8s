@@ -23,7 +23,7 @@ mv minikube bin/
 bin/minikube config set WantKubectlDownloadMsg false
 bin/minikube config set WantReportErrorPrompt false
 
-# FIXME: Remnant of a failing workaround...
+# FIXME: Workaround missing crictl on K8s 1.11 only
 # - Issue:   https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1123
 # - CI fail: https://travis-ci.org/jupyterhub/zero-to-jupyterhub-k8s/jobs/485093909
 if [ ! -z "${CRICTL_VERSION}" ]; then
@@ -35,10 +35,8 @@ if [ ! -z "${CRICTL_VERSION}" ]; then
     mv bin/crictl bin/crictl-${CRICTL_VERSION}
   fi
   cp bin/crictl-${CRICTL_VERSION} bin/crictl
-  # kubeadm being run by minikube complains that it fails to find 'crictl' in
-  # the system path on Travic CI jobs when using K8s 1.11, even if I add it like
-  # below ahead of time...
-  sudo cp bin/crictl-${CRICTL_VERSION} /usr/bin
+  # minikube is run with sudo so the modified PATH is lost
+  sudo ln -s "${PWD}/bin/crictl-${CRICTL_VERSION}" /usr/bin/crictl
 fi
 
 
