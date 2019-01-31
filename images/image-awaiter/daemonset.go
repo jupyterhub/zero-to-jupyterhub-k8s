@@ -58,7 +58,7 @@ func isImagesPresent(ds *DaemonSet) bool {
 	desired := ds.Status.DesiredNumberScheduled
 	ready := ds.Status.NumberReady
 
-	log.Printf("%d of %d nodes currently has the required images.", desired, ready)
+	log.Printf("%d of %d nodes currently has the required images.", ready, desired)
 
 	return desired == ready
 }
