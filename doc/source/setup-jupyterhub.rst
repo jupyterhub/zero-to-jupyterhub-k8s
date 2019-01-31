@@ -181,7 +181,7 @@ Install JupyterHub
 
       .. code-block:: bash
 
-         kubectl describe service proxy-public --output=wide --namespace jhub
+         kubectl describe service proxy-public --namespace jhub
 
 
 7. To use JupyterHub, enter the external IP for the `proxy-public` service in
