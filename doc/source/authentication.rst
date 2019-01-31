@@ -354,8 +354,6 @@ But combining it with a whitelist, users must input **both** an accepted usernam
 
 .. code-block:: yaml
 
-.. code-block:: yaml
-
    auth:
      type: dummy
      dummy:
