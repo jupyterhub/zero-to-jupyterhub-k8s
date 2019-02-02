@@ -313,7 +313,9 @@ Each configuration is a set of options for `Kubespawner <https://github.com/jupy
 which defines how Kubernetes should launch a new user server pod. Any
 configuration options passed to the `profileList` configuration will
 overwrite the defaults in Kubespawner (or any configuration you've
-added elsewhere in your helm chart).
+added elsewhere in your helm chart). All `kubespawner` options can be found in the source
+code of `kubespawner <https://github.com/jupyterhub/kubespawner/blob/master/kubespawner/spawner.py#L79>`_
+class. 
 
 Profiles are stored under ``singluser.profileList``, and are defined as
 a list of profiles with specific configuration options each. Here's an example:
@@ -333,8 +335,9 @@ a list of profiles with specific configuration options each. Here's an example:
 The above configuration will show a screen with information about this profile
 displayed when users start a new server.
 
-Here's an example with two profiles that lets users select the environment they
-wish to use.
+Here's an example with three profiles that lets users select the environment they
+wish to use, where environment can range from different image to spawning 
+on a different node with different requirements or limits.
 
 .. code-block:: yaml
 
@@ -355,6 +358,17 @@ wish to use.
          description: "The Jupyter Stacks spark image!"
          kubespawner_override:
            image: jupyter/all-spark-notebook:2343e33dec46
+       - display_name: "Spark environment on High Mem Node with taints"
+         description: "The Jupyter Stacks spark image on high mem node!"
+         kubespawner_override:
+           image: jupyter/all-spark-notebook:2343e33dec46
+           node_selector:
+             your_label: my_high_mem_node_specifier
+           tolerations:
+             - key: "resilent"
+               operator: "Equal"
+               value: "true"
+               effect: "NoSchedule"
 
 This allows users to select from three profiles, each with their own
 environment (defined by each Docker image in the configuration above).
