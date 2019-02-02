@@ -12,6 +12,9 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
+  backend:
+    serviceName: proxy-public
+    servicePort: 80
   rules:
     {{- range $host := .Values.ingress.hosts }}
     - host: {{ $host | quote }}
