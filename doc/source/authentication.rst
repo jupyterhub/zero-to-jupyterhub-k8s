@@ -76,8 +76,8 @@ GitHub organisations and users.
 For example, omitting the scope means members of an organisation must `set
 their membership to Public
 <https://help.github.com/articles/publicizing-or-hiding-organization-membership/>`_
-to login, whereas setting it to ``read:org`` may require approval of the
-application by a GitHub organisation admin.
+to login, whereas setting it to ``read:org`` (which is needed to let non-admin organization members
+sign in) may require approval of the application by a GitHub organisation admin. 
 Please see `this issue
 <https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/687>`_ for further
 information.
