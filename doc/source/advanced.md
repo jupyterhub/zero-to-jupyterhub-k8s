@@ -39,7 +39,45 @@ We recommend the community-maintained [nginx-ingress](https://github.com/helm/ch
 controller, [**kubernetes/ingress-nginx**](https://github.com/kubernetes/ingress-nginx).
 Note that Nginx maintains two additional ingress controllers.
 For most use cases, we recommend the community maintained **kubernetes/ingress-nginx** since that
-is the ingress controller that the development team has the most experience using.
+is the ingress controller that the development team has the most experience using. See below for
+**GCE Ingress** settings.
+
+#### GCE Ingress and manual HTTPS
+To set up HTTPS with GCE Ingress, you must:
+1. offload the proxy, enable `https` (and ideally, change it from 
+ external `LoadBalancer` to close it from outside world - we have ingress for that)
+2. create TLS secrets same as for other Ingresses (e.g. [nginx](https://kubernetes.github.io/ingress-nginx/user-guide/tls/) )
+3. reference the secret in the ingress spec and add `pathSuffix: *`
+
+```yaml
+proxy:
+  https:
+    enabled: true
+    type: offload
+  service:
+    type: NodePort
+ingress:
+  enabled: true
+  annotations:
+    # kubernetes.io/ingress.global-static-ip-name: YOUR-STATIC-IP-NAME
+    kubernetes.io/ingress.class: gce
+    kubernetes.io/ingress.allow-http: "false"
+  hosts:
+  - example.com  # change it to you domain
+  pathSuffix: "*"
+  tls:
+  - hosts:
+    - example.com
+    secretName: jupyterhub-tls
+```
+*Note*: Ingress must have a default backend, it can be equivalent to the default jupyterhub path.
+
+The default timeout for a GLB backend is 30 seconds, which is not ideal for 
+websocket connections. Currently the timeout must be increased manually after the first deployment:
+```
+kubectl describe ingress $INGRESS_NAME  # find the backend name
+gcloud compute backend-services update k8s-be-99999--9999999999xxxxxx --global --timeout=86400
+```
 
 ### Ingress and Automatic HTTPS with kube-lego & Let's Encrypt
 
