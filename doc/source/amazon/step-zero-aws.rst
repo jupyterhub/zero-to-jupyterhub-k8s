@@ -181,7 +181,7 @@ There are simple methods for encrypting your Kubernetes cluster. Illustrated her
 
 **Encryption at Rest**
 
-Instead of performing step 13 above. Create the following ``storageclass.yml`` file on your local computer::
+Instead of performing step 13 above. Create the following ``storageclass.yml`` file on the connected AWS instance::
 
         kind: StorageClass
         apiVersion: storage.k8s.io/v1
