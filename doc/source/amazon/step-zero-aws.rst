@@ -152,8 +152,7 @@ Procedure:
 
 
 13. Enable dynamic storage on your Kubernetes cluster.
-    Create a file, ``storageclass.yml`` on your local computer, and enter
-    this text::
+    Create a file, ``storageclass.yml`` on the connected EC2 instance with the following contents::
 
         kind: StorageClass
         apiVersion: storage.k8s.io/v1
