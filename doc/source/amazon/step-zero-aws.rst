@@ -132,7 +132,7 @@ Procedure:
 
     You should see a list of two nodes, each beginning with ``ip``.
 
-    If you want to run kubectl from a box not on AWS, you can use run the following on AWS: ``kops export kubecfg``
+    If you want to run kubectl from a box not on AWS, you can run the following on AWS: ``kops export kubecfg``
 
     To use kubctl and helm from a local machine, copy the contents of ``~/.kube/config`` to the same place on your local system.  If you wish to put the kube config file in a different location, you will need to ``export KUBECONFIG=<other kube config location>``
 
