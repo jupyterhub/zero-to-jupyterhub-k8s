@@ -20,14 +20,37 @@ It contains new features, additional configuration options, and bug fixes.
 
 ### Upgrading from 0.7
 
+To upgrade your cluster:
+
+1. backup any persistent volumes and previous configuration, to be safe
+2. read changes here and make any needed updates to your configuration
+3. upgrade the chart:
+
+    helm repo update
+    helm upgrade $RELEASE --force --version 0.8.0 --values config.yaml
+
+The `--force` flag allows deletion and recreation of objects
+that have certain changes, such as different labels,
+which are forbidden otherwise.
+
 #### Breaking changes
 
-- Github organisation OAuth: `auth.github.org_whitelist` has been renamed to `auth.github.orgWhitelist`
+- Github organisation OAuth: `auth.github.org_whitelist` has been renamed to `auth.github.orgWhitelist` to be consistent with helm's camelCase style
 
 
 #### Troubleshooting
 
-TODO: Instructions
+If you encounter issues with upgrades, check for changed configuration in this document, and make sure your config is up to date.
+
+If you aren't able to get the upgrade to work,
+you can [rollback](https://docs.helm.sh/helm/#helm-rollback)
+to a previous version with:
+
+    helm rollback $RELEASE
+
+
+Feel free to [ping us on gitter](https://gitter.im/jupyterhub/jupyterhub)
+if you have problems or questions.
 
 ### New Features
 
