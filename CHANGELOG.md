@@ -33,7 +33,7 @@ TODO: Instructions
 
 #### Easier user-selectable profiles upon login
 
-Profile information is now passed through to Kubespawner. This means you can
+Profile information is now passed through to KubeSpawner. This means you can
 [specify multiple user profiles that users can select from](https://zero-to-jupyterhub.readthedocs.io/en/latest/user-environment.html?highlight=profile#allow-users-to-create-their-own-conda-environments)
 when they log in. ([#402](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/402))
 
@@ -61,10 +61,12 @@ Want to scale up before users arrive so they don't end up waiting for the node t
 
 
 - **preferScheduleNextToRealUsers - improves autoscaling** - #930
-  This setting slightly improves the ability for a cluster autoscaler to scale down by increasing the likelyhood of user placeholders being left alone on a node rather than real users. Real users can't be moved around while user placeholder pods can
+  This setting slightly improves the ability for a cluster autoscaler to scale down by increasing the likelihood of user placeholders being left alone on a node rather than real users. Real users can't be moved around while user placeholder pods can
 
 ### Minor upgrades and development improvements
 
+- **Update jupyterhub to 0.9.4**
+- **Update kubespawner to 0.10.1**
 - **Allow setting of storage labels** - #924
 - **Tolerations for node taints** - #925
 - **Making the core and user pods affinity have configurable presets** - #927
