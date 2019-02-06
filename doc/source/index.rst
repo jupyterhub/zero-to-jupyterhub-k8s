@@ -19,6 +19,8 @@ page`_. If you have tips or deployments that you would like to share, see
 
 This documentation is for jupyterhub chart version |release|, which deploys JupyterHub |hub_version|.
 
+This version of the chart requires kubernetes ≥1.11 and helm ≥2.11.
+
 
 .. _about-guide:
 
