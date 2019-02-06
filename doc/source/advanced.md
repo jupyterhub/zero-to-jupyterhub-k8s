@@ -129,27 +129,30 @@ hub:
       # some other code
 ```
 
-### `hub.extraConfigMap`
+### `custom` configuration
 
-This property takes a dictionary of values that are then made available for code
-in `hub.extraConfig` to read using a `z2jh.get_config` function. You can use this to
-easily separate your code (which goes in `hub.extraConfig`) from your config
-(which should go here).
+The contents of `values.yaml` is passed through to the Hub image.
+You can access these values via the `z2jh.get_config` function,
+for further customization of the hub pod.
+Version 0.8 of the chart adds a top-level `custom`
+field for passing through additional configuration that you may use.
+It can be arbitrary YAML.
+You can use this to separate your code (which goes in `hub.extraConfig`)
+from your config (which should go in `custom`).
 
 For example, if you use the following snippet in your config.yaml file:
 
 ```yaml
-hub:
-  extraConfigMap:
-    myString: Hello!
-    myList:
-      - Item1
-      - Item2
-    myDict:
-      key: value
-    myLongString: |
-      Line1
-      Line2
+custom:
+  myString: Hello!
+  myList:
+    - Item1
+    - Item2
+  myDict:
+    key: value
+  myLongString: |
+    Line1
+    Line2
 ```
 
 In your `hub.extraConfig`,
@@ -166,8 +169,14 @@ In your `hub.extraConfig`,
 You need to have a `import z2jh` at the top of your `extraConfig` for
 `z2jh.get_config()` to work.
 
-Note that the keys in `hub.extraConfigMap` must be alpha numeric strings
-starting with a character. Dashes and Underscores are not allowed.
+```eval_rst
+.. versionchanged:: 0.8
+
+  `hub.extraConfigMap` used to be required for specifying additional values
+  to pass, which was more restrictive.
+  `hub.extraConfigMap` is deprecated in favor of the new
+  top-level `custom` field, which allows fully arbitrary yaml.
+```
 
 ### `hub.extraEnv`
 
