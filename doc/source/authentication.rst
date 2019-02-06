@@ -333,11 +333,31 @@ of users to login. This is especially useful if you are
 using an authenticator with an authentication service open to the general
 public, such as GitHub or Google.
 
+.. note::
+
+   A whitelist must be used **along with another authenticator**. It simply restricts the usernames that
+   are allowed for your JupyterHub, but is not an authenticator by itself.
+
 You can specify this list of usernames in your `config.yaml`:
 
 .. code-block:: yaml
 
    auth:
+     whitelist:
+       users:
+         - user1
+         - user2
+
+For example, here's the configuration to use a white list along with the Dummy Authenticator.
+By default, the Dummy Authenticator will accept any username if they provide the right password.
+But combining it with a whitelist, users must input **both** an accepted username *and* password.
+
+.. code-block:: yaml
+
+   auth:
+     type: dummy
+     dummy:
+       password: 'mypassword'
      whitelist:
        users:
          - user1
