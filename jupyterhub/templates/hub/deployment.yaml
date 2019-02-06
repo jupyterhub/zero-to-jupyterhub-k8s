@@ -41,7 +41,11 @@ spec:
             name: hub-config
         - name: secret
           secret:
+            {{- if .Values.hub.existingSecret }}
+            secretName: {{ .Values.hub.existingSecret }}
+            {{- else }}
             secretName: hub-secret
+            {{- end }}
         {{- if .Values.hub.extraVolumes }}
         {{- .Values.hub.extraVolumes | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
@@ -144,7 +148,11 @@ spec:
             - name: JPY_COOKIE_SECRET
               valueFrom:
                 secretKeyRef:
+                  {{- if .Values.hub.existingSecret }}
+                  name: {{ .Values.hub.existingSecret }}
+                  {{- else }}
                   name: hub-secret
+                  {{- end }}
                   key: hub.cookie-secret
             {{- end }}
             - name: POD_NAMESPACE
@@ -154,13 +162,21 @@ spec:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
+                  {{- if .Values.hub.existingSecret }}
+                  name: {{ .Values.hub.existingSecret }}
+                  {{- else }}
                   name: hub-secret
+                  {{- end }}
                   key: proxy.token
             {{- if .Values.auth.state.enabled }}
             - name: JUPYTERHUB_CRYPT_KEY
               valueFrom:
                 secretKeyRef:
+                  {{- if .Values.hub.existingSecret }}
+                  name: {{ .Values.hub.existingSecret }}
+                  {{- else }}
                   name: hub-secret
+                  {{- end }}
                   key: auth.state.crypto-key
             {{- end }}
             {{- if .Values.hub.db.password }}
@@ -168,13 +184,21 @@ spec:
             - name: MYSQL_PWD
               valueFrom:
                 secretKeyRef:
+                  {{- if .Values.hub.existingSecret }}
+                  name: {{ .Values.hub.existingSecret }}
+                  {{- else }}
                   name: hub-secret
+                  {{- end }}
                   key: hub.db.password
             {{- else if eq .Values.hub.db.type "postgres" }}
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
+                  {{- if .Values.hub.existingSecret }}
+                  name: {{ .Values.hub.existingSecret }}
+                  {{- else }}
                   name: hub-secret
+                  {{- end }}
                   key: hub.db.password
             {{- end }}
             {{- end }}

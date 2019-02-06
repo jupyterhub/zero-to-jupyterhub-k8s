@@ -91,7 +91,11 @@ spec:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
+                  {{- if .Values.hub.existingSecret }}
+                  name: {{ .Values.hub.existingSecret }}
+                  {{- else }}
                   name: hub-secret
+                  {{- end }}
                   key: proxy.token
           {{- with .Values.proxy.chp.image.pullPolicy }}
           imagePullPolicy: {{ . }}
