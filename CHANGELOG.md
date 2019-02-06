@@ -109,6 +109,9 @@ Want to scale up before users arrive so they don't end up waiting for the node t
   `git` and `nbgitpuller` are now available by default
 - **Switch to using a StatefulSet for the Hub** __*__
   The Hub should perhaps be a StatefulSet rather than a Deployment as it tends to be tied to a PV that can only be mounted by one single Hub. See this issue: https://github.com/helm/charts/issues/1863
+- Show users deprecation and error messages when they use certain deprecated
+  configuration (e.g. `hub.extraConfig` as a single string)
+  or incompatible combinations.
 - **Updates to the guide** - #850
 - **Updates to inline documentation** - #939
 
