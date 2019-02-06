@@ -5,6 +5,6 @@
 chartpress==0.2.2
 
 # yamllint and pytest are important for local development, CI
-pytest==3.7.1
-requests==2.19.1
+pytest>=3.7.1
+requests
 yamllint>=1.1.1
