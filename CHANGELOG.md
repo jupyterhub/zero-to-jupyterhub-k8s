@@ -22,7 +22,7 @@ It contains new features, additional configuration options, and bug fixes.
 
 To upgrade your cluster:
 
-1. backup any persistent volumes and previous configuration, to be safe
+1. backup your hub-db-dir persistent volume and previous configuration files, to be safe
 2. read changes here and make any needed updates to your configuration
 3. upgrade the chart:
 
