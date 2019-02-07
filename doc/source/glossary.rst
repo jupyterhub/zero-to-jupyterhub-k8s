@@ -24,7 +24,7 @@ details.
    `config.yaml`
       The :term:`Helm charts <helm chart>` templates are rendered with these
       :term:`Helm values` as input. The file is written in the `YAML
-      <https://en.wikipedia.org/wiki/YAML>`_ format. The YAML format is esential
+      <https://en.wikipedia.org/wiki/YAML>`_ format. The YAML format is essential
       to grasp if working with Kubernetes and Helm.
 
    container
@@ -41,6 +41,13 @@ details.
    Docker image
       A Docker image, built from a :term:`Dockerfile`, allows tools like
       ``docker`` to create any number of :term:`containers <container>`.
+
+   image registry
+      A service for storing Docker images so that they can be stored
+      and used later.
+      The default public registry is at https://hub.docker.com,
+      but you can also run your own private image registry.
+      Many cloud providers offer private image registry services.
 
    `environment variables <https://en.wikipedia.org/wiki/Environment_variable>`_
       A set of named values that can affect the way running processes will

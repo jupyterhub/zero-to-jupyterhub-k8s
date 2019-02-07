@@ -129,27 +129,30 @@ hub:
       # some other code
 ```
 
-### `hub.extraConfigMap`
+### `custom` configuration
 
-This property takes a dictionary of values that are then made available for code
-in `hub.extraConfig` to read using a `z2jh.get_config` function. You can use this to
-easily separate your code (which goes in `hub.extraConfig`) from your config
-(which should go here).
+The contents of `values.yaml` is passed through to the Hub image.
+You can access these values via the `z2jh.get_config` function,
+for further customization of the hub pod.
+Version 0.8 of the chart adds a top-level `custom`
+field for passing through additional configuration that you may use.
+It can be arbitrary YAML.
+You can use this to separate your code (which goes in `hub.extraConfig`)
+from your config (which should go in `custom`).
 
 For example, if you use the following snippet in your config.yaml file:
 
 ```yaml
-hub:
-  extraConfigMap:
-    myString: Hello!
-    myList:
-      - Item1
-      - Item2
-    myDict:
-      key: value
-    myLongString: |
-      Line1
-      Line2
+custom:
+  myString: Hello!
+  myList:
+    - Item1
+    - Item2
+  myDict:
+    key: value
+  myLongString: |
+    Line1
+    Line2
 ```
 
 In your `hub.extraConfig`,
@@ -166,8 +169,14 @@ In your `hub.extraConfig`,
 You need to have a `import z2jh` at the top of your `extraConfig` for
 `z2jh.get_config()` to work.
 
-Note that the keys in `hub.extraConfigMap` must be alpha numeric strings
-starting with a character. Dashes and Underscores are not allowed.
+```eval_rst
+.. versionchanged:: 0.8
+
+  `hub.extraConfigMap` used to be required for specifying additional values
+  to pass, which was more restrictive.
+  `hub.extraConfigMap` is deprecated in favor of the new
+  top-level `custom` field, which allows fully arbitrary yaml.
+```
 
 ### `hub.extraEnv`
 
@@ -190,43 +199,6 @@ in kubernetes that as a long list of cool use cases. Some example use cases are:
 The items in this list must be valid kubernetes
 [container specifications](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#container-v1-core).
 
-## Picking a Scheduler Strategy
-
-Kubernetes offers very flexible ways to determine how it distributes pods on
-your nodes. The JupyterHub helm chart supports two common configurations, see
-below for a brief description of each.
-
-### Spread
-
-* **Behavior**: This spreads user pods across **as many nodes as possible**.
-* **Benefits**: A single node going down will not affect too many users. If you do not have explicit memory & cpu
-  limits, this strategy also allows your users the most efficient use of RAM & CPU.
-* **Drawbacks**: This strategy is less efficient when used with autoscaling.
-
-This is the default strategy. To explicitly specify it, use the following in your
-`config.yaml`:
-
-```yaml
-singleuser:
-   schedulerStrategy: spread
-```
-
-### Pack
-
-* **Behavior**: This packs user pods into **as few nodes as possible**.
-* **Benefits**: This reduces your resource utilization, which is useful in conjunction with autoscalers.
-* **Drawbacks**: A single node going down might affect more user pods than using
-  a "spread" strategy (depending on the node).
-
-When you use this strategy, you should specify limits and guarantees for memory
-and cpu. This will make your users' experience more predictable.
-
-To explicitly specify this strategy, use the following in your `config.yaml`:
-
-```yaml
-singleuser:
-    schedulerStrategy: pack
-```
 
 ## Pre-pulling Images for Faster Startup
 

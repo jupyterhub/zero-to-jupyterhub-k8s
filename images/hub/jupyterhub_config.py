@@ -427,6 +427,9 @@ if isinstance(extra_config, str):
     hub.extraConfig should be a dict of strings,
     but found a single string instead.
 
+    extraConfig as a single string is deprecated
+    as of the jupyterhub chart version 0.6.
+
     The keys can be anything identifying the
     block of extra configuration.
 
@@ -436,6 +439,10 @@ if isinstance(extra_config, str):
           extraConfig:
             myConfig: |
               {}
+
+    This configuration will still be loaded,
+    but you are encouraged to adopt the nested form
+    which enables easier merging of multiple extra configurations.
     """
     )
     print(

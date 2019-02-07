@@ -3,8 +3,8 @@
 Setting up JupyterHub
 =====================
 
-Now that we have a `Kubernetes cluster <create-k8s-cluster.html>`_ and `Helm
-<setup-helm.html>`_ setup, we can proceed by using Helm to install JupyterHub
+Now that we have a `Kubernetes cluster <create-k8s-cluster>`_ and `Helm
+<setup-helm>`_ setup, we can proceed by using Helm to install JupyterHub
 and related :term:`Kubernetes resources <kubernetes resource>` using a
 :term:`Helm chart`.
 
@@ -89,7 +89,7 @@ Install JupyterHub
 
       helm upgrade --install $RELEASE jupyterhub/jupyterhub \
         --namespace $NAMESPACE  \
-        --version 0.7.0 \
+        --version=0.8.0b1 \
         --values config.yaml
 
    where:
@@ -188,8 +188,8 @@ Install JupyterHub
    to a browser. JupyterHub is running with a default *dummy* authenticator so
    entering any username and password combination will let you enter the hub.
 
-Congratulations! Now that you have basic JupyterHub running, you can `extend it
-<extending-jupyterhub.html>`_ and `optimize it <optimization.html>`_ in many
+Congratulations! Now that you have basic JupyterHub running, you can :doc:`extend it
+<extending-jupyterhub>` and :doc:`optimize it <optimization>` in many
 ways to meet your needs.
 
 Some examples of customisations are:

@@ -64,7 +64,7 @@ image containing useful tools and libraries for datascience, complete these step
       failures for users when a new version of the image is released.
 
 2. Apply the changes by following the directions listed in
-   `apply the changes`_.
+   :ref:`apply the changes <apply-config-changes>`.
 
 
    .. note::
@@ -99,8 +99,9 @@ To let users use JupyterLab by default, add the following entries to your
      defaultUrl: "/lab"
 
    hub:
-     extraConfig: |-
-       c.Spawner.cmd = ['jupyter-labhub']
+     extraConfig:
+       jupyterlab: |
+         c.Spawner.cmd = ['jupyter-labhub']
 
 .. note::
 
@@ -143,8 +144,6 @@ by the Helm chart.
    credentials. See the :ref:`helm-chart-configuration-reference` for more
    details on this.
 
-
-
 .. _set-env-vars:
 
 Set environment variables
@@ -155,8 +154,9 @@ variables`. While you can set them up in your Docker image if you build it
 yourself, it is often easier to configure your Helm chart through values
 provided in your :term:`config.yaml`.
 
-To set this up, edit your :term:`config.yaml` and `apply the changes`_. For
-example, this code snippet will set the environment variable ``EDITOR`` to the
+To set this up, edit your :term:`config.yaml` and
+:ref:`apply the changes <apply-config-changes>`.
+For example, this code snippet will set the environment variable ``EDITOR`` to the
 value ``vim``:
 
 .. code-block:: yaml
@@ -195,9 +195,6 @@ is configured to cull a users server that has been inactive for one hour. Note
 that JupyterLab will autosave files, and as long as the file was within the
 users home directory no work is lost.
 
-
-
-
 .. note::
 
    In Kubernetes, a *PersistantVolume* (PV) represents the harddrive.
@@ -230,7 +227,7 @@ your user folders with a git repository.
 
 
 
-.. use-nbgitpuller:
+.. _use-nbgitpuller:
 
 Using ``nbgitpuller`` to synchronize a folder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -270,7 +267,7 @@ using this tool.
    tool in production.
 
 
-.. setup-conda-envs:
+.. _setup-conda-envs:
 
 Allow users to create their own ``conda`` environments
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -296,7 +293,7 @@ across sessions. To resolve this, take the following steps:
   which will persist across sessions.
 
 
-.. multiple-profiles:
+.. _multiple-profiles:
 
 Using multiple profiles to let users select their environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -366,9 +363,3 @@ environment (defined by each Docker image in the configuration above).
    `Kubespawner configuration reference <https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html>`_
    for more information.
 
-
-.. REFERENCES USED:
-
-.. _apply the changes: extending-jupyterhub.html#apply-config-changes
-.. _downloading and installing Docker: https://www.docker.com/community-edition
-.. _pip: https://pip.readthedocs.io/en/latest/user_guide/#requirements-files

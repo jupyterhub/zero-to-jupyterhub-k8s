@@ -9,12 +9,12 @@ Build a Docker image with ``repo2docker``
 
    Docker images to be used this way must have the ``jupyterhub`` package of a
    matching version with the Helm chart. This documentation is for Helm chart
-   ``v0.7``, and it uses JupyterHub version ``0.9.2``.
+   |version|, and it uses JupyterHub version |hub_version|.
 
 If you can't find a pre-existing image that suits your needs, you can create
 your own image. An easy way to do this is with the package :term:`repo2docker`.
 
-`repo2docker <https://github.com/jupyter/repo2docker>`_ lets you quickly convert
+`repo2docker`_ lets you quickly convert
 a Git repository into a Docker image that can be used as a base for your
 JupyterHub instance. Anything inside the Git repository will exist in a user’s
 environment when they access your JupyterHub.
@@ -61,7 +61,7 @@ to configure JupyterHub to build off of this image:
 
    .. code-block:: bash
 
-      jupyterhub==0.9.2
+      jupyterhub==0.9.4
       numpy==1.14.3
       scipy==1.1.0
       matplotlib==2.2.2
@@ -105,7 +105,7 @@ to configure JupyterHub to build off of this image:
 
       jupyter-repo2docker \
           --no-run \
-          --user-name=jovyan \ 
+          --user-name=jovyan \
           --image=<your-image-reference> \
           <a-git-repository-url>
 
@@ -130,7 +130,7 @@ to configure JupyterHub to build off of this image:
 
 7. **Tell helm to update JupyterHub to use this configuration.**
 
-   Use the standard method to `apply the changes`_ to the config.
+   Use the standard method to :ref:`apply the changes <apply-config-changes>` to the config.
 
 8. **Restart your server if you are already logged in.**
    
@@ -141,10 +141,17 @@ to configure JupyterHub to build off of this image:
    .. note::
 
       The contents of your GitHub repository might not show up if you have
-      enabled `persistent storage <user-storage.html>`_. Disable persistent
+      enabled :doc:`persistent storage <user-storage>`. Disable persistent
       storage if you want the Git repository contents to show up.
 
 9. **Enjoy your new computing environment!**
    
    You should now have a live computing environment built off of the Docker
    image we’ve created.
+
+
+.. REFERENCES USED:
+
+.. _repo2docker: https://github.com/jupyter/repo2docker
+.. _downloading and installing Docker: https://www.docker.com/community-edition
+.. _pip: https://pip.readthedocs.io/en/latest/user_guide/#requirements-files

@@ -36,7 +36,7 @@ import dateutil
 import requests_cache
 from github import Github
 from dateutil.parser import parse
-
+from tqdm import tqdm
 
 requests_cache.install_cache('github')
 gh = Github(login_or_token=os.environ['GITHUB_API_TOKEN'].strip())
@@ -48,7 +48,7 @@ def get_all_contributors(repo, since):
         return since < date
 
     repo = gh.get_repo(repo)
-    
+
     # get all issues created or updated since given date
     issues = repo.get_issues(state='all', since=since)
     pulls = repo.get_pulls(state='closed')
@@ -59,25 +59,24 @@ def get_all_contributors(repo, since):
     # c.user.login. We are currently doing it multiple times for each user. We
     # should do it only once, if c.user.login did not already exist in the set,
     # or at the end when we have added all users to a set.
-    for i in issues:
-        if include(i.created_at):
-            users.add((i.user.login, i.user.name))
-        for c in i.get_comments(since=since):
-            users.add((c.user.login, c.user.name))
+    for ii in tqdm(list(issues)):
+        if include(ii.created_at):
+            users.add((ii.user.login, ii.user.name))
+        for cc in ii.get_comments(since=since):
+            users.add((cc.user.login, cc.user.name))
 
 
-    for p in pulls:
-        if include(p.created_at):
-            users.add((p.user.login, p.user.name))
+    for pp in tqdm(list(pulls)):
+        if include(pp.created_at):
+            users.add((pp.user.login, pp.user.name))
 
-        for c in p.get_issue_comments():
-            if include(c.created_at):
-                users.add((c.user.login, c.user.name))
+        for cc in pp.get_issue_comments():
+            if include(cc.created_at):
+                users.add((cc.user.login, cc.user.name))
 
-        for rc in p.get_review_comments():
+        for rc in pp.get_review_comments():
             if include(rc.created_at):
                 users.add((rc.user.login, rc.user.name))
-
 
     return users
 
@@ -89,11 +88,15 @@ if __name__ == '__main__':
     # the chart's release are considered, this means that if kubespawner got
     # something merged to master, but kubespawner wasn't bumped in this chart,
     # it would still be considered a contribution.
-    users = get_all_contributors('jupyterhub/zero-to-jupyterhub-k8s', '2018-01-29')
-    users |= get_all_contributors('jupyterhub/kubespawner', '2018-01-24')
-    users |= get_all_contributors('jupyterhub/jupyterhub', '2017-11-07')
-    users |= get_all_contributors('jupyterhub/oauthenticator', '2017-10-27')
+    repos = [('jupyterhub/zero-to-jupyterhub-k8s', '2018-09-03'),
+             ('jupyterhub/kubespawner', '2018-09-03'),
+             ('jupyterhub/jupyterhub', '2018-09-03'),
+             ('jupyterhub/oauthenticator', '2018-09-03')]
 
+    users = set()
+    for repo, date in repos:
+        print(repo)
+        users |= get_all_contributors(repo, date)
 
     for login, name in sorted(users, key=lambda u: u[1].casefold() if u[1] else u[0].casefold()):
         if name is None:
