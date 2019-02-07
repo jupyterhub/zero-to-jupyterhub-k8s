@@ -142,14 +142,17 @@ your google cloud account.
       --node-labels hub.jupyter.org/node-purpose=user \
       --node-taints hub.jupyter.org_dedicated=user:NoSchedule
 
-  .. note::
 
-    Consider adding the ``--preemptible`` flag to reduce the cost
-    significantly. You can `compare the prices here
-    <https://cloud.google.com/compute/docs/machine-types>`_. See
-    the `preemptible node documentation
-    <https://cloud.google.com/compute/docs/instances/preemptible>`_ for more
-    information.
+  .. preemptible node recommendation not included
+  .. pending handling of evictions in jupyterhub/kubespawner#223
+  .. .. note::
+
+  ..   Consider adding the ``--preemptible`` flag to reduce the cost
+  ..   significantly. You can `compare the prices here
+  ..   <https://cloud.google.com/compute/docs/machine-types>`_. See
+  ..   the `preemptible node documentation
+  ..   <https://cloud.google.com/compute/docs/instances/preemptible>`_ for more
+  ..   information.
 
 Congrats. Now that you have your Kubernetes cluster running, it's time to
 begin :ref:`creating-your-jupyterhub`.
