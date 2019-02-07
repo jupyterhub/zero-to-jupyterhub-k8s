@@ -31,7 +31,7 @@ For these materials, any cluster with Kubernetes installed will work
 with JupyterHub.
 
 More information about setting up accounts services with cloud providers
-can be found `here <create-k8s-cluster.html>`_.
+can be found `here <create-k8s-cluster>`_.
 
 Container Technology
 --------------------
