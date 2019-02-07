@@ -231,6 +231,7 @@ auth:
 
 
 singleuser:
+  podNameTemplate: jupyter-{username}{servername}
   extraTolerations: []
   nodeSelector: {}
   extraNodeAffinity:

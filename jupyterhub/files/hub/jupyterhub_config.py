@@ -100,6 +100,8 @@ if release:
 
 c.KubeSpawner.namespace = os.environ.get('POD_NAMESPACE', 'default')
 
+c.KubeSpawner.pod_name_template = get_config('singleuser.podNameTemplate')
+
 # Max number of consecutive failures before the Hub restarts itself
 # requires jupyterhub 0.9.2
 set_config_if_not_none(
