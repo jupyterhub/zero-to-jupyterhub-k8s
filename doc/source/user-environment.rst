@@ -64,7 +64,7 @@ image containing useful tools and libraries for datascience, complete these step
       failures for users when a new version of the image is released.
 
 2. Apply the changes by following the directions listed in
-   `apply the changes`_.
+   :ref:`apply the changes <apply-config-changes>`.
 
 
    .. note::
@@ -155,8 +155,9 @@ variables`. While you can set them up in your Docker image if you build it
 yourself, it is often easier to configure your Helm chart through values
 provided in your :term:`config.yaml`.
 
-To set this up, edit your :term:`config.yaml` and `apply the changes`_. For
-example, this code snippet will set the environment variable ``EDITOR`` to the
+To set this up, edit your :term:`config.yaml` and
+:ref:`apply the changes <apply-config-changes>`.
+For example, this code snippet will set the environment variable ``EDITOR`` to the
 value ``vim``:
 
 .. code-block:: yaml
@@ -366,9 +367,3 @@ environment (defined by each Docker image in the configuration above).
    `Kubespawner configuration reference <https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html>`_
    for more information.
 
-
-.. REFERENCES USED:
-
-.. _apply the changes: extending-jupyterhub.html#apply-config-changes
-.. _downloading and installing Docker: https://www.docker.com/community-edition
-.. _pip: https://pip.readthedocs.io/en/latest/user_guide/#requirements-files
