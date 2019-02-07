@@ -146,7 +146,7 @@ up, managing, and maintaining JupyterHub.
 
 We hope that you will use this section to share deployments with on a variety
 of infrastructure and for different use cases.
-There is also a :doc:`community maintained list <users-list>`_ of users of this
+There is also a :doc:`community maintained list <users-list>` of users of this
 Guide and the JupyterHub Helm Chart.
 
 Please submit a pull request to add to this section. Thanks.

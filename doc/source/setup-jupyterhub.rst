@@ -189,7 +189,7 @@ Install JupyterHub
    entering any username and password combination will let you enter the hub.
 
 Congratulations! Now that you have basic JupyterHub running, you can :doc:`extend it
-<extending-jupyterhub>`_ and :doc:`optimize it <optimization>`_ in many
+<extending-jupyterhub>` and :doc:`optimize it <optimization>` in many
 ways to meet your needs.
 
 Some examples of customisations are:

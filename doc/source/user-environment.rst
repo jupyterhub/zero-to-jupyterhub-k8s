@@ -144,8 +144,6 @@ by the Helm chart.
    credentials. See the :ref:`helm-chart-configuration-reference` for more
    details on this.
 
-
-
 .. _set-env-vars:
 
 Set environment variables
@@ -197,9 +195,6 @@ is configured to cull a users server that has been inactive for one hour. Note
 that JupyterLab will autosave files, and as long as the file was within the
 users home directory no work is lost.
 
-
-
-
 .. note::
 
    In Kubernetes, a *PersistantVolume* (PV) represents the harddrive.
@@ -232,7 +227,7 @@ your user folders with a git repository.
 
 
 
-.. use-nbgitpuller:
+.. _use-nbgitpuller:
 
 Using ``nbgitpuller`` to synchronize a folder
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -272,7 +267,7 @@ using this tool.
    tool in production.
 
 
-.. setup-conda-envs:
+.. _setup-conda-envs:
 
 Allow users to create their own ``conda`` environments
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -298,7 +293,7 @@ across sessions. To resolve this, take the following steps:
   which will persist across sessions.
 
 
-.. multiple-profiles:
+.. _multiple-profiles:
 
 Using multiple profiles to let users select their environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
