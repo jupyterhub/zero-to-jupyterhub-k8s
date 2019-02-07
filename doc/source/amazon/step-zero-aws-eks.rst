@@ -3,10 +3,10 @@
 Step Zero: Kubernetes on Amazon Web Services (AWS) with Elastic Container with Kubernetes (EKS)
 -----------------------------------------------------------------------------------------------
 
-AWS recently released native support for Kubernetes. Note: This is only available in US West (Oregon) (us-west-2) and 
+AWS recently released native support for Kubernetes. Note: This is only available in US West (Oregon) (us-west-2) and
 US East (N. Virginia) (us-east-1)
 
-This guide uses AWS to set up a cluster. This mirrors the steps found at `"Getting Started with Amazon EKS" <https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html>`_ with some details filled in that are absent
+This guide uses AWS to set up a cluster. This mirrors the steps found at `Getting Started with Amazon EKS`_ with some details filled in that are absent
 
 Procedure:
 
@@ -19,13 +19,13 @@ Procedure:
    
    (From the user interface, select EKS as the service, then follow the default steps) 
    
-2. Create a VPC if you don't already have one. 
+2. Create a VPC if you don't already have one.
 
-    This step has a lot of variability so it is left to the user. However, one deployment can be found at `"Getting Started with Amazon EKS" <https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html>`_, under *Create your Amazon EKS Cluster VPC*
+    This step has a lot of variability so it is left to the user. However, one deployment can be found at `Getting Started with Amazon EKS`_, under *Create your Amazon EKS Cluster VPC*
    
 3. Create a Security Group for the EKS Control Plane to use
     
-    You do not need to set any permissions on this. The steps below will automatically define access control between the EKS Control Planne and the individual nodes
+    You do not need to set any permissions on this. The steps below will automatically define access control between the EKS Control Plane and the individual nodes
 
 4. Create your EKS cluster (using the user interface)
  
@@ -33,11 +33,11 @@ Procedure:
     
 5. Install **kubectl** and **heptio-authenticator-aws**
 
-    Refer to  `"Getting Started with Amazon EKS" <https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html>`_ on *Configure kubectl for Amazon EKS*
+    Refer to  `Getting Started with Amazon EKS`_ on *Configure kubectl for Amazon EKS*
 
-6. Configure *kubeconfig* 
+6. Configure *kubeconfig*
 
-   Also see `"Getting Started with Amazon EKS" <https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html>`_ *Step 2: Configure kubectl for Amazon EKS*
+   Also see `Getting Started with Amazon EKS`_ *Step 2: Configure kubectl for Amazon EKS*
 
    From the user interface on AWS you can retrieve the ``endpoint-url``, ``base64-encoded-ca-cert``. ``cluster-name`` is the name given in step 4. If you are using profiles in your AWS configuration, you can uncomment the ``env`` block and specify your profile as ``aws-profile``.::
     
@@ -82,7 +82,7 @@ Procedure:
     
 8. Create the nodes using CloudFormation
 
-    See `"Getting Started with Amazon EKS" <https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html>`_ *Step 3: Launch and Configure Amazon EKS Worker Nodes*
+    See `Getting Started with Amazon EKS`_ *Step 3: Launch and Configure Amazon EKS Worker Nodes*
 
     **Warning** if you are endeavoring to deploy on a private network, the cloudformation template creates a public IP for each worker node though there is no route to get there if you specified only private subnets. Regardless, if you wish to correct this, you can edit the cloudformation template by changing ``Resources.NodeLaunchConfig.Properties.AssociatePublicIpAddress`` from ``'true'`` to ``'false'``
     
@@ -133,3 +133,6 @@ Then run
 
       kubectl create clusterrolebinding cluster-system-anonymous --clusterrole=cluster-admin --user=system:anonymous
 
+.. References
+
+.. _Getting Started with Amazon EKS: https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html

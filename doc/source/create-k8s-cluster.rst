@@ -16,6 +16,7 @@ Choose one option and proceed.
    google/step-zero-gcp
    microsoft/step-zero-azure
    amazon/step-zero-aws
+   amazon/step-zero-aws-eks
    redhat/step-zero-openshift
    ibm/step-zero-ibm
 
