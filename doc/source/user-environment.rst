@@ -99,8 +99,9 @@ To let users use JupyterLab by default, add the following entries to your
      defaultUrl: "/lab"
 
    hub:
-     extraConfig: |-
-       c.Spawner.cmd = ['jupyter-labhub']
+     extraConfig:
+       jupyterlab: |
+         c.Spawner.cmd = ['jupyter-labhub']
 
 .. note::
 
