@@ -1,4 +1,4 @@
-.. _amazon-aws:
+.. _amazon-efs:
 
 Setting up EFS storage on AWS
 -----------------------------
