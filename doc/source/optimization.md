@@ -245,9 +245,9 @@ This section about scaling down efficiently, will also explains how the *user
 scheduler* can help you reduce the failures to scale down due to blocking user
 pods.
 
-#### Using a user dedicated node pool
+#### Using a dedicated node pool for users
 
-To set up a user dedicated node pool, we can use [*taints and
+To set up a dedicated node pool for user pods, we can use [*taints and
 tolerations*](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/).
 If we add a taint to all the nodes in the node pool, and a toleration on the
 user pods to tolerate being scheduled on a tainted node, we have practically
