@@ -31,7 +31,7 @@ Procedure:
  
     Use the IAM Role in step 1 and Security Group defined in step 3. The cluster name is going to be used throughout. We'll use ``Z2JHKubernetesCluster`` as an example.
     
-5. Install **kubectl** and **heptio-authenticator-aws**
+5. Install **kubectl** and **aws-iam-authenticator**
 
     Refer to  `Getting Started with Amazon EKS`_ on *Configure kubectl for Amazon EKS*
 
@@ -93,7 +93,7 @@ Procedure:
 
    .. code-block:: bash
 
-   curl -O https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-06-05/aws-auth-cm.yaml
+      curl -O https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-06-05/aws-auth-cm.yaml
 
    or copy it::
 
