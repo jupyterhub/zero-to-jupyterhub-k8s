@@ -132,14 +132,15 @@ Procedure:
 
     You should see a list of two nodes, each beginning with ``ip``.
 
-    If you want to run kubectl locally (necessary for step #3 in `Setting up Helm <https://z2jh.jupyter.org/en/latest/setup-helm.html#initialization>`_), you can use run the following on AWS: ``kops export kubecfg``
+    If you want to use kubectl and helm locally (necessary for step #3 in `Setting up Helm <https://z2jh.jupyter.org/en/latest/setup-helm.html#initialization>`_):
+    
+    * run the following on CI host: ``kops export kubecfg``
+    * copy the contents of ``~/.kube/config`` to the same place on your local system
+    
+    If you wish to put the kube config file in a different location, you will need to ``export KUBECONFIG=<other kube config location>``
 
-    To use kubctl and helm from a local machine, copy the contents of ``~/.kube/config`` to the same place on your local system.  If you wish to put the kube config file in a different location, you will need to ``export KUBECONFIG=<other kube config location>``
 
-
-12. Configure ssh bastion
-
-    Skip this step if you did not go with the private option above!
+12. Configure ssh bastion (Skip this step if you did not go with the **--topology private** option above!)
 
     Ideally we would simply be passing the --bastion flag into the kops command above.  However that flag is not functioning as intended at the moment.  https://github.com/kubernetes/kops/issues/2881
 
