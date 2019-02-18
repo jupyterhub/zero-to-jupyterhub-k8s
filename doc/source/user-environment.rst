@@ -42,7 +42,7 @@ used by default, such as the `datascience-notebook
 <https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-datascience-notebook>`_
 image containing useful tools and libraries for datascience, complete these steps:
 
-1. Modify your ``config.yaml`` file to specify the image. For example:
+#. Modify your ``config.yaml`` file to specify the image. For example:
 
    .. code-block:: yaml
 
@@ -63,7 +63,7 @@ image containing useful tools and libraries for datascience, complete these step
       ``latest`` as it might cause a several minute delay, confusion, or
       failures for users when a new version of the image is released.
 
-2. Apply the changes by following the directions listed in
+#. Apply the changes by following the directions listed in
    :ref:`apply the changes <apply-config-changes>`.
 
 
@@ -73,6 +73,8 @@ image containing useful tools and libraries for datascience, complete these step
       cluster will pull the image before the the hub is upgraded to let users
       use the image. The image pulling may take several minutes to complete,
       depending on the size of the image.
+
+#. Restart your server from JupyterHub control panel if you are already logged in.
 
 .. note::
 
