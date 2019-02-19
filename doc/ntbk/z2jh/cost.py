@@ -15,16 +15,16 @@ warnings.filterwarnings('ignore')
 locale.setlocale(locale.LC_ALL, '')
 
 # --- MACHINE COSTS ---
-http = requests.get('https://cloud.google.com/compute/pricing')
-http = bs4(http.text)
+resp = requests.get('https://cloud.google.com/compute/pricing')
+html = bs4(resp.text)
 
 # Munge the cost data
 all_dfs = []
-for table in http.find_all('table'):
-    header = table.find_all('th')
+for table in html.find_all('table'):
+    header = table.find('thead').find_all('th')
     header = [item.text for item in header]
 
-    data = table.find_all('tr')[1:]
+    data = table.find('tbody').find_all('tr')
     rows = []
     for ii in data:
         thisrow = []
