@@ -243,3 +243,5 @@ singleuser:
 
 Note that if you want to mount a volume into multiple pods the volume must
 support a suitable [access mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes).
+
+AWS EFS is one example which suitable for shared storage, see [Setting up EFS storage on AWS](https://zero-to-jupyterhub.readthedocs.io/en/latest/amazon/efs_storage.html) for more details.
