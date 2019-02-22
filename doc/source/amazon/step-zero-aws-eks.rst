@@ -16,6 +16,7 @@ Procedure:
 
    * AmazonEKSClusterPolicy
    * AmazonEKSServicePolicy
+   * AmazonEC2ContainerRegistryReadOnly
    
    (From the user interface, select EKS as the service, then follow the default steps) 
    
@@ -58,18 +59,16 @@ Procedure:
 	 users:
 	 - name: aws
 	   user:
-	   exec:
-	   apiVersion: client.authentication.k8s.io/v1alpha1
-	   command: heptio-authenticator-aws
-	   args:
-           - "token"
-             - "-i"
-               - "<cluster-name>"
-		 # - "-r"
-		 # - "<role-arn>"
-		 # env:
-		 # - name: AWS_PROFILE
-		 #   value: "<aws-profile>"
+	     exec:
+	       apiVersion: client.authentication.k8s.io/v1alpha1
+	       command: aws-iam-authenticator
+	       args:
+	       - "token"
+	       - "-i"
+	       - "<cluster-name>"
+	       # env:
+	       # - name: AWS_PROFILE
+	       #   value: "<aws-profile>"
 
 
 7. Verify kubectl works
@@ -88,38 +87,9 @@ Procedure:
     
 9. Create a AWS authentication ConfigMap
 
-   This is necessary for the workers to find the master plane.
-   Download `aws-auth-cm.yaml` file.
-
-   .. code-block:: bash
-
-      curl -O https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-06-05/aws-auth-cm.yaml
-
-   or copy it::
-
-
-     apiVersion: v1
-     kind: ConfigMap
-     metadata:
-     name: aws-auth
-     namespace: kube-system
-     data:
-     mapRoles: |
-     - rolearn: <ARN of instance role (not instance profile)>
-       username: system:node:{{EC2PrivateDNSName}}
-       groups:
-       - system:bootstrappers
-         - system:nodes
-
-
-To find the ARN of the instance role, you can pull up any node created in Step 8, the nodes will be of the format ``<Cluster Name>-<NodeName>-Node``, for example ``Z2JHKubernetesCluster-Worker-Node``
-Click on the IAM Role for that node, you should see a `Role ARN` and `Instance Profile ARNs.` Use the `Role ARN` in the above yaml file.
-
-Then run 
-   .. code-block:: bash
-
-      kubectl apply -f aws-auth-cm.yaml
-
+    This is necessary for the workers to find the master plane.
+  
+    See `To enable worker nodes to join your cluster`_ *Step 3: Launch and Configure Amazon EKS Worker Nodes*
 
 10. Preparing authenticator for Helm
 
