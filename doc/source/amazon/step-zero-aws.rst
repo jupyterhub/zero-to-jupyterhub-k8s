@@ -10,9 +10,9 @@ guides for setting up Kubernetes on AWS.
 This guide uses kops to setup a cluster on AWS.  This should be seen as a rough template you will use to
 setup and shape your cluster.
 
-===========
+=============
 The Procedure
-===========
+=============
 
 #. Create a IAM Role
 
