@@ -10,7 +10,9 @@ guides for setting up Kubernetes on AWS.
 This guide uses kops to setup a cluster on AWS.  This should be seen as a rough template you will use to
 setup and shape your cluster.
 
-Procedure:
+=============
+The Procedure
+=============
 
 #. Create a IAM Role
 
@@ -182,7 +184,9 @@ Procedure:
     disks, allowing us to automatically assign a disk per user when they log
     in to JupyterHub.
     
-**Encryption**
+==========
+Encryption
+==========
 
 There are simple methods for encrypting your Kubernetes cluster. Illustrated here are simple methods for encryption at rest and encryption in transit.
 
@@ -260,6 +264,15 @@ Then perform the following steps:
     
     If you really want to insure encryption is working, you can listen on port `6783` of any node. If the traffic looks like gibberish, you know it is on.
 
-    
+==============
+Shared Storage
+==============
+A shared volume is supposed to be mounted to multiple user pods, so we cannot use EBS. As an alternative, there's AWS EFS:
+
+#. :ref:`amazon-efs`
+
+#. :ref:`user-storage`
+
+
 Congrats. Now that you have your Kubernetes cluster running, it's time to
 begin :ref:`creating-your-jupyterhub`.
