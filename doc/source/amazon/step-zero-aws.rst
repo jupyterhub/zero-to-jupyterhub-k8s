@@ -269,7 +269,7 @@ Shared Storage
 ==============
 A shared volume is supposed to be mounted to multiple user pods, so we cannot use EBS. As an alternative, there's AWS EFS:
 
-#. `Set up a EFS storage on AWS <https://zero-to-jupyterhub.readthedocs.io/en/latest/amazon/efs_storage.html>`_
+#. :ref:`amazon-efs`
 
 #. `Update helm chart <https://z2jh.jupyter.org/en/latest/user-storage.html#additional-storage-volumes>`_
 
