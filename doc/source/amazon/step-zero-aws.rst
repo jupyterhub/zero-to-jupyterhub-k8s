@@ -271,7 +271,7 @@ A shared volume is supposed to be mounted to multiple user pods, so we cannot us
 
 #. :ref:`amazon-efs`
 
-#. `Update helm chart <https://z2jh.jupyter.org/en/latest/user-storage.html#additional-storage-volumes>`_
+#. :ref:`user-storage`
 
 
 Congrats. Now that you have your Kubernetes cluster running, it's time to
