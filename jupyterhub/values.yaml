@@ -92,19 +92,6 @@ proxy:
       requests:
         cpu: 200m
         memory: 512Mi
-  nginx:
-    image:
-      name: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
-      tag: 0.15.0
-      pullPolicy: IfNotPresent
-    proxyBodySize: 64m
-    resources: {}
-  lego:
-    image:
-      name: jetstack/kube-lego
-      tag: 0.1.7
-      pullPolicy: IfNotPresent
-    resources: {}
   labels: {}
   nodeSelector: {}
   pdb:
@@ -295,3 +282,4 @@ cull:
 
 debug:
   enabled: false
+
