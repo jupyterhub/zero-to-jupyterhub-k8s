@@ -4,6 +4,7 @@ jupyterhub-tmpauthenticator==0.5
 jupyterhub-ltiauthenticator==0.3
 jupyterhub-ldapauthenticator==1.2.2
 jupyterhub-kubespawner==0.10.1
+jupyterhub-traefik-proxy==0.1.3
 kubernetes==8.0.*
 nullauthenticator==1.0
 oauthenticator==0.8.0

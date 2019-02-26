@@ -17,8 +17,10 @@ AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
 # Connect to a proxy running in a different pod
-c.ConfigurableHTTPProxy.api_url = 'http://{}:{}'.format(os.environ['PROXY_API_SERVICE_HOST'], int(os.environ['PROXY_API_SERVICE_PORT']))
-c.ConfigurableHTTPProxy.should_start = False
+from jupyterhub_traefik_proxy import TraefikEtcdProxy
+c.JupyterHub.proxy_class = TraefikEtcdProxy
+c.TraefikProxy.traefik_api_url = 'http://{}:{}'.format(os.environ['PROXY_API_SERVICE_HOST'], int(os.environ['PROXY_API_SERVICE_PORT']))
+c.Proxy.should_start = False
 
 # Do not shut down user pods when hub is restarted
 c.JupyterHub.cleanup_servers = False

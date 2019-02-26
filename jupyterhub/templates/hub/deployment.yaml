@@ -59,7 +59,7 @@ spec:
       {{- if .Values.hub.imagePullSecret.enabled }}
       imagePullSecrets:
         - name: hub-image-credentials
-      {{- end }}  
+      {{- end }}
       containers:
         {{- if .Values.hub.extraContainers }}
         {{- .Values.hub.extraContainers | toYaml | trimSuffix "\n" | nindent 8 }}
