@@ -4,7 +4,9 @@ proxy:
     type: NodePort
     nodePorts:
       http: 31212
-  chp:
+  traefik:
+    debug:
+      enabled: true
     resources:
       requests:
         memory: 0

@@ -1,6 +1,8 @@
-{{- $letsencrypt := and .Values.proxy.https.enabled (eq .Values.proxy.https.type "letsencrypt") -}}
-{{- $manualHTTPS := and .Values.proxy.https.enabled (eq .Values.proxy.https.type "manual") -}}
-{{- $manualHTTPSwithsecret := and .Values.proxy.https.enabled (eq .Values.proxy.https.type "secret") -}}
+{{- $HTTPS := .Values.proxy.https.enabled -}}
+{{- $autoHTTPS := and $HTTPS (and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
+{{- $offloadHTTPS := and $HTTPS (eq .Values.proxy.https.type "offload") -}}
+{{- $manualHTTPS := and $HTTPS (eq .Values.proxy.https.type "manual") -}}
+{{- $manualHTTPSwithsecret := and $HTTPS (eq .Values.proxy.https.type "secret") -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -47,7 +49,7 @@ data:
         {{- end }}
       {{- end}}
 
-    [entryPoints.traefik]
+      [entryPoints.traefik]
       address = ":8080"
         # TODO: traefik api auth
         # [entryPoints.traefik.auth]
@@ -81,12 +83,12 @@ data:
     prefix = {{ .Values.proxy.etcd.prefix | quote }}
     useAPIV3 = true
     {{- if .Values.proxy.etcd.username }}
-    username = {{ .Values.proxy.etcd.username }}
+    username = {{ .Values.proxy.etcd.username | quote }}
     {{- end }}
     {{- if .Values.proxy.etcd.password }}
-    password = {{ .Values.etcd.password }}
+    password = {{ .Values.etcd.password | quote }}
     {{- end }}
-    {{- if $letsencrypt }}
+    {{- if $autoHTTPS }}
     [acme]
     email = {{ .Values.proxy.https.letsencrypt.email | quote }}
     storage = "traefik/acme/account"
@@ -122,7 +124,7 @@ data:
     {{- end }}
     {{- end }}
 
-    {{- end }} {{/* endif $letsencrypt */}}
+    {{- end }} {{/* endif $autoHTTPS */}}
 
     [api]
       entryPoint = "traefik"

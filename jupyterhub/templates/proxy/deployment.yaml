@@ -1,6 +1,8 @@
-{{- $letsencrypt := and .Values.proxy.https.enabled (eq .Values.proxy.https.type "letsencrypt") -}}
-{{- $manualHTTPS := and .Values.proxy.https.enabled (eq .Values.proxy.https.type "manual") -}}
-{{- $manualHTTPSwithsecret := and .Values.proxy.https.enabled (eq .Values.proxy.https.type "secret") -}}
+{{- $HTTPS := .Values.proxy.https.enabled -}}
+{{- $autoHTTPS := and $HTTPS (and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
+{{- $offloadHTTPS := and $HTTPS (eq .Values.proxy.https.type "offload") -}}
+{{- $manualHTTPS := and $HTTPS (eq .Values.proxy.https.type "manual") -}}
+{{- $manualHTTPSwithsecret := and $HTTPS (eq .Values.proxy.https.type "secret") -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -24,6 +26,7 @@ spec:
         {{- .Values.proxy.labels | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
       annotations:
+        checksum/config-map: {{ include (print .Template.BasePath "/proxy/configmap.yaml") . | sha256sum }}
         # This lets us autorestart when the secret changes!
         checksum/hub-secret: {{ include (print $.Template.BasePath "/hub/secret.yaml") . | sha256sum }}
         checksum/proxy-secret: {{ include (print $.Template.BasePath "/proxy/secret.yaml") . | sha256sum }}
@@ -49,7 +52,7 @@ spec:
         - name: tls-secret
           secret:
             secretName: {{ .Values.proxy.https.secret.name }}
-      {{- else if $letsencrypt }}
+      {{- else if $autoHTTPS }}
         - name: acme
         {{- if .Values.proxy.https.letsencrypt.persistence.enabled }}
           persistentVolumeClaim:
@@ -90,7 +93,7 @@ spec:
               name: tls-secret
               readOnly: true
             {{- end }}
-            {{- if and .Values.proxy.https.enabled (eq .Values.proxy.https.type "letsencrypt") }}
+            {{- if $autoHTTPS }}
             - mountPath: /acme
               name: acme
             {{- end }}
@@ -106,6 +109,7 @@ spec:
               name: proxy-http
             - containerPort: 8080
               name: api
+        {{- if $autoHTTPS }}
         - name: storeconfig-job
           image: "{{ .Values.proxy.traefik.image.name }}:{{ .Values.proxy.traefik.image.tag }}"
           command:
@@ -113,7 +117,8 @@ spec:
             - -c
             - "while true; do traefik storeconfig --configfile=/config/traefik.toml; sleep 10; done"
           volumeMounts:
-            - mountPath: /config
+            - mountPath: /etc/traefik
               name: config
             - mountPath: /acme
               name: acme
+        {{- end }}
