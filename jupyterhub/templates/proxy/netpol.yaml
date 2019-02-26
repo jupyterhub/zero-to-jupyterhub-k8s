@@ -3,16 +3,27 @@
 {{- $manualHTTPS := and $HTTPS (eq .Values.proxy.https.type "manual") -}}
 {{- $manualHTTPSwithsecret := and $HTTPS (eq .Values.proxy.https.type "secret") -}}
 {{- if .Values.proxy.networkPolicy.enabled -}}
+#
+{{- /*
+
+Network policy for jupyterhub traefik proxy:
+
+- only hub and proxy can talk to etcd
+- only hub can talk to proxy api
+- proxy only needs to talk to the hub
+
+*/}}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: proxy
+  name: proxy-traefik
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
   podSelector:
     matchLabels:
-      {{- include "jupyterhub.matchLabels" . | nindent 6 }}
+      {{- $_ := merge (dict "componentLabel" "proxy") . }}
+      {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}
   policyTypes:
     - Ingress
     - Egress
@@ -22,20 +33,6 @@ spec:
         port: 80
       - protocol: TCP
         port: 443
-      {{- if not $autoHTTPS }}
-      - protocol: TCP
-        port: 8000
-      {{- end }}
-      {{- if or $manualHTTPS $manualHTTPSwithsecret}}
-      - protocol: TCP
-        port: 8443
-      {{- end }}
-      # kube-lego /healthz
-      - protocol: TCP
-        port: 8080
-      # nginx /healthz
-      - protocol: TCP
-        port: 10254
     - from:
         - podSelector:
             matchLabels:
@@ -49,7 +46,7 @@ spec:
               hub.jupyter.org/network-access-proxy-api: "true"
       ports:
         - protocol: TCP
-          port: 8001
+          port: 8080
   egress:
     {{- /*
     The default is to allow all egress for proxy If you want to restrict it the
@@ -61,4 +58,36 @@ spec:
     {{- if .Values.proxy.networkPolicy.egress }}
     {{- .Values.proxy.networkPolicy.egress | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: proxy-etcd
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- $_ := merge (dict "componentLabel" "proxy-etcd") . }}
+      {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}
+
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-proxy-etcd: "true"
+      ports:
+        - protocol: TCP
+          port: 2379
+    - from:
+        - podSelector:
+            matchLabels:
+              {{- $_ := merge (dict "componentLabel" "proxy-etcd") . }}
+              {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
+      ports:
+        - protocol: TCP
+          port: 2380
 {{- end }}

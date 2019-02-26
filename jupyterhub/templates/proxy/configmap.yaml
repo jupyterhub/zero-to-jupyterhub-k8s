@@ -1,0 +1,134 @@
+{{- $letsencrypt := and .Values.proxy.https.enabled (eq .Values.proxy.https.type "letsencrypt") -}}
+{{- $manualHTTPS := and .Values.proxy.https.enabled (eq .Values.proxy.https.type "manual") -}}
+{{- $manualHTTPSwithsecret := and .Values.proxy.https.enabled (eq .Values.proxy.https.type "secret") -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: proxy-traefik-config
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+data:
+  traefik.toml: |
+    # traefik.toml
+    {{- if .Values.proxy.traefik.debug.enabled }}
+    debug = true
+    {{- else }}
+    logLevel = "INFO"
+    {{- end }}
+    {{- if .Values.proxy.traefik.sendAnonymousUsage }}
+    sendAnonymousUsage = true
+    {{- end }}
+    {{- if .Values.proxy.https.enabled }}
+    defaultEntryPoints = ["http", "https"]
+    {{- else }}
+    defaultEntryPoints = ["http"]
+    {{- end }}
+    [entryPoints]
+      [entryPoints.http]
+      address = ":80"
+      compress = {{ .Values.proxy.traefik.gzip.enabled }}
+        {{- if .Values.proxy.https.enabled }}
+        [entryPoints.http.redirect]
+          regex = "^http://(.*)"
+          replacement = "https://$1"
+          {{- if .Values.proxy.https.permanentRedirect }}
+          permanent = true
+          {{- end }}
+        {{- end }}
+      {{- if and .Values.proxy.https.enabled (not (eq .Values.proxy.https.type "offload")) }}
+      [entryPoints.https]
+      address = ":443"
+      compress = {{ .Values.proxy.traefik.gzip.enabled }}
+        {{- if (or $manualHTTPS $manualHTTPSwithsecret) }}
+        [entryPoints.https.tls]
+          [[entryPoints.https.tls.certificates]]
+          CertFile = "/ssl/tls.crt"
+          KeyFile = "/ssl/tls.key"
+        {{- end }}
+      {{- end}}
+
+    [entryPoints.traefik]
+      address = ":8080"
+        # TODO: traefik api auth
+        # [entryPoints.traefik.auth]
+        #  [entryPoints.traefik.auth.basic]
+        #    users = ["api_admin:"]
+
+    {{- if .Values.proxy.traefik.traefikLogFormat }}
+    [traefikLog]
+      format = {{ .Values.proxy.traefik.traefikLogFormat | quote }}
+    {{- end }}
+
+    # log errors, which could be proxy errors
+    [accessLog]
+    format = "json"
+    [accessLog.filters]
+    statusCodes = ["500-999"]
+
+    [accessLog.fields.headers]
+    [accessLog.fields.headers.names]
+    Authorization = "redact"
+    Cookie = "redact"
+    Set-Cookie = "redact"
+    X-Xsrftoken = "redact"
+
+    [respondingTimeouts]
+    idleTimeout = "10m0s"
+
+    [etcd]
+    endpoint = {{ .Values.proxy.etcd.endpoint | quote }}
+    watch = true
+    prefix = {{ .Values.proxy.etcd.prefix | quote }}
+    useAPIV3 = true
+    {{- if .Values.proxy.etcd.username }}
+    username = {{ .Values.proxy.etcd.username }}
+    {{- end }}
+    {{- if .Values.proxy.etcd.password }}
+    password = {{ .Values.etcd.password }}
+    {{- end }}
+    {{- if $letsencrypt }}
+    [acme]
+    email = {{ .Values.proxy.https.letsencrypt.email | quote }}
+    storage = "traefik/acme/account"
+    storageFile = "/acme/acme.json"
+    OverrideCertificates = true
+    entryPoint = "https"
+    onHostRule = {{ .Values.proxy.https.letsencrypt.onHostRule }}
+    {{- if .Values.proxy.https.letsencrypt.staging }}
+    caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
+    {{- end }}
+    {{- if .Values.proxy.https.letsencrypt.logging }}
+    acmeLogging = true
+    {{- end }}
+    {{- if .Values.proxy.https.letsencrypt.challengeType }}
+    {{- if eq .Values.proxy.https.letsencrypt.challengeType "dns-01" }}
+      [acme.dnsChallenge]
+      provider = {{ .Values.proxy.https.letsencrypt.dnsProvider.name | quote }}
+      {{- if .Values.proxy.https.letsencrypt.delayBeforeCheck }}
+      delayBeforeCheck = {{ .Values.proxy.https.letsencrypt.delayBeforeCheck }}
+      {{- end }}
+    {{- else if eq .Values.proxy.https.letsencrypt.challengeType "http-01" }}
+      [acme.httpChallenge]
+      entryPoint = "http"
+    {{- else if eq .Values.proxy.https.letsencrypt.challengeType "tls-alpn-01" }}
+      [acme.tlsChallenge]
+    {{- end }}
+    {{- end }}
+
+    {{- if .Values.proxy.https.domains }}
+    {{- range .Values.proxy.https.domains }}
+    [[acme.domains]]
+    main = "{{ . }}"
+    {{- end }}
+    {{- end }}
+
+    {{- end }} {{/* endif $letsencrypt */}}
+
+    [api]
+      entryPoint = "traefik"
+      dashboard = false
+    {{- if .Values.proxy.traefik.metrics.prometheus.enabled }}
+    [metrics]
+      [metrics.prometheus]
+        entryPoint = "traefik"
+    {{- end }}

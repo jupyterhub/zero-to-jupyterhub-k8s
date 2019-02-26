@@ -68,10 +68,8 @@ hub:
               cidr: 0.0.0.0/0
   allowNamedServers: false
 
-
 rbac:
   enabled: true
-
 
 proxy:
   secretToken: ''
@@ -83,15 +81,47 @@ proxy:
       http:
       https:
     loadBalancerIP:
-  chp:
+  etcd:
+    endpoint: http://proxy-etcd:2379
+    prefix: /traefik/
+    username: root
+    password:
     image:
-      name: jupyterhub/configurable-http-proxy
-      tag: 3.0.0
-      pullPolicy: IfNotPresent
+      name: k8s.gcr.io/etcd-amd64
+      tag: 2.2.5
+    resources:
+      requests:
+        memory: 128Mi
+    replicas: 1
+    service:
+      labels: {}
+      annotations: {}
+    persistentVolume:
+      enabled: false
+      # storage:
+    pdb:
+      enabled: false
+
+  traefik:
+    # kubernetes features
+    image:
+      name: traefik
+      tag: 1.7.9
     resources:
       requests:
         cpu: 200m
         memory: 512Mi
+    replicas: 1
+    # traefik features
+    debug:
+      enabled: false
+    gzip:
+      enabled: false
+    metrics:
+      prometheus:
+        enabled: true
+    proxyProtocol:
+      enabled: false
   labels: {}
   nodeSelector: {}
   pdb:
@@ -103,6 +133,8 @@ proxy:
     #type: letsencrypt, manual, offload, secret
     letsencrypt:
       contactEmail: ''
+      persistence:
+        enabled: true
     manual:
       key:
       cert:

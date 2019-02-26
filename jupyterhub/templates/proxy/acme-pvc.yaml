@@ -1,0 +1,27 @@
+{{- $HTTPS := .Values.proxy.https.enabled -}}
+{{- $autoHTTPS := and $HTTPS (and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
+{{- if and $autoHTTPS .Values.proxy.https.letsencrypt.persistence.enabled (not .Values.proxy.https.letsencrypt.persistence.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+{{- if .Values.proxy.https.letsencrypt.persistence.annotations }}
+  annotations:
+{{ toYaml .Values.proxy.https.letsencrypt.persistence.annotations | indent 4 }}
+{{- end }}
+  name: proxy-acme
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.proxy.https.letsencrypt.persistence.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.proxy.https.letsencrypt.persistence.size | quote }}
+  {{- if .Values.proxy.https.letsencrypt.persistence.storageClass }}
+  {{-   if (eq "-" .Values.proxy.https.letsencrypt.persistence.storageClass) }}
+  storageClassName: ""
+  {{-   else }}
+  storageClassName: "{{ .Values.proxy.https.letsencrypt.persistence.storageClass }}"
+  {{-   end }}
+  {{- end }}
+{{- end }}

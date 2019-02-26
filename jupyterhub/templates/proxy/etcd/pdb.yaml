@@ -1,0 +1,13 @@
+{{- if .Values.proxy.etcd.pdb.enabled -}}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: proxy-etcd
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+spec:
+  minAvailable: {{ .Values.proxy.etcd.pdb.minAvailable }}
+  selector:
+    matchLabels:
+      {{- include "jupyterhub.matchLabels" . | nindent 6 }}
+{{- end }}

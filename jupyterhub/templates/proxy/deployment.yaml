@@ -1,3 +1,4 @@
+{{- $letsencrypt := and .Values.proxy.https.enabled (eq .Values.proxy.https.type "letsencrypt") -}}
 {{- $manualHTTPS := and .Values.proxy.https.enabled (eq .Values.proxy.https.type "manual") -}}
 {{- $manualHTTPSwithsecret := and .Values.proxy.https.enabled (eq .Values.proxy.https.type "secret") -}}
 apiVersion: apps/v1
@@ -7,7 +8,7 @@ metadata:
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.proxy.traefik.replicas | default 1 }}
   selector:
     matchLabels:
       {{- include "jupyterhub.matchLabels" . | nindent 6 }}
@@ -16,6 +17,7 @@ spec:
       labels:
         {{- /* Changes here will cause the Deployment to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
+        hub.jupyter.org/network-access-etcd: "true"
         hub.jupyter.org/network-access-hub: "true"
         hub.jupyter.org/network-access-singleuser: "true"
         {{- if .Values.proxy.labels }}
@@ -35,64 +37,83 @@ spec:
       {{- end }}
       nodeSelector: {{ toJson .Values.proxy.nodeSelector }}
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
-      {{- if $manualHTTPS }}
       volumes:
+        - name: config
+          configMap:
+            name: proxy-traefik-config
+      {{- if $manualHTTPS }}
         - name: tls-secret
           secret:
             secretName: proxy-manual-tls
       {{- else if $manualHTTPSwithsecret }}
-      volumes:
         - name: tls-secret
           secret:
             secretName: {{ .Values.proxy.https.secret.name }}
+      {{- else if $letsencrypt }}
+        - name: acme
+        {{- if .Values.proxy.https.letsencrypt.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.proxy.https.letsencrypt.persistence.existingClaim | default "proxy-acme" }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
       {{- end }}
       containers:
-        - name: chp
-          image: {{ .Values.proxy.chp.image.name }}:{{ .Values.proxy.chp.image.tag }}
-          command:
-            - configurable-http-proxy
-            - --ip=0.0.0.0
-            - --api-ip=0.0.0.0
-            - --api-port=8001
-            - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
-            - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)/hub/error
-            {{- if $manualHTTPS }}
-            - --port=8443
-            - --redirect-port=8000
-            - --ssl-key=/etc/chp/tls/tls.key
-            - --ssl-cert=/etc/chp/tls/tls.crt
-            {{- else if $manualHTTPSwithsecret }}
-            - --port=8443
-            - --redirect-port=8000
-            - --ssl-key=/etc/chp/tls/{{ .Values.proxy.https.secret.key }}
-            - --ssl-cert=/etc/chp/tls/{{ .Values.proxy.https.secret.crt }}
-            {{- else }}
-            - --port=8000
+        - name: traefik
+          image: {{ .Values.proxy.traefik.image.name }}:{{ .Values.proxy.traefik.image.tag }}
+          readinessProbe:
+            tcpSocket:
+              port: 80
+            failureThreshold: 1
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          livenessProbe:
+            tcpSocket:
+              port: 80
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          args:
+            - --configfile=/config/traefik.toml
+            {{- range .Values.proxy.traefik.extraArgs }}
+            - {{ . }}
             {{- end }}
-            {{- if .Values.debug.enabled }}
-            - --log-level=debug
-            {{- end }}
-          {{- if or $manualHTTPS $manualHTTPSwithsecret }}
           volumeMounts:
-            - name: tls-secret
-              mountPath: /etc/chp/tls
-              readOnly: true
-          {{- end }}
-          resources:
-            {{- .Values.proxy.chp.resources | toYaml | trimSuffix "\n" | nindent 12 }}
-          env:
-            - name: CONFIGPROXY_AUTH_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: hub-secret
-                  key: proxy.token
-          imagePullPolicy: {{ .Values.proxy.chp.image.pullPolicy }}
-          ports:
+            - mountPath: /config
+              name: config
             {{- if or $manualHTTPS $manualHTTPSwithsecret }}
-            - containerPort: 8443
-              name: proxy-https
+            - mountPath: /ssl
+              name: tls-secret
+              readOnly: true
             {{- end }}
-            - containerPort: 8000
-              name: proxy-public
-            - containerPort: 8001
+            {{- if and .Values.proxy.https.enabled (eq .Values.proxy.https.type "letsencrypt") }}
+            - mountPath: /acme
+              name: acme
+            {{- end }}
+          resources:
+            {{- .Values.proxy.traefik.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- if .Values.proxy.traefik.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.proxy.traefik.image.pullPolicy }}
+          {{- end }}
+          ports:
+            - containerPort: 443
+              name: proxy-https
+            - containerPort: 80
+              name: proxy-http
+            - containerPort: 8080
               name: api
+        - name: storeconfig-job
+          image: "{{ .Values.proxy.traefik.image.name }}:{{ .Values.proxy.traefik.image.tag }}"
+          command:
+            - sh
+            - -c
+            - "while true; do traefik storeconfig --configfile=/config/traefik.toml; sleep 10; done"
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /acme
+              name: acme
