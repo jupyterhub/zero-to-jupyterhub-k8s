@@ -8,7 +8,9 @@ US East (N. Virginia) (us-east-1)
 
 This guide uses AWS to set up a cluster. This mirrors the steps found at `Getting Started with Amazon EKS`_ with some details filled in that are absent
 
-Procedure:
+==========
+Procedure
+==========
 
 1. Create a IAM Role for EKS Service Role.
 
@@ -106,3 +108,10 @@ Procedure:
 .. References
 
 .. _Getting Started with Amazon EKS: https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html
+
+==================
+Cluster Autoscaler
+==================
+If you'd like to do some `optimizations <https://zero-to-jupyterhub.readthedocs.io/en/latest/optimization.html?highlight=autoscaler#efficient-cluster-autoscaling>`_, you need to deploy Cluster Autoscaler (CA) first.
+
+See https://eksworkshop.com/scaling/deploy_ca/
