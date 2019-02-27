@@ -396,6 +396,23 @@ properties:
             type: object
             description: |
               Kuberentes annotations to apply to the hub service.
+      pdb:
+        type: object
+        description: |
+          Set the Pod Disruption Budget for the hub pod.
+
+          See [the Kubernetes
+          documentation](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/)
+          for more details about disruptions.
+        properties:
+          enabled:
+            type: boolean
+            description: |
+              Whether PodDisruptionBudget is enabled for the hub pod.
+          minAvailable:
+            type: integer
+            description: |
+              Minimum number of pods to be available during the voluntary disruptions.
 
   proxy:
     type: object
@@ -552,6 +569,23 @@ properties:
               hosts:
                 - <your-domain-name>
               ```   
+      pdb:
+        type: object
+        description: |
+          Set the Pod Disruption Budget for the proxy pod.
+
+          See [the Kubernetes
+          documentation](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/)
+          for more details about disruptions.
+        properties:
+          enabled:
+            type: boolean
+            description: |
+              Whether PodDisruptionBudget is enabled for the proxy pod.
+          minAvailable:
+            type: integer
+            description: |
+              Minimum number of pods to be available during the voluntary disruptions.
     required:
       - secretToken
   auth:
