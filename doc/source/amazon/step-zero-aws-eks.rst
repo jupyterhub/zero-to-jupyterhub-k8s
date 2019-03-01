@@ -91,7 +91,7 @@ Procedure
 
     This is necessary for the workers to find the master plane.
   
-    See `To enable worker nodes to join your cluster`_ *Step 3: Launch and Configure Amazon EKS Worker Nodes*
+    See `Getting Started with Amazon EKS`_ *Step 3: Launch and Configure Amazon EKS Worker Nodes*
 
 10. Preparing authenticator for Helm
 
