@@ -112,6 +112,7 @@ Procedure
 ==================
 Cluster Autoscaler
 ==================
-If you'd like to do some `optimizations <https://zero-to-jupyterhub.readthedocs.io/en/latest/optimization.html?highlight=autoscaler#efficient-cluster-autoscaling>`_, you need to deploy Cluster Autoscaler (CA) first.
+
+If you'd like to do some :ref:`optimizations <efficient-cluster-autoscaling>`, you need to deploy Cluster Autoscaler (CA) first.
 
 See https://eksworkshop.com/scaling/deploy_ca/

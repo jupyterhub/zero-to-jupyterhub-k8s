@@ -165,6 +165,10 @@ prePuller:
       tag: 2343e33dec46
 ```
 
+```eval_rst
+.. _efficient-cluster-autoscaling:
+```
+
 ## Efficient Cluster Autoscaling
 
 A [*Cluster
