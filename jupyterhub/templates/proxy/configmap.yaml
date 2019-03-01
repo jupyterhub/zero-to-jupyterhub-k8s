@@ -80,7 +80,7 @@ data:
     [etcd]
     endpoint = {{ .Values.proxy.etcd.endpoint | quote }}
     watch = true
-    prefix = {{ .Values.proxy.etcd.prefix | quote }}
+    prefix = {{ .Values.proxy.etcd.traefikPrefix | quote }}
     useAPIV3 = true
     {{- if .Values.proxy.etcd.username }}
     username = {{ .Values.proxy.etcd.username | quote }}

@@ -19,8 +19,21 @@ c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 # Connect to a proxy running in a different pod
 from jupyterhub_traefik_proxy import TraefikEtcdProxy
 c.JupyterHub.proxy_class = TraefikEtcdProxy
-c.TraefikProxy.traefik_api_url = 'http://{}:{}'.format(os.environ['PROXY_API_SERVICE_HOST'], int(os.environ['PROXY_API_SERVICE_PORT']))
+
+# proxy is started elsewhere
 c.Proxy.should_start = False
+
+# tell it where traefik api can be found
+c.TraefikProxy.traefik_api_url = 'http://{}:{}'.format(
+    os.environ['PROXY_API_SERVICE_HOST'],
+    int(os.environ['PROXY_API_SERVICE_PORT']),
+)
+# TODO: traefik api auth
+
+# locate etcd
+c.TraefikEtcdProxy.etcd_url = get_config('proxy.etcd.endpoint')
+c.TraefikEtcdProxy.etcd_traefik_prefix = get_config('proxy.etcd.traefik_prefix')
+c.TraefikEtcdProxy.etcd_jupyterhub_prefix = get_config('proxy.etcd.jupyterhub_prefix')
 
 # Do not shut down user pods when hub is restarted
 c.JupyterHub.cleanup_servers = False

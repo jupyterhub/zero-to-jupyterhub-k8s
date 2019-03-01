@@ -83,7 +83,8 @@ proxy:
     loadBalancerIP:
   etcd:
     endpoint: http://proxy-etcd:2379
-    prefix: /traefik/
+    traefikPrefix: /traefik/
+    jupyterhubPrefix: /jupyterhub/
     username: root
     password:
     image:
@@ -100,7 +101,8 @@ proxy:
       enabled: false
       # storage:
     pdb:
-      enabled: false
+      enabled: true
+      minAvailable: 1
 
   traefik:
     # kubernetes features

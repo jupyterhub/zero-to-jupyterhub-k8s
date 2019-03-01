@@ -3,15 +3,13 @@ kind: Service
 metadata:
   name: proxy-etcd
   labels:
-    {{- include "jupyterhub.labels" . | nindent 4 }}
+    {{- $_ := merge (dict "componentLabel" "proxy-etcd") . }}
+    {{- include "jupyterhub.labels" $_ | nindent 4 }}
 spec:
   ports:
   - port: 2380
     name: etcd-server
   - port: 2379
     name: etcd-client
-  clusterIP: None
   selector:
-    app: {{ template "jupyterhub.appLabel" . }}
-    component: proxy-etcd
-    release: {{ .Release.Name | quote }}
+    {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}

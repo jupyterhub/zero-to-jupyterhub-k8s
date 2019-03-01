@@ -51,9 +51,10 @@ spec:
     {{- /*
     The default is to allow all egress for proxy If you want to restrict it the
     following egress is required
-      -  hub:8081
-      -  singleuser:8888
-      -  Kubernetes api-server
+      - hub:8081
+      - singleuser:8888
+      - Kubernetes api-server
+      - Kubernetes DNS
     */}}
     {{- if .Values.proxy.networkPolicy.egress }}
     {{- .Values.proxy.networkPolicy.egress | toYaml | trimSuffix "\n" | nindent 4 }}
@@ -73,7 +74,6 @@ spec:
 
   policyTypes:
     - Ingress
-    - Egress
   ingress:
     - from:
         - podSelector:
@@ -87,7 +87,4 @@ spec:
             matchLabels:
               {{- $_ := merge (dict "componentLabel" "proxy-etcd") . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
-      ports:
-        - protocol: TCP
-          port: 2380
 {{- end }}

@@ -19,7 +19,7 @@ spec:
       labels:
         {{- /* Changes here will cause the Deployment to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
-        hub.jupyter.org/network-access-etcd: "true"
+        hub.jupyter.org/network-access-proxy-etcd: "true"
         hub.jupyter.org/network-access-hub: "true"
         hub.jupyter.org/network-access-singleuser: "true"
         {{- if .Values.proxy.labels }}
