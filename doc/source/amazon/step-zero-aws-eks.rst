@@ -8,7 +8,9 @@ US East (N. Virginia) (us-east-1)
 
 This guide uses AWS to set up a cluster. This mirrors the steps found at `Getting Started with Amazon EKS`_ with some details filled in that are absent
 
-Procedure:
+==========
+Procedure
+==========
 
 1. Create a IAM Role for EKS Service Role.
 
@@ -89,7 +91,7 @@ Procedure:
 
     This is necessary for the workers to find the master plane.
   
-    See `To enable worker nodes to join your cluster`_ *Step 3: Launch and Configure Amazon EKS Worker Nodes*
+    See `Getting Started with Amazon EKS`_ *Step 3: Launch and Configure Amazon EKS Worker Nodes*
 
 10. Preparing authenticator for Helm
 
@@ -106,3 +108,11 @@ Procedure:
 .. References
 
 .. _Getting Started with Amazon EKS: https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html
+
+==================
+Cluster Autoscaler
+==================
+
+If you'd like to do some :ref:`optimizations <efficient-cluster-autoscaling>`, you need to deploy Cluster Autoscaler (CA) first.
+
+See https://eksworkshop.com/scaling/deploy_ca/
