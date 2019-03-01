@@ -277,7 +277,10 @@ elif auth_type == 'cilogon':
         set_config_if_not_none(c.CILogonOAuthenticator, trait, 'auth.cilogon.' + cfg_key)
 elif auth_type == 'gitlab':
     c.JupyterHub.authenticator_class = 'oauthenticator.gitlab.GitLabOAuthenticator'
-    for trait, cfg_key in common_oauth_traits:
+    for trait, cfg_key in common_oauth_traits + (
+        ('gitlab_group_whitelist', None),
+        ('gitlab_project_id_whitelist', None),
+    ):
         if cfg_key is None:
             cfg_key = camelCaseify(trait)
         set_config_if_not_none(c.GitLabOAuthenticator, trait, 'auth.gitlab.' + cfg_key)
