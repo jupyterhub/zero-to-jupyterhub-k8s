@@ -8,7 +8,7 @@ if [[
     "$TRAVIS_PULL_REQUEST" == "false" &&
     "$RUN_DEPLOY_SCRIPT" == "1"
 ]]; then
-    ./ci/deploy.sh
+    ./cd/deploy.sh
 else
     chartpress --commit-range ${TRAVIS_COMMIT_RANGE}
 fi
