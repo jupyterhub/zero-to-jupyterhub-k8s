@@ -71,14 +71,6 @@ hub:
 rbac:
   enabled: true
 
-# this is a shell-utility image with basic commands
-# like cp, cat, etc. used in some initContainers
-# to move files around.
-shellUtils:
-  image:
-    name: alpine
-    tag: 3.9
-
 proxy:
   secretToken: ''
   service:
