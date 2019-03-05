@@ -85,8 +85,8 @@ data:
     {{- if .Values.proxy.etcd.username }}
     username = {{ .Values.proxy.etcd.username | quote }}
     {{- end }}
-    {{- if .Values.proxy.etcd.password }}
-    password = {{ .Values.proxy.etcd.password | quote }}
+    {{- if .Values.proxy.secretToken }}
+    password = {{ .Values.proxy.secretToken | quote }}
     {{- end }}
 
     {{- if $autoHTTPS }}
@@ -135,6 +135,3 @@ data:
       [metrics.prometheus]
         entryPoint = "traefik"
     {{- end }}
-
-    [file]
-      filename = "/secret-config/traefik.toml"

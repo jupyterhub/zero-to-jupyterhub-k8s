@@ -77,12 +77,9 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: hub-secret
-                  key: etcd.password
+                  key: proxy.token
             - name: USERNAME_ETCD
-              valueFrom:
-                secretKeyRef:
-                  name: hub-secret
-                  key: etcd.username
+              value: {{ .Values.proxy.etcd.username }}
           image: {{ .Values.proxy.etcd.image.name }}:{{ .Values.proxy.etcd.image.tag }}
           imagePullPolicy: {{ .Values.proxy.etcd.imagePullPolicy }}
           command:
@@ -198,7 +195,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: CONFIGPROXY_AUTH_TOKEN
+            - name: PROXY_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: hub-secret

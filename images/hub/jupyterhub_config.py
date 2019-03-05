@@ -38,7 +38,7 @@ c.TraefikEtcdProxy.etcd_url = 'http://127.0.0.1:2379'
 c.TraefikEtcdProxy.etcd_traefik_prefix = get_config('proxy.etcd.traefikPrefix')
 c.TraefikEtcdProxy.etcd_jupyterhub_prefix = get_config('proxy.etcd.jupyterhubPrefix')
 c.TraefikEtcdProxy.etcd_username = get_config('proxy.etcd.username')
-c.TraefikEtcdProxy.etcd_password = get_config('proxy.etcd.password')
+c.TraefikEtcdProxy.etcd_password = os.environ['PROXY_AUTH_TOKEN']
 
 # Do not shut down user pods when hub is restarted
 c.JupyterHub.cleanup_servers = False

@@ -85,7 +85,6 @@ proxy:
     traefikPrefix: /traefik/
     jupyterhubPrefix: /jupyterhub/
     username: jupyterhub
-    password: secret
     image:
       name: quay.io/coreos/etcd
       tag: v3.3.12
@@ -106,7 +105,8 @@ proxy:
     # kubernetes features
     image:
       name: traefik
-      tag: 1.7.9
+      # to debug, use vA.B.C-alpine
+      tag: v1.7.9
     resources:
       requests:
         cpu: 200m
