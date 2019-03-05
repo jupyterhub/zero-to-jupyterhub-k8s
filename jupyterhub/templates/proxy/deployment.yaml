@@ -19,7 +19,7 @@ spec:
       labels:
         {{- /* Changes here will cause the Deployment to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
-        hub.jupyter.org/network-access-proxy-etcd: "true"
+        hub.jupyter.org/network-access-etcd: "true"
         hub.jupyter.org/network-access-hub: "true"
         hub.jupyter.org/network-access-singleuser: "true"
         {{- if .Values.proxy.labels }}
@@ -54,13 +54,55 @@ spec:
             secretName: {{ .Values.proxy.https.secret.name }}
       {{- else if $autoHTTPS }}
         - name: acme
-        {{- if .Values.proxy.https.letsencrypt.persistence.enabled }}
-          persistentVolumeClaim:
-            claimName: {{ .Values.proxy.https.letsencrypt.persistence.existingClaim | default "proxy-acme" }}
-        {{- else }}
           emptyDir: {}
-        {{- end }}
       {{- end }}
+        - name: secret-config
+          emptyDir: {}
+      initContainers:
+        # secret-config init container
+        # loads secret config from env into a file in a local volume.
+        # this wouldn't be needed if the configmap were a secret instead
+        - name: secret-config
+          image: {{ .Values.shellUtils.image.name }}:{{ .Values.shellUtils.image.tag }}
+          command:
+            - sh
+            - -c
+            - |
+              cat <<EOF > /secret-config/traefik.toml
+              [etcd]
+              password = "${ETCD_PASSWORD}"
+              EOF
+          env:
+            - name: ETCD_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hub-secret
+                  key: etcd.password
+          volumeMounts:
+            - mountPath: /secret-config
+              name: secret-config
+        - name: storeconfig
+          image: {{ .Values.proxy.traefik.image.name }}:{{ .Values.proxy.traefik.image.tag }}
+          args:
+            - storeconfig
+            - --debug
+            - --configfile=/config/traefik.toml
+            - --etcd.endpoint=$(HUB_ETCD_SERVICE_HOST):$(HUB_ETCD_SERVICE_PORT)
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /secret-config
+              name: secret-config
+              readOnly: true
+            {{- if (or $manualHTTPS $manualHTTPSwithsecret) }}
+            - mountPath: /ssl
+              name: tls-secret
+              readOnly: true
+            {{- end }}
+            {{- if $autoHTTPS }}
+            - mountPath: /acme
+              name: acme
+            {{- end }}
       containers:
         - name: traefik
           image: {{ .Values.proxy.traefik.image.name }}:{{ .Values.proxy.traefik.image.tag }}
@@ -81,13 +123,18 @@ spec:
             successThreshold: 1
             timeoutSeconds: 2
           args:
+            - --debug
             - --configfile=/config/traefik.toml
+            - --etcd.endpoint=$(HUB_ETCD_SERVICE_HOST):$(HUB_ETCD_SERVICE_PORT)
             {{- range .Values.proxy.traefik.extraArgs }}
             - {{ . }}
             {{- end }}
           volumeMounts:
             - mountPath: /config
               name: config
+            - mountPath: /secret-config
+              name: secret-config
+              readOnly: true
             {{- if or $manualHTTPS $manualHTTPSwithsecret }}
             - mountPath: /ssl
               name: tls-secret
@@ -107,7 +154,7 @@ spec:
               name: proxy-https
             - containerPort: 80
               name: proxy-http
-            - containerPort: 8080
+            - containerPort: 8001
               name: api
         {{- if $autoHTTPS }}
         - name: storeconfig-job
@@ -115,7 +162,11 @@ spec:
           command:
             - sh
             - -c
-            - "while true; do traefik storeconfig --configfile=/config/traefik.toml; sleep 10; done"
+            - >
+              while true; do
+                /traefik storeconfig --configfile=/config/traefik.toml;
+                sleep 10;
+              done
           volumeMounts:
             - mountPath: /etc/traefik
               name: config

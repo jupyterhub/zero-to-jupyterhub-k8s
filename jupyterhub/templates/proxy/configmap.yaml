@@ -3,6 +3,7 @@
 {{- $offloadHTTPS := and $HTTPS (eq .Values.proxy.https.type "offload") -}}
 {{- $manualHTTPS := and $HTTPS (eq .Values.proxy.https.type "manual") -}}
 {{- $manualHTTPSwithsecret := and $HTTPS (eq .Values.proxy.https.type "secret") -}}
+{{- $serveHTTPS := and $HTTPS (or $autoHTTPS $manualHTTPS $manualHTTPSwithsecret) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -20,7 +21,7 @@ data:
     {{- if .Values.proxy.traefik.sendAnonymousUsage }}
     sendAnonymousUsage = true
     {{- end }}
-    {{- if .Values.proxy.https.enabled }}
+    {{- if $serveHTTPS }}
     defaultEntryPoints = ["http", "https"]
     {{- else }}
     defaultEntryPoints = ["http"]
@@ -29,7 +30,7 @@ data:
       [entryPoints.http]
       address = ":80"
       compress = {{ .Values.proxy.traefik.gzip.enabled }}
-        {{- if .Values.proxy.https.enabled }}
+        {{- if $serveHTTPS }}
         [entryPoints.http.redirect]
           regex = "^http://(.*)"
           replacement = "https://$1"
@@ -37,7 +38,7 @@ data:
           permanent = true
           {{- end }}
         {{- end }}
-      {{- if and .Values.proxy.https.enabled (not (eq .Values.proxy.https.type "offload")) }}
+      {{- if $serveHTTPS }}
       [entryPoints.https]
       address = ":443"
       compress = {{ .Values.proxy.traefik.gzip.enabled }}
@@ -50,7 +51,7 @@ data:
       {{- end}}
 
       [entryPoints.traefik]
-      address = ":8080"
+      address = ":8001"
         # TODO: traefik api auth
         # [entryPoints.traefik.auth]
         #  [entryPoints.traefik.auth.basic]
@@ -65,7 +66,7 @@ data:
     [accessLog]
     format = "json"
     [accessLog.filters]
-    statusCodes = ["500-999"]
+    statusCodes = ["0-999"]
 
     [accessLog.fields.headers]
     [accessLog.fields.headers.names]
@@ -78,7 +79,6 @@ data:
     idleTimeout = "10m0s"
 
     [etcd]
-    endpoint = {{ .Values.proxy.etcd.endpoint | quote }}
     watch = true
     prefix = {{ .Values.proxy.etcd.traefikPrefix | quote }}
     useAPIV3 = true
@@ -86,8 +86,9 @@ data:
     username = {{ .Values.proxy.etcd.username | quote }}
     {{- end }}
     {{- if .Values.proxy.etcd.password }}
-    password = {{ .Values.etcd.password | quote }}
+    password = {{ .Values.proxy.etcd.password | quote }}
     {{- end }}
+
     {{- if $autoHTTPS }}
     [acme]
     email = {{ .Values.proxy.https.letsencrypt.email | quote }}
@@ -134,3 +135,6 @@ data:
       [metrics.prometheus]
         entryPoint = "traefik"
     {{- end }}
+
+    [file]
+      filename = "/secret-config/traefik.toml"

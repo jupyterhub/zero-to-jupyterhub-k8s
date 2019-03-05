@@ -3,6 +3,7 @@
 {{- $offloadHTTPS := and $HTTPS (eq .Values.proxy.https.type "offload") -}}
 {{- $manualHTTPS := and $HTTPS (eq .Values.proxy.https.type "manual") -}}
 {{- $manualHTTPSwithsecret := and $HTTPS (eq .Values.proxy.https.type "secret") -}}
+{{- $serveHTTPS := and $HTTPS (or $autoHTTPS $manualHTTPS $manualHTTPSwithsecret) }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -40,22 +41,16 @@ spec:
     - name: http
       port: 80
       protocol: TCP
-      targetPort: 8000
+      targetPort: 80
       # allow proxy.service.nodePort for http
       {{- if .Values.proxy.service.nodePorts.http }}
       nodePort: {{ .Values.proxy.service.nodePorts.http }}
       {{- end }}
-    {{- if $HTTPS }}
+    {{- if $serveHTTPS }}
     - name: https
       port: 443
       protocol: TCP
-      {{- if or $manualHTTPS $manualHTTPSwithsecret }}
-      targetPort: 8443
-      {{- else if $offloadHTTPS }}
-      targetPort: 8000
-      {{- else }}
       targetPort: 443
-      {{- end }}
       {{- if .Values.proxy.service.nodePorts.https }}
       nodePort: {{ .Values.proxy.service.nodePorts.https }}
       {{- end }}
