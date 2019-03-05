@@ -82,14 +82,13 @@ proxy:
       https:
     loadBalancerIP:
   etcd:
-    endpoint: http://proxy-etcd:2379
     traefikPrefix: /traefik/
     jupyterhubPrefix: /jupyterhub/
-    username: root
-    password:
+    username: jupyterhub
+    password: secret
     image:
-      name: k8s.gcr.io/etcd-amd64
-      tag: 2.2.5
+      name: quay.io/coreos/etcd
+      tag: v3.3.12
     resources:
       requests:
         memory: 128Mi

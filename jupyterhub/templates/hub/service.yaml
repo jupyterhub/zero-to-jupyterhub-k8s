@@ -28,3 +28,22 @@ spec:
       {{- if .Values.hub.service.ports.nodePort }}
       nodePort: {{ .Values.hub.service.ports.nodePort }}
       {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hub-etcd
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+  annotations:
+    {{- if .Values.hub.service.annotations }}
+    {{- .Values.hub.service.annotations | toYaml | nindent 4 }}
+    {{- end }}
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "jupyterhub.matchLabels" . | nindent 4 }}
+  ports:
+    - protocol: TCP
+      port: 2379
+      targetPort: 2379

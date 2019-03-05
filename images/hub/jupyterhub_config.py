@@ -30,10 +30,15 @@ c.TraefikProxy.traefik_api_url = 'http://{}:{}'.format(
 )
 # TODO: traefik api auth
 
-# locate etcd
-c.TraefikEtcdProxy.etcd_url = get_config('proxy.etcd.endpoint')
-c.TraefikEtcdProxy.etcd_traefik_prefix = get_config('proxy.etcd.traefik_prefix')
-c.TraefikEtcdProxy.etcd_jupyterhub_prefix = get_config('proxy.etcd.jupyterhub_prefix')
+# etcd is in a container in the hub pod:
+# use localhost to avoid problems with hairpin networking
+# which can prevent a pod from connecting to a service pointing
+# back to the same pod
+c.TraefikEtcdProxy.etcd_url = 'http://127.0.0.1:2379'
+c.TraefikEtcdProxy.etcd_traefik_prefix = get_config('proxy.etcd.traefikPrefix')
+c.TraefikEtcdProxy.etcd_jupyterhub_prefix = get_config('proxy.etcd.jupyterhubPrefix')
+c.TraefikEtcdProxy.etcd_username = get_config('proxy.etcd.username')
+c.TraefikEtcdProxy.etcd_password = get_config('proxy.etcd.password')
 
 # Do not shut down user pods when hub is restarted
 c.JupyterHub.cleanup_servers = False

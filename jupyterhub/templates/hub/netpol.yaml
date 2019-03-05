@@ -20,6 +20,13 @@ spec:
       ports:
         - protocol: TCP
           port: 8081
+    - from:
+        - podSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-etcd: "true"
+      ports:
+        - protocol: TCP
+          port: 2379
   egress:
     {{- /*
     The default is to allow all egress for hub If you want to restrict it the
