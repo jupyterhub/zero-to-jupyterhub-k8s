@@ -86,7 +86,9 @@ spec:
                 secretKeyRef:
                   name: hub-secret
                   key: proxy.token
-          imagePullPolicy: {{ .Values.proxy.chp.image.pullPolicy }}
+          {{- with .Values.proxy.chp.image.pullPolicy }}
+          imagePullPolicy: {{ . }}
+          {{- end }}
           ports:
             {{- if or $manualHTTPS $manualHTTPSwithsecret }}
             - containerPort: 8443

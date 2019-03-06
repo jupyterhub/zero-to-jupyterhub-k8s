@@ -50,7 +50,6 @@ hub:
       cpu: 200m
       memory: 512Mi
   services: {}
-  imagePullPolicy: IfNotPresent
   imagePullSecret:
     enabled: false
     registry:
@@ -87,7 +86,6 @@ proxy:
     image:
       name: jupyterhub/configurable-http-proxy
       tag: 3.0.0
-      pullPolicy: IfNotPresent
     resources:
       requests:
         cpu: 200m
@@ -96,14 +94,12 @@ proxy:
     image:
       name: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
       tag: 0.15.0
-      pullPolicy: IfNotPresent
     proxyBodySize: 64m
     resources: {}
   lego:
     image:
       name: jetstack/kube-lego
       tag: 0.1.7
-      pullPolicy: IfNotPresent
     resources: {}
   labels: {}
   nodeSelector: {}
