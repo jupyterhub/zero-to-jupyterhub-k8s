@@ -14,6 +14,9 @@ Links to blog posts
 -------------------
 
 
-
 Links to community project repos
 --------------------------------
+
+* **Automatically deploy a JupyterHub on AWS** from the Space Telescope Software Institute
+  * `github repository <https://github.com/spacetelescope/z2jh-aws-ansible>`_
+  * `blog post <https://github.com/spacetelescope/z2jh-aws-ansible>`_
