@@ -125,9 +125,6 @@ spec:
               name: etcd
           resources:
             {{- .Values.proxy.etcd.resources | toYaml | trimSuffix "\n" | nindent 12 }}
-          securityContext:
-            runAsUser: {{ .Values.hub.uid }}
-            fsGroup: {{ .Values.hub.fsGid }}
           volumeMounts:
             - mountPath: /srv/jupyterhub
               name: hub-db-dir
