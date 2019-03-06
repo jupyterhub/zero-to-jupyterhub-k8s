@@ -50,12 +50,11 @@ data:
         {{- end }}
       {{- end}}
 
-      [entryPoints.traefik]
+      [entryPoints.api]
       address = ":8001"
-        # TODO: traefik api auth
-        # [entryPoints.traefik.auth]
-        #  [entryPoints.traefik.auth.basic]
-        #    users = ["api_admin:"]
+        [entryPoints.api.auth]
+         [entryPoints.api.auth.basic]
+           users = ["api_admin:{{ .Values.proxy.traefik.basicAuth }}"]
 
     {{- if .Values.proxy.traefik.traefikLogFormat }}
     [traefikLog]
@@ -128,10 +127,10 @@ data:
     {{- end }} {{/* endif $autoHTTPS */}}
 
     [api]
-      entryPoint = "traefik"
+      entryPoint = "api"
       dashboard = false
     {{- if .Values.proxy.traefik.metrics.prometheus.enabled }}
     [metrics]
       [metrics.prometheus]
-        entryPoint = "traefik"
+        entryPoint = "api"
     {{- end }}

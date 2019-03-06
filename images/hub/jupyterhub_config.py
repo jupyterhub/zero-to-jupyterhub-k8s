@@ -28,7 +28,8 @@ c.TraefikProxy.traefik_api_url = 'http://{}:{}'.format(
     os.environ['PROXY_API_SERVICE_HOST'],
     int(os.environ['PROXY_API_SERVICE_PORT']),
 )
-# TODO: traefik api auth
+c.TraefikProxy.traefik_api_username = "api_admin"
+c.TraefikProxy.traefik_api_password = os.environ['PROXY_AUTH_TOKEN']
 
 # etcd is in a container in the hub pod:
 # use localhost to avoid problems with hairpin networking
