@@ -71,10 +71,10 @@ cluster:
    This command only needs to run once per Kubernetes cluster, it will create a
    `tiller` deployment in the kube-system namespace and setup your local `helm`
    client.
-   This command installs and configures the ``tiller`` part of Helm (the whole
+   This command installs and configures the `tiller` part of Helm (the whole
    project, not the CLI) on the remote kubernetes cluster. Later when you want
-   to deploy changes with ``helm`` (the local CLI), it will talk to ``tiller``
-   and tell it what to do. ``tiller`` then executes these instructions from
+   to deploy changes with `helm` (the local CLI), it will talk to `tiller`
+   and tell it what to do. `tiller` then executes these instructions from
    within the cluster.
 
    .. note::
