@@ -8,7 +8,7 @@ if [[
     "$TRAVIS_PULL_REQUEST" == "false" &&
     "$RUN_PUBLISH_SCRIPT" == "1"
 ]]; then
-    ./cd/publish-chart.sh
+    ./ci/publish-chart.sh
 else
     chartpress --commit-range ${TRAVIS_COMMIT_RANGE}
 fi

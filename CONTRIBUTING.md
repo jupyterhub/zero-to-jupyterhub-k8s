@@ -81,7 +81,7 @@ development.
 
 9. Install / Upgrade JupyterHub Chart!
    ```bash
-   helm upgrade --wait --install --namespace=hub hub jupyterhub/ -f ci/minikube-config.yaml
+   helm upgrade --wait --install --namespace=hub hub jupyterhub/ -f minikube-config.yaml
    ```
 
    You can easily change the options in `minikube-config.yaml` file to test what

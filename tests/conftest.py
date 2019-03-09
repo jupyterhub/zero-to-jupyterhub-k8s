@@ -8,7 +8,7 @@ import yaml
 @pytest.fixture(scope='module')
 def request_data():
     basedir = os.path.dirname(os.path.dirname(__file__))
-    with open(os.path.join(basedir, 'ci/minikube-config.yaml')) as f:
+    with open(os.path.join(basedir, 'minikube-config.yaml')) as f:
         y = yaml.load(f)
     token = y['hub']['services']['test']['apiToken']
     return {
