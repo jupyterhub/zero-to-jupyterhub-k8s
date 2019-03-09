@@ -12,8 +12,8 @@ docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
 # Activate logging of bash commands now that the sensitive stuff is done
 set -x
 
-# As chartpress utilizes git to push to our Helm chart repository, we configure
-# git ahead of time to utilize the identity we decrypted earlier.
+# As chartpress uses git to push to our Helm chart repository, we configure
+# git ahead of time to use the identity we decrypted earlier.
 export GIT_SSH_COMMAND="ssh -i ${PWD}/ci/id_rsa"
 
 chartpress --commit-range "${TRAVIS_COMMIT_RANGE}" --push --publish-chart
