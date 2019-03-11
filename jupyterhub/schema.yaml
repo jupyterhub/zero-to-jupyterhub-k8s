@@ -911,6 +911,23 @@ properties:
                 type:
                   - string
                   - "null"
+          pdb:
+            type: object
+            description: |
+              Set the Pod Disruption Budget for the user scheduler.
+
+              See [the Kubernetes
+              documentation](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/)
+              for more details about disruptions.
+            properties:
+              enabled:
+                type: boolean
+                description: |
+                  Whether PodDisruptionBudget is enabled for the user scheduler.
+              minAvailable:
+                type: integer
+                description: |
+                  Minimum number of pods to be available during the voluntary disruptions.
       podPriority:
         type: object
         description: |
