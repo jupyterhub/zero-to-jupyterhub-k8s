@@ -28,7 +28,7 @@ If you prefer to use the Digital Ocean portal see the `Digital Ocean Get Started
 
         doctl auth init
 
-     Before you do so you'll need to create an API token on the Digital Ocean portal. Navigate to API then Generate New Token.
+     b. Create an API token on the Digital Ocean portal. Navigate to API then Generate New Token.
 
 #. Create your cluster.
    Digital Ocean's kubernetes support is in beta so you'll need to run the following (add it to your .bashrc if you want to make this change permenant).
