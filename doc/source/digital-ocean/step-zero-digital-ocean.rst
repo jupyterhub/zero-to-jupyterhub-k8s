@@ -1,7 +1,7 @@
 .. _digital-ocean:
 
 Step Zero: Kubernetes on Digital Ocean
-----------------------------------------------------------------
+--------------------------------------
 
 You can create a Kubernetes cluster `either through the Digital Ocean website, or using the Digital Ocean command line tools <https://www.digitalocean.com/>`_.
 
@@ -11,7 +11,7 @@ If you prefer to use the Digital Ocean portal see the `Digital Ocean Get Started
 
 #. Prepare your Digital Ocean shell environment.
    
-   a. **Install command-line tools locally**. You'll need at least v1.13.0 to be able to new the kubernetes control. 
+   a. **Install command-line tools locally**. You'll need at least v1.13.0. 
 
      You can either follow the `installation instructions <https://github.com/digitalocean/doctl/blob/master/README.md>` or use the commands below:
 
