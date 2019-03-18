@@ -11,7 +11,7 @@ If you prefer to use the Digital Ocean portal see the `Digital Ocean Get Started
 
 #. Prepare your Digital Ocean shell environment.
    
-   * **Install command-line tools locally**. You'll need at least v1.13.0 to be able to new the kubernetes control. 
+   a. **Install command-line tools locally**. You'll need at least v1.13.0 to be able to new the kubernetes control. 
 
      You can either follow the `installation instructions <https://github.com/digitalocean/doctl/blob/master/README.md>` or use the commands below:
 
