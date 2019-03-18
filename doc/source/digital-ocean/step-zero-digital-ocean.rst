@@ -16,9 +16,10 @@ If you prefer to use the Digital Ocean portal see the `Digital Ocean Get Started
      You can either follow the `installation instructions <https://github.com/digitalocean/doctl/blob/master/README.md>` or use the commands below:
 
      .. code-block:: bash
-       wget https://github.com/digitalocean/doctl/releases/download/v1.13.0/doctl-1.13.0-linux-amd64.tar.gz
-       tar -xvf doctl-1.13.0-linux-amd64.tar.gz
-       sudo mv doctl /usr/bin/
+
+        wget https://github.com/digitalocean/doctl/releases/download/v1.13.0/doctl-1.13.0-linux-amd64.tar.gz
+        tar -xvf doctl-1.13.0-linux-amd64.tar.gz
+        sudo mv doctl /usr/bin/
 
      Then run the following command to connect your local
      CLI with your account:
@@ -31,15 +32,19 @@ If you prefer to use the Digital Ocean portal see the `Digital Ocean Get Started
 
 #. Create your cluster.
    Digital Ocean's kubernetes support is in beta so you'll need to run the following (add it to your .bashrc if you want to make this change permenant).
+
    .. code-block:: bash
-     export DIGITALOCEAN_ENABLE_BETA=1
-     doctl k8s cluster create jupyter-kubernetes --region lon1 --version 1.12.1-do.2 --node-pool="name=worker-pool;count=3
+
+      export DIGITALOCEAN_ENABLE_BETA=1
+      doctl k8s cluster create jupyter-kubernetes --region lon1 --version 1.12.1-do.2 --node-pool="name=worker-pool;count=3
 
 #. Export your cluster config.
    You can change the default location from $HOME/.kube by setting the KUBECONFIG environment variable.
+
    .. code-block:: bash
-     mkdir -p ~/.kube
-     doctl k8s cluster kubeconfig show bindertime-k8s > ~/.kube/config
+
+      mkdir -p ~/.kube
+      doctl k8s cluster kubeconfig show bindertime-k8s > ~/.kube/config
 
 
 #. Create an ssh key to secure your cluster.
@@ -72,4 +77,3 @@ If you prefer to use the Digital Ocean portal see the `Digital Ocean Get Started
 
 Congrats. Now that you have your Kubernetes cluster running, it's time to
 begin :ref:`creating-your-jupyterhub`.
-
