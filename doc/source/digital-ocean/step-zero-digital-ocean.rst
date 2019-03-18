@@ -21,7 +21,7 @@ If you prefer to use the Digital Ocean portal see the `Digital Ocean Get Started
         tar -xvf doctl-1.13.0-linux-amd64.tar.gz
         sudo mv doctl /usr/bin/
 
-     Then run the following command to connect your local
+     c. Connect your local
      CLI with your account:
 
      .. code-block:: bash
