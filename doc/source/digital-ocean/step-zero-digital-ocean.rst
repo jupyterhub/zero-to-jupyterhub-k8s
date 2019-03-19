@@ -21,14 +21,13 @@ If you prefer to use the Digital Ocean portal see the `Digital Ocean Get Started
         tar -xvf doctl-1.13.0-linux-amd64.tar.gz
         sudo mv doctl /usr/bin/
 
-     c. Connect your local
-     CLI with your account:
+     b. Create an API token on the Digital Ocean portal. Navigate to API then Generate New Token.
+
+     c. Connect your local CLI with your account:
 
      .. code-block:: bash
 
         doctl auth init
-
-     b. Create an API token on the Digital Ocean portal. Navigate to API then Generate New Token.
 
 #. Create your cluster.
    Digital Ocean's kubernetes support is in beta so you'll need to run the following (add it to your .bashrc if you want to make this change permenant).
