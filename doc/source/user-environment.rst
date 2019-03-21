@@ -138,7 +138,7 @@ by the Helm chart.
    # https://github.com/jupyter/docker-stacks/tree/master/minimal-notebook/Dockerfile
 
    # install additional package...
-   RUN pip install --yes astropy
+   RUN pip install --no-cache-dir astropy
 
 .. note:
 
