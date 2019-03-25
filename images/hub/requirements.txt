@@ -14,3 +14,4 @@ statsd==3.2.2
 mwoauth==0.3.2
 globus_sdk[jwt]==1.5.0
 cryptography==2.3.*
+jupyterhub-hmacauthenticator
