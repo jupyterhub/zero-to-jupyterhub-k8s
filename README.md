@@ -8,6 +8,7 @@
 [![Discourse](https://img.shields.io/badge/help_forum-discourse-blue.svg)](https://discourse.jupyter.org/c/jupyterhub/z2jh-k8s)
 [![Gitter](https://img.shields.io/badge/social_chat-gitter-blue.svg)](https://gitter.im/jupyterhub/jupyterhub)
 
+DUMMY PR TO TEST GITHUB PLUGIN FOR DISCOURSE
 
 This repo contains a *Helm chart* for JupyterHub and a guide to use it. Together
 they allow you to make a JupyterHub available to a very large group of users
