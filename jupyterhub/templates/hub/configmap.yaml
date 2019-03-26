@@ -33,4 +33,4 @@ data:
 {{- $_ := set $values "Chart" (dict "Name" .Chart.Name "Version" .Chart.Version) }}
 {{- $_ := set $values "Release" (pick .Release "Name" "Namespace" "Service") }}
   values.yaml: |
-    {{- $values | toYaml | nindent 4 }}
+    {{- tpl ($values | toYaml | nindent 4) . }}
