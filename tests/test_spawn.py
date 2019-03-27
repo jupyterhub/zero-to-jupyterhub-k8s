@@ -12,7 +12,7 @@ def test_api(api_request):
     print("asking for the hub's version")
     r = api_request.get('')
     assert r.status_code == 200
-    assert r.json() == {"version": "0.9.4"}
+    assert r.json() == {"version": "1.0.0b1"}
 
 
 def test_api_info(api_request):
