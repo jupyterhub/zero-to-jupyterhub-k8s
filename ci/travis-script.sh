@@ -6,9 +6,9 @@ python3 tools/templates/lint-and-validate.py
 if [[
     "$TRAVIS_BRANCH" == "master" &&
     "$TRAVIS_PULL_REQUEST" == "false" &&
-    "$RUN_DEPLOY_SCRIPT" == "1"
+    "$RUN_PUBLISH_SCRIPT" == "1"
 ]]; then
-    ./ci/deploy.sh
+    ./ci/publish-chart.sh
 else
     chartpress --commit-range ${TRAVIS_COMMIT_RANGE}
 fi
