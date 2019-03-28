@@ -89,7 +89,7 @@ Install JupyterHub
 
       helm upgrade --install $RELEASE jupyterhub/jupyterhub \
         --namespace $NAMESPACE  \
-        --version=0.8.0 \
+        --version=0.8.1 \
         --values config.yaml
 
    where:
