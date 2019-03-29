@@ -82,11 +82,20 @@
     function properly. It is a way to override the default app label's value.
 */}}
 
+{{/*
+Create a fully qualified name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+
+{{- define "jhub.fullName" -}}
+{{- printf "%s" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- end }}
 
 {{- /*
   jupyterhub.appLabel:
     Used by "jupyterhub.labels".
 */}}
+
 {{- define "jupyterhub.appLabel" -}}
 {{ .Values.nameOverride | default .Chart.Name | trunc 63 | trimSuffix "-" }}
 {{- end }}
