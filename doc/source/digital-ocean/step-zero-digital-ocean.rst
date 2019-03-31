@@ -30,7 +30,7 @@ If you prefer to use the Digital Ocean portal see the `Digital Ocean Get Started
         doctl auth init
 
 #. Create your cluster.
-   Digital Ocean's kubernetes support is in beta so you'll need to run the following (add it to your .bashrc if you want to make this change permenant).
+   Digital Ocean's use of doctl for kubernetes support is in beta so you'll need to run the following (add it to your ``.bashrc`` if you want to make this change permanent).
 
    .. code-block:: bash
 
