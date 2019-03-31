@@ -21,9 +21,9 @@ If you prefer to use the Digital Ocean portal see the `Digital Ocean Get Started
         tar -xvf doctl-1.13.0-linux-amd64.tar.gz
         sudo mv doctl /usr/bin/
 
-     b. Create an API token on the Digital Ocean portal. Navigate to API then Generate New Token.
+   b. Create an API token on the Digital Ocean portal. Navigate to API then Generate New Token.
 
-     c. Connect your local CLI with your account:
+   c. Connect your local CLI with your account:
 
      .. code-block:: bash
 
@@ -56,8 +56,6 @@ If you prefer to use the Digital Ocean portal see the `Digital Ocean Get Started
    This will create a public key named ``ssh-key-<CLUSTER-NAME>.pub`` and a private key named
    ``ssh-key-<CLUSTER-NAME>``. Make sure both go into the folder we created earlier,
    and keep both of them safe!
-
-   .. note::
 
       This command will also print out something to your terminal screen. You
       don't need to do anything with this text.
