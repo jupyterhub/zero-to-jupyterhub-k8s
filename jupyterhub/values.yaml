@@ -180,7 +180,7 @@ singleuser:
   extraLabels:
     hub.jupyter.org/network-access-hub: 'true'
   extraEnv: {}
-  lifecycleHooks:
+  lifecycleHooks: {}
   initContainers: []
   extraContainers: []
   uid: 1000
