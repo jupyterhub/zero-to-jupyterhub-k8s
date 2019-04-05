@@ -271,7 +271,7 @@ using this tool.
 
 .. _setup-conda-envs:
 
-Allow users to create their own ``conda`` environments
+Allow users to create their own ``conda`` environments for notebooks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Sometimes you want users to be able to create their own ``conda`` environments.
@@ -293,6 +293,12 @@ across sessions. To resolve this, take the following steps:
 
   The text above will cause Anaconda to install new environments to this folder,
   which will persist across sessions.
+
+These environments are supposed to be used in notebooks, so a typical use case:
+
+1. Create one with at least a kernel, e.g. for Python it's ``conda create -n myenv ipykernel scipy``
+
+2. Now this env should be available in the list of kernels
 
 
 .. _multiple-profiles:
