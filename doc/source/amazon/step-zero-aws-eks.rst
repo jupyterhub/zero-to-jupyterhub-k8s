@@ -3,8 +3,7 @@
 Step Zero: Kubernetes on Amazon Web Services (AWS) with Elastic Container with Kubernetes (EKS)
 -----------------------------------------------------------------------------------------------
 
-AWS recently released native support for Kubernetes. Note: This is only available in US West (Oregon) (us-west-2) and
-US East (N. Virginia) (us-east-1)
+AWS has released native support for Kubernetes, which is available in `selected regions`_.
 
 This guide uses AWS to set up a cluster. This mirrors the steps found at `Getting Started with Amazon EKS`_ with some details filled in that are absent
 
@@ -108,6 +107,7 @@ Procedure
 .. References
 
 .. _Getting Started with Amazon EKS: https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html
+.. _selected regions: https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/
 
 ==================
 Cluster Autoscaler
