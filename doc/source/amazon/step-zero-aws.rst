@@ -29,13 +29,13 @@ The Procedure
    This instance can be small (t2.micro for example).
 
    When creating it, assign the IAM role created in step 1.
-   
+
    Once created, download ssh keys.
 
 #. SSH to your CI host
 
 #. Install kops and kubectl on your CI host
- 
+
    * Follow the instructions here: https://github.com/kubernetes/kops/blob/master/docs/install.md
 
 #. Choose a cluster name
@@ -57,7 +57,7 @@ The Procedure
 
 #. Set the region to deploy in
 
-      export REGION=`curl -s http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'`
+    export REGION=`curl -s http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'`
 
 #. Set the availability zones for the nodes
 
@@ -139,10 +139,10 @@ The Procedure
     You should see a list of two nodes, each beginning with ``ip``.
 
     If you want to use kubectl and helm locally (necessary for step #3 in `Setting up Helm <https://z2jh.jupyter.org/en/latest/setup-helm.html#initialization>`_):
-    
+
     * run the following on CI host: ``kops export kubecfg``
     * copy the contents of ``~/.kube/config`` to the same place on your local system
-    
+
     If you wish to put the kube config file in a different location, you will need to ``export KUBECONFIG=<other kube config location>``
 
 
@@ -183,7 +183,7 @@ The Procedure
     <https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic>`_ of
     disks, allowing us to automatically assign a disk per user when they log
     in to JupyterHub.
-    
+
 ==========
 Encryption
 ==========
@@ -208,9 +208,9 @@ Instead of performing step 13 above. Create the following ``storageclass.yml`` f
 The main difference is the addition of the line `encrypted: "true"` and make note that `true` is in double quotes.
 
 Next run these commands:
-       
+
         .. code-block:: bash
-           
+
            kubectl delete storageclass gp2
            kubectl apply -f storageclass.yml
 
@@ -225,7 +225,7 @@ Then perform the following steps:
 #. Verify weave is running:
 
    .. code-block:: bash
-            
+
       kubectl --namespace kube-system get pods
 
    You should see several pods of the form `weave-net-abcde`
@@ -233,7 +233,7 @@ Then perform the following steps:
 #.  Create Kubernetes secret with a private password of sufficient strength. A random 128 bytes is used in this example:
 
     .. code-block:: bash
-           
+
         openssl rand -hex 128 >weave-passwd
         kubectl create secret -n kube-system generic weave-passwd --from-file=./weave-passwd
 
@@ -242,26 +242,26 @@ Then perform the following steps:
 #. Patch Weave with the password:
 
     .. code-block:: bash
-           
+
         kubectl patch --namespace=kube-system daemonset/weave-net --type json -p '[ { "op": "add", "path": "/spec/template/spec/containers/0/env/0", "value": { "name": "WEAVE_PASSWORD", "valueFrom": { "secretKeyRef": { "key": "weave-passwd", "name": "weave-passwd" } } } } ]'
 
 
     If you want to remove the encryption you can use the following patch:
 
     .. code-block:: bash
-           
+
         kubectl patch --namespace=kube-system daemonset/weave-net --type json -p '[ { "op": "remove", "path": "/spec/template/spec/containers/0/env/0"} ]'
-    
+
 #. Check to see that the pods are restarted. To expedite the process you can delete the old pods.
 
 #. You can verify encryption is turned on with the following command:
 
     .. code-block:: bash
-    
+
         kubectl exec -n kube-system weave-net-<pod> -c weave -- /home/weave/weave --local status
 
     You should see `encryption: enabled`
-    
+
     If you really want to insure encryption is working, you can listen on port `6783` of any node. If the traffic looks like gibberish, you know it is on.
 
 ==============
