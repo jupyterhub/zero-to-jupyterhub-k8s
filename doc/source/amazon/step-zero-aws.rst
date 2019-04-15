@@ -59,6 +59,11 @@ The Procedure
 
     export REGION=`curl -s http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'`
 
+#. Install the AWS CLI:
+
+    sudo apt-get update
+    sudo apt-get install awscli
+
 #. Set the availability zones for the nodes
 
    For this guide we will be allowing nodes to be deployed in all AZs::
