@@ -69,14 +69,13 @@ The Procedure
    For this guide we will be allowing nodes to be deployed in all AZs::
 
        export ZONES=$(aws ec2 describe-availability-zones --region $REGION | grep ZoneName | awk '{print $2}' | tr -d '"')
-       export ZONES=$(echo $ZONES | tr -d " " | rev | cut -c 2- | rev)
 
 #. Create the cluster
 
    For a basic setup run the following (All sizes measured in GB)::
 
        kops create cluster $NAME \
-         --zones $ZONES \
+         --zones "$ZONES" \
          --authorization RBAC \
          --master-size t2.micro \
          --master-volume-size 10 \
