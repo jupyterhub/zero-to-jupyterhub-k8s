@@ -9,6 +9,12 @@ Helm packages are called *charts*.
 We will be installing and managing JupyterHub on
 our Kubernetes cluster using a Helm chart.
 
+Charts are abstractions describing how to install packages onto a Kubernetes
+cluster. When a chart is deployed, it works as a templating engine to populate
+multiple `yaml` files for package dependencies with the required variables, and
+then runs `kubectl apply` to apply the configuration to the resource and install
+the package.
+
 Helm has two parts: a client (`helm`) and a server (`tiller`). Tiller runs
 inside of your Kubernetes cluster as a pod in the kube-system namespace. Tiller
 manages both, the *releases* (installations) and *revisions* (versions) of charts deployed
@@ -65,6 +71,11 @@ cluster:
    This command only needs to run once per Kubernetes cluster, it will create a
    `tiller` deployment in the kube-system namespace and setup your local `helm`
    client.
+   This command installs and configures the `tiller` part of Helm (the whole
+   project, not the CLI) on the remote kubernetes cluster. Later when you want
+   to deploy changes with `helm` (the local CLI), it will talk to `tiller`
+   and tell it what to do. `tiller` then executes these instructions from
+   within the cluster.
 
    .. note::
     
@@ -78,11 +89,18 @@ cluster:
 Secure Helm
 -----------
 
-Ensure that `tiller is secure <https://engineering.bitnami.com/articles/helm-security.html>`_ from access inside the cluster:
+Ensure that `tiller` is secure from access inside the cluster:
 
 .. code:: bash
 
    kubectl patch deployment tiller-deploy --namespace=kube-system --type=json --patch='[{"op": "add", "path": "/spec/template/spec/containers/0/command", "value": ["/tiller", "--listen=localhost:44134"]}]'
+
+`tiller` s port is exposed in the cluster without authentication and if you probe
+this port directly (i.e. by bypassing `helm`) then `tiller` s permissions can be
+exploited. This step forces `tiller` to listen to commands from localhost (i.e.
+`helm`) *only* so that e.g. other pods inside the cluster cannot ask `tiller` to
+install a new chart granting them arbitrary, elevated RBAC privileges and exploit
+them. `More details here. <https://engineering.bitnami.com/articles/helm-security.html>`_
 
 Verify
 ------

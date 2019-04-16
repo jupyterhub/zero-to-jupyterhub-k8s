@@ -1,19 +1,20 @@
 <!--
 Welcome to Zero to JupyterHub!
 
-Before filing an issue, please search through the issues to see
-if your question has been discussed before. If you
-need more information after searching, feel
-free to message us on the gitter channel. Many
-JupyterHub community members watch the gitter channel
+Before filing an issue, please search through the issues and
+[Discourse forum](https://discourse.jupyter.org/) to see
+if your question has been discussed before.
+
+If you have a general question about using this repository, or are
+looking for advice on using and configuring JupyterHub,
+please use the [Discourse forum](https://discourse.jupyter.org/).
+Many JupyterHub community members are members of the forum
 so you will have the benefit of other users' experience
 as well as the JupyterHub team.
 
-If you still wish to file an issue, please submit
-as much detail about your issue as possible. If
-you think it would be helpful, include a
-scrubbed version of your `config.yaml` file. We've put
-a place below where you can paste this in.
+Please submit as much detail about your issue as possible.
+If you think it would be helpful, include a
+scrubbed version of your `config.yaml` file.
 
 *** WARNING ***
 Make sure you remove all sensitive information that's
@@ -27,10 +28,7 @@ Please remove at *least* the following fields:
 
 If you post any sensitive information we reserve the
 right to edit your comment in order to remove it.
--->
 
-## Contents of `config.yaml`
-```
-CONTENTS HERE.
-DON'T FORGET TO REMOVE SENSITIVE INFO!
-```
+If you have a bug report or a technical suggestion directly relevant
+to this repostiory please open an issue.
+-->

@@ -293,22 +293,33 @@ elif auth_type == 'github':
 elif auth_type == 'cilogon':
     c.JupyterHub.authenticator_class = 'oauthenticator.CILogonOAuthenticator'
     for trait, cfg_key in common_oauth_traits:
+        if cfg_key is None:
+            cfg_key = camelCaseify(trait)
         set_config_if_not_none(c.CILogonOAuthenticator, trait, 'auth.cilogon.' + cfg_key)
 elif auth_type == 'gitlab':
     c.JupyterHub.authenticator_class = 'oauthenticator.gitlab.GitLabOAuthenticator'
-    for trait, cfg_key in common_oauth_traits:
+    for trait, cfg_key in common_oauth_traits + (
+        ('gitlab_group_whitelist', None),
+        ('gitlab_project_id_whitelist', None),
+    ):
+        if cfg_key is None:
+            cfg_key = camelCaseify(trait)
         set_config_if_not_none(c.GitLabOAuthenticator, trait, 'auth.gitlab.' + cfg_key)
 elif auth_type == 'mediawiki':
     c.JupyterHub.authenticator_class = 'oauthenticator.mediawiki.MWOAuthenticator'
     for trait, cfg_key in common_oauth_traits + (
         ('index_url', None),
     ):
+        if cfg_key is None:
+            cfg_key = camelCaseify(trait)
         set_config_if_not_none(c.MWOAuthenticator, trait, 'auth.mediawiki.' + cfg_key)
 elif auth_type == 'globus':
     c.JupyterHub.authenticator_class = 'oauthenticator.globus.GlobusOAuthenticator'
     for trait, cfg_key in common_oauth_traits + (
         ('identity_provider', None),
     ):
+        if cfg_key is None:
+            cfg_key = camelCaseify(trait)
         set_config_if_not_none(c.GlobusOAuthenticator, trait, 'auth.globus.' + cfg_key)
 elif auth_type == 'hmac':
     c.JupyterHub.authenticator_class = 'hmacauthenticator.HMACAuthenticator'

@@ -215,7 +215,7 @@ singleuser:
   events: true
   extraLabels: {}
   extraEnv: {}
-  lifecycleHooks:
+  lifecycleHooks: {}
   initContainers:
     - name: mock-init-container-name
       image: mock-init-container-image

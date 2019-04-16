@@ -42,7 +42,7 @@ used by default, such as the `datascience-notebook
 <https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-datascience-notebook>`_
 image containing useful tools and libraries for datascience, complete these steps:
 
-1. Modify your ``config.yaml`` file to specify the image. For example:
+#. Modify your ``config.yaml`` file to specify the image. For example:
 
    .. code-block:: yaml
 
@@ -63,7 +63,7 @@ image containing useful tools and libraries for datascience, complete these step
       ``latest`` as it might cause a several minute delay, confusion, or
       failures for users when a new version of the image is released.
 
-2. Apply the changes by following the directions listed in
+#. Apply the changes by following the directions listed in
    :ref:`apply the changes <apply-config-changes>`.
 
 
@@ -73,6 +73,8 @@ image containing useful tools and libraries for datascience, complete these step
       cluster will pull the image before the the hub is upgraded to let users
       use the image. The image pulling may take several minutes to complete,
       depending on the size of the image.
+
+#. Restart your server from JupyterHub control panel if you are already logged in.
 
 .. note::
 
@@ -136,7 +138,7 @@ by the Helm chart.
    # https://github.com/jupyter/docker-stacks/tree/master/minimal-notebook/Dockerfile
 
    # install additional package...
-   RUN pip install --yes astropy
+   RUN pip install --no-cache-dir astropy
 
 .. note:
 
@@ -269,7 +271,7 @@ using this tool.
 
 .. _setup-conda-envs:
 
-Allow users to create their own ``conda`` environments
+Allow users to create their own ``conda`` environments for notebooks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Sometimes you want users to be able to create their own ``conda`` environments.
@@ -292,6 +294,12 @@ across sessions. To resolve this, take the following steps:
   The text above will cause Anaconda to install new environments to this folder,
   which will persist across sessions.
 
+These environments are supposed to be used in notebooks, so a typical use case:
+
+1. Create one with at least a kernel, e.g. for Python it's ``conda create -n myenv ipykernel scipy``
+
+2. Now this env should be available in the list of kernels
+
 
 .. _multiple-profiles:
 
@@ -312,7 +320,7 @@ configuration options passed to the `profileList` configuration will
 overwrite the defaults in Kubespawner (or any configuration you've
 added elsewhere in your helm chart).
 
-Profiles are stored under ``singluser.profileList``, and are defined as
+Profiles are stored under ``singleuser.profileList``, and are defined as
 a list of profiles with specific configuration options each. Here's an example:
 
 .. code-block:: yaml

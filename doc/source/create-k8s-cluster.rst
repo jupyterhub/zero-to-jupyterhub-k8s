@@ -18,6 +18,7 @@ Choose one option and proceed.
    amazon/step-zero-aws-eks
    redhat/step-zero-openshift
    ibm/step-zero-ibm
+   digital-ocean/step-zero-digital-ocean
 
 .. note::
 

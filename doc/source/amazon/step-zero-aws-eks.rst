@@ -3,12 +3,13 @@
 Step Zero: Kubernetes on Amazon Web Services (AWS) with Elastic Container with Kubernetes (EKS)
 -----------------------------------------------------------------------------------------------
 
-AWS recently released native support for Kubernetes. Note: This is only available in US West (Oregon) (us-west-2) and
-US East (N. Virginia) (us-east-1)
+AWS has released native support for Kubernetes, which is available in `selected regions`_.
 
 This guide uses AWS to set up a cluster. This mirrors the steps found at `Getting Started with Amazon EKS`_ with some details filled in that are absent
 
-Procedure:
+==========
+Procedure
+==========
 
 1. Create a IAM Role for EKS Service Role.
 
@@ -16,6 +17,7 @@ Procedure:
 
    * AmazonEKSClusterPolicy
    * AmazonEKSServicePolicy
+   * AmazonEC2ContainerRegistryReadOnly
    
    (From the user interface, select EKS as the service, then follow the default steps) 
    
@@ -31,7 +33,7 @@ Procedure:
  
     Use the IAM Role in step 1 and Security Group defined in step 3. The cluster name is going to be used throughout. We'll use ``Z2JHKubernetesCluster`` as an example.
     
-5. Install **kubectl** and **heptio-authenticator-aws**
+5. Install **kubectl** and **aws-iam-authenticator**
 
     Refer to  `Getting Started with Amazon EKS`_ on *Configure kubectl for Amazon EKS*
 
@@ -58,18 +60,16 @@ Procedure:
 	 users:
 	 - name: aws
 	   user:
-	   exec:
-	   apiVersion: client.authentication.k8s.io/v1alpha1
-	   command: heptio-authenticator-aws
-	   args:
-           - "token"
-             - "-i"
-               - "<cluster-name>"
-		 # - "-r"
-		 # - "<role-arn>"
-		 # env:
-		 # - name: AWS_PROFILE
-		 #   value: "<aws-profile>"
+	     exec:
+	       apiVersion: client.authentication.k8s.io/v1alpha1
+	       command: aws-iam-authenticator
+	       args:
+	       - "token"
+	       - "-i"
+	       - "<cluster-name>"
+	       # env:
+	       # - name: AWS_PROFILE
+	       #   value: "<aws-profile>"
 
 
 7. Verify kubectl works
@@ -88,38 +88,9 @@ Procedure:
     
 9. Create a AWS authentication ConfigMap
 
-   This is necessary for the workers to find the master plane.
-   Download `aws-auth-cm.yaml` file.
-
-   .. code-block:: bash
-
-   curl -O https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-06-05/aws-auth-cm.yaml
-
-   or copy it::
-
-
-     apiVersion: v1
-     kind: ConfigMap
-     metadata:
-     name: aws-auth
-     namespace: kube-system
-     data:
-     mapRoles: |
-     - rolearn: <ARN of instance role (not instance profile)>
-       username: system:node:{{EC2PrivateDNSName}}
-       groups:
-       - system:bootstrappers
-         - system:nodes
-
-
-To find the ARN of the instance role, you can pull up any node created in Step 8, the nodes will be of the format ``<Cluster Name>-<NodeName>-Node``, for example ``Z2JHKubernetesCluster-Worker-Node``
-Click on the IAM Role for that node, you should see a `Role ARN` and `Instance Profile ARNs.` Use the `Role ARN` in the above yaml file.
-
-Then run 
-   .. code-block:: bash
-
-      kubectl apply -f aws-auth-cm.yaml
-
+    This is necessary for the workers to find the master plane.
+  
+    See `Getting Started with Amazon EKS`_ *Step 3: Launch and Configure Amazon EKS Worker Nodes*
 
 10. Preparing authenticator for Helm
 
@@ -136,3 +107,12 @@ Then run
 .. References
 
 .. _Getting Started with Amazon EKS: https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html
+.. _selected regions: https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/
+
+==================
+Cluster Autoscaler
+==================
+
+If you'd like to do some :ref:`optimizations <efficient-cluster-autoscaling>`, you need to deploy Cluster Autoscaler (CA) first.
+
+See https://eksworkshop.com/scaling/deploy_ca/

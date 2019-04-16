@@ -9,7 +9,9 @@ RUN apt-get update && \
       python3-dev \
       python3-pip \
       python3-setuptools \
-      python3-pycurl \
+      python3-wheel \
+      libssl-dev \
+      libcurl4-openssl-dev \
       build-essential \
       sqlite3 \
       $(bash -c 'if [[ $JUPYTERHUB_VERSION == "git"* ]]; then \
@@ -32,7 +34,7 @@ RUN adduser --disabled-password \
     ${NB_USER}
 
 ADD requirements.txt /tmp/requirements.txt
-RUN pip3 install --no-cache-dir \
+RUN PYCURL_SSL_LIBRARY=openssl pip3 install --no-cache-dir \
          -r /tmp/requirements.txt \
          $(bash -c 'if [[ $JUPYTERHUB_VERSION == "git"* ]]; then \
             echo ${JUPYTERHUB_VERSION}; \

@@ -50,7 +50,6 @@ hub:
       cpu: 200m
       memory: 512Mi
   services: {}
-  imagePullPolicy: IfNotPresent
   imagePullSecret:
     enabled: false
     registry:
@@ -203,7 +202,7 @@ singleuser:
   extraLabels:
     hub.jupyter.org/network-access-hub: 'true'
   extraEnv: {}
-  lifecycleHooks:
+  lifecycleHooks: {}
   initContainers: []
   extraContainers: []
   uid: 1000

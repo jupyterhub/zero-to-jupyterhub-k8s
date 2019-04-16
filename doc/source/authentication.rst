@@ -193,6 +193,7 @@ and obtain the confidential client credentials.
      extraEnv:
        OAUTH2_AUTHORIZE_URL: https://${host}/auth/realms/${realm}/protocol/openid-connect/auth
        OAUTH2_TOKEN_URL: https://${host}/auth/realms/${realm}/protocol/openid-connect/token
+       OAUTH_CALLBACK_URL: https://<your_jupyterhub_host>/hub/oauth_callback
    auth:
      type: custom
      custom:

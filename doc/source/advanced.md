@@ -268,7 +268,6 @@ prePuller:
      ubuntu-xenial:
        name: ubuntu
        tag: 16.04
-       policy: IfNotPresent
 ```
 
 This snippet will pre-pull the `ubuntu:16.04` image on all nodes, for example. You can

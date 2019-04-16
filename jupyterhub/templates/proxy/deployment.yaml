@@ -116,8 +116,8 @@ spec:
             {{- end }}
           resources:
             {{- .Values.proxy.traefik.resources | toYaml | trimSuffix "\n" | nindent 12 }}
-          {{- if .Values.proxy.traefik.image.pullPolicy }}
-          imagePullPolicy: {{ .Values.proxy.traefik.image.pullPolicy }}
+          {{- with .Values.proxy.traefik.image.pullPolicy }}
+          imagePullPolicy: {{ . }}
           {{- end }}
           ports:
             - containerPort: 443

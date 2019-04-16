@@ -10,9 +10,11 @@ guides for setting up Kubernetes on AWS.
 This guide uses kops to setup a cluster on AWS.  This should be seen as a rough template you will use to
 setup and shape your cluster.
 
-Procedure:
+=============
+The Procedure
+=============
 
-1. Create a IAM Role
+#. Create a IAM Role
 
    This role will be used to give your CI host permission to create and destroy resources on AWS
 
@@ -22,45 +24,49 @@ Procedure:
    * AmazonVPCFullAccess
    * Route53FullAccess (Optional)
 
-2. Create a new instance to use as your CI host.  This node will deal with provisioning and tearing down the cluster.
+#. Create a new instance to use as your CI host.  This node will deal with provisioning and tearing down the cluster.
 
    This instance can be small (t2.micro for example).
 
    When creating it, assign the IAM role created in step 1.
+   
+   Once created, download ssh keys.
 
-3. Install kops and kubectl on your CI host
+#. SSH to your CI host
 
-   Follow the instructions here: https://github.com/kubernetes/kops/blob/master/docs/install.md
+#. Install kops and kubectl on your CI host
+ 
+   * Follow the instructions here: https://github.com/kubernetes/kops/blob/master/docs/install.md
 
-4. Setup an ssh keypair to use with the cluster
-
-   ``ssh-keygen``
-
-5. Choose a cluster name
+#. Choose a cluster name
 
    Since we are not using pre-configured DNS we will use the suffix ".k8s.local".  Per the docs, if the DNS name ends in .k8s.local the cluster will use internal hosted DNS.
 
-   ``export NAME=<somename>.k8s.local``
+      export NAME=<somename>.k8s.local
 
-6. Create a S3 bucket to store your cluster configuration
+#. Setup an ssh keypair to use with the cluster
+
+      ssh-keygen
+
+#. Create a S3 bucket to store your cluster configuration
 
    Since we are on AWS we can use a S3 backing store.  It is recommended to enabling versioning on the S3 bucket.
    We don't need to pass this into the KOPS commands.  It is automatically detected by the kops tool as an env variable.
 
    ``export KOPS_STATE_STORE=s3://<your_s3_bucket_name_here>``
 
-7. Set the region to deploy in
+#. Set the region to deploy in
 
-   ``export REGION=`curl -s http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'```
+      export REGION=`curl -s http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'`
 
-8. Set the availability zones for the nodes
+#. Set the availability zones for the nodes
 
    For this guide we will be allowing nodes to be deployed in all AZs::
 
        export ZONES=$(aws ec2 describe-availability-zones --region $REGION | grep ZoneName | awk '{print $2}' | tr -d '"')
        export ZONES=$(echo $ZONES | tr -d " " | rev | cut -c 2- | rev)
 
-9. Create the cluster
+#. Create the cluster
 
    For a basic setup run the following (All sizes measured in GB)::
 
@@ -111,7 +117,7 @@ Procedure:
       for your AWS account in order to make sure you don't accidentally
       spend more than you wish to.
 
-10. Wait for the cluster to start-up
+#. Wait for the cluster to start-up
 
     Running the 'kops validate cluster' command will tell us what the current state of setup is.
     If you see "can not get nodes" initially, just be patient as the cluster can't report until a
@@ -124,7 +130,7 @@ Procedure:
     If at any point you wish to destroy your cluster after this step, run ``kops delete cluster $NAME --yes``
 
 
-11. Confirm that ``kubectl`` is connected to your Kubernetes cluster.
+#. Confirm that ``kubectl`` is connected to your Kubernetes cluster.
 
     Run::
 
@@ -132,14 +138,15 @@ Procedure:
 
     You should see a list of two nodes, each beginning with ``ip``.
 
-    If you want to run kubectl locally (necessary for step #3 in `Setting up Helm <https://z2jh.jupyter.org/en/latest/setup-helm.html#initialization>`_), you can use run the following on AWS: ``kops export kubecfg``
+    If you want to use kubectl and helm locally (necessary for step #3 in `Setting up Helm <https://z2jh.jupyter.org/en/latest/setup-helm.html#initialization>`_):
+    
+    * run the following on CI host: ``kops export kubecfg``
+    * copy the contents of ``~/.kube/config`` to the same place on your local system
+    
+    If you wish to put the kube config file in a different location, you will need to ``export KUBECONFIG=<other kube config location>``
 
-    To use kubctl and helm from a local machine, copy the contents of ``~/.kube/config`` to the same place on your local system.  If you wish to put the kube config file in a different location, you will need to ``export KUBECONFIG=<other kube config location>``
 
-
-12. Configure ssh bastion
-
-    Skip this step if you did not go with the private option above!
+#. Configure ssh bastion (Skip this step if you did not go with the **--topology private** option above!)
 
     Ideally we would simply be passing the --bastion flag into the kops command above.  However that flag is not functioning as intended at the moment.  https://github.com/kubernetes/kops/issues/2881
 
@@ -151,7 +158,8 @@ Procedure:
     * API ELB security group defaults to access from 0.0.0.0
 
 
-13. Enable dynamic storage on your Kubernetes cluster.
+#. Enable dynamic storage on your Kubernetes cluster.
+
     Create a file, ``storageclass.yml`` on your local computer, and enter
     this text::
 
@@ -176,7 +184,9 @@ Procedure:
     disks, allowing us to automatically assign a disk per user when they log
     in to JupyterHub.
     
-**Encryption**
+==========
+Encryption
+==========
 
 There are simple methods for encrypting your Kubernetes cluster. Illustrated here are simple methods for encryption at rest and encryption in transit.
 
@@ -212,7 +222,7 @@ This will encrypt any dynamic volumes (such as your notebook)created by Kubernet
 In step 9 above, set up the cluster with weave by including the `--networking weave` flag in the `kops create` command above.
 Then perform the following steps:
 
-1. Verify weave is running:
+#. Verify weave is running:
 
    .. code-block:: bash
             
@@ -220,7 +230,7 @@ Then perform the following steps:
 
    You should see several pods of the form `weave-net-abcde`
 
-2.  Create Kubernetes secret with a private password of sufficient strength. A random 128 bytes is used in this example:
+#.  Create Kubernetes secret with a private password of sufficient strength. A random 128 bytes is used in this example:
 
     .. code-block:: bash
            
@@ -229,7 +239,7 @@ Then perform the following steps:
 
     It is important that the secret name and its value (taken from the filename) are the same. If they do not match you may get a `ConfigError`
 
-3. Patch Weave with the password:
+#. Patch Weave with the password:
 
     .. code-block:: bash
            
@@ -242,9 +252,9 @@ Then perform the following steps:
            
         kubectl patch --namespace=kube-system daemonset/weave-net --type json -p '[ { "op": "remove", "path": "/spec/template/spec/containers/0/env/0"} ]'
     
-4. Check to see that the pods are restarted. To expedite the process you can delete the old pods.
+#. Check to see that the pods are restarted. To expedite the process you can delete the old pods.
 
-5. You can verify encryption is turned on with the following command:
+#. You can verify encryption is turned on with the following command:
 
     .. code-block:: bash
     
@@ -254,6 +264,15 @@ Then perform the following steps:
     
     If you really want to insure encryption is working, you can listen on port `6783` of any node. If the traffic looks like gibberish, you know it is on.
 
-    
+==============
+Shared Storage
+==============
+A shared volume is supposed to be mounted to multiple user pods, so we cannot use EBS. As an alternative, there's AWS EFS:
+
+#. :ref:`amazon-efs`
+
+#. :ref:`user-storage`
+
+
 Congrats. Now that you have your Kubernetes cluster running, it's time to
 begin :ref:`creating-your-jupyterhub`.
