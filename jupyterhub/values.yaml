@@ -100,6 +100,15 @@ proxy:
     pdb:
       enabled: true
       minAvailable: 1
+  htpasswd:
+    # image to run htpasswd
+    # any image with htpasswd on path will do
+    # if we used our own traefik image,
+    # this could be done in the same image
+    # but then we'd have another image to maintain
+    image:
+      name: httpd
+      tag: 2.4-alpine
   traefik:
     # kubernetes features
     image:

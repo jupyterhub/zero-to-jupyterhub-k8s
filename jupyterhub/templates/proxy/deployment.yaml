@@ -44,6 +44,8 @@ spec:
         - name: config
           configMap:
             name: proxy-traefik-config
+        - name: htpasswd
+          emptyDir: {}
       {{- if $manualHTTPS }}
         - name: tls-secret
           secret:
@@ -57,6 +59,23 @@ spec:
           emptyDir: {}
       {{- end }}
       initContainers:
+        - name: htpasswd
+          image: {{ .Values.proxy.htpasswd.image.name }}:{{ .Values.proxy.htpasswd.image.tag }}
+          args:
+            - htpasswd
+            - -bc
+            - /htpasswd/htpasswd
+            - api_admin
+            - $PROXY_PASSWORD
+          env:
+            - name: PROXY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hub-secret
+                  key: proxy.token
+          volumeMounts:
+            - mountPath: /htpasswd
+              name: htpasswd
         - name: storeconfig
           image: {{ .Values.proxy.traefik.image.name }}:{{ .Values.proxy.traefik.image.tag }}
           args:
@@ -105,6 +124,8 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: config
+            - mountPath: /htpasswd
+              name: htpasswd
             {{- if or $manualHTTPS $manualHTTPSwithsecret }}
             - mountPath: /ssl
               name: tls-secret

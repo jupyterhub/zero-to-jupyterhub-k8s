@@ -54,7 +54,7 @@ data:
       address = ":8001"
         [entryPoints.api.auth]
          [entryPoints.api.auth.basic]
-           users = ["api_admin:{{ .Values.proxy.traefik.basicAuth }}"]
+           usersFile = "/htpasswd/htpasswd"
 
     {{- if .Values.proxy.traefik.traefikLogFormat }}
     [traefikLog]

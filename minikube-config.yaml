@@ -5,7 +5,6 @@ proxy:
     nodePorts:
       http: 31212
   traefik:
-    basicAuth: "$apr1$sVr1H5fc$UrZULqPLUsRVrTGNSiai3/"
     debug:
       enabled: true
     resources:
