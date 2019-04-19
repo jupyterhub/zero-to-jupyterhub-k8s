@@ -54,7 +54,6 @@ spec:
       serviceAccountName: hub
       {{- end }}
       securityContext:
-        runAsUser: {{ .Values.hub.uid }}
         fsGroup: {{ .Values.hub.fsGid }}
       {{- if .Values.hub.imagePullSecret.enabled }}
       imagePullSecrets:
@@ -113,6 +112,8 @@ spec:
           {{- with .Values.hub.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
+          securityContext:
+            runAsUser: {{ .Values.hub.uid }}
           env:
             - name: PYTHONUNBUFFERED
               value: "1"
