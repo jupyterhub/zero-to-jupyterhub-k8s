@@ -100,7 +100,7 @@ set_config_if_not_none(
 
 for trait, cfg_key in (
     ('start_timeout', None),
-    ('image_pull_policy', None),
+    ('image_pull_policy', 'image.pullPolicy'),
     ('events_enabled', 'events'),
     ('extra_labels', None),
     ('extra_annotations', None),
