@@ -304,7 +304,7 @@ These environments are supposed to be used in notebooks, so a typical use case:
 .. _multiple-profiles:
 
 Using multiple profiles to let users select their environment
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------------------------------------
 
 You can create configurations for multiple user environments,
 and let users select from them once they log in to your JupyterHub. This
