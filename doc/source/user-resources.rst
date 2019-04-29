@@ -121,3 +121,25 @@ After resizing the cluster, it may take a couple of minutes for the new cluster
 size to be reported back as the service is adding or removing nodes. You can
 find the true count of currently 'ready' nodes using ``kubectl get node`` to
 report the current ``Ready/NotReady`` status of all nodes in the cluster.
+
+Microsoft Azure Platform
+~~~~~~~~~~~~~~~~~~~~~
+Use the ``scale`` command and
+provide a new cluster size (i.e. number of nodes) as a command line option
+``--node-count``:
+
+.. code-block:: bash
+
+   az aks scale \
+       --name <YOUR-CLUSTER-NAME> \
+       --node-count <NEW-SIZE> \
+       --resource-group <YOUR-RESOURCE-GROUP>
+
+To display the details of the cluster, use the command:
+
+.. code-block:: bash
+
+   az aks show --name <YOUR-CLUSTER-NAME> --resource-group <YOUR-RESOURCE-GROUP>
+
+It may take some time for the new cluster nodes to be ready.
+You can use ``kubectl get node`` to report the current ``Ready/NotReady`` status of all nodes in the cluster.
