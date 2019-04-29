@@ -275,7 +275,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
    .. image:: ../_static/images/azure/scale_out.png
       :align: center
 
-   The second form needs to be edited for the second rule to descrease the instance count by 1 when the average CPU usage over 10 minutes is less than 5%.
+   The second form needs to be edited for the second rule to decrease the instance count by 1 when the average CPU usage over 10 minutes is less than 5%.
    Save this rule and then save the overall scale condition, the cluster will be updated automatically.
 
    .. image:: ../_static/images/azure/scale_in.png
@@ -305,7 +305,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
    If you create the cluster using the Azure Portal you must enable RBAC.
    RBAC is enabled by default when using the command line tools.
 
-   If you use the Azure interactive shell the included version of Helm (2.10) has a known bug so the Secure Helm step in the :ref:`setup-helm` section of this guide will not work. Either skip this step, or download the latest version of Helm.
+   If you use the Azure interactive shell the included version of Helm (2.10) has a known bug so the Secure Helm step in the :ref:`setup-helm` section of this guide will not work. You will need to download the latest version of Helm as the Helm Chart requires version ``>= 2.11`` in order to handle pod priorities.
 
 Congrats. Now that you have your Kubernetes cluster running, it's time to
 begin :ref:`creating-your-jupyterhub`.
