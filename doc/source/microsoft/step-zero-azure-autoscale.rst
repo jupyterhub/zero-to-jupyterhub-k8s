@@ -105,7 +105,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
      az group create \
                    --name=<RESOURCE-GROUP-NAME> \
-                   --location=centralus \
+                   --location=<LOCATION> \
                    --output table
 
    where:
@@ -115,7 +115,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
      for UC Berkeley's 2018 Spring Data100 Course, you may give it a
      ``<RESOURCE-GROUP-NAME>`` of ``ucb_2018sp_data100_hub``.
    * ``--location`` specifies the location of the data center you want your resource to be in.
-     In this case, we used the ``centralus`` location. For other options, see the
+     For options, see the
      `Azure list of locations that support AKS
      <https://docs.microsoft.com/en-us/azure/aks/container-service-quotas#region-availability>`_.
    * ``--output table`` specifies that the output should be in human readable
