@@ -13,6 +13,7 @@ curl -O https://download.docker.com/linux/ubuntu/dists/xenial/pool/stable/amd64/
 # dpkg won't install dependencies
 dpkg -i $DOCKER_DEB || apt-get install -f -y
 docker info
+usermod -G docker vagrant
 
 install -o vagrant -g vagrant -d /home/vagrant/bin
 
