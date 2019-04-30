@@ -4,7 +4,7 @@ set -eux
 
 # Is there a standard interface name?
 for iface in eth0 ens4 enp0s3; do
-    IP=$(ifconfig $iface | grep 'inet addr' | cut -d: -f2 | awk '{print $1}');
+    IP=$(/sbin/ifconfig $iface | grep 'inet addr' | cut -d: -f2 | awk '{print $1}');
     if [ -n "$IP" ]; then
         echo "IP: $IP"
         break
@@ -12,7 +12,7 @@ for iface in eth0 ens4 enp0s3; do
 done
 if [ -z "$IP" ]; then
     echo "Failed to get IP, current interfaces:"
-    ifconfig -a
+    /sbin/ifconfig -a
     exit 2
 fi
 
