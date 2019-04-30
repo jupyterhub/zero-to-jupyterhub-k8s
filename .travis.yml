@@ -13,7 +13,7 @@ jobs:
   include:
     - stage: lint
       script:
-        - ./ci/installl-lint.sh
+        - ./ci/install-lint.sh
         - python3 tools/templates/lint-and-validate.py
     - stage: test
       # Different scenarios described in
