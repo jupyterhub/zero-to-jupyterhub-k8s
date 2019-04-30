@@ -13,6 +13,7 @@ jobs:
   include:
     - stage: lint
       script:
+        - . ci/lint.env
         - ./ci/install-lint.sh
         - python3 tools/templates/lint-and-validate.py
     - stage: test
@@ -25,6 +26,7 @@ jobs:
           - SCENARIO=1.11-default RUNNER=minikube
           - SCENARIO=1.14-default RUNNER=kind
       script:
+        - . ci/lint.env
         - . "ci/${RUNNER}-${SCENARIO}.env"
         - ./ci/install-${RUNNER}.sh
         - ./ci/travis-script.sh
