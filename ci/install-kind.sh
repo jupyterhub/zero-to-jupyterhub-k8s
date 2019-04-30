@@ -8,7 +8,7 @@ mkdir -p bin
 # install socat (required by helm)
 sudo apt-get update && sudo apt-get install -y socat
 
-# install kubectl, minikube
+# install kubectl, kind
 # based on https://blog.travis-ci.com/2017-10-26-running-kubernetes-on-travis-ci-with-minikube
 if ! [ -f "bin/kubectl" ]; then
   echo "installing kubectl"
@@ -24,23 +24,6 @@ if ! [ -f "bin/kind" ]; then
   mv kind bin/
 fi
 
-# FIXME: Workaround missing crictl on K8s 1.11 only
-# - Issue:   https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1123
-# - CI fail: https://travis-ci.org/jupyterhub/zero-to-jupyterhub-k8s/jobs/485093909
-if [ ! -z "${CRICTL_VERSION}" ]; then
-  echo "installing crictl"
-  if ! [ -f bin/crictl-${CRICTL_VERSION} ]; then
-    curl -sSLo bin/crictl-${CRICTL_VERSION}.tar.gz https://github.com/kubernetes-sigs/cri-tools/releases/download/v${CRICTL_VERSION}/crictl-v${CRICTL_VERSION}-linux-amd64.tar.gz
-    tar --extract --file bin/crictl-${CRICTL_VERSION}.tar.gz --directory bin
-    rm bin/crictl-${CRICTL_VERSION}.tar.gz
-    mv bin/crictl bin/crictl-${CRICTL_VERSION}
-  fi
-  cp bin/crictl-${CRICTL_VERSION} bin/crictl
-  # minikube is run with sudo so the modified PATH is lost
-  sudo ln -s "${PWD}/bin/crictl-${CRICTL_VERSION}" /usr/bin/crictl
-fi
-
-
 echo "installing kubeval"
 if ! [ -f bin/kubeval-${KUBEVAL_VERSION} ]; then
   curl -sSLo bin/kubeval-${KUBEVAL_VERSION}.tar.gz https://github.com/garethr/kubeval/releases/download/${KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz
@@ -50,8 +33,8 @@ if ! [ -f bin/kubeval-${KUBEVAL_VERSION} ]; then
 fi
 cp bin/kubeval-${KUBEVAL_VERSION} bin/kubeval
 
-echo "starting minikube with RBAC"
-CHANGE_MINIKUBE_NONE_USER=true $PWD/bin/kind create cluster --image kindest/node:v${KUBE_VERSION}
+echo "starting cluster with kind"
+$PWD/bin/kind create cluster --image kindest/node:v${KUBE_VERSION}
 export KUBECONFIG="$($PWD/bin/kind get kubeconfig-path --name=kind)"
 
 echo "waiting for kubernetes"

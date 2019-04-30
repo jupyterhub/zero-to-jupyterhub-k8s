@@ -18,6 +18,10 @@ fi
 
 TEST_NAMESPACE=jupyterhub-test
 
+if [ "$RUNNER" = "kind" ]; then
+  export KUBECONFIG="$($PWD/bin/kind get kubeconfig-path --name=kind)"
+fi
+
 helm install --wait --name jupyterhub-test --namespace $TEST_NAMESPACE ./jupyterhub/ $Z2JH_HELM_ARGS
 
 if [ "$RUNNER" = "kind" ]; then
