@@ -17,10 +17,11 @@ jobs:
       # Different scenarios described in
       # /ci/minikube-${SCENARIO}.env
       env:
-        - SCENARIO=1.13-default RUNNER=minikube
-        - SCENARIO=1.12-netpol RUNNER=minikube
-        - SCENARIO=1.11-default RUNNER=minikube
-        - SCENARIO=1.14-default RUNNER=kind
+        matrix:
+          - SCENARIO=1.13-default RUNNER=minikube
+          - SCENARIO=1.12-netpol RUNNER=minikube
+          - SCENARIO=1.11-default RUNNER=minikube
+          - SCENARIO=1.14-default RUNNER=kind
       script:
         - . "ci/${RUNNER}-${SCENARIO}.env"
         - ./ci/install-${RUNNER}.sh
