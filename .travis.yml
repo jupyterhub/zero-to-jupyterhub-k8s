@@ -12,7 +12,9 @@ install:
 jobs:
   include:
     - stage: lint
-      script: python3 tools/templates/lint-and-validate.py
+      script:
+        - ./ci/installl-lint.sh
+        - python3 tools/templates/lint-and-validate.py
     - stage: test
       # Different scenarios described in
       # /ci/minikube-${SCENARIO}.env

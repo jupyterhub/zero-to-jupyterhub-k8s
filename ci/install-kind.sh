@@ -1,12 +1,7 @@
 #!/bin/bash
 set -ex
 
-mkdir -p bin
-
-# nsenter is included on xenial
-
-# install socat (required by helm)
-sudo apt-get update && sudo apt-get install -y socat
+. $PWD/install-lint.sh
 
 # install kubectl, kind
 # based on https://blog.travis-ci.com/2017-10-26-running-kubernetes-on-travis-ci-with-minikube
@@ -24,14 +19,6 @@ if ! [ -f "bin/kind" ]; then
   mv kind bin/
 fi
 
-echo "installing kubeval"
-if ! [ -f bin/kubeval-${KUBEVAL_VERSION} ]; then
-  curl -sSLo bin/kubeval-${KUBEVAL_VERSION}.tar.gz https://github.com/garethr/kubeval/releases/download/${KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz
-  tar --extract --file bin/kubeval-${KUBEVAL_VERSION}.tar.gz --directory bin
-  rm bin/kubeval-${KUBEVAL_VERSION}.tar.gz
-  mv bin/kubeval bin/kubeval-${KUBEVAL_VERSION}
-fi
-cp bin/kubeval-${KUBEVAL_VERSION} bin/kubeval
 
 echo "starting cluster with kind"
 $PWD/bin/kind create cluster --image kindest/node:v${KUBE_VERSION}
@@ -45,14 +32,9 @@ done
 kubectl get nodes
 
 echo "installing helm"
-curl -ssL https://storage.googleapis.com/kubernetes-helm/helm-v${HELM_VERSION}-linux-amd64.tar.gz \
-  | tar -xz -C bin --strip-components 1 linux-amd64/helm
-chmod +x bin/helm
-
 kubectl --namespace kube-system create sa tiller
 kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
 helm init --service-account tiller
-
 
 echo "waiting for tiller"
 kubectl --namespace=kube-system rollout status --watch deployment/tiller-deploy
