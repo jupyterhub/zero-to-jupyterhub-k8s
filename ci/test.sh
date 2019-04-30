@@ -17,9 +17,16 @@ if [ -z "$IP" ]; then
 fi
 
 TEST_NAMESPACE=jupyterhub-test
-TEST_URL=http://$IP:31212
 
-helm install --name jupyterhub-test --namespace $TEST_NAMESPACE ./jupyterhub/ $Z2JH_HELM_ARGS
+helm install --wait --name jupyterhub-test --namespace $TEST_NAMESPACE ./jupyterhub/ $Z2JH_HELM_ARGS
+
+if [ "$RUNNER" = "kind" ]; then
+  kubectl port-forward -n $TEST_NAMESPACE svc/proxy-public 8080:80 &
+  TEST_URL=http://127.0.0.1:8080
+  export HUB_API_URL=http://127.0.0.1:8080/hub/api
+else
+  TEST_URL=http://$IP:31212
+fi
 
 echo "waiting for servers to become responsive"
 until curl --fail -s $TEST_URL/hub/api; do
