@@ -9,7 +9,7 @@ charts:
       hub:
         valuesPath: hub.image
         buildArgs:
-          JUPYTERHUB_VERSION: 1.0.0b2
+          JUPYTERHUB_VERSION: 1.0.0
       network-tools:
         valuesPath: singleuser.networkTools.image
       image-awaiter:
@@ -17,4 +17,4 @@ charts:
       singleuser-sample:
         valuesPath: singleuser.image
         buildArgs:
-          JUPYTERHUB_VERSION: 1.0.0b2
+          JUPYTERHUB_VERSION: 1.0.0
