@@ -3,6 +3,7 @@ from datetime import datetime as py_dtime
 from datetime import timedelta
 import pandas as pd
 import requests
+import re
 from bs4 import BeautifulSoup as bs4
 
 from bqplot import LinearScale, Axis, Lines, Figure, DateScale
@@ -40,6 +41,17 @@ for table in html.find_all('table'):
         rows.append(thisrow)
     df = pd.DataFrame(rows[:-1], columns=header)
     all_dfs.append(df)
+    
+def clean_promo(in_value, use_promo=False):
+    # cleans listings with promotional pricing
+    # defaults to non-promo pricing with use_promo
+    if in_value.find("promo") > -1:
+        if use_promo:
+            return re.search("\d+\.\d+", in_value)[0]
+        else:
+            return re.search("\d+\.\d+", in_value[in_value.find("("):])[0]
+    else:
+        return in_value
 
 # Pull out our reference dataframes
 disk = [df for df in all_dfs if 'Price (per GB / month)' in df.columns][0]
@@ -50,7 +62,7 @@ machines_list = machines_list.rename(columns={'Price (USD)': 'Price (USD / hr)'}
 active_machine = machines_list.iloc[0]
 
 # Base costs, all per day
-disk['Price (per GB / month)'] = disk['Price (per GB / month)'].astype(float)
+disk['Price (per GB / month)'] = disk['Price (per GB / month)'].apply(clean_promo).astype(float)
 cost_storage_hdd = disk[disk['Type'] == 'Standard provisioned space']['Price (per GB / month)'].values[0]
 cost_storage_hdd /= 30.  # To make it per day
 cost_storage_ssd = disk[disk['Type'] == 'SSD provisioned space']['Price (per GB / month)'].values[0]
@@ -156,7 +168,7 @@ def cost_display(n_days=7):
 
         # Calculate costs
         active_machine = machines_list[machines_list['Machine type'] == machines.value]
-        machine_cost = active_machine['Price (USD / hr)'].values.astype(float) * 24  # To make it cost per day
+        machine_cost = active_machine['Price (USD / hr)'].values.apply(clean_promo).astype(float) * 24  # To make it cost per day
         users_for_cost = autoscaled_users if autoscaling.value is True else [max_buffer] * len(handdraw.lines.y)
         num_machines = calculate_machines_needed(users_for_cost, mem_per_user.value, active_machine)
         avg_num_machines = np.mean(num_machines)
@@ -196,3 +208,4 @@ def cost_display(n_days=7):
     display(users, machines, mem_per_user, storage_per_user, persistent, fig, hr,
             text_cost_machine, text_avg_num_machine, text_cost_storage, text_cost_total)
     return fig
+
