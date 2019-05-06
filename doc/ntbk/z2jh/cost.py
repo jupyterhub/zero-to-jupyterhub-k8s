@@ -20,6 +20,17 @@ resp = requests.get('https://cloud.google.com/compute/pricing')
 html = bs4(resp.text)
 
 # Munge the cost data
+def clean_promo(in_value, use_promo=False):
+    # cleans listings with promotional pricing
+    # defaults to non-promo pricing with use_promo
+    if in_value.find("promo") > -1:
+        if use_promo:
+            return re.search("\d+\.\d+", in_value)[0]
+        else:
+            return re.search("\d+\.\d+", in_value[in_value.find("("):])[0]
+    else:
+        return in_value
+
 all_dfs = []
 for table in html.find_all('table'):
     header = table.find('thead').find_all('th')
@@ -33,25 +44,15 @@ for table in html.find_all('table'):
             if 'default' in jj.attrs.keys():
                 thisrow.append(jj.attrs['default'])
             elif 'ore-hourly' in jj.attrs.keys():
-                thisrow.append(jj.attrs['ore-hourly'].strip('$'))
+                thisrow.append(clean_promo(jj.attrs['ore-hourly'].strip('$')))
             elif 'ore-monthly' in jj.attrs.keys():
-                thisrow.append(jj.attrs['ore-monthly'].strip('$'))
+                thisrow.append(clean_promo(jj.attrs['ore-monthly'].strip('$')))
             else:
                 thisrow.append(jj.text.strip())
         rows.append(thisrow)
     df = pd.DataFrame(rows[:-1], columns=header)
     all_dfs.append(df)
-    
-def clean_promo(in_value, use_promo=False):
-    # cleans listings with promotional pricing
-    # defaults to non-promo pricing with use_promo
-    if in_value.find("promo") > -1:
-        if use_promo:
-            return re.search("\d+\.\d+", in_value)[0]
-        else:
-            return re.search("\d+\.\d+", in_value[in_value.find("("):])[0]
-    else:
-        return in_value
+
 
 # Pull out our reference dataframes
 disk = [df for df in all_dfs if 'Price (per GB / month)' in df.columns][0]
@@ -62,7 +63,7 @@ machines_list = machines_list.rename(columns={'Price (USD)': 'Price (USD / hr)'}
 active_machine = machines_list.iloc[0]
 
 # Base costs, all per day
-disk['Price (per GB / month)'] = disk['Price (per GB / month)'].apply(clean_promo).astype(float)
+disk['Price (per GB / month)'] = disk['Price (per GB / month)'].astype(float)
 cost_storage_hdd = disk[disk['Type'] == 'Standard provisioned space']['Price (per GB / month)'].values[0]
 cost_storage_hdd /= 30.  # To make it per day
 cost_storage_ssd = disk[disk['Type'] == 'SSD provisioned space']['Price (per GB / month)'].values[0]
@@ -168,7 +169,7 @@ def cost_display(n_days=7):
 
         # Calculate costs
         active_machine = machines_list[machines_list['Machine type'] == machines.value]
-        machine_cost = active_machine['Price (USD / hr)'].values.apply(clean_promo).astype(float) * 24  # To make it cost per day
+        machine_cost = active_machine['Price (USD / hr)'].values.astype(float) * 24  # To make it cost per day
         users_for_cost = autoscaled_users if autoscaling.value is True else [max_buffer] * len(handdraw.lines.y)
         num_machines = calculate_machines_needed(users_for_cost, mem_per_user.value, active_machine)
         avg_num_machines = np.mean(num_machines)
