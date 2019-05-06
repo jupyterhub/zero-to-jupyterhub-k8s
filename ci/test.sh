@@ -2,24 +2,25 @@
 
 set -eux
 
-# Is there a standard interface name?
-for iface in eth0 ens4 enp0s3; do
-    IP=$(/sbin/ifconfig $iface | grep 'inet addr' | cut -d: -f2 | awk '{print $1}');
-    if [ -n "$IP" ]; then
-        echo "IP: $IP"
-        break
-    fi
-done
-if [ -z "$IP" ]; then
-    echo "Failed to get IP, current interfaces:"
-    /sbin/ifconfig -a
-    exit 2
-fi
 
 TEST_NAMESPACE=jupyterhub-test
 
 if [ "$RUNNER" = "kind" ]; then
   export KUBECONFIG="$($PWD/bin/kind get kubeconfig-path --name=kind)"
+else
+  # Is there a standard interface name?
+  for iface in eth0 ens4 enp0s3; do
+      IP=$(/sbin/ifconfig $iface | grep 'inet addr' | cut -d: -f2 | awk '{print $1}');
+      if [ -n "$IP" ]; then
+          echo "IP: $IP"
+          break
+      fi
+  done
+  if [ -z "$IP" ]; then
+      echo "Failed to get IP, current interfaces:"
+      /sbin/ifconfig -a
+      exit 2
+  fi
 fi
 
 helm install --wait --name jupyterhub-test --namespace $TEST_NAMESPACE ./jupyterhub/ $Z2JH_HELM_ARGS
