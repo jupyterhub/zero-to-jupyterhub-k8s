@@ -228,7 +228,7 @@ singleuser:
 
 scheduling:
   userScheduler:
-    enabled: false
+    enabled: true
     replicas: 1
     logLevel: 4
     image:
