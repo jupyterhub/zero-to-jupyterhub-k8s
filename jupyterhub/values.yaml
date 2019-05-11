@@ -10,6 +10,7 @@ hub:
   baseUrl: /
   cookieSecret:
   publicURL:
+  initContainers: []
   uid: 1000
   fsGid: 1000
   nodeSelector: {}

@@ -59,6 +59,9 @@ spec:
       imagePullSecrets:
         - name: hub-image-credentials
       {{- end }}  
+      {{- if .Values.hub.initContainers }}
+      {{- .Values.hub.initContainers | toYaml | trimSuffix "\n" | nindent 6 }}
+      {{- end }}
       containers:
         {{- if .Values.hub.extraContainers }}
         {{- .Values.hub.extraContainers | toYaml | trimSuffix "\n" | nindent 8 }}
