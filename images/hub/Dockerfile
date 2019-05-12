@@ -14,6 +14,8 @@ RUN apt-get update && \
       libcurl4-openssl-dev \
       build-essential \
       sqlite3 \
+      curl \
+      dnsutils \
       $(bash -c 'if [[ $JUPYTERHUB_VERSION == "git"* ]]; then \
         echo npm; \
       fi') \
