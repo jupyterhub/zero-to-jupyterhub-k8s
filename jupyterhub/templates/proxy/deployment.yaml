@@ -46,6 +46,9 @@ spec:
           secret:
             secretName: {{ .Values.proxy.https.secret.name }}
       {{- end }}
+      securityContext:
+        # Don't allow any process to execute as root inside the container
+        allowPrivilegeEscalation: false
       containers:
         - name: chp
           image: {{ .Values.proxy.chp.image.name }}:{{ .Values.proxy.chp.image.tag }}
