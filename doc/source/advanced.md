@@ -227,8 +227,8 @@ your `config.yaml`:
 
 ```yaml
 prePuller:
-   hook:
-     enabled: false
+  hook:
+    enabled: false
 ```
 
 ### Pre-pulling and changes in cluster size
@@ -264,10 +264,10 @@ of additional images.
 
 ```yaml
 prePuller:
-   extraImages:
-     ubuntu-xenial:
-       name: ubuntu
-       tag: 16.04
+  extraImages:
+    ubuntu-xenial:
+      name: ubuntu
+      tag: 16.04
 ```
 
 This snippet will pre-pull the `ubuntu:16.04` image on all nodes, for example. You can

@@ -134,7 +134,7 @@ the following paths:
 - `singleuser.image`
 - `singleuser.profileList[].kubespawner_override.image`
 - `singleuser.extraContainers[].image`
-- `prePuller.extraImages[].someName`
+- `prePuller.extraImages.someName`
 
 #### Additional sources
 - `singleuser.networkTools.image`
