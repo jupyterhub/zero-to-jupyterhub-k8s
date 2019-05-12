@@ -294,7 +294,11 @@ prePuller:
   continuous:
     enabled: true
   extraImages:
-    - name: mock-user/mock-image
+    mockImage1:
+      name: mock-user/mock-image1
+      tag: mock-tag
+    mockImage2:
+      name: mock-user/mock-image2
       tag: mock-tag
 
 
