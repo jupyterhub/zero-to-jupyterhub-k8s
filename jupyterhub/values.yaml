@@ -95,7 +95,7 @@ proxy:
       name: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
       tag: 0.15.0
     proxyBodySize: 64m
-    hstsIncludeSubdomains: "false"
+    hstsIncludeSubdomains: 'false'
     resources: {}
   lego:
     image:
