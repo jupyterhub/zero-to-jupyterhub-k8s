@@ -265,7 +265,7 @@ prePuller:
       name: jupyterhub/k8s-image-awaiter
       tag: generated-by-chartpress
   continuous:
-    enabled: false
+    enabled: true
   extraImages: {}
   pause:
     image:
