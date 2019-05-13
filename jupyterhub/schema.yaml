@@ -282,6 +282,7 @@ properties:
           list of initContainers to be run with hub pod. See [Kubernetes Docs](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/)
           
           ```yaml
+          hub:
             initContainers:
               - name: init-myservice
                 image: busybox:1.28
