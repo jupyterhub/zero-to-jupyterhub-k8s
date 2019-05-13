@@ -60,7 +60,8 @@ spec:
         - name: hub-image-credentials
       {{- end }}  
       {{- if .Values.hub.initContainers }}
-      {{- .Values.hub.initContainers | toYaml | trimSuffix "\n" | nindent 6 }}
+      initContainers:
+        {{- .Values.hub.initContainers | toYaml | trimSuffix "\n" | nindent 8 }}
       {{- end }}
       containers:
         {{- if .Values.hub.extraContainers }}
