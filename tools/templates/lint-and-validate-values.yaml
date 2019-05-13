@@ -31,6 +31,9 @@ hub:
     mock: mock
   annotations:
     mock: mock
+  initContainers:
+    - name: mock-init-container-name
+      image: mock-init-container-image
   extraConfig:
     test: |-
       c.Spawner.cmd = 'mock'
