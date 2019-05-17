@@ -19,7 +19,7 @@ fi
 
 if ! [ -f "bin/kind" ]; then
   echo "installing kind"
-  curl -Lo kind https://github.com/kubernetes-sigs/kind/releases/download/${KIND_VERSION}/kind-linux-amd64
+  curl -Lo kind https://github.com/kubernetes-sigs/kind/releases/download/v${KIND_VERSION}/kind-linux-amd64
   chmod +x kind
   mv kind bin/
 fi
