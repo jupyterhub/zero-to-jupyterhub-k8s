@@ -30,7 +30,7 @@ your google cloud account.
    below.
 
    a. **Use a web based terminal:**
-   
+
       Start *Google Cloud Shell* from `console.cloud.google.com
       <https://console.cloud.google.com>`_ by clicking the button shown below.
       You are now in control of a virtual machine with various tools
@@ -70,14 +70,14 @@ your google cloud account.
         --zone us-central1-b \
         --cluster-version latest \
         <CLUSTERNAME>
-      
+
    * Replace `<CLUSTERNAME>` with a name that can be used to refer to this cluster
      in the future.
 
    * ``--machine-type`` specifies the amount of CPU and RAM in each node within
      this default node pool. There is a `variety of types
      <https://cloud.google.com/compute/docs/machine-types>`_ to choose from.
-   
+
    * ``--num-nodes`` specifies how many nodes to spin up. You can change this
      later through the cloud console or using the `gcloud` command line tool.
 
@@ -141,8 +141,9 @@ your google cloud account.
       --min-nodes 0 \
       --max-nodes 3 \
       --node-labels hub.jupyter.org/node-purpose=user \
-      --node-taints hub.jupyter.org_dedicated=user:NoSchedule
-
+      --node-taints hub.jupyter.org_dedicated=user:NoSchedule \
+      --zone us-central1-b \
+      --cluster <CLUSTERNAME>
 
   .. preemptible node recommendation not included
   .. pending handling of evictions in jupyterhub/kubespawner#223
