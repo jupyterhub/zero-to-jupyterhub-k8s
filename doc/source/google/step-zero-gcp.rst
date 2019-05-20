@@ -93,7 +93,8 @@ your google cloud account.
 
       kubectl get node
 
-   The response should list one running node.
+   The response should list two running nodes (or however many nodes you
+   set with ``--num-nodes`` above).
 
 6. Give your account permissions to perform all administrative actions needed.
 
