@@ -17,7 +17,8 @@ RUN apt-get update && \
       curl \
       dnsutils \
       $(bash -c 'if [[ $JUPYTERHUB_VERSION == "git"* ]]; then \
-        echo npm; \
+        # workaround for https://bugs.launchpad.net/ubuntu/+source/nodejs/+bug/1794589
+        echo nodejs=8.10.0~dfsg-2ubuntu0.2 nodejs-dev=8.10.0~dfsg-2ubuntu0.2 npm; \
       fi') \
       && \
     apt-get purge && apt-get clean
