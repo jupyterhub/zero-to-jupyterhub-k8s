@@ -229,7 +229,7 @@ singleuser:
 scheduling:
   userScheduler:
     enabled: true
-    replicas: 1
+    replicas: 2
     logLevel: 4
     image:
       name: gcr.io/google_containers/kube-scheduler-amd64
