@@ -76,7 +76,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
    .. code-block:: bash
 
-     az feature --name VMSSPreview --namespace Microsoft.ContainerService
+     az feature register --name VMSSPreview --namespace Microsoft.ContainerService
 
    A VMSS is a `Virtual Machine Scale Set <https://docs.microsoft.com/en-us/azure/virtual-machine-scale-sets/overview>`_, that is to say an autoscalable set of virtual machines.
 
