@@ -338,7 +338,7 @@ a list of profiles with specific configuration options each. Here's an example:
 The above configuration will show a screen with information about this profile
 displayed when users start a new server.
 
-Here's an example with two profiles that lets users select the environment they
+Here's an example with four profiles that lets users select the environment they
 wish to use.
 
 .. code-block:: yaml
@@ -360,9 +360,29 @@ wish to use.
          description: "The Jupyter Stacks spark image!"
          kubespawner_override:
            image: jupyter/all-spark-notebook:2343e33dec46
+       - display_name: "Learning Data Science"
+         description: "Datascience Environment with Sample Notebooks"
+         kubespawner_override:
+           image: jupyter/datascience-notebook:2343e33dec46
+           lifecycle_hooks:
+             postStart:
+               exec:
+                 command:
+                   - "sh"
+                   - "-c"
+                   - >
+                     gitpuller https://github.com/data-8/materials-fa17 master materials-fa;
 
 This allows users to select from three profiles, each with their own
 environment (defined by each Docker image in the configuration above).
+
+The "Learning Data Science" environment in the above example overrides the postStart lifecycle hook. Note that when
+using ``kubespawner_override`` the values must be in the format that comply with the `KubeSpawner configuration
+<https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html>`_.
+For instance, when overriding the lifecycle
+hooks in ``kubespawner_override``, the configuration is for ``lifecycle_hooks`` (snake_case) rather than ``lifecycleHooks`` (camelCase) which is
+how it is used directly under the ``singleuser`` configuration section.
+`A further explanation for this can be found in this github issue. <https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1242#issuecomment-484895216>`_
 
 .. note::
 
