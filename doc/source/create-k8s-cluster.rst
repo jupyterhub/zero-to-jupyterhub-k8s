@@ -20,6 +20,7 @@ Choose one option and proceed.
    redhat/step-zero-openshift
    ibm/step-zero-ibm
    digital-ocean/step-zero-digital-ocean
+   local/step-zero-local-dev
 
 .. note::
 
