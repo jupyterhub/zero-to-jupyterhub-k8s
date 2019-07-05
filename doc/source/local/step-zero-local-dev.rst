@@ -16,7 +16,7 @@ You should then be able to proceed with the rest of Zero to JupyterHub, but be a
 
 * You may need to increase the amount of memory available to Docker Engine. This can be done in the Advanced tab 
   of Preferences in the Docker control panel. An appropriate error message should appear if insufficient memory is available.
-* The version of Kubernetes that comes with Docker Desktop may be a few versions old, and when you run the ``heml upgrade ...`` 
+* The version of Kubernetes that comes with Docker Desktop may be a few versions old, and when you run the ``helm upgrade ...`` 
   command it may say something like ``Error: Chart requires kubernetesVersion: >=1.11.0-0 which is incompatible with Kubernetes v1.10.11``.
   The easiest thing may be to try earliers version numbers of the 
   `Helm Chart from this table <https://github.com/jupyterhub/helm-chart#versions-coupled-to-each-chart-release>`_ until things work, 
