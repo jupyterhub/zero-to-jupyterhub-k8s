@@ -59,11 +59,13 @@ spec:
             {{- if $manualHTTPS }}
             - --port=8443
             - --redirect-port=8000
+            - --redirect-to=443
             - --ssl-key=/etc/chp/tls/tls.key
             - --ssl-cert=/etc/chp/tls/tls.crt
             {{- else if $manualHTTPSwithsecret }}
             - --port=8443
             - --redirect-port=8000
+            - --redirect-to=443
             - --ssl-key=/etc/chp/tls/{{ .Values.proxy.https.secret.key }}
             - --ssl-cert=/etc/chp/tls/{{ .Values.proxy.https.secret.crt }}
             {{- else }}
