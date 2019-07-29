@@ -116,7 +116,7 @@ situations:
     generally fail to do so. This is because it will only add a node if one or
     more pods won't fit on the current nodes but would fit more if a node is
     added, but at that point users are already waiting. To scale up nodes ahead
-    of time we can use *user-placeholders*.
+    of time we can use [user-placeholders](#scaling-up-in-time-user-placeholders).
 
 ### The images that will be pulled
 

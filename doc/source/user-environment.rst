@@ -70,7 +70,7 @@ image containing useful tools and libraries for datascience, complete these step
    .. note::
 
       If you have configured *prePuller.hook.enabled*, all the nodes in your
-      cluster will pull the image before the the hub is upgraded to let users
+      cluster will pull the image before the hub is upgraded to let users
       use the image. The image pulling may take several minutes to complete,
       depending on the size of the image.
 
