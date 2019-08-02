@@ -1,7 +1,7 @@
 .. _microsoft-azure:
 
 Step Zero: Kubernetes on Microsoft Azure Kubernetes Service (AKS) with Autoscaling
----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
 
 .. warning::
 

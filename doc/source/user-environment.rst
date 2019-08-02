@@ -272,7 +272,7 @@ using this tool.
 .. _setup-conda-envs:
 
 Allow users to create their own ``conda`` environments for notebooks
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Sometimes you want users to be able to create their own ``conda`` environments.
 By default, any environments created in a JupyterHub session will not persist

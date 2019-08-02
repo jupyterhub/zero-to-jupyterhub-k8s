@@ -123,7 +123,7 @@ find the true count of currently 'ready' nodes using ``kubectl get node`` to
 report the current ``Ready/NotReady`` status of all nodes in the cluster.
 
 Microsoft Azure Platform
-~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 Use the ``scale`` command and
 provide a new cluster size (i.e. number of nodes) as a command line option
 ``--node-count``:
