@@ -73,6 +73,70 @@ This would limit your users to a maximum of .5 of a CPU (so 1/2 of a CPU core), 
 
    Remember to :ref:`apply the change <apply-config-changes>` after changing your ``config.yaml`` file!
 
+Set user GPU guarantees / limits
+--------------------------------
+
+It is possible to allocate GPUs to your user. This is useful for heavier
+workloads, such as deep learning, that can take advantage of GPUs.
+
+For example, to create a profile that allocates one NVIDIA GPU:
+
+    .. code-block:: yaml
+
+       singleuser:
+        profileList:
+          - display_name: "GPU Server"
+            description: "Spawns a notebook server with access to a GPU"
+            kubespawner_override:
+              extra_resource_limits:
+                nvidia.com/gpu: "1"
+
+This assumes that at least one of your Kubernetes nodes has compatible GPUs
+attached. The method for doing this differs according to your infrastructure
+provider. Here are a few links to help you get started:
+
+- `Google Kubernetes Engine (GKE)<https://cloud.google.com/kubernetes-engine/docs/how-to/gpus>`_
+- `Amazon Elastic Kubernetes Service (EKS)<https://aws.amazon.com/blogs/compute/running-gpu-accelerated-kubernetes-workloads-on-p3-and-p2-ec2-instances-with-amazon-eks/>`_
+- `Azure Kubernetes Service (AKS)<https://cloud.google.com/kubernetes-engine/docs/how-to/gpus>`_
+
+You will also need to deploy the k8s-device-plugin following the instructions `here<https://github.com/NVIDIA/k8s-device-plugin#quick-start>`_.
+
+To check that your GPUs are schedulable by Kubernetes, you can run the following command:
+
+    .. code-block:: none
+
+       kubectl get nodes -o=custom-columns=NAME:.metadata.name,GPUs:.status.capacity.'nvidia\.com/gpu'
+
+Modifying user shared memory size
+---------------------------------
+
+It is also beneficial to increase the shared memory (SHM) allocation on pods
+running workloads like deep learning. This is required for functions like
+PyTorch's DataLoader to run properly.
+
+The following configuration will increase the SHM allocation by mounting a
+:code:`tmpfs` (ramdisk) at :code:`/dev/shm`, replacing the default 64MB allocation.
+
+    .. code-block:: yaml
+
+       singleuser:
+        storage:
+          extraVolumes:
+            - name: shm-volume
+              emptyDir:
+                medium: Memory
+          extraVolumeMounts:
+            - name: shm-volume
+              mountPath: /dev/shm
+
+The volume :code:`shm-volume` will be created when the user's pod is created, 
+and destroyed after the pod is destroyed.
+
+Some important notes regarding SHM allocation:
+
+- SHM usage by the pod will count towards its memory limit
+- When the memory limit is exceeded, the pod will be evicted
+
 Modifying user storage type and size
 ------------------------------------
 
