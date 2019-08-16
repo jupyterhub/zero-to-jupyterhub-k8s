@@ -180,6 +180,7 @@ spec:
             - containerPort: 8081
               name: hub
           livenessProbe:
+            initialDelaySeconds: 30
             httpGet:
               path: {{ .Values.hub.baseUrl }}hub/health
               port: hub
