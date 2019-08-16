@@ -181,9 +181,9 @@ spec:
               name: hub
           livenessProbe:
             httpGet:
-              path: /health
+              path: {{ .Values.hub.baseUrl }}hub/health
               port: hub
           readinessProbe:
             httpGet:
-              path: /health
+              path: {{ .Values.hub.baseUrl }}hub/health
               port: hub
