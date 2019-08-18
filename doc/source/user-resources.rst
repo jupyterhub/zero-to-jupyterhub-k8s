@@ -95,11 +95,11 @@ This assumes that at least one of your Kubernetes nodes has compatible GPUs
 attached. The method for doing this differs according to your infrastructure
 provider. Here are a few links to help you get started:
 
-- `Google Kubernetes Engine (GKE)<https://cloud.google.com/kubernetes-engine/docs/how-to/gpus>`_
-- `Amazon Elastic Kubernetes Service (EKS)<https://aws.amazon.com/blogs/compute/running-gpu-accelerated-kubernetes-workloads-on-p3-and-p2-ec2-instances-with-amazon-eks/>`_
-- `Azure Kubernetes Service (AKS)<https://cloud.google.com/kubernetes-engine/docs/how-to/gpus>`_
+- `Google Kubernetes Engine (GKE) <https://cloud.google.com/kubernetes-engine/docs/how-to/gpus>`_
+- `Amazon Elastic Kubernetes Service (EKS) <https://aws.amazon.com/blogs/compute/running-gpu-accelerated-kubernetes-workloads-on-p3-and-p2-ec2-instances-with-amazon-eks/>`_
+- `Azure Kubernetes Service (AKS) <https://cloud.google.com/kubernetes-engine/docs/how-to/gpus>`_
 
-You will also need to deploy the k8s-device-plugin following the instructions `here<https://github.com/NVIDIA/k8s-device-plugin#quick-start>`_.
+You will also need to deploy the k8s-device-plugin following the instructions `here <https://github.com/NVIDIA/k8s-device-plugin#quick-start>`_.
 
 To check that your GPUs are schedulable by Kubernetes, you can run the following command:
 
