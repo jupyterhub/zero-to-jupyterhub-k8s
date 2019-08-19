@@ -70,7 +70,7 @@ image containing useful tools and libraries for datascience, complete these step
    .. note::
 
       If you have configured *prePuller.hook.enabled*, all the nodes in your
-      cluster will pull the image before the the hub is upgraded to let users
+      cluster will pull the image before the hub is upgraded to let users
       use the image. The image pulling may take several minutes to complete,
       depending on the size of the image.
 
@@ -272,7 +272,7 @@ using this tool.
 .. _setup-conda-envs:
 
 Allow users to create their own ``conda`` environments for notebooks
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Sometimes you want users to be able to create their own ``conda`` environments.
 By default, any environments created in a JupyterHub session will not persist

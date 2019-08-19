@@ -1,7 +1,7 @@
 .. _microsoft-azure:
 
 Step Zero: Kubernetes on Microsoft Azure Kubernetes Service (AKS)
-----------------------------------------------------------------
+-----------------------------------------------------------------
 
 You can create a Kubernetes cluster `either through the Azure portal website, or using the Azure command line tools <https://docs.microsoft.com/en-us/azure/aks/>`_.
 
