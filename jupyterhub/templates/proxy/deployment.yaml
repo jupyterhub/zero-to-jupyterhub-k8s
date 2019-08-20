@@ -103,3 +103,11 @@ spec:
               name: proxy-public
             - containerPort: 8001
               name: api
+          livenessProbe:
+            httpGet:
+              path: /_chp_healthz
+              port: proxy-public
+          readinessProbe:
+            httpGet:
+              path: /_chp_healthz
+              port: proxy-public
