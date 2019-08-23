@@ -147,6 +147,14 @@ spec:
               name: proxy-http
             - containerPort: 8001
               name: api
+          livenessProbe:
+            httpGet:
+              path: /_chp_healthz
+              port: proxy-http
+          readinessProbe:
+            httpGet:
+              path: /_chp_healthz
+              port: proxy-http
         {{- if $autoHTTPS }}
         - name: storeconfig-job
           image: "{{ .Values.proxy.traefik.image.name }}:{{ .Values.proxy.traefik.image.tag }}"

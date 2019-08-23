@@ -3,6 +3,7 @@ from datetime import datetime as py_dtime
 from datetime import timedelta
 import pandas as pd
 import requests
+import re
 from bs4 import BeautifulSoup as bs4
 
 from bqplot import LinearScale, Axis, Lines, Figure, DateScale
@@ -19,6 +20,17 @@ resp = requests.get('https://cloud.google.com/compute/pricing')
 html = bs4(resp.text)
 
 # Munge the cost data
+def clean_promo(in_value, use_promo=False):
+    # cleans listings with promotional pricing
+    # defaults to non-promo pricing with use_promo
+    if in_value.find("promo") > -1:
+        if use_promo:
+            return re.search("\d+\.\d+", in_value)[0]
+        else:
+            return re.search("\d+\.\d+", in_value[in_value.find("("):])[0]
+    else:
+        return in_value
+
 all_dfs = []
 for table in html.find_all('table'):
     header = table.find('thead').find_all('th')
@@ -32,14 +44,15 @@ for table in html.find_all('table'):
             if 'default' in jj.attrs.keys():
                 thisrow.append(jj.attrs['default'])
             elif 'ore-hourly' in jj.attrs.keys():
-                thisrow.append(jj.attrs['ore-hourly'].strip('$'))
+                thisrow.append(clean_promo(jj.attrs['ore-hourly'].strip('$')))
             elif 'ore-monthly' in jj.attrs.keys():
-                thisrow.append(jj.attrs['ore-monthly'].strip('$'))
+                thisrow.append(clean_promo(jj.attrs['ore-monthly'].strip('$')))
             else:
                 thisrow.append(jj.text.strip())
         rows.append(thisrow)
     df = pd.DataFrame(rows[:-1], columns=header)
     all_dfs.append(df)
+
 
 # Pull out our reference dataframes
 disk = [df for df in all_dfs if 'Price (per GB / month)' in df.columns][0]
@@ -196,3 +209,4 @@ def cost_display(n_days=7):
     display(users, machines, mem_per_user, storage_per_user, persistent, fig, hr,
             text_cost_machine, text_avg_num_machine, text_cost_storage, text_cost_total)
     return fig
+

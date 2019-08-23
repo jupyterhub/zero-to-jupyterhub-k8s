@@ -126,7 +126,11 @@ to configure JupyterHub to build off of this image:
       singleuser:
         image:
           name: <your-image-reference>
-          tag: <tag>
+          tag: "<tag>"
+
+    If the tag is the first several characters of the SHA and they happen to
+    all be numerical, you *must* use quotes around the tag as above in order
+    for the YAML to be parsed correctly.
 
 7. **Tell helm to update JupyterHub to use this configuration.**
 

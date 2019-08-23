@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 
-ARG JUPYTERHUB_VERSION=0.9.*
+ARG JUPYTERHUB_VERSION=1.0.*
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -14,8 +14,11 @@ RUN apt-get update && \
       libcurl4-openssl-dev \
       build-essential \
       sqlite3 \
+      curl \
+      dnsutils \
       $(bash -c 'if [[ $JUPYTERHUB_VERSION == "git"* ]]; then \
-        echo npm; \
+        # workaround for https://bugs.launchpad.net/ubuntu/+source/nodejs/+bug/1794589
+        echo nodejs=8.10.0~dfsg-2ubuntu0.2 nodejs-dev=8.10.0~dfsg-2ubuntu0.2 npm; \
       fi') \
       && \
     apt-get purge && apt-get clean

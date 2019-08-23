@@ -1,7 +1,11 @@
 .. _microsoft-azure:
 
-Step Zero: Kubernetes on Microsoft Azure Kubernetes Service (AKS)
------------------------------------------------------------------
+Step Zero: Kubernetes on Microsoft Azure Kubernetes Service (AKS) with Autoscaling
+----------------------------------------------------------------------------------
+
+.. warning::
+
+  These instructions involve part of the Azure command line that are in preview, hence the following documentation to subject to change.
 
 You can create a Kubernetes cluster `either through the Azure portal website, or using the Azure command line tools <https://docs.microsoft.com/en-us/azure/aks/>`_.
 
@@ -60,6 +64,38 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
       az account set -s <YOUR-CHOSEN-SUBSCRIPTION-NAME>
 
 
+#. Setup the CLI for Autoscaling features.
+   First install the `aks-preview <https://github.com/Azure/azure-cli-extensions/tree/master/src/aks-preview>`_ CLI extension.
+   This will grant access to new commands.
+
+   .. code-block:: bash
+
+     az extension add --name aks-preview
+
+   We then need to register the scale set feature.
+
+   .. code-block:: bash
+
+     az feature register --name VMSSPreview --namespace Microsoft.ContainerService
+
+   A VMSS is a `Virtual Machine Scale Set <https://docs.microsoft.com/en-us/azure/virtual-machine-scale-sets/overview>`_, that is to say an autoscalable set of virtual machines.
+
+   The previous command will take a while to register.
+   Use the following command to check it's status.
+
+   .. code-block:: bash
+
+     az feature list \
+       --output table \
+       --query  "[?contains(name, 'Microsoft.ContainerService/VMSSPreview')].{Name:name,State:properties.state}"
+
+   Once the VMSSPreview feature has been registered, refresh the registration with the following command.
+
+   .. code-block:: bash
+
+     az provider register --namespace Microsoft.ContainerService
+
+
 #. Create a resource group. Azure uses the concept of
    **resource groups** to group related resources together.
    We need to create a resource group in a given data center location. We will create
@@ -69,7 +105,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
      az group create \
                    --name=<RESOURCE-GROUP-NAME> \
-                   --location=centralus \
+                   --location=<LOCATION> \
                    --output table
 
    where:
@@ -79,7 +115,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
      for UC Berkeley's 2018 Spring Data100 Course, you may give it a
      ``<RESOURCE-GROUP-NAME>`` of ``ucb_2018sp_data100_hub``.
    * ``--location`` specifies the location of the data center you want your resource to be in.
-     In this case, we used the ``centralus`` location. For other options, see the
+     For options, see the
      `Azure list of locations that support AKS
      <https://docs.microsoft.com/en-us/azure/aks/container-service-quotas#region-availability>`_.
    * ``--output table`` specifies that the output should be in human readable
@@ -91,6 +127,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
        Consider `setting a cloud budget <https://docs.microsoft.com/en-us/partner-center/set-an-azure-spending-budget-for-your-customers>`_
        for your Azure account in order to make sure you don't accidentally
        spend more than you wish to.
+
 
 #. Choose a cluster name.
 
@@ -121,6 +158,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
       This command will also print out something to your terminal screen. You
       don't need to do anything with this text.
 
+
 #. Create an AKS cluster.
 
    The following command will request a Kubernetes cluster within the resource
@@ -133,22 +171,31 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
                     --ssh-key-value ssh-key-<CLUSTER-NAME>.pub \
                     --node-count 3 \
                     --node-vm-size Standard_D2s_v3 \
+                    --enable-vmss \
+                    --enable-cluster-autoscaler \
+                    --min-count 3 \
+                    --max-count 6 \
+                    --kubernetes-version 1.12.7 \
                     --output table
 
    where:
 
    * ``--name`` is the name you want to use to refer to your cluster
    * ``--resource-group`` is the ResourceGroup you created in step 4
-   * ``--ssh-key-value`` is the ssh public key created in step 7
+   * ``--ssh-key-value`` is the ssh public key created in step 6
    * ``--node-count`` is the number of nodes you want in your Kubernetes cluster
    * ``--node-vm-size`` is the size of the nodes you want to use, which varies based on
      what you are using your cluster for and how much RAM/CPU each of your users need.
      There is a `list of all possible node sizes <https://docs.microsoft.com/en-us/azure/cloud-services/cloud-services-sizes-specs>`_
      for you to choose from, but not all might be available in your location.
      If you get an error whilst creating the cluster you can try changing either the region or the node size.
-   * This will install the default version of Kubernetes. You can pass ``--kubernetes-version`` to install a different version.
+   * ``--enable-vmss`` deploys the cluster as a scale set.
+   * ``--enable-cluster-autoscaler`` installs a `Cluster Autoscaler <https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler>`_ onto the cluster (though counterintuitively, does not enable it!).
+   * ``--min-count``/``--max-count`` are the minimum/maximum number of nodes in the cluster at any time.
+   * ``--kubernetes-version`` installs a specific version of Kubernetes onto the cluster. To autoscale, we require ``>= v 1.12.4``.
 
    This should take a few minutes and provide you with a working Kubernetes cluster!
+
 
 #. If you're using the Azure CLI locally, install `kubectl <https://kubernetes.io/docs/reference/kubectl/overview/>`_, a tool
    for accessing the Kubernetes API from the commandline:
@@ -158,6 +205,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
       az aks install-cli
 
    Note: kubectl is already installed in Azure Cloud Shell.
+
 
 #. Get credentials from Azure for ``kubectl`` to work:
 
@@ -170,10 +218,11 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
    where:
 
-   * ``--name`` is the name you gave your cluster in step 7
+   * ``--name`` is the name you gave your cluster in step 5
    * ``--resource-group`` is the ResourceGroup you created in step 4
 
    This automatically updates your Kubernetes client configuration file.
+
 
 #. Check if your cluster is fully functional
 
@@ -184,6 +233,72 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
    The response should list three running nodes and their Kubernetes versions!
    Each node should have the status of ``Ready``, note that this may take a
    few moments.
+
+
+#. Enabling Autoscaling
+
+   We now move to the Azure Portal to enable autoscaling and set rules to manage the Cluster Autoscaler.
+
+   First we need to register `Microsoft Insights <https://docs.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview>`_ for use on the active subscription.
+
+   .. code-block:: bash
+
+     az provider register --namespace microsoft.insights
+
+   To check the status of the registration, run the following command:
+
+   .. code-block:: bash
+
+     az provider show -n microsoft.insights
+
+   Once the application has been registered, navigate to your active subscription on the `Portal <https://portal.azure.com/>`_.
+
+   Under "Resources", select the VMSS.
+   It should be named something like ``aks-nodepool1-<random-str>-vmss``.
+
+   .. image:: ../_static/images/azure/select_vmss.png
+      :align: center
+
+   From the left-hand menu, select "Scaling".
+   Click the blue "Enable autoscaling" button and an autogenerated form for a scale condition will appear.
+   We will add two new rules to this condition:
+
+   * Increase the instance count by 1 when the average CPU usage over 10 minutes is greater than 70%
+   * Decrease the instance count by 1 when the average CPU usage over 10 minutes is less than 5%
+
+   .. image:: ../_static/images/azure/scale_condition.png
+      :align: center
+
+   Make sure the "Scale based on metric" option is selected and click "+ Add new rule", another autogenerated form will appear.
+   This will be pre-filled with the required settings to fulfill our first rule, so save it by clicking "Update" and click "+ Add new rule" again.
+
+   .. image:: ../_static/images/azure/scale_out.png
+      :align: center
+
+   The second form needs to be edited for the second rule to decrease the instance count by 1 when the average CPU usage over 10 minutes is less than 5%.
+   Save this rule and then save the overall scale condition, the cluster will be updated automatically.
+
+   .. image:: ../_static/images/azure/scale_in.png
+      :align: center
+
+   .. note::
+
+     This form can also be used to change ``--node-count``/``--min-count``/``--max-count`` that was set in step 7 by using the "Instance limits" section of the scale condition ("Default", "Minimum" and "Maximum" respectively).
+
+     If you prefer to use the command line, you can run the following:
+
+       .. code-block:: bash
+
+         az aks update \
+           --name <CLUSTER-NAME> \
+           --resource-group <RESOURCE-GROUP> \
+           --update-cluster-autoscaler \
+           --min-count <DESIRED-MINIMUM-COUNT> \
+           --max-count <DESIRED-MAXIMUM-COUNT> \
+           --output table
+
+     **Both** ``--min-count`` and ``--max-count`` must be defined.
+
 
 .. note::
 

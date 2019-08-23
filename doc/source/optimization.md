@@ -22,10 +22,6 @@ A reasonable final configuration for efficient autoscaling could look something
 like this:
 
 ```yaml
-prePuller:
-  continuous:
-    enabled: true
-
 scheduling:
   userScheduler:
     enabled: true
@@ -96,7 +92,7 @@ situations:
     come fresh without any images on their disks, a user pod arriving to this
     node will be forced to wait while the image is pulled.
 
-    With the *continuous-image-puller* enabled (**disabled** by default), the user's
+    With the *continuous-image-puller* enabled (**enabled** by default), the user's
     container image will be pulled when a new node is added. New nodes can for
     example be added manually or by a cluster autoscaler. The continuous
     image-puller uses a
@@ -104,14 +100,14 @@ situations:
     to force Kubernetes to pull the user image on all nodes as soon as a node is
     present.
 
-    The continuous-image-puller is disabled by default. To enable it, use the
+    The continuous-image-puller is enabled by default. To disable it, use the
     following snippet in your `config.yaml`:
 
     ```yaml
     prePuller:
       continuous:
         # NOTE: if used with a Cluster Autoscaler, also add user-placeholders
-        enabled: true
+        enabled: false
     ```
 
     It is important to realize that if the continuous-image-puller together with
@@ -120,7 +116,7 @@ situations:
     generally fail to do so. This is because it will only add a node if one or
     more pods won't fit on the current nodes but would fit more if a node is
     added, but at that point users are already waiting. To scale up nodes ahead
-    of time we can use *user-placeholders*.
+    of time we can use [user-placeholders](#scaling-up-in-time-user-placeholders).
 
 ### The images that will be pulled
 
@@ -134,7 +130,7 @@ the following paths:
 - `singleuser.image`
 - `singleuser.profileList[].kubespawner_override.image`
 - `singleuser.extraContainers[].image`
-- `prePuller.extraImages[].someName`
+- `prePuller.extraImages.someName`
 
 #### Additional sources
 - `singleuser.networkTools.image`

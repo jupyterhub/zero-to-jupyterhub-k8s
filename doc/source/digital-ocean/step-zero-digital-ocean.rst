@@ -70,7 +70,5 @@ If you prefer to use the Digital Ocean portal see the `Digital Ocean Get Started
    Each node should have the status of ``Ready``, note that this may take a
    few moments.
 
-.. note::
-
 Congrats. Now that you have your Kubernetes cluster running, it's time to
 begin :ref:`creating-your-jupyterhub`.

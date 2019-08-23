@@ -10,6 +10,7 @@ hub:
   baseUrl: /
   cookieSecret:
   publicURL:
+  initContainers: []
   uid: 1000
   fsGid: 1000
   nodeSelector: {}
@@ -258,8 +259,8 @@ singleuser:
 
 scheduling:
   userScheduler:
-    enabled: false
-    replicas: 1
+    enabled: true
+    replicas: 2
     logLevel: 4
     image:
       name: gcr.io/google_containers/kube-scheduler-amd64
@@ -295,7 +296,7 @@ prePuller:
       name: jupyterhub/k8s-image-awaiter
       tag: generated-by-chartpress
   continuous:
-    enabled: false
+    enabled: true
   extraImages: {}
   pause:
     image:

@@ -61,6 +61,10 @@ spec:
       {{- if .Values.hub.imagePullSecret.enabled }}
       imagePullSecrets:
         - name: hub-image-credentials
+      {{- end }}  
+      {{- if .Values.hub.initContainers }}
+      initContainers:
+        {{- .Values.hub.initContainers | toYaml | trimSuffix "\n" | nindent 8 }}
       {{- end }}
       containers:
         {{- if .Values.hub.extraContainers }}
@@ -179,6 +183,8 @@ spec:
           {{- end }}
           securityContext:
             runAsUser: {{ .Values.hub.uid }}
+            # Don't allow any process to execute as root inside the container
+            allowPrivilegeEscalation: false
           env:
             - name: PYTHONUNBUFFERED
               value: "1"
@@ -238,4 +244,19 @@ spec:
           ports:
             - containerPort: 8081
               name: hub
-
+          ## livenessProbe notes:
+          ## We don't know how long hub database upgrades could take
+          ## so having a liveness probe could be a bit risky unless we put
+          ## a initialDelaySeconds value with long enough margin for that
+          ## to not be an issue. If it is too short, we could end up aborting
+          ## database upgrades midway or ending up in an infinite restart
+          ## loop.
+          # livenessProbe:
+          #   initialDelaySeconds: 30
+          #   httpGet:
+          #     path: {{ .Values.hub.baseUrl }}hub/health
+          #     port: hub
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.hub.baseUrl }}hub/health
+              port: hub

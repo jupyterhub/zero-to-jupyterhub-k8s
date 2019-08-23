@@ -1,6 +1,7 @@
 # jupyterhub version is defined in chartpress.yaml
 jupyterhub-dummyauthenticator==0.3.1
-jupyterhub-tmpauthenticator==0.5
+jupyterhub-firstuseauthenticator==0.12
+jupyterhub-tmpauthenticator==0.6
 jupyterhub-ltiauthenticator==0.3
 jupyterhub-ldapauthenticator==1.2.2
 jupyterhub-kubespawner==0.10.1
@@ -16,3 +17,5 @@ mwoauth==0.3.2
 globus_sdk[jwt]==1.5.0
 cryptography==2.3.*
 jupyterhub-hmacauthenticator
+# Very useful for profiling running hubs
+py-spy

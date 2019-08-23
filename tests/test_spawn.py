@@ -1,18 +1,27 @@
 import os
-import requests
-import pytest
 import subprocess
 import time
+
+import pytest
+import requests
+import yaml
 
 # Makes heavy use of JupyterHub's API:
 # http://petstore.swagger.io/?url=https://raw.githubusercontent.com/jupyterhub/jupyterhub/master/docs/rest-api.yml
 
+# load app version of chart
+here = os.path.dirname(os.path.abspath(__file__))
+chart_yaml = os.path.join(here, os.pardir, 'jupyterhub', 'Chart.yaml')
+
+with open(chart_yaml) as f:
+    chart = yaml.safe_load(f)
+    jupyterhub_version = chart['appVersion']
 
 def test_api(api_request):
     print("asking for the hub's version")
     r = api_request.get('')
     assert r.status_code == 200
-    assert r.json() == {"version": "1.0.0b2"}
+    assert r.json().get("version", "version-missing") == jupyterhub_version
 
 
 def test_api_info(api_request):
