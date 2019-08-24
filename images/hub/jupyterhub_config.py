@@ -330,7 +330,7 @@ elif auth_type == 'ldap':
 elif auth_type == 'custom':
     # full_class_name looks like "myauthenticator.MyAuthenticator".
     # To create a docker image with this class availabe, you can just have the
-    # following Dockerifle:
+    # following Dockerfile:
     #   FROM jupyterhub/k8s-hub:v0.4
     #   RUN pip3 install myauthenticator
     full_class_name = get_config('auth.custom.className')
