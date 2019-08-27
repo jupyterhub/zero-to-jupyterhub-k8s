@@ -106,8 +106,8 @@ spec:
           livenessProbe:
             httpGet:
               path: /_chp_healthz
-              port: proxy-public
+              port: proxy-https
           readinessProbe:
             httpGet:
               path: /_chp_healthz
-              port: proxy-public
+              port: proxy-https
