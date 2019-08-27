@@ -37,11 +37,6 @@ echo "starting cluster with kind"
 $PWD/bin/kind create cluster --image kindest/node:v${KUBE_VERSION}
 export KUBECONFIG="$($PWD/bin/kind get kubeconfig-path --name=kind)"
 
-echo "waiting for kubernetes"
-JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'
-until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do
-  sleep 1
-done
 kubectl get nodes
 
 echo "installing helm"
