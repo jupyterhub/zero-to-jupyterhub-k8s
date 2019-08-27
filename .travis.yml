@@ -20,6 +20,7 @@ env:
     - SCENARIO=1.13-default RUNNER=minikube
     - SCENARIO=1.12-netpol RUNNER=minikube
     - SCENARIO=1.11-default RUNNER=minikube
+    - SCENARIO=1.15-default RUNNER=kind
     - SCENARIO=1.14-default RUNNER=kind
     - SCENARIO=1.13-default RUNNER=kind
     - SCENARIO=1.12-default RUNNER=kind
