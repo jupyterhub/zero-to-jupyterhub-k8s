@@ -10,10 +10,6 @@ if [[
 ]]; then
     ./ci/publish-chart.sh
 else
-
-    echo "is chartpress detection failing?"
-    python3 -c 'import docker;  print(docker.from_env().images.get_registry_data("jupyterhub/k8s-hub:0.9-c9f80ce").id)'
-
     chartpress --commit-range ${TRAVIS_COMMIT_RANGE}
 fi
 git diff
