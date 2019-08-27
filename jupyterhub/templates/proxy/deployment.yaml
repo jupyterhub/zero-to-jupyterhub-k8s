@@ -106,8 +106,16 @@ spec:
           livenessProbe:
             httpGet:
               path: /_chp_healthz
+              {{- if or $manualHTTPS $manualHTTPSwithsecret }}
               port: proxy-https
+              {{- else }}
+              port: proxy-public
+              {{- end }}
           readinessProbe:
             httpGet:
               path: /_chp_healthz
+              {{- if or $manualHTTPS $manualHTTPSwithsecret }}
               port: proxy-https
+              {{- else }}
+              port: proxy-public
+              {{- end }}
