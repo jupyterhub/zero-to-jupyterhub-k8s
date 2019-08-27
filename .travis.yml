@@ -7,6 +7,7 @@ git:
 services:
   - docker
 install:
+  - ./ci/docker-fixes.sh
   - pip3 install --no-cache-dir -r dev-requirements.txt
   - . "ci/${RUNNER}-${SCENARIO}.env"
   - ./ci/install-${RUNNER}.sh
