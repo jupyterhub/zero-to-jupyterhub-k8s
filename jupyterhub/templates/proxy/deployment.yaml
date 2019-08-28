@@ -108,14 +108,18 @@ spec:
               path: /_chp_healthz
               {{- if or $manualHTTPS $manualHTTPSwithsecret }}
               port: proxy-https
+              scheme: HTTPS
               {{- else }}
               port: proxy-public
+              scheme: HTTP
               {{- end }}
           readinessProbe:
             httpGet:
               path: /_chp_healthz
               {{- if or $manualHTTPS $manualHTTPSwithsecret }}
               port: proxy-https
+              scheme: HTTPS
               {{- else }}
               port: proxy-public
+              scheme: HTTP
               {{- end }}
