@@ -62,6 +62,7 @@ hub:
     minAvailable: 1
   networkPolicy:
     enabled: false
+    ingress: []
     egress:
       - to:
           - ipBlock:
@@ -124,6 +125,7 @@ proxy:
     hosts: []
   networkPolicy:
     enabled: false
+    ingress: []
     egress:
       - to:
           - ipBlock:
@@ -170,6 +172,7 @@ singleuser:
     ip: 169.254.169.254
   networkPolicy:
     enabled: false
+    ingress: []
     egress:
     # Required egress is handled by other rules so it's safe to modify this
       - to:

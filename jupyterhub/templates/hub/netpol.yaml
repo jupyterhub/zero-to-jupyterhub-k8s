@@ -20,9 +20,9 @@ spec:
       ports:
         - protocol: TCP
           port: 8081
-    {{- /* Useful if you want to give hub access to pods from other namespaces */ }}
-    {{- if .Values.hub.networkPolicy.ingress.extraRules }}
-    {{- .Values.hub.networkPolicy.ingress.extraRules | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- /* Useful if you want to give hub access to pods from other namespaces */}}
+    {{- if .Values.hub.networkPolicy.ingress}}
+    {{- .Values.hub.networkPolicy.ingress| toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
   egress:
     {{- /*
