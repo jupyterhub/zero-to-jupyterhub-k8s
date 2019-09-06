@@ -21,6 +21,10 @@ spec:
       ports:
         - protocol: TCP
           port: 8888
+    {{- /* Useful if you want to give user server access to pods from other namespaces */}}
+    {{- if .Values.singleuser.networkPolicy.ingress }}
+    {{- .Values.singleuser.networkPolicy.ingress | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- end }}
   egress:
     - to:
         - podSelector:

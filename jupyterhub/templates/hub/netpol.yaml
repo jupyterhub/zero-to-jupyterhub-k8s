@@ -27,6 +27,10 @@ spec:
       ports:
         - protocol: TCP
           port: 2379
+    {{- /* Useful if you want to give hub access to pods from other namespaces */}}
+    {{- if .Values.hub.networkPolicy.ingress}}
+    {{- .Values.hub.networkPolicy.ingress| toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- end }}
   egress:
     {{- /*
     The default is to allow all egress for hub If you want to restrict it the

@@ -223,7 +223,25 @@ container, meaning that commands that place files relative to ``./`` will result
 in users seeing those files in their home directory. You can use commands like
 ``wget`` to place files where you like.
 
-However, keep in mind that this command will be run **each time** a user starts
+A simple way to populate the notebook user's home directory is to add the
+required files to the container's `/tmp` directory and then copy them to
+`/home/jovyan` using a ``postStart`` hook. This example shows the use of
+multiple commands.
+
+.. code-block:: yaml
+
+   singleuser:
+    lifecycleHooks:
+        postStart:
+          exec:
+            command:
+              - "sh"
+              - "-c"
+              - >
+                cp -r /tmp/foo /home/jovyan;
+                cp -r /tmp/bar /home/jovyan
+
+Keep in mind that commands will be run **each time** a user starts
 their server. For this reason, we recommend using ``nbgitpuller`` to synchronize
 your user folders with a git repository.
 
