@@ -62,11 +62,9 @@ spec:
         - name: htpasswd
           image: {{ .Values.proxy.htpasswd.image.name }}:{{ .Values.proxy.htpasswd.image.tag }}
           args:
-            - htpasswd
-            - -bc
-            - /htpasswd/htpasswd
-            - api_admin
-            - $PROXY_PASSWORD
+            - sh
+            - -c
+            - htpasswd -bc /htpasswd/htpasswd api_admin $PROXY_PASSWORD
           env:
             - name: PROXY_PASSWORD
               valueFrom:
