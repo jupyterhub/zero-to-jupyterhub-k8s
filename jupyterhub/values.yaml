@@ -68,6 +68,12 @@ hub:
           - ipBlock:
               cidr: 0.0.0.0/0
   allowNamedServers: false
+  namedServerLimitPerUser:
+  authenticatePrometheus:
+  redirectToServer:
+  shutdownOnLogout:
+  templatePaths: []
+  templateVars: {}
 
 
 rbac:
@@ -228,6 +234,7 @@ singleuser:
     guarantees: {}
   cmd: jupyterhub-singleuser
   defaultUrl:
+  extraPodConfig: {}
 
 
 scheduling:
