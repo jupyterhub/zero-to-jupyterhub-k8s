@@ -225,6 +225,36 @@ component: {{ include "jupyterhub.componentLabel" . }}
 {{- end }}
 
 {{- /*
+  jupyterhub.dockerproxyconfigjson:
+    Creates a base64 encoded docker registry json blob for use in a image pull
+    secret, just like the `kubectl create secret docker-registry` command does
+    for the generated secrets data.dockerproxyconfigjson field. The output is
+    verified to be exactly the same even if you have a password spanning
+    multiple lines as you may need to use a private GCR registry.
+    - https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
+*/}}
+{{- define "jupyterhub.dockerproxyconfigjson" -}}
+{{ include "jupyterhub.dockerproxyconfigjson.yaml" . | b64enc }}
+{{- end }}
+
+{{- define "jupyterhub.dockerproxyconfigjson.yaml" -}}
+{{- with .Values.proxy.chp.imagePullSecret -}}
+{
+  "auths": {
+    {{ .registry | default "https://index.docker.io/v1/" | quote }}: {
+      "username": {{ .username | quote }},
+      "password": {{ .password | quote }},
+      {{- if .email }}
+      "email": {{ .email | quote }},
+      {{- end }}
+      "auth": {{ (print .username ":" .password) | b64enc | quote }}
+    }
+  }
+}
+{{- end }}
+{{- end }}
+
+{{- /*
   jupyterhub.resources:
     The resource request of a singleuser.
 */}}

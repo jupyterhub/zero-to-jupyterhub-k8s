@@ -92,6 +92,12 @@ proxy:
       requests:
         cpu: 200m
         memory: 512Mi
+    imagePullSecret:
+      enabled: false
+      registry:
+      username:
+      email:
+      password:
   nginx:
     image:
       name: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
