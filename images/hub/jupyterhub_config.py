@@ -133,7 +133,6 @@ for trait, cfg_key in (
     ('extra_resource_guarantees', 'extraResource.guarantees'),
     ('environment', 'extraEnv'),
     ('profile_list', None),
-    ('lifecycle_hooks', None),
     ('extra_pod_config', None),
 ):
     if cfg_key is None:
