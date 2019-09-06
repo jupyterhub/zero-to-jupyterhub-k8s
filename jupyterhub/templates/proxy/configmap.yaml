@@ -53,8 +53,8 @@ data:
       [entryPoints.api]
       address = ":8001"
         [entryPoints.api.auth]
-         [entryPoints.api.auth.basic]
-           usersFile = "/htpasswd/htpasswd"
+          [entryPoints.api.auth.basic]
+            usersFile = "/htpasswd/htpasswd"
 
     {{- if .Values.proxy.traefik.traefikLogFormat }}
     [traefikLog]
