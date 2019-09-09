@@ -1,9 +1,8 @@
 {{- $HTTPS := .Values.proxy.https.enabled -}}
-{{- $autoHTTPS := and $HTTPS (and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
 {{- $offloadHTTPS := and $HTTPS (eq .Values.proxy.https.type "offload") -}}
 {{- $manualHTTPS := and $HTTPS (eq .Values.proxy.https.type "manual") -}}
 {{- $manualHTTPSwithsecret := and $HTTPS (eq .Values.proxy.https.type "secret") -}}
-{{- $serveHTTPS := and $HTTPS (or $autoHTTPS $manualHTTPS $manualHTTPSwithsecret) }}
+{{- $serveHTTPS := and $HTTPS (or $manualHTTPS $manualHTTPSwithsecret) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -87,44 +86,6 @@ data:
     {{- if .Values.proxy.secretToken }}
     password = {{ .Values.proxy.secretToken | quote }}
     {{- end }}
-
-    {{- if $autoHTTPS }}
-    [acme]
-    email = {{ .Values.proxy.https.letsencrypt.email | quote }}
-    storage = "traefik/acme/account"
-    storageFile = "/acme/acme.json"
-    OverrideCertificates = true
-    entryPoint = "https"
-    onHostRule = {{ .Values.proxy.https.letsencrypt.onHostRule }}
-    {{- if .Values.proxy.https.letsencrypt.staging }}
-    caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
-    {{- end }}
-    {{- if .Values.proxy.https.letsencrypt.logging }}
-    acmeLogging = true
-    {{- end }}
-    {{- if .Values.proxy.https.letsencrypt.challengeType }}
-    {{- if eq .Values.proxy.https.letsencrypt.challengeType "dns-01" }}
-      [acme.dnsChallenge]
-      provider = {{ .Values.proxy.https.letsencrypt.dnsProvider.name | quote }}
-      {{- if .Values.proxy.https.letsencrypt.delayBeforeCheck }}
-      delayBeforeCheck = {{ .Values.proxy.https.letsencrypt.delayBeforeCheck }}
-      {{- end }}
-    {{- else if eq .Values.proxy.https.letsencrypt.challengeType "http-01" }}
-      [acme.httpChallenge]
-      entryPoint = "http"
-    {{- else if eq .Values.proxy.https.letsencrypt.challengeType "tls-alpn-01" }}
-      [acme.tlsChallenge]
-    {{- end }}
-    {{- end }}
-
-    {{- if .Values.proxy.https.domains }}
-    {{- range .Values.proxy.https.domains }}
-    [[acme.domains]]
-    main = "{{ . }}"
-    {{- end }}
-    {{- end }}
-
-    {{- end }} {{/* endif $autoHTTPS */}}
 
     [api]
       entryPoint = "api"

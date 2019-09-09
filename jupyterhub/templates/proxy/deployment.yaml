@@ -54,9 +54,6 @@ spec:
         - name: tls-secret
           secret:
             secretName: {{ .Values.proxy.https.secret.name }}
-      {{- else if $autoHTTPS }}
-        - name: acme
-          emptyDir: {}
       {{- end }}
       initContainers:
         - name: htpasswd
@@ -110,10 +107,6 @@ spec:
               name: tls-secret
               readOnly: true
             {{- end }}
-            {{- if $autoHTTPS }}
-            - mountPath: /acme
-              name: acme
-            {{- end }}
           resources:
             {{- .Values.proxy.traefik.resources | toYaml | trimSuffix "\n" | nindent 12 }}
           {{- with .Values.proxy.traefik.image.pullPolicy }}
@@ -140,6 +133,4 @@ spec:
           volumeMounts:
             - mountPath: /etc/traefik
               name: config
-            - mountPath: /acme
-              name: acme
         {{- end }}
