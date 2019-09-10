@@ -11,6 +11,8 @@ spec:
   selector:
     matchLabels:
       {{- include "jupyterhub.matchLabels" . | nindent 6 }}
+  strategy:
+    {{- .Values.proxy.deploymentStrategy | toYaml | trimSuffix "\n" | nindent 4 }}
   template:
     metadata:
       labels:
