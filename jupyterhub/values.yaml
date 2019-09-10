@@ -100,6 +100,17 @@ proxy:
     ##   as it only configured the old proxy pod but not the new before trying
     ##   to reach them.
     type: Recreate
+    ## rollingUpdate:
+    ## - WARNING:
+    ##   This is required to be set explicitly blank! Without it being
+    ##   explicitly blank, k8s will let eventual old values under rollingUpdate
+    ##   remain and then the Deployment becomes invalid and a helm upgrade would
+    ##   fail with an error like this:
+    ##
+    ##     UPGRADE FAILED
+    ##     Error: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
+    ##     Error: UPGRADE FAILED: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
+    rollingUpdate:
   service:
     type: LoadBalancer
     labels: {}
