@@ -72,7 +72,7 @@ spec:
           command:
             - jupyterhub
             - --config
-            - /srv/jupyterhub_config.py
+            - /etc/jupyterhub/jupyterhub_config.py
             {{- if .Values.debug.enabled }}
             - --debug
             {{- end }}
@@ -97,6 +97,15 @@ spec:
             {{- end }}
             {{- end }}
           volumeMounts:
+            - mountPath: /etc/jupyterhub/jupyterhub_config.py
+              subPath: jupyterhub_config.py
+              name: config
+            - mountPath: /usr/local/lib/python3.6/dist-packages/z2jh.py
+              subPath: z2jh.py
+              name: config
+            - mountPath: /usr/local/bin/cull_idle_servers.py
+              subPath: cull_idle_servers.py
+              name: config
             - mountPath: /etc/jupyterhub/config/
               name: config
             - mountPath: /etc/jupyterhub/secret/

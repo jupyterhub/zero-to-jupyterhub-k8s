@@ -34,3 +34,7 @@ data:
 {{- $_ := set $values "Release" (pick .Release "Name" "Namespace" "Service") }}
   values.yaml: |
     {{- $values | toYaml | nindent 4 }}
+
+  {{- /* Glob files to allow them to be mounted by the hub pod */ -}}
+  {{- /* key=filename: value=content */ -}}
+  {{- (.Files.Glob "files/hub/*").AsConfig | nindent 2 }}
