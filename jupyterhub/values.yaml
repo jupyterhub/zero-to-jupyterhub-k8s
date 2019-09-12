@@ -271,6 +271,7 @@ scheduling:
     enabled: true
     replicas: 2
     logLevel: 4
+    policy: {}
     image:
       name: gcr.io/google_containers/kube-scheduler-amd64
       tag: v1.11.2
