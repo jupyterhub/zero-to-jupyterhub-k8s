@@ -105,6 +105,7 @@ spec:
               name: config
             - mountPath: /usr/local/bin/cull_idle_servers.py
               subPath: cull_idle_servers.py
+              mode: 0555
               name: config
             - mountPath: /etc/jupyterhub/config/
               name: config
