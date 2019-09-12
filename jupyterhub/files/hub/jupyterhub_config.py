@@ -359,7 +359,8 @@ c.JupyterHub.services = []
 
 if get_config('cull.enabled', False):
     cull_cmd = [
-        'cull_idle_servers.py',
+        'python3',
+        '/etc/jupyterhub/cull_idle_servers.py',
     ]
     base_url = c.JupyterHub.get('base_url', '/')
     cull_cmd.append(
