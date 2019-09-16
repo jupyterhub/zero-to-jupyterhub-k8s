@@ -271,6 +271,15 @@ scheduling:
     enabled: true
     replicas: 2
     logLevel: 4
+    ## policy:
+    ## Allows you to provide custom YAML/JSON to render into a JSON policy.cfg,
+    ## a configuration file for the kube-scheduler binary.
+    ## NOTE: The kube-scheduler binary in the kube-scheduler image we are
+    ## currently using may be version bumped. It would for example happen if we
+    ## increase the lowest supported k8s version for the helm chart. At this
+    ## point, the provided policy.cfg may require a change along with that due
+    ## to breaking changes in the kube-scheduler binary.
+    policy: {}
     image:
       name: gcr.io/google_containers/kube-scheduler-amd64
       tag: v1.11.2
