@@ -36,8 +36,30 @@ spec:
       tolerations:
         {{- include "jupyterhub.userTolerations" . | nindent 8 }}
       nodeSelector: {{ toJson .Values.singleuser.nodeSelector }}
-      {{- if include "jupyterhub.userAffinity" . }}
       affinity:
+        # We ideally want *all* our placeholder pods to be in the newest
+        # autoscaled node. This way, user pods are packed in as tightly
+        # as possible, instead of nodes 'wasting' some resources on
+        # user placeholder pods that won't get pre-empted. Part of
+        # accomplishing this is:
+        #   1. Make sure the placeholder pods all hang out together.
+        #      This is accomplished using the custom user scheduler
+        #      right now.
+        #   2. Try and make sure user pods & placeholder pods do not
+        #      mix. This anti affinity term helps with that, although
+        #      there also needs to be active descheduling.
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: component
+                      operator: In
+                      values:
+                        - singleuser-server
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+      {{- if include "jupyterhub.userAffinity" . }}
         {{- include "jupyterhub.userAffinity" . | nindent 8 }}
       {{- end }}
       terminationGracePeriodSeconds: 0
