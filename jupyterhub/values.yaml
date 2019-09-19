@@ -120,6 +120,7 @@ proxy:
       https:
     loadBalancerIP:
     loadBalancerSourceRanges:
+      - 0.0.0.0/0
   chp:
     image:
       name: jupyterhub/configurable-http-proxy
