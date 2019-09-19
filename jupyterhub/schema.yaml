@@ -43,10 +43,10 @@ properties:
         description: |
           Creates an image pull secret for you and makes the hub pod utilize
           it, allowing it to pull images from private image registries.
-          
+
           Using this configuration option automates the following steps that
           normally is required to pull from private image registries.
-          
+
           ```sh
           # you won't need to run this manually...
           kubectl create secret docker-registry hub-image-credentials \
@@ -108,7 +108,7 @@ properties:
 
               For gcr.io registries the password will be a big JSON blob for a
               Google cloud service account, it should look something like below.
-                            
+
               ```yaml
               password: |-
                 {
@@ -144,7 +144,7 @@ properties:
             type: string
             description: |
               The tag of the image to pull.
-              
+
               This is the value after the `:` in your full image name.
 
               ```
@@ -280,7 +280,7 @@ properties:
         type: list
         description: |
           list of initContainers to be run with hub pod. See [Kubernetes Docs](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/)
-          
+
           ```yaml
           hub:
             initContainers:
@@ -398,6 +398,13 @@ properties:
                 service:
                   loadBalancerIP: xxx.xxx.xxx.xxx
               ```
+          loadBalancerSourceRanges:
+            type: list
+            description: |
+              A list of IP CIDR ranges that are allowed to access the load balancer service.
+              Defaults to allowing everyone to access it.
+
+              For more information please check the [Kubernetes documentation](https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service).
           ports:
             type: object
             description: |
@@ -451,7 +458,7 @@ properties:
         description: |
           Object to configure the service the JupyterHub's proxy will be exposed on by the Kubernetes server.
         properties:
-          type: 
+          type:
             type: string
             enum:
               - ClusterIP
@@ -567,12 +574,12 @@ properties:
               key:
                 type: string
                 description: |
-                  Path to the private key to be used for HTTPS. 
+                  Path to the private key to be used for HTTPS.
                   Example: `'tls.key'`
               crt:
                 type: string
                 description: |
-                  Path to the certificate to be used for HTTPS. 
+                  Path to the certificate to be used for HTTPS.
                   Example: `'tls.crt'`
           hosts:
             type: list
@@ -583,7 +590,7 @@ properties:
               ```
               hosts:
                 - <your-domain-name>
-              ```   
+              ```
       pdb:
         type: object
         description: |
@@ -655,7 +662,7 @@ properties:
         type: object
         description: |
           Set Memory limits & guarantees that are enforced for each user.
-          
+
           See the [Kubernetes docs](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container)
           for more info.
         properties:
@@ -674,10 +681,10 @@ properties:
         description: |
           Creates an image pull secret for you and makes the user pods utilize
           it, allowing them to pull images from private image registries.
-          
+
           Using this configuration option automates the following steps that
           normally is required to pull from private image registries.
-          
+
           ```sh
           # you won't need to run this manually...
           kubectl create secret docker-registry singleuser-image-credentials \
@@ -741,7 +748,7 @@ properties:
 
               For gcr.io registries the password will be a big JSON blob for a
               Google cloud service account, it should look something like below.
-                            
+
               ```yaml
               password: |-
                 {
@@ -840,7 +847,7 @@ properties:
           certain label (node affinity). They may also require to be scheduled
           in proximity or with a lack of proximity to another pod (pod affinity
           and anti pod affinity).
-          
+
           See the [Kubernetes
           docs](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/)
           for more info.
