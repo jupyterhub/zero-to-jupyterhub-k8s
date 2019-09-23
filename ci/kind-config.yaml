@@ -1,0 +1,11 @@
+## kind create cluster --config kind-config.yaml
+##
+## ref: https://github.com/kubernetes-sigs/kind/blob/master/site/content/docs/user/kind-example-config.yaml
+## ref: https://godoc.org/sigs.k8s.io/kind/pkg/apis/config/v1alpha3#Cluster
+##
+kind: Cluster
+apiVersion: kind.sigs.k8s.io/v1alpha3
+networking:
+  disableDefaultCNI: true
+nodes:
+- role: control-plane

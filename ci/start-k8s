@@ -1,0 +1,100 @@
+#!/bin/bash
+set -eu
+
+## NOTE: This script assumes we have installed kind, but the common script doesn't
+##
+if [ "${KIND_CLUSTER:-}" == "" ]; then
+    echo "Run \". ./dev init\" first!"
+    exit 1
+elif [ "${KIND_CLUSTER:-}" != "dev" ]; then
+    if [ "${KUBECONFIG:-}" != "$(kind get kubeconfig-path --name="jh-ci-${KUBE_VERSION:-}")" ]; then
+        echo "Assertion error: KUBECONFIG out of sync with KUBE_VERSION"
+        echo "KUBECONFIG=${KUBECONFIG:-}"
+        echo "KUBE_VERSION=${KUBE_VERSION:-}"
+        echo "Run \". ./ci/common\" to update your KUBECONFIG environment variable based on your KUBE_VERSION variable."
+        exit 1
+    elif [ "${KIND_CLUSTER:-}" != "jh-ci-${KUBE_VERSION:-}" ]; then
+        echo "Assertion error: KIND_CLUSTER out of sync with KUBE_VERSION"
+        echo "KIND_CLUSTER=${KIND_CLUSTER:-}"
+        echo "KUBE_VERSION=${KUBE_VERSION:-}"
+        echo "Run \". ./ci/common\" to update your KIND_CLUSTER environment variable based on your KUBE_VERSION variable."
+        exit 1
+    fi
+fi
+
+# If the kind k8s cluster for this k8s version is already running, restart it
+if kind get clusters | grep --word-regexp ${KIND_CLUSTER}; then
+    echo "deleting existing kind k8s cluster: ${KIND_CLUSTER}"
+    kind delete cluster --name=${KIND_CLUSTER}
+fi
+
+echo "starting kind k8s cluster: ${KIND_CLUSTER}"
+kind create cluster --name=${KIND_CLUSTER} --image="kindest/node:v${KUBE_VERSION}" --config ci/kind-config.yaml
+kubectl config set-context --current --namespace jh-ci
+kubectl get nodes
+
+# To test network policies, we need a custom CNI like Calico. We have disabled
+# the default CNI through kind-config.yaml and will need to manually install a
+# CNI for the nodes to become Ready.
+echo "installing a custom CNI: Calico (async, in cluster)"
+# Setup daemonset/calico-etcd, a prerequisite for calico-node
+kubectl apply -f https://docs.projectcalico.org/v3.9/getting-started/kubernetes/installation/hosted/etcd.yaml
+# NOTE: A toleration to schedule on a node that isn't ready is missing, but
+#       this pod will be part of making sure the node can become ready.
+#
+#       toleration:
+#         - key: node.kubernetes.io/not-ready
+#           effect: NoSchedule
+kubectl patch -n kube-system daemonset/calico-etcd --type='json' \
+  -p='[{"op":"add", "path":"/spec/template/spec/tolerations/-", "value":{"key":"node.kubernetes.io/not-ready", "effect":"NoSchedule"}}]'
+
+# Setup daemonset/calico-node, that will allow nodes to enter a ready state
+curl -sSo ci/daemonset-calico-node.yaml https://docs.projectcalico.org/v3.9/getting-started/kubernetes/installation/hosted/calico.yaml
+# NOTE: Connection details to daemonset/calico-etcd is missing so we need to
+#       manually add them.
+CALICO_ETCD_IP=$(kubectl get service -n kube-system calico-etcd -o jsonpath='{.spec.clusterIP}')
+CALICO_ETCD_PORT=$(kubectl get service -n kube-system calico-etcd -o jsonpath='{.spec.ports[0].port}')
+sed -i -e "s/<ETCD_IP>:<ETCD_PORT>/$CALICO_ETCD_IP:$CALICO_ETCD_PORT/" ci/daemonset-calico-node.yaml
+kubectl apply -f ci/daemonset-calico-node.yaml
+# NOTE: daemonset/calico-node pods' main container fails to startup without
+#       an additional environment variable configured to disable a check
+#       that we fail.
+#
+#       env:
+#         - name: FELIX_IGNORELOOSERPF
+#           value: "true"
+kubectl patch -n kube-system daemonset/calico-node --type='json' \
+  -p='[{"op":"add", "path":"/spec/template/spec/containers/0/env/-", "value":{"name":"FELIX_IGNORELOOSERPF", "value":"true"}}]'
+
+echo "waiting for kubernetes nodes (in cluster)"
+# NOTE: kubectl wait has a bug relating to using the --all flag in 1.13 at least
+#       Due to this, we wait only for the kind-control-plane node, which
+#       currently is the only node we start with kind but could be configured in
+#       kind-config.yaml.
+#
+#       ref: https://github.com/kubernetes/kubernetes/pull/71746
+kubectl wait node/${KIND_CLUSTER}-control-plane --for condition=ready --timeout 2m || {
+  r=$?
+  echo "kubernetes nodes never became ready"
+  kubectl describe nodes || true
+  kubectl describe -n kube-system daemonset/calico-etcd || true
+  kubectl logs -n kube-system daemonset/calico-etcd || true
+  kubectl describe -n kube-system daemonset/calico-node || true
+  kubectl logs -n kube-system daemonset/calico-node || true
+  exit $r
+}
+
+echo "installing tiller (async, in cluster)"
+kubectl create serviceaccount tiller -n kube-system
+kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+helm init --service-account tiller
+
+echo "waiting for tiller (in cluster)"
+kubectl rollout status -n kube-system deployment/tiller-deploy --timeout 1m || {
+  r=$?
+  echo "tiller never became ready"
+  kubectl describe nodes || true
+  kubectl describe -n kube-system deployment/tiller || true
+  kubectl logs -n kube-system deployment/tiller || true
+  exit $r
+}

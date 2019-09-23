@@ -1,0 +1,30 @@
+#!/bin/bash
+set -eu
+
+display_logs() {
+  echo "***** node *****"
+  kubectl describe node
+  echo "***** pods *****"
+  kubectl get pods
+  echo "***** events *****"
+  kubectl get events
+  echo "***** hub *****"
+  kubectl logs deploy/hub
+  echo "***** proxy *****"
+  kubectl logs deploy/proxy
+}
+
+echo "running tests from outside the cluster:"
+echo "- kubectl port-forward has enabled communication with services in the cluster"
+## NOTE: -x / --exitfirst makes us avoid noise in the hub and proxy pod logs
+##       following a failure we are interested in debugging.
+##
+pytest ./tests -v --exitfirst || {
+  r=$?
+  echo "a test failed, here is relevant debugging information"
+  display_logs
+  exit $r
+}
+
+## If tests succeeded show all pods to see if any were restarted
+kubectl get pods

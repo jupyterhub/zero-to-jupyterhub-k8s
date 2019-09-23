@@ -1,14 +1,18 @@
+## conftest.py has a special meaning to pytest
+## ref: https://docs.pytest.org/en/latest/writing_plugins.html#conftest-py-plugins
+##
 import os
 import requests
-import pytest
 import uuid
+
+import pytest
 import yaml
 
 
 @pytest.fixture(scope='module')
 def request_data():
     basedir = os.path.dirname(os.path.dirname(__file__))
-    with open(os.path.join(basedir, 'minikube-config.yaml')) as f:
+    with open(os.path.join(basedir, 'dev-config.yaml')) as f:
         y = yaml.safe_load(f)
     token = y['hub']['services']['test']['apiToken']
     return {

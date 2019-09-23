@@ -1,0 +1,38 @@
+#!/bin/bash
+
+## dev is a script to help us get started performing typical task during local
+## development without needing to learn everything at once
+##
+## - init
+## - start-k8s
+## - upgrade
+## - lint-and-validate
+## - test
+##
+
+## if the script is sourced
+if [ "${BASH_SOURCE[0]}" != "${0}" ]; then
+    if ! [ "$1" = "init" ]; then
+        echo "Only source the init command, run your command without a leading dot!"
+    else
+        if [ "$1" = "init" ]; then
+            . ./ci/common
+            pip3 install -r dev-requirements.txt
+        fi
+    fi
+## else, the script isn't sourced
+else
+    if [ "$1" = "init" ]; then
+        echo "The init command needs to be sourced, run it with \". ./ci/dev init\""
+    else
+        if [ "$1" = "start-k8s" ]; then
+            ./ci/start-k8s
+        elif [ "$1" = "upgrade" ]; then
+            ./ci/upgrade
+        elif [ "$1" = "lint-and-validate" ]; then
+            python3 tools/templates/lint-and-validate.py --kubernetes-versions 1.13.0
+        elif [ "$1" = "test" ]; then
+            ./ci/upgrade && ./ci/test
+        fi
+    fi
+fi

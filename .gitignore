@@ -1,8 +1,9 @@
 ### Zero to JupyterHub Kubernetes ###
 tools/templates/rendered-templates/
 bin/
-ci/.vagrant
+.vagrant/
 tools/github.sqlite
+ci/daemonset-calico-node.yaml
 
 .vscode
 
