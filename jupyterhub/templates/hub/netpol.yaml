@@ -23,10 +23,10 @@ spec:
     - from:
         - podSelector:
             matchLabels:
-              hub.jupyter.org/network-access-etcd: "true"
+              hub.jupyter.org/network-access-consul: "true"
       ports:
         - protocol: TCP
-          port: 2379
+          port: 8500
     {{- /* Useful if you want to give hub access to pods from other namespaces */}}
     {{- if .Values.hub.networkPolicy.ingress}}
     {{- .Values.hub.networkPolicy.ingress| toYaml | trimSuffix "\n" | nindent 4 }}

@@ -82,13 +82,13 @@ proxy:
       http:
       https:
     loadBalancerIP:
-  etcd:
-    traefikPrefix: /traefik/
+  consul:
+    traefikPrefix: traefik/
     jupyterhubPrefix: /jupyterhub/
     username: jupyterhub
     image:
-      name: quay.io/coreos/etcd
-      tag: v3.3.12
+      name: consul
+      tag: 1.6.1
     resources:
       requests:
         memory: 128Mi
@@ -116,7 +116,7 @@ proxy:
     image:
       name: traefik
       # to debug, use vA.B.C-alpine
-      tag: v1.7.9
+      tag: v1.7.9-alpine
     resources:
       requests:
         cpu: 200m

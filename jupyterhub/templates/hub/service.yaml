@@ -32,7 +32,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: hub-etcd
+  name: hub-consul
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
@@ -41,5 +41,5 @@ spec:
     {{- include "jupyterhub.matchLabels" . | nindent 4 }}
   ports:
     - protocol: TCP
-      port: 2379
-      targetPort: 2379
+      port: 8500
+      targetPort: 8500

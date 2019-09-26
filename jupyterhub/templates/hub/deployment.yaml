@@ -17,7 +17,7 @@ spec:
         {{- /* Changes here will cause the Deployment to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
         hub.jupyter.org/network-access-proxy-api: "true"
-        hub.jupyter.org/network-access-etcd: "true"
+        hub.jupyter.org/network-access-consul: "true"
         hub.jupyter.org/network-access-proxy-http: "true"
         hub.jupyter.org/network-access-singleuser: "true"
         {{- if .Values.hub.labels }}
@@ -70,64 +70,31 @@ spec:
         {{- if .Values.hub.extraContainers }}
         {{- .Values.hub.extraContainers | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
-        - name: etcd
+        - name: consul
           env:
-            - name: ETCDCTL_API
-              value: '3'
-            # etcd warns about unrecognized ETCD_* variables
-            # so we can't use obvious ETCD_USERNAME, etc
-            - name: PASSWORD_ETCD
+            - name: PASSWORD_CONSUL
               valueFrom:
                 secretKeyRef:
                   name: hub-secret
                   key: proxy.token
-            - name: USERNAME_ETCD
-              value: {{ .Values.proxy.etcd.username }}
-          image: {{ .Values.proxy.etcd.image.name }}:{{ .Values.proxy.etcd.image.tag }}
-          imagePullPolicy: {{ .Values.proxy.etcd.imagePullPolicy }}
-          command:
-            - etcd
-            - --data-dir=/srv/jupyterhub/etcd/default.etcd
-            - --listen-client-urls=http://0.0.0.0:2379
-            - --advertise-client-urls=http://127.0.0.1:2379
-          lifecycle:
-            # postStart hook to enable etcd username+password
-            postStart:
-              exec:
-                command:
-                  - sh
-                  - -c
-                  - |
-                    set -e
-                    # step 1. check if auth works *or* is not yet enabled
-                    # if the password changes, this will fail and should force resetting
-                    # all of etcd state
-                    etcdctl --user ${USERNAME_ETCD}:${PASSWORD_ETCD} user list || (
-                      echo "etcd auth invalid, resetting etcd"
-                      rm -rf /srv/jupyterhub/etcd/default.etcd
-                      exit 1
-                    )
-                    # step 2. ensure users exists
-                    if [[ -z "$(etcdctl --user ${USERNAME_ETCD}:${PASSWORD_ETCD} user list)" ]]; then
-                      # no users listed, setup auth
-                      # first setup root user, which is required for auth
-                      etcdctl user add root:${PASSWORD_ETCD}
-                      etcdctl auth enable
-                      # next, create the user that will actually be used
-                      # and grant the user root access
-                      if [[ ${USERNAME_ETCD} != "root" ]]; then
-                        etcdctl --user root:${PASSWORD_ETCD} user add ${USERNAME_ETCD}:${PASSWORD_ETCD}
-                        etcdctl --user root:${PASSWORD_ETCD} user grant-role ${USERNAME_ETCD} root
-                      fi
-                      # step 3. verify authentication
-                      echo "check auth"
-                      etcdctl --user ${USERNAME_ETCD}:${PASSWORD_ETCD} user list
-                    fi
+          image: {{ .Values.proxy.consul.image.name }}:{{ .Values.proxy.consul.image.tag }}
+          imagePullPolicy: {{ .Values.proxy.consul.imagePullPolicy }}
+          args:
+            - "agent"
+            - "--data-dir=/srv/jupyterhub/consul/default.consul"
+            - "--server"
+            - "--client=0.0.0.0"
+            - "--advertise=127.0.0.1"
+            - "--http-port=8500"
+            - "--bootstrap-expect=1"
+            - '--hcl={"acl":{"enabled":true, "default_policy":"deny", "tokens":{"master":"$(PASSWORD_CONSUL)"}}}}'
+            - "--ui"
+            - "--log-level=DEBUG"
           ports:
-            - containerPort: 2379
-              name: etcd
+            - containerPort: 8500
+              name: consul
           resources:
-            {{- .Values.proxy.etcd.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- .Values.proxy.consul.resources | toYaml | trimSuffix "\n" | nindent 12 }}
           volumeMounts:
             - mountPath: /srv/jupyterhub
               name: hub-db-dir

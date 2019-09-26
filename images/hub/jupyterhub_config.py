@@ -17,8 +17,8 @@ AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
 # Connect to a proxy running in a different pod
-from jupyterhub_traefik_proxy import TraefikEtcdProxy
-c.JupyterHub.proxy_class = TraefikEtcdProxy
+from jupyterhub_traefik_proxy import TraefikConsulProxy
+c.JupyterHub.proxy_class = TraefikConsulProxy
 
 # proxy is started elsewhere
 c.Proxy.should_start = False
@@ -31,15 +31,14 @@ c.TraefikProxy.traefik_api_url = 'http://{}:{}'.format(
 c.TraefikProxy.traefik_api_username = "api_admin"
 c.TraefikProxy.traefik_api_password = os.environ['PROXY_AUTH_TOKEN']
 
-# etcd is in a container in the hub pod:
+# consul is in a container in the hub pod:
 # use localhost to avoid problems with hairpin networking
 # which can prevent a pod from connecting to a service pointing
 # back to the same pod
-c.TraefikEtcdProxy.etcd_url = 'http://127.0.0.1:2379'
-c.TraefikEtcdProxy.etcd_traefik_prefix = get_config('proxy.etcd.traefikPrefix')
-c.TraefikEtcdProxy.etcd_jupyterhub_prefix = get_config('proxy.etcd.jupyterhubPrefix')
-c.TraefikEtcdProxy.etcd_username = get_config('proxy.etcd.username')
-c.TraefikEtcdProxy.etcd_password = os.environ['PROXY_AUTH_TOKEN']
+c.TraefikConsulProxy.kv_url = 'http://127.0.0.1:8500'
+c.TraefikConsulProxy.kv_traefik_prefix = get_config('proxy.consul.traefikPrefix')
+c.TraefikConsulProxy.kv_jupyterhub_prefix = get_config('proxy.consul.jupyterhubPrefix')
+c.TraefikConsulProxy.kv_password = os.environ['PROXY_AUTH_TOKEN']
 
 # Do not shut down user pods when hub is restarted
 c.JupyterHub.cleanup_servers = False

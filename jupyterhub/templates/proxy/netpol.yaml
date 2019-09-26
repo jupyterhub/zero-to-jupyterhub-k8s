@@ -8,7 +8,7 @@
 
 Network policy for jupyterhub traefik proxy:
 
-- only hub and proxy can talk to etcd
+- only hub and proxy can talk to consul
 - only hub can talk to proxy api
 - proxy only needs to talk to the hub
 

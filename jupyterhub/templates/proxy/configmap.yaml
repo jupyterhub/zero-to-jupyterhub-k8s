@@ -76,16 +76,9 @@ data:
     [respondingTimeouts]
     idleTimeout = "10m0s"
 
-    [etcd]
+    [consul]
     watch = true
-    prefix = {{ .Values.proxy.etcd.traefikPrefix | quote }}
-    useAPIV3 = true
-    {{- if .Values.proxy.etcd.username }}
-    username = {{ .Values.proxy.etcd.username | quote }}
-    {{- end }}
-    {{- if .Values.proxy.secretToken }}
-    password = {{ .Values.proxy.secretToken | quote }}
-    {{- end }}
+    prefix = {{ .Values.proxy.consul.traefikPrefix | quote }}
 
     [api]
       entryPoint = "api"
