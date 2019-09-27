@@ -55,10 +55,16 @@ spec:
       {{- end }}
       securityContext:
         fsGroup: {{ .Values.hub.fsGid }}
-      {{- if .Values.hub.imagePullSecret.enabled }}
+      {{- if or .Values.hub.imagePullSecret.enabled .Values.hub.image.pullSecrets }}
       imagePullSecrets:
+        {{- if .Values.hub.imagePullSecret.enabled }}
         - name: hub-image-credentials
-      {{- end }}  
+        {{ else }}
+        {{- range .Values.hub.image.pullSecrets }}
+        - name: {{ . }}
+        {{- end }}
+        {{- end }}
+      {{- end }}
       {{- if .Values.hub.initContainers }}
       initContainers:
         {{- .Values.hub.initContainers | toYaml | trimSuffix "\n" | nindent 8 }}
