@@ -16,7 +16,11 @@ set -x
 # git ahead of time to use the identity we decrypted earlier.
 export GIT_SSH_COMMAND="ssh -i ${PWD}/ci/id_rsa"
 
-chartpress --commit-range "${TRAVIS_COMMIT_RANGE}" --push --publish-chart
+if [ "${TRAVIS_TAG:-}" == "" ]; then
+    chartpress --commit-range "${TRAVIS_COMMIT_RANGE}" --push --publish-chart
+else
+    chartpress --commit-range "${TRAVIS_COMMIT_RANGE}" --push --publish-chart --tag "${TRAVIS_TAG}"
+fi
 
 # Let us log the changes chartpress did, it should include replacements for
 # fields in values.yaml, such as what tag for various images we are using.
