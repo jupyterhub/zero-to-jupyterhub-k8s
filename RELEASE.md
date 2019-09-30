@@ -1,6 +1,6 @@
 # Release process
 
-Start by making a release issue using the template below, it can be followed to
+Start by making a release issue using the template below. The issue checklist can be followed to
 release a new version of the Helm chart and help everybody coordinate. Do some
 copy pasting!
 

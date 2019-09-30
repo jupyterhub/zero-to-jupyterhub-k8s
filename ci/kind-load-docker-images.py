@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """
+Functions using kind to load docker images.
+
 Run `kind load docker-image <image:tag>` on all the docker images within
 values.yaml that is available locally on the host as first verified with `docker
 images --quiet <image:tag>`. If we could capture this directly from chartpress
