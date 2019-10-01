@@ -6,12 +6,6 @@ import pytest
 import requests
 import yaml
 
-## DEV NOTES:
-## A lot of logs are currently in the code for debugging purposes.
-##
-## ref: https://travis-ci.org/jupyterhub/zero-to-jupyterhub-k8s/jobs/589410196
-##
-
 # Makes heavy use of JupyterHub's API:
 # http://petstore.swagger.io/?url=https://raw.githubusercontent.com/jupyterhub/jupyterhub/master/docs/rest-api.yml
 
@@ -182,8 +176,8 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
 def _wait_for_user_to_spawn(api_request, jupyter_user, timeout):
     endtime = time.time() + timeout
     while time.time() < endtime:
-        # NOTE: If this fails with a 503 response from the proxy, the hub pod has
-        #       probably crashed by the tests interaction with it.
+        # NOTE: If this request fails with a 503 response from the proxy, the
+        #       hub pod has probably crashed by the tests interaction with it.
         r = api_request.get("/users/" + jupyter_user)
         r.raise_for_status()
         user_model = r.json()
@@ -203,9 +197,8 @@ def _wait_for_user_to_spawn(api_request, jupyter_user, timeout):
 
 
 def _delete_server(api_request, jupyter_user, timeout):
-    # NOTE: If this fails with a 503 response from the proxy, the hub pod has
-    #       probably crashed by the tests interaction with it.
-
+    # NOTE: If this request fails with a 503 response from the proxy, the hub
+    #       pod has probably crashed by the previous tests' interaction with it.
     r = api_request.delete("/users/" + jupyter_user + "/server")
     assert r.status_code in (202, 204)
 
