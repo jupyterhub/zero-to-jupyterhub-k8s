@@ -6,6 +6,16 @@ Run `kind load docker-image <image:tag>` on all the docker images within
 values.yaml that is available locally on the host as first verified with `docker
 images --quiet <image:tag>`. If we could capture this directly from chartpress
 build output it would be quicker.
+
+Example: to get help about the parameters and their default values.
+
+    ci/kind-load-docker-images.py --help
+
+Example: after you have run `chartpress` to modify the values.yaml files with
+the newly built image name and tags, you can run this command to ensure the kind
+cluster named "dev" gets the required docker images from your local registry.
+
+    ci/kind-load-docker-images.py --kind-cluster dev
 """
 
 import sys
