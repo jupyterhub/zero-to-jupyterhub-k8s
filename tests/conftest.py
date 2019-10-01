@@ -17,7 +17,7 @@ def request_data():
     token = y["hub"]["services"]["test"]["apiToken"]
     return {
         "token": token,
-        "hub_url": os.getenv("HUB_API_URL", "http://localhost:31212/hub/api"),
+        "hub_url": os.environ["HUB_API_URL"],
         "headers": {"Authorization": f"token {token}"},
         "test_timeout": 300,
         "request_timeout": 60,
