@@ -23,9 +23,11 @@ echo "load the images the kind cluster"
 python3 ci/kind-load-docker-images.py --kind-cluster $KIND_CLUSTER --values ./jupyterhub/values.yaml
 
 echo "install our deployment"
-helm upgrade --install jh-ci --wait --namespace jh-ci ./jupyterhub \
-  --values dev-config.yaml \
-  --values dev-config-netpol.yaml
+helm upgrade jh-ci ./jupyterhub \
+    --install \
+    --namespace jh-ci \
+    --values dev-config.yaml \
+    --wait
 
 echo "waiting for hub and proxy to become responsive"
 kubectl rollout status deployment/proxy --timeout 1m

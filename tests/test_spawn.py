@@ -129,18 +129,18 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
         print(server_model)
         pod_name = server_model['state']['pod_name']
 
-        # Must match CIDR in dev-config-netpol.yaml
+        # Must match CIDR in singleuser.networkPolicy.egress.
         allowed_url = 'http://jupyter.org'
         blocked_url = 'http://mybinder.org'
 
         c = subprocess.run([
             'kubectl', '--namespace=jh-ci', 'exec', pod_name, '--',
-            'wget', '-q', '-t1', '-T5', allowed_url])
+            'wget', '--quiet', '--tries', '1', '--timeout', '5', allowed_url])
         assert c.returncode == 0, "Unable to get allowed domain"
 
         c = subprocess.run([
             'kubectl', '--namespace=jh-ci', 'exec', pod_name, '--',
-            'wget', '-q', '-t1', '-T5', blocked_url])
+            'wget', '--quiet', '--tries', '1', '--timeout', '5', blocked_url])
         assert c.returncode > 0, "Blocked domain was allowed"
 
     finally:
