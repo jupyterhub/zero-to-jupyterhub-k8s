@@ -52,10 +52,10 @@ def extract_images_from_values(chartpress_file, values_file):
     """Returns a list of image:tag strings given a values.yaml file."""
 
     with open(chartpress_file) as f:
-        chartpress = yaml.full_load(f)
+        chartpress = yaml.safe_load(f)
 
     with open(values_file) as f:
-        values = yaml.full_load(f)
+        values = yaml.safe_load(f)
 
     image_paths = []
     for chart in chartpress["charts"]:
