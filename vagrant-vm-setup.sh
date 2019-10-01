@@ -16,6 +16,5 @@ echo 'PATH=$PATH:~/.local/bin' >> /home/vagrant/.bashrc
 curl -sSL https://get.docker.com | sh
 usermod -aG docker vagrant
 
-## When we run ./ci/vagrant-run-ci.sh we get some environment variables set,
-## but these will be lost if the script quits due to an error.
+## Put to be downloaded binaries on PATH
 echo 'PATH=$PATH:~/zero-to-jupyterhub-k8s/bin' >> /home/vagrant/.bashrc
