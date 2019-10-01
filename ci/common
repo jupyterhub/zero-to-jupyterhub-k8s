@@ -33,7 +33,7 @@ if [ -z ${KUBEVAL_VERSION:-} ]; then
 fi
 
 ## Valid versions to list under LINT_KUBE_VERSIONS are those in the
-## kubernetes-json-schema repoistory, used by kubeval.
+## kubernetes-json-schema repository, used by kubeval.
 ##
 ## ref: https://github.com/instrumenta/kubernetes-json-schema
 ##

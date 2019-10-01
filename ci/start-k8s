@@ -56,7 +56,7 @@ CALICO_ETCD_IP=$(kubectl get service -n kube-system calico-etcd -o jsonpath='{.s
 CALICO_ETCD_PORT=$(kubectl get service -n kube-system calico-etcd -o jsonpath='{.spec.ports[0].port}')
 sed -i -e "s/<ETCD_IP>:<ETCD_PORT>/$CALICO_ETCD_IP:$CALICO_ETCD_PORT/" ci/daemonset-calico-node.yaml
 kubectl apply -f ci/daemonset-calico-node.yaml
-# NOTE: daemonset/calico-node pods' main container fails to startup without
+# NOTE: daemonset/calico-node pods' main container fails to start up without
 #       an additional environment variable configured to disable a check
 #       that we fail.
 #

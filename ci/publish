@@ -2,8 +2,8 @@
 set -eu
 
 # Decrypt a private SSH key having its public key registered on GitHub. It will
-# be used to establish an identity with rights to push to the repo hosting our
-# Helm charts: https://github.com/jupyterhub/helm-chart
+# be used to establish an identity with rights to push to the git repository
+# hosting our Helm charts: https://github.com/jupyterhub/helm-chart
 openssl aes-256-cbc -K $encrypted_c6b45058ffe8_key -iv $encrypted_c6b45058ffe8_iv -in ci/publish-id_rsa.enc -out ci/id_rsa -d
 chmod 0400 ci/id_rsa
 

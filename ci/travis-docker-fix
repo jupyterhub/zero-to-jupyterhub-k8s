@@ -1,9 +1,9 @@
 #!/bin/bash
 set -eu
 
-# This is a workaround to an issue caused by the existance of a docker registry
+# This is a workaround to an issue caused by the existence of a docker registry
 # mirror in our CI environment. Without this fix that removes the mirror,
-# chartpress fails to realize the existance of already built images and rebuilds
+# chartpress fails to realize the existence of already built images and rebuilds
 # them.
 #
 # ref: https://github.com/moby/moby/issues/39120
