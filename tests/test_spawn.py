@@ -49,7 +49,7 @@ def test_hub_api_create_user_and_get_information_about_user(api_request, jupyter
     #       user.
     #
     #       Also note that the fixture will automatically clean up the
-    #       user from the hub's database when the function exit.
+    #       user from the hub's database when the function exits.
     print("create a user, and get information about the user")
     r = api_request.get("/users/" + jupyter_user)
     assert r.status_code == 200
