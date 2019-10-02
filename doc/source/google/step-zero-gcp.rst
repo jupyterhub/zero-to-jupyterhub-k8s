@@ -67,7 +67,7 @@ your google cloud account.
       gcloud container clusters create \
         --machine-type n1-standard-2 \
         --num-nodes 2 \
-        --zone us-central1-b \
+        --zone <compute zone from the list linked below> \
         --cluster-version latest \
         <CLUSTERNAME>
 
@@ -84,7 +84,11 @@ your google cloud account.
    * ``--zone`` specifies the data center zone where your cluster will be created.
      You can pick something from `this list
      <https://cloud.google.com/compute/docs/regions-zones/#available>`_
-     that is not too far away from your users.
+     that is not too far away from your users.                   
+   *  Note: A region is a geographical location used to host resources, comprising one or more zones.                                   
+     A regional cluster creates pods across zones in a region, distributing Kubernetes resources across multiple zones in the region.     
+     This is different from the default cluster, which has all its resources within a single zone(as shown above).       
+
 
 
 5. To test if your cluster is initialized, run:
