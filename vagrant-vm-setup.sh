@@ -1,20 +1,46 @@
 #!/bin/sh
 set -eu
 
-## Install pip
-##
-## NOTE: pip installs executable packages in ~/.local/bin
-##
+# Install pip
+#
+# NOTE: pip installs executable packages in ~/.local/bin
+#
 apt-get -q update
 apt-get -q install -y python3-pip
 echo 'PATH=$PATH:~/.local/bin' >> /home/vagrant/.bashrc
 
-## Install Docker CE
-##
-## ref: https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-convenience-script
-##
+
+# Install Docker CE
+#
+# ref: https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-convenience-script
+#
 curl -sSL https://get.docker.com | sh
 usermod -aG docker vagrant
 
-## Put to be downloaded binaries on PATH
+
+# Workaround a DNS problem for MacOS running Kubernetes
+#
+# ref: https://github.com/kubernetes/minikube/issues/2027#issuecomment-338221646
+#
+# 1. Append two nameserver entries in /etc/hosts
+#
+cat << EOF > /etc/resolv.conf
+nameserver 8.8.4.4
+nameserver 8.8.8.8
+EOF
+# 2. Edit the line starting with 127.0.0.1 in /etc/hosts
+#
+# "127.0.0.1 localhost" becomes "127.0.0.1 localhost ubuntu1804.localdomain"
+#
+# NOTE: The sed command below updates the relevant line in the file in place
+# -i : --in-place
+# -r : --regexp-extended
+# -e : --expression
+# \1 : anything captured in the first parenthesis
+# \\ : "\" escaped for bash with "\\"
+#
+sed -i -re "s/^(127.0.0.1\\s.+)/\\1 `hostname`/" /etc/hosts
+
+
+# Put to be downloaded binaries on PATH
 echo 'PATH=$PATH:~/zero-to-jupyterhub-k8s/bin' >> /home/vagrant/.bashrc
