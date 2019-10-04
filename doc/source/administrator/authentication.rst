@@ -235,6 +235,8 @@ Auth0
 Auth0 is a popular commercial provider of identity management. The jupyterhub helm does not support Auth0 as a
 specific configuration, so we must configure it with extraEnv and extraConfig.
 
+Note that without the scope defined, authenticating to JupyterHub after already being logged in to Auth0 will fail.
+
 .. code-block:: yaml
 
     hub:
@@ -246,6 +248,7 @@ specific configuration, so we must configure it with extraEnv and extraConfig.
           c.Auth0OAuthenticator.client_id = 'y0urc1logonc1ient1d'
           c.Auth0OAuthenticator.client_secret = 'an0ther1ongs3cretstr1ng'
           c.Auth0OAuthenticator.oauth_callback_url = 'https://<your_jupyterhub_host>/hub/oauth_callback'
+          c.Auth0OAuthenticator.scope = ['openid', 'email']
           c.Authenticator.admin_users = {
                 'devops@example.com'
               }
