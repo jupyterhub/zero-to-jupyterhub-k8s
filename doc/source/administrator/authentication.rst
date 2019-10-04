@@ -229,6 +229,28 @@ and obtain the confidential client credentials.
          userdata_params: {'state': 'state'}
          username_key: preferred_username
 
+Auth0
+^^^^^^^^^^^^^^
+
+Auth0 is a popular commercial provider of identity management. The jupyterhub helm does not support Auth0 as a
+specific configuration, so we must configure it with extraEnv and extraConfig.
+
+.. code-block:: yaml
+
+    hub:
+      extraEnv:
+        AUTH0_SUBDOMAIN: 'prod-8ua-1yy9'
+      extraConfig:
+        myConfig.py: |
+          c.JupyterHub.authenticator_class = 'oauthenticator.auth0.Auth0OAuthenticator'
+          c.Auth0OAuthenticator.client_id = 'y0urc1logonc1ient1d'
+          c.Auth0OAuthenticator.client_secret = 'an0ther1ongs3cretstr1ng'
+          c.Auth0OAuthenticator.oauth_callback_url = 'https://<your_jupyterhub_host>/hub/oauth_callback'
+          c.Authenticator.admin_users = {
+                'devops@example.com'
+              }
+          c.Authenticator.auto_login = True
+
 .. _google_oauth:
 
 Full Example of Google OAuth2
