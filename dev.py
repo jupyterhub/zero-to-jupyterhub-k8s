@@ -402,6 +402,11 @@ def _run(cmd, print_command=True, print_end="\n", print_error=True, error_callba
         if kwargs.get("text", None) is None:
             kwargs["text"] = True
 
+        # FIXME: This is a workaround for Python 3.6 that won't be required in
+        #        Python 3.7.
+        del kwargs["capture_output"]
+        kwargs["stdout"] = kwargs["stderr"] = subprocess.PIPE
+
     if print_command:
         _print_command(" ".join(map(pipes.quote, cmd)))
     completed_process = subprocess.run(cmd, **kwargs)
