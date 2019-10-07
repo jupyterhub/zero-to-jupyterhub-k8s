@@ -105,7 +105,7 @@ def kind_start(recreate):
     if os.environ["KUBECONFIG"] != kubeconfig_path:
         print("Updating your .env file's KUBECONFIG value to \"%s\"" % kubeconfig_path)
         dotenv.set_key(".env", "KUBECONFIG", kubeconfig_path)
-        dotenv.load_dotenv()
+        os.environ["KUBECONFIG"] = kubeconfig_path
 
     print('Making "jh-dev" the default namespace in the cluster.')
     _run([
@@ -493,7 +493,8 @@ if __name__ == "__main__":
     if not os.path.exists(".env"):
         default_dotenv_file = textwrap.dedent(
             """\
-            ## Environment variables loaded and used by the ./dev script.
+            ## Environment variables loaded and used by the ./dev script. They
+            ## will take precedence over system variables.
             #
             ## GITHUB_ACCESS_TOKEN is needed to generate changelog entries etc.
             ##
@@ -511,9 +512,12 @@ if __name__ == "__main__":
             KUBECONFIG=
             #
             ## KUBE_VERSION is used to create a kind cluster and as a fallback
-            ## if you have not specified VALIDATE_KUBE_VERSIONS.
+            ## if you have not specified VALIDATE_KUBE_VERSIONS. Note that only
+            ## versions that are found on kindest/node can be used.
             ##
-            KUBE_VERSION=1.15.3
+            ## ref: https://hub.docker.com/r/kindest/node/tags
+            ##
+            # KUBE_VERSION=1.15.3
             #
             ## VALIDATE_KUBE_VERSIONS is used when you check your Helm
             ## templates. Are the generated Kubernetes resources valid
@@ -525,7 +529,7 @@ if __name__ == "__main__":
         with open('.env', 'w+') as f:
             f.write(default_dotenv_file)
 
-    dotenv.load_dotenv()
+    dotenv.load_dotenv(override=True)
 
     # run suitable command and pass arguments
     if args.cmd == "kind":

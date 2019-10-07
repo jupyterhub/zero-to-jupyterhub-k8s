@@ -36,7 +36,7 @@ script:
   - setup_kind
   - setup_helm
   - ./ci/travis-docker-fix
-  - ./ci/start-k8s
+  - ./dev.py check templates
   - ./ci/upgrade
   - ./ci/test
 env:
@@ -66,7 +66,7 @@ jobs:
       script:
         - setup_helm
         - setup_kubeval
-        - python3 tools/templates/lint-and-validate.py --kubernetes-versions $VALIDATE_KUBE_VERSIONS
+        - ./dev.py check templates
       env: []
     - stage: publish
       script:
