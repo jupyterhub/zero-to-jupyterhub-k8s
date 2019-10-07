@@ -426,12 +426,14 @@ def _get_argparser():
     _ = argparse.ArgumentParser(
         description="Local development help for jupyterhub/zero-to-jupyterhub-k8s"
     )
-    _cmds = _.add_subparsers(title="Commands", dest="cmd", required=True)
+
+    _cmds = _.add_subparsers(title="Commands", dest="cmd")
 
     kind = _cmds.add_parser(
         "kind", help="Kubernetes-in-Docker (kind) cluster management."
     )
-    kind_cmds = kind.add_subparsers(title="Commands", dest="sub_cmd", required=True)
+
+    kind_cmds = kind.add_subparsers(title="Commands", dest="sub_cmd")
     kind_start = kind_cmds.add_parser(
         "start", help="Start and initialize a kind Kubernetes cluster."
     )
@@ -462,7 +464,7 @@ def _get_argparser():
     check = _cmds.add_parser(
         "check", help="Run checks on your developed helm templates and python code."
     )
-    check_cmds = check.add_subparsers(title="Commands", dest="sub_cmd", required=True)
+    check_cmds = check.add_subparsers(title="Commands", dest="sub_cmd")
     check_templates = check_cmds.add_parser(
         "templates",
         help="Run checks on the Helm templates and the Kubernetes resources they generate using: helm lint, helm templates, yamllint, and kubeval.",
