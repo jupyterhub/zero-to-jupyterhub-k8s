@@ -7,13 +7,13 @@ if [ "${KIND_CLUSTER:-}" == "" ]; then
     echo "Run \". ./dev init\" first!"
     exit 1
 elif [ "${KIND_CLUSTER:-}" != "dev" ]; then
-    if [ "${KUBECONFIG:-}" != "$(kind get kubeconfig-path --name="jh-ci-${KUBE_VERSION:-}")" ]; then
+    if [ "${KUBECONFIG:-}" != "$(kind get kubeconfig-path --name="jh-dev-${KUBE_VERSION:-}")" ]; then
         echo "Assertion error: KUBECONFIG out of sync with KUBE_VERSION"
         echo "KUBECONFIG=${KUBECONFIG:-}"
         echo "KUBE_VERSION=${KUBE_VERSION:-}"
         echo "Run \". ./ci/common\" to update your KUBECONFIG environment variable based on your KUBE_VERSION variable."
         exit 1
-    elif [ "${KIND_CLUSTER:-}" != "jh-ci-${KUBE_VERSION:-}" ]; then
+    elif [ "${KIND_CLUSTER:-}" != "jh-dev-${KUBE_VERSION:-}" ]; then
         echo "Assertion error: KIND_CLUSTER out of sync with KUBE_VERSION"
         echo "KIND_CLUSTER=${KIND_CLUSTER:-}"
         echo "KUBE_VERSION=${KUBE_VERSION:-}"
@@ -30,7 +30,7 @@ fi
 
 echo "starting kind k8s cluster: ${KIND_CLUSTER}"
 kind create cluster --name=${KIND_CLUSTER} --image="kindest/node:v${KUBE_VERSION}" --config ci/kind-config.yaml
-kubectl config set-context --current --namespace jh-ci
+kubectl config set-context --current --namespace jh-dev
 kubectl get nodes
 
 # To test network policies, we need a custom CNI like Calico. We have disabled

@@ -59,9 +59,9 @@ def test_hub_api_create_user_and_get_information_about_user(api_request, jupyter
     [I 2019-09-25 12:03:12.126 JupyterHub log:174] 201 POST /hub/api/users/testuser-7c70eb90-035b-4d9f-92a5-482e441e307d (test@127.0.0.1) 20.74ms
     [I 2019-09-25 12:03:12.153 JupyterHub log:174] 200 GET /hub/api/users/testuser-7c70eb90-035b-4d9f-92a5-482e441e307d (test@127.0.0.1) 11.91ms
     [D 2019-09-25 12:03:12.180 JupyterHub user:240] Creating <class 'kubespawner.spawner.KubeSpawner'> for testuser-7c70eb90-035b-4d9f-92a5-482e441e307d:
-    [I 2019-09-25 12:03:12.204 JupyterHub reflector:199] watching for pods with label selector='component=singleuser-server' in namespace jh-ci
+    [I 2019-09-25 12:03:12.204 JupyterHub reflector:199] watching for pods with label selector='component=singleuser-server' in namespace jh-dev
     [D 2019-09-25 12:03:12.205 JupyterHub reflector:202] Connecting pods watcher
-    [I 2019-09-25 12:03:12.229 JupyterHub reflector:199] watching for events with field selector='involvedObject.kind=Pod' in namespace jh-ci
+    [I 2019-09-25 12:03:12.229 JupyterHub reflector:199] watching for events with field selector='involvedObject.kind=Pod' in namespace jh-dev
     [D 2019-09-25 12:03:12.229 JupyterHub reflector:202] Connecting events watcher
     [I 2019-09-25 12:03:12.269 JupyterHub log:174] 204 DELETE /hub/api/users/testuser-7c70eb90-035b-4d9f-92a5-482e441e307d (test@127.0.0.1) 98.85ms
     """
@@ -140,7 +140,7 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
         c = subprocess.run(
             [
                 "kubectl",
-                "--namespace=jh-ci",
+                "--namespace=jh-dev",
                 "exec",
                 pod_name,
                 "--",
@@ -156,7 +156,7 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
         c = subprocess.run(
             [
                 "kubectl",
-                "--namespace=jh-ci",
+                "--namespace=jh-dev",
                 "exec",
                 pod_name,
                 "--",

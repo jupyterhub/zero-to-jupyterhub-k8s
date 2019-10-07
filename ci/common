@@ -32,13 +32,13 @@ if [ -z ${KUBEVAL_VERSION:-} ]; then
     export KUBEVAL_VERSION=0.14.0
 fi
 
-## Valid versions to list under LINT_KUBE_VERSIONS are those in the
+## Valid versions to list under VALIDATE_KUBE_VERSIONS are those in the
 ## kubernetes-json-schema repository, used by kubeval.
 ##
 ## ref: https://github.com/instrumenta/kubernetes-json-schema
 ##
-if [ -z ${LINT_KUBE_VERSIONS:-} ]; then
-    export LINT_KUBE_VERSIONS=1.11.0,1.12.0,1.13.0,1.14.0,1.15.0
+if [ -z ${VALIDATE_KUBE_VERSIONS:-} ]; then
+    export VALIDATE_KUBE_VERSIONS=1.11.0,1.12.0,1.13.0,1.14.0,1.15.0
 fi
 
 ## NOTE: The setup_... functions cache downloads but ensure the correct version
@@ -96,7 +96,7 @@ setup_git_crypt () {
 }
 
 if [ "$1" = "ci" ]; then
-    export KIND_CLUSTER=jh-ci-${KUBE_VERSION}
+    export KIND_CLUSTER=jh-dev-${KUBE_VERSION}
     export KUBECONFIG=~/.kube/kind-config-${KIND_CLUSTER}
 else
     setup_kubectl

@@ -23,9 +23,9 @@ echo "load the images the kind cluster"
 python3 ci/kind-load-docker-images.py --kind-cluster $KIND_CLUSTER --values ./jupyterhub/values.yaml
 
 echo "install our deployment"
-helm upgrade jh-ci ./jupyterhub \
+helm upgrade jh-dev ./jupyterhub \
     --install \
-    --namespace jh-ci \
+    --namespace jh-dev \
     --values dev-config.yaml \
     --wait
 

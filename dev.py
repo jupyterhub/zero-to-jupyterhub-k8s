@@ -21,14 +21,22 @@ import argparse
 import functools
 import os
 import pipes
+import re
 import shutil
 import subprocess
 import sys
+import textwrap
 
 import dotenv
+import colorama
 
+colorama.init()
 
 def depend_on(binaries=[], envs=[]):
+    """
+    A decorator to ensure the function is called with the relevant binaries
+    available and relevant environment variables set.
+    """
     def decorator_depend_on(func):
         @functools.wraps(func)
         def wrapper_depend_on(*args, **kwargs):
@@ -38,14 +46,18 @@ def depend_on(binaries=[], envs=[]):
                     missing_binaries.append(binary)
             missing_envs = []
             for env in envs:
-                if os.environ.get(env) is None:
+                if not os.environ.get(env):
                     missing_envs.append(env)
 
             if missing_binaries or missing_envs:
                 print('Exiting due to missing dependencies for "%s"' % func.__name__)
                 print("- Binaries: %s" % missing_binaries)
                 print("- Env vars: %s" % missing_envs)
-
+                print("")
+                if missing_binaries:
+                    print("Install and make the binaries available on your PATH!")
+                if missing_envs:
+                    print("Update your .env file!")
                 sys.exit(1)
             else:
                 return func(*args, **kwargs)
@@ -55,73 +67,359 @@ def depend_on(binaries=[], envs=[]):
     return decorator_depend_on
 
 
-@depend_on(binaries=["kind"], envs=["KUBECONFIG"])
-def kind_start(force):
-    # check if there is a cluster existing already
-    # then delete it
+@depend_on(binaries=["kind"], envs=["KUBE_VERSION"])
+def kind_start(recreate):
+    # check for a existing jh-dev cluster and conditionally delete it
+    kind_clusters = _run(
+        cmd=["kind", "get", "clusters"],
+        print_command=False,
+        capture_output=True,
+    )
+    kind_cluster_exist = bool(re.search(r"\bjh-dev\b", kind_clusters))
+    if kind_cluster_exist:
+        print('The kind cluster "jh-dev" exists already.')
+        if recreate:
+            _run(["kind", "delete", "cluster", "--name", "jh-dev"])
+        else:
+            sys.exit(1)
+
 
     # start a new cluster with a fixed name, kubernetes version
-    # configure a default namespace
+    print('Creating kind cluster "jh-dev".')
+    _run([
+        "kind", "create", "cluster",
+        "--name", "jh-dev",
+        "--image", "kindest/node:v%s" % os.environ["KUBE_VERSION"],
+        "--config", "ci/kind-config.yaml",
+    ])
     
-    # install calico
-    # install helm
-    pass
+    kubeconfig_path = _run(
+        cmd=[
+            "kind", "get", "kubeconfig-path",
+            "--name", "jh-dev",
+        ],
+        print_command=False,
+        capture_output=True,
+    )
+
+    if os.environ["KUBECONFIG"] != kubeconfig_path:
+        print("Updating your .env file's KUBECONFIG value to \"%s\"" % kubeconfig_path)
+        dotenv.set_key(".env", "KUBECONFIG", kubeconfig_path)
+        dotenv.load_dotenv()
+
+    print('Making "jh-dev" the default namespace in the cluster.')
+    _run([
+        "kubectl", "config", "set-context",
+        "--current",
+        "--namespace", "jh-dev",
+    ])
 
 
-@depend_on(binaries=["kind"], envs=["KUBECONFIG"])
+    # To test network policies, we need a custom CNI like Calico. We have disabled
+    # the default CNI through kind-config.yaml and will need to manually install a
+    # CNI for the nodes to become Ready.
+    # Setup daemonset/calico-etcd, a prerequisite for calico-node
+    print("Installing a custom CNI: Calico (async, in cluster)")
+    _run(
+        cmd=[
+            "kubectl", "apply",
+            "-f", "https://docs.projectcalico.org/v3.9/getting-started/kubernetes/installation/hosted/etcd.yaml",
+        ],
+        print_end="",
+    )
+    # NOTE: A toleration to schedule on a node that isn't ready is missing, but
+    #       this pod will be part of making sure the node can become ready.
+    #
+    #       toleration:
+    #         - key: node.kubernetes.io/not-ready
+    #           effect: NoSchedule
+    _run(
+        cmd=[
+            "kubectl", "patch", "daemonset/calico-etcd",
+            "--namespace", "kube-system",
+            "--type", "json",
+            "--patch", '[{"op":"add", "path":"/spec/template/spec/tolerations/-", "value":{"key":"node.kubernetes.io/not-ready", "effect":"NoSchedule"}}]',
+        ],
+        print_end="",
+    )
+    # Setup daemonset/calico-node, that will allow nodes to enter a ready state
+    _run(
+        cmd=[
+            "kubectl", "apply",
+            "-f", "https://docs.projectcalico.org/v3.9/getting-started/kubernetes/installation/hosted/calico.yaml",
+        ],
+        print_end="",
+    )
+    # NOTE: Connection details to daemonset/calico-etcd is missing so we need to
+    #       manually add them.
+    calico_etcd_endpoint = _run(
+        cmd=[
+            "kubectl", "get", "service/calico-etcd",
+            "--namespace", "kube-system",
+            "--output", "jsonpath=http://{.spec.clusterIP}:{.spec.ports[0].port}",
+        ],
+        print_command=False,
+        capture_output=True,
+    )
+    _run(
+        cmd=[
+            "kubectl", "patch", "configmap/calico-config",
+            "--namespace", "kube-system",
+            "--type", "merge",
+            "--patch", '{"data":{"etcd_endpoints":"%s"}}' % calico_etcd_endpoint,
+        ],
+        print_end="",
+    )
+    # NOTE: daemonset/calico-node pods' main container fails to start up without
+    #       an additional environment variable configured to disable a check
+    #       that we fail.
+    #
+    #       env:
+    #         - name: FELIX_IGNORELOOSERPF
+    #           value: "true"
+    _run(
+        cmd=[
+            "kubectl", "patch", "daemonset/calico-node",
+            "--namespace", "kube-system",
+            "--type", "json",
+            "--patch", '[{"op":"add", "path":"/spec/template/spec/containers/0/env/-", "value":{"name":"FELIX_IGNORELOOSERPF", "value":"true"}}]',
+        ],
+    )
+
+    print("Waiting for Kubernetes nodes to become ready.")
+    _run(
+        # NOTE: kubectl wait has a bug relating to using the --all flag in 1.13
+        #       at least Due to this, we wait only for the kind-control-plane
+        #       node, which currently is the only node we start with kind but
+        #       could be configured in kind-config.yaml.
+        #
+        #       ref: https://github.com/kubernetes/kubernetes/pull/71746
+        cmd=[
+            "kubectl", "wait", "node/jh-dev-control-plane",
+            "--for", "condition=ready",
+            "--timeout", "2m",
+        ],
+        error_callback=_log_wait_node_timeout,
+    )
+
+    print("Installing Helm's tiller asynchronously in the cluster.")
+    _run(
+        cmd=[
+            "kubectl", "create", "serviceaccount", "tiller",
+            "--namespace", "kube-system",
+        ],
+        print_end="",
+    )
+    _run(
+        cmd=[
+            "kubectl", "create", "clusterrolebinding", "tiller",
+            "--clusterrole", "cluster-admin",
+            "--serviceaccount", "kube-system:tiller",
+        ],
+        print_end="",
+    )
+    _run([
+        "helm", "init",
+        "--service-account", "tiller",
+    ])
+
+    print("Waiting for Helm's tiller to become ready in the cluster.")
+    _run(
+        cmd=[
+            "kubectl", "rollout", "status", "deployment/tiller-deploy",
+            "--namespace", "kube-system",
+            "--timeout", "2m",
+        ],
+        error_callback=_log_tiller_rollout_timeout,
+    )
+
+    print('Kind cluster "jh-dev" successfully setup!')
+
+
+@depend_on(binaries=["kind"], envs=[])
 def kind_stop():
-    # delete the kind cluster
-    pass
+    print('Deleting kind cluster "jh-dev".')
+    _run(["kind", "delete", "cluster", "--name", "jh-dev"])
 
 
-@depend_on(binaries=["chartpress", "helm"], envs=["KUBECONFIG"])
-def upgrade():
-    # consider commit-range
-    # run chartpress
-    # (conditionally) load images to a kind cluster
-    # helm upgrade / install with dev-config
-    # (?) port-forward
-    pass
+@depend_on(binaries=["chartpress", "helm"], envs=["KUBECONFIG", "CHARTPRESS_COMMIT_RANGE"])
+def upgrade(values):
+    print("Building images and updating image tags if needed.")
+    commit_range = os.environ.get(
+        "TRAVIS_COMMIT_RANGE",
+        os.environ["CHARTPRESS_COMMIT_RANGE"]
+    )
+    _run([
+        "chartpress",
+        "--commit-range", commit_range,
+    ])
+    # git --no-pager diff
+
+    if "kind-config-jh-dev" in os.environ["KUBECONFIG"]:
+        print("Loading the locally built images into the kind cluster.")
+        cmd = [
+            "python3", "ci/kind-load-docker-images.py",
+            "--kind-cluster", "jh-dev",
+        ]
+        for value in values:
+            cmd.append("--values")
+            cmd.append(value)
+        _run(cmd=cmd)
+
+
+    print("Installing/upgrading the Helm chart on the Kubernetes cluster.")
+    _run([
+        "helm", "upgrade", "jh-dev", "./jupyterhub",
+        "--install",
+        "--namespace", "jh-dev",
+        "--values", "dev-config.yaml",
+        "--wait",
+    ])
+
+    print("Waiting for the proxy and hub to become ready.")
+    _run(
+        cmd=[
+            "kubectl", "rollout", "status", "deployment/proxy",
+            "--timeout", "1m",
+        ],
+        print_end=""
+    )
+    _run([
+        "kubectl", "rollout", "status", "deployment/hub",
+        "--timeout", "1m",
+    ])
+
+    # FIXME: we don't do any port-forwarding
 
 
 @depend_on(binaries=["kubectl", "pytest"], envs=["KUBECONFIG"])
 def test():
-    # pytest
-    pass
+    _run(["pytest", "-v", "--exitfirst", "./tests"])
 
 
 @depend_on(binaries=["kubectl", "kubeval", ], envs=[])
 def check_templates():
-    # lint-and-validate script
-    pass
+    kubernetes_versions = None
+    kubernetes_versions = kubernetes_versions or os.environ.get("VALIDATE_KUBE_VERSIONS", None)
+    kubernetes_versions = kubernetes_versions or os.environ.get("KUBE_VERSION", None)
+
+    _run([
+        "python3", "tools/templates/lint-and-validate.py",
+         "--kubernetes-versions", kubernetes_versions,
+    ])
 
 
 @depend_on(binaries=["black"], envs=[])
 def check_python_code(apply):
-    # black
-    pass
+    raise NotImplementedError()
+    # invoke black
 
 
 @depend_on(binaries=[], envs=["GITHUB_ACCESS_TOKEN"])
 def changelog():
-    # req: GITHUB_ACCESS_TOKEN
-
-    # gitlab-activity
-    pass
+    raise NotImplementedError()
+    # invoke gitlab-activity
 
 
-def _check_output(cmd, **kwargs):
+def _log_tiller_rollout_timeout():
+    print("Helm's tiller never became ready!")
+    _run(
+        cmd=["kubectl", "describe", "nodes",],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=[
+            "kubectl", "describe", "deployment/tiller",
+            "--namespace", "kube-system",
+        ],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=[
+            "kubectl", "logs", "deployment/tiller",
+            "--namespace", "kube-system",
+        ],
+        exit_on_error=False,
+    )
+
+
+def _log_wait_node_timeout():
+    print("Kubernetes nodes never became ready")
+    _run(
+        cmd=["kubectl", "describe", "nodes",],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=[
+            "kubectl", "describe", "calico-etcd",
+            "--namespace", "kube-system",
+        ],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=[
+            "kubectl", "logs", "calico-etcd",
+            "--namespace", "kube-system",
+        ],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=[
+            "kubectl", "describe", "calico-node",
+            "--namespace", "kube-system",
+        ],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=[
+            "kubectl", "logs", "calico-node",
+            "--namespace", "kube-system",
+        ],
+        exit_on_error=False,
+    )
+
+
+def _print_command(text):
+    print(
+        colorama.Style.BRIGHT +
+        "$ " +
+        colorama.Fore.GREEN +
+        text +
+        colorama.Style.RESET_ALL +
+        colorama.Fore.WHITE +
+        colorama.Style.DIM
+    )
+
+def _run(cmd, print_command=True, print_end="\n", print_error=True, error_callback=None, exit_on_error=True, **kwargs):
     """Run a subcommand and exit if it fails"""
-    try:
-        return subprocess.check_output(cmd, **kwargs)
-    except subprocess.CalledProcessError as e:
+    if kwargs.get("capture_output", None):
+        if kwargs.get("text", None) is None:
+            kwargs["text"] = True
+
+    if print_command:
+        _print_command(" ".join(map(pipes.quote, cmd)))
+    completed_process = subprocess.run(cmd, **kwargs)
+    if print_command:
+        print(colorama.Style.RESET_ALL, end=print_end)
+
+    if completed_process.returncode != 0:
         print(
-            "`{}` exited with status {}".format(
-                " ".join(map(pipes.quote, cmd)), e.returncode
-            ),
+            "`{}` errored ({})".format(" ".join(map(pipes.quote, cmd)), e.returncode),
             file=sys.stderr,
         )
-        sys.exit(e.returncode)
+        if error_callback:
+            error_callback(cmd)
+        if exit_on_error:
+            sys.exit(e.returncode)
+
+    if completed_process.stdout:
+        return completed_process.stdout.strip()
 
 
 def _get_argparser():
@@ -138,8 +436,7 @@ def _get_argparser():
         "start", help="Start and initialize a kind Kubernetes cluster."
     )
     kind_start.add_argument(
-        "-f",
-        "--force",
+        "--recreate",
         action="store_true",
         help="If the cluster is already started, delete it and start a new.",
     )
@@ -149,6 +446,13 @@ def _get_argparser():
 
     upgrade = _cmds.add_parser(
         "upgrade", help="Install or upgrade the Helm chart in the Kubernetes cluster."
+    )
+    upgrade.add_argument(
+        "-f",
+        "--values",
+        action="append",
+        default=["dev-config.yaml"],
+        help="A Helm values file, this argument can be passed multiple times.",
     )
 
     test = _cmds.add_parser(
@@ -185,21 +489,53 @@ if __name__ == "__main__":
     argparser = _get_argparser()
     args = argparser.parse_args()
     
-    # DEBUGGING:
-    print(args)
+    # initialize defaults and load environment variables from the .env file
+    if not os.path.exists(".env"):
+        default_dotenv_file = textwrap.dedent(
+            """\
+            ## Environment variables loaded and used by the ./dev script.
+            #
+            ## GITHUB_ACCESS_TOKEN is needed to generate changelog entries etc.
+            ##
+            GITHUB_ACCESS_TOKEN=
+            #
+            ## CHARTPRESS_COMMIT_RANGE can help us avoids image rebuilds. If
+            ## the main repo remote isn't named origin, correct it here.
+            ##
+            CHARTPRESS_COMMIT_RANGE=origin/master..HEAD
+            #
+            ## KUBECONFIG is required to be set explicitly in order to avoid
+            ## potential modifications of non developer clusters. It should
+            ## be to the path where the kubernetes config resides.
+            ##
+            KUBECONFIG=
+            #
+            ## KUBE_VERSION is used to create a kind cluster and as a fallback
+            ## if you have not specified VALIDATE_KUBE_VERSIONS.
+            ##
+            KUBE_VERSION=1.15.3
+            #
+            ## VALIDATE_KUBE_VERSIONS is used when you check your Helm
+            ## templates. Are the generated Kubernetes resources valid
+            ## resources for these Kubernetes versions?
+            ##
+            # VALIDATE_KUBE_VERSIONS=1.14.0,1.15.0
+            """
+        )
+        with open('.env', 'w+') as f:
+            f.write(default_dotenv_file)
 
-    # load environment variables from the .env file
     dotenv.load_dotenv()
 
     # run suitable command and pass arguments
     if args.cmd == "kind":
         if args.sub_cmd == "start":
-            kind_start(force=args.force)
+            kind_start(recreate=args.recreate)
         if args.sub_cmd == "stop":
             kind_stop()
 
     if args.cmd == "upgrade":
-        upgrade()
+        upgrade(args.values)
 
     if args.cmd == "test":
         test()
