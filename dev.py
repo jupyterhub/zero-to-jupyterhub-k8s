@@ -399,9 +399,6 @@ def _print_command(text):
 def _run(cmd, print_command=True, print_end="\n", print_error=True, error_callback=None, exit_on_error=True, **kwargs):
     """Run a subcommand and exit if it fails"""
     if kwargs.get("capture_output", None):
-        if kwargs.get("text", None) is None:
-            kwargs["text"] = True
-
         # FIXME: This is a workaround for Python 3.6 that won't be required in
         #        Python 3.7.
         del kwargs["capture_output"]
@@ -424,7 +421,7 @@ def _run(cmd, print_command=True, print_end="\n", print_error=True, error_callba
             sys.exit(e.returncode)
 
     if completed_process.stdout:
-        return completed_process.stdout.strip()
+        return completed_process.stdout.decode("utf-8").strip()
 
 
 def _get_argparser():
