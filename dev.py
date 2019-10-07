@@ -18,14 +18,44 @@ Requirements:
 """
 
 import argparse
+import functools
 import os
 import pipes
+import shutil
 import subprocess
 import sys
 
 import dotenv
 
 
+def depend_on(binaries=[], envs=[]):
+    def decorator_depend_on(func):
+        @functools.wraps(func)
+        def wrapper_depend_on(*args, **kwargs):
+            missing_binaries = []
+            for binary in binaries:
+                if shutil.which(binary) is None:
+                    missing_binaries.append(binary)
+            missing_envs = []
+            for env in envs:
+                if os.environ.get(env) is None:
+                    missing_envs.append(env)
+
+            if missing_binaries or missing_envs:
+                print('Exiting due to missing dependencies for "%s"' % func.__name__)
+                print("- Binaries: %s" % missing_binaries)
+                print("- Env vars: %s" % missing_envs)
+
+                sys.exit(1)
+            else:
+                return func(*args, **kwargs)
+
+        return wrapper_depend_on
+
+    return decorator_depend_on
+
+
+@depend_on(binaries=["kind"], envs=["KUBECONFIG"])
 def kind_start(force):
     # check if there is a cluster existing already
     # then delete it
@@ -38,11 +68,13 @@ def kind_start(force):
     pass
 
 
+@depend_on(binaries=["kind"], envs=["KUBECONFIG"])
 def kind_stop():
     # delete the kind cluster
     pass
 
 
+@depend_on(binaries=["chartpress", "helm"], envs=["KUBECONFIG"])
 def upgrade():
     # consider commit-range
     # run chartpress
@@ -51,22 +83,26 @@ def upgrade():
     # (?) port-forward
     pass
 
-# req: kubectl, kubeconfig, running cluster,
+
+@depend_on(binaries=["kubectl", "pytest"], envs=["KUBECONFIG"])
 def test():
     # pytest
     pass
 
 
+@depend_on(binaries=["kubectl", "kubeval", ], envs=[])
 def check_templates():
     # lint-and-validate script
     pass
 
 
+@depend_on(binaries=["black"], envs=[])
 def check_python_code(apply):
     # black
     pass
 
 
+@depend_on(binaries=[], envs=["GITHUB_ACCESS_TOKEN"])
 def changelog():
     # req: GITHUB_ACCESS_TOKEN
 
