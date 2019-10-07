@@ -75,6 +75,8 @@ def kind_start(recreate):
         print_command=False,
         capture_output=True,
     )
+    print(kind_clusters)
+    tmp = re.search(r"\bjh-dev\b", kind_clusters)
     kind_cluster_exist = bool(re.search(r"\bjh-dev\b", kind_clusters))
     if kind_cluster_exist:
         print('The kind cluster "jh-dev" exists already.')
@@ -422,6 +424,8 @@ def _run(cmd, print_command=True, print_end="\n", print_error=True, error_callba
 
     if completed_process.stdout:
         return completed_process.stdout.decode("utf-8").strip()
+    elif kwargs.get("stdout", None):
+        return ""
 
 
 def _get_argparser():
