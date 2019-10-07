@@ -27,6 +27,7 @@ stages:
       branch in (master) AND
       type in (push)
 install:
+  - set -e
   - pip3 install --no-cache-dir -r dev-requirements.txt
   - . ci/common ci
 
@@ -36,9 +37,10 @@ script:
   - setup_kind
   - setup_helm
   - ./ci/travis-docker-fix
-  - ./dev.py check templates
-  - ./ci/upgrade
-  - ./ci/test
+  - ./dev.py kind start
+  - ./dev.py upgrade
+  - kubectl port-forward svc/proxy-public 8080:80 > /dev/null 2>&1 &
+  - ./dev.py test
 env:
   ## NOTE: The environment variables will be expanded to multiple jobs. For
   ##       additional individual jobs, only the first entry is used.
