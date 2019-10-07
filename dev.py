@@ -297,7 +297,7 @@ def test():
     _run(["pytest", "-v", "--exitfirst", "./tests"])
 
 
-@depend_on(binaries=["kubectl", "kubeval", ], envs=[])
+@depend_on(binaries=["kubectl", "helm", "yamllint", "kubeval"], envs=[])
 def check_templates():
     kubernetes_versions = None
     kubernetes_versions = kubernetes_versions or os.environ.get("VALIDATE_KUBE_VERSIONS", None)
