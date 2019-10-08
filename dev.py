@@ -259,24 +259,24 @@ def upgrade(values):
 
     if "kind-config-jh-dev" in os.environ["KUBECONFIG"]:
         print("Loading the locally built images into the kind cluster.")
-        cmd = [
+        _run([
             "python3", "ci/kind-load-docker-images.py",
             "--kind-cluster", "jh-dev",
-        ]
-        for value in values:
-            cmd.append("--values")
-            cmd.append(value)
-        _run(cmd=cmd)
+        ])
 
 
     print("Installing/upgrading the Helm chart on the Kubernetes cluster.")
-    _run([
+    cmd = [
         "helm", "upgrade", "jh-dev", "./jupyterhub",
         "--install",
         "--namespace", "jh-dev",
         "--values", "dev-config.yaml",
         "--wait",
-    ])
+    ]
+    for value in values:
+        cmd.append("--values")
+        cmd.append(value)
+    _run(cmd)
 
     print("Waiting for the proxy and hub to become ready.")
     _run(
