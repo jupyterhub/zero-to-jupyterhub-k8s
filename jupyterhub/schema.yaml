@@ -1087,8 +1087,8 @@ properties:
         description: |
           Enable the creation of a Kubernetes Ingress to proxy-public service.
 
-          See [Advanced Topics — Zero to JupyterHub with Kubernetes 0.7.0 documentation]
-          (https://zero-to-jupyterhub.readthedocs.io/en/stable/advanced.html#ingress)
+          See [Advanced Topics — Zero to JupyterHub with Kubernetes
+          0.7.0 documentation](https://zero-to-jupyterhub.readthedocs.io/en/stable/advanced.html#ingress)
           for more details.
       annotations:
         type: object
