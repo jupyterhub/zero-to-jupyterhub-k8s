@@ -270,25 +270,23 @@ def upgrade(values):
         "helm", "upgrade", "jh-dev", "./jupyterhub",
         "--install",
         "--namespace", "jh-dev",
-        "--values", "dev-config.yaml",
-        "--wait",
     ]
     for value in values:
         cmd.append("--values")
         cmd.append(value)
-    _run(cmd)
+    _run(cmd=cmd)
 
     print("Waiting for the proxy and hub to become ready.")
     _run(
         cmd=[
             "kubectl", "rollout", "status", "deployment/proxy",
-            "--timeout", "1m",
+            "--timeout", "2m",
         ],
         print_end=""
     )
     _run([
         "kubectl", "rollout", "status", "deployment/hub",
-        "--timeout", "1m",
+        "--timeout", "2m",
     ])
 
     # FIXME: we don't do any port-forwarding
@@ -414,13 +412,15 @@ def _run(cmd, print_command=True, print_end="\n", print_error=True, error_callba
 
     if completed_process.returncode != 0:
         print(
-            "`{}` errored ({})".format(" ".join(map(pipes.quote, cmd)), e.returncode),
+            "`{}` errored ({})".format(" ".join(map(pipes.quote, cmd)), completed_process.returncode),
             file=sys.stderr,
         )
+        if completed_process.stderr:
+            print(completed_process.stderr.decode("utf-8").strip())
         if error_callback:
             error_callback(cmd)
         if exit_on_error:
-            sys.exit(e.returncode)
+            sys.exit(completed_process.returncode)
 
     if completed_process.stdout:
         return completed_process.stdout.decode("utf-8").strip()
