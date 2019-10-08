@@ -29,7 +29,7 @@ stages:
 install:
   - set -e
   - pip3 install --no-cache-dir -r dev-requirements.txt
-  - . ci/common ci
+  - . ci/common
 
 stage: test
 script:
@@ -53,11 +53,10 @@ env:
   ## ref: https://hub.docker.com/r/kindest/node/tags
   ## ref: https://github.com/kubernetes-sigs/kind/issues/197
   ##
-  # - KUBE_VERSION=1.16
+  - KUBE_VERSION=1.16.1
   - KUBE_VERSION=1.15.3
   - KUBE_VERSION=1.14.6
   - KUBE_VERSION=1.13.10
-  - KUBE_VERSION=1.12.10
 
 jobs:
   ## include additional individual jobs
@@ -68,7 +67,8 @@ jobs:
         - setup_helm
         - setup_kubeval
         - ./dev.py check templates
-      env: []
+      env:
+        - VALIDATE_KUBE_VERSIONS=1.11.0,1.12.0,1.13.0,1.14.0,1.15.0,1.16.0
     - stage: publish
       script:
         - setup_helm

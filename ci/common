@@ -6,39 +6,30 @@
 mkdir -p bin
 export PATH="$PWD/bin:$PATH"
 
-## NOTE: export HUB_API_URL is required for it to be accessible from pytest
-##
-export HUB_API_URL=http://127.0.0.1:8080/hub/api
-
-## NOTE: We need to allow our CI system to override these env. variables
+## NOTE: These are default values for relevant environment variables
 ##
 if [ -z ${KUBE_VERSION:-} ]; then
     ## NOTE: KUBE_VERSION is limited by the available kindest/node images
     ## 
     ## ref: https://hub.docker.com/r/kindest/node/tags
     ## ref: https://github.com/kubernetes/kubernetes/releases
-    export KUBE_VERSION=1.13.10
+    ##
+    export KUBE_VERSION=1.15.3
 fi
 if [ -z ${KIND_VERSION:-} ]; then
     ## ref: https://github.com/kubernetes-sigs/kind/releases
+    ##
     export KIND_VERSION=0.5.1
 fi
 if [ -z ${HELM_VERSION:-} ]; then
     ## ref: https://github.com/helm/helm/releases
+    ##
     export HELM_VERSION=2.14.3
 fi
 if [ -z ${KUBEVAL_VERSION:-} ]; then
     ## ref: https://github.com/instrumenta/kubeval/releases
+    ##
     export KUBEVAL_VERSION=0.14.0
-fi
-
-## Valid versions to list under VALIDATE_KUBE_VERSIONS are those in the
-## kubernetes-json-schema repository, used by kubeval.
-##
-## ref: https://github.com/instrumenta/kubernetes-json-schema
-##
-if [ -z ${VALIDATE_KUBE_VERSIONS:-} ]; then
-    export VALIDATE_KUBE_VERSIONS=1.11.0,1.12.0,1.13.0,1.14.0,1.15.0
 fi
 
 ## NOTE: The setup_... functions cache downloads but ensure the correct version
@@ -95,15 +86,9 @@ setup_git_crypt () {
     cp bin/git-crypt-${GIT_CRYPT_VERSION} bin/git-crypt
 }
 
-if [ "$1" = "ci" ]; then
-    export KIND_CLUSTER=jh-dev-${KUBE_VERSION}
-    export KUBECONFIG=~/.kube/kind-config-${KIND_CLUSTER}
-else
+if [ "$1" = "--setup" ]; then
     setup_kubectl
     setup_kind
     setup_helm
     setup_kubeval
-
-    export KIND_CLUSTER=dev
-    export KUBECONFIG=~/.kube/kind-config-${KIND_CLUSTER}
 fi
