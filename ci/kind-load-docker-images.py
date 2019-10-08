@@ -78,7 +78,7 @@ def kind_load_docker_images(kind_cluster, images):
             continue
 
         check_output(["kind", "load", "docker-image", "--name", kind_cluster, image])
-        print("### Loaded %s" % image)
+        print(f"### Loaded {image}")
 
 
 if __name__ == "__main__":

@@ -50,9 +50,9 @@ def depend_on(binaries=[], envs=[]):
                     missing_envs.append(env)
 
             if missing_binaries or missing_envs:
-                print('Exiting due to missing dependencies for "%s"' % func.__name__)
-                print("- Binaries: %s" % missing_binaries)
-                print("- Env vars: %s" % missing_envs)
+                print(f'Exiting due to missing dependencies for "{func.__name__}"')
+                print(f"- Binaries: {missing_binaries}")
+                print(f"- Env vars: {missing_envs}")
                 print("")
                 if missing_binaries:
                     print("Install and make the binaries available on your PATH!")
@@ -75,8 +75,6 @@ def kind_start(recreate):
         print_command=False,
         capture_output=True,
     )
-    print(kind_clusters)
-    tmp = re.search(r"\bjh-dev\b", kind_clusters)
     kind_cluster_exist = bool(re.search(r"\bjh-dev\b", kind_clusters))
     if kind_cluster_exist:
         print('The kind cluster "jh-dev" exists already.')
@@ -91,7 +89,7 @@ def kind_start(recreate):
     _run([
         "kind", "create", "cluster",
         "--name", "jh-dev",
-        "--image", "kindest/node:v%s" % os.environ["KUBE_VERSION"],
+        "--image", f"kindest/node:v{os.environ['KUBE_VERSION']}",
         "--config", "ci/kind-config.yaml",
     ])
     
@@ -105,7 +103,7 @@ def kind_start(recreate):
     )
 
     if os.environ["KUBECONFIG"] != kubeconfig_path:
-        print("Updating your .env file's KUBECONFIG value to \"%s\"" % kubeconfig_path)
+        print(f'Updating your .env file\'s KUBECONFIG value to "{kubeconfig_path}"')
         dotenv.set_key(".env", "KUBECONFIG", kubeconfig_path)
         os.environ["KUBECONFIG"] = kubeconfig_path
 
@@ -293,7 +291,7 @@ def upgrade(values):
     _run(
         cmd=[
             "kubectl", "port-forward", "service/proxy-public",
-            "%s:80" % os.environ["PROXY_PUBLIC_SERVICE_PORT"],
+            f"{os.environ['PROXY_PUBLIC_SERVICE_PORT']}:80",
         ],
         forget=True,
     )
