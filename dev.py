@@ -299,7 +299,13 @@ def upgrade(values):
 
 @depend_on(binaries=["kubectl", "pytest"], envs=["KUBECONFIG", "PROXY_PUBLIC_SERVICE_HOST", "PROXY_PUBLIC_SERVICE_PORT"])
 def test():
-    _run(["pytest", "-v", "--exitfirst", "./tests"])
+    _run(
+        cmd=["pytest", "-v", "--exitfirst", "./tests"],
+        error_callback=_log_test_failure,
+    )
+    
+    print("Tests succeeded!")
+    _run(cmd=["kubectl", "get", "pods"])
 
 
 @depend_on(binaries=["helm", "yamllint", "kubeval"], envs=[])
@@ -324,6 +330,34 @@ def check_python_code(apply):
 def changelog():
     raise NotImplementedError()
     # invoke gitlab-activity
+
+
+def _log_test_failure():
+    print("A test failed, let's debug!")
+    _run(
+        cmd=["kubectl", "describe", "nodes",],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=["kubectl", "get", "pods",],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=["kubectl", "get", "events",],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=["kubectl", "get", "logs", "deploy/hub",],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=["kubectl", "get", "logs", "deploy/proxy",],
+        exit_on_error=False,
+    )
 
 
 def _log_tiller_rollout_timeout():
@@ -436,7 +470,7 @@ def _run(cmd, forget=False, print_command=True, print_end="\n", print_error=True
         if proc.stderr:
             print(proc.stderr.decode("utf-8").strip())
         if error_callback:
-            error_callback(cmd)
+            error_callback()
         if exit_on_error:
             sys.exit(proc.returncode)
 
