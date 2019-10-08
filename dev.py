@@ -244,7 +244,7 @@ def kind_stop():
     _run(["kind", "delete", "cluster", "--name", "jh-dev"])
 
 
-@depend_on(binaries=["chartpress", "helm"], envs=["KUBECONFIG", "CHARTPRESS_COMMIT_RANGE"])
+@depend_on(binaries=["chartpress", "helm"], envs=["KUBECONFIG", "CHARTPRESS_COMMIT_RANGE", "PROXY_PUBLIC_SERVICE_PORT"])
 def upgrade(values):
     print("Building images and updating image tags if needed.")
     commit_range = os.environ.get(
@@ -291,12 +291,15 @@ def upgrade(values):
 
     print("Run and forget about port-forwarding.")
     _run(
-        cmd=["kubectl", "port-forward", "service/proxy-public", "8080:80"],
+        cmd=[
+            "kubectl", "port-forward", "service/proxy-public",
+            "%s:80" % os.environ["PROXY_PUBLIC_SERVICE_PORT"],
+        ],
         forget=True,
     )
 
 
-@depend_on(binaries=["kubectl", "pytest"], envs=["KUBECONFIG"])
+@depend_on(binaries=["kubectl", "pytest"], envs=["KUBECONFIG", "PROXY_PUBLIC_SERVICE_HOST", "PROXY_PUBLIC_SERVICE_PORT"])
 def test():
     _run(["pytest", "-v", "--exitfirst", "./tests"])
 
@@ -534,6 +537,9 @@ if __name__ == "__main__":
             ## potential modifications of non developer clusters. It should
             ## be to the path where the kubernetes config resides.
             ##
+            ## The "./dev.py kind start" command will set this files KUBECONFIG
+            ## entry automatically on cluster creation.
+            ##
             KUBECONFIG=
             #
             ## KUBE_VERSION is used to create a kind cluster and as a fallback
@@ -549,6 +555,14 @@ if __name__ == "__main__":
             ## resources for these Kubernetes versions?
             ##
             # VALIDATE_KUBE_VERSIONS=1.14.0,1.15.0
+            #
+            ## PROXY_PUBLIC_SERVICE_HOST and PROXY_PUBLIC_SERVICE_PORT allow
+            ## you to run the tests if you have used kubectl to port forward
+            ## the proxy-public Kubernetes service manually with a custom
+            ## port or host ip.
+            ##
+            PROXY_PUBLIC_SERVICE_HOST=127.0.0.1
+            PROXY_PUBLIC_SERVICE_PORT=8080
             """
         )
         with open('.env', 'w+') as f:

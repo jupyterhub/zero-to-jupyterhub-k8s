@@ -15,9 +15,11 @@ def request_data():
     with open(os.path.join(basedir, "dev-config.yaml")) as f:
         y = yaml.safe_load(f)
     token = y["hub"]["services"]["test"]["apiToken"]
+    host = os.environ.get("ROXY_PUBLIC_SERVICE_HOST", "127.0.0.1"),
+    port = os.environ.get("PROXY_PUBLIC_SERVICE_PORT", "8080"),
     return {
         "token": token,
-        "hub_url": os.environ["HUB_API_URL"],
+        "hub_url": "http://%s:%s/hub/api" % (host, port),
         "headers": {"Authorization": f"token {token}"},
         "test_timeout": 300,
         "request_timeout": 60,

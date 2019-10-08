@@ -53,7 +53,12 @@ env:
   ## ref: https://hub.docker.com/r/kindest/node/tags
   ## ref: https://github.com/kubernetes-sigs/kind/issues/197
   ##
-  - KUBE_VERSION=1.16.1
+  ## NOTE: KUBE_VERSION 1.16.1 is disabled until calcio has updated their
+  ##       calico-etcd.yaml containing an old invalid DaemonSet's apiVersion.
+  ##
+  ## ref: https://github.com/projectcalico/calico/issues/2915
+  ##
+  # - KUBE_VERSION=1.16.1
   - KUBE_VERSION=1.15.3
   - KUBE_VERSION=1.14.6
   - KUBE_VERSION=1.13.10

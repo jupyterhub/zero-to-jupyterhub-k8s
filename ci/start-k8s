@@ -38,7 +38,7 @@ kubectl get nodes
 # CNI for the nodes to become Ready.
 echo "installing a custom CNI: Calico (async, in cluster)"
 # Setup daemonset/calico-etcd, a prerequisite for calico-node
-kubectl apply -f https://docs.projectcalico.org/v3.9/getting-started/kubernetes/installation/hosted/etcd.yaml
+kubectl apply -f https://docs.projectcalico.org/v3.10/getting-started/kubernetes/installation/hosted/etcd.yaml
 # NOTE: A toleration to schedule on a node that isn't ready is missing, but
 #       this pod will be part of making sure the node can become ready.
 #
@@ -49,7 +49,7 @@ kubectl patch -n kube-system daemonset/calico-etcd --type='json' \
   -p='[{"op":"add", "path":"/spec/template/spec/tolerations/-", "value":{"key":"node.kubernetes.io/not-ready", "effect":"NoSchedule"}}]'
 
 # Setup daemonset/calico-node, that will allow nodes to enter a ready state
-curl -sSo ci/daemonset-calico-node.yaml https://docs.projectcalico.org/v3.9/getting-started/kubernetes/installation/hosted/calico.yaml
+curl -sSo ci/daemonset-calico-node.yaml https://docs.projectcalico.org/v3.10/getting-started/kubernetes/installation/hosted/calico.yaml
 # NOTE: Connection details to daemonset/calico-etcd is missing so we need to
 #       manually add them.
 CALICO_ETCD_IP=$(kubectl get service -n kube-system calico-etcd -o jsonpath='{.spec.clusterIP}')
