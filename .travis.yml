@@ -39,7 +39,6 @@ script:
   - ./ci/travis-docker-fix
   - ./dev.py kind start
   - ./dev.py upgrade
-  - kubectl port-forward svc/proxy-public 8080:80 > /dev/null 2>&1 &
   - ./dev.py test
 env:
   ## NOTE: The environment variables will be expanded to multiple jobs. For

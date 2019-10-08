@@ -289,7 +289,11 @@ def upgrade(values):
         "--timeout", "2m",
     ])
 
-    # FIXME: we don't do any port-forwarding
+    print("Run and forget about port-forwarding.")
+    _run(
+        cmd=["kubectl", "port-forward", "service/proxy-public", "8080:80"],
+        forget=True,
+    )
 
 
 @depend_on(binaries=["kubectl", "pytest"], envs=["KUBECONFIG"])
@@ -396,7 +400,7 @@ def _print_command(text):
         colorama.Style.DIM
     )
 
-def _run(cmd, print_command=True, print_end="\n", print_error=True, error_callback=None, exit_on_error=True, **kwargs):
+def _run(cmd, forget=False, print_command=True, print_end="\n", print_error=True, error_callback=None, exit_on_error=True, **kwargs):
     """Run a subcommand and exit if it fails"""
     if kwargs.get("capture_output", None):
         # FIXME: This is a workaround for Python 3.6 that won't be required in
@@ -406,24 +410,37 @@ def _run(cmd, print_command=True, print_end="\n", print_error=True, error_callba
 
     if print_command:
         _print_command(" ".join(map(pipes.quote, cmd)))
-    completed_process = subprocess.run(cmd, **kwargs)
+    if forget:
+        # Call and forget this process
+        with open(os.devnull, 'r+b', 0) as DEVNULL:
+            proc = subprocess.Popen(
+                cmd,
+                stdin=DEVNULL,
+                stdout=DEVNULL,
+                stderr=DEVNULL,
+                close_fds=True,
+            )
+        return
+    else:
+        # This call will await completion
+        proc = subprocess.run(cmd, **kwargs)
     if print_command:
         print(colorama.Style.RESET_ALL, end=print_end)
 
-    if completed_process.returncode != 0:
+    if proc.returncode != 0:
         print(
-            "`{}` errored ({})".format(" ".join(map(pipes.quote, cmd)), completed_process.returncode),
+            "`{}` errored ({})".format(" ".join(map(pipes.quote, cmd)), proc.returncode),
             file=sys.stderr,
         )
-        if completed_process.stderr:
-            print(completed_process.stderr.decode("utf-8").strip())
+        if proc.stderr:
+            print(proc.stderr.decode("utf-8").strip())
         if error_callback:
             error_callback(cmd)
         if exit_on_error:
-            sys.exit(completed_process.returncode)
+            sys.exit(proc.returncode)
 
-    if completed_process.stdout:
-        return completed_process.stdout.decode("utf-8").strip()
+    if proc.stdout:
+        return proc.stdout.decode("utf-8").strip()
     elif kwargs.get("stdout", None):
         return ""
 
