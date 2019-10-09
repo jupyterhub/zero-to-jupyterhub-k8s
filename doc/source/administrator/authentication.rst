@@ -230,10 +230,10 @@ and obtain the confidential client credentials.
          username_key: preferred_username
 
 Auth0
-^^^^^^^^^^^^^^
+^^^^^
 
-Auth0 is a popular commercial provider of identity management. The jupyterhub helm does not support Auth0 as a
-specific configuration, so we must configure it with extraEnv and extraConfig.
+Auth0 is a popular commercial provider of identity management. The JupyterHub helm chart does not include support for
+Auth0 by default.  To use Auth0, ``extraEnv`` and ``extraConfig`` must be configured as follows:
 
 Note that without the scope defined, authenticating to JupyterHub after already being logged in to Auth0 will fail.
 
