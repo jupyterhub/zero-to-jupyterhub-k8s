@@ -67,7 +67,7 @@ def depend_on(binaries=[], envs=[]):
     return decorator_depend_on
 
 
-@depend_on(binaries=["kind"], envs=["KUBE_VERSION"])
+@depend_on(binaries=["kind", "docker"], envs=["KUBE_VERSION"])
 def kind_start(recreate):
     # check for a existing jh-dev cluster and conditionally delete it
     kind_clusters = _run(
@@ -77,11 +77,26 @@ def kind_start(recreate):
     )
     kind_cluster_exist = bool(re.search(r"\bjh-dev\b", kind_clusters))
     if kind_cluster_exist:
-        print('The kind cluster "jh-dev" exists already.')
         if recreate:
+            print("Deleting existing kind cluster named jh-dev.")
             _run(["kind", "delete", "cluster", "--name", "jh-dev"])
         else:
-            sys.exit(1)
+            # This workaround currently only works for single node clusters,
+            # which is what we currently setup.
+            #
+            # ref: https://github.com/kubernetes-sigs/kind/issues/148#issuecomment-504712517
+            is_kind_cluster_container_running = _run(
+                cmd=["docker", "ps", "--quiet", "--filter", "name=jh-dev-control-plane"],
+                print_command=False,
+                capture_output=True,
+            )
+            if not is_kind_cluster_container_running:
+                print("Starting up the existing kind cluster's node container.")
+                _run(["docker", "start", "jh-dev-control-plane"])
+                sys.exit(0)
+            else:
+                print("The kind cluster was already started and running.")
+                sys.exit(0)
 
 
     # start a new cluster with a fixed name, kubernetes version
