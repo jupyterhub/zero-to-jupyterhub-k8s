@@ -133,72 +133,13 @@ def kind_start(recreate):
     # To test network policies, we need a custom CNI like Calico. We have disabled
     # the default CNI through kind-config.yaml and will need to manually install a
     # CNI for the nodes to become Ready.
-    # Setup daemonset/calico-etcd, a prerequisite for calico-node
     print("Installing a custom CNI: Calico (async, in cluster)")
     _run(
         cmd=[
             "kubectl", "apply",
-            "-f", "https://docs.projectcalico.org/v3.9/getting-started/kubernetes/installation/hosted/etcd.yaml",
+            "-f", "https://docs.projectcalico.org/v3.10/manifests/calico.yaml",
         ],
         print_end="",
-    )
-    # NOTE: A toleration to schedule on a node that isn't ready is missing, but
-    #       this pod will be part of making sure the node can become ready.
-    #
-    #       toleration:
-    #         - key: node.kubernetes.io/not-ready
-    #           effect: NoSchedule
-    _run(
-        cmd=[
-            "kubectl", "patch", "daemonset/calico-etcd",
-            "--namespace", "kube-system",
-            "--type", "json",
-            "--patch", '[{"op":"add", "path":"/spec/template/spec/tolerations/-", "value":{"key":"node.kubernetes.io/not-ready", "effect":"NoSchedule"}}]',
-        ],
-        print_end="",
-    )
-    # Setup daemonset/calico-node, that will allow nodes to enter a ready state
-    _run(
-        cmd=[
-            "kubectl", "apply",
-            "-f", "https://docs.projectcalico.org/v3.9/getting-started/kubernetes/installation/hosted/calico.yaml",
-        ],
-        print_end="",
-    )
-    # NOTE: Connection details to daemonset/calico-etcd is missing so we need to
-    #       manually add them.
-    calico_etcd_endpoint = _run(
-        cmd=[
-            "kubectl", "get", "service/calico-etcd",
-            "--namespace", "kube-system",
-            "--output", "jsonpath=http://{.spec.clusterIP}:{.spec.ports[0].port}",
-        ],
-        print_command=False,
-        capture_output=True,
-    )
-    _run(
-        cmd=[
-            "kubectl", "patch", "configmap/calico-config",
-            "--namespace", "kube-system",
-            "--type", "merge",
-            "--patch", '{"data":{"etcd_endpoints":"%s"}}' % calico_etcd_endpoint,
-        ],
-        print_end="",
-    )
-    # NOTE: daemonset/calico-node pods' main container fails to start up without
-    #       an additional environment variable configured to disable a check
-    #       that we fail.
-    #
-    #       env:
-    #         - name: FELIX_IGNORELOOSERPF
-    #           value: "true"
-    _run(
-        cmd=[
-            "kubectl", "patch", "daemonset/calico-node",
-            "--namespace", "kube-system",
-            "--type", "json",
-            "--patch", '[{"op":"add", "path":"/spec/template/spec/containers/0/env/-", "value":{"name":"FELIX_IGNORELOOSERPF", "value":"true"}}]',
-        ],
     )
 
     print("Waiting for Kubernetes nodes to become ready.")
