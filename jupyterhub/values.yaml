@@ -49,6 +49,8 @@ hub:
   image:
     name: jupyterhub/k8s-hub
     tag: generated-by-chartpress
+    # pullSecrets:
+    #   - secretName
   resources:
     requests:
       cpu: 200m
@@ -245,6 +247,8 @@ singleuser:
     name: jupyterhub/k8s-singleuser-sample
     tag: generated-by-chartpress
     pullPolicy: IfNotPresent
+    # pullSecrets:
+    #   - secretName
   imagePullSecret:
     enabled: false
     registry:
