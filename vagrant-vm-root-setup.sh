@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -eu
 
 # Install pip
@@ -7,7 +7,6 @@ set -eu
 #
 apt-get -q update
 apt-get -q install -y python3-pip
-echo 'PATH=$PATH:~/.local/bin' >> /home/vagrant/.bashrc
 
 
 # Install Docker CE
@@ -42,5 +41,5 @@ EOF
 sed -i -re "s/^(127.0.0.1\\s.+)/\\1 `hostname`/" /etc/hosts
 
 
-# Put to be downloaded binaries on PATH
-echo 'PATH=$PATH:~/zero-to-jupyterhub-k8s/bin' >> /home/vagrant/.bashrc
+# Make additional setup steps as the vagrant user
+su -c "source /home/vagrant/zero-to-jupyterhub-k8s/vagrant-vm-user-setup.sh" vagrant

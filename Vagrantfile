@@ -15,6 +15,6 @@ Vagrant.configure("2") do |config|
 
   config.vm.network "forwarded_port", guest: 8080, host: 8090
 
-  config.vm.provision "shell", path: "vagrant-vm-setup.sh"
+  config.vm.provision "shell", path: "vagrant-vm-root-setup.sh"
   config.vm.synced_folder ".", "/home/vagrant/zero-to-jupyterhub-k8s"
 end

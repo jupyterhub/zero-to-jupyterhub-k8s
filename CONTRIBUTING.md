@@ -1,44 +1,31 @@
 # Contributing
 
-Welcome! As a [Jupyter](https://jupyter.org) project, we follow the [Jupyter
-contributor
+We are very pleased to have you as a contributor, and we hope you will find your
+impact on the projects valuable. Thank you for sharing your interests, ideas,
+and skills with us!
+
+This is a [Jupyter](https://jupyter.org) project, so please start out by reading
+the first page of the general [Jupyter contributor
 guide](https://jupyter.readthedocs.io/en/latest/contributor/content-contributor.html).
 
-## Local development for a code contribution
+## Local development
 
-### Prepare git
+### 1: Preparations
 
-1. Install [git](https://www.git-scm.com/). To verify it is installed, run this
-   from a terminal.
+Before anything else, install [git](https://www.git-scm.com/), clone the
+repository, and enter the repository directory.
 
-   ```bash
-   git version
-   ```
+```
+git clone https://github.com/jupyterhub/zero-to-jupyterhub-k8s
+cd zero-to-jupyterhub-k8s
+```
 
-1. Make a GitHub fork of [this
-   repository](https://github.com/jupyterhub/zero-to-jupyterhub-k8s) by creating
-   and then logging into your GitHub account and clicking the Fork button.
+For local development, you will additional tools and we present you with two
+options. Either you, a) start and work from a Virtual Machine that is
+automatically prepared for development, or b) install the tools yourself and
+work without a Virtual Machine.
 
-1. Clone your fork to your local computer.
-
-   ```bash
-   git clone http://github.com/<YOUR-GITHUB-USERNAME>/zero-to-jupyterhub-k8s.git
-   cd zero-to-jupyterhub-k8s
-
-   # make it easy to reference the projects GitHub repository as "upstream"
-   git remote add upstream https://github.com/jupyterhub/zero-to-jupyterhub-k8s
-
-   # make it obvious what you reference by renaming a reference to your
-   # personal GitHub repository to "fork"
-   git remote rename origin fork
-   ```
-
-### Prepare Virtual Machine software
-
-A `Vagrantfile` is a way to prepare a Virtual Machine (VM), and we [have
-one](Vagrantfile) to prepare a VM for local development! We can use it to get
-a VM up and running, enter it with SSH, develop and run tests, and later shut
-down without influencing our system.
+#### a) Use a prepared Virtual Machine (VM)
 
 1. Install VirtualBox by [downloading and running an
    installer](https://www.virtualbox.org/wiki/Downloads).
@@ -46,64 +33,146 @@ down without influencing our system.
 1. Install Vagrant by [downloading and running an
    installer](https://www.vagrantup.com/downloads.html).
 
-### Develop and run tests
-
 1. Start a prepared VM and SSH into it.
 
-   ```bash
-   ## if you have suspended a VM earlier, use "vagrat resume" instead
+   ```shell
+   # if you have suspended a VM earlier, use "vagrat resume" instead
    vagrant up
 
-   ## enter a SSH session with the VM
+   # enter a SSH session with the VM
    vagrant ssh
-   ```
 
-2. Develop and test within the VM
-   
-   ```bash
-   ## run within the SSH session
+   # relocate to the repository folder that is mounted from outside the VM
+   # IMPORTANT: changes to this folder will be seen outside your VM
    cd zero-to-jupyterhub-k8s
-   
-   ## initialize some environment variables etc (notice the leading dot)
-   . ./dev init
-
-   ## start a k8s cluster
-   ./dev start-k8s
-
-   ## install/upgrade the helm chart
-   ./dev upgrade
-
-   ## see the results
-   # visit http://localhost:8090
-
-   ## make a change
-   # ...
-
-   ## run tests
-   ./dev test
    ```
-  
-3. Close the SSH session
 
-   ```bash
+1. Do your development.
+
+1. Exit and suspend the VM
+
+   ```shell
    ## exit the SSH session
    exit
    vagrant suspend
-   # vagrant halt
-   # vagrant destroy
    ```
 
-> **NOTE:** You can also use `vagrant destroy` to reset the VM state entirely,
-> but the start-k8s script will reset the k8s cluster if you have the same k8s
-> version set as previous so it should be fine to just `halt` and do `up` again
-> later.
+   > **NOTE:** You can also use `vagrant destroy` to reset the VM state entirely.
 
-### Debugging issues
+#### b) Install tools yourself
+
+This is what you need to install and make available on your PATH.
+
+- [docker](https://docs.docker.com/install/)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- [helm](https://helm.sh/docs/using_helm/#installing-helm)
+- [kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
+- [kubeval](https://kubeval.instrumenta.dev/installation/)
+- Python 3.6+ ([Anaconda.com](https://www.anaconda.com/distribution/), [Python.org](https://www.python.org/downloads/))
+- Python dependencies installed
+    - `dev-requirements.txt`
+    - `doc/doc-requirements.txt`
+
+To verify you got it all right, you should be able to run the following commands
+without error.
+
+```
+git --version
+docker --version
+kubectl version --client
+helm version --client
+kind --version
+kubeval --version
+pytest --version
+chartpress --version
+```
+
+### 2: Setup a Kubernetes cluster
+
+You will now need a Kubernetes cluster to work with, and we present you with two
+options again. Either you, a) use an automated script that starts and sets up a
+Kubernetes cluster for you using [`kind`
+(Kubernetes-in-Docker)](https://kind.sigs.k8s.io), or b), you start and setup
+your own Kubernetes cluster.
+
+
+#### a) Automated use of `kind`
+
+```shell
+# create and setup a local Kubernetes cluster
+./dev kind create
+```
+
+> **NOTE:** You can also use the `--recreate` flag to recreate the cluster to
+> get a clean slate, or first run `./dev kind delete`.
+
+#### b) Self-managed Kubernetes cluster
+
+- To be compatible with all test that currently are defined, your cluster need
+  to have a network policy controller that enforces the network policies.
+- To use `./dev upgrade` or `./dev test`, you will note that you need to
+  explicitly declare the path of your Kubernetes config and what Kubernetes
+  context to use. This is enforced to ensure the script only works on a
+  Kubernetes cluster it is intended to work on.
+
+### 3: Install or upgrade your local Helm chart
+
+You have two options as usual to install or upgrade your local Helm chart,
+either you a) use the automated script to install or upgrade, or you do it on
+your own.
+
+TODO: learn properly about the chartpress --commit-ranger flag.
+
+#### a) Automated Helm chart install or upgrade
+
+1. Install or upgrade your local Helm chart
+   
+   ```shell
+   ./dev upgrade
+   ```
+
+1. Visit http://localhost:8080
+
+#### b) Manual Helm chart install or upgrade
+
+1. Use [`chartpress`](https://github.com/jupyterhub/chartpress) to rebuild
+   modified images if needed but also update the chart's
+   [values.yaml](jupyterhub/values.yaml) file with the appropriate image tags.
+
+   ```shell
+   chartpress --commit-range origin/master..HEAD
+   ```
+
+   > **NOTE:** If you use a kind cluster and have built new images that will
+   > only available locally, you must also load them into the kind cluster using
+   > the `kind load docker-image <image:tag>` command.
+
+1. Use `helm` to install or upgrade your Helm chart.
+
+   ```shell
+   helm upgrade jh-dev ./jupyterhub --install --namespace jh-dev
+   ```
+
+1. Use `kubectl` to open up a network path to your cluster.
+
+   ```shell
+   kubectl port-forward --namespace jh-dev service/proxy-public 8080:80
+   ```
+
+1. Visit http://localhost:8080
+
+### 4: Run tests
+
+```shell
+./dev test
+```
+
+## Debugging issues
 
 Various things can go wrong while working with the local development
 environment, here are some typical issues and what to do about them.
 
-#### Network errors
+### Network errors
 
 Did you get an error like one of these below?
 
@@ -139,7 +208,7 @@ As you may notice, typical keywords associated with network errors are:
 Did you get an error like this?
 
 ```
-Unable to listen on port 8090: Listeners failed to create with the following errors: [Unable to create listener: Error listen tcp4 127.0.0.1:8090: bind: address already in use Unable to create listener: Error listen tcp6 [::1]:8090: bind: address already in use]
+Unable to listen on port 8080: Listeners failed to create with the following errors: [Unable to create listener: Error listen tcp4 127.0.0.1:8080: bind: address already in use Unable to create listener: Error listen tcp6 [::1]:8080: bind: address already in use]
 ```
 
 The key to solving this is understanding it!
@@ -155,7 +224,7 @@ Let's look on how we need traffic to be shuttled!
 
    When you run `vagrant up` your computer will read the
    [Vagrantfile](Vagrantfile) and from that conclude it should shuttle traffic
-   incoming to your computer on port `8090` to your VM on port `8080`.
+   incoming to your computer on port `8080` to your VM on port `8080`.
 
 2. *Traffic entering your VM should go to your Kubernetes cluster's Service named `proxy-public`.*
 
@@ -165,7 +234,7 @@ Let's look on how we need traffic to be shuttled!
    with the hub and proxy even though it is also possible to speak directly to
    the hub.
 
-In short, the traffic is routed from computer (8090), to the VM (8080), to the
+In short, the traffic is routed from computer (8080), to the VM (8080), to the
 Kubernetes `proxy-public` Service (80).
 
 The reason you may run into an issue if is there is another service already

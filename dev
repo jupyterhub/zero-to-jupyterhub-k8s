@@ -1,20 +1,5 @@
 #!/usr/bin/env python3
 """
-Checks that can be made:
-1. Are we using the correct cluster? If not KUBECONFIG is set explicitly in an
-   env var or through an .env file, we could fail.
-2. Are the required dependencies available on path or in the ./bin folder?
-
-Requirements:
-- KUBECONFIG is set
-- dev-config.yaml is used
--
-
-.env file:
-    GITHUB_ACCESS_TOKEN     - for release changes and contributors
-    KUBECONFIG              - for kind clusters
-    HELM_HOME               - for plugins
-    CHARTPRESS_COMMIT_RANGE - ?
 """
 
 import argparse
@@ -55,9 +40,9 @@ def depend_on(binaries=[], envs=[]):
                 print(f"- Env vars: {missing_envs}")
                 print("")
                 if missing_binaries:
-                    print("Install and make the binaries available on your PATH!")
+                    print("Install and make the binaries available on your PATH")
                 if missing_envs:
-                    print("Update your .env file!")
+                    print("Update your .env file")
                 sys.exit(1)
             else:
                 return func(*args, **kwargs)
@@ -68,8 +53,8 @@ def depend_on(binaries=[], envs=[]):
 
 
 @depend_on(binaries=["kind", "docker"], envs=["KUBE_VERSION"])
-def kind_start(recreate):
-    # check for a existing jh-dev cluster and conditionally delete it
+def kind_create(recreate):
+    # check for a existing cluster
     kind_clusters = _run(
         cmd=["kind", "get", "clusters"],
         print_command=False,
@@ -78,7 +63,7 @@ def kind_start(recreate):
     kind_cluster_exist = bool(re.search(r"\bjh-dev\b", kind_clusters))
     if kind_cluster_exist:
         if recreate:
-            print("Deleting existing kind cluster named jh-dev.")
+            print("Deleting existing kind cluster")
             _run(["kind", "delete", "cluster", "--name", "jh-dev"])
         else:
             # This workaround currently only works for single node clusters,
@@ -91,16 +76,16 @@ def kind_start(recreate):
                 capture_output=True,
             )
             if not is_kind_cluster_container_running:
-                print("Starting up the existing kind cluster's node container.")
+                print("Starting up existing kind cluster")
                 _run(["docker", "start", "jh-dev-control-plane"])
                 sys.exit(0)
             else:
-                print("The kind cluster was already started and running.")
+                print("The kind cluster was already created and running.")
                 sys.exit(0)
 
 
-    # start a new cluster with a fixed name, kubernetes version
-    print('Creating kind cluster "jh-dev".')
+    # create and setup a new cluster
+    print('Creating kind cluster')
     _run([
         "kind", "create", "cluster",
         "--name", "jh-dev",
@@ -122,7 +107,7 @@ def kind_start(recreate):
         dotenv.set_key(".env", "KUBECONFIG", kubeconfig_path)
         os.environ["KUBECONFIG"] = kubeconfig_path
 
-    print('Making "jh-dev" the default namespace in the cluster.')
+    print('Setting default namespace')
     _run([
         "kubectl", "config", "set-context",
         "--current",
@@ -139,7 +124,6 @@ def kind_start(recreate):
             "kubectl", "apply",
             "-f", "https://docs.projectcalico.org/v3.10/manifests/calico.yaml",
         ],
-        print_end="",
     )
 
     print("Waiting for Kubernetes nodes to become ready.")
@@ -189,11 +173,11 @@ def kind_start(recreate):
         error_callback=_log_tiller_rollout_timeout,
     )
 
-    print('Kind cluster "jh-dev" successfully setup!')
+    print('Kind cluster successfully setup!')
 
 
 @depend_on(binaries=["kind"], envs=[])
-def kind_stop():
+def kind_delete():
     print('Deleting kind cluster "jh-dev".')
     _run(["kind", "delete", "cluster", "--name", "jh-dev"])
 
@@ -448,16 +432,16 @@ def _get_argparser():
     )
 
     kind_cmds = kind.add_subparsers(title="Commands", dest="sub_cmd")
-    kind_start = kind_cmds.add_parser(
-        "start", help="Start and initialize a kind Kubernetes cluster."
+    kind_create = kind_cmds.add_parser(
+        "create", help="Create and setup a kind Kubernetes cluster."
     )
-    kind_start.add_argument(
+    kind_create.add_argument(
         "--recreate",
         action="store_true",
-        help="If the cluster is already started, delete it and start a new.",
+        help="If the cluster already exist, delete it and create a new.",
     )
-    kind_stop = kind_cmds.add_parser(
-        "stop", help="Stop and delete a previously started kind Kubernetes cluster."
+    kind_delete = kind_cmds.add_parser(
+        "delete", help="Stop and delete a previously started kind Kubernetes cluster."
     )
 
     upgrade = _cmds.add_parser(
@@ -525,7 +509,7 @@ if __name__ == "__main__":
             ## potential modifications of non developer clusters. It should
             ## be to the path where the kubernetes config resides.
             ##
-            ## The "./dev.py kind start" command will set this files KUBECONFIG
+            ## The "./dev.py kind create" command will set this files KUBECONFIG
             ## entry automatically on cluster creation.
             ##
             KUBECONFIG=
@@ -560,10 +544,10 @@ if __name__ == "__main__":
 
     # run suitable command and pass arguments
     if args.cmd == "kind":
-        if args.sub_cmd == "start":
-            kind_start(recreate=args.recreate)
-        if args.sub_cmd == "stop":
-            kind_stop()
+        if args.sub_cmd == "create":
+            kind_create(recreate=args.recreate)
+        if args.sub_cmd == "delete":
+            kind_delete()
 
     if args.cmd == "upgrade":
         upgrade(args.values)

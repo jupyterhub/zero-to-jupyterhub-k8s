@@ -37,9 +37,9 @@ script:
   - setup_kind
   - setup_helm
   - ./ci/travis-docker-fix
-  - ./dev.py kind start
-  - ./dev.py upgrade
-  - ./dev.py test
+  - ./dev kind create
+  - ./dev upgrade
+  - ./dev test
 env:
   ## NOTE: The environment variables will be expanded to multiple jobs. For
   ##       additional individual jobs, only the first entry is used.
@@ -71,7 +71,7 @@ jobs:
       script:
         - setup_helm
         - setup_kubeval
-        - ./dev.py check templates
+        - ./dev check templates
       env:
         - VALIDATE_KUBE_VERSIONS=1.11.0,1.12.0,1.13.0,1.14.0,1.15.0,1.16.0
     - stage: publish
