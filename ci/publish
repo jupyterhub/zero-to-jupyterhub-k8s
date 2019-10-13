@@ -17,9 +17,9 @@ set -x
 export GIT_SSH_COMMAND="ssh -i ${PWD}/ci/id_rsa"
 
 if [ "${TRAVIS_TAG:-}" == "" ]; then
-    chartpress --commit-range "${TRAVIS_COMMIT_RANGE}" --push --publish-chart
+    chartpress --push --publish-chart
 else
-    chartpress --commit-range "${TRAVIS_COMMIT_RANGE}" --push --publish-chart --tag "${TRAVIS_TAG}"
+    chartpress --push --publish-chart --tag "${TRAVIS_TAG}"
 fi
 
 # Let us log the changes chartpress did, it should include replacements for

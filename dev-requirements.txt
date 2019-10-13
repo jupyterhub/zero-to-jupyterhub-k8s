@@ -21,6 +21,6 @@ requests
 ##
 yamllint>=1.17.0
 
-## ./dev.py use these
+## ./dev use these
 colorama
 python-dotenv

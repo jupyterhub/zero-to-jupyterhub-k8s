@@ -189,10 +189,7 @@ def upgrade(values):
         "TRAVIS_COMMIT_RANGE",
         os.environ["CHARTPRESS_COMMIT_RANGE"]
     )
-    _run([
-        "chartpress",
-        "--commit-range", commit_range,
-    ])
+    _run(["chartpress"])
     # git --no-pager diff
 
     if "kind-config-jh-dev" in os.environ["KUBECONFIG"]:
@@ -500,16 +497,11 @@ if __name__ == "__main__":
             ##
             GITHUB_ACCESS_TOKEN=
             #
-            ## CHARTPRESS_COMMIT_RANGE can help us avoids image rebuilds. If
-            ## the main repo remote isn't named origin, correct it here.
-            ##
-            CHARTPRESS_COMMIT_RANGE=origin/master..HEAD
-            #
             ## KUBECONFIG is required to be set explicitly in order to avoid
             ## potential modifications of non developer clusters. It should
             ## be to the path where the kubernetes config resides.
             ##
-            ## The "./dev.py kind create" command will set this files KUBECONFIG
+            ## The "./dev kind create" command will set this files KUBECONFIG
             ## entry automatically on cluster creation.
             ##
             KUBECONFIG=

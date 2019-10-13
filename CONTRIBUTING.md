@@ -8,6 +8,8 @@ This is a [Jupyter](https://jupyter.org) project, so please start out by reading
 the first page of the general [Jupyter contributor
 guide](https://jupyter.readthedocs.io/en/latest/contributor/content-contributor.html).
 
+
+
 ## Local development
 
 ### 1: Preparations
@@ -33,31 +35,43 @@ work without a Virtual Machine.
 1. Install Vagrant by [downloading and running an
    installer](https://www.vagrantup.com/downloads.html).
 
-1. Start a prepared VM and SSH into it.
+1. Start and automatically setup a VM.
+
+   Use the `vagrant up` command to start the VM for the first time, or `vagrant
+   resume` to resume a suspended VM.
 
    ```shell
-   # if you have suspended a VM earlier, use "vagrat resume" instead
    vagrant up
+   # vagrant resume
+   ```
 
-   # enter a SSH session with the VM
+1. Enter the VM and the `~/zero-to-jupyterhub-k8s` folder.
+
+   The `~/zero-to-jupyterhub-k8s` folder in the VM will be the exact same folder
+   on your actual machine. Change either and you influence both.
+
+   ```shell
    vagrant ssh
-
-   # relocate to the repository folder that is mounted from outside the VM
-   # IMPORTANT: changes to this folder will be seen outside your VM
    cd zero-to-jupyterhub-k8s
    ```
 
 1. Do your development.
 
-1. Exit and suspend the VM
+1. Exit and suspend the VM.
+
+   If you don't worry about using some disk space, suspending the VM with
+   `vagrant suspend` is a good option as compared to `halt` or `destroy`
+   commands. Suspending the VM will allow you to quickly get back to development
+   within the VM later. For more details see a [description about the
+   differences](https://www.vagrantup.com/intro/getting-started/teardown.html).
 
    ```shell
-   ## exit the SSH session
+   # exit the VM
    exit
+
+   # suspend the VM
    vagrant suspend
    ```
-
-   > **NOTE:** You can also use `vagrant destroy` to reset the VM state entirely.
 
 #### b) Install tools yourself
 
@@ -87,6 +101,8 @@ pytest --version
 chartpress --version
 ```
 
+
+
 ### 2: Setup a Kubernetes cluster
 
 You will now need a Kubernetes cluster to work with, and we present you with two
@@ -94,7 +110,6 @@ options again. Either you, a) use an automated script that starts and sets up a
 Kubernetes cluster for you using [`kind`
 (Kubernetes-in-Docker)](https://kind.sigs.k8s.io), or b), you start and setup
 your own Kubernetes cluster.
-
 
 #### a) Automated use of `kind`
 
@@ -115,13 +130,24 @@ your own Kubernetes cluster.
   context to use. This is enforced to ensure the script only works on a
   Kubernetes cluster it is intended to work on.
 
+
+
 ### 3: Install or upgrade your local Helm chart
 
-You have two options as usual to install or upgrade your local Helm chart,
-either you a) use the automated script to install or upgrade, or you do it on
-your own.
+This repository contains various `Dockerfile`s that are used to build docker
+images in use by the Helm chart. To help us build these docker images only when
+needed as well as update the Helm chart's [`values.yaml`](jupyterhub/values.yaml)
+to use the latest available image, we rely on a command line tool called
+[`chartpress`](https://github.com/jupyterhub/chartpress) that is installed as
+part of [dev-requirements.txt](dev-requirements.txt).
 
-TODO: learn properly about the chartpress --commit-ranger flag.
+Chartpress is configured through [chartpress.yaml](chartpress.yaml), and will
+only rebuild images if their dependent files in their respective directories or
+chartpress.yaml itself has changed.
+
+Now you will be presented with two options as usual, either you a) use the
+automated script to install or upgrade the Helm chart, or b) you do it on your
+own.
 
 #### a) Automated Helm chart install or upgrade
 
@@ -140,7 +166,7 @@ TODO: learn properly about the chartpress --commit-ranger flag.
    [values.yaml](jupyterhub/values.yaml) file with the appropriate image tags.
 
    ```shell
-   chartpress --commit-range origin/master..HEAD
+   chartpress
    ```
 
    > **NOTE:** If you use a kind cluster and have built new images that will
@@ -161,11 +187,35 @@ TODO: learn properly about the chartpress --commit-ranger flag.
 
 1. Visit http://localhost:8080
 
+
+
 ### 4: Run tests
+
+To run the available tests, you can a) use the dev script or b) do it yourself
+with `pytest`. Using the dev script you will be presented with useful debugging
+information if a test fails, and you will be required to explicitly declare what
+Kubernetes cluster to use in the `.env` file. This can help to avoid mistakenly
+working towards the wrong Kubernetes cluster.
+
+> **NOTE:** If you haven't port-forwarded the `proxy-public` Kubernetes service
+> to port `8080` on localhost (`127.0.0.1`), you will need to set the
+> environment variables `PROXY_PUBLIC_SERVICE_HOST` and
+> `PROXY_PUBLIC_SERVICE_PORT` respectively. If you use the dev script, you can
+> set them in the `.env` file.
+
+#### a) Run tests with the dev script
 
 ```shell
 ./dev test
 ```
+
+#### b) Run test manually
+
+```shell
+pytest -v --exitfirst ./tests
+```
+
+
 
 ## Debugging issues
 
@@ -240,6 +290,8 @@ Kubernetes `proxy-public` Service (80).
 The reason you may run into an issue if is there is another service already
 listening on traffic arriving on a given port. Then you would need to either
 shut it down or route traffic differently.
+
+
 
 ## Helm chart practices
 
