@@ -124,6 +124,23 @@ def kind_create(recreate):
             "kubectl", "apply",
             "-f", "https://docs.projectcalico.org/v3.10/manifests/calico.yaml",
         ],
+        print_end="",
+    )
+
+    # NOTE: daemonset/calico-node pods' main container fails to start up without
+    #       an additional environment variable configured to disable a check
+    #       that we fail.
+    #
+    #       env:
+    #         - name: FELIX_IGNORELOOSERPF
+    #           value: "true"
+    _run(
+        cmd=[
+            "kubectl", "patch", "daemonset/calico-node",
+            "--namespace", "kube-system",
+            "--type", "json",
+            "--patch", '[{"op":"add", "path":"/spec/template/spec/containers/0/env/-", "value":{"name":"FELIX_IGNORELOOSERPF", "value":"true"}}]',
+        ],
     )
 
     print("Waiting for Kubernetes nodes to become ready.")
@@ -283,12 +300,12 @@ def _log_test_failure():
         print_end="",
     )
     _run(
-        cmd=["kubectl", "get", "logs", "deploy/hub",],
+        cmd=["kubectl", "logs", "deploy/hub",],
         exit_on_error=False,
         print_end="",
     )
     _run(
-        cmd=["kubectl", "get", "logs", "deploy/proxy",],
+        cmd=["kubectl", "logs", "deploy/proxy",],
         exit_on_error=False,
     )
 
