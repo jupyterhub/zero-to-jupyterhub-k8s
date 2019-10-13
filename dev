@@ -182,13 +182,9 @@ def kind_delete():
     _run(["kind", "delete", "cluster", "--name", "jh-dev"])
 
 
-@depend_on(binaries=["chartpress", "helm"], envs=["KUBECONFIG", "CHARTPRESS_COMMIT_RANGE", "PROXY_PUBLIC_SERVICE_PORT"])
+@depend_on(binaries=["chartpress", "helm"], envs=["KUBECONFIG", "PROXY_PUBLIC_SERVICE_PORT"])
 def upgrade(values):
     print("Building images and updating image tags if needed.")
-    commit_range = os.environ.get(
-        "TRAVIS_COMMIT_RANGE",
-        os.environ["CHARTPRESS_COMMIT_RANGE"]
-    )
     _run(["chartpress"])
     # git --no-pager diff
 
