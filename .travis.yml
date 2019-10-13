@@ -58,7 +58,7 @@ env:
   ##
   ## ref: https://github.com/projectcalico/calico/issues/2915
   ##
-  - KUBE_VERSION=1.16.1
+  # - KUBE_VERSION=1.16.1 (Required bumped Helm version, but that version currently errors)
   - KUBE_VERSION=1.15.3
   - KUBE_VERSION=1.14.6
   - KUBE_VERSION=1.13.10

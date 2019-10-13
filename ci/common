@@ -24,7 +24,10 @@ fi
 if [ -z ${HELM_VERSION:-} ]; then
     ## ref: https://github.com/helm/helm/releases
     ##
-    export HELM_VERSION=2.15.0-rc.1
+    ## FIXME: Helm version 2.15.0-rc.1 errored with "Transport is closing",
+    ##        but Kubernetes 1.16 requires a fix for tiller that is using the
+    ##        apiVersion: extensions/v1beta1 still.
+    export HELM_VERSION=2.14.3
 fi
 if [ -z ${KUBEVAL_VERSION:-} ]; then
     ## ref: https://github.com/instrumenta/kubeval/releases
