@@ -1,6 +1,8 @@
-## conftest.py has a special meaning to pytest
-## ref: https://docs.pytest.org/en/latest/writing_plugins.html#conftest-py-plugins
-##
+"""conftest.py has a special meaning to pytest
+
+ref: https://docs.pytest.org/en/latest/writing_plugins.html#conftest-py-plugins
+"""
+
 import os
 import requests
 import uuid
