@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
     lv.cpus = 2
   end if Vagrant.has_plugin?('vagrant-libvirt')
 
-  config.vm.network "forwarded_port", guest: 8080, host: 8090
+  config.vm.network "forwarded_port", guest: 8080, host: 8080
 
   config.vm.provision "shell", path: "vagrant-vm-root-setup.sh"
   config.vm.synced_folder ".", "/home/vagrant/zero-to-jupyterhub-k8s"
