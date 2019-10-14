@@ -25,6 +25,8 @@ def depend_on(binaries=[], envs=[]):
     def decorator_depend_on(func):
         @functools.wraps(func)
         def wrapper_depend_on(*args, **kwargs):
+            # FEATURE: Allow prompt to set variables interactively.
+
             missing_binaries = []
             for binary in binaries:
                 if shutil.which(binary) is None:
@@ -52,7 +54,7 @@ def depend_on(binaries=[], envs=[]):
     return decorator_depend_on
 
 
-@depend_on(binaries=["kind", "docker"], envs=["KUBE_VERSION"])
+@depend_on(binaries=["kubectl", "kind", "docker"], envs=["KUBE_VERSION"])
 def kind_create(recreate):
     # check for a existing cluster
     kind_clusters = _run(
@@ -101,17 +103,32 @@ def kind_create(recreate):
         print_command=False,
         capture_output=True,
     )
-
-    if os.environ["KUBECONFIG"] != kubeconfig_path:
+    if os.environ.get("KUBECONFIG", None) != kubeconfig_path:
         print(f'Updating your .env file\'s KUBECONFIG value to "{kubeconfig_path}"')
         dotenv.set_key(".env", "KUBECONFIG", kubeconfig_path)
         os.environ["KUBECONFIG"] = kubeconfig_path
+
+    kube_context = _run(
+        cmd=["kubectl", "config", "current-context"],
+        print_command=False,
+        capture_output=True,
+    )
+    if os.environ.get("Z2JH_KUBE_CONTEXT", None) != kube_context:
+        print(f'Updating your .env file\'s Z2JH_KUBE_CONTEXT value to "{kube_context}"')
+        dotenv.set_key(".env", "Z2JH_KUBE_CONTEXT", kube_context)
+        os.environ["Z2JH_KUBE_CONTEXT"] = kube_context
+
+    kube_namespace = os.environ.get("Z2JH_KUBE_NAMESPACE", "jh-dev")
+    if os.environ.get("Z2JH_KUBE_NAMESPACE", None) != kube_namespace:
+        print(f'Updating your .env file\'s Z2JH_KUBE_NAMESPACE value to "{kube_namespace}"')
+        dotenv.set_key(".env", "Z2JH_KUBE_NAMESPACE", kube_namespace)
+        os.environ["Z2JH_KUBE_NAMESPACE"] = kube_namespace
 
     print('Setting default namespace')
     _run([
         "kubectl", "config", "set-context",
         "--current",
-        "--namespace", "jh-dev",
+        "--namespace", kube_namespace,
     ])
 
 
@@ -199,7 +216,7 @@ def kind_delete():
     _run(["kind", "delete", "cluster", "--name", "jh-dev"])
 
 
-@depend_on(binaries=["chartpress", "helm"], envs=["KUBECONFIG", "PROXY_PUBLIC_SERVICE_PORT"])
+@depend_on(binaries=["chartpress", "helm"], envs=["KUBECONFIG", "Z2JH_KUBE_CONTEXT", "Z2JH_KUBE_NAMESPACE", "PROXY_PUBLIC_SERVICE_PORT"])
 def upgrade(values):
     print("Building images and updating image tags if needed.")
     _run(["chartpress"])
@@ -217,7 +234,8 @@ def upgrade(values):
     cmd = [
         "helm", "upgrade", "jh-dev", "./jupyterhub",
         "--install",
-        "--namespace", "jh-dev",
+        "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+        "--kube-context", os.environ["Z2JH_KUBE_CONTEXT"],
     ]
     for value in values:
         cmd.append("--values")
@@ -229,25 +247,34 @@ def upgrade(values):
         cmd=[
             "kubectl", "rollout", "status", "deployment/proxy",
             "--timeout", "2m",
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
         ],
         print_end=""
     )
     _run([
         "kubectl", "rollout", "status", "deployment/hub",
         "--timeout", "2m",
+        "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+        "--context", os.environ["Z2JH_KUBE_CONTEXT"],
     ])
 
+
+@depend_on(binaries=["kubectl"], envs=["KUBECONFIG", "Z2JH_KUBE_CONTEXT", "Z2JH_KUBE_NAMESPACE", "PROXY_PUBLIC_SERVICE_PORT"])
+def port_forward():
     print("Run and forget about port-forwarding.")
     _run(
         cmd=[
             "kubectl", "port-forward", "service/proxy-public",
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
             f"{os.environ['PROXY_PUBLIC_SERVICE_PORT']}:80",
         ],
         forget=True,
     )
 
 
-@depend_on(binaries=["kubectl", "pytest"], envs=["KUBECONFIG", "PROXY_PUBLIC_SERVICE_HOST", "PROXY_PUBLIC_SERVICE_PORT"])
+@depend_on(binaries=["kubectl", "pytest"], envs=["KUBECONFIG", "Z2JH_KUBE_CONTEXT", "Z2JH_KUBE_NAMESPACE", "PROXY_PUBLIC_SERVICE_HOST", "PROXY_PUBLIC_SERVICE_PORT"])
 def test():
     _run(
         cmd=["pytest", "-v", "--exitfirst", "./tests"],
@@ -255,7 +282,13 @@ def test():
     )
     
     print("Tests succeeded!")
-    _run(cmd=["kubectl", "get", "pods"])
+    _run(
+        cmd=[
+            "kubectl", "get", "pods",
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ]
+    )
 
 
 @depend_on(binaries=["helm", "yamllint", "kubeval"], envs=[])
@@ -285,27 +318,47 @@ def changelog():
 def _log_test_failure():
     print("A test failed, let's debug!")
     _run(
-        cmd=["kubectl", "describe", "nodes",],
+        cmd=[
+            "kubectl", "describe", "nodes",
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
         exit_on_error=False,
         print_end="",
     )
     _run(
-        cmd=["kubectl", "get", "pods",],
+        cmd=[
+            "kubectl", "get", "pods",
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
         exit_on_error=False,
         print_end="",
     )
     _run(
-        cmd=["kubectl", "get", "events",],
+        cmd=[
+            "kubectl", "get", "events",
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
         exit_on_error=False,
         print_end="",
     )
     _run(
-        cmd=["kubectl", "logs", "deploy/hub",],
+        cmd=[
+            "kubectl", "logs", "deploy/hub",
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
         exit_on_error=False,
         print_end="",
     )
     _run(
-        cmd=["kubectl", "logs", "deploy/proxy",],
+        cmd=[
+            "kubectl", "logs", "deploy/proxy",
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
         exit_on_error=False,
     )
 
@@ -313,7 +366,10 @@ def _log_test_failure():
 def _log_tiller_rollout_timeout():
     print("Helm's tiller never became ready!")
     _run(
-        cmd=["kubectl", "describe", "nodes",],
+        cmd=[
+            "kubectl", "describe", "nodes",
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
         exit_on_error=False,
         print_end="",
     )
@@ -321,6 +377,7 @@ def _log_tiller_rollout_timeout():
         cmd=[
             "kubectl", "describe", "deployment/tiller",
             "--namespace", "kube-system",
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
         ],
         exit_on_error=False,
         print_end="",
@@ -329,6 +386,7 @@ def _log_tiller_rollout_timeout():
         cmd=[
             "kubectl", "logs", "deployment/tiller",
             "--namespace", "kube-system",
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
         ],
         exit_on_error=False,
     )
@@ -337,38 +395,27 @@ def _log_tiller_rollout_timeout():
 def _log_wait_node_timeout():
     print("Kubernetes nodes never became ready")
     _run(
-        cmd=["kubectl", "describe", "nodes",],
-        exit_on_error=False,
-        print_end="",
-    )
-    _run(
         cmd=[
-            "kubectl", "describe", "calico-etcd",
-            "--namespace", "kube-system",
+            "kubectl", "describe", "nodes",
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
         ],
         exit_on_error=False,
         print_end="",
     )
     _run(
         cmd=[
-            "kubectl", "logs", "calico-etcd",
+            "kubectl", "describe", "daemonset/calico-node",
             "--namespace", "kube-system",
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
         ],
         exit_on_error=False,
         print_end="",
     )
     _run(
         cmd=[
-            "kubectl", "describe", "calico-node",
+            "kubectl", "logs", "daemonset/calico-node",
             "--namespace", "kube-system",
-        ],
-        exit_on_error=False,
-        print_end="",
-    )
-    _run(
-        cmd=[
-            "kubectl", "logs", "calico-node",
-            "--namespace", "kube-system",
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
         ],
         exit_on_error=False,
     )
@@ -465,6 +512,10 @@ def _get_argparser():
         help="A Helm values file, this argument can be passed multiple times.",
     )
 
+    port_forward = _cmds.add_parser(
+        "port-forward", help="Start port-forwarding of the deployed Helm chart's proxy-public service in a detached process."
+    )
+
     test = _cmds.add_parser(
         "test", help="Run tests on the deployed Helm chart in the Kubernetes cluster."
     )
@@ -525,13 +576,13 @@ if __name__ == "__main__":
             ##
             ## ref: https://hub.docker.com/r/kindest/node/tags
             ##
-            # KUBE_VERSION=1.15.3
+            KUBE_VERSION=1.15.3
             #
             ## VALIDATE_KUBE_VERSIONS is used when you check your Helm
             ## templates. Are the generated Kubernetes resources valid
             ## resources for these Kubernetes versions?
             ##
-            # VALIDATE_KUBE_VERSIONS=1.14.0,1.15.0
+            VALIDATE_KUBE_VERSIONS=1.15.0
             #
             ## PROXY_PUBLIC_SERVICE_HOST and PROXY_PUBLIC_SERVICE_PORT allow
             ## you to run the tests if you have used kubectl to port forward
@@ -556,6 +607,9 @@ if __name__ == "__main__":
 
     if args.cmd == "upgrade":
         upgrade(args.values)
+
+    if args.cmd == "port-forward":
+        port_forward()
 
     if args.cmd == "test":
         test()
