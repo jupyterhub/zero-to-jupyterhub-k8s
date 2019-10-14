@@ -39,6 +39,7 @@ script:
   - ./ci/travis-docker-fix
   - ./dev kind create
   - ./dev upgrade
+  - ./dev port-forward
   - ./dev test
 env:
   ## NOTE: The environment variables will be expanded to multiple jobs. For

@@ -15,8 +15,8 @@ def request_data():
     with open(os.path.join(basedir, "dev-config.yaml")) as f:
         y = yaml.safe_load(f)
     token = y["hub"]["services"]["test"]["apiToken"]
-    host = os.environ.get("PROXY_PUBLIC_SERVICE_HOST", "127.0.0.1")
-    port = os.environ.get("PROXY_PUBLIC_SERVICE_PORT", "8080")
+    host = os.environ.get("Z2JH_PORT_FORWARD_ADDRESS", "localhost")
+    port = os.environ.get("Z2JH_PORT_FORWARD_PORT", "8080")
     return {
         "token": token,
         "hub_url": f'http://{host}:{port}/hub/api',
