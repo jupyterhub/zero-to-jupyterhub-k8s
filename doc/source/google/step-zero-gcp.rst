@@ -85,9 +85,11 @@ your google cloud account.
      You can pick something from `this list
      <https://cloud.google.com/compute/docs/regions-zones/#available>`_
      that is not too far away from your users.                   
-   *  Note: A region is a geographical location used to host resources, comprising one or more zones.                                   
-     A regional cluster creates pods across zones in a region, distributing Kubernetes resources across multiple zones in the region.     
-     This is different from the default cluster, which has all its resources within a single zone(as shown above).       
+   *  .. note::
+         
+         A region is a geographical location used to host resources, comprising one or more zones.                                   
+         A regional cluster creates pods across zones in a region, distributing Kubernetes resources across multiple zones in the region.     
+         This is different from the default cluster, which has all its resources within a single zone(as shown above).       
 
 
 
