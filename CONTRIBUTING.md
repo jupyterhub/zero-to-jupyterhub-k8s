@@ -82,7 +82,7 @@ This is what you need to install and make available on your PATH.
 - [helm](https://helm.sh/docs/using_helm/#installing-helm)
 - [kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
 - [kubeval](https://kubeval.instrumenta.dev/installation/)
-- Python 3.6+ ([Anaconda.com](https://www.anaconda.com/distribution/), [Python.org](https://www.python.org/downloads/))
+- Python 3.7+ ([Anaconda.com](https://www.anaconda.com/distribution/), [Python.org](https://www.python.org/downloads/))
 - Python dependencies installed
     - `dev-requirements.txt`
     - `doc/doc-requirements.txt`
@@ -151,13 +151,11 @@ own.
 
 #### a) Automated Helm chart install or upgrade
 
-1. Install or upgrade your local Helm chart
+1. Install or upgrade your local Helm chart.
    
    ```shell
    ./dev upgrade
    ```
-
-1. Visit http://localhost:8080
 
 #### b) Manual Helm chart install or upgrade
 
@@ -179,29 +177,49 @@ own.
    helm upgrade jh-dev ./jupyterhub --install --namespace jh-dev
    ```
 
-1. Use `kubectl` to open up a network path to your cluster.
-
-   ```shell
-   kubectl port-forward --namespace jh-dev service/proxy-public 8080:80
-   ```
-
-1. Visit http://localhost:8080
 
 
+### 4: Setup network access
 
-### 4: Run tests
+In order for you to access jupyterhub and a spawned user server, you need to be
+able to access the Kubernetes service in this Helm chart called proxy-public.
+While pods in the cluster can do this easily, your computer isn't a pod in the
+cluster. What we can do is to dedicate a port on your computer to go towards the
+proxy-public service of the Kubernetes cluster using `kubectl port-forward`.
+
+When you run `kubectl port-forward` you will get a process that keeps running
+and you need to open an new terminal window alongside it, unless you detach this
+process. The `./dev port-forward` script will detach the process, and respect
+the environment two variables, `Z2JH_PORT_FORWARD_ADDRESS` and
+`Z2JH_PORT_FORWARD_PORT`, that you can set with the `.env` file.
+
+#### a) Using dev script
+
+```shell
+./dev port-forward
+```
+
+#### b) Using kubectl directly
+
+```shell
+kubectl port-forward --namespace jh-dev service/proxy-public 8080:80
+```
+
+
+
+### 5: Run tests
 
 To run the available tests, you can a) use the dev script or b) do it yourself
-with `pytest`. Using the dev script you will be presented with useful debugging
+with `pytest`. Using the dev script, you will be presented with useful debugging
 information if a test fails, and you will be required to explicitly declare what
-Kubernetes cluster to use in the `.env` file. This can help to avoid mistakenly
-working towards the wrong Kubernetes cluster.
+Kubernetes cluster to use in the `.env` file. This can help you avoid a mistake
+of working with the wrong Kubernetes cluster.
 
 > **NOTE:** If you haven't port-forwarded the `proxy-public` Kubernetes service
-> to port `8080` on localhost (`127.0.0.1`), you will need to set the
-> environment variables `PROXY_PUBLIC_SERVICE_HOST` and
-> `PROXY_PUBLIC_SERVICE_PORT` respectively. If you use the dev script, you can
-> set them in the `.env` file.
+> on `localhost` to port `8080` as is the default, you will need to set the
+> environment variables `Z2JH_PORT_FORWARD_ADDRESS` and `Z2JH_PORT_FORWARD_PORT`
+> respectively. If you run `./dev test`, you need to set them in the `.env`
+> file.
 
 #### a) Run tests with the dev script
 
@@ -209,7 +227,7 @@ working towards the wrong Kubernetes cluster.
 ./dev test
 ```
 
-#### b) Run test manually
+#### b) Run test with pytest directly
 
 ```shell
 pytest -v --exitfirst ./tests
@@ -252,6 +270,34 @@ As you may notice, typical keywords associated with network errors are:
 - *name resolution*
 - *timeout*
 - *no route to host*
+
+#### kind load docker-image issues
+
+This is an error I got on Ubuntu using docker version 18.06.1-ce. I upgraded to
+use a newer version of docker and has not experienced it since.
+
+```
+$ python3 ci/kind-load-docker-images.py --kind-cluster jh-dev
+Error: exit status 1
+`kind load docker-image --name jh-dev jupyterhub/k8s-hub:0.8.0_241-4be955c8` exited with status 1
+`python3 ci/kind-load-docker-images.py --kind-cluster jh-dev` errored (1)
+
+$ kind load docker-image --name jh-dev jupyterhub/k8s-hub:0.8.0_241-4be955c8
+Error: exit status 1
+
+$ kind load docker-image --name jh-dev jupyterhub/k8s-hub:0.8.0_241-4be955c8 --loglevel DEBUG
+DEBU[00:46:57] Running: /snap/bin/docker [docker image inspect -f {{ .Id }} jupyterhub/k8s-hub:0.8.0_241-4be955c8]
+DEBU[00:46:57] Running: /snap/bin/docker [docker ps -q -a --no-trunc --filter label=io.k8s.sigs.kind.cluster --format {{.Names}}\t{{.Label "io.k8s.sigs.kind.cluster"}}] 
+DEBU[00:46:57] Running: /snap/bin/docker [docker ps -q -a --no-trunc --filter label=io.k8s.sigs.kind.cluster --format {{.Names}}\t{{.Label "io.k8s.sigs.kind.cluster"}} --filter label=io.k8s.sigs.kind.cluster=jh-dev] 
+DEBU[00:46:57] Running: /snap/bin/docker [docker inspect -f {{index .Config.Labels "io.k8s.sigs.kind.role"}} jh-dev-control-plane]
+DEBU[00:46:57] Running: /snap/bin/docker [docker exec --privileged jh-dev-control-plane crictl inspecti jupyterhub/k8s-hub:0.8.0_241-4be955c8]
+DEBU[00:46:57] Image: "jupyterhub/k8s-hub:0.8.0_241-4be955c8" with ID "sha256:49a728c14a0f1d8cba40071f7bf2c173d03acd8c04fce828fea6b9dcb9805145" not present on node "jh-dev-control-plane" 
+DEBU[00:46:57] Running: /snap/bin/docker [docker save -o /tmp/image-tar149196292/image.tar jupyterhub/k8s-hub:0.8.0_241-4be955c8] 
+Error: exit status 1
+
+$ docker save -o /tmp/image-tar149196292/image.tar jupyterhub/k8s-hub:0.8.0_241-4be955c8
+failed to save image: unable to validate output path: directory "/tmp/image-tar149196292" does not exist
+```
 
 #### Unable to listen on port
 

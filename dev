@@ -7,10 +7,12 @@ import functools
 import os
 import pipes
 import re
+import requests
 import shutil
 import subprocess
 import sys
 import textwrap
+import time
 
 import dotenv
 import colorama
@@ -59,7 +61,7 @@ def kind_create(recreate):
     # check for a existing cluster
     kind_clusters = _run(
         cmd=["kind", "get", "clusters"],
-        print_command=False,
+        print_command=True,
         capture_output=True,
     )
     kind_cluster_exist = bool(re.search(r"\bjh-dev\b", kind_clusters))
@@ -261,17 +263,36 @@ def upgrade(values):
 
 @depend_on(binaries=["kubectl"], envs=["KUBECONFIG", "Z2JH_KUBE_CONTEXT", "Z2JH_KUBE_NAMESPACE"])
 def port_forward():
-    print("Run and forget about port-forwarding.")
-    _run(
+    host = os.environ.get("Z2JH_PORT_FORWARD_ADDRESS", "localhost")
+    port = os.environ.get("Z2JH_PORT_FORWARD_PORT", "8080")
+    hub_api_url = f"http://{host}:{port}"
+
+    print("Run and detach a process to run the kubectl port-forward command.")
+    proc = _run(
         cmd=[
             "kubectl", "port-forward", "service/proxy-public",
             "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
             "--context", os.environ["Z2JH_KUBE_CONTEXT"],
-            "--address", os.environ.get("Z2JH_PORT_FORWARD_ADDRESS", "localhost"),
-            f'{os.environ.get("Z2JH_PORT_FORWARD_PORT", "8080")}:80',
+            "--pod-running-timeout", "1s",
+            "--address", host,
+            f'{port}:80',
         ],
-        forget=True,
+        detach=True,
     )
+
+    try:
+        response = requests.get(hub_api_url, timeout=1.05)
+    except requests.exceptions.ConnectionError as e:
+        # this is a signature of a failed port forwarding
+        print("Port-forwarding failed!")
+        sys.exit(1)
+    except requests.exceptions.Timeout as e:
+        # this is a signature of successful port forwarding with services not responding
+        print("Port-forwarding seems to work but the proxy pod didn't respond quickly.")
+    else:
+        # this is a signature of a successful web response
+        print("Port-forwarding success!")
+
 
 
 @depend_on(binaries=["kubectl", "pytest"], envs=["KUBECONFIG", "Z2JH_KUBE_CONTEXT", "Z2JH_KUBE_NAMESPACE"])
@@ -428,27 +449,25 @@ def _print_command(text):
         colorama.Style.DIM
     )
 
-def _run(cmd, forget=False, print_command=True, print_end="\n", print_error=True, error_callback=None, exit_on_error=True, **kwargs):
+def _run(cmd, detach=False, print_command=True, print_end="\n", print_error=True, error_callback=None, exit_on_error=True, **kwargs):
     """Run a subcommand and exit if it fails"""
-    if kwargs.get("capture_output", None):
-        # FIXME: This is a workaround for Python 3.6 that won't be required in
-        #        Python 3.7.
-        del kwargs["capture_output"]
-        kwargs["stdout"] = kwargs["stderr"] = subprocess.PIPE
+    if kwargs.get("capture_output", None) and kwargs.get("text", None) is None:
+        kwargs["text"] = True
 
     if print_command:
         _print_command(" ".join(map(pipes.quote, cmd)))
-    if forget:
-        # Call and forget this process
+    if detach:
+        # Call and detach the new process
         with open(os.devnull, 'r+b', 0) as DEVNULL:
             proc = subprocess.Popen(
                 cmd,
-                stdin=DEVNULL,
-                stdout=DEVNULL,
-                stderr=DEVNULL,
+                text=True,
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
                 close_fds=True,
             )
-        return
+        return proc
     else:
         # This call will await completion
         proc = subprocess.run(cmd, **kwargs)
@@ -461,16 +480,15 @@ def _run(cmd, forget=False, print_command=True, print_end="\n", print_error=True
             file=sys.stderr,
         )
         if proc.stderr:
-            print(proc.stderr.decode("utf-8").strip())
+            print(proc.stderr.strip())
         if error_callback:
             error_callback()
         if exit_on_error:
             sys.exit(proc.returncode)
 
     if proc.stdout:
-        return proc.stdout.decode("utf-8").strip()
-    elif kwargs.get("stdout", None):
-        return ""
+        return proc.stdout.strip()
+    return ""
 
 
 def _get_argparser():
@@ -509,7 +527,7 @@ def _get_argparser():
     )
 
     port_forward = _cmds.add_parser(
-        "port-forward", help="Start port-forwarding of the deployed Helm chart's proxy-public service in a detached process."
+        "port-forward", help="Run kubectl port-forward on the deployed Helm chart's proxy-public service in a detached process."
     )
 
     test = _cmds.add_parser(

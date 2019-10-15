@@ -166,36 +166,22 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
         allowed_url = "http://jupyter.org"
         blocked_url = "http://mybinder.org"
 
-        c = subprocess.run(
-            [
-                "kubectl",
-                "--namespace=jh-dev",
-                "exec",
-                pod_name,
-                "--",
-                "wget",
-                "--quiet",
-                "--tries=1",
-                "--timeout=5",
-                allowed_url,
-            ]
-        )
+        c = subprocess.run([
+            "kubectl", "exec", pod_name,
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+            "--",
+            "wget", "--quiet", "--tries=1", "--timeout=3", allowed_url,
+        ])
         assert c.returncode == 0, "Unable to get allowed domain"
 
-        c = subprocess.run(
-            [
-                "kubectl",
-                "--namespace=jh-dev",
-                "exec",
-                pod_name,
-                "--",
-                "wget",
-                "--quiet",
-                "--tries=1",
-                "--timeout=5",
-                blocked_url,
-            ]
-        )
+        c = subprocess.run([
+            "kubectl", "exec", pod_name,
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+            "--",
+            "wget", "--quiet", "--tries=1", "--timeout=3", blocked_url,
+        ])
         assert c.returncode > 0, "Blocked domain was allowed"
 
     finally:

@@ -1,7 +1,7 @@
 dist: bionic
 language: python
 python:
-  - 3.6
+  - 3.7
 git:
   ## depth set to false overrides travis default behavior to use shallow clones
   ## with depth 50 that can cause issues
