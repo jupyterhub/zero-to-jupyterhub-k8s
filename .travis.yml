@@ -54,17 +54,19 @@ env:
   ## ref: https://hub.docker.com/r/kindest/node/tags
   ## ref: https://github.com/kubernetes-sigs/kind/issues/197
   ##
-  ## NOTE: Z2JH_KUBE_VERSION 1.16.1 is disabled until calcio has updated their
-  ##       calico-etcd.yaml containing an old invalid DaemonSet's apiVersion.
-  ##
-  ## ref: https://github.com/projectcalico/calico/issues/2915
-  ##
-  # - Z2JH_KUBE_VERSION=1.16.1 (Required bumped Helm version, but that version currently errors)
+  - Z2JH_KUBE_VERSION=1.16.1 Z2JH_HELM_VERSION=2.15.0-rc.2
   - Z2JH_KUBE_VERSION=1.15.3
   - Z2JH_KUBE_VERSION=1.14.6
   - Z2JH_KUBE_VERSION=1.13.10
 
 jobs:
+  ## allow a selection of the matrix of jobs to fail
+  ##
+  ## ref: https://docs.travis-ci.com/user/customizing-the-build/#rows-that-are-allowed-to-fail
+  ##
+  allow_failures:
+    - env: Z2JH_KUBE_VERSION=1.16.1
+
   ## include additional individual jobs
   ##
   include:
