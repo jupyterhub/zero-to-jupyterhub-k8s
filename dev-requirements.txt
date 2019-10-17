@@ -9,7 +9,7 @@
 ##
 ## ref: https://github.com/jupyterhub/chartpress
 ##
-chartpress>=0.4
+chartpress>=0.4.1
 
 ## pytest run tests that require requests, pytest is run from test
 ## script
