@@ -626,8 +626,16 @@ if __name__ == "__main__":
 
 
     dotenv.load_dotenv(override=False)
-    os.environ["GITHUB_ACCESS_TOKEN"] = dotenv.get_key(".env", "GITHUB_ACCESS_TOKEN")
-    os.environ["KUBECONFIG"] = dotenv.get_key(".env", "KUBECONFIG")
+
+    # let these environment values in the .env file override the system
+    # environment variables, but let the user know if an override happen
+    env_keys = ["GITHUB_ACCESS_TOKEN", "KUBECONFIG"]
+    for env_key in env_keys:
+        env_value_in_os = os.environ.get(env_key, None)
+        env_value_in_file = dotenv.get_key(".env", env_key)
+        if env_value_in_os and env_value_in_os != env_value_in_file:
+            print(f"Warning: system's {env_key} value is ignored in favor of the .env file's value.")
+        os.environ[env_key] = env_value_in_file
 
     # run suitable command and pass arguments
     if args.cmd == "kind":

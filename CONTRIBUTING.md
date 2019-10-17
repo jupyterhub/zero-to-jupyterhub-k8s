@@ -273,8 +273,8 @@ As you may notice, typical keywords associated with network errors are:
 
 #### kind load docker-image issues
 
-This is an error I got on Ubuntu using docker version 18.06.1-ce. I upgraded to
-use a newer version of docker and has not experienced it since.
+This is an error experienced using docker version 18.06.1-ce, and it has not
+reoccurred since upgrading to 19.03.1-ce.
 
 ```
 $ python3 ci/kind-load-docker-images.py --kind-cluster jh-dev
