@@ -573,8 +573,11 @@ if __name__ == "__main__":
     if not os.path.exists(".env"):
         default_dotenv_file = textwrap.dedent(
             """\
-            # Environment variables loaded and used by the ./dev script. They
-            # will take precedence over system variables.
+            # Environment variables loaded and used by the ./dev script.
+            #
+            # Z2JH_ prefixed environment variables already defined will take
+            # precedence if they are defined in the system already, while the
+            # others are required to be explicitly set here.
             # -----------------------------------------------------------------
             #
             # GITHUB_ACCESS_TOKEN is needed to generate changelog entries etc.
@@ -622,7 +625,9 @@ if __name__ == "__main__":
             f.write(default_dotenv_file)
 
 
-    dotenv.load_dotenv(override=True)
+    dotenv.load_dotenv(override=False)
+    os.environ["GITHUB_ACCESS_TOKEN"] = dotenv.get_key(".env", "GITHUB_ACCESS_TOKEN")
+    os.environ["KUBECONFIG"] = dotenv.get_key(".env", "KUBECONFIG")
 
     # run suitable command and pass arguments
     if args.cmd == "kind":
