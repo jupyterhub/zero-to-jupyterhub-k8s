@@ -48,21 +48,21 @@ env:
   ## ref: https://docs.travis-ci.com/user/build-stages/#build-stages-and-build-matrix-expansion
   ##
   ##
-  ## KUBE_VERSION should match a released kindest/node image tag, but they are
-  ## currently not automatically published.
+  ## Z2JH_KUBE_VERSION should match a released kindest/node image tag, but they
+  ## are currently not automatically published.
   ##
   ## ref: https://hub.docker.com/r/kindest/node/tags
   ## ref: https://github.com/kubernetes-sigs/kind/issues/197
   ##
-  ## NOTE: KUBE_VERSION 1.16.1 is disabled until calcio has updated their
+  ## NOTE: Z2JH_KUBE_VERSION 1.16.1 is disabled until calcio has updated their
   ##       calico-etcd.yaml containing an old invalid DaemonSet's apiVersion.
   ##
   ## ref: https://github.com/projectcalico/calico/issues/2915
   ##
-  # - KUBE_VERSION=1.16.1 (Required bumped Helm version, but that version currently errors)
-  - KUBE_VERSION=1.15.3
-  - KUBE_VERSION=1.14.6
-  - KUBE_VERSION=1.13.10
+  # - Z2JH_KUBE_VERSION=1.16.1 (Required bumped Helm version, but that version currently errors)
+  - Z2JH_KUBE_VERSION=1.15.3
+  - Z2JH_KUBE_VERSION=1.14.6
+  - Z2JH_KUBE_VERSION=1.13.10
 
 jobs:
   ## include additional individual jobs
@@ -74,7 +74,7 @@ jobs:
         - setup_kubeval
         - ./dev check templates
       env:
-        - VALIDATE_KUBE_VERSIONS=1.11.0,1.12.0,1.13.0,1.14.0,1.15.0,1.16.0
+        - Z2JH_VALIDATE_KUBE_VERSIONS=1.11.0,1.12.0,1.13.0,1.14.0,1.15.0,1.16.0
     - stage: publish
       script:
         - setup_helm

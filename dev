@@ -56,7 +56,7 @@ def depend_on(binaries=[], envs=[]):
     return decorator_depend_on
 
 
-@depend_on(binaries=["kubectl", "kind", "docker"], envs=["KUBE_VERSION"])
+@depend_on(binaries=["kubectl", "kind", "docker"], envs=["Z2JH_KUBE_VERSION"])
 def kind_create(recreate):
     # check for a existing cluster
     kind_clusters = _run(
@@ -93,7 +93,7 @@ def kind_create(recreate):
     _run([
         "kind", "create", "cluster",
         "--name", "jh-dev",
-        "--image", f"kindest/node:v{os.environ['KUBE_VERSION']}",
+        "--image", f"kindest/node:v{os.environ['Z2JH_KUBE_VERSION']}",
         "--config", "ci/kind-config.yaml",
     ])
     
@@ -315,11 +315,11 @@ def test():
     )
 
 
-@depend_on(binaries=["helm", "yamllint", "kubeval"], envs=["VALIDATE_KUBE_VERSIONS"])
+@depend_on(binaries=["helm", "yamllint", "kubeval"], envs=["Z2JH_VALIDATE_KUBE_VERSIONS"])
 def check_templates():
     _run([
         "python3", "tools/templates/lint-and-validate.py",
-         "--kubernetes-versions", os.environ["VALIDATE_KUBE_VERSIONS"],
+         "--kubernetes-versions", os.environ["Z2JH_VALIDATE_KUBE_VERSIONS"],
     ])
 
 
@@ -578,9 +578,11 @@ if __name__ == "__main__":
             # -----------------------------------------------------------------
             #
             # GITHUB_ACCESS_TOKEN is needed to generate changelog entries etc.
+            # For private repositories you don't have to give this token any
+            # privileges when you create it here: https://github.com/settings/tokens/new
             #
             GITHUB_ACCESS_TOKEN=""
-            #
+
             # KUBECONFIG is required to be set explicitly in order to avoid
             # potential modifications of non developer clusters. It should
             # be to the path where the kubernetes config resides.
@@ -588,26 +590,26 @@ if __name__ == "__main__":
             # The "./dev kind create" command will set this files KUBECONFIG
             # entry automatically on cluster creation.
             KUBECONFIG=""
-            #
+
             # Z2JH_KUBE_CONTEXT and Z2JH_KUBE_NAMESPACE is used to ensure we
             # work with the right cluster, with the right credentials, and in
             # the right namespace without modifying the provided KUBECONFIG.
             Z2JH_KUBE_CONTEXT=""
             Z2JH_KUBE_NAMESPACE=""
 
-            # KUBE_VERSION is used to create a kind cluster. Note that only
+            # Z2JH_KUBE_VERSION is used to create a kind cluster. Note that only
             # versions that are found on kindest/node can be used.
             #
             # ref: https://hub.docker.com/r/kindest/node/tags
-            KUBE_VERSION="1.15.3"
-            #
-            # VALIDATE_KUBE_VERSIONS is influences "./dev check templates",
+            Z2JH_KUBE_VERSION="1.15.3"
+
+            # Z2JH_VALIDATE_KUBE_VERSIONS is influences "./dev check templates",
             # what Kubernetes versions do we validate against? Note that only
             # versions found on instrumenta/kubernetes-json-schema can be used.
             #
             # ref: https://github.com/instrumenta/kubernetes-json-schema
-            VALIDATE_KUBE_VERSIONS="1.15.0"
-            #
+            Z2JH_VALIDATE_KUBE_VERSIONS="1.15.0"
+
             # Z2JH_PORT_FORWARD_ADDRESS and Z2JH_PORT_FORWARD_PORT influences
             # "./dev port-forward" and where "./dev test" will look to access
             # the proxy-public Kubernetes service.
@@ -618,6 +620,7 @@ if __name__ == "__main__":
         )
         with open('.env', 'w+') as f:
             f.write(default_dotenv_file)
+
 
     dotenv.load_dotenv(override=True)
 
