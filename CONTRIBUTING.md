@@ -307,6 +307,32 @@ Did you get an error like this?
 Unable to listen on port 8080: Listeners failed to create with the following errors: [Unable to create listener: Error listen tcp4 127.0.0.1:8080: bind: address already in use Unable to create listener: Error listen tcp6 [::1]:8080: bind: address already in use]
 ```
 
+The key to solving this is understanding it!
+
+We need to shuttle traffic from your computer to your Kubernetes clusters's
+Service that in turn shuttle the traffic to the pod of relevance. While doing
+so, we can end up with issues like the ones above. They arise because we have
+asked for traffic to go to more than one place.
+
+Let's look on how we need traffic to be shuttled!
+
+*Traffic entering your computer should go to your Kubernetes cluster's
+Service named `proxy-public`.*
+
+When you run `./dev upgrade`, that in turn runs the `kubectl port-forward`
+command to shuttle traffic from port `8080` to the `proxy-public` Kubernetes
+Service (port `80`) that we want to communicate with, it is the gate to speak
+with the hub and proxy even though it is also possible to speak directly to
+the hub.
+
+Consider this example issue. Assume you setup a `kind` Kubernetes cluster on
+your local computer, and also let incoming traffic on `8080` go straight ot this
+cluster using the `kubectl port-forward` command. What would happen if you start
+up a VM with `vagrant up` and, Vagrant was configured in the Vagrantfile to want
+traffic coming to your computer on `8080` to go towards it? Then you would have
+asked for traffic to go both to the Kubernetes cluster and to your VM. You would
+experience an error like the one below.
+
 ```
 Vagrant cannot forward the specified ports on this VM, since they
 would collide with some other application that is already listening
@@ -314,35 +340,10 @@ on these ports. The forwarded port to 8080 is already in use
 on the host machine.
 ```
 
-The key to solving this is understanding it!
-
-We need to shuttle traffic from your computer to your Kubernetes clusters's
-Service that in turn shuttle the traffic to the pod of relevance. While doing
-so, we can end up with issues like the one above if we end up asking for traffic
-to go to more than one place.
-
-Let's look on how we need traffic to be shuttled!
-
-1. *Traffic entering your computer should go to your VM.*
-
-   When you run `vagrant up` your computer will read the
-   [Vagrantfile](Vagrantfile) and from that conclude it should shuttle traffic
-   incoming to your computer on port `8080` to your VM on port `8080`.
-
-2. *Traffic entering your VM should go to your Kubernetes cluster's Service named `proxy-public`.*
-
-   When you run `./dev upgrade`, that in turn runs the `kubectl port-forward`
-   command to shuttle traffic from port `8080` to the `proxy-public` Kubernetes
-   Service (port `80`) that we want to communicate with, it is the gate to speak
-   with the hub and proxy even though it is also possible to speak directly to
-   the hub.
-
-In short, the traffic is routed from computer (8080), to the VM (8080), to the
-Kubernetes `proxy-public` Service (80).
-
-The reason you may run into an issue if is there is another service already
-listening on traffic arriving on a given port. Then you would need to either
-shut it down or route traffic differently.
+To conclude: you may run into an issue like this if is there is another service
+already listening on traffic arriving on a given port you want to use. Then you
+would need to either shut the blocking service down or route traffic
+differently.
 
 
 

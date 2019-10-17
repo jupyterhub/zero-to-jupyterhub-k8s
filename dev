@@ -265,7 +265,7 @@ def upgrade(values):
 def port_forward():
     host = os.environ.get("Z2JH_PORT_FORWARD_ADDRESS", "localhost")
     port = os.environ.get("Z2JH_PORT_FORWARD_PORT", "8080")
-    hub_api_url = f"http://{host}:{port}"
+    service_url = f"http://{host}:{port}"
 
     print("Run and detach a process to run the kubectl port-forward command.")
     proc = _run(
@@ -273,7 +273,7 @@ def port_forward():
             "kubectl", "port-forward", "service/proxy-public",
             "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
             "--context", os.environ["Z2JH_KUBE_CONTEXT"],
-            "--pod-running-timeout", "10s",
+            "--pod-running-timeout", "1s",
             "--address", host,
             f'{port}:80',
         ],
@@ -281,7 +281,10 @@ def port_forward():
     )
 
     try:
-        response = requests.get(hub_api_url, timeout=10.05)
+        # Ensure there has been enough time for the detached port-forwarding
+        # process to establish a connection
+        time.sleep(1.05)
+        response = requests.get(service_url, timeout=1)
     except requests.exceptions.ConnectionError as e:
         # this is a signature of a failed port forwarding
         print("Port-forwarding failed!")
