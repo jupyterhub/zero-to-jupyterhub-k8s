@@ -11,6 +11,13 @@ git:
   depth: false
 services:
   - docker
+## This if conditions gives us control to run the stages and jobs. Not running
+## on pushed tags make us enforce that our tags reside on the master branch,
+## that chartpress' logic require for proper versioning.
+##
+## ref: https://docs.travis-ci.com/user/conditions-v1
+##
+if: tag IS blank
 ## stages declares and orders stages
 ##
 ## ref: https://docs.travis-ci.com/user/build-stages/#build-stages-and-deployments
@@ -19,12 +26,9 @@ stages:
   - name: lint and validate
   - name: test
   - name: publish
-    ## if conditions gives us control if the stage should run
-    ##
-    ## ref: https://docs.travis-ci.com/user/conditions-v1
-    ##
     if: >
-      branch in (master) AND
+      branch in (master)
+      AND
       type in (push)
 install:
   - set -e
@@ -86,7 +90,7 @@ jobs:
       script:
         - setup_git_crypt
         - setup_helm
-        - helm init
+        - helm init --client-only
         - ./ci/travis-docker-fix
         - ./ci/publish
       env:
@@ -96,5 +100,3 @@ jobs:
         ## ref: https://docs.travis-ci.com/user/environment-variables/#encrypting-environment-variables
         - secure: jpFpbMccpjGP+otWH2Z03VFdtR9AAu2vzrNxsoZ3IvJvrO4MfzYJ3uSCDQuB0NG9gBgaAscpTJtliPTEi7njXHLcsFeWXLUmeBEHLozYxfzDQzMvW3EYdNWcC7oVAAt3de0i0ojw9rGswiofhbu2dAe+Xd2bejv1+PVJcEC3SRPGy17kb6bme6gD3zty5ft4VpzP0nomUNqfZBRLUYxSZuKlHJaZ6Nuq434rKmXrcN6uy+eEWDorTbjyM22IIYgUmrhg++Qtu/MBR7/rriPhyRltCU14361bcxqyq2Hw+HNG8D3hsqo5TiEiYwxOQcXRgddL+Ci6/y0L1EvqOQc+1V8ycwNs2oNicwNgSn5A+9HpF495Kae039hGtj2Gpt4IbplSYwKFq/sFTq+CekxdD2YVQmGvsjep4bNVL66o2RSZVAW1Bg/G8/sSe3BwgD8IToy9+1NHPPuaVupeukRqNyUDcVvWH8hdb8AkXYY87+546etYDpn91GQnhTEberKbXX4UCmpKNXpXoprLE8nQLGb6TIoHPTyA+RRNQ4erDzMjqF43UVmhOZTtkGaRgIWK7vDAKpLUnuOguuhJUNpYpRggGQsMV8cZnaCumy5OFUf6i6rfN0Ru6a+/Bm7grJiAcnZlU7igaxgI38QaJgCKcqqzIImdcRYNQC74/Ok/1oM=
         - secure: BK++GwKVPoS0iG8aB7wQ13daTgJR9MifHA+l9xr/tSZ3SUL6nc7kjxLbliRQJCqT9lcOODsd+v2u9PziEzBp0CCh67ftFxJw8riP2+FgdmHTK4yav9QpSwoBJHhV2SgBMGlXiqdUVC7wpgjzzK63V8abvzAhXkthWPl3kYpUI//xGYyuBNXVHEOImHB3F1M5bn90lflFtRfq2iH5FigGesMi2BFfTVeqvbzZVZrAs0E1/NRdO+/cRq0c9aRpNLkh254k1tcKbUvULQq1iLQuHN2Ramn3NgNnx93sbwp1e7ZjmETbjr9cwMIDg5mh25H0Rjf2Nn8cqHbBCWzoMkjZW097HRVDYht2kJZQIbQcaxX38DW6vykUwGWSBAWbtvCUwYwU57s/dIbSYUTQErkYYmhiq52cdOtnxZ2/ULoElCVyR8lTmQuANJrq9YFC9q1ly69YuMWWnFgwxWpK1JCgAJGELgj5EvcghEtNmkEFh5f6pmbKBE7PKQPTovzNKcdRauR/L+MsmhVYukCfNZq57LrruIQIX1GQNw9w3Ck8P4EPtNjdI4umCSy6nZSyTevWgVTmIP9EwXa5Cap32ZU+iDtw+wUBAr3sjROJOYGKlL/ktWsWbjog5hIG0rrb8PbgOfbLRZSEYGL9sYsyXXyW5oI37lB7AqG6D7vOA4TdmTQ=
-      on:
-        tags: true
