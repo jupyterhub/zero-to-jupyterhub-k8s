@@ -54,18 +54,23 @@ env:
   ## ref: https://hub.docker.com/r/kindest/node/tags
   ## ref: https://github.com/kubernetes-sigs/kind/issues/197
   ##
-  - Z2JH_KUBE_VERSION=1.16.1 Z2JH_HELM_VERSION=2.15.0-rc.2
   - Z2JH_KUBE_VERSION=1.15.3
   - Z2JH_KUBE_VERSION=1.14.6
   - Z2JH_KUBE_VERSION=1.13.10
+  - &allow_failure Z2JH_KUBE_VERSION=1.16.1 Z2JH_HELM_VERSION=2.15.0-rc.2
 
 jobs:
-  ## allow a selection of the matrix of jobs to fail
+  ## allow experimental setups to fail
   ##
   ## ref: https://docs.travis-ci.com/user/customizing-the-build/#rows-that-are-allowed-to-fail
   ##
   allow_failures:
-    - env: Z2JH_KUBE_VERSION=1.16.1
+    - env: *allow_failure
+  ## don't wait for the jobs that are allowed to fail to report success
+  ##
+  ## ref: https://docs.travis-ci.com/user/customizing-the-build/#fast-finishing
+  ##
+  fast_finish: true
 
   ## include additional individual jobs
   ##
