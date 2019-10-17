@@ -173,7 +173,7 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
             "--",
             "wget", "--quiet", "--tries=1", "--timeout=3", allowed_url,
         ])
-        assert c.returncode == 0, "Unable to get allowed domain"
+        assert c.returncode == 0, "Unable to get allowed domain (or failed to resolve the domain name)"
 
         c = subprocess.run([
             "kubectl", "exec", pod_name,
