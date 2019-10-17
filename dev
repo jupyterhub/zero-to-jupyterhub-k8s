@@ -273,7 +273,7 @@ def port_forward():
             "kubectl", "port-forward", "service/proxy-public",
             "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
             "--context", os.environ["Z2JH_KUBE_CONTEXT"],
-            "--pod-running-timeout", "1s",
+            "--pod-running-timeout", "10s",
             "--address", host,
             f'{port}:80',
         ],
@@ -281,7 +281,7 @@ def port_forward():
     )
 
     try:
-        response = requests.get(hub_api_url, timeout=1.05)
+        response = requests.get(hub_api_url, timeout=10.05)
     except requests.exceptions.ConnectionError as e:
         # this is a signature of a failed port forwarding
         print("Port-forwarding failed!")
@@ -451,8 +451,14 @@ def _print_command(text):
 
 def _run(cmd, detach=False, print_command=True, print_end="\n", print_error=True, error_callback=None, exit_on_error=True, **kwargs):
     """Run a subcommand and exit if it fails"""
-    if kwargs.get("capture_output", None) and kwargs.get("text", None) is None:
-        kwargs["text"] = True
+    if kwargs.get("capture_output", None):
+        if kwargs.get("text", None) is None:
+            kwargs["text"] = True
+
+        # FIXME: This following lines are a removable workaround at the time we
+        #        assume Python 3.7+, but it is required for Python 3.6.
+        del kwargs["capture_output"]
+        kwargs["stdout"] = kwargs["stderr"] = subprocess.PIPE
 
     if print_command:
         _print_command(" ".join(map(pipes.quote, cmd)))
@@ -461,7 +467,6 @@ def _run(cmd, detach=False, print_command=True, print_end="\n", print_error=True
         with open(os.devnull, 'r+b', 0) as DEVNULL:
             proc = subprocess.Popen(
                 cmd,
-                text=True,
                 stdin=subprocess.DEVNULL,
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
@@ -480,14 +485,14 @@ def _run(cmd, detach=False, print_command=True, print_end="\n", print_error=True
             file=sys.stderr,
         )
         if proc.stderr:
-            print(proc.stderr.strip())
+            print(proc.stderr.decode("utf-8").strip())
         if error_callback:
             error_callback()
         if exit_on_error:
             sys.exit(proc.returncode)
 
     if proc.stdout:
-        return proc.stdout.strip()
+        return proc.stdout.decode("utf-8").strip()
     return ""
 
 

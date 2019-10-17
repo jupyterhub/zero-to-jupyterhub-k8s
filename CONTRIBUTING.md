@@ -307,6 +307,13 @@ Did you get an error like this?
 Unable to listen on port 8080: Listeners failed to create with the following errors: [Unable to create listener: Error listen tcp4 127.0.0.1:8080: bind: address already in use Unable to create listener: Error listen tcp6 [::1]:8080: bind: address already in use]
 ```
 
+```
+Vagrant cannot forward the specified ports on this VM, since they
+would collide with some other application that is already listening
+on these ports. The forwarded port to 8080 is already in use
+on the host machine.
+```
+
 The key to solving this is understanding it!
 
 We need to shuttle traffic from your computer to your Kubernetes clusters's
