@@ -11,13 +11,6 @@ git:
   depth: false
 services:
   - docker
-## This if conditions gives us control to run the stages and jobs. Not running
-## on pushed tags make us enforce that our tags reside on the master branch,
-## that chartpress' logic require for proper versioning.
-##
-## ref: https://docs.travis-ci.com/user/conditions-v1
-##
-if: tag IS blank
 ## stages declares and orders stages
 ##
 ## ref: https://docs.travis-ci.com/user/build-stages/#build-stages-and-deployments
