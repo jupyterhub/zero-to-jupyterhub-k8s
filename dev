@@ -219,17 +219,19 @@ def kind_delete():
 
 @depend_on(binaries=["chartpress", "helm"], envs=["KUBECONFIG", "Z2JH_KUBE_CONTEXT", "Z2JH_KUBE_NAMESPACE"])
 def upgrade(chart, version, values):
-    print("Building images and updating image tags if needed.")
-    _run(["chartpress"])
-    # git --no-pager diff
+    if chart.startswith("./"):
+        print("Building images and updating image tags if needed.")
+        _run(["chartpress"])
+        # git --no-pager diff
 
-    if "kind-config-jh-dev" in os.environ["KUBECONFIG"]:
-        print("Loading the locally built images into the kind cluster.")
-        _run([
-            "python3", "ci/kind-load-docker-images.py",
-            "--kind-cluster", "jh-dev",
-        ])
-
+        if "kind-config-jh-dev" in os.environ["KUBECONFIG"]:
+            print("Loading the locally built images into the kind cluster.")
+            _run([
+                "python3", "ci/kind-load-docker-images.py",
+                "--kind-cluster", "jh-dev",
+            ])
+    else:
+        print("External chart specified, skipping use of chartpress.")
 
     print("Installing/upgrading the Helm chart on the Kubernetes cluster.")
     cmd = [

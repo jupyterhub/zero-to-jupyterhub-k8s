@@ -56,7 +56,7 @@ env:
   ##
   - Z2JH_KUBE_VERSION=1.15.3
   - Z2JH_KUBE_VERSION=1.13.10
-  - &allow_failure Z2JH_KUBE_VERSION=1.16.1
+  - &allow_failure Z2JH_KUBE_VERSION=1.16.2
 
 jobs:
   ## allow experimental setups to fail
