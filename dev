@@ -218,7 +218,7 @@ def kind_delete():
 
 
 @depend_on(binaries=["chartpress", "helm"], envs=["KUBECONFIG", "Z2JH_KUBE_CONTEXT", "Z2JH_KUBE_NAMESPACE"])
-def upgrade(values):
+def upgrade(chart, version, values):
     print("Building images and updating image tags if needed.")
     _run(["chartpress"])
     # git --no-pager diff
@@ -233,14 +233,17 @@ def upgrade(values):
 
     print("Installing/upgrading the Helm chart on the Kubernetes cluster.")
     cmd = [
-        "helm", "upgrade", "jh-dev", "./jupyterhub",
+        "helm", "upgrade", "jh-dev", chart,
         "--install",
         "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
         "--kube-context", os.environ["Z2JH_KUBE_CONTEXT"],
     ]
-    for value in values:
+    if version:
+        cmd.append("--version")
+        cmd.append(version)
+    for values_file in values:
         cmd.append("--values")
-        cmd.append(value)
+        cmd.append(values_file)
     _run(cmd=cmd)
 
     print("Waiting for the proxy and hub to become ready.")
@@ -524,6 +527,15 @@ def _get_argparser():
         "upgrade", help="Install or upgrade the Helm chart in the Kubernetes cluster."
     )
     upgrade.add_argument(
+        "--chart",
+        default="./jupyterhub",
+        help="Chart to upgrade/install with the upgrade helm upgrade command.",
+    )
+    upgrade.add_argument(
+        "--version",
+        help="Specifies the chart's version to upgrade/install.",
+    )
+    upgrade.add_argument(
         "-f",
         "--values",
         action="append",
@@ -645,7 +657,7 @@ if __name__ == "__main__":
             kind_delete()
 
     if args.cmd == "upgrade":
-        upgrade(args.values)
+        upgrade(chart=args.chart, version=args.version, values=args.values)
 
     if args.cmd == "port-forward":
         port_forward()
