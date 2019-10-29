@@ -1,21 +1,23 @@
 # Release process
 
-Start by making a release issue using the template below. The issue checklist can be followed to
-release a new version of the Helm chart and help everybody coordinate. Do some
-copy pasting!
+Start by making a release issue using the template below. The issue checklist
+can be followed to release a new version of the Helm chart and help everybody
+coordinate. Do some copy pasting!
 
 ## Issue title: Release x.y.z
 
-This issue will be used to coordinate the next release of the Helm
-chart according to the instructions in [RELEASE.md](RELEASE.md).
-Below is the checklist for this release.
+This issue will be used to coordinate the next release of the Helm chart
+according to the instructions in [RELEASE.md](RELEASE.md). Below is the
+checklist for this release.
 
 ## Pre-release iteration 1
 
-- Make a changelog
-  - [ ] Summarize points of interest.
-  - [ ] List breaking changes and mention the [upgrade instructions](https://z2jh.jupyter.org/en/latest/upgrading.html).
-    - [ ] Update the upgrade instructions.
+- Update [CHANGELOG.md](CHANGELOG.md) and make a commit
+  - [ ] List merged PRs using
+    [choldgraf/github-activity](https://github.com/choldgraf/github-activity).
+  - [ ] List breaking changes and refer to the [upgrade
+    instructions](https://z2jh.jupyter.org/en/latest/upgrading.html).
+    - [ ] Update these upgrade instructions.
   - [ ] List features with brief descriptions.
 
 - Pre-release
@@ -23,9 +25,9 @@ Below is the checklist for this release.
 
     ```bash
     git checkout master
-    git pull <REMOTE> master
-    git tag -a x.y.z-beta.1
-    git push <REMOTE> --tags
+    git reset --hard <upstream>/master
+    git tag -a x.y.z-beta.1 -m x.y.z-beta.1 <commit on master>
+    git push --follow-tags <upstream> master
     ```
 
 - Update documentation
@@ -35,12 +37,12 @@ Below is the checklist for this release.
   - [ ] Write a discourse post
 
 - Verify
-  - [ ] Follow one set of instructions to deploy on z2jh.jupyter.org
+  - [ ] Verify one set of instructions to deploy on
+    [z2jh.jupyter.org](https://z2jh.jupyter.org).
 
 ## Final release
 
-- Update changelog
-  - [ ] Update the changelog
+- Update [CHANGELOG.md](CHANGELOG.md) and make a commit
   - [ ] Generate and add a list of contributors
 
     ```bash
@@ -53,17 +55,17 @@ Below is the checklist for this release.
     #       ensure you make progress. You have 5000 requests per hour.
 
     # get a GITHUB_API_TOKEN for use with the script
-     GITHUB_API_TOKEN="your-token" tools/contributors.py
+      GITHUB_API_TOKEN="your-token" tools/contributors.py
     ```
 
 - Release
-  - [ ] Create and push a git tag
+  - [ ] Create and push a git tag.
 
     ```bash
     git checkout master
-    git pull <REMOTE> master
-    git tag -a x.y.z
-    git push <REMOTE> --tags
+    git reset --hard <upstream>/master
+    git tag -a x.y.z-beta.1 -m x.y.z-beta.1 HEAD
+    git push --follow-tags <upstream> master
     ```
 
   - [ ] Create a GitHub release
