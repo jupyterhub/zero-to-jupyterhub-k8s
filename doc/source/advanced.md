@@ -129,6 +129,28 @@ hub:
       # some other code
 ```
 
+Example of mounting kubernetes secrets as environmeent variables into spawned user pods via `hub.extraConfig` without having to expose them in your `values.yaml`. Useful for example, if you want to provide credentials for reading protected external resources. 
+
+```yaml
+hub:
+  extraConfig:
+    ...
+    10-secretToEnv: |
+      from kubernetes import client
+      def modify_pod_hook(spawner, pod):
+          pod.spec.containers[0].env.append(
+              client.V1EnvVar(
+                  name='YOUR_ENV_VARIABLE', 
+                  value_from=client.V1EnvVarSource(
+                      secret_key_ref=client.V1SecretKeySelector(
+                          name='your-secret',
+                          key='SECRET_KEY',
+                      ))))
+          return pod
+      c.KubeSpawner.modify_pod_hook = modify_pod_hook
+    ...
+```
+
 ### `custom` configuration
 
 The contents of `values.yaml` is passed through to the Hub image.
