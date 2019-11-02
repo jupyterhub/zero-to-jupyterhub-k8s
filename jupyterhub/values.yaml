@@ -13,6 +13,7 @@ hub:
   initContainers: []
   fsGid: 1000
   nodeSelector: {}
+  tolerations: []
   concurrentSpawnLimit: 64
   consecutiveFailureLimit: 5
   activeServerLimit:
@@ -193,6 +194,7 @@ proxy:
     resources: {}
   labels: {}
   nodeSelector: {}
+  tolerations: []
   pdb:
     enabled: true
     minAvailable: 1
@@ -352,6 +354,7 @@ scheduling:
       name: k8s.gcr.io/kube-scheduler
       tag: v1.19.1
     nodeSelector: {}
+    tolerations: []
     pdb:
       enabled: true
       minAvailable: 1
@@ -403,6 +406,8 @@ prePuller:
     enabled: true
   pullProfileListImages: true
   extraImages: {}
+  nodeSelector: {}
+  tolerations: []
   pause:
     containerSecurityContext:
       runAsUser: 65534  # nobody user

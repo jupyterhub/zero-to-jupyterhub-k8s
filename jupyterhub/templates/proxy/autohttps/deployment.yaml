@@ -31,6 +31,7 @@ spec:
       priorityClassName: {{ .Release.Name }}-default-priority
       {{- end }}
       nodeSelector: {{ toJson .Values.proxy.nodeSelector }}
+      tolerations: {{ toJson .Values.proxy.tolerations }}
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
       volumes:
         - name: certificates
