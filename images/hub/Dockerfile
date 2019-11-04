@@ -1,5 +1,7 @@
 FROM ubuntu:18.04
 
+## NOTE: This is a default and be overridden by chartpress using the
+##       chartpress.yaml configuration
 ARG JUPYTERHUB_VERSION=1.0.*
 
 RUN apt-get update && \
@@ -45,11 +47,6 @@ RUN PYCURL_SSL_LIBRARY=openssl pip3 install --no-cache-dir \
             echo jupyterhub==${JUPYTERHUB_VERSION}; \
           fi')
 
-ADD jupyterhub_config.py /srv/jupyterhub_config.py
-
-ADD z2jh.py /usr/local/lib/python3.6/dist-packages/z2jh.py
-ADD cull_idle_servers.py /usr/local/bin/cull_idle_servers.py
-
 WORKDIR /srv/jupyterhub
 
 # So we can actually write a db file here
@@ -59,4 +56,4 @@ RUN chown ${NB_USER}:${NB_USER} /srv/jupyterhub
 EXPOSE 8081
 
 USER ${NB_USER}
-CMD ["jupyterhub", "--config", "/srv/jupyterhub_config.py"]
+CMD ["jupyterhub", "--config", "/etc/jupyterhub/jupyterhub_config.py"]

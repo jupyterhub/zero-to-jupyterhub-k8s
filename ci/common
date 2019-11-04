@@ -1,0 +1,94 @@
+#!/bin/bash
+
+## common - source this file with ". ./ci/common" to set environment
+## variables and make useful functions available.
+
+mkdir -p bin
+export PATH="$PWD/bin:$PATH"
+
+## NOTE: These are default values for relevant environment variables
+##
+if [ -z ${Z2JH_KUBE_VERSION:-} ]; then
+    ## NOTE: Z2JH_KUBE_VERSION is limited by the available kindest/node images
+    ## 
+    ## ref: https://hub.docker.com/r/kindest/node/tags
+    ## ref: https://github.com/kubernetes/kubernetes/releases
+    ##
+    export Z2JH_KUBE_VERSION=1.15.3
+fi
+if [ -z ${Z2JH_KIND_VERSION:-} ]; then
+    ## ref: https://github.com/kubernetes-sigs/kind/releases
+    ##
+    export Z2JH_KIND_VERSION=0.5.1
+fi
+if [ -z ${Z2JH_HELM_VERSION:-} ]; then
+    ## ref: https://github.com/helm/helm/releases
+    ##
+    export Z2JH_HELM_VERSION=2.15.1
+fi
+if [ -z ${Z2JH_KUBEVAL_VERSION:-} ]; then
+    ## ref: https://github.com/instrumenta/kubeval/releases
+    ##
+    export Z2JH_KUBEVAL_VERSION=0.14.0
+fi
+
+## NOTE: The setup_... functions cache downloads but ensure the correct version
+##
+setup_kubectl () {
+    echo "setup kubectl ${Z2JH_KUBE_VERSION}"
+    if ! [ -f "bin/kubectl-${Z2JH_KUBE_VERSION}" ]; then
+        curl -sSLo "bin/kubectl-${Z2JH_KUBE_VERSION}" "https://storage.googleapis.com/kubernetes-release/release/v${Z2JH_KUBE_VERSION}/bin/linux/amd64/kubectl"
+        chmod +x "bin/kubectl-${Z2JH_KUBE_VERSION}"
+    fi
+    cp "bin/kubectl-${Z2JH_KUBE_VERSION}" bin/kubectl
+}
+
+setup_kind () {
+    echo "setup kind ${Z2JH_KIND_VERSION}"
+    if ! [ -f "bin/kind-${Z2JH_KIND_VERSION}" ]; then
+        curl -sSLo "bin/kind-${Z2JH_KIND_VERSION}" "https://github.com/kubernetes-sigs/kind/releases/download/v${Z2JH_KIND_VERSION}/kind-linux-amd64"
+        chmod +x "bin/kind-${Z2JH_KIND_VERSION}"
+    fi
+    cp "bin/kind-${Z2JH_KIND_VERSION}" bin/kind
+}
+
+setup_helm () {
+    echo "setup helm ${Z2JH_HELM_VERSION}"
+    if ! [ -f "bin/helm-${Z2JH_HELM_VERSION}" ]; then
+        curl -sSLo "bin/helm-${Z2JH_HELM_VERSION}.tar.gz" "https://storage.googleapis.com/kubernetes-helm/helm-v${Z2JH_HELM_VERSION}-linux-amd64.tar.gz"
+        tar -xf "bin/helm-${Z2JH_HELM_VERSION}.tar.gz" --directory bin --strip-components 1 linux-amd64/helm
+        rm "bin/helm-${Z2JH_HELM_VERSION}.tar.gz"
+        mv bin/helm "bin/helm-${Z2JH_HELM_VERSION}"
+    fi
+    cp bin/helm-${Z2JH_HELM_VERSION} bin/helm
+}
+
+setup_kubeval () {
+    echo "setup kubeval ${Z2JH_KUBEVAL_VERSION}"
+    if ! [ -f "bin/kubeval-${Z2JH_KUBEVAL_VERSION}" ]; then
+        curl -sSLo "bin/kubeval-${Z2JH_KUBEVAL_VERSION}.tar.gz" "https://github.com/instrumenta/kubeval/releases/download/${Z2JH_KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz"
+        tar -xf "bin/kubeval-${Z2JH_KUBEVAL_VERSION}.tar.gz" --directory bin
+        rm "bin/kubeval-${Z2JH_KUBEVAL_VERSION}.tar.gz"
+        mv bin/kubeval "bin/kubeval-${Z2JH_KUBEVAL_VERSION}"
+    fi
+    cp bin/kubeval-${Z2JH_KUBEVAL_VERSION} bin/kubeval
+}
+
+setup_git_crypt () {
+    Z2JH_GIT_CRYPT_VERSION=0.5.0
+    Z2JH_GIT_CRYPT_VERSION_SHA=46c288cc849c23a28239de3386c6050e5c7d7acd50b1d0248d86e6efff09c61b
+    echo "setup git-crypt ${Z2JH_GIT_CRYPT_VERSION}"
+    if ! [ -f "bin/git-crypt-${Z2JH_GIT_CRYPT_VERSION}" ]; then
+        curl -sSLo "bin/git-crypt-${Z2JH_GIT_CRYPT_VERSION}" https://github.com/minrk/git-crypt-bin/releases/download/${Z2JH_GIT_CRYPT_VERSION}/git-crypt
+        chmod +x "bin/git-crypt-${Z2JH_GIT_CRYPT_VERSION}"
+        echo "${Z2JH_GIT_CRYPT_VERSION_SHA}  bin/git-crypt-${Z2JH_GIT_CRYPT_VERSION}" | shasum -a 256 -c -
+    fi
+    cp bin/git-crypt-${Z2JH_GIT_CRYPT_VERSION} bin/git-crypt
+}
+
+if [ "${1:-}" = "--setup" ]; then
+    setup_kubectl
+    setup_kind
+    setup_helm
+    setup_kubeval
+fi

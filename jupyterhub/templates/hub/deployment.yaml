@@ -55,10 +55,16 @@ spec:
       {{- end }}
       securityContext:
         fsGroup: {{ .Values.hub.fsGid }}
-      {{- if .Values.hub.imagePullSecret.enabled }}
+      {{- if or .Values.hub.imagePullSecret.enabled .Values.hub.image.pullSecrets }}
       imagePullSecrets:
+        {{- if .Values.hub.imagePullSecret.enabled }}
         - name: hub-image-credentials
-      {{- end }}  
+        {{ else }}
+        {{- range .Values.hub.image.pullSecrets }}
+        - name: {{ . }}
+        {{- end }}
+        {{- end }}
+      {{- end }}
       {{- if .Values.hub.initContainers }}
       initContainers:
         {{- .Values.hub.initContainers | toYaml | trimSuffix "\n" | nindent 8 }}
@@ -72,7 +78,7 @@ spec:
           command:
             - jupyterhub
             - --config
-            - /srv/jupyterhub_config.py
+            - /etc/jupyterhub/jupyterhub_config.py
             {{- if .Values.debug.enabled }}
             - --debug
             {{- end }}
@@ -97,6 +103,15 @@ spec:
             {{- end }}
             {{- end }}
           volumeMounts:
+            - mountPath: /etc/jupyterhub/jupyterhub_config.py
+              subPath: jupyterhub_config.py
+              name: config
+            - mountPath: /usr/local/lib/python3.6/dist-packages/z2jh.py
+              subPath: z2jh.py
+              name: config
+            - mountPath: /etc/jupyterhub/cull_idle_servers.py
+              subPath: cull_idle_servers.py
+              name: config
             - mountPath: /etc/jupyterhub/config/
               name: config
             - mountPath: /etc/jupyterhub/secret/

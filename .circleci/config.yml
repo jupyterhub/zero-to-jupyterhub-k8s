@@ -1,6 +1,3 @@
-# This CircleCI build lets us preview the documentation inside PRs before they 
-# are merged! And when they are, the readthedocs.yml file will help ReadTheDocs
-# build and publish it on https://z2jh.jupyter.org.
 version: 2
 jobs:
   build_docs:

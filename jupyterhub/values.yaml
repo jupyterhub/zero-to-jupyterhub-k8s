@@ -18,10 +18,13 @@ hub:
   consecutiveFailureLimit: 5
   activeServerLimit:
   deploymentStrategy:
-    # sqlite-pvc backed hub requires Recreate strategy to work
+    ## type: Recreate
+    ## - sqlite-pvc backed hubs require the Recreate deployment strategy as a
+    ##   typical PVC storage can only be bound to one pod at the time.
+    ## - JupyterHub isn't designed to support being run in parallell. More work
+    ##   needs to be done in JupyterHub itself for a fully highly available (HA)
+    ##   deployment of JupyterHub on k8s is to be possible.
     type: Recreate
-    # This is required for upgrading to work
-    rollingUpdate:
   db:
     type: sqlite-pvc
     upgrade:
@@ -45,7 +48,9 @@ hub:
   extraVolumeMounts: []
   image:
     name: jupyterhub/k8s-hub
-    tag: generated-by-chartpress
+    tag: 'set-by-chartpress'
+    # pullSecrets:
+    #   - secretName
   resources:
     requests:
       cpu: 200m
@@ -68,6 +73,12 @@ hub:
           - ipBlock:
               cidr: 0.0.0.0/0
   allowNamedServers: false
+  namedServerLimitPerUser:
+  authenticatePrometheus:
+  redirectToServer:
+  shutdownOnLogout:
+  templatePaths: []
+  templateVars: {}
 
 
 rbac:
@@ -76,6 +87,32 @@ rbac:
 
 proxy:
   secretToken: ''
+  deploymentStrategy:
+    ## type: Recreate
+    ## - JupyterHub's interaction with the CHP proxy becomes a lot more robust
+    ##   with this configuration. To understand this, consider that JupyterHub
+    ##   during startup will interact a lot with the k8s service to reach a
+    ##   ready proxy pod. If the hub pod during a helm upgrade is restarting
+    ##   directly while the proxy pod is making a rolling upgrade, the hub pod
+    ##   could end up running a sequence of interactions with the old proxy pod
+    ##   and finishing up the sequence of interactions with the new proxy pod.
+    ##   As CHP proxy pods carry individual state this is very error prone. One
+    ##   outcome when not using Recreate as a strategy has been that user pods
+    ##   have been deleted by the hub pod because it considered them unreachable
+    ##   as it only configured the old proxy pod but not the new before trying
+    ##   to reach them.
+    type: Recreate
+    ## rollingUpdate:
+    ## - WARNING:
+    ##   This is required to be set explicitly blank! Without it being
+    ##   explicitly blank, k8s will let eventual old values under rollingUpdate
+    ##   remain and then the Deployment becomes invalid and a helm upgrade would
+    ##   fail with an error like this:
+    ##
+    ##     UPGRADE FAILED
+    ##     Error: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
+    ##     Error: UPGRADE FAILED: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
+    rollingUpdate:
   service:
     type: LoadBalancer
     labels: {}
@@ -172,7 +209,7 @@ singleuser:
   networkTools:
     image:
       name: jupyterhub/k8s-network-tools
-      tag: generated-by-chartpress
+      tag: 'set-by-chartpress'
   cloudMetadata:
     enabled: false
     ip: 169.254.169.254
@@ -214,8 +251,10 @@ singleuser:
       storageAccessModes: [ReadWriteOnce]
   image:
     name: jupyterhub/k8s-singleuser-sample
-    tag: generated-by-chartpress
+    tag: 'set-by-chartpress'
     pullPolicy: IfNotPresent
+    # pullSecrets:
+    #   - secretName
   imagePullSecret:
     enabled: false
     registry:
@@ -234,6 +273,7 @@ singleuser:
     guarantees: {}
   cmd: jupyterhub-singleuser
   defaultUrl:
+  extraPodConfig: {}
 
 
 scheduling:
@@ -241,6 +281,15 @@ scheduling:
     enabled: true
     replicas: 2
     logLevel: 4
+    ## policy:
+    ## Allows you to provide custom YAML/JSON to render into a JSON policy.cfg,
+    ## a configuration file for the kube-scheduler binary.
+    ## NOTE: The kube-scheduler binary in the kube-scheduler image we are
+    ## currently using may be version bumped. It would for example happen if we
+    ## increase the lowest supported k8s version for the helm chart. At this
+    ## point, the provided policy.cfg may require a change along with that due
+    ## to breaking changes in the kube-scheduler binary.
+    policy: {}
     image:
       name: gcr.io/google_containers/kube-scheduler-amd64
       tag: v1.11.2
@@ -273,7 +322,7 @@ prePuller:
     enabled: true
     image:
       name: jupyterhub/k8s-image-awaiter
-      tag: generated-by-chartpress
+      tag: 'set-by-chartpress'
   continuous:
     enabled: true
   extraImages: {}

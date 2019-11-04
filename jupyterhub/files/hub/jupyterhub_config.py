@@ -59,6 +59,12 @@ for trait, cfg_key in (
     # base url prefix
     ('base_url', None),
     ('allow_named_servers', None),
+    ('named_server_limit_per_user', None),
+    ('authenticate_prometheus', None),
+    ('redirect_to_server', None),
+    ('shutdown_on_logout', None),
+    ('template_paths', None),
+    ('template_vars', None),
 ):
     if cfg_key is None:
         cfg_key = camelCaseify(trait)
@@ -127,6 +133,7 @@ for trait, cfg_key in (
     ('extra_resource_guarantees', 'extraResource.guarantees'),
     ('environment', 'extraEnv'),
     ('profile_list', None),
+    ('extra_pod_config', None),
 ):
     if cfg_key is None:
         cfg_key = camelCaseify(trait)
@@ -234,8 +241,6 @@ elif storage_type == 'static':
 
 c.KubeSpawner.volumes.extend(get_config('singleuser.storage.extraVolumes', []))
 c.KubeSpawner.volume_mounts.extend(get_config('singleuser.storage.extraVolumeMounts', []))
-
-set_config_if_not_none(c.KubeSpawner, 'lifecycle_hooks', 'singleuser.lifecycleHooks')
 
 # Gives spawned containers access to the API of the hub
 c.JupyterHub.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
@@ -354,7 +359,8 @@ c.JupyterHub.services = []
 
 if get_config('cull.enabled', False):
     cull_cmd = [
-        '/usr/local/bin/cull_idle_servers.py',
+        'python3',
+        '/etc/jupyterhub/cull_idle_servers.py',
     ]
     base_url = c.JupyterHub.get('base_url', '/')
     cull_cmd.append(
