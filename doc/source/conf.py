@@ -225,13 +225,13 @@ count = 0
 parse_yaml(data)
 
 # Generate the `.md` file
-with open('reference.txt', 'r') as f:
+with open('reference/reference.txt', 'r') as f:
     new_lines = f.readlines()
     new_lines = new_lines[1:]
     new_lines = [ln.strip('\n') for ln in new_lines]
 new_lines += lines
 
-with open('reference.md', 'w') as f:
+with open('reference/reference.md', 'w') as f:
     f.write('\n'.join(new_lines))
 
 
