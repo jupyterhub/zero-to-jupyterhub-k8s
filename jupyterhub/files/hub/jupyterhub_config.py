@@ -6,6 +6,10 @@ from tornado.httpclient import AsyncHTTPClient
 from kubernetes import client
 from jupyterhub.utils import url_path_join
 
+# Make sure that modules placed in the same directory as the jupyterhub config are added to the pythonpath
+configuration_directory = os.path.dirname(os.path.realpath(__file__))
+sys.path.insert(0, configuration_directory)
+
 from z2jh import get_config, set_config_if_not_none
 
 # Configure JupyterHub to use the curl backend for making HTTP requests,
