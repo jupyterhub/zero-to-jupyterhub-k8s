@@ -124,7 +124,7 @@ proxy:
   chp:
     image:
       name: jupyterhub/configurable-http-proxy
-      tag: 4.1.0
+      tag: 4.2.0
     resources:
       requests:
         cpu: 200m
