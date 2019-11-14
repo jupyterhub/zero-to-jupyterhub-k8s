@@ -132,7 +132,7 @@ proxy:
   nginx:
     image:
       name: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
-      tag: 0.15.0
+      tag: 0.26.1
     proxyBodySize: 64m
     hstsIncludeSubdomains: 'false'
     resources: {}
