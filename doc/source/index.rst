@@ -76,9 +76,7 @@ an initial deployment.
    :maxdepth: 1
    :caption: Setup JupyterHub
 
-   setup-helm
-   setup-jupyterhub
-   turn-off
+   setup-jupyterhub/index
 
 .. _customization-guide:
 
@@ -96,11 +94,7 @@ used configurable helm chart fields.
    :maxdepth: 2
    :caption: Customization Guide
 
-   extending-jupyterhub
-   user-environment
-   user-resources
-   user-storage
-   user-management
+   customizing/index
 
 .. _administrator-guide:
 
@@ -115,15 +109,7 @@ cloud-based deployments and tips for maintaining your deployment.
    :maxdepth: 2
    :caption: Administrator Guide
 
-   architecture
-   debug
-   authentication
-   optimization
-   security
-   upgrading
-   troubleshooting
-   advanced
-   cost
+   administrator/index
 
 .. _community-resources:
 
@@ -146,7 +132,7 @@ up, managing, and maintaining JupyterHub.
 
 We hope that you will use this section to share deployments with on a variety
 of infrastructure and for different use cases.
-There is also a :doc:`community maintained list <users-list>` of users of this
+There is also a :doc:`community maintained list <community/users-list>` of users of this
 Guide and the JupyterHub Helm Chart.
 
 Please submit a pull request to add to this section. Thanks.
@@ -155,9 +141,7 @@ Please submit a pull request to add to this section. Thanks.
    :maxdepth: 1
    :caption: Community section
 
-   tips
-   users-list
-   additional-resources
+   community/index
 
 .. _reference:
 
@@ -168,10 +152,7 @@ Reference
    :maxdepth: 1
    :caption: Reference
 
-   reference
-   reference-docs
-   tools
-   glossary
+   reference/index
 
 Institutional support
 ---------------------

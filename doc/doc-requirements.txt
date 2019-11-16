@@ -2,4 +2,4 @@ sphinx>=1.7
 recommonmark==0.4.0
 pyyaml
 sphinx-copybutton
-alabaster_jupyterhub
+git+https://github.com/pandas-dev/pandas-sphinx-theme.git@master
