@@ -10,6 +10,48 @@ This issue will be used to coordinate the next release of the Helm chart
 according to the instructions in [RELEASE.md](RELEASE.md). Below is the
 checklist for this release.
 
+## Look through dependencies
+
+The JupyterHub Helm chart relies on many dependent projects, and when we make a
+release it is good to be updated about their status and what version we decide
+to couple the Helm chart release with. Below are the more important depdencies.
+Put a check on those that reach a state good enough for a z2jh release to be
+cut.
+
+### Depdendent Python packages
+A more complete list is available in the
+[images/hub/requirements.txt](images/hub/requirements.txt), but here are some of
+the big ones.
+
+- [ ] [jupyterhub](https://github.com/jupyterhub/jupyterhub)
+- [ ] [kubespawner](https://github.com/jupyterhub/kubespawner)
+  - [ ] [kubernetes-client/python](https://github.com/kubernetes-client/python)
+- [ ] [oauthenticator](https://github.com/jupyterhub/oauthenticator)
+
+### Depdendent docker images
+These images version/tags are set in [values.yaml](jupyterhub/values.yaml).
+
+- [ ] [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy)
+  - [Available image tags](https://hub.docker.com/r/jupyterhub/configurable-http-proxy/tags)
+  - values.yaml entry: proxy.chp.image
+- [ ] [kubernetes/ingress-nginx](https://github.com/kubernetes/ingress-nginx)
+  - [Available image tags](https://quay.io/repository/kubernetes-ingress-controller/nginx-ingress-controller?tab=tags)
+  - values.yaml entry: proxy.nginx.image
+- [ ] [kube-scheduler](https://github.com/kubernetes/kube-scheduler)
+  - [Available image tags](https://gcr.io/google_containers/kube-scheduler-amd64)
+  - values.yaml entry: scheduling.userScheduler.image
+- [ ] [kubernetes/pause](https://github.com/kubernetes/kubernetes/tree/master/build/pause)
+  - [Available image tags](https://gcr.io/google_containers/pause)
+
+We may may also be impacted by the `FROM` image we build our own images from.
+Give these a quick glance as well.
+
+- [ ] [hub](images/hub/Dockerfile)
+- [ ] [image-awaiter](images/image-awaiter/Dockerfile)
+- [ ] [network-tools](images/network-tools/Dockerfile)
+- [ ] [singleuser-sample](images/singleuser-sample/Dockerfile)
+
+
 ## Pre-release iteration 1
 
 - Update [CHANGELOG.md](CHANGELOG.md) and make a commit
