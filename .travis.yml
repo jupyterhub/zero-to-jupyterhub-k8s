@@ -80,7 +80,8 @@ jobs:
         - setup_kubeval
         - ./dev check templates
       env:
-        - Z2JH_VALIDATE_KUBE_VERSIONS=1.11.0,1.12.0,1.13.0,1.14.0,1.15.0,1.16.0
+        ## inclusions of more than three versions cause rate limiting failures
+        - Z2JH_VALIDATE_KUBE_VERSIONS=1.11.0,1.14.0,1.16.0
     - stage: publish
       script:
         - setup_git_crypt
