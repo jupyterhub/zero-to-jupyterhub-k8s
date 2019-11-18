@@ -18,7 +18,7 @@ to couple the Helm chart release with. Below are the more important depdencies.
 Put a check on those that reach a state good enough for a z2jh release to be
 cut.
 
-### Depdendent Python packages
+### Dependent Python packages
 A more complete list is available in the
 [images/hub/requirements.txt](images/hub/requirements.txt), but here are some of
 the big ones.
@@ -28,18 +28,18 @@ the big ones.
   - [ ] [kubernetes-client/python](https://github.com/kubernetes-client/python)
 - [ ] [oauthenticator](https://github.com/jupyterhub/oauthenticator)
 
-### Depdendent docker images
+### Dependent docker images
 These images version/tags are set in [values.yaml](jupyterhub/values.yaml).
 
 - [ ] [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy)
   - [Available image tags](https://hub.docker.com/r/jupyterhub/configurable-http-proxy/tags)
-  - values.yaml entry: proxy.chp.image
+  - values.yaml entry: `proxy.chp.image`
 - [ ] [kubernetes/ingress-nginx](https://github.com/kubernetes/ingress-nginx)
   - [Available image tags](https://quay.io/repository/kubernetes-ingress-controller/nginx-ingress-controller?tab=tags)
-  - values.yaml entry: proxy.nginx.image
+  - values.yaml entry: `proxy.nginx.image`
 - [ ] [kube-scheduler](https://github.com/kubernetes/kube-scheduler)
   - [Available image tags](https://gcr.io/google_containers/kube-scheduler-amd64)
-  - values.yaml entry: scheduling.userScheduler.image
+  - values.yaml entry: `scheduling.userScheduler.image`
 - [ ] [kubernetes/pause](https://github.com/kubernetes/kubernetes/tree/master/build/pause)
   - [Available image tags](https://gcr.io/google_containers/pause)
 
