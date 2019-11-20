@@ -152,6 +152,18 @@ properties:
               v1.11.1
               zhy270a
               ```
+          pullSecrets:
+            type: list
+            description: |
+              Use an existing kubernetes secret to pull the custom image.
+              
+              ```yaml
+              # example existing pull secret.
+              singleuser:
+                image:
+                  pullSecrets:
+                    - gcr-pull
+              ```
       db:
         type: object
         properties:
@@ -786,6 +798,18 @@ properties:
 
               See the [Kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
               for more info.
+          pullSecrets:
+            type: list
+            description: |
+              Use an existing kubernetes secret to pull the custom image.
+              
+              ```yaml
+              # example existing pull secret
+              singleuser:
+                image:
+                  pullSecrets:
+                    - gcr-pull
+              ```
       profileList:
         type: list
         description: |
@@ -1087,8 +1111,8 @@ properties:
         description: |
           Enable the creation of a Kubernetes Ingress to proxy-public service.
 
-          See [Advanced Topics — Zero to JupyterHub with Kubernetes 0.7.0 documentation]
-          (https://zero-to-jupyterhub.readthedocs.io/en/stable/advanced.html#ingress)
+          See [Advanced Topics — Zero to JupyterHub with Kubernetes
+          0.7.0 documentation](https://zero-to-jupyterhub.readthedocs.io/en/stable/advanced.html#ingress)
           for more details.
       annotations:
         type: object

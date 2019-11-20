@@ -1,7 +1,7 @@
 .. _amazon-aws:
 
-Step Zero: Kubernetes on Amazon Web Services (AWS)
---------------------------------------------------
+Kubernetes on Amazon Web Services (AWS)
+---------------------------------------
 
 AWS does not have native support for Kubernetes, however there are
 many organizations that have put together their own solutions and

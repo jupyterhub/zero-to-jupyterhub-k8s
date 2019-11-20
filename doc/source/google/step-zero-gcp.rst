@@ -1,7 +1,7 @@
 .. _google-cloud:
 
-Step Zero: Kubernetes on `Google Cloud <https://cloud.google.com/>`_ (GKE)
---------------------------------------------------------------------------
+Kubernetes on `Google Cloud <https://cloud.google.com/>`_ (GKE)
+---------------------------------------------------------------
 
 `Google Kubernetes Engine <https://cloud.google.com/kubernetes-engine/>`_
 (GKE) is the simplest and most common way of setting

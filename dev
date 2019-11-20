@@ -1,0 +1,677 @@
+#!/usr/bin/env python3
+"""
+"""
+
+import argparse
+import functools
+import os
+import pipes
+import re
+import requests
+import shutil
+import subprocess
+import sys
+import textwrap
+import time
+
+import dotenv
+import colorama
+
+colorama.init()
+
+def depend_on(binaries=[], envs=[]):
+    """
+    A decorator to ensure the function is called with the relevant binaries
+    available and relevant environment variables set.
+    """
+    def decorator_depend_on(func):
+        @functools.wraps(func)
+        def wrapper_depend_on(*args, **kwargs):
+            # FEATURE: Allow prompt to set variables interactively.
+
+            missing_binaries = []
+            for binary in binaries:
+                if shutil.which(binary) is None:
+                    missing_binaries.append(binary)
+            missing_envs = []
+            for env in envs:
+                if not os.environ.get(env):
+                    missing_envs.append(env)
+
+            if missing_binaries or missing_envs:
+                print(f'Exiting due to missing dependencies for "{func.__name__}"')
+                print(f"- Binaries: {missing_binaries}")
+                print(f"- Env vars: {missing_envs}")
+                print("")
+                if missing_binaries:
+                    print("Install and make the binaries available on your PATH")
+                if missing_envs:
+                    print("Update your .env file")
+                sys.exit(1)
+            else:
+                return func(*args, **kwargs)
+
+        return wrapper_depend_on
+
+    return decorator_depend_on
+
+
+@depend_on(binaries=["kubectl", "kind", "docker"], envs=["Z2JH_KUBE_VERSION"])
+def kind_create(recreate):
+    # check for a existing cluster
+    kind_clusters = _run(
+        cmd=["kind", "get", "clusters"],
+        print_command=True,
+        capture_output=True,
+    )
+    kind_cluster_exist = bool(re.search(r"\bjh-dev\b", kind_clusters))
+    if kind_cluster_exist:
+        if recreate:
+            print("Deleting existing kind cluster")
+            _run(["kind", "delete", "cluster", "--name", "jh-dev"])
+        else:
+            # This workaround currently only works for single node clusters,
+            # which is what we currently setup.
+            #
+            # ref: https://github.com/kubernetes-sigs/kind/issues/148#issuecomment-504712517
+            is_kind_cluster_container_running = _run(
+                cmd=["docker", "ps", "--quiet", "--filter", "name=jh-dev-control-plane"],
+                print_command=False,
+                capture_output=True,
+            )
+            if not is_kind_cluster_container_running:
+                print("Starting up existing kind cluster")
+                _run(["docker", "start", "jh-dev-control-plane"])
+                sys.exit(0)
+            else:
+                print("The kind cluster was already created and running.")
+                sys.exit(0)
+
+
+    # create and setup a new cluster
+    print('Creating kind cluster')
+    _run([
+        "kind", "create", "cluster",
+        "--name", "jh-dev",
+        "--image", f"kindest/node:v{os.environ['Z2JH_KUBE_VERSION']}",
+        "--config", "ci/kind-config.yaml",
+    ])
+    
+    kubeconfig_path = _run(
+        cmd=[
+            "kind", "get", "kubeconfig-path",
+            "--name", "jh-dev",
+        ],
+        print_command=False,
+        capture_output=True,
+    )
+    if os.environ.get("KUBECONFIG", None) != kubeconfig_path:
+        print(f'Updating your .env file\'s KUBECONFIG value to "{kubeconfig_path}"')
+        dotenv.set_key(".env", "KUBECONFIG", kubeconfig_path)
+        os.environ["KUBECONFIG"] = kubeconfig_path
+
+    kube_context = _run(
+        cmd=["kubectl", "config", "current-context"],
+        print_command=False,
+        capture_output=True,
+    )
+    if os.environ.get("Z2JH_KUBE_CONTEXT", None) != kube_context:
+        print(f'Updating your .env file\'s Z2JH_KUBE_CONTEXT value to "{kube_context}"')
+        dotenv.set_key(".env", "Z2JH_KUBE_CONTEXT", kube_context)
+        os.environ["Z2JH_KUBE_CONTEXT"] = kube_context
+
+    if not os.environ.get("Z2JH_KUBE_NAMESPACE", None):
+        print(f'Updating your .env file\'s Z2JH_KUBE_NAMESPACE value to "jh-dev"')
+        dotenv.set_key(".env", "Z2JH_KUBE_NAMESPACE", "jh-dev")
+        os.environ["Z2JH_KUBE_NAMESPACE"] = "jh-dev"
+
+    print('Setting default namespace')
+    _run([
+        "kubectl", "config", "set-context",
+        "--current",
+        "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+    ])
+
+
+    # To test network policies, we need a custom CNI like Calico. We have disabled
+    # the default CNI through kind-config.yaml and will need to manually install a
+    # CNI for the nodes to become Ready.
+    print("Installing a custom CNI: Calico (async, in cluster)")
+    _run(
+        cmd=[
+            "kubectl", "apply",
+            "-f", "https://docs.projectcalico.org/v3.10/manifests/calico.yaml",
+        ],
+        print_end="",
+    )
+
+    # NOTE: daemonset/calico-node pods' main container fails to start up without
+    #       an additional environment variable configured to disable a check
+    #       that we fail.
+    #
+    #       env:
+    #         - name: FELIX_IGNORELOOSERPF
+    #           value: "true"
+    _run(
+        cmd=[
+            "kubectl", "patch", "daemonset/calico-node",
+            "--namespace", "kube-system",
+            "--type", "json",
+            "--patch", '[{"op":"add", "path":"/spec/template/spec/containers/0/env/-", "value":{"name":"FELIX_IGNORELOOSERPF", "value":"true"}}]',
+        ],
+    )
+
+    print("Waiting for Kubernetes nodes to become ready.")
+    _run(
+        # NOTE: kubectl wait has a bug relating to using the --all flag in 1.13
+        #       at least Due to this, we wait only for the kind-control-plane
+        #       node, which currently is the only node we start with kind but
+        #       could be configured in kind-config.yaml.
+        #
+        #       ref: https://github.com/kubernetes/kubernetes/pull/71746
+        cmd=[
+            "kubectl", "wait", "node/jh-dev-control-plane",
+            "--for", "condition=ready",
+            "--timeout", "2m",
+        ],
+        error_callback=_log_wait_node_timeout,
+    )
+
+    print("Installing Helm's tiller asynchronously in the cluster.")
+    _run(
+        cmd=[
+            "kubectl", "create", "serviceaccount", "tiller",
+            "--namespace", "kube-system",
+        ],
+        print_end="",
+    )
+    _run(
+        cmd=[
+            "kubectl", "create", "clusterrolebinding", "tiller",
+            "--clusterrole", "cluster-admin",
+            "--serviceaccount", "kube-system:tiller",
+        ],
+        print_end="",
+    )
+    _run([
+        "helm", "init",
+        "--service-account", "tiller",
+    ])
+
+    print("Waiting for Helm's tiller to become ready in the cluster.")
+    _run(
+        cmd=[
+            "kubectl", "rollout", "status", "deployment/tiller-deploy",
+            "--namespace", "kube-system",
+            "--timeout", "2m",
+        ],
+        error_callback=_log_tiller_rollout_timeout,
+    )
+
+    print('Kind cluster successfully setup!')
+
+
+@depend_on(binaries=["kind"], envs=[])
+def kind_delete():
+    print('Deleting kind cluster "jh-dev".')
+    _run(["kind", "delete", "cluster", "--name", "jh-dev"])
+
+
+@depend_on(binaries=["chartpress", "helm"], envs=["KUBECONFIG", "Z2JH_KUBE_CONTEXT", "Z2JH_KUBE_NAMESPACE"])
+def upgrade(chart, version, values):
+    if chart.startswith("./"):
+        print("Building images and updating image tags if needed.")
+        _run(["chartpress"])
+        # git --no-pager diff
+
+        if "kind-config-jh-dev" in os.environ["KUBECONFIG"]:
+            print("Loading the locally built images into the kind cluster.")
+            _run([
+                "python3", "ci/kind-load-docker-images.py",
+                "--kind-cluster", "jh-dev",
+            ])
+    else:
+        print("External chart specified, skipping use of chartpress.")
+
+    print("Installing/upgrading the Helm chart on the Kubernetes cluster.")
+    cmd = [
+        "helm", "upgrade", "jh-dev", chart,
+        "--install",
+        "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+        "--kube-context", os.environ["Z2JH_KUBE_CONTEXT"],
+    ]
+    if version:
+        cmd.append("--version")
+        cmd.append(version)
+    for values_file in values:
+        cmd.append("--values")
+        cmd.append(values_file)
+    _run(cmd=cmd)
+
+    print("Waiting for the proxy and hub to become ready.")
+    _run(
+        cmd=[
+            "kubectl", "rollout", "status", "deployment/proxy",
+            "--timeout", "2m",
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
+        print_end=""
+    )
+    _run([
+        "kubectl", "rollout", "status", "deployment/hub",
+        "--timeout", "2m",
+        "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+        "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+    ])
+
+
+@depend_on(binaries=["kubectl"], envs=["KUBECONFIG", "Z2JH_KUBE_CONTEXT", "Z2JH_KUBE_NAMESPACE"])
+def port_forward():
+    host = os.environ.get("Z2JH_PORT_FORWARD_ADDRESS", "localhost")
+    port = os.environ.get("Z2JH_PORT_FORWARD_PORT", "8080")
+    service_url = f"http://{host}:{port}"
+
+    print("Run and detach a process to run the kubectl port-forward command.")
+    proc = _run(
+        cmd=[
+            "kubectl", "port-forward", "service/proxy-public",
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+            "--pod-running-timeout", "1s",
+            "--address", host,
+            f'{port}:80',
+        ],
+        detach=True,
+    )
+
+    try:
+        # Ensure there has been enough time for the detached port-forwarding
+        # process to establish a connection
+        time.sleep(1.05)
+        response = requests.get(service_url, timeout=1)
+    except requests.exceptions.ConnectionError as e:
+        # this is a signature of a failed port forwarding
+        print("Port-forwarding failed!")
+        sys.exit(1)
+    except requests.exceptions.Timeout as e:
+        # this is a signature of successful port forwarding with services not responding
+        print("Port-forwarding seems to work but the proxy pod didn't respond quickly.")
+    else:
+        # this is a signature of a successful web response
+        print("Port-forwarding success!")
+
+
+
+@depend_on(binaries=["kubectl", "pytest"], envs=["KUBECONFIG", "Z2JH_KUBE_CONTEXT", "Z2JH_KUBE_NAMESPACE"])
+def test():
+    _run(
+        cmd=["pytest", "-v", "--exitfirst", "./tests"],
+        error_callback=_log_test_failure,
+    )
+    
+    print("Tests succeeded!")
+    _run(
+        cmd=[
+            "kubectl", "get", "pods",
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ]
+    )
+
+
+@depend_on(binaries=["helm", "yamllint", "kubeval"], envs=["Z2JH_VALIDATE_KUBE_VERSIONS"])
+def check_templates():
+    _run([
+        "python3", "tools/templates/lint-and-validate.py",
+         "--kubernetes-versions", os.environ["Z2JH_VALIDATE_KUBE_VERSIONS"],
+    ])
+
+
+@depend_on(binaries=["black"], envs=[])
+def check_python_code(apply):
+    raise NotImplementedError()
+    # invoke black
+
+
+@depend_on(binaries=[], envs=["GITHUB_ACCESS_TOKEN"])
+def changelog():
+    raise NotImplementedError()
+    # invoke gitlab-activity
+
+
+def _log_test_failure():
+    print("A test failed, let's debug!")
+    _run(
+        cmd=[
+            "kubectl", "describe", "nodes",
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=[
+            "kubectl", "get", "pods",
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=[
+            "kubectl", "get", "events",
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=[
+            "kubectl", "logs", "deploy/hub",
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=[
+            "kubectl", "logs", "deploy/proxy",
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
+        exit_on_error=False,
+    )
+
+
+def _log_tiller_rollout_timeout():
+    print("Helm's tiller never became ready!")
+    _run(
+        cmd=[
+            "kubectl", "describe", "nodes",
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=[
+            "kubectl", "describe", "deployment/tiller",
+            "--namespace", "kube-system",
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=[
+            "kubectl", "logs", "deployment/tiller",
+            "--namespace", "kube-system",
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
+        exit_on_error=False,
+    )
+
+
+def _log_wait_node_timeout():
+    print("Kubernetes nodes never became ready")
+    _run(
+        cmd=[
+            "kubectl", "describe", "nodes",
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=[
+            "kubectl", "describe", "daemonset/calico-node",
+            "--namespace", "kube-system",
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=[
+            "kubectl", "logs", "daemonset/calico-node",
+            "--namespace", "kube-system",
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
+        exit_on_error=False,
+    )
+
+
+def _print_command(text):
+    print(
+        colorama.Style.BRIGHT +
+        "$ " +
+        colorama.Fore.GREEN +
+        text +
+        colorama.Style.RESET_ALL +
+        colorama.Fore.WHITE +
+        colorama.Style.DIM
+    )
+
+def _run(cmd, detach=False, print_command=True, print_end="\n", print_error=True, error_callback=None, exit_on_error=True, **kwargs):
+    """Run a subcommand and exit if it fails"""
+    if kwargs.get("capture_output", None):
+        # FIXME: This following lines are a removable workaround at the time we
+        #        assume Python 3.7+, but it is required for Python 3.6.
+        del kwargs["capture_output"]
+        kwargs["stdout"] = kwargs["stderr"] = subprocess.PIPE
+
+    if print_command:
+        _print_command(" ".join(map(pipes.quote, cmd)))
+    if detach:
+        # Call and detach the new process
+        with open(os.devnull, 'r+b', 0) as DEVNULL:
+            proc = subprocess.Popen(
+                cmd,
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                close_fds=True,
+            )
+        return proc
+    else:
+        # This call will await completion
+        proc = subprocess.run(cmd, **kwargs)
+    if print_command:
+        print(colorama.Style.RESET_ALL, end=print_end)
+
+    if proc.returncode != 0:
+        print(
+            "`{}` errored ({})".format(" ".join(map(pipes.quote, cmd)), proc.returncode),
+            file=sys.stderr,
+        )
+        if proc.stderr:
+            print(proc.stderr.decode("utf-8").strip())
+        if error_callback:
+            error_callback()
+        if exit_on_error:
+            sys.exit(proc.returncode)
+
+    if proc.stdout:
+        return proc.stdout.decode("utf-8").strip()
+    return ""
+
+
+def _get_argparser():
+    _ = argparse.ArgumentParser(
+        description="Local development help for jupyterhub/zero-to-jupyterhub-k8s"
+    )
+
+    _cmds = _.add_subparsers(title="Commands", dest="cmd")
+
+    kind = _cmds.add_parser(
+        "kind", help="Kubernetes-in-Docker (kind) cluster management."
+    )
+
+    kind_cmds = kind.add_subparsers(title="Commands", dest="sub_cmd")
+    kind_create = kind_cmds.add_parser(
+        "create", help="Create and setup a kind Kubernetes cluster."
+    )
+    kind_create.add_argument(
+        "--recreate",
+        action="store_true",
+        help="If the cluster already exist, delete it and create a new.",
+    )
+    kind_delete = kind_cmds.add_parser(
+        "delete", help="Stop and delete a previously started kind Kubernetes cluster."
+    )
+
+    upgrade = _cmds.add_parser(
+        "upgrade", help="Install or upgrade the Helm chart in the Kubernetes cluster."
+    )
+    upgrade.add_argument(
+        "--chart",
+        default="./jupyterhub",
+        help="Chart to upgrade/install with the upgrade helm upgrade command.",
+    )
+    upgrade.add_argument(
+        "--version",
+        help="Specifies the chart's version to upgrade/install.",
+    )
+    upgrade.add_argument(
+        "-f",
+        "--values",
+        action="append",
+        default=["dev-config.yaml"],
+        help="A Helm values file, this argument can be passed multiple times.",
+    )
+
+    port_forward = _cmds.add_parser(
+        "port-forward", help="Run kubectl port-forward on the deployed Helm chart's proxy-public service in a detached process."
+    )
+
+    test = _cmds.add_parser(
+        "test", help="Run tests on the deployed Helm chart in the Kubernetes cluster."
+    )
+
+    check = _cmds.add_parser(
+        "check", help="Run checks on your developed helm templates and python code."
+    )
+    check_cmds = check.add_subparsers(title="Commands", dest="sub_cmd")
+    check_templates = check_cmds.add_parser(
+        "templates",
+        help="Run checks on the Helm templates and the Kubernetes resources they generate using: helm lint, helm templates, yamllint, and kubeval.",
+    )
+    check_python_code = check_cmds.add_parser(
+        "python-code", help="Run checks on the python code using: black."
+    )
+    check_python_code.add_argument(
+        "--apply",
+        action="store_true",
+        help="Apply autoformatting to the Python code files.",
+    )
+
+    changelog = _cmds.add_parser(
+        "changelog",
+        help="Generate a changelog since last release using: choldgraf/github-activity.",
+    )
+
+    return _
+
+
+if __name__ == "__main__":
+    # parse passed command line arguments
+    argparser = _get_argparser()
+    args = argparser.parse_args()
+    
+    # initialize defaults and load environment variables from the .env file
+    if not os.path.exists(".env"):
+        default_dotenv_file = textwrap.dedent(
+            """\
+            # Environment variables loaded and used by the ./dev script.
+            #
+            # Z2JH_ prefixed environment variables already defined will take
+            # precedence if they are defined in the system already, while the
+            # others are required to be explicitly set here.
+            # -----------------------------------------------------------------
+            #
+            # GITHUB_ACCESS_TOKEN is needed to generate changelog entries etc.
+            # For private repositories you don't have to give this token any
+            # privileges when you create it here: https://github.com/settings/tokens/new
+            #
+            GITHUB_ACCESS_TOKEN=""
+
+            # KUBECONFIG is required to be set explicitly in order to avoid
+            # potential modifications of non developer clusters. It should
+            # be to the path where the kubernetes config resides.
+            #
+            # The "./dev kind create" command will set this files KUBECONFIG
+            # entry automatically on cluster creation.
+            KUBECONFIG=""
+
+            # Z2JH_KUBE_CONTEXT and Z2JH_KUBE_NAMESPACE is used to ensure we
+            # work with the right cluster, with the right credentials, and in
+            # the right namespace without modifying the provided KUBECONFIG.
+            Z2JH_KUBE_CONTEXT=""
+            Z2JH_KUBE_NAMESPACE=""
+
+            # Z2JH_KUBE_VERSION is used to create a kind cluster. Note that only
+            # versions that are found on kindest/node can be used.
+            #
+            # ref: https://hub.docker.com/r/kindest/node/tags
+            Z2JH_KUBE_VERSION="1.15.3"
+
+            # Z2JH_VALIDATE_KUBE_VERSIONS is influences "./dev check templates",
+            # what Kubernetes versions do we validate against? Note that only
+            # versions found on instrumenta/kubernetes-json-schema can be used.
+            #
+            # ref: https://github.com/instrumenta/kubernetes-json-schema
+            Z2JH_VALIDATE_KUBE_VERSIONS="1.15.0"
+
+            # Z2JH_PORT_FORWARD_ADDRESS and Z2JH_PORT_FORWARD_PORT influences
+            # "./dev port-forward" and where "./dev test" will look to access
+            # the proxy-public Kubernetes service.
+            #
+            Z2JH_PORT_FORWARD_ADDRESS="localhost"
+            Z2JH_PORT_FORWARD_PORT="8080"
+            """
+        )
+        with open('.env', 'w+') as f:
+            f.write(default_dotenv_file)
+
+
+    dotenv.load_dotenv(override=False)
+
+    # let these environment values in the .env file override the system
+    # environment variables, but let the user know if an override happen
+    env_keys = ["GITHUB_ACCESS_TOKEN", "KUBECONFIG"]
+    for env_key in env_keys:
+        env_value_in_os = os.environ.get(env_key, None)
+        env_value_in_file = dotenv.get_key(".env", env_key)
+        if env_value_in_os and env_value_in_os != env_value_in_file:
+            print(f"Warning: system's {env_key} value is ignored in favor of the .env file's value.")
+        os.environ[env_key] = env_value_in_file
+
+    # run suitable command and pass arguments
+    if args.cmd == "kind":
+        if args.sub_cmd == "create":
+            kind_create(recreate=args.recreate)
+        if args.sub_cmd == "delete":
+            kind_delete()
+
+    if args.cmd == "upgrade":
+        upgrade(chart=args.chart, version=args.version, values=args.values)
+
+    if args.cmd == "port-forward":
+        port_forward()
+
+    if args.cmd == "test":
+        test()
+
+    if args.cmd == "check":
+        if args.sub_cmd == "templates":
+            check_templates()
+        if args.sub_cmd == "python-code":
+            check_python_code(apply=args.apply)
+
+    if args.cmd == "changelog":
+        changelog()

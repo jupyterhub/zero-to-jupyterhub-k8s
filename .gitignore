@@ -1,7 +1,7 @@
 ### Zero to JupyterHub Kubernetes ###
 tools/templates/rendered-templates/
 bin/
-ci/.vagrant
+.vagrant/
 tools/github.sqlite
 
 .vscode
@@ -114,7 +114,7 @@ instance/
 
 # Sphinx documentation
 doc/build/
-doc/source/reference.md
+doc/source/reference/reference.md
 
 # PyBuilder
 target/

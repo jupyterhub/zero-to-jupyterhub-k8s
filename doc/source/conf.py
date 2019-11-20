@@ -50,7 +50,6 @@ source_parsers = {
 def setup(app):
     app.add_config_value('recommonmark_config', {
             'enable_eval_rst': True,
-            'enable_auto_doc_ref': True,
             }, True)
     app.add_stylesheet('custom.css')
     app.add_transform(AutoStructify)
@@ -110,41 +109,11 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-import alabaster_jupyterhub
 
-html_theme = 'alabaster_jupyterhub'
-html_theme_path = [alabaster_jupyterhub.get_html_theme_path()]
+html_theme = 'pandas_sphinx_theme'
 
 html_favicon = '_static/images/logo/favicon.ico'
 html_logo = '_static/images/logo/logo.png'
-
-# Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
-# documentation.
-#
-html_theme_options = {
-    'show_related': True,
-    'description': 'A tutorial to help install and manage JupyterHub on a cloud with Kubernetes.',
-    'github_user': 'jupyterhub',
-    'github_repo': 'zero-to-jupyterhub-k8s',
-    'github_banner': False,
-    'github_button': False,
-    'show_powered_by': False,
-    'extra_nav_links': {
-        'GitHub Repo': 'http://github.com/jupyterhub/zero-to-jupyterhub-k8s',
-        'Issue Tracker': 'http://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues',
-    },
-}
-
-html_sidebars = {
-    '**': [
-        'about.html',
-        'searchbox.html',
-        'navigation.html',
-        'relations.html',
-        'sourcelink.html',
-    ],
-}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -256,13 +225,13 @@ count = 0
 parse_yaml(data)
 
 # Generate the `.md` file
-with open('reference.txt', 'r') as f:
+with open('reference/reference.txt', 'r') as f:
     new_lines = f.readlines()
     new_lines = new_lines[1:]
     new_lines = [ln.strip('\n') for ln in new_lines]
 new_lines += lines
 
-with open('reference.md', 'w') as f:
+with open('reference/reference.md', 'w') as f:
     f.write('\n'.join(new_lines))
 
 

@@ -1,10 +1,14 @@
 FROM ubuntu:18.04
 
+## NOTE: This is a default and be overridden by chartpress using the
+##       chartpress.yaml configuration
 ARG JUPYTERHUB_VERSION=1.0.*
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
       git \
+      vim \
+      less \
       python3 \
       python3-dev \
       python3-pip \
