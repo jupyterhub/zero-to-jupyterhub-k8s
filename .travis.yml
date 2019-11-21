@@ -54,9 +54,9 @@ env:
   ## ref: https://hub.docker.com/r/kindest/node/tags
   ## ref: https://github.com/kubernetes-sigs/kind/issues/197
   ##
-  - Z2JH_KUBE_VERSION=1.15.3
-  - Z2JH_KUBE_VERSION=1.13.10
-  - &allow_failure Z2JH_KUBE_VERSION=1.16.2
+  - Z2JH_KUBE_VERSION=1.15.6
+  - Z2JH_KUBE_VERSION=1.13.12
+  - &allow_failure Z2JH_KUBE_VERSION=1.16.3
 
 jobs:
   ## allow experimental setups to fail
