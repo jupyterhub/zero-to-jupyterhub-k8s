@@ -618,7 +618,7 @@ if __name__ == "__main__":
             # versions that are found on kindest/node can be used.
             #
             # ref: https://hub.docker.com/r/kindest/node/tags
-            Z2JH_KUBE_VERSION="1.15.3"
+            Z2JH_KUBE_VERSION="1.15.6"
 
             # Z2JH_VALIDATE_KUBE_VERSIONS is influences "./dev check templates",
             # what Kubernetes versions do we validate against? Note that only
