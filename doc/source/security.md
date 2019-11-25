@@ -264,21 +264,3 @@ singleuser:
 See the [Kubernetes
 documentation](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
 for further information on defining policies.
-
-## Restricting Load Balancer Access
-By default any IP address can access your JupyterHub deployment through the load balancer service.
-In case you want to restrict which IP addresses are allowed to access the load balancer, you can
-specify a list of IP CIDR addresses in your `config.yaml` as follows:
-
-```yaml
-proxy:
-  service:
-    loadBalancerSourceRanges:
-      - 111.222.333.444/32
-      - 222.333.444.555/32
-```
-
-This would restrict the access to only two IP addresses: `111.222.333.444` and `222.333.444.555`.
-
-For more information please check the [Kubernetes documentation](https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service)
-on restricting load balancer access.
