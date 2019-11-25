@@ -13,6 +13,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: jupyterhub-internal
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
   annotations:

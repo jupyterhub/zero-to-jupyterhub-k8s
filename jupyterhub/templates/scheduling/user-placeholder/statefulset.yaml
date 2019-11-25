@@ -12,6 +12,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: user-placeholder
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:

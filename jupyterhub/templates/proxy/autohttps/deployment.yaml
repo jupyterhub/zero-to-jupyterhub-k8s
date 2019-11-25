@@ -5,6 +5,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: autohttps
+  namespace: {{ .Release.Namespace }}
   labels:
       {{- /*
         NOTE: The deployment's own app label does not have to deviate like it's

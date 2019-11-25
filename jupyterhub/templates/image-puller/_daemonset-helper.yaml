@@ -8,6 +8,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ print .componentPrefix "image-puller" }}
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
     {{- if .hook }}
