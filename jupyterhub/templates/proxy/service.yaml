@@ -73,3 +73,7 @@ spec:
   {{- if .Values.proxy.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.proxy.service.loadBalancerIP }}
   {{- end }}
+  {{- if and (eq .Values.proxy.service.type "LoadBalancer") .Values.proxy.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+    {{- .Values.proxy.service.loadBalancerSourceRanges | toYaml | trimSuffix "\n" | nindent 4 }}
+  {{- end }}
