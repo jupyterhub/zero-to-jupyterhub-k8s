@@ -3,6 +3,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: hub
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 ---

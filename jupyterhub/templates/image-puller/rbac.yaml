@@ -10,6 +10,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: hook-image-awaiter
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
     hub.jupyter.org/deletable: "true"

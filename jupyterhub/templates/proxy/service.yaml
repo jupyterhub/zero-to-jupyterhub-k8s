@@ -7,6 +7,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: proxy-api
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- $_ := merge (dict "componentSuffix" "-api") . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
