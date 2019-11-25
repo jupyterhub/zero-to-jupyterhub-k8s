@@ -1,7 +1,7 @@
 .. _create-k8s-cluster:
 
-Setup a Kubernetes Cluster
-==========================
+Setup Kubernetes
+================
 
 Kubernetes' documentation describes the many `ways to set up a cluster`_.
 We attempt to provide quick instructions for the most painless and popular ways of setting up

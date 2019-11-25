@@ -1,6 +1,3 @@
-# Dependencies for the guides cloud cost estimator notebook
-# http://mybinder.org/v2/gh/jupyterhub/zero-to-jupyterhub-k8s/master?filepath=doc/ntbk/draw_function.ipynb
-
 # Need to install bqplot with conda so it calls the javascript extension.
 name: bqplot
 channels:

@@ -1,4 +1,4 @@
-FROM jupyter/base-notebook:8ccdfc1da8d5
+FROM jupyter/base-notebook:814ef10d64fb
 # Built from... https://hub.docker.com/r/jupyter/base-notebook/
 #               https://github.com/jupyter/docker-stacks/blob/master/base-notebook/Dockerfile
 # Built from... Ubuntu 18.04
@@ -9,7 +9,7 @@ FROM jupyter/base-notebook:8ccdfc1da8d5
 # Example install of git and nbgitpuller.
 # NOTE: git is already available in the jupyter/minimal-notebook image.
 USER root
-RUN apt-get update && apt-get install --yes \
+RUN apt-get update && apt-get install --yes --no-install-recommends \
     git \
  && rm -rf /var/lib/apt/lists/*
 USER $NB_USER

@@ -183,8 +183,8 @@ you can still configure JupyterHub to authenticate with OpenID Connect providers
 by specifying all endpoints in GenericOAuthenticator.
 By setting `login_service` you can customize the label on the login button.
 
-Here's an example for authenticating against `keycloak <https://www.keycloak.org/docs/3.4/securing_apps/index.html#endpoints>`_,
-after you `configure an OIDC Client <https://www.keycloak.org/docs/3.4/server_admin/index.html#oidc-clients>`_
+Here's an example for authenticating against `keycloak <https://www.keycloak.org/docs/latest/securing_apps/index.html#endpoints>`_,
+after you `configure an OIDC Client <https://www.keycloak.org/docs/latest/server_admin/index.html#oidc-clients>`_
 and obtain the confidential client credentials.
 
 .. code-block:: yaml
