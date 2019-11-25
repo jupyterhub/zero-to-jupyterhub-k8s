@@ -47,6 +47,7 @@ Thank you to the following contributors:
 - Erik Sundell
 - Ryan Lovett
 - Yuvi Panda
+- Laurent Goderre
 
 Future contributors are encouraged to add themselves to this README file too.
 

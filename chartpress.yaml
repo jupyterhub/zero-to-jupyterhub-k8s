@@ -9,7 +9,7 @@ charts:
       hub:
         valuesPath: hub.image
         buildArgs:
-          JUPYTERHUB_VERSION: 1.0.0
+          JUPYTERHUB_VERSION: git+https://github.com/jupyterhub/jupyterhub@89b0c42
       network-tools:
         valuesPath: singleuser.networkTools.image
       image-awaiter:

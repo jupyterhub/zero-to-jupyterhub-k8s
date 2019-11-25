@@ -9,5 +9,5 @@ pods in which users will work, and connecting users with those pods.
 The following diagram gives a high-level overview of the many pieces of
 JupyterHub, and how they fit together in this process:
 
-.. image:: _static/images/architecture.png
+.. image:: ../_static/images/architecture.png
    :align: center
