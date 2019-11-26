@@ -24,6 +24,7 @@ spec:
   serviceName: "user-placeholder"
   template:
     metadata:
+      namespace: {{ .Release.Namespace }}
       labels:
         {{- /* Changes here will cause the Deployment to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}

@@ -12,6 +12,7 @@ kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: {{ .Release.Name }}-user-scheduler-base
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- $_ := merge (dict "componentSuffix" "-base") . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
@@ -28,6 +29,7 @@ kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: {{ .Release.Name }}-user-scheduler-complementary
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- $_ := merge (dict "componentSuffix" "-complementary") . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
@@ -46,6 +48,7 @@ kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: {{ .Release.Name }}-user-scheduler-complementary
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- $_ := merge (dict "componentSuffix" "-complementary") . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}

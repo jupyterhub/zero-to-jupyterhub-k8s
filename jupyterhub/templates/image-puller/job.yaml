@@ -21,6 +21,7 @@ metadata:
 spec:
   template:
     metadata:
+      namespace: {{ .Release.Namespace }}
       labels:
         {{- /* Changes here will cause the Job to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}

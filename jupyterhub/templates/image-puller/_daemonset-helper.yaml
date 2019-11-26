@@ -33,6 +33,7 @@ spec:
       maxUnavailable: 100%
   template:
     metadata:
+      namespace: {{ .Release.Namespace }}
       labels:
         {{- /* Changes here will cause the DaemonSet to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
