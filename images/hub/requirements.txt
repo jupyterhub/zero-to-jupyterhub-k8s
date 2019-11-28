@@ -7,7 +7,7 @@ jupyterhub-ldapauthenticator==1.2.2
 jupyterhub-kubespawner==0.10.1
 kubernetes==9.0.*
 nullauthenticator==1.0
-oauthenticator==0.8.2
+oauthenticator==0.10.*
 pymysql==0.9.2
 psycopg2==2.7.5
 pycurl==7.43.0.*
