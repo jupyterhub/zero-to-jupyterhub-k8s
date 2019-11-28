@@ -224,7 +224,15 @@ def upgrade(chart, version, values):
         _run(["chartpress"])
         # git --no-pager diff
 
-        if "kind-config-jh-dev" in os.environ["KUBECONFIG"]:
+        kubeconfig_path = _run(
+            cmd=[
+                "kind", "get", "kubeconfig-path",
+                "--name", "jh-dev",
+            ],
+            print_command=False,
+            capture_output=True,
+        )
+        if kubeconfig_path in os.environ["KUBECONFIG"]:
             print("Loading the locally built images into the kind cluster.")
             _run([
                 "python3", "ci/kind-load-docker-images.py",
