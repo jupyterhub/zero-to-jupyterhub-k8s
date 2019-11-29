@@ -4,7 +4,7 @@ jupyterhub-firstuseauthenticator==0.12
 jupyterhub-tmpauthenticator==0.6
 jupyterhub-ltiauthenticator==0.3
 jupyterhub-ldapauthenticator==1.2.2
-jupyterhub-kubespawner==0.11.0
+jupyterhub-kubespawner==0.11.1
 kubernetes==10.0.1
 nullauthenticator==1.0
 oauthenticator==0.10.0
