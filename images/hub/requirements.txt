@@ -64,7 +64,7 @@ pymysql==0.9
 
 # https://github.com/psycopg/psycopg2
 # https://pypi.org/search/?q=psycopg2
-psycopg2==2.8
+psycopg2-binary==2.8
 
 # https://pypi.org/project/pycurl/
 pycurl==7.43.0.*
