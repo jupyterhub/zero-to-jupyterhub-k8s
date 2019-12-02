@@ -27,4 +27,4 @@ Choose one option and proceed.
      files for configuration purposes. It may be helpful to create a folder
      for your JuypterHub deployment to keep track of these files.
 
-.. _ways to set up a cluster: https://kubernetes.io/docs/setup/pick-right-solution/
+.. _ways to set up a cluster: https://kubernetes.io/docs/setup/
