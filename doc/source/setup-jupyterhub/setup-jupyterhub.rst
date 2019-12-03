@@ -188,8 +188,8 @@ Install JupyterHub
    to a browser. JupyterHub is running with a default *dummy* authenticator so
    entering any username and password combination will let you enter the hub.
 
-Congratulations! Now that you have basic JupyterHub running, you can :doc:`extend it
-<extending-jupyterhub>` and :doc:`optimize it <optimization>` in many
+Congratulations! Now that you have basic JupyterHub running, you can :ref:`extend it
+<extending-jupyterhub>` and :ref:`optimize it <optimization>` in many
 ways to meet your needs.
 
 Some examples of customisations are:
