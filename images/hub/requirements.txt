@@ -17,10 +17,7 @@ jupyterhub-tmpauthenticator==0.6.*
 
 # https://github.com/jupyterhub/ltiauthenticator
 # https://pypi.org/project/jupyterhub-ltiauthenticator
-# FIXME: the 0.3 release is incompatible with other JupyterHub's requirement on
-# oauthlib, so we need a new release of ltiauthenticator before z2jh can release
-# with this.
-# jupyterhub-ltiauthenticator==0.3.*
+jupyterhub-ltiauthenticator==0.4.*
 
 # https://github.com/jupyterhub/ldapauthenticator
 # https://pypi.org/project/jupyterhub-ldapauthenticator
