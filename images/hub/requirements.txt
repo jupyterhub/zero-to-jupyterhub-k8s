@@ -5,28 +5,31 @@
 
 # https://github.com/jupyterhub/dummyauthenticator
 # https://pypi.org/project/jupyterhub-dummyauthenticator
-jupyterhub-dummyauthenticator==0.3
+jupyterhub-dummyauthenticator==0.3.*
 
 # https://github.com/jupyterhub/firstuseauthenticator
 # https://pypi.org/project/jupyterhub-firstuseauthenticator
-jupyterhub-firstuseauthenticator==0.12
+jupyterhub-firstuseauthenticator==0.12.*
 
 # https://github.com/jupyterhub/tmpauthenticator
 # https://pypi.org/project/jupyterhub-tmpauthenticator
-jupyterhub-tmpauthenticator==0.6
+jupyterhub-tmpauthenticator==0.6.*
 
 # https://github.com/jupyterhub/ltiauthenticator
 # https://pypi.org/project/jupyterhub-ltiauthenticator
-jupyterhub-ltiauthenticator==0.3
+# FIXME: the 0.3 release is incompatible with other JupyterHub's requirement on
+# oauthlib, so we need a new release of ltiauthenticator before z2jh can release
+# with this.
+# jupyterhub-ltiauthenticator==0.3.*
 
 # https://github.com/jupyterhub/ldapauthenticator
 # https://pypi.org/project/jupyterhub-ldapauthenticator
 # NEEDS NEW RELEASE
-jupyterhub-ldapauthenticator==1.2
+jupyterhub-ldapauthenticator==1.2.*
 
 # https://github.com/jupyterhub/hmacauthenticator
 # https://pypi.org/project/jupyterhub-hmacauthenticator
-jupyterhub-hmacauthenticator==0.1
+jupyterhub-hmacauthenticator==0.1.*
 
 # https://github.com/mediawiki-utilities/python-mwoauth
 # https://pypi.org/project/mwoauth
@@ -34,47 +37,47 @@ mwoauth==0.3.7
 
 # https://github.com/globus/globus-sdk-python
 # https://pypi.org/project/globus_sdk
-globus_sdk[jwt]==1.8
+globus_sdk[jwt]==1.8.*
 
 # https://github.com/jupyterhub/nullauthenticator
 # https://pypi.org/project/nullauthenticator
-nullauthenticator==1.0
+nullauthenticator==1.0.*
 
 # https://github.com/jupyterhub/oauthenticator
 # https://pypi.org/project/oauthenticator
-oauthenticator==0.10
+oauthenticator==0.10.*
 
 ## Spawners
 # ---------------------------------------------------------
 
 # https://github.com/jupyterhub/kubespawner
 # https://pypi.org/project/jupyterhub-kubespawner
-jupyterhub-kubespawner==0.11
+jupyterhub-kubespawner==0.11.*
 
 # https://github.com/kubernetes-client/python
 # https://pypi.org/project/kubernetes
-kubernetes==10.0
+kubernetes==10.0.*
 
 ## Other dependencies
 # ---------------------------------------------------------
 
 # https://github.com/PyMySQL/PyMySQL
 # https://pypi.org/project/PyMySQL/
-pymysql==0.9
+pymysql==0.9.*
 
 # https://github.com/psycopg/psycopg2
 # https://pypi.org/search/?q=psycopg2
-psycopg2-binary==2.8
+psycopg2-binary==2.8.*
 
 # https://pypi.org/project/pycurl/
 pycurl==7.43.0.*
 
 # https://github.com/jsocol/pystatsd
 # https://pypi.org/project/statsd/
-statsd==3.3
+statsd==3.3.*
 
 # https://pypi.org/project/cryptography/
-cryptography==2.8
+cryptography==2.8.*
 
 ## Useful tools
 # ---------------------------------------------------------
