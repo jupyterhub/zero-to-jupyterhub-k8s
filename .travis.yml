@@ -20,9 +20,9 @@ stages:
   - name: test
   - name: publish
     if: >
-      branch in (master)
-      AND
-      type in (push)
+      branch IN (master)
+      OR
+      tag IS present
 install:
   - set -e
   - pip3 install --no-cache-dir -r dev-requirements.txt
