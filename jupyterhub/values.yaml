@@ -125,6 +125,8 @@ proxy:
     image:
       name: jupyterhub/configurable-http-proxy
       tag: 4.1.0
+      # pullSecrets:
+      #   - secretName
     resources:
       requests:
         cpu: 200m
