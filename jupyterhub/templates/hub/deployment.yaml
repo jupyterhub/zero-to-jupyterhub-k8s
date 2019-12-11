@@ -41,7 +41,11 @@ spec:
             name: hub-config
         - name: secret
           secret:
+            {{- if .Values.hub.existingSecret }}
+            secretName: {{ .Values.hub.existingSecret }}
+            {{- else }}
             secretName: hub-secret
+            {{- end }}
         {{- if .Values.hub.extraVolumes }}
         {{- .Values.hub.extraVolumes | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
@@ -106,7 +110,7 @@ spec:
             - mountPath: /etc/jupyterhub/jupyterhub_config.py
               subPath: jupyterhub_config.py
               name: config
-            - mountPath: /usr/local/lib/python3.6/dist-packages/z2jh.py
+            - mountPath: /etc/jupyterhub/z2jh.py
               subPath: z2jh.py
               name: config
             - mountPath: /etc/jupyterhub/cull_idle_servers.py
@@ -144,7 +148,11 @@ spec:
             - name: JPY_COOKIE_SECRET
               valueFrom:
                 secretKeyRef:
+                  {{- if .Values.hub.existingSecret }}
+                  name: {{ .Values.hub.existingSecret }}
+                  {{- else }}
                   name: hub-secret
+                  {{- end }}
                   key: hub.cookie-secret
             {{- end }}
             - name: POD_NAMESPACE
@@ -154,13 +162,21 @@ spec:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
+                  {{- if .Values.hub.existingSecret }}
+                  name: {{ .Values.hub.existingSecret }}
+                  {{- else }}
                   name: hub-secret
+                  {{- end }}
                   key: proxy.token
             {{- if .Values.auth.state.enabled }}
             - name: JUPYTERHUB_CRYPT_KEY
               valueFrom:
                 secretKeyRef:
+                  {{- if .Values.hub.existingSecret }}
+                  name: {{ .Values.hub.existingSecret }}
+                  {{- else }}
                   name: hub-secret
+                  {{- end }}
                   key: auth.state.crypto-key
             {{- end }}
             {{- if .Values.hub.db.password }}
@@ -168,13 +184,21 @@ spec:
             - name: MYSQL_PWD
               valueFrom:
                 secretKeyRef:
+                  {{- if .Values.hub.existingSecret }}
+                  name: {{ .Values.hub.existingSecret }}
+                  {{- else }}
                   name: hub-secret
+                  {{- end }}
                   key: hub.db.password
             {{- else if eq .Values.hub.db.type "postgres" }}
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
+                  {{- if .Values.hub.existingSecret }}
+                  name: {{ .Values.hub.existingSecret }}
+                  {{- else }}
                   name: hub-secret
+                  {{- end }}
                   key: hub.db.password
             {{- end }}
             {{- end }}
@@ -194,19 +218,26 @@ spec:
           ports:
             - containerPort: 8081
               name: hub
-          ## livenessProbe notes:
-          ## We don't know how long hub database upgrades could take
-          ## so having a liveness probe could be a bit risky unless we put
-          ## a initialDelaySeconds value with long enough margin for that
-          ## to not be an issue. If it is too short, we could end up aborting
-          ## database upgrades midway or ending up in an infinite restart
-          ## loop.
-          # livenessProbe:
-          #   initialDelaySeconds: 30
-          #   httpGet:
-          #     path: {{ .Values.hub.baseUrl }}hub/health
-          #     port: hub
-          readinessProbe:
+          {{- if .Values.hub.livenessProbe.enabled }}
+          # livenessProbe notes:
+          # We don't know how long hub database upgrades could take
+          # so having a liveness probe could be a bit risky unless we put
+          # a initialDelaySeconds value with long enough margin for that
+          # to not be an issue. If it is too short, we could end up aborting
+          # database upgrades midway or ending up in an infinite restart
+          # loop.
+          livenessProbe:
+            initialDelaySeconds: {{ .Values.hub.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.hub.livenessProbe.periodSeconds }}
             httpGet:
               path: {{ .Values.hub.baseUrl }}hub/health
               port: hub
+          {{- end }}
+          {{- if .Values.hub.readinessProbe.enabled }}
+          readinessProbe:
+            initialDelaySeconds: {{ .Values.hub.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.hub.readinessProbe.periodSeconds }}
+            httpGet:
+              path: {{ .Values.hub.baseUrl }}hub/health
+              port: hub
+          {{- end }}

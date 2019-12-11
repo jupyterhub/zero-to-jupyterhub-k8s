@@ -8,4 +8,4 @@ dependencies:
     - recommonmark==0.4.0
     - pyyaml
     - sphinx-copybutton
-    - alabaster_jupyterhub
+    - r doc-requirements.txt

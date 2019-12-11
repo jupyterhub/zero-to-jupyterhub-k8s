@@ -101,7 +101,11 @@ spec:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
+                  {{- if .Values.hub.existingSecret }}
+                  name: {{ .Values.hub.existingSecret }}
+                  {{- else }}
                   name: hub-secret
+                  {{- end }}
                   key: proxy.token
           {{- with .Values.proxy.chp.image.pullPolicy }}
           imagePullPolicy: {{ . }}
@@ -115,7 +119,10 @@ spec:
               name: proxy-public
             - containerPort: 8001
               name: api
+          {{- if .Values.proxy.chp.livenessProbe.enabled }}
           livenessProbe:
+            initialDelaySeconds: {{ .Values.proxy.chp.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.proxy.chp.livenessProbe.periodSeconds }}
             httpGet:
               path: /_chp_healthz
               {{- if or $manualHTTPS $manualHTTPSwithsecret }}
@@ -125,7 +132,11 @@ spec:
               port: proxy-public
               scheme: HTTP
               {{- end }}
+          {{- end }}
+          {{- if .Values.proxy.chp.readinessProbe.enabled }}
           readinessProbe:
+            initialDelaySeconds: {{ .Values.proxy.chp.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.proxy.chp.readinessProbe.periodSeconds }}
             httpGet:
               path: /_chp_healthz
               {{- if or $manualHTTPS $manualHTTPSwithsecret }}
@@ -135,3 +146,4 @@ spec:
               port: proxy-public
               scheme: HTTP
               {{- end }}
+          {{- end }}

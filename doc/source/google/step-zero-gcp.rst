@@ -1,7 +1,7 @@
 .. _google-cloud:
 
-Step Zero: Kubernetes on `Google Cloud <https://cloud.google.com/>`_ (GKE)
---------------------------------------------------------------------------
+Kubernetes on `Google Cloud <https://cloud.google.com/>`_ (GKE)
+---------------------------------------------------------------
 
 `Google Kubernetes Engine <https://cloud.google.com/kubernetes-engine/>`_
 (GKE) is the simplest and most common way of setting
@@ -116,7 +116,7 @@ your google cloud account.
 
   This is an optional step, for those who want to separate
   user pods from "core" pods such as the Hub itself and others.
-  See :doc:`../optimization` for details on using a dedicated user node pool.
+  See :ref:`optimization` for details on using a dedicated user node pool.
 
   The nodes in this node pool are for the users only. The node pool has
   autoscaling enabled along with a lower and an upper scaling limit. This

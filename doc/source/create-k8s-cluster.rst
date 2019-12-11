@@ -1,7 +1,7 @@
 .. _create-k8s-cluster:
 
-Setup a Kubernetes Cluster
-==========================
+Setup Kubernetes
+================
 
 Kubernetes' documentation describes the many `ways to set up a cluster`_.
 We attempt to provide quick instructions for the most painless and popular ways of setting up
@@ -27,4 +27,4 @@ Choose one option and proceed.
      files for configuration purposes. It may be helpful to create a folder
      for your JuypterHub deployment to keep track of these files.
 
-.. _ways to set up a cluster: https://kubernetes.io/docs/setup/pick-right-solution/
+.. _ways to set up a cluster: https://kubernetes.io/docs/setup/

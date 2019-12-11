@@ -54,22 +54,22 @@ env:
   ## ref: https://hub.docker.com/r/kindest/node/tags
   ## ref: https://github.com/kubernetes-sigs/kind/issues/197
   ##
-  - Z2JH_KUBE_VERSION=1.15.3
-  - Z2JH_KUBE_VERSION=1.13.10
-  - &allow_failure Z2JH_KUBE_VERSION=1.16.2
+  - Z2JH_KUBE_VERSION=1.13.12
+  - Z2JH_KUBE_VERSION=1.15.6
+  - Z2JH_KUBE_VERSION=1.16.3
 
 jobs:
   ## allow experimental setups to fail
   ##
   ## ref: https://docs.travis-ci.com/user/customizing-the-build/#rows-that-are-allowed-to-fail
   ##
-  allow_failures:
-    - env: *allow_failure
+  # allow_failures:
+  #   - env: *allow_failure
   ## don't wait for the jobs that are allowed to fail to report success
   ##
   ## ref: https://docs.travis-ci.com/user/customizing-the-build/#fast-finishing
   ##
-  fast_finish: true
+  # fast_finish: true
 
   ## include additional individual jobs
   ##
@@ -80,7 +80,8 @@ jobs:
         - setup_kubeval
         - ./dev check templates
       env:
-        - Z2JH_VALIDATE_KUBE_VERSIONS=1.11.0,1.12.0,1.13.0,1.14.0,1.15.0,1.16.0
+        ## inclusions of more than three versions cause rate limiting failures
+        - Z2JH_VALIDATE_KUBE_VERSIONS=1.11.0,1.14.0,1.16.0
     - stage: publish
       script:
         - setup_git_crypt

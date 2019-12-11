@@ -224,7 +224,15 @@ def upgrade(chart, version, values):
         _run(["chartpress"])
         # git --no-pager diff
 
-        if "kind-config-jh-dev" in os.environ["KUBECONFIG"]:
+        kubeconfig_path = _run(
+            cmd=[
+                "kind", "get", "kubeconfig-path",
+                "--name", "jh-dev",
+            ],
+            print_command=False,
+            capture_output=True,
+        )
+        if kubeconfig_path in os.environ["KUBECONFIG"]:
             print("Loading the locally built images into the kind cluster.")
             _run([
                 "python3", "ci/kind-load-docker-images.py",
@@ -252,18 +260,56 @@ def upgrade(chart, version, values):
     _run(
         cmd=[
             "kubectl", "rollout", "status", "deployment/proxy",
-            "--timeout", "2m",
+            "--timeout", "3m",
             "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
             "--context", os.environ["Z2JH_KUBE_CONTEXT"],
         ],
-        print_end=""
+        print_end="",
+        error_callback=_log_wait_hub_proxy_timeout,
     )
-    _run([
-        "kubectl", "rollout", "status", "deployment/hub",
-        "--timeout", "2m",
-        "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
-        "--context", os.environ["Z2JH_KUBE_CONTEXT"],
-    ])
+    _run(
+        cmd=[
+            "kubectl", "rollout", "status", "deployment/hub",
+            "--timeout", "3m",
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
+        error_callback=_log_wait_hub_proxy_timeout,
+    )
+
+def _log_wait_hub_proxy_timeout():
+    print("Both Hub and Proxy never became ready")
+    _run(
+        cmd=[
+            "kubectl", "describe", "deploy/hub",
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=[
+            "kubectl", "logs", "deploy/hub",
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=[
+            "kubectl", "logs", "deploy/proxy",
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
+        exit_on_error=False,
+        print_end="",
+    )
+    _run(
+        cmd=[
+            "kubectl", "logs", "deploy/proxy",
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+        ],
+        exit_on_error=False,
+    )
 
 
 @depend_on(binaries=["kubectl"], envs=["KUBECONFIG", "Z2JH_KUBE_CONTEXT", "Z2JH_KUBE_NAMESPACE"])
@@ -618,7 +664,7 @@ if __name__ == "__main__":
             # versions that are found on kindest/node can be used.
             #
             # ref: https://hub.docker.com/r/kindest/node/tags
-            Z2JH_KUBE_VERSION="1.15.3"
+            Z2JH_KUBE_VERSION="1.15.6"
 
             # Z2JH_VALIDATE_KUBE_VERSIONS is influences "./dev check templates",
             # what Kubernetes versions do we validate against? Note that only

@@ -60,7 +60,7 @@ cluster:
       kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
 
    See `our RBAC documentation
-   <security.html#use-role-based-access-control-rbac>`_ for more information.
+   <../administrator/security.html#use-role-based-access-control-rbac>`_ for more information.
 
 3. Initialize `helm` and `tiller`.
 
@@ -78,7 +78,7 @@ cluster:
    within the cluster.
 
    .. note::
-    
+
       If you wish to install `helm` on another computer, you won't need to setup
       `tiller` again but you still need to initialize `helm`:
 

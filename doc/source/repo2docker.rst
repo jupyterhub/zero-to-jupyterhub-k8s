@@ -145,7 +145,7 @@ to configure JupyterHub to build off of this image:
    .. note::
 
       The contents of your GitHub repository might not show up if you have
-      enabled :doc:`persistent storage <user-storage>`. Disable persistent
+      enabled :ref:`persistent storage <user-storage>`. Disable persistent
       storage if you want the Git repository contents to show up.
 
 9. **Enjoy your new computing environment!**

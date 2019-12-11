@@ -1,3 +1,7 @@
+```eval_rst
+.. _optimization:
+```
+
 # Optimizations
 
 This page contains information and guidelines for improving the reliability,
@@ -321,7 +325,7 @@ for the first time, it is showing the amount of user pods active on five
 different nodes. When the user scheduler was enabled, two nodes were in time
 freed up from user pods and scaled down.
 
-[![](_static/images/user_scheduler.png)](_static/images/user_scheduler.png)
+[![](../_static/images/user_scheduler.png)](../_static/images/user_scheduler.png)
 
 To enable the user scheduler:
 

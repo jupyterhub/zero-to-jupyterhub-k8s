@@ -79,7 +79,15 @@ hub:
   shutdownOnLogout:
   templatePaths: []
   templateVars: {}
-
+  livenessProbe:
+    enabled: false
+    initialDelaySeconds: 30
+    periodSeconds: 10
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 0
+    periodSeconds: 10
+  # existingSecret: existing-secret
 
 rbac:
   enabled: true
@@ -121,12 +129,21 @@ proxy:
       http:
       https:
     loadBalancerIP:
+    loadBalancerSourceRanges: []
   chp:
     image:
       name: jupyterhub/configurable-http-proxy
-      tag: 4.1.0
+      tag: 4.2.0
       # pullSecrets:
       #   - secretName
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 30
+      periodSeconds: 10
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 0
+      periodSeconds: 10
     resources:
       requests:
         cpu: 200m
@@ -294,7 +311,7 @@ scheduling:
     policy: {}
     image:
       name: gcr.io/google_containers/kube-scheduler-amd64
-      tag: v1.11.2
+      tag: v1.13.12
     nodeSelector: {}
     pdb:
       enabled: true
@@ -331,7 +348,7 @@ prePuller:
   pause:
     image:
       name: gcr.io/google_containers/pause
-      tag: '3.0'
+      tag: '3.1'
 
 
 ingress:
