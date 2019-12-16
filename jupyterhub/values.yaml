@@ -49,8 +49,7 @@ hub:
   image:
     name: jupyterhub/k8s-hub
     tag: 'set-by-chartpress'
-    # pullSecrets:
-    #   - secretName
+    pullSecrets: []
   resources:
     requests:
       cpu: 200m
@@ -140,8 +139,7 @@ proxy:
     image:
       name: jupyterhub/configurable-http-proxy
       tag: 4.2.0
-      # pullSecrets:
-      #   - secretName
+      pullSecrets: []
     livenessProbe:
       enabled: true
       initialDelaySeconds: 30
@@ -272,8 +270,7 @@ singleuser:
     name: jupyterhub/k8s-singleuser-sample
     tag: 'set-by-chartpress'
     pullPolicy: IfNotPresent
-    # pullSecrets:
-    #   - secretName
+    pullSecrets: []
   imagePullSecret:
     enabled: false
     registry:
