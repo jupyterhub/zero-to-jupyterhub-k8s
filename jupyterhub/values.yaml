@@ -121,6 +121,12 @@ proxy:
     ##     Error: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
     ##     Error: UPGRADE FAILED: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
     rollingUpdate:
+  imagePullSecret:
+    enabled: false
+    registry:
+    username:
+    email:
+    password:
   service:
     type: LoadBalancer
     labels: {}
@@ -148,12 +154,6 @@ proxy:
       requests:
         cpu: 200m
         memory: 512Mi
-    imagePullSecret:
-      enabled: false
-      registry:
-      username:
-      email:
-      password:
   nginx:
     image:
       name: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
