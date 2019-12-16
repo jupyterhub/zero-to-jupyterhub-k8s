@@ -23,7 +23,7 @@ stages:
       (
         branch IN (master)
         AND
-        type IS push
+        type IN (push)
       )
       OR
       tag IS present
