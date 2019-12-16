@@ -38,18 +38,18 @@ properties:
 
           See the [Kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
           for more info on what the values mean.
-      imagePullSecret:
+      imagePullSecret: &imagePullSecretSchema
         type: object
         description: |
-          Creates an image pull secret for you and makes the hub pod utilize
-          it, allowing it to pull images from private image registries.
+          Creates an image pull secret for you and makes the related pods utilize
+          it, allowing them to pull images from private image registries.
           
           Using this configuration option automates the following steps that
           normally is required to pull from private image registries.
           
           ```sh
           # you won't need to run this manually...
-          kubectl create secret docker-registry hub-image-credentials \
+          kubectl create secret docker-registry <singleuser|hub|proxy>-image-credentials \
             --docker-server=<REGISTRY> \
             --docker-username=<USERNAME> \
             --docker-email=<EMAIL> \
@@ -60,7 +60,7 @@ properties:
           # you won't need to specify this manually...
           spec:
             imagePullSecrets:
-              - name: hub-image-credentials
+              - name: <singleuser|hub|proxy>-image-credentials
           ```
 
           To learn the username and password fields to access a gcr.io registry
@@ -73,8 +73,10 @@ properties:
             type: boolean
             description: |
               Enable the creation of a Kubernetes Secret containing credentials
-              to access a image registry. By enabling this, the hub pod will also be configured
-              to use these credentials when it pulls its container image.
+              to access a image registry. By enabling this, related pods will
+              also be configured to use these credentials when they pull their
+              container images.
+
           registry:
             type: string
             description: |
@@ -470,6 +472,7 @@ properties:
   proxy:
     type: object
     properties:
+      imagePullSecret: &imagePullSecretSchema
       secretToken:
         type: string
         description: |
@@ -707,91 +710,7 @@ properties:
               - "null"
             description: |
               Note that this field is referred to as *requests* by the Kubernetes API.
-      imagePullSecret:
-        type: object
-        description: |
-          Creates an image pull secret for you and makes the user pods utilize
-          it, allowing them to pull images from private image registries.
-          
-          Using this configuration option automates the following steps that
-          normally is required to pull from private image registries.
-          
-          ```sh
-          # you won't need to run this manually...
-          kubectl create secret docker-registry singleuser-image-credentials \
-            --docker-server=<REGISTRY> \
-            --docker-username=<USERNAME> \
-            --docker-email=<EMAIL> \
-            --docker-password=<PASSWORD>
-          ```
-
-          ```yaml
-          # you won't need to specify this manually...
-          spec:
-            imagePullSecrets:
-              - name: singleuser-image-credentials
-          ```
-
-          To learn the username and password fields to access a gcr.io registry
-          from a Kubernetes cluster not associated with the same google cloud
-          credentials, look into [this
-          guide](http://docs.heptio.com/content/private-registries/pr-gcr.html)
-          and read the notes about the password.
-        properties:
-          enabled:
-            type: boolean
-            description: |
-              Enable the creation of a Kubernetes Secret containing credentials
-              to access a image registry. By enabling this, user pods and image
-              puller pods will also be configured to use these credentials when
-              they pull their container images.
-
-          registry:
-            type: string
-            description: |
-              Name of the private registry you want to create a credential set
-              for. It will default to Docker Hub's image registry.
-
-              Examples:
-                - https://index.docker.io/v1/
-                - quay.io
-                - eu.gcr.io
-                - alexmorreale.privatereg.net
-          username:
-            type: string
-            description: |
-              Name of the user you want to use to connect to your private
-              registry. For external gcr.io, you will use the `_json_key`.
-
-              Examples:
-                - alexmorreale
-                - alex@pfc.com
-                - _json_key
-          password:
-            type: string
-            description: |
-              Password of the user you want to use to connect to your private
-              registry.
-
-              Examples:
-                - plaintextpassword
-                - abc123SECRETzyx098
-
-              For gcr.io registries the password will be a big JSON blob for a
-              Google cloud service account, it should look something like below.
-                            
-              ```yaml
-              password: |-
-                {
-                  "type": "service_account",
-                  "project_id": "jupyter-se",
-                  "private_key_id": "f2ba09118a8d3123b3321bd9a7d6d0d9dc6fdb85",
-                  ...
-                }
-              ```
-
-              Learn more in [this
-              guide](http://docs.heptio.com/content/private-registries/pr-gcr.html).
+      imagePullSecret: *imagePullSecretSchema
       image:
         type: object
         description: |
