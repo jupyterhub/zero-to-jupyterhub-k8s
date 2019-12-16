@@ -52,11 +52,10 @@ spec:
       imagePullSecrets:
         {{- if .Values.singleuser.imagePullSecret.enabled }}
         - name: {{ if .hook -}} hook- {{- end -}} singleuser-image-credentials
-        {{ else }}
+        {{- end }}
         {{- range .Values.singleuser.image.pullSecrets }}
         - name: {{ . }}
         {{- end }}
-        {{ end }}
       {{- end }}
       initContainers:
         - name: image-pull-singleuser

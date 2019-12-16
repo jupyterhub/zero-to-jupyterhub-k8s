@@ -48,15 +48,14 @@ spec:
           secret:
             secretName: {{ .Values.proxy.https.secret.name }}
       {{- end }}
-      {{- if or .Values.proxy.chp.imagePullSecret.enabled .Values.proxy.chp.image.pullSecrets }}
+      {{- if or .Values.proxy.imagePullSecret.enabled .Values.proxy.chp.image.pullSecrets }}
       imagePullSecrets:
-        {{- if .Values.proxy.chp.imagePullSecret.enabled }}
-        - name: proxy-chp-image-credentials
-        {{ else }}
+        {{- if .Values.proxy.imagePullSecret.enabled }}
+        - name: proxy-image-credentials
+        {{- end }}
         {{- range .Values.proxy.chp.image.pullSecrets }}
         - name: {{ . }}
         {{- end }}
-        {{ end }}
       {{- end }}
       containers:
         - name: chp
