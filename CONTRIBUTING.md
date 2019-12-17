@@ -352,4 +352,4 @@ differently.
 We strive to follow the guidelines provided by
 [kubernetes/charts](https://github.com/kubernetes/charts/blob/master/REVIEW_GUIDELINES.md)
 and the [Helm chart best practices
-guide](https://github.com/kubernetes/helm/tree/master/docs/chart_best_practices).
+guide](https://helm.sh/docs/topics/chart_best_practices/).
