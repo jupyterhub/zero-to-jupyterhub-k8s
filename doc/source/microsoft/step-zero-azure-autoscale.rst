@@ -250,8 +250,8 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
    where:
 
    * ``--name`` is the name you want to use to refer to your cluster
-   * ``--resource-group`` is the ResourceGroup you created in step 4
-   * ``--ssh-key-value`` is the ssh public key created in step 6
+   * ``--resource-group`` is the ResourceGroup you created
+   * ``--ssh-key-value`` is the ssh public key created
    * ``--node-count`` is the number of nodes you want in your Kubernetes cluster
    * ``--node-vm-size`` is the size of the nodes you want to use, which varies based on
      what you are using your cluster for and how much RAM/CPU each of your users need.
@@ -295,8 +295,8 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
    where:
 
-   * ``--name`` is the name you gave your cluster in step 5
-   * ``--resource-group`` is the ResourceGroup you created in step 4
+   * ``--name`` is the name you gave your cluster
+   * ``--resource-group`` is the ResourceGroup you created
 
    This automatically updates your Kubernetes client configuration file.
 
@@ -360,7 +360,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
    .. note::
 
-     This form can also be used to change ``--node-count``/``--min-count``/``--max-count`` that was set in step 7 by using the "Instance limits" section of the scale condition ("Default", "Minimum" and "Maximum" respectively).
+     This form can also be used to change ``--node-count``/``--min-count``/``--max-count`` that was set previously by using the "Instance limits" section of the scale condition ("Default", "Minimum" and "Maximum" respectively).
 
      If you prefer to use the command line, you can run the following:
 
