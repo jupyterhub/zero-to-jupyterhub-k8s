@@ -121,6 +121,68 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
       This command will also print out something to your terminal screen. You
       don't need to do anything with this text.
 
+#. Create a virtual network and sub-network.
+
+   Kubernetes does not by default come with a controller that enforces ``networkpolicy`` resources.
+   ``networkpolicy`` resources are important as they define how Kubernetes pods can securely communicate with one another and the outside sources, for example, the internet.
+
+   To enable this in Azure, we must first create a `Virtual Network <https://docs.microsoft.com/en-gb/azure/virtual-network/virtual-networks-overview>`_ with Azure's own network policies enabled.
+
+   This section of the documentation is following the Microsoft Azure tutorial on `creating an AKS cluster and enabling network policy <https://docs.microsoft.com/en-us/azure/aks/use-network-policies#create-an-aks-cluster-and-enable-network-policy>`_, which includes information on using `Calico <https://docs.projectcalico.org>`_ network policies.
+
+   .. code-block:: bash
+
+      az network vnet create \
+          --resource-group <RESOURCE-GROUP-NAME> \
+          --name <VNET-NAME> \
+          --address-prefixes 10.0.0.0/8 \
+          --subnet-name <SUBNET-NAME> \
+          --subnet-prefix 10.240.0.0/16
+
+   where:
+
+   * ``--resource-group`` is the ResourceGroup you created
+   * ``-name`` is the name you want to assign to your virtual network, for example, ``hub-vnet``
+   * ``--address-prefixes`` are the IP address prefixes for your virtual network
+   * ``--subnet-name`` is your desired name for your subnet, for example, ``hub-subnet``
+   * ``--subnet-prefixes`` are the IP address prefixes in `CIDR format <https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing>`_ for the subnet
+
+   We will now retrieve the application IDs of the VNet and subnet we just created and save them to bash variables.
+
+   .. code-block:: bash
+
+      VNET_ID=$(az network vnet show
+          --resource-group <RESOURCE-GROUP-NAME>
+          --name <VNET-NAME>
+          --query id
+          --output tsv)
+      SUBNET_ID=$(az network vnet subnet show
+          --resource-group <RESOURCE-GROUP-NAME>
+          --vnet-name <VNET-NAME>
+          --name <SUBNET-NAME>
+          --query id
+          --output tsv)
+
+   We will create an Azure Active Directory (Azure AD) `service principal <https://docs.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals>`_ for use with the cluster, and assign the `Contributor role <https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#contributor>`_ for use with the VNet.
+   Make sure ``SERVICE-PRINCIPAL-NAME`` is something recognisable, for example, ``binderhub-sp``.
+
+   .. code-block:: bash
+
+      SP_PASSWD=$(az ad create-for-rbac
+          --name <SERVICE-PRINCIPAL-NAME>
+          --role Contributor
+          --scopes $VNET_ID
+          --query password
+          --output tsv)
+      SP_ID=$(az ad sp show
+          --id http://<SERVICE-PRINCIPAL-NAME>
+          --query appId
+          --output tsv)
+
+   .. warning::
+
+      You will need Owner role on your subscription for this step to succeed.
+
 #. Create an AKS cluster.
 
    The following command will request a Kubernetes cluster within the resource
@@ -128,25 +190,42 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
    .. code-block:: bash
 
-      az aks create --name <CLUSTER-NAME> \
-                    --resource-group <RESOURCE-GROUP-NAME> \
-                    --ssh-key-value ssh-key-<CLUSTER-NAME>.pub \
-                    --node-count 3 \
-                    --node-vm-size Standard_D2s_v3 \
-                    --output table
+      az aks create \
+          --name <CLUSTER-NAME> \
+          --resource-group <RESOURCE-GROUP-NAME> \
+          --ssh-key-value ssh-key-<CLUSTER-NAME>.pub \
+          --node-count 3 \
+          --node-vm-size Standard_D2s_v3 \
+          --service-principal $SP_ID \
+          --client-secret $SP_PASSWD \
+          --dns-service-ip 10.0.0.10 \
+          --docker-bridge-address 172.17.0.1/16 \
+          --network-plugin azure \
+          --network-policy azure \
+          --service-cidr 10.0.0.0/16 \
+          --vnet-subnet-id $SUBNET_ID \
+          --output table
 
    where:
 
    * ``--name`` is the name you want to use to refer to your cluster
-   * ``--resource-group`` is the ResourceGroup you created in step 4
-   * ``--ssh-key-value`` is the ssh public key created in step 7
+   * ``--resource-group`` is the ResourceGroup you created
+   * ``--ssh-key-value`` is the ssh public key created
    * ``--node-count`` is the number of nodes you want in your Kubernetes cluster
    * ``--node-vm-size`` is the size of the nodes you want to use, which varies based on
      what you are using your cluster for and how much RAM/CPU each of your users need.
      There is a `list of all possible node sizes <https://docs.microsoft.com/en-us/azure/cloud-services/cloud-services-sizes-specs>`_
      for you to choose from, but not all might be available in your location.
      If you get an error whilst creating the cluster you can try changing either the region or the node size.
-   * This will install the default version of Kubernetes. You can pass ``--kubernetes-version`` to install a different version.
+   * ``--service-principal`` is the application ID of the service principal we created
+   * ``--client-secret`` is the password for the service principal we created
+   * ``--dns-service-ip`` is an IP address assigned to the `Kubernetes DNS service <https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/>`_
+   * ``--docker-bridge-address`` is a specific IP address and netmask for the Docker bridge, using standard CIDR notation
+   * ``--network-plugin`` is the Kubernetes network plugin to use. In this example, we have used Azure's own implementation.
+   * ``--network-policy`` is the Kubernetes network policy to use. In this example, we have used Azure's own implementation.
+   * ``--service-cidr`` is a CIDR notation IP range from which to assign service cluster IPs
+   * ``vnet-subnet-id`` is the application ID of the subnet we created
+   * This command will install the default version of Kubernetes. You can pass ``--kubernetes-version`` to install a different version.
 
    This should take a few minutes and provide you with a working Kubernetes cluster!
 
@@ -170,8 +249,8 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
    where:
 
-   * ``--name`` is the name you gave your cluster in step 7
-   * ``--resource-group`` is the ResourceGroup you created in step 4
+   * ``--name`` is the name you gave your cluster
+   * ``--resource-group`` is the ResourceGroup you created
 
    This automatically updates your Kubernetes client configuration file.
 
