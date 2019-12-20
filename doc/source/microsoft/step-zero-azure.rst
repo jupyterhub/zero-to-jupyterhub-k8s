@@ -151,16 +151,16 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
    .. code-block:: bash
 
-      VNET_ID=$(az network vnet show
-          --resource-group <RESOURCE-GROUP-NAME>
-          --name <VNET-NAME>
-          --query id
+      VNET_ID=$(az network vnet show \
+          --resource-group <RESOURCE-GROUP-NAME> \
+          --name <VNET-NAME> \
+          --query id \
           --output tsv)
-      SUBNET_ID=$(az network vnet subnet show
-          --resource-group <RESOURCE-GROUP-NAME>
-          --vnet-name <VNET-NAME>
-          --name <SUBNET-NAME>
-          --query id
+      SUBNET_ID=$(az network vnet subnet show \
+          --resource-group <RESOURCE-GROUP-NAME> \
+          --vnet-name <VNET-NAME> \
+          --name <SUBNET-NAME> \
+          --query id \
           --output tsv)
 
    We will create an Azure Active Directory (Azure AD) `service principal <https://docs.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals>`_ for use with the cluster, and assign the `Contributor role <https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#contributor>`_ for use with the VNet.
@@ -168,15 +168,15 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
    .. code-block:: bash
 
-      SP_PASSWD=$(az ad create-for-rbac
-          --name <SERVICE-PRINCIPAL-NAME>
-          --role Contributor
-          --scopes $VNET_ID
-          --query password
+      SP_PASSWD=$(az ad create-for-rbac \
+          --name <SERVICE-PRINCIPAL-NAME> \
+          --role Contributor \
+          --scopes $VNET_ID \
+          --query password \
           --output tsv)
-      SP_ID=$(az ad sp show
-          --id http://<SERVICE-PRINCIPAL-NAME>
-          --query appId
+      SP_ID=$(az ad sp show \
+          --id http://<SERVICE-PRINCIPAL-NAME> \
+          --query appId \
           --output tsv)
 
    .. warning::
