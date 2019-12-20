@@ -142,7 +142,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
    where:
 
    * ``--resource-group`` is the ResourceGroup you created
-   * ``-name`` is the name you want to assign to your virtual network, for example, ``hub-vnet``
+   * ``--name`` is the name you want to assign to your virtual network, for example, ``hub-vnet``
    * ``--address-prefixes`` are the IP address prefixes for your virtual network
    * ``--subnet-name`` is your desired name for your subnet, for example, ``hub-subnet``
    * ``--subnet-prefixes`` are the IP address prefixes in `CIDR format <https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing>`_ for the subnet
