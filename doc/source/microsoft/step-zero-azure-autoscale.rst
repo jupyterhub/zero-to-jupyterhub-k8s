@@ -208,7 +208,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
       SP_PASSWD=$(az ad create-for-rbac \
           --name <SERVICE-PRINCIPAL-NAME> \
           --role Contributor \
-          --scopes $VNET_ID \
+          --scope $VNET_ID \
           --query password \
           --output tsv)
       SP_ID=$(az ad sp show \
