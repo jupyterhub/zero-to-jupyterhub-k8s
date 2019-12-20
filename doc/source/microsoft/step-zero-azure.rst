@@ -57,7 +57,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
    .. code-block:: bash
 
-      az account set -s <YOUR-CHOSEN-SUBSCRIPTION-NAME>
+      az account set --subscription <YOUR-CHOSEN-SUBSCRIPTION-NAME>
 
 
 #. Create a resource group. Azure uses the concept of

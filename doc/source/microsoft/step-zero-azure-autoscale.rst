@@ -5,7 +5,7 @@ Kubernetes on Microsoft Azure Kubernetes Service (AKS) with Autoscaling
 
 .. warning::
 
-  These instructions involve part of the Azure command line that are in preview, hence the following documentation to subject to change.
+  These instructions involve parts of the Azure command line that are in preview, hence the following documentation to subject to change.
 
 You can create a Kubernetes cluster `either through the Azure portal website, or using the Azure command line tools <https://docs.microsoft.com/en-us/azure/aks/>`_.
 
@@ -61,7 +61,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
    .. code-block:: bash
 
-      az account set -s <YOUR-CHOSEN-SUBSCRIPTION-NAME>
+      az account set --subscription <YOUR-CHOSEN-SUBSCRIPTION-NAME>
 
 
 #. Setup the CLI for Autoscaling features.
@@ -158,6 +158,67 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
       This command will also print out something to your terminal screen. You
       don't need to do anything with this text.
 
+#. Create a virtual network and sub-network.
+
+   Kubernetes does not by default come with a controller that enforces ``networkpolicy`` resources.
+   ``networkpolicy`` resources are important as they define how Kubernetes pods can securely communicate with one another and the outside sources, for example, the internet.
+
+   To enable this in Azure, we must first create a `Virtual Network <https://docs.microsoft.com/en-gb/azure/virtual-network/virtual-networks-overview>`_ with Azure's own network policies enabled.
+
+   This section of the documentation is following the Microsoft Azure tutorial on `creating an AKS cluster and enabling network policy <https://docs.microsoft.com/en-us/azure/aks/use-network-policies#create-an-aks-cluster-and-enable-network-policy>`_, which includes information on using `Calico <https://docs.projectcalico.org>`_ network policies.
+
+   .. code-block:: bash
+
+      az network vnet create \
+          --resource-group <RESOURCE-GROUP-NAME> \
+          --name <VNET-NAME> \
+          --address-prefixes 10.0.0.0/8 \
+          --subnet-name <SUBNET-NAME> \
+          --subnet-prefix 10.240.0.0/16
+
+   where:
+
+   * ``--resource-group`` is the ResourceGroup you created
+   * ``--name`` is the name you want to assign to your virtual network, for example, ``hub-vnet``
+   * ``--address-prefixes`` are the IP address prefixes for your virtual network
+   * ``--subnet-name`` is your desired name for your subnet, for example, ``hub-subnet``
+   * ``--subnet-prefixes`` are the IP address prefixes in `CIDR format <https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing>`_ for the subnet
+
+   We will now retrieve the application IDs of the VNet and subnet we just created and save them to bash variables.
+
+   .. code-block:: bash
+
+      VNET_ID=$(az network vnet show \
+          --resource-group <RESOURCE-GROUP-NAME> \
+          --name <VNET-NAME> \
+          --query id \
+          --output tsv)
+      SUBNET_ID=$(az network vnet subnet show \
+          --resource-group <RESOURCE-GROUP-NAME> \
+          --vnet-name <VNET-NAME> \
+          --name <SUBNET-NAME> \
+          --query id \
+          --output tsv)
+
+   We will create an Azure Active Directory (Azure AD) `service principal <https://docs.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals>`_ for use with the cluster, and assign the `Contributor role <https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#contributor>`_ for use with the VNet.
+   Make sure ``SERVICE-PRINCIPAL-NAME`` is something recognisable, for example, ``binderhub-sp``.
+
+   .. code-block:: bash
+
+      SP_PASSWD=$(az ad create-for-rbac \
+          --name <SERVICE-PRINCIPAL-NAME> \
+          --role Contributor \
+          --scopes $VNET_ID \
+          --query password \
+          --output tsv)
+      SP_ID=$(az ad sp show \
+          --id http://<SERVICE-PRINCIPAL-NAME> \
+          --query appId \
+          --output tsv)
+
+   .. warning::
+
+      You will need Owner role on your subscription for this step to succeed.
 
 #. Create an AKS cluster.
 
@@ -176,6 +237,14 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
                     --min-count 3 \
                     --max-count 6 \
                     --kubernetes-version 1.12.7 \
+                    --service-principal $SP_ID \
+                    --client-secret $SP_PASSWD \
+                    --dns-service-ip 10.0.0.10 \
+                    --docker-bridge-address 172.17.0.1/16 \
+                    --network-plugin azure \
+                    --network-policy azure \
+                    --service-cidr 10.0.0.0/16 \
+                    --vnet-subnet-id $SUBNET_ID \
                     --output table
 
    where:
@@ -192,7 +261,15 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
    * ``--enable-vmss`` deploys the cluster as a scale set.
    * ``--enable-cluster-autoscaler`` installs a `Cluster Autoscaler <https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler>`_ onto the cluster (though counterintuitively, does not enable it!).
    * ``--min-count``/``--max-count`` are the minimum/maximum number of nodes in the cluster at any time.
-   * ``--kubernetes-version`` installs a specific version of Kubernetes onto the cluster. To autoscale, we require ``>= v 1.12.4``.
+   * ``--kubernetes-version`` installs a specific version of Kubernetes onto the cluster. To autoscale, we require ``>= v 1.12.4``, though it's recommended to use the most recent version available.
+   * ``--service-principal`` is the application ID of the service principal we created
+   * ``--client-secret`` is the password for the service principal we created
+   * ``--dns-service-ip`` is an IP address assigned to the `Kubernetes DNS service <https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/>`_
+   * ``--docker-bridge-address`` is a specific IP address and netmask for the Docker bridge, using standard CIDR notation
+   * ``--network-plugin`` is the Kubernetes network plugin to use. In this example, we have used Azure's own implementation.
+   * ``--network-policy`` is the Kubernetes network policy to use. In this example, we have used Azure's own implementation.
+   * ``--service-cidr`` is a CIDR notation IP range from which to assign service cluster IPs
+   * ``vnet-subnet-id`` is the application ID of the subnet we created
 
    This should take a few minutes and provide you with a working Kubernetes cluster!
 
