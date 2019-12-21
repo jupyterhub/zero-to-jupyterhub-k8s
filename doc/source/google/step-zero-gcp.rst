@@ -59,7 +59,7 @@ your google cloud account.
 
    Ask Google Cloud to create a managed Kubernetes cluster and a default `node
    pool <https://cloud.google.com/kubernetes-engine/docs/concepts/node-pools>`_
-   to get nodes from. *Nodes* represents hardware and a *node pools* will
+   to get nodes from. *Nodes* represents hardware and a *node pool* will
    keep track of how much of a certain type of hardware that you would like.
 
    .. code-block:: bash
