@@ -95,7 +95,7 @@ your google cloud account.
          
          * They also increase control plane uptime to 99.95%. 
          
-         * To avoid tripling the number of nodes without losing these benefits, the `--node-locations` flag suffixed with a location can be used. 
+         * To avoid tripling the number of nodes without losing these benefits, the ``--node-locations`` flag suffixed with a location can be used. 
               
                 
 
