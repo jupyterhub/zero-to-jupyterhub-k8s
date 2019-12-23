@@ -42,7 +42,7 @@ rules:
     verbs: ["get", "list", "watch"]
   # Workaround for missing permission with rancher local-path-provisioner
   - apiGroups: [""]
-    resources: ["persistentvolumeclaims"]
+    resources: ["persistentvolume", "persistentvolumeclaims"]
     verbs: ["update"]
 ---
 kind: ClusterRoleBinding
