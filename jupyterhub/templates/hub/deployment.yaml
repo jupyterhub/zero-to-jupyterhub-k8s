@@ -230,7 +230,7 @@ spec:
             initialDelaySeconds: {{ .Values.hub.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.hub.livenessProbe.periodSeconds }}
             httpGet:
-              path: {{ .Values.hub.baseUrl }}hub/health
+              path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
               port: hub
           {{- end }}
           {{- if .Values.hub.readinessProbe.enabled }}
@@ -238,6 +238,6 @@ spec:
             initialDelaySeconds: {{ .Values.hub.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.hub.readinessProbe.periodSeconds }}
             httpGet:
-              path: {{ .Values.hub.baseUrl }}hub/health
+              path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
               port: hub
           {{- end }}
