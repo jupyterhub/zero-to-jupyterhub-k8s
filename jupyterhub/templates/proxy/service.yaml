@@ -56,6 +56,7 @@ spec:
       {{- if .Values.proxy.service.nodePorts.https }}
       nodePort: {{ .Values.proxy.service.nodePorts.https }}
       {{- end }}
+    {{- end }}
     - name: http
       port: 80
       protocol: TCP
@@ -68,7 +69,6 @@ spec:
       {{- if .Values.proxy.service.nodePorts.http }}
       nodePort: {{ .Values.proxy.service.nodePorts.http }}
       {{- end }}
-    {{- end }}
   type: {{ .Values.proxy.service.type }}
   {{- if .Values.proxy.service.loadBalancerIP }}
   loadBalancerIP: {{ .Values.proxy.service.loadBalancerIP }}
