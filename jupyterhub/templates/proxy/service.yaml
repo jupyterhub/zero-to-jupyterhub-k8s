@@ -42,18 +42,6 @@ spec:
     {{- end }}
     release: {{ .Release.Name }}
   ports:
-    - name: http
-      port: 80
-      protocol: TCP
-      {{- if $autoHTTPS }}
-      targetPort: 80
-      {{- else }}
-      targetPort: 8000
-      {{- end }}
-      # allow proxy.service.nodePort for http
-      {{- if .Values.proxy.service.nodePorts.http }}
-      nodePort: {{ .Values.proxy.service.nodePorts.http }}
-      {{- end }}
     {{- if $HTTPS }}
     - name: https
       port: 443
@@ -67,6 +55,18 @@ spec:
       {{- end }}
       {{- if .Values.proxy.service.nodePorts.https }}
       nodePort: {{ .Values.proxy.service.nodePorts.https }}
+      {{- end }}
+    - name: http
+      port: 80
+      protocol: TCP
+      {{- if $autoHTTPS }}
+      targetPort: 80
+      {{- else }}
+      targetPort: 8000
+      {{- end }}
+      # allow proxy.service.nodePort for http
+      {{- if .Values.proxy.service.nodePorts.http }}
+      nodePort: {{ .Values.proxy.service.nodePorts.http }}
       {{- end }}
     {{- end }}
   type: {{ .Values.proxy.service.type }}
