@@ -9,6 +9,7 @@ charts:
       hub:
         valuesPath: hub.image
         buildArgs:
+          # NOTE: Also bump the Chart.yaml's appVersion if this is bumped
           JUPYTERHUB_VERSION: 1.1.0b1
       network-tools:
         valuesPath: singleuser.networkTools.image
