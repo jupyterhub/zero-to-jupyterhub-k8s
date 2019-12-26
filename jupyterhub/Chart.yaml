@@ -1,7 +1,7 @@
 apiVersion: v1
 name: jupyterhub
 version: 0.0.1-set.by.chartpress
-appVersion: 1.0.1dev
+appVersion: 1.1.0b1
 description: Multi-user Jupyter installation
 home: https://z2jh.jupyter.org
 sources:

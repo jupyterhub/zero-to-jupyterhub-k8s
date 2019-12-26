@@ -9,7 +9,8 @@ charts:
       hub:
         valuesPath: hub.image
         buildArgs:
-          JUPYTERHUB_VERSION: git+https://github.com/jupyterhub/jupyterhub@abb93ad
+          # NOTE: Also bump the Chart.yaml's appVersion if this is bumped
+          JUPYTERHUB_VERSION: 1.1.0b1
       network-tools:
         valuesPath: singleuser.networkTools.image
       image-awaiter:
@@ -17,4 +18,4 @@ charts:
       singleuser-sample:
         valuesPath: singleuser.image
         buildArgs:
-          JUPYTERHUB_VERSION: 1.0.0
+          JUPYTERHUB_VERSION: 1.1.0b1
