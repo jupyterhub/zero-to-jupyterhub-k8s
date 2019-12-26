@@ -7,6 +7,12 @@ players.
 
 ## [0.9]
 
+### [0.9.0-beta.2]
+
+#### Fixed
+
+* Fix major breaking change if all HTTPS options was disabled introduced just before beta.1 [#1534](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1534) ([@dirkcgrunwald](https://github.com/dirkcgrunwald))
+
 ### [0.9.0-beta.1]
 
 Some highlights of relevance for this release are:
