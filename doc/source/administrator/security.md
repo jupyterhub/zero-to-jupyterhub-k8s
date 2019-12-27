@@ -137,7 +137,8 @@ hub:
       c.JupyterHub.hub_bind_url = "https://0.0.0.0:8081"
       c.ConfigurableHTTPProxy.api_url = 'https://proxy-api.{{NAMESPACE}}.svc.cluster.local:8001'
       # If you are following the above directions and have external ingress into JupyterHub you will also need to set your exteral domain as a trusted_alt_name see jupyter.external.com
-      c.JupyterHub.trusted_alt_names = ["DNS:jupyter.external.com", "DNS:*.{{NAMESPACE}}.svc.cluster.local"]
+      # IP:127.0.0.1 is required if cull is enabled
+      c.JupyterHub.trusted_alt_names = ["IP:127.0.0.1", "DNS:jupyter.external.com", "DNS:*.{{NAMESPACE}}.svc.cluster.local"]
       c.JupyterHub.hub_connect_url = "https://hub.{{NAMESPACE}}.svc.cluster.local:8081"
 
       c.KubeSpawner.working_dir = '/home/jovyan/'
