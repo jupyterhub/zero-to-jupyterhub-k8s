@@ -371,7 +371,7 @@ if get_config('cull.enabled', False):
     base_url = c.JupyterHub.get('base_url', '/')
 
     protocol="http"
-    if not get_config('hub.https.enabled', False):
+    if get_config('hub.https.enabled', False):
         protocol="https"
 
     cull_cmd.append(
