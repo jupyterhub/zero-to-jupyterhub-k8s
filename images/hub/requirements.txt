@@ -42,14 +42,18 @@ nullauthenticator==1.0.*
 
 # https://github.com/jupyterhub/oauthenticator
 # https://pypi.org/project/oauthenticator
-oauthenticator==0.10.*
+#oauthenticator==0.10.*
+git+https://github.com/sstarcher/oauthenticator.git@debug#egg=oauthenticator
+
 
 ## Spawners
 # ---------------------------------------------------------
 
 # https://github.com/jupyterhub/kubespawner
 # https://pypi.org/project/jupyterhub-kubespawner
-jupyterhub-kubespawner==0.11.*
+# jupyterhub-kubespawner==0.11.*
+
+git+https://github.com/sstarcher/kubespawner.git@ssl2#egg=jupyterhub-kubespawner
 
 # https://github.com/kubernetes-client/python
 # https://pypi.org/project/kubernetes

@@ -7,6 +7,8 @@ hub:
     ports:
       nodePort:
     loadBalancerIP:
+  https:
+    enabled: false
   baseUrl: /
   cookieSecret:
   publicURL:
@@ -92,7 +94,6 @@ hub:
 rbac:
   enabled: true
 
-
 proxy:
   secretToken: ''
   deploymentStrategy:
@@ -176,6 +177,16 @@ proxy:
       name: ''
       key: tls.key
       crt: tls.crt
+    internalSecret:
+      name: jupyterhub-certs
+      api:
+        key: proxy-api.key
+        crt: proxy-api.crt
+        ca: proxy-api-ca_trust.crt
+      client:
+        key: proxy-client.key
+        crt: proxy-client.crt
+        ca: proxy-client-ca_trust.crt
     hosts: []
   networkPolicy:
     enabled: false
@@ -184,7 +195,6 @@ proxy:
       - to:
           - ipBlock:
               cidr: 0.0.0.0/0
-
 
 auth:
   type: dummy
@@ -203,7 +213,6 @@ auth:
   state:
     enabled: false
     cryptoKey:
-
 
 singleuser:
   extraTolerations: []
@@ -228,7 +237,7 @@ singleuser:
     enabled: false
     ingress: []
     egress:
-    # Required egress is handled by other rules so it's safe to modify this
+      # Required egress is handled by other rules so it's safe to modify this
       - to:
           - ipBlock:
               cidr: 0.0.0.0/0
@@ -286,7 +295,6 @@ singleuser:
   defaultUrl:
   extraPodConfig: {}
 
-
 scheduling:
   userScheduler:
     enabled: true
@@ -327,7 +335,6 @@ scheduling:
     nodeAffinity:
       matchNodePurpose: prefer
 
-
 prePuller:
   hook:
     enabled: true
@@ -342,14 +349,12 @@ prePuller:
       name: gcr.io/google_containers/pause
       tag: '3.1'
 
-
 ingress:
   enabled: false
   annotations: {}
   hosts: []
   pathSuffix: ''
   tls: []
-
 
 cull:
   enabled: true
@@ -358,7 +363,6 @@ cull:
   every: 600
   concurrency: 10
   maxAge: 0
-
 
 debug:
   enabled: false

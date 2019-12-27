@@ -116,6 +116,34 @@ security report generator. Use the following URL structure to test your domain:
 http://ssllabs.com/ssltest/analyze.html?d=<YOUR-DOMAIN>
 ```
 
+### Internal JupyterHub TLS
+
+By default the internal communication of the Proxy, JupyterHub, and user notebooks are not encrypted by TLS.
+
+* Setup JupyterHub not using internal_ssl
+* Add to your configuration `c.JupyterHub.trusted_alt_names` see below
+* Run this [script](../../../tools/jupyterhub-sync-certs.sh) to generate the internal_ssl certificates and create a secret named `jupyterhub-certs`
+* Update the rest of your configuration from below
+
+Replace all instances of `{{NAMESPACE}}` to the correct value.
+```yaml
+hub:
+  https:
+    enabled: true
+  extraConfig:
+    jupyterlab: |
+      c.JupyterHub.internal_ssl = True
+      c.JupyterHub.bind_url = "https://0.0.0.0:8081"
+      c.JupyterHub.hub_bind_url = "https://0.0.0.0:8081"
+      c.ConfigurableHTTPProxy.api_url = 'https://proxy-api.{{NAMESPACE}}.svc.cluster.local:8001'
+      # If you are following the above directions and have external ingress into JupyterHub you will also need to set your exteral domain as a trusted_alt_name see jupyter.external.com
+      c.JupyterHub.trusted_alt_names = ["DNS:jupyter.external.com", "DNS:*.{{NAMESPACE}}.svc.cluster.local"]
+      c.JupyterHub.hub_connect_url = "https://hub.{{NAMESPACE}}.svc.cluster.local:8081"
+
+      c.KubeSpawner.working_dir = '/home/jovyan/'
+```
+
+
 ## Secure access to Helm
 
 In its default configuration, helm pretty much allows root access to all other

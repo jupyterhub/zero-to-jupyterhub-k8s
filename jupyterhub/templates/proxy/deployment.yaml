@@ -37,16 +37,20 @@ spec:
       {{- end }}
       nodeSelector: {{ toJson .Values.proxy.nodeSelector }}
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
-      {{- if $manualHTTPS }}
       volumes:
+      {{- if $manualHTTPS }}
         - name: tls-secret
           secret:
             secretName: proxy-manual-tls
       {{- else if $manualHTTPSwithsecret }}
-      volumes:
         - name: tls-secret
           secret:
             secretName: {{ .Values.proxy.https.secret.name }}
+      {{- end }}
+      {{- if .Values.hub.https.enabled }}
+        - name: internal-tls-secret
+          secret:
+            secretName: {{ .Values.proxy.https.internalSecret.name }}
       {{- end }}
       containers:
         - name: chp
@@ -56,8 +60,24 @@ spec:
             - --ip=0.0.0.0
             - --api-ip=0.0.0.0
             - --api-port=8001
+            {{- if .Values.hub.https.enabled }}
+            - --default-target=https://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
+            - --error-target=https://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)/hub/error
+            - --ssl-ca=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+            - --api-ssl-key=/etc/chp/internal/{{ .Values.proxy.https.internalSecret.api.key }}
+            - --api-ssl-cert=/etc/chp/internal/{{ .Values.proxy.https.internalSecret.api.crt }}
+            - --api-ssl-ca=/etc/chp/internal/{{ .Values.proxy.https.internalSecret.api.ca }}
+            - --api-ssl-request-cert
+            - --api-ssl-reject-unauthorized
+            - --client-ssl-key=/etc/chp/internal/{{ .Values.proxy.https.internalSecret.client.key }}
+            - --client-ssl-cert=/etc/chp/internal/{{ .Values.proxy.https.internalSecret.client.crt }}
+            - --client-ssl-ca=/etc/chp/internal/{{ .Values.proxy.https.internalSecret.client.ca }}
+            - --client-ssl-request-cert
+            - --client-ssl-reject-unauthorized
+            {{- else }}
             - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
             - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)/hub/error
+            {{- end }}
             {{- if $manualHTTPS }}
             - --port=8443
             - --redirect-port=8000
@@ -76,10 +96,15 @@ spec:
             {{- if .Values.debug.enabled }}
             - --log-level=debug
             {{- end }}
-          {{- if or $manualHTTPS $manualHTTPSwithsecret }}
           volumeMounts:
+          {{- if or $manualHTTPS $manualHTTPSwithsecret }}
             - name: tls-secret
               mountPath: /etc/chp/tls
+              readOnly: true
+          {{- end }}
+          {{- if .Values.hub.https.enabled }}
+            - name: internal-tls-secret
+              mountPath: /etc/chp/internal
               readOnly: true
           {{- end }}
           resources:
