@@ -87,15 +87,15 @@ your google cloud account.
      that is not too far away from your users.                   
    *  .. note::
          
-         A region is a geographical location used to host resources, comprising one or more zones.                                      
+         A region in GCP is a geographical region with at least three zones, where each zone is representing a datacenter to with servers etc.                                     
       
          * A regional cluster creates pods across zones in a region(three by default), distributing Kubernetes resources across multiple zones in the region. This is different from the default cluster, which has all its resources within a single zone(as shown above).
          
-         * A regional cluster is also highly available(HA) with zero downtime for upgrades. This results in the cluster being highly available for deployments even in situations like a single node being upgraded.  
+         * A regional cluster has Highly Available (HA) kubernetes api-servers, this allows jupyterhub which use them to have no downtime during upgrades of kubernetes itself.
          
          * They also increase control plane uptime to 99.95%. 
          
-         * To avoid tripling the number of nodes without losing these benefits, the ``--node-locations`` flag suffixed with a location can be used. 
+         * To avoid tripling the number of nodes while still having HA kubernetes, the ``--node-locations`` flag can be used to specify a single zone to use.
               
                 
 
