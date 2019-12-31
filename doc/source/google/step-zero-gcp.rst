@@ -67,7 +67,7 @@ your google cloud account.
       gcloud container clusters create \
         --machine-type n1-standard-2 \
         --num-nodes 2 \
-        --zone us-central1-b \
+        --zone <compute zone from the list linked below> \
         --cluster-version latest \
         <CLUSTERNAME>
 
@@ -84,7 +84,21 @@ your google cloud account.
    * ``--zone`` specifies the data center zone where your cluster will be created.
      You can pick something from `this list
      <https://cloud.google.com/compute/docs/regions-zones/#available>`_
-     that is not too far away from your users.
+     that is not too far away from your users.                   
+   *  .. note::
+         
+         A region in GCP is a geographical region with at least three zones, where each zone is representing a datacenter with servers etc.                                     
+      
+         * A regional cluster creates pods across zones in a region(three by default), distributing Kubernetes resources across multiple zones in the region. This is different from the default cluster, which has all its resources within a single zone(as shown above).
+         
+         * A regional cluster has Highly Available (HA) kubernetes api-servers, this allows jupyterhub which uses them to have no downtime during upgrades of kubernetes itself.
+         
+         * They also increase control plane uptime to 99.95%. 
+         
+         * To avoid tripling the number of nodes while still having HA kubernetes, the ``--node-locations`` flag can be used to specify a single zone to use.
+              
+                
+
 
 
 5. To test if your cluster is initialized, run:
