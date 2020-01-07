@@ -148,15 +148,15 @@ proxy:
         memory: 512Mi
   nginx:
     image:
-      name: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
-      tag: 0.15.0
+      name: nginx
+      tag: 1.17-alpine
     proxyBodySize: 64m
     hstsIncludeSubdomains: 'false'
     resources: {}
-  lego:
+  autocertbot:
     image:
-      name: jetstack/kube-lego
-      tag: 0.1.7
+      name: jupyterhub/k8s-autocertbot
+      tag: '0.9.0-alpha.1.112.34b7b8e'
     resources: {}
   labels: {}
   nodeSelector: {}

@@ -6,6 +6,8 @@ charts:
       published: https://jupyterhub.github.io/helm-chart
 
     images:
+      autocertbot:
+        valuesPath: proxy.autocertbot.image
       hub:
         valuesPath: hub.image
         buildArgs:
