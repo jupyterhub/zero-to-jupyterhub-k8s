@@ -24,7 +24,7 @@ subjects:
   apiGroup:
 roleRef:
   kind: Role
-  name: autotls
+  name: https
   apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: v1
