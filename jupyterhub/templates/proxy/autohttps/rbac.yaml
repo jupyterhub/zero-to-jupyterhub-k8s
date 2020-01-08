@@ -8,7 +8,7 @@ metadata:
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 rules:
-- apiGroups: [""] # "" indicates the core API group
+- apiGroups: [""]
   resources: ["secrets"]
   verbs: ["get", "patch", "list", "create"]
 ---
