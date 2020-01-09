@@ -16,6 +16,7 @@ set to /usr/shared/nginx/html, and is shared with this container. This
 lets us use the webroot challenge with certbot.
 """
 import sys
+import os
 import subprocess
 import argparse
 import time
@@ -24,18 +25,6 @@ import io
 import base64
 import logging
 from kubernetes import client, config
-
-def compress_dir(path):
-    """
-    Compress directory at 'path' to a tar.gz & return it.
-
-    Paths stored in the tarball are relative to the base directory -
-    so /etc/letsencrypt/account/ is stored as account/
-    """
-    compressed_stream = io.BytesIO()
-    with tarfile.open(fileobj=compressed_stream, mode='w:gz') as tf:
-        tf.add(path, arcname='.')
-    return compressed_stream.getvalue()
 
 def update_secret(namespace, secret_name, key, value):
     """
@@ -61,6 +50,8 @@ def update_secret(namespace, secret_name, key, value):
             raise
     # Value should be base64'd string
     new_value = base64.standard_b64encode(value).decode()
+    if secret.data is None:
+        secret.data = {}
     if new_value != secret.data.get(key):
         secret.data[key] = base64.standard_b64encode(value).decode()
         v1.patch_namespaced_secret(namespace=namespace, name=secret_name, body=secret)
@@ -80,6 +71,8 @@ def get_secret_value(namespace, secret_name, key):
             # Secret doesn't exist
             return None
         raise
+    if secret.data is None or key not in secret.data:
+        return None
     return base64.standard_b64decode(secret.data[key])
 
 def setup_logging():
@@ -91,28 +84,25 @@ def setup_logging():
 def main():
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
-        'secret_name',
-        help='Name of kubernetes secret to store certificates in'
-    )
-    argparser.add_argument(
-        'email',
-        help='Contact email to pass to letsencrypt'
-    )
-    argparser.add_argument(
-        'domains',
-        help='List of domains to get certificates for',
-        nargs='+'
-    )
-
-    argparser.add_argument(
         '--namespace',
         help='Namespace to operate in'
     )
 
     argparser.add_argument(
-        '--test-cert',
-        help='Get test certificates from the staging server',
-        action='store_true'
+        'action',
+        choices=['load', 'watch-save']
+    )
+
+    argparser.add_argument(
+        'secret_name'
+    )
+
+    argparser.add_argument(
+        'key',
+    )
+
+    argparser.add_argument(
+        'path',
     )
 
     args = argparser.parse_args()
@@ -124,31 +114,21 @@ def main():
             with open("/var/run/secrets/kubernetes.io/serviceaccount/namespace") as f:
                 args.namespace = f.read().strip()
         except FileNotFoundError:
-            print("Can not determin a namespace, must be explicitly set with --namespace", file=sys.stderr)
+            print("Can not determine a namespace, must be explicitly set with --namespace", file=sys.stderr)
             sys.exit(1)
 
-    current_dir = get_secret_value(args.namespace, args.secret_name, 'letsencrypt.tar.gz')
-    if current_dir:
-        with tarfile.open(fileobj=io.BytesIO(current_dir), mode='r:gz') as tf:
-            tf.extractall('/etc/letsencrypt')
-
-    certbot_args = [
-        'certbot',
-        'certonly', '--webroot', '-n', '--agree-tos',
-        '-m', args.email,
-        '-w', '/usr/share/nginx/html'
-    ] + [f'-d={d}' for d in args.domains]
-
-    if args.test_cert:
-        certbot_args.append('--test-cert')
-        logging.info("Using Let's Encrypt Staging server")
-
-    while True:
-        logging.info(f"Calling certbot: {' '.join(certbot_args)}")
-        subprocess.check_call(certbot_args)
-        letsencrypt_dir = compress_dir('/etc/letsencrypt')
-        update_secret(args.namespace, args.secret_name, 'letsencrypt.tar.gz', letsencrypt_dir)
-        time.sleep(30)
+    if args.action == 'load':
+        value = get_secret_value(args.namespace, args.secret_name, args.key)
+        if value:
+            with open(args.path, 'wb') as f:
+                f.write(value)
+                os.fchmod(f.fileno(), 0o600)
+    else:
+        while True:
+            if os.path.exists(args.path):
+                with open(args.path, 'rb') as f:
+                    update_secret(args.namespace, args.secret_name, args.key, f.read())
+            time.sleep(30)
 
 if __name__ == '__main__':
     main()

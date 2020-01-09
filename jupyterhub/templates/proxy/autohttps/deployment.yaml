@@ -18,7 +18,7 @@ spec:
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
         hub.jupyter.org/network-access-proxy-http: "true"
       annotations:
-        checksum/config-map: {{ include (print .Template.BasePath "/proxy/autohttps/configmap-nginx.yaml") . | sha256sum }}
+        checksum/config-map: {{ include (print .Template.BasePath "/proxy/autohttps/configmap.yaml") . | sha256sum }}
     spec:
       {{- if .Values.rbac.enabled }}
       serviceAccountName: autohttps
@@ -30,33 +30,42 @@ spec:
       nodeSelector: {{ toJson .Values.proxy.nodeSelector }}
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
       volumes:
-        - name: webroot
-          emptyDir: {}
         - name: certificates
           emptyDir: {}
-        - name: nginx-config
+        - name: traefik-config
           configMap:
-            name: nginx-proxy-config
+            name: traefik-proxy-config
       initContainers:
       - name: volume-mount-hack-why-god-still
         image: busybox
         command:
         - /bin/sh
         - -c
-        - chmod 0755 /usr/share/nginx/html /etc/letsencrypt
+        - chmod 0755 /etc/acme
         volumeMounts:
-          - name: webroot
-            mountPath: /usr/share/nginx/html
           - name: certificates
-            mountPath: /etc/letsencrypt
+            mountPath: /etc/acme
+      - name: load-acme
+        image: "{{ .Values.proxy.autocertbot.image.name }}:{{ .Values.proxy.autocertbot.image.tag }}"
+        {{- with .Values.proxy.autocertbot.image.pullPolicy }}
+        imagePullPolicy: {{ . }}
+        {{- end }}
+        command: ["/usr/local/bin/autocert.py", "load", "proxy-public-tls-acme", "acme.json", "/etc/acme/acme.json"]
+        env:
+        # We need this to get logs immediately
+        - name: PYTHONUNBUFFERED
+          value: "True"
+        volumeMounts:
+          - name: certificates
+            mountPath: /etc/acme
       containers:
-        - name: nginx
-          image: "{{ .Values.proxy.nginx.image.name }}:{{ .Values.proxy.nginx.image.tag }}"
-          {{- with .Values.proxy.nginx.image.pullPolicy }}
+        - name: traefik
+          image: "{{ .Values.proxy.traefik.image.name }}:{{ .Values.proxy.traefik.image.tag }}"
+          {{- with .Values.proxy.traefik.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
           resources:
-            {{- .Values.proxy.nginx.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- .Values.proxy.traefik.resources | toYaml | trimSuffix "\n" | nindent 12 }}
           ports:
             - name: http
               containerPort: 80
@@ -65,32 +74,21 @@ spec:
               containerPort: 443
               protocol: TCP
           volumeMounts:
-            - name: webroot
-              mountPath: /usr/share/nginx/html
+            - name: traefik-config
+              mountPath: /etc/traefik
             - name: certificates
-              mountPath: /etc/letsencrypt
-            - name: nginx-config
-              mountPath: /etc/nginx/conf.d/
+              mountPath: /etc/acme
         - name: certbot
           image: "{{ .Values.proxy.autocertbot.image.name }}:{{ .Values.proxy.autocertbot.image.tag }}"
           {{- with .Values.proxy.autocertbot.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
-          command: ["/usr/local/bin/autocert.py"]
+          command: ["/usr/local/bin/autocert.py", "watch-save", "proxy-public-tls-acme", "acme.json", "/etc/acme/acme.json"]
           env:
           # We need this to get logs immediately
           - name: PYTHONUNBUFFERED
             value: "True"
-          args:
-          - --test-cert
-          - {{ .Release.Name }}-https-certbot-dir
-          - yuvipanda@gmail.com
-          {{- range $host := .Values.proxy.https.hosts }}
-          - {{ $host }}
-          {{- end }}
           volumeMounts:
-            - name: webroot
-              mountPath: /usr/share/nginx/html
             - name: certificates
-              mountPath: /etc/letsencrypt
+              mountPath: /etc/acme
 {{- end }}

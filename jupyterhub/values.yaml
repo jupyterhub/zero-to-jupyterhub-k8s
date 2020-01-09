@@ -153,6 +153,13 @@ proxy:
     proxyBodySize: 64m
     hstsIncludeSubdomains: 'false'
     resources: {}
+  traefik:
+    image:
+      name: traefik
+      tag: v2.1
+    proxyBodySize: 64m
+    hstsIncludeSubdomains: 'false'
+    resources: {}
   autocertbot:
     image:
       name: jupyterhub/k8s-autocertbot

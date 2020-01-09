@@ -4,47 +4,66 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: nginx-proxy-config
+  name: traefik-proxy-config
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 data:
-  proxy.conf: |
-    map $http_upgrade $connection_upgrade {
-        default upgrade;
-        ''      close;
-    }
+  traefik.toml: |
+    # traefik.toml file template
+    defaultEntryPoints = ["http", "https"]
 
-    server {
-        listen 80;
+    logLevel = "INFO"
+    # log errors, which could be proxy errors
+    [accessLog]
+    format = "json"
+    [accessLog.filters]
+    statusCodes = ["500-999"]
 
-        # Serve let's encrypt challenges from the disk shared with autocertbot
-        location /.well-known/acme-challenge {
-            root   /usr/share/nginx/html/;
-        }
+    [accessLog.fields.headers]
+    [accessLog.fields.headers.names]
+    Authorization = "redact"
+    Cookie = "redact"
+    Set-Cookie = "redact"
+    X-Xsrftoken = "redact"
 
-        location / {
-          # Redirect everything to HTTPS
-          return 301 https://$host$request_uri;
-        }
-    }
+    [respondingTimeouts]
+    idleTimeout = "10m0s"
 
-    {{- range $host := .Values.proxy.https.hosts }}
-    server {
-        listen 443 ssl;
-        server_name {{ $host }};
+    [entryPoints]
+      [entryPoints.http]
+      address = ":80"
 
-        ssl_certificate /etc/letsencrypt/live/{{ $host }}/fullchain.pem;
-        ssl_certificate_key /etc/letsencrypt/live/{{ $host }}/privkey.pem;
+      [entryPoints.https]
+      address = ":443"
 
-        location / {
-          proxy_pass   http://proxy-http:8000/;
-          proxy_set_header Host $host;
-          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    [wss]
+    protocol = "http"
 
-          # websocket headers
-          proxy_set_header Upgrade $http_upgrade;
-          proxy_set_header Connection $connection_upgrade;
-        }
-    }
-    {{- end }}
+    [certificatesResolvers.le.acme]
+      email = "yuvipanda@gmail.com"
+      storage = "/etc/acme/acme.json"
+      caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
+      [certificatesResolvers.le.acme.httpChallenge]
+        # used during the challenge
+        entryPoint = "http"
+    [providers]
+      [providers.file]
+        filename = '/etc/traefik/dynamic.toml'
+
+  dynamic.toml: |
+    [http.routers]
+      [http.routers.chp]
+        rule = "PathPrefix(`/`)"
+        service = "chp"
+          [http.routers.chp.tls]
+            certResolver = "le"
+            {{- range $host := .Values.proxy.https.hosts }}
+            [[http.routers.chp.tls.domains]]
+            main = "{{ $host }}"
+            {{- end}}
+
+    [http.services]
+      [http.services.chp.loadBalancer]
+        [[http.services.chp.loadBalancer.servers]]
+          url = "http://proxy-http:8000/"
 {{- end }}
