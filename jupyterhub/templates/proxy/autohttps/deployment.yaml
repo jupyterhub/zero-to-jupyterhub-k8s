@@ -17,6 +17,8 @@ spec:
       labels:
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
         hub.jupyter.org/network-access-proxy-http: "true"
+      annotations:
+        checksum/config-map: {{ include (print .Template.BasePath "/proxy/autohttps/configmap-nginx.yaml") . | sha256sum }}
     spec:
       {{- if .Values.rbac.enabled }}
       serviceAccountName: autohttps
