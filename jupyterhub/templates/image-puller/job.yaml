@@ -33,6 +33,7 @@ spec:
           {{- if .Values.hookimageawaiter.securityContext.enabled }}
           securityContext:
             runAsUser: 1001
+          {{- end }}
           name: hook-image-awaiter
           imagePullPolicy: IfNotPresent
           command:
