@@ -30,6 +30,9 @@ spec:
       {{- end }}
       containers:
         - image: {{ .Values.prePuller.hook.image.name }}:{{ .Values.prePuller.hook.image.tag }}
+          {{- if .Values.hookimageawaiter.securityContext.enabled }}
+          securityContext:
+            runAsUser: 1001
           name: hook-image-awaiter
           imagePullPolicy: IfNotPresent
           command:
