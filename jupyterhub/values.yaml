@@ -94,6 +94,8 @@ rbac:
 
 
 proxy:
+  securityContext:
+    enable: false
   secretToken: ''
   deploymentStrategy:
     ## type: Recreate
@@ -327,7 +329,6 @@ scheduling:
     nodeAffinity:
       matchNodePurpose: prefer
 
-
 prePuller:
   hook:
     enabled: true
@@ -342,6 +343,13 @@ prePuller:
       name: gcr.io/google_containers/pause
       tag: '3.1'
 
+hookimagepuller:
+  securityContext:
+    enabled: false
+
+hookimageawaiter:
+  securityContext:
+    enabled: false
 
 ingress:
   enabled: false

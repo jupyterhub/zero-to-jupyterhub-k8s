@@ -51,6 +51,11 @@ spec:
       containers:
         - name: chp
           image: {{ .Values.proxy.chp.image.name }}:{{ .Values.proxy.chp.image.tag }}
+          {{- if .Values.proxy.securityContext.enabled}}
+          securityContext:
+          {{- /* We take the hub UID here ! */}}
+            runAsUser: {{ .Values.hub.uid}}
+          {{- end}}
           command:
             - configurable-http-proxy
             - --ip=0.0.0.0
