@@ -8,6 +8,43 @@ metadata:
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 data:
-  proxy-body-size: "{{ .Values.proxy.nginx.proxyBodySize }}"
-  hsts-include-subdomains: "{{ .Values.proxy.nginx.hstsIncludeSubdomains }}"
+  proxy.conf: |
+    map $http_upgrade $connection_upgrade {
+        default upgrade;
+        ''      close;
+    }
+
+    server {
+        listen 80;
+
+        # Serve let's encrypt challenges from the disk shared with autocertbot
+        location /.well-known/acme-challenge {
+            root   /usr/share/nginx/html/;
+        }
+
+        location / {
+          # Redirect everything to HTTPS
+          return 301 https://$host$request_uri;
+        }
+    }
+
+    {{- range $host := .Values.proxy.https.hosts }}
+    server {
+        listen 443 ssl;
+        server_name {{ $host }};
+
+        ssl_certificate /etc/letsencrypt/live/{{ $host }}/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/{{ $host }}/privkey.pem;
+
+        location / {
+          proxy_pass   http://proxy-http:8000/;
+          proxy_set_header Host $host;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+          # websocket headers
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection $connection_upgrade;
+        }
+    }
+    {{- end }}
 {{- end }}

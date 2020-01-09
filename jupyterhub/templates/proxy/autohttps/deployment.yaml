@@ -32,6 +32,9 @@ spec:
           emptyDir: {}
         - name: certificates
           emptyDir: {}
+        - name: nginx-config
+          configMap:
+            name: nginx-proxy-config
       initContainers:
       - name: volume-mount-hack-why-god-still
         image: busybox
@@ -64,9 +67,13 @@ spec:
               mountPath: /usr/share/nginx/html
             - name: certificates
               mountPath: /etc/letsencrypt
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d/
         - name: certbot
           image: "{{ .Values.proxy.autocertbot.image.name }}:{{ .Values.proxy.autocertbot.image.tag }}"
-          imagePullPolicy: Never
+          {{- with .Values.proxy.autocertbot.image.pullPolicy }}
+          imagePullPolicy: {{ . }}
+          {{- end }}
           command: ["/usr/local/bin/autocert.py"]
           env:
           # We need this to get logs immediately
