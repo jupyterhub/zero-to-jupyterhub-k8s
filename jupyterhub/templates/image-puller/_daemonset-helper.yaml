@@ -62,6 +62,7 @@ spec:
         - name: image-pull-singleuser
           {{- if .Values.hookimagepuller.securityContext.enabled }}
           securityContext:
+          {{- /* We take the hub UID here ! */}}
             runAsUser: {{ .Values.hub.uid }}
           {{- end }}
           image: {{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}
@@ -88,6 +89,7 @@ spec:
         - name: image-pull-metadata-block
           {{- if .Values.hookimagepuller.securityContext.enabled }}
           securityContext:
+          {{- /* We take the hub UID here ! */}}
             runAsUser: {{ .Values.hub.uid }}
           {{- end }}
           image: {{ .Values.singleuser.networkTools.image.name }}:{{ .Values.singleuser.networkTools.image.tag }}
@@ -103,6 +105,7 @@ spec:
         - name: image-pull-{{ $k }}
           {{- if .Values.hookimagepuller.securityContext.enabled }}
           securityContext:
+          {{- /* We take the hub UID here ! */}}
             runAsUser: {{ .Values.hub.uid }}
           {{- end }}
           image: {{ $v.name }}:{{ $v.tag }}
@@ -118,6 +121,7 @@ spec:
         - name: image-pull-singleuser-extra-container-{{ $k }}
           {{- if .Values.hookimagepuller.securityContext.enabled }}
           securityContext:
+          {{- /* We take the hub UID here ! */}}
             runAsUser: {{ .Values.hub.uid }}
           {{- end }}
           image: {{ $container.image }}
@@ -133,6 +137,7 @@ spec:
         - name: pause
           {{- if .Values.hookimagepuller.securityContext.enabled }}
           securityContext:
+          {{- /* We take the hub UID here ! */}}
             runAsUser: {{ .Values.hub.uid }}
           {{- end }}
           image: {{ .Values.prePuller.pause.image.name }}:{{ .Values.prePuller.pause.image.tag }}
