@@ -58,6 +58,7 @@ spec:
       serviceAccountName: hub
       {{- end }}
       securityContext:
+        runAsUser: {{ .Values.hub.uid }}
         fsGroup: {{ .Values.hub.fsGid }}
       {{- if or .Values.hub.imagePullSecret.enabled .Values.hub.image.pullSecrets }}
       imagePullSecrets:
