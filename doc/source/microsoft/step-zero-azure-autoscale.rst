@@ -5,7 +5,7 @@ Kubernetes on Microsoft Azure Kubernetes Service (AKS) with Autoscaling
 
 .. warning::
 
-  These instructions involve parts of the Azure command line that are in preview, hence the following documentation to subject to change.
+  These instructions involve parts of the Azure command line that are in preview, hence the following documentation is subject to change.
 
 You can create a Kubernetes cluster `either through the Azure portal website, or using the Azure command line tools <https://docs.microsoft.com/en-us/azure/aks/>`_.
 
