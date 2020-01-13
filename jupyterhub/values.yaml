@@ -162,8 +162,8 @@ proxy:
     resources: {}
   secretSync:
     image:
-      name: jupyterhub/k8s-autocertbot
-      tag: '0.9.0-alpha.1.112.34b7b8e'
+      name: jupyterhub/k8s-secret-sync
+      tag: 'set-by-chartpress'
     resources: {}
   labels: {}
   nodeSelector: {}
