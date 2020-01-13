@@ -175,9 +175,9 @@ proxy:
     type: letsencrypt
     #type: letsencrypt, manual, offload, secret
     letsencrypt:
-      contactEmail: ''
+      contactEmail: 'yuvipanda@gmail.com'
       # Specify custom server here (https://acme-staging-v02.api.letsencrypt.org/directory) to hit staging LE
-      acmeServer:
+      acmeServer: ''
     manual:
       key:
       cert:

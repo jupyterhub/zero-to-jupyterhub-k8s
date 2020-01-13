@@ -40,7 +40,7 @@ data:
     protocol = "http"
 
     [certificatesResolvers.le.acme]
-      email = "yuvipanda@gmail.com"
+      email = {{ required "proxy.https.letsencrypt.contactEmail is a required field" .Values.proxy.https.letsencrypt.contactEmail | quote }}
       storage = "/etc/acme/acme.json"
       {{- if .Values.proxy.https.letsencrypt.acmeServer }}
       caServer = {{ .Values.proxy.https.letsencrypt.acmeServer | quote }}
