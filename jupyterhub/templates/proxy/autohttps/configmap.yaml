@@ -42,7 +42,9 @@ data:
     [certificatesResolvers.le.acme]
       email = "yuvipanda@gmail.com"
       storage = "/etc/acme/acme.json"
-      caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
+      {{- if .Values.proxy.https.letsencrypt.acmeServer }}
+      caServer = {{ .Values.proxy.https.letsencrypt.acmeServer | quote }}
+      {{- end}}
       [certificatesResolvers.le.acme.httpChallenge]
         # used during the challenge
         entryPoint = "http"

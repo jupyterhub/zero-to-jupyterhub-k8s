@@ -176,6 +176,8 @@ proxy:
     #type: letsencrypt, manual, offload, secret
     letsencrypt:
       contactEmail: ''
+      # Specify custom server here (https://acme-staging-v02.api.letsencrypt.org/directory) to hit staging LE
+      acmeServer:
     manual:
       key:
       cert:
