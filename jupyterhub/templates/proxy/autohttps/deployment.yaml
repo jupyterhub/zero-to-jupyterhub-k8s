@@ -46,11 +46,11 @@ spec:
           - name: certificates
             mountPath: /etc/acme
       - name: load-acme
-        image: "{{ .Values.proxy.autocertbot.image.name }}:{{ .Values.proxy.autocertbot.image.tag }}"
-        {{- with .Values.proxy.autocertbot.image.pullPolicy }}
+        image: "{{ .Values.proxy.secretSync.image.name }}:{{ .Values.proxy.secretSync.image.tag }}"
+        {{- with .Values.proxy.secretSync.image.pullPolicy }}
         imagePullPolicy: {{ . }}
         {{- end }}
-        command: ["/usr/local/bin/autocert.py", "load", "proxy-public-tls-acme", "acme.json", "/etc/acme/acme.json"]
+        command: ["/usr/local/bin/secret-sync.py", "load", "proxy-public-tls-acme", "acme.json", "/etc/acme/acme.json"]
         env:
         # We need this to get logs immediately
         - name: PYTHONUNBUFFERED
@@ -79,11 +79,11 @@ spec:
             - name: certificates
               mountPath: /etc/acme
         - name: certbot
-          image: "{{ .Values.proxy.autocertbot.image.name }}:{{ .Values.proxy.autocertbot.image.tag }}"
-          {{- with .Values.proxy.autocertbot.image.pullPolicy }}
+          image: "{{ .Values.proxy.secretSync.image.name }}:{{ .Values.proxy.secretSync.image.tag }}"
+          {{- with .Values.proxy.secretSync.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
-          command: ["/usr/local/bin/autocert.py", "watch-save", "proxy-public-tls-acme", "acme.json", "/etc/acme/acme.json"]
+          command: ["/usr/local/bin/secret-sync.py", "watch-save", "proxy-public-tls-acme", "acme.json", "/etc/acme/acme.json"]
           env:
           # We need this to get logs immediately
           - name: PYTHONUNBUFFERED

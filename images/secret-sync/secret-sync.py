@@ -1,19 +1,33 @@
 #!/usr/bin/env python3
 """
-Helper script to run certbot inside a kubernetes cluster.
+Helper script to perform two-way sync of files to k8s secret objects.
 
-certbot expects contents of /etc/letsencrypt to be persistent
-across runs, so it knows when to renew certificates & when to leave
-them alone. This is a problem in Kubernetes, since we try to avoid
-having persistent disks unless we must.
+traefik expects a JSON file (acme.json) to persist across time,
+to make sure Let's Encrypt certificates work. In kubernetes,
+pod restarts clear out the filesystem, making this hard. We could
+add a persistent volume to the proxy, but this is excessive for
+a single file.
 
-This script saves / restores the contents of /etc/letsencrypt into
-a Kubernetes secret object, thus letting certbot operate unchanged
-without needing any persistent storage.
+This script can do a 'two way' sync of a given file and a key
+in a kubernetes secret object. The file should be in an emptyDir
+volume in the traefik pod, which should also have this script
+running as a sidecar.
 
-This script runs as a sidecar to an nginx container that has webroot
-set to /usr/shared/nginx/html, and is shared with this container. This
-lets us use the webroot challenge with certbot.
+## Kubernetes Secret -> File system
+
+This needs to happen only once when the pod starts - we do not
+support modifications to the secret by other actors. The
+'load' command is used to specify the secret name, key and
+path to load it into
+
+## File system -> Kubernetes secret
+
+traefik might write new contents to the acme.json file over
+time, and we need to sync it to the kubernetes secret object.
+Ideally, we would watch for changes to the file with inotify
+and update the secret object as needed. However, for now we
+just operate in a 30s loop. This is good enough, since
+traefik can always re-generate certs if needed.
 """
 import sys
 import os
@@ -85,7 +99,7 @@ def main():
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
         '--namespace',
-        help='Namespace to operate in'
+        help='Namespace the secret exists in'
     )
 
     argparser.add_argument(
@@ -94,15 +108,18 @@ def main():
     )
 
     argparser.add_argument(
-        'secret_name'
+        'secret_name',
+        help="Name of secret to sync with. Will be created if needed."
     )
 
     argparser.add_argument(
         'key',
+        help="Key in secret object to sync file to"
     )
 
     argparser.add_argument(
         'path',
+        help="Path in filesystem to sync to"
     )
 
     args = argparser.parse_args()
@@ -123,7 +140,8 @@ def main():
             with open(args.path, 'wb') as f:
                 f.write(value)
                 os.fchmod(f.fileno(), 0o600)
-    else:
+    elif args.action == 'watch-save':
+        # FIXME: use inotifiy
         while True:
             if os.path.exists(args.path):
                 with open(args.path, 'rb') as f:
