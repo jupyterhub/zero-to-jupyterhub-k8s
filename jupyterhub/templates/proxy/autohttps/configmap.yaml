@@ -53,6 +53,22 @@ data:
         filename = '/etc/traefik/dynamic.toml'
 
   dynamic.toml: |
+
+    [tls]
+      [tls.options]
+        [tls.options.default]
+          sniStrict = true
+          minVersion = "VersionTLS12"
+          # Adapted from https://ssl-config.mozilla.org/#server=traefik&server-version=1.7.12&config=intermediate
+          cipherSuites = [
+            "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
+            "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+            "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+            "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+            "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305",
+            "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305"
+          ]
+
     [http.middlewares]
       [http.middlewares.redirect.redirectScheme]
         scheme = "https"
@@ -69,6 +85,7 @@ data:
         entrypoints = ["https"]
         service = "chp"
           [http.routers.chp.tls]
+            options = "default"
             certResolver = "le"
             {{- range $host := .Values.proxy.https.hosts }}
             [[http.routers.chp.tls.domains]]
