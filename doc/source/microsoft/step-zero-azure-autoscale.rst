@@ -1,4 +1,4 @@
-.. _microsoft-azure:
+.. _microsoft-azure-autoscale:
 
 Kubernetes on Microsoft Azure Kubernetes Service (AKS) with Autoscaling
 -----------------------------------------------------------------------
