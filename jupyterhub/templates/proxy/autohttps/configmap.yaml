@@ -53,9 +53,20 @@ data:
         filename = '/etc/traefik/dynamic.toml'
 
   dynamic.toml: |
+    [http.middlewares]
+      [http.middlewares.redirect.redirectScheme]
+        scheme = "https"
+
     [http.routers]
+      [http.routers.httpredirect]
+        rule = "PathPrefix(`/`)"
+        service = "chp"
+        entrypoints = ["http"]
+        middlewares = ["redirect"]
+
       [http.routers.chp]
         rule = "PathPrefix(`/`)"
+        entrypoints = ["https"]
         service = "chp"
           [http.routers.chp.tls]
             certResolver = "le"
