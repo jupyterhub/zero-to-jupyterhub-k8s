@@ -146,18 +146,10 @@ proxy:
       requests:
         cpu: 200m
         memory: 512Mi
-  nginx:
-    image:
-      name: nginx
-      tag: 1.17-alpine
-    proxyBodySize: 64m
-    hstsIncludeSubdomains: 'false'
-    resources: {}
   traefik:
     image:
       name: traefik
       tag: v2.1
-    proxyBodySize: 64m
     hstsIncludeSubdomains: 'false'
     resources: {}
   secretSync:
