@@ -40,7 +40,7 @@ import base64
 import logging
 from kubernetes import client, config
 
-def update_secret(namespace, secret_name, key, value):
+def update_secret(namespace, secret_name, labels, key, value):
     """
     Update a secret object's key with the value
     """
@@ -55,7 +55,7 @@ def update_secret(namespace, secret_name, key, value):
     except client.rest.ApiException as e:
         if e.status == 404:
             secret = client.V1Secret(
-                metadata=client.V1ObjectMeta(name=secret_name),
+                metadata=client.V1ObjectMeta(name=secret_name, labels=labels),
                 data={}
             )
             resp = v1.create_namespaced_secret(namespace=namespace, body=secret)
@@ -122,6 +122,12 @@ def main():
         help="Path in filesystem to sync to"
     )
 
+    argparser.add_argument(
+        '--label',
+        help="Labels (of form key=value) to add to the k8s secret when it is created",
+        action="append"
+    )
+
     args = argparser.parse_args()
 
     setup_logging()
@@ -141,11 +147,15 @@ def main():
                 f.write(value)
                 os.fchmod(f.fileno(), 0o600)
     elif args.action == 'watch-save':
+        labels = {}
+        for label in args.label:
+            l_splits = label.split('=', 1)
+            labels[l_splits[0]] = l_splits[1]
         # FIXME: use inotifiy
         while True:
             if os.path.exists(args.path):
                 with open(args.path, 'rb') as f:
-                    update_secret(args.namespace, args.secret_name, args.key, f.read())
+                    update_secret(args.namespace, args.secret_name, labels, args.key, f.read())
             time.sleep(30)
 
 if __name__ == '__main__':
