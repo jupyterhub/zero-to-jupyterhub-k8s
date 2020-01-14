@@ -70,7 +70,7 @@ spec:
               mountPath: /etc/traefik
             - name: certificates
               mountPath: /etc/acme
-        - name: certbot
+        - name: secret-sync
           image: "{{ .Values.proxy.secretSync.image.name }}:{{ .Values.proxy.secretSync.image.tag }}"
           {{- with .Values.proxy.secretSync.image.pullPolicy }}
           imagePullPolicy: {{ . }}
