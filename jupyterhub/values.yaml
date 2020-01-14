@@ -150,7 +150,9 @@ proxy:
     image:
       name: traefik
       tag: v2.1
-    hstsIncludeSubdomains: 'false'
+    hsts:
+      maxAge: 15724800 # About 6 months
+      includeSubdomains: false
     resources: {}
   secretSync:
     image:

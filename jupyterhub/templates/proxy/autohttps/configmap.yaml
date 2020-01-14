@@ -53,7 +53,6 @@ data:
         filename = '/etc/traefik/dynamic.toml'
 
   dynamic.toml: |
-
     [tls]
       [tls.options]
         [tls.options.default]
@@ -72,6 +71,12 @@ data:
     [http.middlewares]
       [http.middlewares.redirect.redirectScheme]
         scheme = "https"
+      [http.middlewares.hsts.headers]
+        stsSeconds = {{ int64 .Values.proxy.traefik.hsts.maxAge }}
+        {{ if .Values.proxy.traefik.hsts.includeSubdomains }}
+        stsIncludeSubdomains = true
+        {{- end }}
+
 
     [http.routers]
       [http.routers.httpredirect]
@@ -83,6 +88,8 @@ data:
       [http.routers.chp]
         rule = "PathPrefix(`/`)"
         entrypoints = ["https"]
+        middlewares = ["hsts"]
+
         service = "chp"
           [http.routers.chp.tls]
             options = "default"
