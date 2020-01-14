@@ -32,7 +32,6 @@ spec:
       volumes:
         - name: certificates
           emptyDir: {}
-          defaultMode: 493  # 0755 in decimal
         - name: traefik-config
           configMap:
             name: traefik-proxy-config
