@@ -181,17 +181,13 @@ def kind_create(recreate):
 
     if os.getenv('Z2JH_HELM_VERSION', '').startswith('3.'):
         print("Creating K8s namespace for Helm 3 to work in.")
-        k8s_ns = {
-            "apiVersion": "v1",
-            "kind": "Namespace",
-            "metadata": { "name": os.environ["Z2JH_KUBE_NAMESPACE"] },
-        }
         _run(
             cmd=[
-                "sh", "-c", "echo '{}' | kubectl create -f -".format(
-                    json.dumps(k8s_ns))
+                "kubectl", "create", "namespace",
+                os.environ["Z2JH_KUBE_NAMESPACE"],
             ],
             print_end="",
+            exit_on_error=False,
         )
     else:
         print("Installing Helm's tiller asynchronously in the cluster.")
