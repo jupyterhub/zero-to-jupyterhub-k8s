@@ -32,19 +32,11 @@ spec:
       volumes:
         - name: certificates
           emptyDir: {}
+          defaultMode: 493  # 0755 in decimal
         - name: traefik-config
           configMap:
             name: traefik-proxy-config
       initContainers:
-      - name: volume-mount-hack-why-god-still
-        image: busybox
-        command:
-        - /bin/sh
-        - -c
-        - chmod 0755 /etc/acme
-        volumeMounts:
-          - name: certificates
-            mountPath: /etc/acme
       - name: load-acme
         image: "{{ .Values.proxy.secretSync.image.name }}:{{ .Values.proxy.secretSync.image.tag }}"
         {{- with .Values.proxy.secretSync.image.pullPolicy }}
