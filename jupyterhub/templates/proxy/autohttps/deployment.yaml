@@ -80,7 +80,7 @@ spec:
             - --label=app={{ include "jupyterhub.appLabel" . }}
             - --label=release={{ .Release.Name }}
             - --label=chart={{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-            - --label=heritage={{ .Release.Service }}
+            - --label=heritage=secret-sync
             - proxy-public-tls-acme
             - acme.json
             - /etc/acme/acme.json
