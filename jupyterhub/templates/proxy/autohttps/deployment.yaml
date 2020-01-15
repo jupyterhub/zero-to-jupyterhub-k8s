@@ -26,7 +26,6 @@ spec:
       {{- if .Values.scheduling.podPriority.enabled }}
       priorityClassName: {{ .Release.Name }}-default-priority
       {{- end }}
-      terminationGracePeriodSeconds: 60
       nodeSelector: {{ toJson .Values.proxy.nodeSelector }}
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
       volumes:
