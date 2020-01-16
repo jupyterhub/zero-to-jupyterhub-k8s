@@ -27,6 +27,7 @@ Or run it manually by generating an API token and storing it in `JUPYTERHUB_API_
     python cull_idle_servers.py [--timeout=900] [--url=http://127.0.0.1:8081/hub/api]
 """
 
+import ssl
 from datetime import datetime, timezone
 from functools import partial
 import json
@@ -79,8 +80,20 @@ def format_td(td):
     return f"{h:02}:{m:02}:{seconds:02}"
 
 
+def make_ssl_context(keyfile, certfile, cafile=None, verify=True, check_hostname=True):
+    """Setup context for starting an https server or making requests over ssl.
+    """
+    if not keyfile or not certfile:
+        return None
+    purpose = ssl.Purpose.SERVER_AUTH if verify else ssl.Purpose.CLIENT_AUTH
+    ssl_context = ssl.create_default_context(purpose, cafile=cafile)
+    ssl_context.load_cert_chain(certfile, keyfile)
+    ssl_context.check_hostname = check_hostname
+    return ssl_context
+
+
 @coroutine
-def cull_idle(url, api_token, inactive_limit, cull_users=False, max_age=0, concurrency=10):
+def cull_idle(url, api_token, inactive_limit, ssl_enabled, internal_certs_location, cull_users=False, max_age=0, concurrency=10 ):
     """Shutdown idle single-user servers
 
     If cull_users, inactive *users* will be deleted as well.
@@ -93,6 +106,18 @@ def cull_idle(url, api_token, inactive_limit, cull_users=False, max_age=0, concu
         headers=auth_header,
     )
     now = datetime.now(timezone.utc)
+
+    if ssl_enabled:
+        ssl_context = make_ssl_context(
+            f'{internal_certs_location}/hub-internal/hub-internal.key',
+            f'{internal_certs_location}/hub-internal/hub-internal.crt',
+            f'{internal_certs_location}/hub-ca/hub-ca.crt'
+        )
+
+        app_log.debug("ssl_enabled is Enabled: %s", ssl_enabled)
+        app_log.debug("internal_certs_location is %s", internal_certs_location)
+        AsyncHTTPClient.configure(None, defaults={"ssl_options": ssl_context})
+
     client = AsyncHTTPClient()
 
     if concurrency:
@@ -296,6 +321,10 @@ if __name__ == '__main__':
         help="The JupyterHub API URL",
     )
     define('timeout', default=600, help="The idle timeout (in seconds)")
+    define('ssl_enabled', default=False,
+           help="Whether the Jupyter API endpoint has TLS enabled")
+    define('internal_certs_location', default="/srv/jupyterhub/internal-ssl",
+           help="The location of generated internal-ssl certificates (only needed if ssl_enabled=True)")
     define('cull_every', default=0,
            help="The interval (in seconds) for checking for idle servers to cull")
     define('max_age', default=0,
@@ -309,7 +338,7 @@ if __name__ == '__main__':
 
                 Deleting a lot of users at the same time can slow down the Hub,
                 so limit the number of API requests we have outstanding at any given time.
-                """
+           """
            )
 
     parse_command_line()
@@ -331,6 +360,8 @@ if __name__ == '__main__':
         url=options.url,
         api_token=api_token,
         inactive_limit=options.timeout,
+        ssl_enabled=options.ssl_enabled,
+        internal_certs_location=options.internal_certs_location,
         cull_users=options.cull_users,
         max_age=options.max_age,
         concurrency=options.concurrency,

@@ -363,46 +363,6 @@ set_config_if_not_none(c.Authenticator, 'whitelist', 'auth.whitelist.users')
 
 c.JupyterHub.services = []
 
-if get_config('cull.enabled', False):
-    cull_cmd = [
-        'python3',
-        '/etc/jupyterhub/cull_idle_servers.py',
-    ]
-    base_url = c.JupyterHub.get('base_url', '/')
-
-    protocol="http"
-    if get_config('hub.https.enabled', False):
-        protocol="https"
-
-    cull_cmd.append(
-        '--url='+protocol+'://127.0.0.1:8081' + url_path_join(base_url, 'hub/api')
-    )
-
-    cull_timeout = get_config('cull.timeout')
-    if cull_timeout:
-        cull_cmd.append('--timeout=%s' % cull_timeout)
-
-    cull_every = get_config('cull.every')
-    if cull_every:
-        cull_cmd.append('--cull-every=%s' % cull_every)
-
-    cull_concurrency = get_config('cull.concurrency')
-    if cull_concurrency:
-        cull_cmd.append('--concurrency=%s' % cull_concurrency)
-
-    if get_config('cull.users'):
-        cull_cmd.append('--cull-users')
-
-    cull_max_age = get_config('cull.maxAge')
-    if cull_max_age:
-        cull_cmd.append('--max-age=%s' % cull_max_age)
-
-    c.JupyterHub.services.append({
-        'name': 'cull-idle',
-        'admin': True,
-        'command': cull_cmd,
-    })
-
 for name, service in get_config('hub.services', {}).items():
     # jupyterhub.services is a list of dicts, but
     # in the helm chart it is a dict of dicts for easier merged-config
@@ -484,3 +444,54 @@ if isinstance(extra_config, str):
 for key, config_py in sorted(extra_config.items()):
     print("Loading extra config: %s" % key)
     exec(config_py)
+
+if get_config('cull.enabled', False):
+    cull_cmd = [
+        'python3',
+        '/etc/jupyterhub/cull_idle_servers.py',
+    ]
+    base_url = c.JupyterHub.get('base_url', '/')
+
+    https_enabled = get_config('hub.https.enabled', False)
+    protocol = "https" if https_enabled else "https"
+
+    cull_cmd.append(
+        '--url='+protocol+'://127.0.0.1:8081' + url_path_join(base_url, 'hub/api')
+    )
+
+    if https_enabled:
+        cull_cmd.append('--ssl-enabled')
+
+        # attempt to load override if set in extraConfig section
+        if isinstance(c.JupyterHub.internal_certs_location, str):
+            internal_certs_location = c.JupyterHub.internal_certs_location
+        else:
+            internal_certs_location = "/srv/jupyterhub/internal-ssl"
+
+        if internal_certs_location:
+            cull_cmd.append('--internal-certs-location=%s' % internal_certs_location)
+
+    cull_timeout = get_config('cull.timeout')
+    if cull_timeout:
+        cull_cmd.append('--timeout=%s' % cull_timeout)
+
+    cull_every = get_config('cull.every')
+    if cull_every:
+        cull_cmd.append('--cull-every=%s' % cull_every)
+
+    cull_concurrency = get_config('cull.concurrency')
+    if cull_concurrency:
+        cull_cmd.append('--concurrency=%s' % cull_concurrency)
+
+    if get_config('cull.users'):
+        cull_cmd.append('--cull-users')
+
+    cull_max_age = get_config('cull.maxAge')
+    if cull_max_age:
+        cull_cmd.append('--max-age=%s' % cull_max_age)
+
+    c.JupyterHub.services.append({
+        'name': 'cull-idle',
+        'admin': True,
+        'command': cull_cmd,
+    })
