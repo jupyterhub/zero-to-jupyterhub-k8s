@@ -95,7 +95,7 @@ rbac:
 
 proxy:
   securityContext:
-    enable: false
+    enabled: false
   secretToken: ''
   deploymentStrategy:
     ## type: Recreate
