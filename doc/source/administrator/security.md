@@ -54,7 +54,7 @@ changes to your `config.yaml` file:
 
 If you have your own HTTPS certificates & want to use those instead of the automatically provisioned Let's Encrypt ones, that's also possible. Note that this is considered an advanced option, so we recommend not doing it unless you have good reasons.
 
-There are 2 ways to specify your manual certificate, directly in the config.yaml or by creating a `secret`.
+There are two ways to specify your manual certificate, directly in the config.yaml or by creating a [Kubernetes `secret`](https://kubernetes.io/docs/concepts/configuration/secret/).
 
 #### Specify certificate in config.yaml
 
