@@ -54,6 +54,10 @@ changes to your `config.yaml` file:
 
 If you have your own HTTPS certificates & want to use those instead of the automatically provisioned Let's Encrypt ones, that's also possible. Note that this is considered an advanced option, so we recommend not doing it unless you have good reasons.
 
+There are 2 ways to specify your manual certificate, directly in the config.yaml or by creating a `secret`.
+
+#### Specify certificate in config.yaml
+
 1.  Add your domain name & HTTPS certificate info to your `config.yaml`
 
     ```yaml
@@ -73,8 +77,26 @@ If you have your own HTTPS certificates & want to use those instead of the autom
             -----END CERTIFICATE-----
     ```
 
-2.  Apply the config changes by running helm upgrade ....
-3.  Wait for about a minute, now your hub should be HTTPS enabled!
+2. Apply the config changes by running helm upgrade ....
+3. Wait for about a minute, now your hub should be HTTPS enabled!
+
+
+#### Specify certificate through Secret resource
+
+1. Create a `secret` resource with type `kubernetes.io/tls` containing your certificate. Add your domain and the name of your `secret` to your config.yaml.
+
+    ```yaml
+    proxy:
+      https:
+        hosts:
+          - <your-domain-name>
+        type: secret
+          secret:
+            name: <your-secret-name>
+    ```
+
+2. Apply the config changes by running helm upgrade ....
+3. Wait for about a minute, now your hub should be HTTPS enabled!
 
 ### Off-loading SSL to a Load Balancer
 
