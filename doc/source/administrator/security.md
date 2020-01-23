@@ -83,7 +83,11 @@ There are two ways to specify your manual certificate, directly in the config.ya
 
 #### Specify certificate through Secret resource
 
-1. Create a `secret` resource with type `kubernetes.io/tls` containing your certificate. Add your domain and the name of your `secret` to your config.yaml.
+1. Create a `secret` resource with type `kubernetes.io/tls` containing your certificate.
+
+   `kubectl create secret tls example-tls --key="tls.key" --cert="tls.crt"`
+
+2. Add your domain and the name of your `secret` to your config.yaml.
 
     ```yaml
     proxy:
@@ -92,11 +96,11 @@ There are two ways to specify your manual certificate, directly in the config.ya
           - <your-domain-name>
         type: secret
           secret:
-            name: <your-secret-name>
+            name: example-tls
     ```
 
-2. Apply the config changes by running helm upgrade ....
-3. Wait for about a minute, now your hub should be HTTPS enabled!
+3. Apply the config changes by running helm upgrade ....
+4. Wait for about a minute, now your hub should be HTTPS enabled!
 
 ### Off-loading SSL to a Load Balancer
 
