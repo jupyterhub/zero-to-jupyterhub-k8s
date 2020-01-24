@@ -88,7 +88,6 @@ data:
 
       # Used to set appropriate headers in requests sent to CHP
       [http.middlewares.https.headers]
-        sslProxyHeaders = true
         [http.middlewares.https.headers.customRequestHeaders]
           # Tornado needs this for referrer checks
           # You run into stuff like https://github.com/jupyterhub/jupyterhub/issues/2284 otherwise
