@@ -42,10 +42,12 @@ The Procedure
 
    Since we are not using pre-configured DNS we will use the suffix ".k8s.local".  Per the docs, if the DNS name ends in .k8s.local the cluster will use internal hosted DNS.
 
+      .. code-block:: bash
       export NAME=<somename>.k8s.local
 
 #. Setup an ssh keypair to use with the cluster
 
+      .. code-block:: bash
       ssh-keygen
 
 #. Create a S3 bucket to store your cluster configuration
@@ -53,22 +55,26 @@ The Procedure
    Since we are on AWS we can use a S3 backing store.  It is recommended to enabling versioning on the S3 bucket.
    We don't need to pass this into the KOPS commands.  It is automatically detected by the kops tool as an env variable.
 
-   ``export KOPS_STATE_STORE=s3://<your_s3_bucket_name_here>``
+      .. code-block:: bash
+      export KOPS_STATE_STORE=s3://<your_s3_bucket_name_here>
 
 #. Set the region to deploy in
 
-    export REGION=`curl -s http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'`
+      .. code-block:: bash
+      export REGION=`curl -s http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'`
 
 #. Install the AWS CLI:
 
-    sudo apt-get update
-    sudo apt-get install awscli
+      .. code-block:: bash
+      sudo apt-get update
+      sudo apt-get install awscli
 
 #. Set the availability zones for the nodes
 
    For this guide we will be allowing nodes to be deployed in all AZs::
 
-       export ZONES=$(aws ec2 describe-availability-zones --region $REGION | grep ZoneName | awk '{print $2}' | tr -d '"')
+      .. code-block:: bash
+      export ZONES=$(aws ec2 describe-availability-zones --region $REGION | grep ZoneName | awk '{print $2}' | tr -d '"')
 
 #. Create the cluster
 
@@ -129,7 +135,10 @@ The Procedure
 
     Keep running 'kops validate cluster' until you see "Your cluster $NAME is ready" at the end of the output.
 
-    ``time until kops validate cluster; do sleep 15 ; done`` can be used to automate the waiting process.
+      .. code-block:: bash
+      time until kops validate cluster; do sleep 15 ; done
+      
+    can be used to automate the waiting process.
 
     If at any point you wish to destroy your cluster after this step, run ``kops delete cluster $NAME --yes``
 
@@ -137,8 +146,10 @@ The Procedure
 #. Confirm that ``kubectl`` is connected to your Kubernetes cluster.
 
     Run::
-
-       kubectl get nodes
+      
+      .. code-block:: bash
+      kubectl get nodes
+      
 
     You should see a list of two nodes, each beginning with ``ip``.
 
@@ -147,7 +158,10 @@ The Procedure
     * run the following on CI host: ``kops export kubecfg``
     * copy the contents of ``~/.kube/config`` to the same place on your local system
 
-    If you wish to put the kube config file in a different location, you will need to ``export KUBECONFIG=<other kube config location>``
+    If you wish to put the kube config file in a different location, you will need to 
+    
+    .. code-block:: bash
+    export KUBECONFIG=<other kube config location>
 
 
 #. Configure ssh bastion (Skip this step if you did not go with the **--topology private** option above!)
@@ -260,13 +274,12 @@ Then perform the following steps:
 
 #. You can verify encryption is turned on with the following command:
 
-    .. code-block:: bash
+      .. code-block:: bash
+      kubectl exec -n kube-system weave-net-<pod> -c weave -- /home/weave/weave --local status
 
-        kubectl exec -n kube-system weave-net-<pod> -c weave -- /home/weave/weave --local status
+   You should see `encryption: enabled`
 
-    You should see `encryption: enabled`
-
-    If you really want to insure encryption is working, you can listen on port `6783` of any node. If the traffic looks like gibberish, you know it is on.
+   If you really want to insure encryption is working, you can listen on port `6783` of any node. If the traffic looks like gibberish, you know it is on.
 
 ==============
 Shared Storage
