@@ -1,0 +1,134 @@
+{{- $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled) }}
+{{- $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt")) }}
+{{- if $autoHTTPS -}}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: traefik-proxy-config
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+data:
+  # This configmap provides the complete configuration for our traefik proxy.
+  # traefik has 'static' config and 'dynamic' config (https://docs.traefik.io/getting-started/configuration-overview/)
+  # traefik.toml contains the static config, while dynamic.toml has the dynamic config.
+  traefik.toml: |
+
+    # We wanna listen on both port 80 & 443
+    [entryPoints]
+      [entryPoints.http]
+        # traefik is used only for TLS termination, so port 80 is just for redirects
+        # No configuration for timeouts, etc needed
+        address = ":80"
+
+      [entryPoints.https]
+        address = ":443"
+
+        [entryPoints.https.transport.respondingTimeouts]
+          # High idle timeout, because we have websockets
+          idleTimeout = "10m0s"
+
+    [log]
+      level = "INFO"
+
+    [accessLog]
+      [accessLog.filters]
+      # Only error codes
+      statusCodes = ["500-599"]
+
+      # Redact possible sensitive headers from log
+      [accessLog.fields.headers]
+        [accessLog.fields.headers.names]
+          Authorization = "redact"
+          Cookie = "redact"
+          Set-Cookie = "redact"
+          X-Xsrftoken = "redact"
+
+    # We want certificates to come from Let's Encrypt, with the HTTP-01 challenge
+    [certificatesResolvers.le.acme]
+      email = {{ required "proxy.https.letsencrypt.contactEmail is a required field" .Values.proxy.https.letsencrypt.contactEmail | quote }}
+      storage = "/etc/acme/acme.json"
+      {{- if .Values.proxy.https.letsencrypt.acmeServer }}
+      caServer = {{ .Values.proxy.https.letsencrypt.acmeServer | quote }}
+      {{- end}}
+      [certificatesResolvers.le.acme.httpChallenge]
+        # Use our port 80 http endpoint for the HTTP-01 challenge
+        entryPoint = "http"
+
+    [providers]
+      [providers.file]
+        # Configuration for routers & other dynamic items come from this file
+        # This file is also provided by this configmap
+        filename = '/etc/traefik/dynamic.toml'
+
+  dynamic.toml: |
+    # Configure TLS to give us an A+ in the ssllabs test
+    [tls]
+      [tls.options]
+        [tls.options.default]
+          sniStrict = true
+          # Do not support insecureTLS 1.0 or 1.1
+          minVersion = "VersionTLS12"
+          # Ciphers to support, adapted from https://ssl-config.mozilla.org/#server=traefik&server-version=1.7.12&config=intermediate
+          # This supports a reasonable number of browsers.
+          cipherSuites = [
+            "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
+            "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+            "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+            "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+            "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305",
+            "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305"
+          ]
+
+    # traefik uses middlewares to set options in specific routes
+    # These set up the middleware options, which are then referred to by the routes
+    [http.middlewares]
+      # Used to do http -> https redirects
+      [http.middlewares.redirect.redirectScheme]
+        scheme = "https"
+
+      # Used to set appropriate headers in requests sent to CHP
+      [http.middlewares.https.headers]
+        [http.middlewares.https.headers.customRequestHeaders]
+          # Tornado needs this for referrer checks
+          # You run into stuff like https://github.com/jupyterhub/jupyterhub/issues/2284 otherwise
+          X-Scheme = "https"
+
+      # Used to set HSTS headers based on user provided options
+      [http.middlewares.hsts.headers]
+        stsSeconds = {{ int64 .Values.proxy.traefik.hsts.maxAge }}
+        {{ if .Values.proxy.traefik.hsts.includeSubdomains }}
+        stsIncludeSubdomains = true
+        {{- end }}
+
+
+    # Routers match conditions (rule) to options (middlewares) and a backend (service)
+    [http.routers]
+      # Listen on the http endpoint (port 80), redirect everything to https
+      [http.routers.httpredirect]
+        rule = "PathPrefix(`/`)"
+        service = "chp"
+        entrypoints = ["http"]
+        middlewares = ["redirect"]
+
+      # Listen on https endpoint (port 443), proxy everything to chp
+      [http.routers.chp]
+        rule = "PathPrefix(`/`)"
+        entrypoints = ["https"]
+        middlewares = ["hsts", "https"]
+        service = "chp"
+
+          [http.routers.chp.tls]
+            # use our nice TLS defaults, and get HTTPS from Let's Encrypt
+            options = "default"
+            certResolver = "le"
+            {{- range $host := .Values.proxy.https.hosts }}
+            [[http.routers.chp.tls.domains]]
+            main = "{{ $host }}"
+            {{- end}}
+
+    # Set CHP to be our only backend where traffic is routed to
+    [http.services]
+      [http.services.chp.loadBalancer]
+        [[http.services.chp.loadBalancer.servers]]
+          url = "http://proxy-http:8000/"
+{{- end }}

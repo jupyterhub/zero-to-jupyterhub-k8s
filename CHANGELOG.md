@@ -7,6 +7,22 @@ players.
 
 ## [0.9]
 
+### [0.9.0-beta.3]
+
+#### Dependency updates
+
+* Deploy jupyterhub 1.1.0 stable [#1548](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1548) ([@minrk](https://github.com/minrk))
+* Bump chartpress for Helm 3 compatible dev releases [#1542](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1542) ([@consideRatio](https://github.com/consideRatio))
+
+#### Fixed
+
+* Replace kube-lego + nginx ingress with traefik [#1539](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1539) ([@yuvipanda](https://github.com/yuvipanda))
+
+#### Maintenance
+* Update step zero for Azure docs with commands to setup an VNet and network policy [#1527](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1527) ([@sgibson91](https://github.com/sgibson91))
+* Fix duplicate docs label [#1544](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1544) ([@manics](https://github.com/manics))
+* Made GCP docs of compute zone names generic [#1431](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1431) ([@metonymic-smokey](https://github.com/metonymic-smokey))
+
 ### [0.9.0-beta.2]
 
 #### Fixed

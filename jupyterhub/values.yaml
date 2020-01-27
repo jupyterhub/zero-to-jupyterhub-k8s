@@ -148,17 +148,18 @@ proxy:
       requests:
         cpu: 200m
         memory: 512Mi
-  nginx:
+  traefik:
     image:
-      name: quay.io/kubernetes-ingress-controller/nginx-ingress-controller
-      tag: 0.15.0
-    proxyBodySize: 64m
-    hstsIncludeSubdomains: 'false'
+      name: traefik
+      tag: v2.1
+    hsts:
+      maxAge: 15724800 # About 6 months
+      includeSubdomains: false
     resources: {}
-  lego:
+  secretSync:
     image:
-      name: jetstack/kube-lego
-      tag: 0.1.7
+      name: jupyterhub/k8s-secret-sync
+      tag: 'set-by-chartpress'
     resources: {}
   labels: {}
   nodeSelector: {}
@@ -171,6 +172,8 @@ proxy:
     #type: letsencrypt, manual, offload, secret
     letsencrypt:
       contactEmail: ''
+      # Specify custom server here (https://acme-staging-v02.api.letsencrypt.org/directory) to hit staging LE
+      acmeServer: ''
     manual:
       key:
       cert:
