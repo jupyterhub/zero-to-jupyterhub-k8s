@@ -322,7 +322,7 @@ if __name__ == '__main__':
            )
     define('remove_named_servers', default=False,
            help="""Remove named servers in addition to stopping them.
-                This is for use in temporary-user cases such as Binderhub.""",
+                This is useful for a BinderHub that uses authentication and named servers.""",
            )
     define('concurrency', default=10,
            help="""Limit the number of concurrent requests made to the Hub.
