@@ -179,6 +179,10 @@ def cull_idle(
         body = None
         if server_name:
             # culling a named server
+            # A named server can be stopped and kept available to the user
+            # for starting again or stopped and removed. To remove the named
+            # server we have to pass an additional option in the body of our
+            # DELETE request.
             delete_url = url + "/users/%s/servers/%s" % (
                 quote(user['name']),
                 quote(server['name']),
