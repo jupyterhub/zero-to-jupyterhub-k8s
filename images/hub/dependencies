@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""automatically manage requirements.txt dependencies with pip-tools"""
+"""automatically manage requirements.txt dependencies with pip-tools
+
+./dependencies --help for info
+"""
 
 from functools import lru_cache
 import json
@@ -18,7 +21,7 @@ image = 'hub-dependencies'
 
 @lru_cache()
 def build_args(image='hub'):
-    """retrieve docker build arguments from"""
+    """retrieve docker build arguments from chartpress config file"""
     with open(chartpress_yaml) as f:
         chartpress_config = yaml.load(f)
     chart = chartpress_config['charts'][0]
@@ -27,6 +30,7 @@ def build_args(image='hub'):
 
 
 def build_image():
+    """Build the docker image"""
     click.echo(f"Building image {image}")
     build_arg_dict = build_args()
     build_arg_list = []
@@ -39,17 +43,40 @@ def build_image():
 
 @click.group()
 def cli():
+    """Manage the Python dependencies in this image."""
     pass
 
 
 @click.command()
-@click.option('--build/--no-build', default=True)
-def freeze(build):
-    """freeze the environment, optionally upgrading packages"""
+@click.option(
+    '--build/--no-build',
+    help="add --no-build to skip building the image prior to upgrading",
+    default=True,
+)
+@click.option(
+    '--upgrade/--no-upgrade',
+    help="--upgrade to upgrade all dependencies within the range specified in requirements.in",
+    default=False,
+)
+@click.option(
+    '--upgrade-package',
+    help="specify individual packages to upgrade within the range specified in requirements.in",
+    multiple=True,
+)
+def freeze(build, upgrade, upgrade_package):
+    """Freeze the environment, updating requirements.txt from requirements.in
+
+    Individual packages can be updated, or the whole environment
+    """
     if build:
         build_image()
     click.echo("freezing dependencies with pip-compile")
     upgrade_args = []
+    if upgrade:
+        upgrade_args.append("--upgrade")
+    for pkg in upgrade_package:
+        upgrade_args.append("--upgrade-package")
+        upgrade_args.append(pkg)
     check_call(
         [
             "docker",
@@ -63,6 +90,7 @@ def freeze(build):
             image,
             "pip-compile",
         ]
+        + upgrade_args
     )
 
 
@@ -72,12 +100,22 @@ cli.add_command(freeze)
 @click.command()
 @click.option('--build/--no-build', default=True)
 def outdated(build):
-    """Check for outdated dependencies with pip"""
+    """Check for outdated dependencies with pip."""
     if build:
         build_image()
-    click.echo("Checking for outdated dependencies with pip")
+    click.echo("Checking for outdated dependencies with pip.")
     outdated_json = check_output(
-        ["docker", "run", "--rm", "-it", image, "pip", "list", "--outdated", "--format=json"]
+        [
+            "docker",
+            "run",
+            "--rm",
+            "-it",
+            image,
+            "pip",
+            "list",
+            "--outdated",
+            "--format=json",
+        ]
     ).decode("utf8")
     outdated = json.loads(outdated_json)
     have_outdated = False
@@ -98,9 +136,18 @@ def outdated(build):
 
     if have_outdated:
         print("There are outdated dependencies!")
-        print("To pick up any versions outside the range(s) specified in requirements.in,")
-        print("update that file.")
-        print("To update the environment, run `./dependencies freeze`")
+        print(
+            "To pick up any versions outside the range(s) specified in requirements.in,"
+        )
+        print("update the pinning(s) in that file.")
+        print(
+            "To update the whole environment within the given ranges, run `./dependencies freeze --upgrade`"
+        )
+        print(
+            "To update one or more specific packages, run `./dependencies freeze --upgrade-package pkg1 [--upgrade-package pkg2]`"
+        )
+    else:
+        print("Everything appears to be up-to-date!")
 
 
 cli.add_command(outdated)
