@@ -172,6 +172,26 @@ tape archive, public cloud, or your own laptop. Start a Globus app
        callbackUrl: "https://<your_jupyterhub_host>/hub/oauth_callback"
        identityProvider: "youruniversity.edu"
 
+
+Azure Active Directory
+^^^^^^^^^^^^^^^^^^^^^^
+
+Azure Active Directory <https://docs.microsoft.com/en-us/azure/active-directory/>`_
+is an identity provider from Microsoft Azure.
+The main additional option to configure for Azure AD from any other
+oauth provider is the tenant id.
+
+.. code-block:: yaml
+
+   auth:
+     type: azuread
+     azuread:
+       clientId: "your-aad-client-id"
+       clientSecret: "your-aad-client-secret"
+       tenantId: "your-aad-tenant-id"
+       callbackUrl: "https://<your_jupyterhub_host>/hub/oauth_callback"
+
+
 OpenID Connect
 ^^^^^^^^^^^^^^
 
