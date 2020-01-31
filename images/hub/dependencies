@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
+"""automatically manage requirements.txt dependencies with pip-tools"""
+
 from functools import lru_cache
+import json
 import os
-from subprocess import check_call
+from subprocess import check_call, check_output
 
 import click
 from ruamel.yaml import YAML
@@ -40,15 +43,13 @@ def cli():
 
 
 @click.command()
-@click.argument('packages', nargs=-1)
-def freeze(packages):
+@click.option('--build/--no-build', default=True)
+def freeze(build):
     """freeze the environment, optionally upgrading packages"""
-    build_image()
+    if build:
+        build_image()
     click.echo("freezing dependencies with pip-compile")
     upgrade_args = []
-    for package in packages:
-        upgrade_args.append("--upgrade-package")
-        upgrade_args.append(package)
     check_call(
         [
             "docker",
@@ -61,7 +62,7 @@ def freeze(packages):
             "/io",
             image,
             "pip-compile",
-        ] + upgrade_args
+        ]
     )
 
 
@@ -69,11 +70,37 @@ cli.add_command(freeze)
 
 
 @click.command()
-def outdated():
+@click.option('--build/--no-build', default=True)
+def outdated(build):
     """Check for outdated dependencies with pip"""
-    build_image()
+    if build:
+        build_image()
     click.echo("Checking for outdated dependencies with pip")
-    check_call(["docker", "run", "--rm", "-it", image, "pip", "list", "--outdated"])
+    outdated_json = check_output(
+        ["docker", "run", "--rm", "-it", image, "pip", "list", "--outdated", "--format=json"]
+    ).decode("utf8")
+    outdated = json.loads(outdated_json)
+    have_outdated = False
+    for pkg in outdated:
+        name = pkg['name']
+        # ignore some common packages that aren't relevant to our requirements.txt
+        if name in {'pip', 'setuptools', 'wheel'}:
+            continue
+        have_outdated = True
+        version = pkg['version']
+        latest = pkg['latest_version']
+        # TODO: parser requirements.in to check if latest is in-range?
+        # If they are in-range, running freeze again is enough,
+        # but if they are outside the range, requirements.in needs to be updated
+        # first to pick them up
+        # for now, print as much so humans can decide
+        print(f"Have {name}=={version}, latest is {name}=={latest}")
+
+    if have_outdated:
+        print("There are outdated dependencies!")
+        print("To pick up any versions outside the range(s) specified in requirements.in,")
+        print("update that file.")
+        print("To update the environment, run `./dependencies freeze`")
 
 
 cli.add_command(outdated)
