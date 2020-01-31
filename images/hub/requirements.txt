@@ -27,7 +27,7 @@ jinja2==2.11.1            # via jupyterhub, jupyterhub-kubespawner
 jsonschema==3.2.0         # via jupyter-telemetry
 jupyter-telemetry==0.0.4  # via jupyterhub
 jupyterhub-dummyauthenticator==0.3.1
-jupyterhub-firstuseauthenticator==0.12
+jupyterhub-firstuseauthenticator==0.13.0
 jupyterhub-hmacauthenticator==0.1
 jupyterhub-kubespawner==0.11.1
 jupyterhub-ldapauthenticator==1.2.2

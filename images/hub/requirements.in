@@ -2,7 +2,7 @@
 
 ## Authenticators
 jupyterhub-dummyauthenticator==0.3.*
-jupyterhub-firstuseauthenticator==0.12.*
+jupyterhub-firstuseauthenticator==0.13.*
 jupyterhub-tmpauthenticator==0.6.*
 jupyterhub-ltiauthenticator==0.4.*
 jupyterhub-ldapauthenticator==1.2.*
