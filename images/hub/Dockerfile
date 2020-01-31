@@ -40,7 +40,8 @@ RUN adduser --disabled-password \
     --force-badname \
     ${NB_USER}
 
-ADD requirements.txt /tmp/requirements.txt
+RUN python3 -m pip install --upgrade --no-cache setuptools pip pip-tools
+COPY requirements.txt /tmp/requirements.txt
 RUN PYCURL_SSL_LIBRARY=openssl pip3 install --no-cache-dir \
          -r /tmp/requirements.txt \
          $(bash -c 'if [[ $JUPYTERHUB_VERSION == "git"* ]]; then \

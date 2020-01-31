@@ -27,3 +27,6 @@ cryptography==2.8.*
 
 # py-spy is useful for profiling running hubs
 py-spy
+# pip-tools is used for updating requirements
+pip-tools
+
