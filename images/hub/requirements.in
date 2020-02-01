@@ -1,27 +1,30 @@
 # JupyterHub's version is defined in chartpress.yaml
 
 ## Authenticators
-jupyterhub-dummyauthenticator==0.3.*
-jupyterhub-firstuseauthenticator==0.13.*
-jupyterhub-tmpauthenticator==0.6.*
-jupyterhub-ltiauthenticator==0.4.*
-jupyterhub-ldapauthenticator==1.2.*
-jupyterhub-hmacauthenticator==0.1.*
-mwoauth==0.3.7
-globus_sdk[jwt]==1.8.*
-nullauthenticator==1.0.*
-oauthenticator==0.10.*
+jupyterhub-dummyauthenticator
+jupyterhub-firstuseauthenticator
+jupyterhub-hmacauthenticator
+jupyterhub-ltiauthenticator
+jupyterhub-ldapauthenticator
+jupyterhub-tmpauthenticator
+nullauthenticator
+oauthenticator
 
-## Spawners
-jupyterhub-kubespawner==0.11.*
-kubernetes==10.0.*
+# Authenticator optional dependencies
+mwoauth
+globus_sdk[jwt]
 
-## Other dependencies
-pymysql==0.9.*
-psycopg2-binary==2.8.*
-pycurl==7.43.0.*
-statsd==3.3.*
-cryptography==2.8.*
+## Kubernetes spawner
+jupyterhub-kubespawner
+# we pin the kubernetes API version explicitly
+# so that it is only updated explicitly
+kubernetes==10.*
+
+## Other optional dependencies for additional features
+pymysql  # mysql
+psycopg2-binary  # postgres
+pycurl  # internal http requests handle more load with pycurl
+statsd  # statsd metrics collection (TODO: remove soon, since folks use prometheus)
 
 ## Useful tools
 
