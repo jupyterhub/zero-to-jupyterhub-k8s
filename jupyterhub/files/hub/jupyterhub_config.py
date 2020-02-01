@@ -294,7 +294,7 @@ elif auth_type == 'gitlab':
             cfg_key = camelCaseify(trait)
         set_config_if_not_none(c.GitLabOAuthenticator, trait, 'auth.gitlab.' + cfg_key)
 elif auth_type == 'azuread':
-    c.JupyterHub.authenticator_class = 'azuread'
+    c.JupyterHub.authenticator_class = 'oauthenticator.azuread.AzureAdOAuthenticator'
     for trait, cfg_key in common_oauth_traits + (
         ('tenant_id', None),
         ('username_claim', None),
