@@ -10,7 +10,7 @@ jupyterhub-hmacauthenticator==0.1.*
 mwoauth==0.3.7
 globus_sdk[jwt]==1.8.*
 nullauthenticator==1.0.*
-oauthenticator==0.10.*
+oauthenticator==0.11.*
 
 ## Spawners
 jupyterhub-kubespawner==0.11.*

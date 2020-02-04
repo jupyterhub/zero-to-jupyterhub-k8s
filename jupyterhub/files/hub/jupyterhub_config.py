@@ -293,6 +293,16 @@ elif auth_type == 'gitlab':
         if cfg_key is None:
             cfg_key = camelCaseify(trait)
         set_config_if_not_none(c.GitLabOAuthenticator, trait, 'auth.gitlab.' + cfg_key)
+elif auth_type == 'azuread':
+    c.JupyterHub.authenticator_class = 'oauthenticator.azuread.AzureAdOAuthenticator'
+    for trait, cfg_key in common_oauth_traits + (
+        ('tenant_id', None),
+        ('username_claim', None),
+    ):
+        if cfg_key is None:
+            cfg_key = camelCaseify(trait)
+
+        set_config_if_not_none(c.AzureAdOAuthenticator, trait, 'auth.azuread.' + cfg_key)
 elif auth_type == 'mediawiki':
     c.JupyterHub.authenticator_class = 'oauthenticator.mediawiki.MWOAuthenticator'
     for trait, cfg_key in common_oauth_traits + (
