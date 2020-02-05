@@ -80,7 +80,15 @@ def format_td(td):
 
 
 @coroutine
-def cull_idle(url, api_token, inactive_limit, cull_users=False, max_age=0, concurrency=10):
+def cull_idle(
+    url,
+    api_token,
+    inactive_limit,
+    cull_users=False,
+    remove_named_servers=False,
+    max_age=0,
+    concurrency=10,
+):
     """Shutdown idle single-user servers
 
     If cull_users, inactive *users* will be deleted as well.
@@ -168,16 +176,28 @@ def cull_idle(url, api_token, inactive_limit, cull_users=False, max_age=0, concu
                 log_name, format_td(age), format_td(inactive))
             return False
 
+        body = None
         if server_name:
             # culling a named server
-            delete_url = url + "/users/%s/servers/%s"%(
-                quote(user['name']), quote(server['name'])
+            # A named server can be stopped and kept available to the user
+            # for starting again or stopped and removed. To remove the named
+            # server we have to pass an additional option in the body of our
+            # DELETE request.
+            delete_url = url + "/users/%s/servers/%s" % (
+                quote(user['name']),
+                quote(server['name']),
             )
+            if remove_named_servers:
+                body = json.dumps({"remove": True})
         else:
             delete_url = url + '/users/%s/server' % quote(user['name'])
 
         req = HTTPRequest(
-            url=delete_url, method='DELETE', headers=auth_header,
+            url=delete_url,
+            method='DELETE',
+            headers=auth_header,
+            body=body,
+            allow_nonstandard_methods=True,
         )
         resp = yield fetch(req)
         if resp.code == 202:
@@ -302,7 +322,11 @@ if __name__ == '__main__':
            help="The maximum age (in seconds) of servers that should be culled even if they are active")
     define('cull_users', default=False,
            help="""Cull users in addition to servers.
-                This is for use in temporary-user cases such as tmpnb.""",
+                This is for use in temporary-user cases such as BinderHub.""",
+           )
+    define('remove_named_servers', default=False,
+           help="""Remove named servers in addition to stopping them.
+                This is useful for a BinderHub that uses authentication and named servers.""",
            )
     define('concurrency', default=10,
            help="""Limit the number of concurrent requests made to the Hub.
@@ -332,6 +356,7 @@ if __name__ == '__main__':
         api_token=api_token,
         inactive_limit=options.timeout,
         cull_users=options.cull_users,
+        remove_named_servers=options.remove_named_servers,
         max_age=options.max_age,
         concurrency=options.concurrency,
     )
