@@ -396,6 +396,9 @@ if get_config('cull.enabled', False):
     if get_config('cull.users'):
         cull_cmd.append('--cull-users')
 
+    if get_config('cull.namedServers'):
+        cull_cmd.append('--remove-named-servers')
+
     cull_max_age = get_config('cull.maxAge')
     if cull_max_age:
         cull_cmd.append('--max-age=%s' % cull_max_age)
