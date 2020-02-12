@@ -221,7 +221,7 @@ where he analyzed its introduction on mybinder.org.
 priority depending on how your cluster autoscaler is configured. This is known
 to work on GKE, but we don't know how it works on other cloud providers or
 kubernetes. See the [configuration
-reference](reference.html#scheduling-podpriority) for more details.
+reference](https://zero-to-jupyterhub.readthedocs.io/en/latest/reference.html#scheduling-podpriority) for more details.
 
 ### Scaling down efficiently
 
