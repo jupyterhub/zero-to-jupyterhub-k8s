@@ -96,19 +96,9 @@ def kind_create(recreate):
         "--image", f"kindest/node:v{os.environ['Z2JH_KUBE_VERSION']}",
         "--config", "ci/kind-config.yaml",
     ])
-    
-    kubeconfig_path = _run(
-        cmd=[
-            "kind", "get", "kubeconfig-path",
-            "--name", "jh-dev",
-        ],
-        print_command=False,
-        capture_output=True,
-    )
-    if os.environ.get("KUBECONFIG", None) != kubeconfig_path:
-        print(f'Updating your .env file\'s KUBECONFIG value to "{kubeconfig_path}"')
-        dotenv.set_key(".env", "KUBECONFIG", kubeconfig_path)
-        os.environ["KUBECONFIG"] = kubeconfig_path
+
+    if not os.environ.get("KUBECONFIG", None):
+        os.environ["KUBECONFIG"] = ""
 
     kube_context = _run(
         cmd=["kubectl", "config", "current-context"],
@@ -224,20 +214,11 @@ def upgrade(chart, version, values):
         _run(["chartpress"])
         # git --no-pager diff
 
-        kubeconfig_path = _run(
-            cmd=[
-                "kind", "get", "kubeconfig-path",
-                "--name", "jh-dev",
-            ],
-            print_command=False,
-            capture_output=True,
-        )
-        if kubeconfig_path in os.environ["KUBECONFIG"]:
-            print("Loading the locally built images into the kind cluster.")
-            _run([
-                "python3", "ci/kind-load-docker-images.py",
-                "--kind-cluster", "jh-dev",
-            ])
+        print("Loading the locally built images into the kind cluster.")
+        _run([
+            "python3", "ci/kind-load-docker-images.py",
+            "--kind-cluster", "jh-dev",
+        ])
     else:
         print("External chart specified, skipping use of chartpress.")
 
@@ -652,7 +633,7 @@ if __name__ == "__main__":
             #
             # The "./dev kind create" command will set this files KUBECONFIG
             # entry automatically on cluster creation.
-            KUBECONFIG=""
+            KUBECONFIG=".jh-dev-kubeconfig"
 
             # Z2JH_KUBE_CONTEXT and Z2JH_KUBE_NAMESPACE is used to ensure we
             # work with the right cluster, with the right credentials, and in
