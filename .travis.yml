@@ -59,8 +59,9 @@ env:
   ## ref: https://github.com/kubernetes-sigs/kind/issues/197
   ##
   - Z2JH_KUBE_VERSION=1.13.12
-  - Z2JH_KUBE_VERSION=1.15.6
-  - Z2JH_KUBE_VERSION=1.16.3
+  - Z2JH_KUBE_VERSION=1.15.7
+  - Z2JH_KUBE_VERSION=1.16.4
+  - Z2JH_KUBE_VERSION=1.17.0
 
 jobs:
   ## allow experimental setups to fail
