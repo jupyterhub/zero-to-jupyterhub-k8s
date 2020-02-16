@@ -57,8 +57,7 @@ def depend_on(binaries=[], envs=[]):
     return decorator_depend_on
 
 
-@depend_on(binaries=["kubectl", "kind", "docker"],
-    envs=["Z2JH_KUBE_VERSION", "Z2JH_HELM_VERSION"])
+@depend_on(binaries=["kubectl", "kind", "docker"], envs=["Z2JH_KUBE_VERSION"])
 def kind_create(recreate):
     # check for a existing cluster
     kind_clusters = _run(
