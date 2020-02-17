@@ -288,8 +288,8 @@ elif auth_type == 'gitlab':
     c.JupyterHub.authenticator_class = 'oauthenticator.gitlab.GitLabOAuthenticator'
     for trait, cfg_key in common_oauth_traits + (
         ('gitlab_group_whitelist', None),
-        ('gitlab_url',None),
         ('gitlab_project_id_whitelist', None),
+        ('gitlab_url', None),
     ):
         if cfg_key is None:
             cfg_key = camelCaseify(trait)
