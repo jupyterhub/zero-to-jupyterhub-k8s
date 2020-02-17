@@ -53,7 +53,7 @@ elif db_type == "sqlite-memory":
     c.JupyterHub.db_url = "sqlite://"
 else:
     set_config_if_not_none(c.JupyterHub, "db_url", "hub.db.url")
-
+    
 
 for trait, cfg_key in (
     # Max number of servers that can be spawning at any one time
@@ -289,6 +289,7 @@ elif auth_type == 'gitlab':
     for trait, cfg_key in common_oauth_traits + (
         ('gitlab_group_whitelist', None),
         ('gitlab_project_id_whitelist', None),
+        ('gitlab_url', None),
     ):
         if cfg_key is None:
             cfg_key = camelCaseify(trait)
