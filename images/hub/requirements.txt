@@ -7,6 +7,7 @@ jupyterhub-tmpauthenticator==0.6.*
 jupyterhub-ltiauthenticator==0.4.*
 jupyterhub-ldapauthenticator==1.3.*
 jupyterhub-hmacauthenticator==0.1.*
+jupyterhub-nativeauthenticator==0.0.5
 mwoauth==0.3.7
 globus_sdk[jwt]==1.8.*
 nullauthenticator==1.0.*
