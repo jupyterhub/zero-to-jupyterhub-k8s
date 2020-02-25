@@ -49,6 +49,16 @@ RUN PYCURL_SSL_LIBRARY=openssl pip3 install --no-cache-dir \
             echo jupyterhub==${JUPYTERHUB_VERSION}; \
           fi')
 
+# Merge https://github.com/jupyterhub/kubespawner/pull/387 into master and install
+RUN cd /tmp && \
+    git clone https://github.com/jupyterhub/kubespawner.git && \
+    cd kubespawner && \
+    git fetch origin "pull/387/head:pr387" && \
+    git config user.email "travis-ci@example.org" && \
+    git config user.name "Travis CI" && \
+    git merge --no-edit pr387 && \
+    pip3 install .
+
 WORKDIR /srv/jupyterhub
 
 # So we can actually write a db file here
