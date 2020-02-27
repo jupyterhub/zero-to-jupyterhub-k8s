@@ -1,4 +1,4 @@
-FROM jupyter/base-notebook:d4e60350af15
+FROM jupyter/base-notebook:a07573d685a4
 # Built from... https://hub.docker.com/r/jupyter/base-notebook/
 #               https://github.com/jupyter/docker-stacks/blob/master/base-notebook/Dockerfile
 # Built from... Ubuntu 18.04
@@ -14,8 +14,7 @@ RUN apt-get update && apt-get install --yes --no-install-recommends \
  && rm -rf /var/lib/apt/lists/*
 USER $NB_USER
 
-RUN pip install --upgrade jupyterhub && \
-    pip install nbgitpuller && \
+RUN pip install nbgitpuller && \
     jupyter serverextension enable --py nbgitpuller --sys-prefix
 
 # Uncomment the line below to make nbgitpuller default to start up in JupyterLab
