@@ -73,7 +73,7 @@ cluster:
 
    .. code-block:: bash
 
-      helm init --service-account tiller --wait
+      helm init --service-account tiller --history-max 100 --wait
 
    This command only needs to run once per Kubernetes cluster, it will create a
    `tiller` deployment in the kube-system namespace and setup your local `helm`
