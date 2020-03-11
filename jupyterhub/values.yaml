@@ -133,7 +133,7 @@ proxy:
   chp:
     image:
       name: jupyterhub/configurable-http-proxy
-      tag: 4.2.0
+      tag: 4.2.1
     livenessProbe:
       enabled: true
       initialDelaySeconds: 30
