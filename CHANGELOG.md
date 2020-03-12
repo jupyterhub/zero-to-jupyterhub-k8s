@@ -7,6 +7,31 @@ players.
 
 ## [0.9]
 
+### [0.9.0-beta.4]
+
+#### Added
+* Add nativeauthenticator to hub image [#1583](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1583) ([@consideRatio](https://github.com/consideRatio))
+* Add option to remove named server when culling [#1558](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1558) ([@betatim](https://github.com/betatim))
+
+#### Dependency updates
+* jupyterhub-ldapauthenticator==1.3 [#1576](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1576) ([@manics](https://github.com/manics))
+* First-class azuread support, oauth 0.11 [#1563](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1563) ([@minrk](https://github.com/minrk))
+* simplify hub-requirements [#1560](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1560) ([@minrk](https://github.com/minrk))
+* Bump to base-notebook with JH 1.1.0 etc [#1549](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1549) ([@consideRatio](https://github.com/consideRatio))
+
+#### Fixed
+* Fix removing of named servers when culled [#1567](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1567) ([@consideRatio](https://github.com/consideRatio))
+
+#### Maintenance
+* Added gitlab URL [#1577](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1577) ([@metonymic-smokey](https://github.com/metonymic-smokey))
+* Fix reference doc link [#1570](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1570) ([@clkao](https://github.com/clkao))
+* Add contributor badge [#1559](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1559) ([@GeorgianaElena](https://github.com/GeorgianaElena))
+* Trying to clean up formatting [#1555](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1555) ([@jeremycadams](https://github.com/jeremycadams))
+* Remove unneeded directive in traefik config [#1554](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1554) ([@yuvipanda](https://github.com/yuvipanda))
+* Added documentation of secret https mode [#1553](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1553) ([@RossRKK](https://github.com/RossRKK))
+* Helm 3 preview [#1543](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1543) ([@manics](https://github.com/manics))
+
+
 ### [0.9.0-beta.3]
 
 #### Dependency updates

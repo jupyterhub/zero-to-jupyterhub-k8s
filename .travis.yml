@@ -61,6 +61,7 @@ env:
   - Z2JH_KUBE_VERSION=1.13.12
   - Z2JH_KUBE_VERSION=1.15.6
   - Z2JH_KUBE_VERSION=1.16.3
+  - Z2JH_KUBE_VERSION=1.16.3 Z2JH_HELM_VERSION=3.0.2
 
 jobs:
   ## allow experimental setups to fail
@@ -90,7 +91,7 @@ jobs:
       script:
         - setup_git_crypt
         - setup_helm
-        - helm init --client-only
+        - init_helm
         - ./ci/travis-docker-fix
         - ./ci/publish
       env:

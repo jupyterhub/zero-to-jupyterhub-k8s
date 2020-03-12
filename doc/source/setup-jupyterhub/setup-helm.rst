@@ -21,6 +21,13 @@ manages both, the *releases* (installations) and *revisions* (versions) of chart
 on the cluster. When you run `helm` commands, your local Helm client sends
 instructions to `tiller` in the cluster that in turn make the requested changes.
 
+.. note::
+
+   These instructions are for Helm 2.
+   Helm 3 includes several major breaking changes and is not yet officially
+   supported, but `preliminary instructions are available for testing
+   <setup-helm3>`_.
+
 Installation
 ------------
 
@@ -66,7 +73,7 @@ cluster:
 
    .. code-block:: bash
 
-      helm init --service-account tiller --wait
+      helm init --service-account tiller --history-max 100 --wait
 
    This command only needs to run once per Kubernetes cluster, it will create a
    `tiller` deployment in the kube-system namespace and setup your local `helm`
@@ -76,6 +83,8 @@ cluster:
    to deploy changes with `helm` (the local CLI), it will talk to `tiller`
    and tell it what to do. `tiller` then executes these instructions from
    within the cluster.
+   We limit the history to 100 previous installs as very long histories slow 
+   down helm commands a lot.
 
    .. note::
 
