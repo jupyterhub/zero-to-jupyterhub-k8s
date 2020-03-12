@@ -32,6 +32,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 chartpress_yaml = os.path.join(here, os.pardir, os.pardir, "chartpress.yaml")
 values_yaml = os.path.join(here, os.pardir, os.pardir, "jupyterhub", "values.yaml")
 dependencies_image = 'hub-dependencies'
+pip_tools_version="4.*"
 
 
 @lru_cache()
@@ -54,13 +55,14 @@ def build_image():
     """Build the docker image used for computing dependencies
 
     This runs the chartpress build of the current image
-    to be used for computing dependencies.
-    The image is built with the current frozen environment with requirements.txt
-    and pip-tools commands available for updating requirements.txt from requirements.in
+    with the addition of pip-tools, used for computing dependencies.
+
+    The image is built with the current frozen environment in requirements.txt
+    and pip-tools commands are available for updating requirements.txt from requirements.in.
     """
     click.echo(f"Building docker image {dependencies_image}")
     build_arg_dict = build_args()
-    build_arg_list = []
+    build_arg_list = ["--build-arg", f"PIP_TOOLS={pip_tools_version}"]
     for key in sorted(build_arg_dict):
         value = build_arg_dict[key]
         build_arg_list.append("--build-arg")

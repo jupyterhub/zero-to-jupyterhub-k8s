@@ -40,7 +40,7 @@ RUN adduser --disabled-password \
     --force-badname \
     ${NB_USER}
 
-RUN python3 -m pip install --upgrade --no-cache setuptools pip pip-tools
+RUN python3 -m pip install --upgrade --no-cache setuptools pip
 COPY requirements.txt /tmp/requirements.txt
 RUN PYCURL_SSL_LIBRARY=openssl pip3 install --no-cache-dir \
          -r /tmp/requirements.txt \
@@ -60,3 +60,9 @@ EXPOSE 8081
 
 USER ${NB_USER}
 CMD ["jupyterhub", "--config", "/etc/jupyterhub/jupyterhub_config.py"]
+
+# when building the dependencies image
+# add pip-tools necessary for computing dependencies
+# this is not done in production builds by chartpress
+ARG PIP_TOOLS=
+RUN test -z "$PIP_TOOLS" || pip install --no-cache pip-tools==$PIP_TOOLS

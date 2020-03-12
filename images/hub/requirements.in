@@ -30,6 +30,4 @@ statsd  # statsd metrics collection (TODO: remove soon, since folks use promethe
 
 # py-spy is useful for profiling running hubs
 py-spy
-# pip-tools is used for updating requirements
-pip-tools
 
