@@ -1,7 +1,22 @@
 #!/usr/bin/env python3
 """automatically manage requirements.txt dependencies with pip-tools
 
-./dependencies --help for info
+See
+
+    ./dependencies --help for commands and arguments
+
+How it works:
+
+- the image used in the helm chart installs a frozen environment from requirements.txt
+- `pip-compile` is used to generate frozen `requirements.txt` from our actual requirements
+  in requirements.in.
+- `pip list --outdated` is used to report available updates for packages
+  in the frozen environment
+- pip-compile etc. are run *inside the image* to ensure consistent behavior,
+  rather than running on host systems, which can vary.
+- When building the image to be used for running dependency-management commands,
+  chartpress configuration is loaded to ensure the environment is the same
+  as when chartpress builds the tagged image to be published.
 """
 
 from functools import lru_cache
@@ -16,29 +31,41 @@ yaml = YAML()
 here = os.path.dirname(os.path.abspath(__file__))
 chartpress_yaml = os.path.join(here, os.pardir, os.pardir, "chartpress.yaml")
 values_yaml = os.path.join(here, os.pardir, os.pardir, "jupyterhub", "values.yaml")
-image = 'hub-dependencies'
+dependencies_image = 'hub-dependencies'
 
 
 @lru_cache()
-def build_args(image='hub'):
-    """retrieve docker build arguments from chartpress config file"""
+def build_args(image_name='hub'):
+    """retrieve docker build arguments from chartpress.yaml config file
+
+    Args:
+
+    image_name (str):
+        the name of the image to be built in chartpress.yaml
+    """
     with open(chartpress_yaml) as f:
         chartpress_config = yaml.load(f)
     chart = chartpress_config['charts'][0]
-    image = chart['images'][image]
-    return image.get('buildArgs', {})
+    image_config = chart['images'][image_name]
+    return image_config.get('buildArgs', {})
 
 
 def build_image():
-    """Build the docker image"""
-    click.echo(f"Building image {image}")
+    """Build the docker image used for computing dependencies
+
+    This runs the chartpress build of the current image
+    to be used for computing dependencies.
+    The image is built with the current frozen environment with requirements.txt
+    and pip-tools commands available for updating requirements.txt from requirements.in
+    """
+    click.echo(f"Building docker image {dependencies_image}")
     build_arg_dict = build_args()
     build_arg_list = []
     for key in sorted(build_arg_dict):
         value = build_arg_dict[key]
         build_arg_list.append("--build-arg")
         build_arg_list.append(f"{key}={value}")
-    check_call(["docker", "build", "-t", image] + build_arg_list + [here])
+    check_call(["docker", "build", "-t", dependencies_image] + build_arg_list + [here])
 
 
 @click.group()
@@ -50,7 +77,7 @@ def cli():
 @click.command()
 @click.option(
     '--build/--no-build',
-    help="add --no-build to skip building the image prior to upgrading",
+    help="add --no-build to skip building the dependencies image prior to upgrading",
     default=True,
 )
 @click.option(
@@ -66,7 +93,13 @@ def cli():
 def freeze(build, upgrade, upgrade_package):
     """Freeze the environment, updating requirements.txt from requirements.in
 
-    Individual packages can be updated, or the whole environment
+    Individual packages can be updated, or the whole environment.
+
+    This command:
+
+    1. builds the image with the current frozen environment
+    2. runs pip-compile in the image to update requirements.txt from requirements.in,
+       passing through additional arguments to pip-compile
     """
     if build:
         build_image()
@@ -83,11 +116,13 @@ def freeze(build, upgrade, upgrade_package):
             "run",
             "--rm",
             "-it",
+            "-e",
+            "CUSTOM_COMPILE_COMMAND=./dependencies freeze",
             "--volume",
             f"{here}:/io",
             "--workdir",
             "/io",
-            image,
+            dependencies_image,
             "pip-compile",
         ]
         + upgrade_args
@@ -100,7 +135,14 @@ cli.add_command(freeze)
 @click.command()
 @click.option('--build/--no-build', default=True)
 def outdated(build):
-    """Check for outdated dependencies with pip."""
+    """Check for outdated dependencies with pip.
+
+    This command:
+
+    1. builds the image with the current frozen environment
+    2. runs `pip list --outdated` to report any outdated packages
+       that could be candidates for upgrade
+    """
     if build:
         build_image()
     click.echo("Checking for outdated dependencies with pip.")
@@ -110,7 +152,7 @@ def outdated(build):
             "run",
             "--rm",
             "-it",
-            image,
+            dependencies_image,
             "pip",
             "list",
             "--outdated",
