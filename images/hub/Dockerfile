@@ -58,11 +58,12 @@ RUN chown ${NB_USER}:${NB_USER} /srv/jupyterhub
 # JupyterHub API port
 EXPOSE 8081
 
-USER ${NB_USER}
-CMD ["jupyterhub", "--config", "/etc/jupyterhub/jupyterhub_config.py"]
-
 # when building the dependencies image
 # add pip-tools necessary for computing dependencies
 # this is not done in production builds by chartpress
 ARG PIP_TOOLS=
 RUN test -z "$PIP_TOOLS" || pip install --no-cache pip-tools==$PIP_TOOLS
+
+USER ${NB_USER}
+CMD ["jupyterhub", "--config", "/etc/jupyterhub/jupyterhub_config.py"]
+
