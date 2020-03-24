@@ -37,15 +37,11 @@ import yaml
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.mathjax',
-              'sphinx_copybutton']
+              'sphinx_copybutton',
+              'recommonmark']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
-
-source_parsers = {
-    '.md': 'recommonmark.parser.CommonMarkParser',
-}
-
 
 def setup(app):
     app.add_config_value('recommonmark_config', {
@@ -76,7 +72,7 @@ author = u'Project Jupyter Contributors'
 #
 # The short X.Y version of documentation.
 with open('../../jupyterhub/Chart.yaml') as f:
-    chart = yaml.load(f)
+    chart = yaml.safe_load(f)
 version = chart['version'].split('-', 1)[0]
 # The full version of documentation, including alpha/beta/rc tags.
 release = chart['version']
@@ -110,7 +106,7 @@ todo_include_todos = False
 # a list of builtin themes.
 #
 
-html_theme = 'pandas_sphinx_theme'
+html_theme = 'pydata_sphinx_theme'
 
 html_favicon = '_static/images/logo/favicon.ico'
 html_logo = '_static/images/logo/logo.png'
@@ -202,7 +198,7 @@ epub_exclude_files = ['search.html']
 
 # Generate the JSON schema markdown file for the reference docs.
 with open('../../jupyterhub/schema.yaml') as f:
-    data = yaml.load(f)
+    data = yaml.safe_load(f)
 
 def parse_yaml(yaml, count=0, pre=''):
     """Generate markdown headers from the schema yaml."""
