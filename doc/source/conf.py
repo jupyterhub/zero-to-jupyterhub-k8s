@@ -110,7 +110,7 @@ todo_include_todos = False
 # a list of builtin themes.
 #
 
-html_theme = 'pandas_sphinx_theme'
+html_theme = 'pydata_sphinx_theme'
 
 html_favicon = '_static/images/logo/favicon.ico'
 html_logo = '_static/images/logo/logo.png'
