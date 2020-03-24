@@ -43,12 +43,14 @@ The Procedure
    Since we are not using pre-configured DNS we will use the suffix ".k8s.local".  Per the docs, if the DNS name ends in .k8s.local the cluster will use internal hosted DNS.
 
       .. code-block:: bash
-      export NAME=<somename>.k8s.local
+         
+         export NAME=<somename>.k8s.local
 
 #. Setup an ssh keypair to use with the cluster
 
       .. code-block:: bash
-      ssh-keygen
+         
+         ssh-keygen
 
 #. Create a S3 bucket to store your cluster configuration
 
@@ -56,18 +58,21 @@ The Procedure
    We don't need to pass this into the KOPS commands.  It is automatically detected by the kops tool as an env variable.
 
       .. code-block:: bash
-      export KOPS_STATE_STORE=s3://<your_s3_bucket_name_here>
+         
+         export KOPS_STATE_STORE=s3://<your_s3_bucket_name_here>
 
 #. Set the region to deploy in
 
       .. code-block:: bash
-      export REGION=`curl -s http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'`
+         
+         export REGION=`curl -s http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'`
 
 #. Install the AWS CLI:
 
       .. code-block:: bash
-      sudo apt-get update
-      sudo apt-get install awscli
+      
+         sudo apt-get update
+         sudo apt-get install awscli
 
 #. Set the availability zones for the nodes
 
@@ -136,7 +141,8 @@ The Procedure
     Keep running 'kops validate cluster' until you see "Your cluster $NAME is ready" at the end of the output.
 
       .. code-block:: bash
-      time until kops validate cluster; do sleep 15 ; done
+         
+         time until kops validate cluster; do sleep 15 ; done
       
     can be used to automate the waiting process.
 
@@ -148,7 +154,8 @@ The Procedure
     Run::
       
       .. code-block:: bash
-      kubectl get nodes
+         
+         kubectl get nodes
       
 
     You should see a list of two nodes, each beginning with ``ip``.
@@ -161,7 +168,8 @@ The Procedure
     If you wish to put the kube config file in a different location, you will need to 
     
     .. code-block:: bash
-    export KUBECONFIG=<other kube config location>
+      
+      export KUBECONFIG=<other kube config location>
 
 
 #. Configure ssh bastion (Skip this step if you did not go with the **--topology private** option above!)
@@ -275,7 +283,8 @@ Then perform the following steps:
 #. You can verify encryption is turned on with the following command:
 
       .. code-block:: bash
-      kubectl exec -n kube-system weave-net-<pod> -c weave -- /home/weave/weave --local status
+         
+         kubectl exec -n kube-system weave-net-<pod> -c weave -- /home/weave/weave --local status
 
    You should see `encryption: enabled`
 

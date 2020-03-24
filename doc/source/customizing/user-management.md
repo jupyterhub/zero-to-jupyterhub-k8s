@@ -80,4 +80,4 @@ auth:
 ## Authenticating Users
 
 For information on authenticating users in JupyterHub, see
-[the Authentication guide](../../administrator/authentication.html).
+[the Authentication guide](../administrator/authentication).
