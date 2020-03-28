@@ -1,4 +1,4 @@
-sphinx>=1.7
+sphinx>=1.8
 recommonmark
 pyyaml
 sphinx-copybutton

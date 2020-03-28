@@ -3,8 +3,8 @@
 Setting up JupyterHub
 =====================
 
-Now that we have a `Kubernetes cluster <create-k8s-cluster>`_ and `Helm
-<setup-helm>`_ setup, we can proceed by using Helm to install JupyterHub
+Now that we have a :doc:`Kubernetes cluster </create-k8s-cluster>` and :doc:`Helm
+<setup-helm>` setup, we can proceed by using Helm to install JupyterHub
 and related :term:`Kubernetes resources <kubernetes resource>` using a
 :term:`Helm chart`.
 

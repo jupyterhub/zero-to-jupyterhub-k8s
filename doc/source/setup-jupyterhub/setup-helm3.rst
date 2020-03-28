@@ -1,3 +1,5 @@
+:orphan:
+
 .. _setup-helm3:
 
 Setting up Helm 3 (Preview)

@@ -1,3 +1,5 @@
+:orphan:
+
 .. This is a backup of the repo2docker instructions from user-environment.rst
 
 .. _r2d-custom-image:
