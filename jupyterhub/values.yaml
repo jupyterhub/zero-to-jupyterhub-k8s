@@ -87,7 +87,7 @@ hub:
     enabled: true
     initialDelaySeconds: 0
     periodSeconds: 10
-  # existingSecret: existing-secret
+  existingSecret: false
 
 rbac:
   enabled: true
