@@ -3,4 +3,4 @@ pyyaml
 recommonmark
 sphinx-autobuild
 sphinx-copybutton
-sphinx>=2.0
+sphinx
