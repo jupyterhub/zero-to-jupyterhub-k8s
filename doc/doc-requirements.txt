@@ -1,5 +1,6 @@
-sphinx>=1.8
-recommonmark
-pyyaml
-sphinx-copybutton
 pydata_sphinx_theme
+pyyaml
+recommonmark
+sphinx-autobuild
+sphinx-copybutton
+sphinx>=2.0
