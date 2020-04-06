@@ -7,6 +7,103 @@ players.
 
 ## [0.9]
 
+### [0.9.0]
+
+#### Release summary
+
+TODO - write info about the release comparing with 0.8.2.
+
+Summary:
+- kube-lego broke during 0.8.2, and is now replaced
+- ...
+
+Bumped dependencies:
+- jupyterhub version 1.1.0
+- kubespawner bump
+- oauthenticator bump
+- chp bump
+- ...
+
+#### Upgrade instructions (IMPORTANT)
+
+1. If you are using Helm 2, upgrade to the latest Helm 2 version. And if you are
+   using Helm 3, upgrade to the latest Helm 3 version.
+   
+   Upgrading to Helm 3 from Helm 2 requires additional steps not covered here,
+   so for now please stay with your current major version of helm (2 or 3).
+
+   ```
+   # Figure out what version you currently have locally, you should use
+   # release of the same major version you have used before.
+   helm version
+   ```
+
+   Install either the latest [Helm
+   2](https://v2.helm.sh/docs/using_helm/#installing-helm) or [Helm
+   3](https://helm.sh/docs/intro/install/) depending on what major version you
+   currently had worked with.
+
+   ```
+   # verify you successfully upgraded helm
+   helm version
+
+   # if you just upgraded helm 2, also upgrade tiller
+   helm init --upgrade --service-account=tiller
+   ```
+
+2. Use `--cleanup-on-fail` when using `helm upgrade`.
+
+   Helm can enter a problematic state by a `helm` install or upgrade process
+   which started creating Kubernetes resources, but then didn't finish at all or
+   didn't finish successfully. It can cause resources created that helm will
+   later come in conflict with.
+
+   To mitigate this, we suggest always using `--cleanup-on-fail` with this Helm
+   chart, it is a solid behavior that reduce a lot of head ache.
+
+3. If you use `--wait`, or `--atomic` which implies `--wait`: do not manually
+   cancel the upgrade!
+
+   If you would abort the upgrade when using `--wait` and Kubernetes resources
+   has been created, resources will have been created that can cause conflict
+   with future upgrades and require you to manually clean them up.
+
+4. Delete resources that could cause issues before upgrading.
+
+   ```
+   # replace <NAMESPACE> below with where jupyterhub is installed
+   kubectl delete -n <NAMESPACE> clusterrole,clusterrolebinding,role,rolebinding,serviceaccount,deployment,configmap,service -l component=autohttps
+   ```
+
+#### Troubleshooting upgrade
+
+TODO: more here...
+
+There is both Helm 2 and Helm 3 being used now to work against this Helm chart,
+and the details will vary a bit.
+
+> ```
+> error: kind ConfigMap with the name "traefik-proxy-config" already exists in
+> the cluster and wasn't defined in the previous release. Before upgrading,
+> please either delete the resource from the cluster or remove it from the chart
+> ```
+
+#### Dependency updates
+
+* Bump configurable-http-proxy image [#1598](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1598) ([@consideRatio](https://github.com/consideRatio))
+* fix: Bump to base-notebook with JH 1.1.0 etc [#1588](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1588) ([@bitnik](https://github.com/bitnik))
+
+#### Maintenance
+
+* Docs: refactor/docs for local development of docs [#1617](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1617) ([@consideRatio](https://github.com/consideRatio))
+* [MRG] sphinx: linkcheck in travis (allowed to fail) [#1611](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1611) ([@manics](https://github.com/manics))
+* [MRG] Sphinx: warnings are errors [#1610](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1610) ([@manics](https://github.com/manics))
+* pydata theme [#1608](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1608) ([@choldgraf](https://github.com/choldgraf))
+* Small typo fix in doc [#1591](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1591) ([@sebastianpfischer](https://github.com/sebastianpfischer))
+* [MRG] Pin sphinx theme [#1589](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1589) ([@manics](https://github.com/manics))
+* init helm and tiller with history-max settings [#1587](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1587) ([@bitnik](https://github.com/bitnik))
+* Changelog for 0.9.0-beta.4 [#1585](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1585) ([@manics](https://github.com/manics))
+
 ### [0.9.0-beta.4]
 
 #### Added
