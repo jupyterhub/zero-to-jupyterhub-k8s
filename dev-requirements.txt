@@ -24,3 +24,6 @@ yamllint>=1.17.0
 ## ./dev use these
 colorama
 python-dotenv
+
+# click is used to make cli scripts
+click
