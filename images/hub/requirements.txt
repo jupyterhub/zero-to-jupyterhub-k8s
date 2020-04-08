@@ -7,7 +7,7 @@
 alembic==1.4.1            # via jupyterhub
 async-generator==1.10     # via jupyterhub, jupyterhub-kubespawner
 attrs==19.3.0             # via jsonschema
-bcrypt==3.1.7             # via jupyterhub-firstuseauthenticator
+bcrypt==3.1.7             # via jupyterhub-firstuseauthenticator, jupyterhub-nativeauthenticator
 cachetools==4.0.0         # via google-auth
 certifi==2019.11.28       # via kubernetes, requests
 certipy==0.1.3            # via jupyterhub
@@ -31,9 +31,10 @@ jupyterhub-hmacauthenticator==0.1  # via -r requirements.in
 jupyterhub-kubespawner==0.11.1  # via -r requirements.in
 jupyterhub-ldapauthenticator==1.3.0  # via -r requirements.in
 jupyterhub-ltiauthenticator==0.4.0  # via -r requirements.in
+jupyterhub-nativeauthenticator==0.0.5  # via -r requirements.in
 jupyterhub-tmpauthenticator==0.6  # via -r requirements.in
-jupyterhub==1.1.0         # via jupyterhub-firstuseauthenticator, jupyterhub-kubespawner, jupyterhub-ldapauthenticator, jupyterhub-ltiauthenticator, nullauthenticator, oauthenticator
-kubernetes==10.0.1        # via -r requirements.in, jupyterhub-kubespawner
+jupyterhub==1.1.0         # via jupyterhub-firstuseauthenticator, jupyterhub-kubespawner, jupyterhub-ldapauthenticator, jupyterhub-ltiauthenticator, jupyterhub-nativeauthenticator, nullauthenticator, oauthenticator
+kubernetes==10.0.1        # via jupyterhub-kubespawner
 ldap3==2.7                # via jupyterhub-ldapauthenticator
 mako==1.1.2               # via alembic
 markupsafe==1.1.1         # via jinja2, mako
@@ -41,6 +42,7 @@ mwoauth==0.3.7            # via -r requirements.in
 nullauthenticator==1.0.0  # via -r requirements.in
 oauthenticator==0.11.0    # via -r requirements.in
 oauthlib==3.1.0           # via jupyterhub, jupyterhub-ltiauthenticator, mwoauth, requests-oauthlib
+onetimepass==1.0.1        # via jupyterhub-nativeauthenticator
 pamela==1.0.0             # via jupyterhub
 prometheus-client==0.7.1  # via jupyterhub
 psycopg2-binary==2.8.4    # via -r requirements.in
@@ -62,7 +64,7 @@ requests==2.23.0          # via globus-sdk, jupyterhub, kubernetes, mwoauth, req
 rsa==4.0                  # via google-auth
 ruamel.yaml.clib==0.2.0   # via ruamel.yaml
 ruamel.yaml==0.16.10      # via jupyter-telemetry
-six==1.14.0               # via bcrypt, cryptography, globus-sdk, google-auth, jsonschema, kubernetes, mwoauth, pyopenssl, pyrsistent, python-dateutil, traitlets, websocket-client
+six==1.14.0               # via bcrypt, cryptography, globus-sdk, google-auth, jsonschema, kubernetes, mwoauth, onetimepass, pyopenssl, pyrsistent, python-dateutil, traitlets, websocket-client
 sqlalchemy==1.3.15        # via alembic, jupyterhub
 statsd==3.3.0             # via -r requirements.in
 tornado==6.0.4            # via jupyterhub, jupyterhub-ldapauthenticator

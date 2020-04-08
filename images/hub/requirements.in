@@ -4,8 +4,9 @@
 jupyterhub-dummyauthenticator
 jupyterhub-firstuseauthenticator
 jupyterhub-hmacauthenticator
-jupyterhub-ltiauthenticator
 jupyterhub-ldapauthenticator
+jupyterhub-ltiauthenticator
+jupyterhub-nativeauthenticator
 jupyterhub-tmpauthenticator
 nullauthenticator
 oauthenticator
@@ -16,9 +17,6 @@ globus_sdk[jwt]
 
 ## Kubernetes spawner
 jupyterhub-kubespawner
-# we pin the kubernetes API version explicitly
-# so that it is only updated explicitly
-kubernetes==10.*
 
 ## Other optional dependencies for additional features
 pymysql  # mysql
@@ -30,4 +28,3 @@ statsd  # statsd metrics collection (TODO: remove soon, since folks use promethe
 
 # py-spy is useful for profiling running hubs
 py-spy
-
