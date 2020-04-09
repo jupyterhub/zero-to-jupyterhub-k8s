@@ -19,10 +19,13 @@ Summary:
 
 Bumped dependencies:
 - jupyterhub version 1.1.0
-- kubespawner bump
-- oauthenticator bump
-- chp bump
-- ...
+- configurable-http-proxy version  4.2.1
+- jupyterhub-ldapauthenticator version 1.3.0
+- jupyterhub-kubespawner version 0.11.1 
+- oauthenticator version 0.11.0
+- kubernetes version 10.0.1
+- mwoauth version 0.3.7
+- cryptography version 2.8
 
 #### Upgrade instructions (IMPORTANT)
 
