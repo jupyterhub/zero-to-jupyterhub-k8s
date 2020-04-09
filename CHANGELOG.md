@@ -11,7 +11,7 @@ players.
 
 #### Release summary
 
-TODO - write info about the release comparing with 0.8.2.
+This release is primarily focused on offering support for the latest JupyterHub (version 1.1.0) and the latest versions of the JupyterHub authenticators. There are also additional configuration options and a number of bug fixes.
 
 Summary:
 - kube-lego broke during 0.8.2, and is now replaced
