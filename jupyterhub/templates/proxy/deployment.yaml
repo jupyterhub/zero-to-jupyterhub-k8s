@@ -53,8 +53,8 @@ spec:
           image: {{ .Values.proxy.chp.image.name }}:{{ .Values.proxy.chp.image.tag }}
           command:
             - configurable-http-proxy
-            - --ip=0.0.0.0
-            - --api-ip=0.0.0.0
+            - '--ip=::'
+            - '--api-ip=::'
             - --api-port=8001
             - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
             - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)/hub/error
