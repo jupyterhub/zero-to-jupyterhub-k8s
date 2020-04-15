@@ -2,30 +2,30 @@
 
 Here you can find upgrade changes in between releases and upgrade instructions.
 
-Releases are named after famous [Cricket](https://en.wikipedia.org/wiki/Cricket)
-players.
-
 ## [0.9]
 
-### [0.9.0]
+### [0.9.0] - 2020-04-15
 
 #### Release summary
 
-This release is primarily focused on offering support for the latest JupyterHub (version 1.1.0) and the latest versions of the JupyterHub authenticators. There are also additional configuration options and a number of bug fixes.
+This Helm chart release is mainly a maintenance release featuring the latest
+JupyterHub (1.1.0) and authenticators along with bug fixes and some additional
+helpful configuration options.
 
-Summary:
-- kube-lego broke during 0.8.2, and is now replaced
-- ...
+Noteworthy:
+- An issue with automatic acquisition of HTTPS certificates has been resolved
+  since 0.9.0-beta.3.
+- Fixed a compatibility issue with Kubernetes 1.16+
+- The `images/hub/requirements.txt` file in this repo can now be used to track
+  what specific version has been used at any point in time.
+- [jupyterhub-nativeauthenticator](https://native-authenticator.readthedocs.io/en/latest/) added to the JupyterHub Docker image.
 
 Bumped dependencies:
 - jupyterhub version 1.1.0
-- configurable-http-proxy version  4.2.1
 - jupyterhub-ldapauthenticator version 1.3.0
-- jupyterhub-kubespawner version 0.11.1 
+- jupyterhub-kubespawner version 0.11.1
 - oauthenticator version 0.11.0
 - kubernetes version 10.0.1
-- mwoauth version 0.3.7
-- cryptography version 2.8
 
 #### Upgrade instructions (IMPORTANT)
 
@@ -73,17 +73,27 @@ Bumped dependencies:
 
 4. Delete resources that could cause issues before upgrading.
 
-   ```
+   ```shell
    # replace <NAMESPACE> below with where jupyterhub is installed
    kubectl delete -n <NAMESPACE> clusterrole,clusterrolebinding,role,rolebinding,serviceaccount,deployment,configmap,service -l component=autohttps
    ```
 
 #### Troubleshooting upgrade
 
-TODO: more here...
+If you get an error similar to the one below, it is a symptom of having
+attempted a `helm upgrade` that failed where helm lost track of some newly
+created resources. A good solution is to delete all of these resources and try
+again.
 
-There is both Helm 2 and Helm 3 being used now to work against this Helm chart,
-and the details will vary a bit.
+```shell
+# replace <NAMESPACE> below with where jupyterhub is installed
+kubectl delete -n <NAMESPACE> clusterrole,clusterrolebinding,role,rolebinding,serviceaccount,deployment,configmap,service -l component=autohttps
+```
+
+To avoid this in the future, use `--cleanup-on-fail` with the `helm upgrade`
+command. It is not a fool proof way to avoid it, but . And note that even if that flag is used, an interupption for example during `--wait` or `--atomic` which implies `--wait`, be
+aware of an interruption while waiting can very likely cause this to arise on
+the following upgrade attempt.
 
 > ```
 > error: kind ConfigMap with the name "traefik-proxy-config" already exists in
@@ -106,8 +116,9 @@ and the details will vary a bit.
 * [MRG] Pin sphinx theme [#1589](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1589) ([@manics](https://github.com/manics))
 * init helm and tiller with history-max settings [#1587](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1587) ([@bitnik](https://github.com/bitnik))
 * Changelog for 0.9.0-beta.4 [#1585](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1585) ([@manics](https://github.com/manics))
+* freeze environment in hub image [#1562](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1562) ([@minrk](https://github.com/minrk))
 
-### [0.9.0-beta.4]
+### [0.9.0-beta.4] - 2020-02-26
 
 #### Added
 * Add nativeauthenticator to hub image [#1583](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1583) ([@consideRatio](https://github.com/consideRatio))
@@ -132,7 +143,7 @@ and the details will vary a bit.
 * Helm 3 preview [#1543](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1543) ([@manics](https://github.com/manics))
 
 
-### [0.9.0-beta.3]
+### [0.9.0-beta.3] - 2020-01-17
 
 #### Dependency updates
 
@@ -148,13 +159,13 @@ and the details will vary a bit.
 * Fix duplicate docs label [#1544](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1544) ([@manics](https://github.com/manics))
 * Made GCP docs of compute zone names generic [#1431](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1431) ([@metonymic-smokey](https://github.com/metonymic-smokey))
 
-### [0.9.0-beta.2]
+### [0.9.0-beta.2] - 2019-12-26
 
 #### Fixed
 
 * Fix major breaking change if all HTTPS options was disabled introduced just before beta.1 [#1534](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1534) ([@dirkcgrunwald](https://github.com/dirkcgrunwald))
 
-### [0.9.0-beta.1]
+### [0.9.0-beta.1] - 2019-12-26
 
 Some highlights of relevance for this release are:
 
