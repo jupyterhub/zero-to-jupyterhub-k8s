@@ -1,6 +1,6 @@
 pydata_sphinx_theme
 pyyaml
-recommonmark
+myst_parser
 sphinx-autobuild
 sphinx-copybutton
 sphinx

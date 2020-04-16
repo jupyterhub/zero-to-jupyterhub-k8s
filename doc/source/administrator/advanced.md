@@ -169,13 +169,11 @@ In your `hub.extraConfig`,
 You need to have a `import z2jh` at the top of your `extraConfig` for
 `z2jh.get_config()` to work.
 
-```eval_rst
-.. versionchanged:: 0.8
-
-  `hub.extraConfigMap` used to be required for specifying additional values
-  to pass, which was more restrictive.
-  `hub.extraConfigMap` is deprecated in favor of the new
-  top-level `custom` field, which allows fully arbitrary yaml.
+```{versionchanged} 0.8
+`hub.extraConfigMap` used to be required for specifying additional values
+to pass, which was more restrictive.
+`hub.extraConfigMap` is deprecated in favor of the new
+top-level `custom` field, which allows fully arbitrary yaml.
 ```
 
 ### `hub.extraEnv`

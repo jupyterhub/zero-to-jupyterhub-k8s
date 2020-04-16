@@ -1,9 +1,6 @@
 DO NOT EDIT THIS LINE. This file is used in `conf.py to generate schema.md`. Edit below and changes will propagate to the build.
-```eval_rst
-.. _helm-chart-configuration-reference:
-```
-
-# Configuration Reference 
+(helm-chart-configuration-reference)=
+# Configuration Reference
 
 The [JupyterHub Helm
 chart](https://github.com/jupyterhub/zero-to-jupyterhub-k8s) is configurable by
@@ -14,7 +11,5 @@ Below is a description of many *but not all* of the configurable values for the
 Helm chart. To see *all* configurable options, inspect their default values
 defined [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/jupyterhub/values.yaml).
 
-```eval_rst
 For more guided information about some specific things you can do with
-modifications to the helm chart, see the :ref:`customization-guide`.
-```
+modifications to the helm chart, see the {ref}`customization-guide`.
