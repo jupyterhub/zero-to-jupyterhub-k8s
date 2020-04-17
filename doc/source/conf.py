@@ -27,7 +27,7 @@ import yaml
 # ref: http://www.sphinx-doc.org/en/latest/extdev/tutorial.html#the-setup-function
 
 def setup(app):
-    app.add_stylesheet('custom.css')
+    app.add_css_file('custom.css')
 
 
 # -- Project information -----------------------------------------------------

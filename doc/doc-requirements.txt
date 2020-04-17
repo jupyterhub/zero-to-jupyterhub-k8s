@@ -3,4 +3,4 @@ pyyaml
 myst_parser
 sphinx-autobuild
 sphinx-copybutton
-sphinx
+sphinx<3
