@@ -34,7 +34,6 @@ metadata:
   {{- end }}
 spec:
   selector:
-    # TODO: Refactor to utilize the helpers
     {{- if $autoHTTPS }}
     component: autohttps
     {{- else }}
@@ -53,8 +52,8 @@ spec:
       {{- else }}
       targetPort: 443
       {{- end }}
-      {{- if .Values.proxy.service.nodePorts.https }}
-      nodePort: {{ .Values.proxy.service.nodePorts.https }}
+      {{- with .Values.proxy.service.nodePorts.https }}
+      nodePort: {{ . }}
       {{- end }}
     {{- end }}
     - name: http
@@ -65,15 +64,16 @@ spec:
       {{- else }}
       targetPort: 8000
       {{- end }}
-      # allow proxy.service.nodePort for http
-      {{- if .Values.proxy.service.nodePorts.http }}
-      nodePort: {{ .Values.proxy.service.nodePorts.http }}
+      {{- with .Values.proxy.service.nodePorts.http }}
+      nodePort: {{ . }}
       {{- end }}
   type: {{ .Values.proxy.service.type }}
-  {{- if .Values.proxy.service.loadBalancerIP }}
-  loadBalancerIP: {{ .Values.proxy.service.loadBalancerIP }}
+  {{- with .Values.proxy.service.loadBalancerIP }}
+  loadBalancerIP: {{ . }}
   {{- end }}
-  {{- if and (eq .Values.proxy.service.type "LoadBalancer") .Values.proxy.service.loadBalancerSourceRanges }}
+  {{- if eq .Values.proxy.service.type "LoadBalancer" }}
+  {{- with .Values.proxy.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
-    {{- .Values.proxy.service.loadBalancerSourceRanges | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
+  {{- end }}
   {{- end }}
