@@ -12,5 +12,5 @@ proxy:
       - example.local
     type: letsencrypt
     letsencrypt:
-      contactEmail: 'jovyan@jupyter.local'
+      contactEmail: 'jovyan@jupyter-mail.org'
       acmeServer: https://pebble:14000/dir
