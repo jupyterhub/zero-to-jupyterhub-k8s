@@ -171,7 +171,7 @@ proxy:
     letsencrypt:
       contactEmail: ''
       # Specify custom server here (https://acme-staging-v02.api.letsencrypt.org/directory) to hit staging LE
-      acmeServer: ''
+      acmeServer: https://acme-v02.api.letsencrypt.org/directory
     manual:
       key:
       cert:
