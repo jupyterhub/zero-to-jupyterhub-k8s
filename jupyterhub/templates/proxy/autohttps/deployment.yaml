@@ -68,6 +68,12 @@ spec:
               mountPath: /etc/traefik
             - name: certificates
               mountPath: /etc/acme
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 1
+            periodSeconds: 1
+            failureThreshold: 3
         - name: secret-sync
           image: "{{ .Values.proxy.secretSync.image.name }}:{{ .Values.proxy.secretSync.image.tag }}"
           {{- with .Values.proxy.secretSync.image.pullPolicy }}
