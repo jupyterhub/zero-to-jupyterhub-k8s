@@ -11,6 +11,16 @@ git:
   depth: false
 services:
   - docker
+addons:
+  ## host modifies /etc/hosts so jupyter.local and example.local points to
+  ## localhost, allowing us to test acquisition of HTTPS certificates and
+  ## working against HTTPS.
+  ##
+  ## ref: https://docs.travis-ci.com/user/hosts/
+  ##
+  hosts:
+    - jupyter.local
+    - example.local
 ## stages declares and orders stages
 ##
 ## ref: https://docs.travis-ci.com/user/build-stages/#build-stages-and-deployments
