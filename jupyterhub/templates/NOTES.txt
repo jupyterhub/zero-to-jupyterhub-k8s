@@ -10,7 +10,7 @@ and watching for both those pods to be in status 'Running'.
 
 You can find the public IP of the JupyterHub by doing:
 
- kubectl --namespace={{ .Release.Namespace }} get svc {{- include "jupyterhub.proxy" . -}}-public
+ kubectl --namespace={{ .Release.Namespace }} get svc {{ include "jupyterhub.proxy" . }}-public
 
 It might take a few minutes for it to appear!
 
