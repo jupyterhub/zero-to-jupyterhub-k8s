@@ -4,7 +4,7 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: traefik-{{- inclde "jupyterhub.proxy" -}}-config
+  name: traefik-{{- include "jupyterhub.proxy" -}}-config
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 data:
@@ -130,5 +130,5 @@ data:
     [http.services]
       [http.services.chp.loadBalancer]
         [[http.services.chp.loadBalancer.servers]]
-          url = "http://{{- inclde "jupyterhub.proxy" -}}-http:8000/"
+          url = "http://{{- include "jupyterhub.proxy" -}}-http:8000/"
 {{- end }}
