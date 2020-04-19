@@ -17,7 +17,7 @@ jobs:
           name: Build docs to store
           command: |
             cd doc
-            make html SPHINXOPTS='-W --keep-going'
+            make html
 
       - store_artifacts:
           path: doc/build/html/
