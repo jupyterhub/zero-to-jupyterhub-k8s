@@ -68,6 +68,7 @@ rbac:
 
 
 proxy:
+  fullnameOverride: proxy
   secretToken: '0000000000000000000000000000000000000000000000000000000000000000'
   service:
     type: LoadBalancer
