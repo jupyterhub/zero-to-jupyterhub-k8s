@@ -1,0 +1,69 @@
+{{- if .Values.testing.pebble.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pebble
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "jupyterhub.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "jupyterhub.matchLabels" . | nindent 8 }}
+      annotations:
+        checksum/config-map: {{ include (print .Template.BasePath "/testing/pebble/configmap.yaml") . | sha256sum }}
+    spec:
+      hostAliases:
+        - ip: {{ .Values.proxy.service.clusterIP | required "We need proxy.service.clusterIP to be pinned to help pebble resolve hostnames to the proxy-public service." }}
+          hostnames:
+            {{- .Values.proxy.https.hosts | toYaml | trimSuffix "\n" | nindent 12 }}
+      volumes:
+        - name: config
+          configMap:
+            name: pebble
+      containers:
+      - name: pebble-challtestsrv
+        image: "{{ .Values.testing.pebble.image.name }}-challtestsrv:{{ .Values.testing.pebble.image.tag }}"
+        # command ref: https://github.com/letsencrypt/pebble/tree/master/cmd/pebble-challtestsrv#usage
+        command: [
+          "pebble-challtestsrv",
+          "-management", ":8055",
+          "-dns01", ":8053",
+          "-tlsalpn01", "",
+          "-http01", "",
+          "-https01", "",
+          "-defaultIPv4", {{ .Values.proxy.service.clusterIP }},
+          "-defaultIPv6", "",
+        ]
+        ports:
+          - name: test-dns
+            containerPort: 8053
+          - name: test-mgmt
+            containerPort: 8055
+      - name: pebble
+        image: "{{ .Values.testing.pebble.image.name }}:{{ .Values.testing.pebble.image.tag }}"
+        command: [
+          "pebble",
+          "-config", "/etc/pebble/pebble-config.json",
+          "-dnsserver", "127.0.0.1:8053",
+        ]
+        env:
+          - name: PEBBLE_VA_NOSLEEP
+            value: "1"
+          {{- if .Values.testing.pebble.skipValidation }}
+          - name: PEBBLE_VA_ALWAYS_VALID
+            value: "1"
+          {{- end }}
+        volumeMounts:
+          - name: config
+            mountPath: /etc/pebble
+        ports:
+          - name: pebble-acme
+            containerPort: 14000
+          - name: pebble-mgmt
+            containerPort: 15000
+{{- end }}

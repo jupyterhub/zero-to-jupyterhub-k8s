@@ -68,6 +68,9 @@ spec:
       nodePort: {{ . }}
       {{- end }}
   type: {{ .Values.proxy.service.type }}
+  {{- with .Values.proxy.service.clusterIP }}
+  clusterIP: {{ . }}
+  {{- end }}
   {{- with .Values.proxy.service.loadBalancerIP }}
   loadBalancerIP: {{ . }}
   {{- end }}

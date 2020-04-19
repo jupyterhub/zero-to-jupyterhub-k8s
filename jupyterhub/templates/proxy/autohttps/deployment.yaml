@@ -39,6 +39,11 @@ spec:
         - name: traefik-config
           configMap:
             name: traefik-proxy-config
+        {{- if .Values.testing.pebble.enabled }}
+        - name: pebble
+          configMap:
+            name: pebble
+        {{- end }}
       initContainers:
       - name: load-acme
         image: "{{ .Values.proxy.secretSync.image.name }}:{{ .Values.proxy.secretSync.image.tag }}"
@@ -73,6 +78,28 @@ spec:
               mountPath: /etc/traefik
             - name: certificates
               mountPath: /etc/acme
+            {{- if .Values.testing.pebble.enabled }}
+            - name: pebble
+              subPath: pebble.minica.pem
+              mountPath: /etc/lego/pebble.minica.pem
+            {{- end }}
+          {{- if .Values.testing.pebble.enabled }}
+          env:
+            # We test automatic provisioning of certificates from Let's Encrypt
+            # using a local ACME server called Pebble.
+            # - ref: https://github.com/letsencrypt/pebble
+            #
+            # Traefik's underlying ACME client is called LEGO.
+            # - ref: https://github.com/go-acme/lego
+            #
+            # We configure LEGO to trust the root certificate that signed
+            # pebble's self-generated certificates.
+            # - ref: # ref: https://github.com/letsencrypt/pebble/tree/master/test/certs
+            - name: LEGO_CA_CERTIFICATES
+              value: /etc/lego/pebble.minica.pem
+            - name: LEGO_CA_SERVER_NAME
+              value: pebble
+          {{- end }}
           readinessProbe:
             tcpSocket:
               port: http

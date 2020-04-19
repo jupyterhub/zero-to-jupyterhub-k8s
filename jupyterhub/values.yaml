@@ -369,3 +369,23 @@ cull:
 
 debug:
   enabled: false
+
+testing:
+  pebble:
+    # config ref: https://github.com/letsencrypt/pebble/blob/master/test/config/pebble-config.json
+    #
+    config:
+      {
+        "pebble": {
+          "listenAddress": "0.0.0.0:14000",
+          "managementListenAddress": "0.0.0.0:15000",
+          "certificate": "/etc/pebble/cert.pem",
+          "privateKey": "/etc/pebble/key.pem",
+          "httpPort": 80,
+          "externalAccountBindingRequired": false,
+        }
+      }
+    image:
+      # https://hub.docker.com/r/letsencrypt/pebble/tags
+      name: letsencrypt/pebble
+      tag: v2.3.0

@@ -1,0 +1,16 @@
+testing:
+  pebble:
+    enabled: true
+  
+proxy:
+  service:
+    clusterIP: 10.43.139.188
+  https:
+    enabled: true
+    hosts:
+      - jupyter.local
+      - example.local
+    type: letsencrypt
+    letsencrypt:
+      contactEmail: 'jovyan@jupyter.local'
+      acmeServer: https://pebble:14000/dir
