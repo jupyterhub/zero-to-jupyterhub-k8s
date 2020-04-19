@@ -94,6 +94,7 @@ rbac:
 
 
 proxy:
+  fullnameOverride: 
   secretToken: ''
   deploymentStrategy:
     ## type: Recreate

@@ -33,7 +33,7 @@ spec:
           emptyDir: {}
         - name: traefik-config
           configMap:
-            name: traefik-proxy-config
+            name: traefik-{{- inclde "jupyterhub.proxy" -}}-config
       initContainers:
       - name: load-acme
         image: "{{ .Values.proxy.secretSync.image.name }}:{{ .Values.proxy.secretSync.image.tag }}"

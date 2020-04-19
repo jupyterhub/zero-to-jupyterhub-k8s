@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: proxy
+  name: {{- inclde "jupyterhub.proxy" -}}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
@@ -41,7 +41,7 @@ spec:
       volumes:
         - name: tls-secret
           secret:
-            secretName: proxy-manual-tls
+            secretName: {{- inclde "jupyterhub.proxy" -}}-manual-tls
       {{- else if $manualHTTPSwithsecret }}
       volumes:
         - name: tls-secret
@@ -103,10 +103,10 @@ spec:
           ports:
             {{- if or $manualHTTPS $manualHTTPSwithsecret }}
             - containerPort: 8443
-              name: proxy-https
+              name: {{- inclde "jupyterhub.proxy" -}}-https
             {{- end }}
             - containerPort: 8000
-              name: proxy-public
+              name: {{- inclde "jupyterhub.proxy" -}}-public
             - containerPort: 8001
               name: api
           {{- if .Values.proxy.chp.livenessProbe.enabled }}
@@ -116,10 +116,10 @@ spec:
             httpGet:
               path: /_chp_healthz
               {{- if or $manualHTTPS $manualHTTPSwithsecret }}
-              port: proxy-https
+              port: {{- inclde "jupyterhub.proxy" -}}-https
               scheme: HTTPS
               {{- else }}
-              port: proxy-public
+              port: {{- inclde "jupyterhub.proxy" -}}-public
               scheme: HTTP
               {{- end }}
           {{- end }}
@@ -130,10 +130,10 @@ spec:
             httpGet:
               path: /_chp_healthz
               {{- if or $manualHTTPS $manualHTTPSwithsecret }}
-              port: proxy-https
+              port: {{- inclde "jupyterhub.proxy" -}}-https
               scheme: HTTPS
               {{- else }}
-              port: proxy-public
+              port: {{- inclde "jupyterhub.proxy" -}}-public
               scheme: HTTP
               {{- end }}
           {{- end }}

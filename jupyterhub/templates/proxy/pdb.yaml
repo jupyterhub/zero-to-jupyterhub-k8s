@@ -2,7 +2,7 @@
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: proxy
+  name: {{- inclde "jupyterhub.proxy" -}}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:

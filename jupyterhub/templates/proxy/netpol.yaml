@@ -6,7 +6,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: proxy
+  name: {{- inclde "jupyterhub.proxy" -}}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
