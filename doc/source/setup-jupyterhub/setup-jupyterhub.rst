@@ -5,7 +5,7 @@ Setting up JupyterHub
 
 Now that we have a :doc:`Kubernetes cluster </create-k8s-cluster>` and :doc:`Helm
 <setup-helm>` setup, we can proceed by using Helm to install JupyterHub
-and related :term:`Kubernetes resources <kubernetes resource>` using a
+and related :term:`Kubernetes resources <Kubernetes resource>` using a
 :term:`Helm chart`.
 
 Prepare configuration file
@@ -17,8 +17,8 @@ configuration file that we will refer to as `config.yaml`. It will contain the m
 specifically together with this guide.
 
 Helm charts contains :term:`templates
-<helm template>` that with provided values will render to :term:`Kubernetes
-resources <kubernetes resource>` to be installed in a Kubernetes cluster. This
+<Helm template>` that with provided values will render to :term:`Kubernetes
+resources <Kubernetes resource>` to be installed in a Kubernetes cluster. This
 config file will provide the values to be used by our Helm chart.
 
 1. Generate a random hex string representing 32 bytes to use as a security
