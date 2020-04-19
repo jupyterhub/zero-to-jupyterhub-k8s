@@ -151,19 +151,19 @@ component: {{ include "jupyterhub.componentLabel" . }}
 {{ include "jupyterhub.commonLabels" . }}
 {{- end }}
 
-{{- /*
+{{/*
   jupyterhub.proxy:
     Defines proxy name value  
-    Default appends "-proxy" to chart name. At the same time, 
+    Default appends "proxy" to chart name. At the same time, 
     proxy name can be further adjusted by values.yaml 'proxy.fullnameOverride' key
 */}}
 {{- define "jupyterhub.proxy" -}}
 {{- if .Values.proxy.fullnameOverride -}}
 {{- printf "%s-%s" .Chart.Name .Values.proxy.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- printf "%s-%s" .Chart.Name "-proxy" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" .Chart.Name "proxy" | trunc 63 | trimSuffix "-" -}}
 {{- end }}
-
+{{- end }}
 
 {{- /*
   jupyterhub.matchLabels:

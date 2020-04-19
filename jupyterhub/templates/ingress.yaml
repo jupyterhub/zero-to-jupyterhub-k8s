@@ -25,7 +25,7 @@ spec:
         paths:
           - path: {{ $.Values.hub.baseUrl }}{{ $.Values.ingress.pathSuffix }}
             backend:
-              serviceName: {{- include "jupyterhub.proxy" -}}-public
+              serviceName: {{- include "jupyterhub.proxy" . -}}-public
               servicePort: 80
     {{- end }}
   {{- if .Values.ingress.tls }}

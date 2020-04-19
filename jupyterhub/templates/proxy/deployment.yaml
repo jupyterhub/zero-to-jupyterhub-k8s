@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{- include "jupyterhub.proxy" -}}
+  name: {{- include "jupyterhub.proxy" . -}}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
@@ -41,7 +41,7 @@ spec:
       volumes:
         - name: tls-secret
           secret:
-            secretName: {{- include "jupyterhub.proxy" -}}-manual-tls
+            secretName: {{- include "jupyterhub.proxy" . -}}-manual-tls
       {{- else if $manualHTTPSwithsecret }}
       volumes:
         - name: tls-secret
@@ -103,10 +103,10 @@ spec:
           ports:
             {{- if or $manualHTTPS $manualHTTPSwithsecret }}
             - containerPort: 8443
-              name: {{- include "jupyterhub.proxy" -}}-https
+              name: {{- include "jupyterhub.proxy" . -}}-https
             {{- end }}
             - containerPort: 8000
-              name: {{- include "jupyterhub.proxy" -}}-public
+              name: {{- include "jupyterhub.proxy" . -}}-public
             - containerPort: 8001
               name: api
           {{- if .Values.proxy.chp.livenessProbe.enabled }}
@@ -116,10 +116,10 @@ spec:
             httpGet:
               path: /_chp_healthz
               {{- if or $manualHTTPS $manualHTTPSwithsecret }}
-              port: {{- include "jupyterhub.proxy" -}}-https
+              port: {{- include "jupyterhub.proxy" . -}}-https
               scheme: HTTPS
               {{- else }}
-              port: {{- include "jupyterhub.proxy" -}}-public
+              port: {{- include "jupyterhub.proxy" . -}}-public
               scheme: HTTP
               {{- end }}
           {{- end }}
@@ -130,10 +130,10 @@ spec:
             httpGet:
               path: /_chp_healthz
               {{- if or $manualHTTPS $manualHTTPSwithsecret }}
-              port: {{- include "jupyterhub.proxy" -}}-https
+              port: {{- include "jupyterhub.proxy" . -}}-https
               scheme: HTTPS
               {{- else }}
-              port: {{- include "jupyterhub.proxy" -}}-public
+              port: {{- include "jupyterhub.proxy" . -}}-public
               scheme: HTTP
               {{- end }}
           {{- end }}

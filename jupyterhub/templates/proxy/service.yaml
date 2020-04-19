@@ -6,7 +6,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{- include "jupyterhub.proxy" -}}-api
+  name: {{- include "jupyterhub.proxy" . -}}-api
   labels:
     {{- $_ := merge (dict "componentSuffix" "-api") . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
@@ -21,7 +21,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{- include "jupyterhub.proxy" -}}-public
+  name: {{- include "jupyterhub.proxy" . -}}-public
   labels:
     {{- $_ := merge (dict "componentSuffix" "-public") . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
@@ -38,7 +38,7 @@ spec:
     {{- if $autoHTTPS }}
     component: autohttps
     {{- else }}
-    component: {{- include "jupyterhub.proxy" -}}
+    component: {{- include "jupyterhub.proxy" . -}}
     {{- end }}
     release: {{ .Release.Name }}
   ports:
