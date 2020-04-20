@@ -165,7 +165,7 @@ proxy:
     enabled: true
     minAvailable: 1
   https:
-    enabled: true
+    enabled: false
     type: letsencrypt
     #type: letsencrypt, manual, offload, secret
     letsencrypt:
