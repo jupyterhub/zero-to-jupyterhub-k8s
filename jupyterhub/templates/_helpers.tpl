@@ -161,7 +161,7 @@ component: {{ include "jupyterhub.componentLabel" . }}
 {{- if .Values.proxy.fullnameOverride -}}
 {{- printf "%s-%s" .Chart.Name .Values.proxy.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- printf "%s-%s" .Chart.Name "proxy" | trunc 63 | trimSuffix "-" -}}
+{{- print "proxy" -}}
 {{- end }}
 {{- end }}
 
