@@ -379,7 +379,7 @@ if get_config('cull.enabled', False):
     ]
     base_url = c.JupyterHub.get('base_url', '/')
     cull_cmd.append(
-        '--url=http://127.0.0.1:8081' + url_path_join(base_url, 'hub/api')
+        '--url=http://localhost:8081' + url_path_join(base_url, 'hub/api')
     )
 
     cull_timeout = get_config('cull.timeout')
