@@ -1,6 +1,7 @@
 {{- $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled) }}
 {{- $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt")) }}
 {{- if $autoHTTPS -}}
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,7 +19,11 @@ spec:
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
         hub.jupyter.org/network-access-proxy-http: "true"
       annotations:
-        checksum/config-map: {{ include (print .Template.BasePath "/proxy/autohttps/configmap.yaml") . | sha256sum }}
+        # Only force a restart through a change to this checksum when the static
+        # configuration is changed, as the dynamic can be updated after start.
+        # Any disruptions to this deployment impacts everything, it is the
+        # entrypoint of all network traffic.
+        checksum/static-config: {{ include "jupyterhub.traefik.yaml" . | fromYaml | merge .Values.proxy.traefik.extraStaticConfig | toYaml | sha256sum }}
     spec:
       {{- if .Values.rbac.enabled }}
       serviceAccountName: autohttps
