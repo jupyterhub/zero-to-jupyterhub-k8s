@@ -15,7 +15,7 @@ spec:
     {{- include "jupyterhub.matchLabels" . | nindent 4 }}
   ports:
     - port: 8001
-      targetPort: 8001
+      targetPort: api
 ---
 apiVersion: v1
 kind: Service
@@ -43,12 +43,10 @@ spec:
     {{- if $HTTPS }}
     - name: https
       port: 443
-      {{- if or $manualHTTPS $manualHTTPSwithsecret }}
-      targetPort: 8443
-      {{- else if $offloadHTTPS }}
-      targetPort: 8000
+      {{- if $offloadHTTPS }}
+      targetPort: http
       {{- else }}
-      targetPort: 443
+      targetPort: https
       {{- end }}
       {{- with .Values.proxy.service.nodePorts.https }}
       nodePort: {{ . }}
@@ -56,11 +54,7 @@ spec:
     {{- end }}
     - name: http
       port: 80
-      {{- if $autoHTTPS }}
-      targetPort: 80
-      {{- else }}
-      targetPort: 8000
-      {{- end }}
+      targetPort: http
       {{- with .Values.proxy.service.nodePorts.http }}
       nodePort: {{ . }}
       {{- end }}

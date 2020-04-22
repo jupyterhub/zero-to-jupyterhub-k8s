@@ -23,7 +23,7 @@ spec:
     {{- include "jupyterhub.matchLabels" . | nindent 4 }}
   ports:
     - port: 8081
-      targetPort: 8081
+      targetPort: http
       {{- if .Values.hub.service.ports.nodePort }}
       nodePort: {{ .Values.hub.service.ports.nodePort }}
       {{- end }}

@@ -18,5 +18,5 @@ spec:
     {{- include "jupyterhub.matchLabels" $_ | nindent 4 }}
   ports:
     - port: 8000
-      targetPort: 8000
+      targetPort: http
 {{- end }}
