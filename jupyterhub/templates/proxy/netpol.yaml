@@ -18,30 +18,22 @@ spec:
     - Egress
   ingress:
     - ports:
-      - port: 80
-      - port: 443
-      {{- if not $autoHTTPS }}
-      - port: 8000
-      {{- end }}
+      - port: http
       {{- if or $manualHTTPS $manualHTTPSwithsecret}}
-      - port: 8443
+      - port: https
       {{- end }}
-      # kube-lego /healthz
-      - port: 8080
-      # nginx /healthz
-      - port: 10254
     - from:
         - podSelector:
             matchLabels:
               hub.jupyter.org/network-access-proxy-http: "true"
       ports:
-        - port: 8000
+        - port: http
     - from:
         - podSelector:
             matchLabels:
               hub.jupyter.org/network-access-proxy-api: "true"
       ports:
-        - port: 8001
+        - port: api
     {{- /* Useful if you want to give proxy access to pods from other namespaces */}}
     {{- if .Values.proxy.networkPolicy.ingress}}
     {{- .Values.proxy.networkPolicy.ingress | toYaml | trimSuffix "\n" | nindent 4 }}
