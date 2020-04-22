@@ -14,8 +14,7 @@ spec:
   selector:
     {{- include "jupyterhub.matchLabels" . | nindent 4 }}
   ports:
-    - protocol: TCP
-      port: 8001
+    - port: 8001
       targetPort: 8001
 ---
 apiVersion: v1
@@ -44,7 +43,6 @@ spec:
     {{- if $HTTPS }}
     - name: https
       port: 443
-      protocol: TCP
       {{- if or $manualHTTPS $manualHTTPSwithsecret }}
       targetPort: 8443
       {{- else if $offloadHTTPS }}
@@ -58,7 +56,6 @@ spec:
     {{- end }}
     - name: http
       port: 80
-      protocol: TCP
       {{- if $autoHTTPS }}
       targetPort: 80
       {{- else }}
