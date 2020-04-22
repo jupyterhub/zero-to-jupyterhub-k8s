@@ -1,6 +1,18 @@
 {{- $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled) }}
 {{- $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt")) }}
 {{- if $autoHTTPS -}}
+{{- $_ := required .Values.proxy.https.letsencrypt.contactEmail "proxy.https.letsencrypt.contactEmail is a required field" -}}
+
+# This configmap contains Traefik configuration files to be mounted.
+# - traefik.yaml will only be read during startup (static configuration)
+# - dynamic.yaml will be read on change (dynamic configuration)
+#
+# ref: https://docs.traefik.io/getting-started/configuration-overview/
+#
+# The configuration files are first rendered with Helm templating to large YAML
+# strings. Then we use the fromYAML function on these strings to get an object,
+# that we in turn merge with user provided extra configuration.
+#
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -8,172 +20,9 @@ metadata:
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 data:
-  # This configmap contains Traefik configuration files to be mounted.
-  # - traefik.yaml will only be read during startup (static configuration)
-  # - dynamic.yaml will be read on change (dynamic configuration)
-  #
-  # ref: https://docs.traefik.io/getting-started/configuration-overview/
-  #
   traefik.yaml: |
-    # Let Traefik monitor another file we mount for dynamic configuration. As we
-    # mount this file through this configmap, we can make a `kubectl edit` on
-    # the configmap and have Traefik update on changes to dynamic.yaml.
-    providers:
-      file:
-        filename: /etc/traefik/dynamic.yaml
-
-    # Let Traefik listen to port 80 and port 443
-    #
-    # ref: https://docs.traefik.io/routing/entrypoints/
-    entryPoints:
-      # Port 80, used for:
-      # - ACME HTTP-01 challenges
-      # - Redirects to HTTPS
-      http:
-        address: ':80'
-      # Port 443, used for:
-      # - TLS Termination Proxy, where HTTPS transitions to HTTP.
-      https:
-        address: ':443'
-        # Configure a high idle timeout for our websockets connections
-        transport:
-          respondingTimeouts:
-            idleTimeout: 10m0s
-
-    # Config of logs about what happens to Traefik itself (startup,
-    # configuration, events, shutdown, and so on).
-    #
-    # ref: https://docs.traefik.io/observability/logs
-    log:
-      level: {{ if .Values.debug.enabled -}} DEBUG {{- else -}} INFO {{- end }}
-
-    # Config of logs about web requests
-    #
-    # ref: https://docs.traefik.io/observability/access-logs/
-    accessLog:
-      # Only log errors
-      filters:
-        statusCodes:
-          - 500-599
-      # Redact commonly sensitive headers
-      fields:
-        headers:
-          names:
-            Authorization: redacted
-            Cookie: redacted
-            Set-Cookie: redacted
-            X-Xsrftoken: redacted
-
-    # Automatically acquire certificates certificates form a Certificate
-    # Authority (CA) like Let's Encrypt using the ACME protocol's HTTP-01
-    # challenge.
-    #
-    # ref: https://docs.traefik.io/https/acme/#certificate-resolvers
-    certificatesResolvers:
-      default:
-        acme:
-          caServer: {{ .Values.proxy.https.letsencrypt.acmeServer | quote }}
-          email: {{ .Values.proxy.https.letsencrypt.contactEmail | required "proxy.https.letsencrypt.contactEmail is a required field" | quote }}
-          httpChallenge:
-            entryPoint: http
-          storage: /etc/acme/acme.json
-
+    {{- include "jupyterhub.traefik.yaml" . | fromYaml | merge .Values.proxy.traefik.extraStaticConfig | toYaml | nindent 4 }}
   dynamic.yaml: |
-    # Configure TLS to give us an A+ in the ssllabs.com test
-    #
-    # ref: https://www.ssllabs.com/ssltest/
-    tls:
-      options:
-        default:
-          sniStrict: true
-          minVersion: VersionTLS12
-          # Allowed ciphers adapted from Mozillas SSL Configuration Generator
-          # configured for Intermediate support which doesn't support very old
-          # systems but doesn't require very modern either.
-          #
-          # ref: https://ssl-config.mozilla.org/#server=traefik&version=2.1.2&config=intermediate&guideline=5.4
-          cipherSuites:
-            - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-            - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-            - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
-            - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-            - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305
-            - TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305
+    {{- include "jupyterhub.dynamic.yaml" . | fromYaml | merge .Values.proxy.traefik.extraDynamicConfig | toYaml | nindent 4 }}
 
-    http:
-      # Services represents the destinations we route traffic to.
-      #
-      # ref: https://docs.traefik.io/routing/services/
-      services:
-        # Represents the configurable-http-proxy (chp) server that is managed by
-        # JupyterHub to route traffic both to itself and to user pods.
-        chp:
-          loadBalancer:
-            servers:
-              - url: 'http://proxy-http:8000/'
-
-      # Middlewares tweaks requests. We define them here and reference them in
-      # our routers. We use them to redirect http traffic and headers to proxied
-      # web requests.
-      #
-      # ref: https://docs.traefik.io/middlewares/overview/
-      middlewares:
-        # A middleware to redirect to https
-        redirect:
-          redirectScheme:
-            scheme: https
-        # A middleware to add a X-Scheme (X-Forwarded-Proto) header that
-        # JupyterHub's Tornado web-server needs if expecting to serve https
-        # traffic. Without it we would run into issues like:
-        # https://github.com/jupyterhub/jupyterhub/issues/2284
-        scheme:
-          headers:
-            customRequestHeaders:
-              # DISCUSS ME: Can we use the X-Forwarded-Proto header instead? It
-              # seems more recognized. Mozilla calls it the de-facto standard
-              # header for this purpose, and Tornado recognizes both.
-              #
-              # ref: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Proto
-              # ref: https://www.tornadoweb.org/en/stable/httpserver.html#http-server
-              X-Scheme: https
-        hsts:
-          # A middleware to add a HTTP Strict-Transport-Security (HSTS) response
-          # header, they function as a request for browsers to enforce HTTPS on
-          # their end in for a given time into the future, and optionally
-          # subdomains for requests to subdomains as well.
-          #
-          # ref: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
-          headers:
-            stsSeconds: {{ .Values.proxy.traefik.hsts.maxAge | int64 }}
-            stsIncludeSubdomains: true
-
-      # Routers routes web requests to a service and optionally tweaks them with
-      # middleware.
-      #
-      # ref: https://docs.traefik.io/routing/routers/
-      routers:
-        # Route insecure http traffic to https
-        insecure:
-          rule: PathPrefix(`/`)
-          service: chp
-          entrypoints: ["http"]
-          middlewares: ["redirect", "hsts"]
-
-        # Route secure https traffic to the configurable-http-proxy managed by
-        # JupyterHub.
-        default:
-          rule: PathPrefix(`/`)
-          service: chp
-          entrypoints: ["https"]
-          middlewares: ["hsts", "scheme"]
-          # Use our predefined TLS options and certificate resolver, enabling
-          # this route to act as a TLS termination proxy with high security
-          # standards.
-          tls:
-            options: default
-            certResolver: default
-            domains:
-              {{- range $host := .Values.proxy.https.hosts }}
-              - main: {{ $host }}
-              {{- end }}
 {{- end }}

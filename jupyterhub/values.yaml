@@ -154,6 +154,8 @@ proxy:
       maxAge: 15724800 # About 6 months
       includeSubdomains: false
     resources: {}
+    extraStaticConfig: {}
+    extraDynamicConfig: {}
   secretSync:
     image:
       name: jupyterhub/k8s-secret-sync
