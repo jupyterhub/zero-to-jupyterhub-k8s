@@ -12,6 +12,22 @@ sys.path.insert(0, configuration_directory)
 
 from z2jh import get_config, set_config_if_not_none
 
+def serviceUrl(svc, ssl=False):
+    port = int(os.environ['{}_SERVICE_PORT'.fornat(svc.upper())])
+    host = os.environ['{}_SERVICE_HOST'.format(svc.upper())]
+    schema = 'https' if ssl else 'http'
+    ipv6 = ':' in host
+    
+    return ('{}://[{}]:{}' if ipv6 else '{}://{}:{}').format(schema, host, port)
+
+def camelCaseify(s):
+    """convert snake_case to camelCase
+
+    For the common case where some_value is set from someValue
+    so we don't have to specify the name twice.
+    """
+    return re.sub(r"_([a-z])", lambda m: m.group(1).upper(), s)
+
 # Configure JupyterHub to use the curl backend for making HTTP requests,
 # rather than the pure-python implementations. The default one starts
 # being too slow to make a large number of requests to the proxy API
@@ -21,7 +37,7 @@ AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
 # Connect to a proxy running in a different pod
-c.ConfigurableHTTPProxy.api_url = 'http://{}:{}'.format(os.environ['PROXY_API_SERVICE_HOST'], int(os.environ['PROXY_API_SERVICE_PORT']))
+c.ConfigurableHTTPProxy.api_url = serviceUrl('proxy-api')
 c.ConfigurableHTTPProxy.should_start = False
 
 # Do not shut down user pods when hub is restarted
@@ -34,15 +50,6 @@ c.JupyterHub.last_activity_interval = 60
 c.JupyterHub.tornado_settings = {
     'slow_spawn_timeout': 0,
 }
-
-
-def camelCaseify(s):
-    """convert snake_case to camelCase
-
-    For the common case where some_value is set from someValue
-    so we don't have to specify the name twice.
-    """
-    return re.sub(r"_([a-z])", lambda m: m.group(1).upper(), s)
 
 
 # configure the hub db connection
@@ -74,11 +81,10 @@ for trait, cfg_key in (
         cfg_key = camelCaseify(trait)
     set_config_if_not_none(c.JupyterHub, trait, 'hub.' + cfg_key)
 
-c.JupyterHub.ip = os.environ['PROXY_PUBLIC_SERVICE_HOST']
-c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
+c.JupyterHub.bind_url = serviceUrl('proxy-public')
 
 # the hub should listen on all interfaces, so the proxy can access it
-c.JupyterHub.hub_ip = '0.0.0.0'
+c.JupyterHub.hub_bind_url = 'http://[::]:8081'
 
 # implement common labels
 # this duplicates the jupyterhub.commonLabels helper
@@ -247,8 +253,7 @@ c.KubeSpawner.volumes.extend(get_config('singleuser.storage.extraVolumes', []))
 c.KubeSpawner.volume_mounts.extend(get_config('singleuser.storage.extraVolumeMounts', []))
 
 # Gives spawned containers access to the API of the hub
-c.JupyterHub.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
-c.JupyterHub.hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])
+c.JupyterHub.hub_connect_url = serviceUrl('hub')
 
 # Allow switching authenticators easily
 auth_type = get_config('auth.type')
