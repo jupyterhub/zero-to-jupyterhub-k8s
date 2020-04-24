@@ -22,6 +22,7 @@ http:
     # A middleware to redirect to https
     redirect:
       redirectScheme:
+        permanent: true
         scheme: https
     # A middleware to add a X-Scheme (X-Forwarded-Proto) header that
     # JupyterHub's Tornado web-server needs if expecting to serve https
@@ -69,7 +70,6 @@ http:
       entrypoints:
         - "http"
       middlewares:
-        - "hsts"
         - "redirect"
       rule: PathPrefix(`/`)
       service: default
