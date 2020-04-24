@@ -17,7 +17,8 @@ http:
       #
       # ref: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
       headers:
-        stsIncludeSubdomains: true
+        stsIncludeSubdomains: {{ .Values.proxy.traefik.hsts.includeSubdomains }}
+        stsPreload: {{ .Values.proxy.traefik.hsts.preload }}
         stsSeconds: {{ .Values.proxy.traefik.hsts.maxAge | int64 }}
     # A middleware to redirect to https
     redirect:
