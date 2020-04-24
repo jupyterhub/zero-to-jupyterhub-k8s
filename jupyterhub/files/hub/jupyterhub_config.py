@@ -13,8 +13,9 @@ sys.path.insert(0, configuration_directory)
 from z2jh import get_config, set_config_if_not_none
 
 def serviceUrl(svc, ssl=False):
-    port = int(os.environ['{}_SERVICE_PORT'.fornat(svc.upper())])
-    host = os.environ['{}_SERVICE_HOST'.format(svc.upper())]
+    prefix = (svc.replace('-', '_') + '_SERVICE').upper()
+    port = int(os.environ['{}_PORT'.format(prefix)])
+    host = os.environ['{}_HOST'.format(prefix)]
     schema = 'https' if ssl else 'http'
     ipv6 = ':' in host
     
