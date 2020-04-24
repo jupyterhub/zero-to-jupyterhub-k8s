@@ -85,7 +85,9 @@ for trait, cfg_key in (
 c.JupyterHub.bind_url = serviceUrl('proxy-public')
 
 # the hub should listen on all interfaces, so the proxy can access it
-c.JupyterHub.hub_bind_url = 'http://[::]:8081'
+# tornados httpserver only listens on a single address family which deviates from Lux standard behaviour
+ipv6 = ':' in os.environ['KUBERNETES_SERVICE_HOST']
+c.JupyterHub.hub_bind_url = 'http://[::]:8081' if ipv6 else 'http://0.0.0.0:8081'
 
 # implement common labels
 # this duplicates the jupyterhub.commonLabels helper
