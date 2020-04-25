@@ -30,7 +30,7 @@ What To Expect
 This guide will help you deploy and customize your own JupyterHub on a cloud.
 While doing this, you will gain valuable experience with:
 
-* **A cloud provider** such Google Cloud, Microsoft Azure, Amazon EC2, IBM Cloud...
+* **A cloud provider** such as Google Cloud, Microsoft Azure, Amazon EC2, IBM Cloud...
 * **Kubernetes** to manage resources on the cloud
 * **Helm** to configure and control the packaged JupyterHub installation
 * **JupyterHub** to give users access to a Jupyter computing environment

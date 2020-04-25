@@ -22,7 +22,7 @@ details.
       Dummy (anyone can log in), etc.
    
    `config.yaml`
-      The :term:`Helm charts <helm chart>` templates are rendered with these
+      The :term:`Helm charts <Helm chart>` templates are rendered with these
       :term:`Helm values` as input. The file is written in the `YAML
       <https://en.wikipedia.org/wiki/YAML>`_ format. The YAML format is essential
       to grasp if working with Kubernetes and Helm.
@@ -57,7 +57,7 @@ details.
    `Helm chart <https://docs.helm.sh/developing_charts/#charts>`_
       A Helm chart is a group of :term:`Helm templates <Helm template>` that
       can, given its default values and overrides in provided ``yaml`` files,
-      render to a set of :term:`Kubernetes resources <kubernetes resource>` that
+      render to a set of :term:`Kubernetes resources <Kubernetes resource>` that
       can be easily installed to your Kubernetes cluster. In other words a Helm
       chart is like a configurable installation of software and infrastructure
       to exist on a cloud.
@@ -67,10 +67,10 @@ details.
       :term:`Kubernetes resource`.
 
    `Helm values <https://docs.helm.sh/chart_template_guide/#values-files>`_
-      :term:`Helm charts <helm chart>` has a set of predefined values
+      :term:`Helm charts <Helm chart>` has a set of predefined values
       (`values.yaml`) typically overridden by other values in `config.yaml`. The
-      final values are used to generate :term:`Kubernetes resources <kubernetes
-      resource>` from :term:`Helm templates <helm template>` within a
+      final values are used to generate :term:`Kubernetes resources <Kubernetes
+      resource>` from :term:`Helm templates <Helm template>` within a
       :term:`Helm chart`.
 
    Kubernetes

@@ -3,7 +3,8 @@ proxy:
   service:
     type: NodePort
     nodePorts:
-      http: 31212
+      http: 30080
+      https: 30443
   chp:
     resources:
       requests:

@@ -1176,14 +1176,18 @@ properties:
     properties:
       hook:
         description: |
-          See the [*optimization section*](optimization.html#pulling-images-before-users-arrive) for more details.
+          See the [*optimization
+          section*](https://zero-to-jupyterhub.readthedocs.io/en/stable/administrator/optimization.html#pulling-images-before-users-arrive)
+          for more details.
         type: object
         properties:
           enabled:
             type: bool
       continuous:
         description: |
-          See the [*optimization section*](optimization.html#pulling-images-before-users-arrive) for more details.
+          See the [*optimization
+          section*](https://zero-to-jupyterhub.readthedocs.io/en/stable/administrator/optimization.html#pulling-images-before-users-arrive)
+          for more details.
 
           **NOTE**: If used with a Cluster Autoscaler (an autoscaling node
           pool), also add user-placeholders and enable pod priority.
@@ -1194,7 +1198,9 @@ properties:
       extraImages:
         type: object
         description: |
-          See the [*optimization section*](optimization.html#the-images-that-will-be-pulled) for more details.
+          See the [*optimization
+          section*](https://zero-to-jupyterhub.readthedocs.io/en/stable/administrator/optimization.html#the-images-that-will-be-pulled)
+          for more details.
 
           ```yaml
           prePuller:

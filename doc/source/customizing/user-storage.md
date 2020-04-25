@@ -175,8 +175,9 @@ You can set the size of storage requested by JupyterHub in the `PVC` in
 your `config.yaml`.
 
 ```yaml
-storage:
-  capacity: 2Gi
+singleuser:
+  storage:
+    capacity: 2Gi
 ```
 
 This will request a `2Gi` volume per user. The default requests a `10Gi`
