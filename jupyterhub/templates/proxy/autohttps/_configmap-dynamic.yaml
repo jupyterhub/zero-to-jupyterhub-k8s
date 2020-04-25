@@ -84,7 +84,7 @@ http:
     default:
       loadBalancer:
         servers:
-          - url: 'http://proxy-http:8000/'
+          - url: 'http://{{ include "jupyterhub.proxy" . }}-http:8000/'
 
 # Configure TLS to give us an A+ in the ssllabs.com test
 #

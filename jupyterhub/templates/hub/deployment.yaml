@@ -44,15 +44,15 @@ spec:
             {{- if .Values.hub.existingSecret }}
             secretName: {{ .Values.hub.existingSecret }}
             {{- else }}
-            secretName: hub-secret
+            secretName: {{ include "jupyterhub.hub" . }}-secret
             {{- end }}
         {{- if .Values.hub.extraVolumes }}
         {{- .Values.hub.extraVolumes | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
         {{- if eq .Values.hub.db.type "sqlite-pvc" }}
-        - name: hub-db-dir
+        - name: {{ include "jupyterhub.hub" . }}-db-dir
           persistentVolumeClaim:
-            claimName: hub-db-dir
+            claimName: {{ include "jupyterhub.hub" . }}-db-dir
         {{- end }}
       {{- if .Values.rbac.enabled }}
       serviceAccountName: hub
@@ -125,7 +125,7 @@ spec:
             {{- end }}
             {{- if eq .Values.hub.db.type "sqlite-pvc" }}
             - mountPath: /srv/jupyterhub
-              name: hub-db-dir
+              name: {{ include "jupyterhub.hub" . }}-db-dir
               {{- if .Values.hub.db.pvc.subPath }}
               subPath: {{ .Values.hub.db.pvc.subPath | quote }}
               {{- end }}
@@ -151,7 +151,7 @@ spec:
                   {{- if .Values.hub.existingSecret }}
                   name: {{ .Values.hub.existingSecret }}
                   {{- else }}
-                  name: hub-secret
+                  name: {{ include "jupyterhub.hub" . }}-secret
                   {{- end }}
                   key: hub.cookie-secret
             {{- end }}
@@ -165,7 +165,7 @@ spec:
                   {{- if .Values.hub.existingSecret }}
                   name: {{ .Values.hub.existingSecret }}
                   {{- else }}
-                  name: hub-secret
+                  name: {{ include "jupyterhub.hub" . }}-secret
                   {{- end }}
                   key: proxy.token
             {{- if .Values.auth.state.enabled }}
@@ -175,7 +175,7 @@ spec:
                   {{- if .Values.hub.existingSecret }}
                   name: {{ .Values.hub.existingSecret }}
                   {{- else }}
-                  name: hub-secret
+                  name: {{ include "jupyterhub.hub" . }}-secret
                   {{- end }}
                   key: auth.state.crypto-key
             {{- end }}
@@ -187,7 +187,7 @@ spec:
                   {{- if .Values.hub.existingSecret }}
                   name: {{ .Values.hub.existingSecret }}
                   {{- else }}
-                  name: hub-secret
+                  name: {{ include "jupyterhub.hub" . }}-secret
                   {{- end }}
                   key: hub.db.password
             {{- else if eq .Values.hub.db.type "postgres" }}
@@ -197,7 +197,7 @@ spec:
                   {{- if .Values.hub.existingSecret }}
                   name: {{ .Values.hub.existingSecret }}
                   {{- else }}
-                  name: hub-secret
+                  name: {{ include "jupyterhub.hub" . }}-secret
                   {{- end }}
                   key: hub.db.password
             {{- end }}
