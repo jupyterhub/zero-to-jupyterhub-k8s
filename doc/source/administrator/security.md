@@ -281,10 +281,8 @@ singleuser:
             protocol: UDP
       - ports:
           - port: 80
-            protocol: TCP
       - ports:
           - port: 443
-            protocol: TCP
 ```
 
 See the [Kubernetes

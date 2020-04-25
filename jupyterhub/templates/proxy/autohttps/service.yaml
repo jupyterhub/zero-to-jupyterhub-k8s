@@ -17,7 +17,6 @@ spec:
     {{- $_ := merge (dict "componentLabel" "proxy") . }}
     {{- include "jupyterhub.matchLabels" $_ | nindent 4 }}
   ports:
-    - protocol: TCP
-      port: 8000
-      targetPort: 8000
+    - port: 8000
+      targetPort: http
 {{- end }}

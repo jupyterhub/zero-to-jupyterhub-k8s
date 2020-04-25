@@ -216,8 +216,8 @@ spec:
             {{- end }}
             {{- end }}
           ports:
-            - containerPort: 8081
-              name: hub
+            - name: http
+              containerPort: 8081
           {{- if .Values.hub.livenessProbe.enabled }}
           # livenessProbe notes:
           # We don't know how long hub database upgrades could take
@@ -231,7 +231,7 @@ spec:
             periodSeconds: {{ .Values.hub.livenessProbe.periodSeconds }}
             httpGet:
               path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
-              port: hub
+              port: http
           {{- end }}
           {{- if .Values.hub.readinessProbe.enabled }}
           readinessProbe:
@@ -239,5 +239,5 @@ spec:
             periodSeconds: {{ .Values.hub.readinessProbe.periodSeconds }}
             httpGet:
               path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
-              port: hub
+              port: http
           {{- end }}
