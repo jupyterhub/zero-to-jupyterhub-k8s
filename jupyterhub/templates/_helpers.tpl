@@ -165,6 +165,21 @@ component: {{ include "jupyterhub.componentLabel" . }}
 {{- end }}
 {{- end }}
 
+{{/*
+  jupyterhub.hub:
+    Defines hub name value  
+    Default appends "hub" to chart name. At the same time, 
+    proxy name can be further adjusted by values.yaml 'hub.fullnameOverride' key
+*/}}
+{{- define "jupyterhub.hub" -}}
+{{- if .Values.hub.fullnameOverride -}}
+{{- printf "%s-%s" .Chart.Name .Values.hub.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- print "hub" -}}
+{{- end }}
+{{- end }}
+
+
 {{- /*
   jupyterhub.matchLabels:
     Used to provide pod selection labels: component, app, release.

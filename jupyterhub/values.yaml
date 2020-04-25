@@ -1,6 +1,7 @@
 custom: {}
 
 hub:
+  fullnameOverride: ''
   service:
     type: ClusterIP
     annotations: {}

@@ -1,4 +1,5 @@
 hub:
+  fullnameOverride: 'hub'
   service:
     type: ClusterIP
     ports:
