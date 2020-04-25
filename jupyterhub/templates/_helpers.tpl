@@ -169,7 +169,7 @@ component: {{ include "jupyterhub.componentLabel" . }}
   jupyterhub.hub:
     Defines hub name value  
     Default appends "hub" to chart name. At the same time, 
-    proxy name can be further adjusted by values.yaml 'hub.fullnameOverride' key
+    hub name can be further adjusted by values.yaml 'hub.fullnameOverride' key
 */}}
 {{- define "jupyterhub.hub" -}}
 {{- if .Values.hub.fullnameOverride -}}

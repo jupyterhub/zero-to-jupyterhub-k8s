@@ -4,6 +4,10 @@ properties:
   hub:
     type: object
     properties:
+      fullnameOverride:
+        type: string
+        description: |
+          Overwrite name of the proxy
       cookieSecret:
         type:
           - string
