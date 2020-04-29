@@ -12,15 +12,6 @@ sys.path.insert(0, configuration_directory)
 
 from z2jh import get_config, set_config_if_not_none
 
-def serviceUrl(svc, ssl=False):
-    prefix = (svc.replace('-', '_') + '_SERVICE').upper()
-    port = int(os.environ['{}_PORT'.format(prefix)])
-    host = os.environ['{}_HOST'.format(prefix)]
-    schema = 'https' if ssl else 'http'
-    ipv6 = ':' in host
-    
-    return ('{}://[{}]:{}' if ipv6 else '{}://{}:{}').format(schema, host, port)
-
 def camelCaseify(s):
     """convert snake_case to camelCase
 
@@ -38,7 +29,7 @@ AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
 # Connect to a proxy running in a different pod
-c.ConfigurableHTTPProxy.api_url = serviceUrl('proxy-api')
+c.ConfigurableHTTPProxy.api_url = 'http://proxy-api'
 c.ConfigurableHTTPProxy.should_start = False
 
 # Do not shut down user pods when hub is restarted
@@ -82,7 +73,7 @@ for trait, cfg_key in (
         cfg_key = camelCaseify(trait)
     set_config_if_not_none(c.JupyterHub, trait, 'hub.' + cfg_key)
 
-c.JupyterHub.bind_url = serviceUrl('proxy-public')
+c.JupyterHub.bind_url = 'http://proxy-public'
 
 # the hub should listen on all interfaces, so the proxy can access it
 # tornados httpserver only listens on a single address family which deviates from Lux standard behaviour
@@ -256,7 +247,7 @@ c.KubeSpawner.volumes.extend(get_config('singleuser.storage.extraVolumes', []))
 c.KubeSpawner.volume_mounts.extend(get_config('singleuser.storage.extraVolumeMounts', []))
 
 # Gives spawned containers access to the API of the hub
-c.JupyterHub.hub_connect_url = serviceUrl('hub')
+c.JupyterHub.hub_connect_url = 'http://hub'
 
 # Allow switching authenticators easily
 auth_type = get_config('auth.type')

@@ -36,7 +36,7 @@ spec:
             - /image-awaiter
             - -ca-path=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
             - -auth-token-path=/var/run/secrets/kubernetes.io/serviceaccount/token
-            - -api-server-address=https://$(KUBERNETES_SERVICE_HOST):$(KUBERNETES_SERVICE_PORT)
+            - -api-server-address=https://kubernetes.default.svc
             - -namespace={{ .Release.Namespace }}
             - -daemonset=hook-image-puller
 {{- end }}
