@@ -29,7 +29,7 @@ AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
 # Connect to a proxy running in a different pod
-c.ConfigurableHTTPProxy.api_url = 'http://proxy-api'
+c.ConfigurableHTTPProxy.api_url = 'http://proxy-api:8001'
 c.ConfigurableHTTPProxy.should_start = False
 
 # Do not shut down user pods when hub is restarted
@@ -76,7 +76,9 @@ for trait, cfg_key in (
 c.JupyterHub.bind_url = 'http://proxy-public'
 
 # the hub should listen on all interfaces, so the proxy can access it
-# tornados httpserver only listens on a single address family which deviates from Lux standard behaviour
+# tornados httpserver only listens on a single address family
+# this deviates from Linux's standard behaviour. Right now JupyterHub
+# does not support dual-stack setups.
 ipv6 = ':' in os.environ['KUBERNETES_SERVICE_HOST']
 c.JupyterHub.hub_bind_url = 'http://[::]:8081' if ipv6 else 'http://0.0.0.0:8081'
 
@@ -247,7 +249,7 @@ c.KubeSpawner.volumes.extend(get_config('singleuser.storage.extraVolumes', []))
 c.KubeSpawner.volume_mounts.extend(get_config('singleuser.storage.extraVolumeMounts', []))
 
 # Gives spawned containers access to the API of the hub
-c.JupyterHub.hub_connect_url = 'http://hub'
+c.JupyterHub.hub_connect_url = 'http://hub:8081'
 
 # Allow switching authenticators easily
 auth_type = get_config('auth.type')
