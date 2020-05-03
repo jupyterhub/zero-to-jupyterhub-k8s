@@ -19,8 +19,7 @@ spec:
             matchLabels:
               hub.jupyter.org/network-access-singleuser: "true"
       ports:
-        - protocol: TCP
-          port: 8888
+        - port: 8888
     {{- /* Useful if you want to give user server access to pods from other namespaces */}}
     {{- if .Values.singleuser.networkPolicy.ingress }}
     {{- .Values.singleuser.networkPolicy.ingress | toYaml | trimSuffix "\n" | nindent 4 }}
@@ -36,8 +35,7 @@ spec:
               {{- $_ := merge (dict "componentLabel" "hub") . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
       ports:
-        - protocol: TCP
-          port: 8081
+        - port: 8081
     {{- if .Values.singleuser.networkPolicy.egress }}
     {{- .Values.singleuser.networkPolicy.egress | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}

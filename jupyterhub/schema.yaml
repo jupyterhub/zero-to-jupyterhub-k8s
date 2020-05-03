@@ -505,7 +505,7 @@ properties:
               - LoadBalancer
               - ExternalName
             description: |
-              See `hub.service.type`.
+              Default `LoadBalancer`. See `hub.service.type` for supported values.
           labels:
             type: object
             description: |
