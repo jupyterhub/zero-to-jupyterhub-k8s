@@ -168,7 +168,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
    .. code-block:: bash
 
-      SP_PASSWD=$(az ad create-for-rbac \
+      SP_PASSWD=$(az ad sp create-for-rbac \
           --name <SERVICE-PRINCIPAL-NAME> \
           --role Contributor \
           --scopes $VNET_ID \
