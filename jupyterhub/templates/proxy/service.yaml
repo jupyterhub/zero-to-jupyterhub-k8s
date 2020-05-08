@@ -14,9 +14,8 @@ spec:
   selector:
     {{- include "jupyterhub.matchLabels" . | nindent 4 }}
   ports:
-    - protocol: TCP
-      port: 8001
-      targetPort: 8001
+    - port: 8001
+      targetPort: api
 ---
 apiVersion: v1
 kind: Service
@@ -34,7 +33,6 @@ metadata:
   {{- end }}
 spec:
   selector:
-    # TODO: Refactor to utilize the helpers
     {{- if $autoHTTPS }}
     component: autohttps
     {{- else }}
@@ -42,38 +40,31 @@ spec:
     {{- end }}
     release: {{ .Release.Name }}
   ports:
-    - name: http
-      port: 80
-      protocol: TCP
-      {{- if $autoHTTPS }}
-      targetPort: 80
-      {{- else }}
-      targetPort: 8000
-      {{- end }}
-      # allow proxy.service.nodePort for http
-      {{- if .Values.proxy.service.nodePorts.http }}
-      nodePort: {{ .Values.proxy.service.nodePorts.http }}
-      {{- end }}
     {{- if $HTTPS }}
     - name: https
       port: 443
-      protocol: TCP
-      {{- if or $manualHTTPS $manualHTTPSwithsecret }}
-      targetPort: 8443
-      {{- else if $offloadHTTPS }}
-      targetPort: 8000
+      {{- if $offloadHTTPS }}
+      targetPort: http
       {{- else }}
-      targetPort: 443
+      targetPort: https
       {{- end }}
-      {{- if .Values.proxy.service.nodePorts.https }}
-      nodePort: {{ .Values.proxy.service.nodePorts.https }}
+      {{- with .Values.proxy.service.nodePorts.https }}
+      nodePort: {{ . }}
       {{- end }}
     {{- end }}
+    - name: http
+      port: 80
+      targetPort: http
+      {{- with .Values.proxy.service.nodePorts.http }}
+      nodePort: {{ . }}
+      {{- end }}
   type: {{ .Values.proxy.service.type }}
-  {{- if .Values.proxy.service.loadBalancerIP }}
-  loadBalancerIP: {{ .Values.proxy.service.loadBalancerIP }}
+  {{- with .Values.proxy.service.loadBalancerIP }}
+  loadBalancerIP: {{ . }}
   {{- end }}
-  {{- if and (eq .Values.proxy.service.type "LoadBalancer") .Values.proxy.service.loadBalancerSourceRanges }}
+  {{- if eq .Values.proxy.service.type "LoadBalancer" }}
+  {{- with .Values.proxy.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
-    {{- .Values.proxy.service.loadBalancerSourceRanges | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
+  {{- end }}
   {{- end }}

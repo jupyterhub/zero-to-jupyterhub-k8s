@@ -1,3 +1,5 @@
+:orphan:
+
 .. _amazon-efs:
 
 Setting up EFS storage on AWS

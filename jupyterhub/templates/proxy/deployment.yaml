@@ -62,8 +62,8 @@ spec:
           image: {{ .Values.proxy.chp.image.name }}:{{ .Values.proxy.chp.image.tag }}
           command:
             - configurable-http-proxy
-            - --ip=0.0.0.0
-            - --api-ip=0.0.0.0
+            - '--ip=::'
+            - '--api-ip=::'
             - --api-port=8001
             - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
             - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)/hub/error
@@ -111,13 +111,13 @@ spec:
           {{- end }}
           ports:
             {{- if or $manualHTTPS $manualHTTPSwithsecret }}
-            - containerPort: 8443
-              name: proxy-https
+            - name: https
+              containerPort: 8443
             {{- end }}
-            - containerPort: 8000
-              name: proxy-public
-            - containerPort: 8001
-              name: api
+            - name: http
+              containerPort: 8000
+            - name: api
+              containerPort: 8001
           {{- if .Values.proxy.chp.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.proxy.chp.livenessProbe.initialDelaySeconds }}
@@ -125,10 +125,10 @@ spec:
             httpGet:
               path: /_chp_healthz
               {{- if or $manualHTTPS $manualHTTPSwithsecret }}
-              port: proxy-https
+              port: https
               scheme: HTTPS
               {{- else }}
-              port: proxy-public
+              port: http
               scheme: HTTP
               {{- end }}
           {{- end }}
@@ -139,10 +139,10 @@ spec:
             httpGet:
               path: /_chp_healthz
               {{- if or $manualHTTPS $manualHTTPSwithsecret }}
-              port: proxy-https
+              port: https
               scheme: HTTPS
               {{- else }}
-              port: proxy-public
+              port: http
               scheme: HTTP
               {{- end }}
           {{- end }}

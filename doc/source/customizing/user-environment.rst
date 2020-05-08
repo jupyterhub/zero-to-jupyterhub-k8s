@@ -125,7 +125,7 @@ we recommend that you build a new image on top of an existing Docker image from
 jupyter/docker-stacks.
 
 Below is an example :term:`Dockerfile` building on top of the *minimal-notebook*
-image. This file can be built to a :term:`docker image`, and pushed to a
+image. This file can be built to a :term:`Docker image`, and pushed to a
 :term:`image registry`, and finally configured in :term:`config.yaml` to be used
 by the Helm chart.
 

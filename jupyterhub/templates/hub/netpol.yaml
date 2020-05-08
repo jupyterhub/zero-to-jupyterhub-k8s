@@ -18,8 +18,7 @@ spec:
             matchLabels:
               hub.jupyter.org/network-access-hub: "true"
       ports:
-        - protocol: TCP
-          port: 8081
+        - port: http
     {{- /* Useful if you want to give hub access to pods from other namespaces */}}
     {{- if .Values.hub.networkPolicy.ingress}}
     {{- .Values.hub.networkPolicy.ingress| toYaml | trimSuffix "\n" | nindent 4 }}

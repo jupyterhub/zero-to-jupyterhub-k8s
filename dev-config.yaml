@@ -1,4 +1,10 @@
 proxy:
+  secretToken: 97141abb55ea5321867979cb57bb2e6a86a2f4d6bb166fca45aedb07c212c42d
+  service:
+    type: NodePort
+    nodePorts:
+      http: 30080
+      https: 30443
   chp:
     resources:
       requests:

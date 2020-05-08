@@ -221,7 +221,7 @@ where he analyzed its introduction on mybinder.org.
 priority depending on how your cluster autoscaler is configured. This is known
 to work on GKE, but we don't know how it works on other cloud providers or
 kubernetes. See the [configuration
-reference](reference.html#scheduling-podpriority) for more details.
+reference](https://zero-to-jupyterhub.readthedocs.io/en/latest/reference.html#scheduling-podpriority) for more details.
 
 ### Scaling down efficiently
 
@@ -325,7 +325,7 @@ for the first time, it is showing the amount of user pods active on five
 different nodes. When the user scheduler was enabled, two nodes were in time
 freed up from user pods and scaled down.
 
-[![](../_static/images/user_scheduler.png)](../_static/images/user_scheduler.png)
+![User scheduler node activity](../_static/images/user_scheduler.png)
 
 To enable the user scheduler:
 

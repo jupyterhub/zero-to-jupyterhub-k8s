@@ -4,6 +4,7 @@
 
 import argparse
 import functools
+import json
 import os
 import pipes
 import re
@@ -177,36 +178,47 @@ def kind_create(recreate):
         error_callback=_log_wait_node_timeout,
     )
 
-    print("Installing Helm's tiller asynchronously in the cluster.")
-    _run(
-        cmd=[
-            "kubectl", "create", "serviceaccount", "tiller",
-            "--namespace", "kube-system",
-        ],
-        print_end="",
-    )
-    _run(
-        cmd=[
-            "kubectl", "create", "clusterrolebinding", "tiller",
-            "--clusterrole", "cluster-admin",
-            "--serviceaccount", "kube-system:tiller",
-        ],
-        print_end="",
-    )
-    _run([
-        "helm", "init",
-        "--service-account", "tiller",
-    ])
+    if os.getenv('Z2JH_HELM_VERSION', '').startswith('3.'):
+        print("Creating K8s namespace for Helm 3 to work in.")
+        _run(
+            cmd=[
+                "kubectl", "create", "namespace",
+                os.environ["Z2JH_KUBE_NAMESPACE"],
+            ],
+            print_end="",
+            exit_on_error=False,
+        )
+    else:
+        print("Installing Helm's tiller asynchronously in the cluster.")
+        _run(
+            cmd=[
+                "kubectl", "create", "serviceaccount", "tiller",
+                "--namespace", "kube-system",
+            ],
+            print_end="",
+        )
+        _run(
+            cmd=[
+                "kubectl", "create", "clusterrolebinding", "tiller",
+                "--clusterrole", "cluster-admin",
+                "--serviceaccount", "kube-system:tiller",
+            ],
+            print_end="",
+        )
+        _run([
+            "helm", "init",
+            "--service-account", "tiller",
+        ])
 
-    print("Waiting for Helm's tiller to become ready in the cluster.")
-    _run(
-        cmd=[
-            "kubectl", "rollout", "status", "deployment/tiller-deploy",
-            "--namespace", "kube-system",
-            "--timeout", "2m",
-        ],
-        error_callback=_log_tiller_rollout_timeout,
-    )
+        print("Waiting for Helm's tiller to become ready in the cluster.")
+        _run(
+            cmd=[
+                "kubectl", "rollout", "status", "deployment/tiller-deploy",
+                "--namespace", "kube-system",
+                "--timeout", "2m",
+            ],
+            error_callback=_log_tiller_rollout_timeout,
+        )
 
     print('Kind cluster successfully setup!')
 

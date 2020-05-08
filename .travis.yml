@@ -20,9 +20,13 @@ stages:
   - name: test
   - name: publish
     if: >
-      branch in (master)
-      AND
-      type in (push)
+      (
+        branch IN (master)
+        AND
+        type IN (push)
+      )
+      OR
+      tag IS present
 install:
   - set -e
   - pip3 install --no-cache-dir -r dev-requirements.txt
@@ -57,19 +61,20 @@ env:
   - Z2JH_KUBE_VERSION=1.13.12
   - Z2JH_KUBE_VERSION=1.15.6
   - Z2JH_KUBE_VERSION=1.16.3
+  - Z2JH_KUBE_VERSION=1.16.3 Z2JH_HELM_VERSION=3.0.2
 
 jobs:
   ## allow experimental setups to fail
   ##
   ## ref: https://docs.travis-ci.com/user/customizing-the-build/#rows-that-are-allowed-to-fail
   ##
-  # allow_failures:
-  #   - env: *allow_failure
+  allow_failures:
+    - name: check docs
   ## don't wait for the jobs that are allowed to fail to report success
   ##
   ## ref: https://docs.travis-ci.com/user/customizing-the-build/#fast-finishing
   ##
-  # fast_finish: true
+  fast_finish: true
 
   ## include additional individual jobs
   ##
@@ -82,11 +87,18 @@ jobs:
       env:
         ## inclusions of more than three versions cause rate limiting failures
         - Z2JH_VALIDATE_KUBE_VERSIONS=1.11.0,1.14.0,1.16.0
+    - stage: lint and validate
+      name: check docs
+      script:
+        - pip install -r doc/doc-requirements.txt
+        - cd doc
+        - make html SPHINXOPTS='-W --keep-going'
+        - make linkcheck
     - stage: publish
       script:
         - setup_git_crypt
         - setup_helm
-        - helm init --client-only
+        - init_helm
         - ./ci/travis-docker-fix
         - ./ci/publish
       env:

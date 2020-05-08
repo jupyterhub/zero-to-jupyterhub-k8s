@@ -289,10 +289,21 @@ elif auth_type == 'gitlab':
     for trait, cfg_key in common_oauth_traits + (
         ('gitlab_group_whitelist', None),
         ('gitlab_project_id_whitelist', None),
+        ('gitlab_url', None),
     ):
         if cfg_key is None:
             cfg_key = camelCaseify(trait)
         set_config_if_not_none(c.GitLabOAuthenticator, trait, 'auth.gitlab.' + cfg_key)
+elif auth_type == 'azuread':
+    c.JupyterHub.authenticator_class = 'oauthenticator.azuread.AzureAdOAuthenticator'
+    for trait, cfg_key in common_oauth_traits + (
+        ('tenant_id', None),
+        ('username_claim', None),
+    ):
+        if cfg_key is None:
+            cfg_key = camelCaseify(trait)
+
+        set_config_if_not_none(c.AzureAdOAuthenticator, trait, 'auth.azuread.' + cfg_key)
 elif auth_type == 'mediawiki':
     c.JupyterHub.authenticator_class = 'oauthenticator.mediawiki.MWOAuthenticator'
     for trait, cfg_key in common_oauth_traits + (
@@ -364,11 +375,12 @@ c.JupyterHub.services = []
 if get_config('cull.enabled', False):
     cull_cmd = [
         'python3',
-        '/etc/jupyterhub/cull_idle_servers.py',
+        '-m',
+        'jupyterhub_idle_culler'
     ]
     base_url = c.JupyterHub.get('base_url', '/')
     cull_cmd.append(
-        '--url=http://127.0.0.1:8081' + url_path_join(base_url, 'hub/api')
+        '--url=http://localhost:8081' + url_path_join(base_url, 'hub/api')
     )
 
     cull_timeout = get_config('cull.timeout')
@@ -385,6 +397,9 @@ if get_config('cull.enabled', False):
 
     if get_config('cull.users'):
         cull_cmd.append('--cull-users')
+
+    if get_config('cull.removeNamedServers'):
+        cull_cmd.append('--remove-named-servers')
 
     cull_max_age = get_config('cull.maxAge')
     if cull_max_age:

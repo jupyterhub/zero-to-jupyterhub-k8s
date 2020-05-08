@@ -9,7 +9,7 @@
 ##
 ## ref: https://github.com/jupyterhub/chartpress
 ##
-chartpress==0.5.*
+chartpress==0.6.*
 
 ## pytest run tests that require requests, pytest is run from test
 ## script
@@ -24,3 +24,6 @@ yamllint>=1.17.0
 ## ./dev use these
 colorama
 python-dotenv
+
+# click is used to make cli scripts
+click
