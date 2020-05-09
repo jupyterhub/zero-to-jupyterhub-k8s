@@ -1,7 +1,4 @@
-```eval_rst
-.. _optimization:
-```
-
+(optimization)=
 # Optimizations
 
 This page contains information and guidelines for improving the reliability,
@@ -74,7 +71,7 @@ situations:
     referring to how a [Helm
     hook](https://docs.helm.sh/developing_charts/#hooks) is used to accomplish
     this, a more informative name would have been *pre-upgrade-image-puller*.
-    
+
     **NOTE**: With this enabled your `helm upgrade` will take a long time if you
     introduce a new image as it will wait for the pulling to complete. We
     recommend that you add `--timeout 600` or similar to your `helm upgrade`
@@ -165,10 +162,7 @@ prePuller:
       tag: 2343e33dec46
 ```
 
-```eval_rst
-.. _efficient-cluster-autoscaling:
-```
-
+(efficient-cluster-autoscaling)=
 ## Efficient Cluster Autoscaling
 
 A [*Cluster
@@ -271,7 +265,7 @@ following:
       kubernetes labels, but this label must be a kubernetes label.
 
     - The taint: `hub.jupyter.org/dedicated=user:NoSchedule`
-    
+
       **NOTE**: You may need to replace `/` with `_` due cloud provider
       limitations. Both taints are tolerated by the user pods.
 

@@ -20,7 +20,6 @@
 
 from datetime import date
 
-from recommonmark.transform import AutoStructify
 import yaml
 
 
@@ -28,13 +27,7 @@ import yaml
 # ref: http://www.sphinx-doc.org/en/latest/extdev/tutorial.html#the-setup-function
 
 def setup(app):
-    app.add_config_value(
-        'recommonmark_config',
-        { 'enable_eval_rst': True, },
-        True,
-    )
-    app.add_stylesheet('custom.css')
-    app.add_transform(AutoStructify)
+    app.add_css_file('custom.css')
 
 
 # -- Project information -----------------------------------------------------
@@ -71,7 +64,7 @@ default_role = 'literal'
 # ones.
 extensions = ['sphinx.ext.mathjax',
               'sphinx_copybutton',
-              'recommonmark']
+              'myst_parser']
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
