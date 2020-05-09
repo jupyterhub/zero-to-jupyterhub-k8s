@@ -1,5 +1,15 @@
-pydata_sphinx_theme
+# Order matters:
+# - myst-parser[sphinx] depends on "sphinx>=2,<3"
+# - pydata-sphinx-theme depends on "sphinx"
+# - sphinx-copybutton depends on "sphinx>=1.8"
+#
+# Listing either pydata-sphinx-theme or sphinx-copybutton first will make the
+# myst-parser[sphinx] constraints on sphinx be ignored, so myst-parser should go
+# first. This is only relevant if sphinx==1.* is already installed in the
+# environment, which it is on ReadTheDocs.
+#
+myst-parser[sphinx]
+pydata-sphinx-theme
 pyyaml
-myst_parser[sphinx]
 sphinx-autobuild
 sphinx-copybutton
