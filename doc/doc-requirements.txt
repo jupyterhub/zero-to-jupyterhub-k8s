@@ -1,6 +1,5 @@
 pydata_sphinx_theme
 pyyaml
-myst_parser
+myst_parser[sphinx]
 sphinx-autobuild
 sphinx-copybutton
-sphinx<3
