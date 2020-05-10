@@ -67,32 +67,6 @@ the resources you need to provide. In the future JupyterHub will have
 auto-scaling functionality, but currently it does not. This means that you need
 to provision resources for the *maximum* expected number of users at one time.
 
-
-Interactive Cost Estimator (rough estimate)
--------------------------------------------
-
-This small notebook may help you to make an initial planning estimate of costs
-for your JupyterHub instance.
-
-To use the estimator, the button below will take you to an interactive
-notebook served with `Binder <https://mybinder.org>`_. Run the cells and
-you'll be able to choose the computational requirements you have, as well as
-draw a pattern of usage you expect over time. It will estimate the costs for
-you.
-
-.. warning::
-
-   **The cost estimator is a very rough estimate.** It is based on Google Cloud
-   Engine instances served from Oregon. Costs will vary based on your
-   location / provider, and will be highly variable if you implement any kind
-   of auto-scaling. Treat it as an order-of-magnitude estimate, not a hard rule.
-
-.. raw:: html
-
-   <a target="_blank" href="http://mybinder.org/v2/gh/jupyterhub/zero-to-jupyterhub-k8s/master?filepath=doc/ntbk/draw_function.ipynb">
-   <button style="background-color: rgb(235, 119, 55); border: 1px solid; border-color: black; color: white; padding: 15px 32px; text-align: center; text-decoration: none; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 8px;">Launch the Cost Estimator</button></a>
-
-
 Examples
 --------
 
