@@ -29,15 +29,16 @@ and update the secret object as needed. However, for now we
 just operate in a 30s loop. This is good enough, since
 traefik can always re-generate certs if needed.
 """
-import sys
+import argparse
+import base64
+import io
+import logging
 import os
 import subprocess
-import argparse
-import time
+import sys
 import tarfile
-import io
-import base64
-import logging
+import time
+
 from kubernetes import client, config
 
 def update_secret(namespace, secret_name, labels, key, value):

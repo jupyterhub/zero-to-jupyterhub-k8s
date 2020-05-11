@@ -45,7 +45,11 @@ spec:
         {{- with .Values.proxy.secretSync.image.pullPolicy }}
         imagePullPolicy: {{ . }}
         {{- end }}
-        command: ["/usr/local/bin/secret-sync.py", "load", "proxy-public-tls-acme", "acme.json", "/etc/acme/acme.json"]
+        args:
+          - load
+          - proxy-public-tls-acme
+          - acme.json
+          - /etc/acme/acme.json
         env:
         # We need this to get logs immediately
         - name: PYTHONUNBUFFERED
@@ -82,8 +86,7 @@ spec:
           {{- with .Values.proxy.secretSync.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
-          command:
-            - /usr/local/bin/secret-sync.py
+          args:
             - watch-save
             - --label=app={{ include "jupyterhub.appLabel" . }}
             - --label=release={{ .Release.Name }}
