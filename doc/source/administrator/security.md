@@ -50,6 +50,23 @@ changes to your `config.yaml` file:
 2. Apply the config changes by running `helm upgrade ...`
 3. Wait for about a minute, now your hub should be HTTPS enabled!
 
+***
+**NOTE:**
+
+If the proxy service is of type `LoadBalancer`, then a specific static IP address can be requested (if available) instead of a dynamically acquired one.  
+Although not essential for HTTPS, using a static IP address is a recommended practice for domain names referencing fixed IPs.
+This ensures the same IP address for multiple deployments.
+The IP can be provided like:
+
+```yaml
+  proxy:
+    service:
+      loadBalancerIP: xxx.xxx.xxx.xxx
+```
+
+More info about this can be found on the [Configuration Reference](https://zero-to-jupyterhub.readthedocs.io/en/latest/reference/reference.html) page.
+***
+
 ### Set up manual HTTPS
 
 If you have your own HTTPS certificates & want to use those instead of the automatically provisioned Let's Encrypt ones, that's also possible. Note that this is considered an advanced option, so we recommend not doing it unless you have good reasons.
