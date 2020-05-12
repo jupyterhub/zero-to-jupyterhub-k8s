@@ -1,5 +1,5 @@
 hub:
-  fullnameOverride: 'hub'
+  nameOverride: 'hub'
   service:
     type: ClusterIP
     ports:
@@ -69,7 +69,7 @@ rbac:
 
 
 proxy:
-  fullnameOverride: 'proxy'
+  nameOverride: 'proxy'
   secretToken: '0000000000000000000000000000000000000000000000000000000000000000'
   service:
     type: LoadBalancer

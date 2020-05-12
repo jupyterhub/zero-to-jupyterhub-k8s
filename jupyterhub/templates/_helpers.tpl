@@ -155,11 +155,11 @@ component: {{ include "jupyterhub.componentLabel" . }}
   jupyterhub.proxy:
     Defines proxy name value  
     Default appends "proxy" to chart name. At the same time, 
-    proxy name can be further adjusted by values.yaml 'proxy.fullnameOverride' key
+    proxy name can be further adjusted by values.yaml 'proxy.nameOverride' key
 */}}
 {{- define "jupyterhub.proxy" -}}
-{{- if .Values.proxy.fullnameOverride -}}
-{{- printf "%s-%s" .Chart.Name .Values.proxy.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- if .Values.proxy.nameOverride -}}
+{{- printf "%s-%s" .Chart.Name .Values.proxy.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- print "proxy" -}}
 {{- end }}
@@ -169,11 +169,11 @@ component: {{ include "jupyterhub.componentLabel" . }}
   jupyterhub.hub:
     Defines hub name value  
     Default appends "hub" to chart name. At the same time, 
-    hub name can be further adjusted by values.yaml 'hub.fullnameOverride' key
+    hub name can be further adjusted by values.yaml 'hub.nameOverride' key
 */}}
 {{- define "jupyterhub.hub" -}}
-{{- if .Values.hub.fullnameOverride -}}
-{{- printf "%s-%s" .Chart.Name .Values.hub.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- if .Values.hub.nameOverride -}}
+{{- printf "%s-%s" .Chart.Name .Values.hub.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- print "hub" -}}
 {{- end }}

@@ -4,7 +4,7 @@ properties:
   hub:
     type: object
     properties:
-      fullnameOverride:
+      nameOverride:
         type: string
         description: |
           Overwrite name of the proxy
@@ -474,7 +474,7 @@ properties:
   proxy:
     type: object
     properties:
-      fullnameOverride:
+      nameOverride:
         type: string
         description: |
           Overwrite name of the proxy

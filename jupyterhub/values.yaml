@@ -1,7 +1,7 @@
 custom: {}
 
 hub:
-  fullnameOverride: ''
+  nameOverride: ''
   service:
     type: ClusterIP
     annotations: {}
@@ -95,7 +95,7 @@ rbac:
 
 
 proxy:
-  fullnameOverride: ''
+  nameOverride: ''
   secretToken: ''
   deploymentStrategy:
     ## type: Recreate
