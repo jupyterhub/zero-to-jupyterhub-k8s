@@ -20,6 +20,20 @@ import colorama
 
 colorama.init()
 
+def get_kubeconfig_path(path='kubeconfig.yaml'):
+    config = _run(
+        cmd=[
+            "kind", "get", "kubeconfig",
+            "--name", "jh-dev",
+        ],
+        print_command=False,
+        capture_output=True,
+    )
+    with open(path, 'w') as f:
+        f.write(config)
+
+    return path
+
 def depend_on(binaries=[], envs=[]):
     """
     A decorator to ensure the function is called with the relevant binaries
@@ -98,17 +112,7 @@ def kind_create(recreate):
         "--config", "ci/kind-config.yaml",
     ])
     
-    kubeconfig_path = 'kubeconfig.yaml'
-    kubeconfig = _run(
-        cmd=[
-            "kind", "get", "kubeconfig",
-            "--name", "jh-dev",
-        ],
-        print_command=False,
-        capture_output=True,
-    )
-    with open(kubeconfig_path, 'w') as f:
-        f.write(kubeconfig)
+    kubeconfig_path = get_kubeconfig_path()
     if os.environ.get("KUBECONFIG", None) != kubeconfig_path:
         print(f'Updating your .env file\'s KUBECONFIG value to "{kubeconfig_path}"')
         dotenv.set_key(".env", "KUBECONFIG", kubeconfig_path)
@@ -239,17 +243,7 @@ def upgrade(chart, version, values):
         _run(["chartpress"])
         # git --no-pager diff
 
-        kubeconfig_path = 'kubeconfig.yaml'
-        kubeconfig = _run(
-            cmd=[
-                "kind", "get", "kubeconfig",
-                "--name", "jh-dev",
-            ],
-            print_command=False,
-            capture_output=True,
-        )
-        with open(kubeconfig_path, 'w') as f:
-            f.write(kubeconfig)
+        kubeconfig_path = get_kubeconfig_path()
         if kubeconfig_path in os.environ["KUBECONFIG"]:
             print("Loading the locally built images into the kind cluster.")
             _run([
