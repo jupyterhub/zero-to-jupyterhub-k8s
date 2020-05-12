@@ -64,7 +64,7 @@ The IP can be provided like:
       loadBalancerIP: xxx.xxx.xxx.xxx
 ```
 
-More info about this can be found on the [Configuration Reference](https://zero-to-jupyterhub.readthedocs.io/en/latest/reference/reference.html) page.
+More info about this can be found on the [Configuration Reference](helm-chart-configuration-reference) page.
 ***
 
 ### Set up manual HTTPS
