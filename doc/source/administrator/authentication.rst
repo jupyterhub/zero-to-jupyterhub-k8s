@@ -96,7 +96,7 @@ but we recommend ``read:user`` as this requires no additional configuration by
 GitHub organisations and users.
 For example, omitting the scope means members of an organisation must `set
 their membership to Public
-<https://help.github.com/articles/publicizing-or-hiding-organization-membership/>`_
+<https://help.github.com/en/github/setting-up-and-managing-your-github-user-account/publicizing-or-hiding-organization-membership>`_
 to login, whereas setting it to ``read:org`` may require approval of the
 application by a GitHub organisation admin.
 Please see `this issue
@@ -142,7 +142,7 @@ CILogon
 In order to overcome the `caveats <https://github.com/jupyterhub/oauthenticator/blob/master/oauthenticator/cilogon.py>`_ of implementing CILogon OAuthAuthenticator for JupyterHub,
 i.e. default username_claim of ePPN does not work for all providers, e.g. generic OAuth such as Google, Use c.CILogonOAuthenticator.username_claim = 'email' to use email instead of ePPN as the JupyterHub username:
 
-Add to your config.yaml file to `inject extra python based configuration that should be in jupyterhub_config.py <https://zero-to-jupyterhub.readthedocs.io/en/latest/reference.html#hub-extraconfig>`_ as below:
+Add to your config.yaml file to `inject extra python based configuration that should be in jupyterhub_config.py </reference/reference.html#hub-extraconfig>`_ as below:
 
 .. code-block:: yaml
 

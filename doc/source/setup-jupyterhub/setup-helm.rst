@@ -32,7 +32,7 @@ Installation
 ------------
 
 While several `methods to install Helm
-<https://github.com/helm/helm/blob/master/docs/install.md>`_ exists, the
+<https://v2.helm.sh/docs/using_helm/#installing-helm>`_ exists, the
 simplest way to install Helm is to run Helm's installer script in a terminal:
 
 .. code:: bash

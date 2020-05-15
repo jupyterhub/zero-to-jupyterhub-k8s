@@ -121,7 +121,18 @@ with open('reference/reference.md', 'w') as f:
 
 # -- Options for linkcheck builder -------------------------------------------
 # ref: http://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-the-linkcheck-builder
-linkcheck_anchors_ignore = ["/#!"]
+linkcheck_ignore = [
+    r'(.*)github\.com(.*)#',                                    # javascript based anchors
+    r'(.*)/#%21(.*)/(.*)',                                      # /#!forum/jupyter - encoded anchor edge case
+    "https://your-domain.com",                                  # example
+    "https://your-domain-name.com",                             # example
+    "https://kubernetes.io/docs/tutorials/kubernetes-basics/",  # works
+    "https://cloud.ibm.com/kubernetes/catalog/create",          # works
+]
+linkcheck_anchors_ignore = [
+    "/#!",
+    "/#%21",
+]
 
 
 # -- Options for HTML output -------------------------------------------------

@@ -3,7 +3,7 @@
 Kubernetes on IBM Cloud
 -----------------------
 
-This guide shows how to deploy JupyterHub on the IBM Cloud using their `Kubernetes service <https://console.bluemix.net/containers-kubernetes/catalog/cluster)>`_.
+This guide shows how to deploy JupyterHub on the IBM Cloud using their `Kubernetes service <https://cloud.ibm.com/kubernetes/catalog/create)>`_.
 It should provide you with enough knowledge to create a cluster, deploy your application using a Docker image and use a custom domain to use the deployed app.
 
 Before you begin:
@@ -11,7 +11,7 @@ Before you begin:
 * Understand the basics of Kubernetes_.
     .. _Kubernetes: https://kubernetes.io/docs/tutorials/kubernetes-basics/)
 * Install the IBM Cloud Developer Tools
-    - Install the `IBM Cloud CLI <https://console.bluemix.net/docs/cli/index.html#overview)>`_.
+    - Install the `IBM Cloud CLI <https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started>`_.
     - `curl -sL https://ibm.biz/idt-installer | bash`
     - Verify your installation
     - `ibmcloud dev help`
@@ -30,7 +30,7 @@ Procedure:
    Kubernetes Service delivers powerful tools by combining Docker and Kubernetes technologies, an intuitive user experience, and built-in security and isolation to automate the deployment, operation, scaling, and monitoring of containerized apps in a cluster of computing hosts.
 
    To set up the Kubernetes cluster:
-     1. Create a Kubernetes cluster from the `IBM Cloud catalog <https://console.bluemix.net/containers-kubernetes/launch)>`_.
+     1. Create a Kubernetes cluster from the `IBM Cloud catalog <https://cloud.ibm.com/kubernetes/catalog/create)>`_.
      2. When configuring the new cluster, select the **Cluster type** and click **Create Cluster** to provision a Kubernetes cluster.
         2.1 In the case of a free cluster you will see something similar to:
 
@@ -44,11 +44,11 @@ Procedure:
 
      3. Check the status of your **Cluster** and **Worker Nodes** and wait for them to be **ready**.
 
-     Or, if you prefer, create the cluster using the `IBM Cloud CLI tools <https://console.bluemix.net/docs/containers/cs_clusters.html#clusters_cli)>`_
+     Or, if you prefer, create the cluster using the `IBM Cloud CLI tools <https://cloud.ibm.com/docs/containers?topic=containers-cs_cli_install)>`_
 
 2. Configure kubectl
 
-   `kubectl <https://kubernetes.io/docs/user-guide/kubectl-overview/)>`_ is a CLI tool to interact with a Kubernetes cluster. In this occasion, you will use it to point forward to the created Kubernetes cluster.
+   `kubectl <https://kubernetes.io/docs/reference/kubectl/overview/>`_ is a CLI tool to interact with a Kubernetes cluster. In this occasion, you will use it to point forward to the created Kubernetes cluster.
 
    1. Use `ibmcloud login` to log in interactively into the IBM Cloud. Provide the organization (org), location and space under which the cluster is created. You can reconfirm the details by running `ibmcloud target` command.
    2. When the cluster is ready, retrieve the cluster configuration by using the cluster's name:
@@ -79,5 +79,5 @@ Procedure:
 Hooray! You have your Kubernetes cluster running; it's time to begin :ref:`creating-your-jupyterhub`.
 
 More info and readings:
-    - https://console.bluemix.net/docs/tutorials/scalable-webapp-kubernetes.html#deploy-a-scalable-web-application-on-kubernetes
+    - https://cloud.ibm.com/docs/tutorials?topic=solution-tutorials-scalable-webapp-kubernetes
     - https://github.com/IBM-Cloud/get-started-python

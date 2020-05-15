@@ -135,7 +135,7 @@ popular cloud providers in their
 ### Confirm that your domain is running HTTPS
 
 There are many ways to confirm that a domain is running trusted HTTPS
-certificates. One options is to use the [Qualys SSL Labs](https://ssllabs.com)
+certificates. One options is to use the [Qualys SSL Labs](https://www.ssllabs.com/)
 security report generator. Use the following URL structure to test your domain:
 
 ```

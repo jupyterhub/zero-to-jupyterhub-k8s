@@ -307,7 +307,7 @@ Bumped the underlying JupyterHub to 0.9.5.
 ### [0.8.0] - [Richie Benaud](https://en.wikipedia.org/wiki/Richie_Benaud) - 2019-01-24
 
 This release contains JupyterHub version 0.9.4. It requires Kubernetes >= 1.11 and Helm >= 2.11.0.
-See [the Helm Chart repository](https://github.com/jupyterhub/helm-chart#versions-coupled-to-each-chart-release) for
+See [the Helm Chart repository](https://github.com/jupyterhub/helm-chart#release-notes) for
 a list of relevant dependencies for all Helm Chart versions.
 
 It contains new features, additional configuration options, and bug fixes.

@@ -95,7 +95,7 @@ Install JupyterHub
    where:
 
    - ``RELEASE`` refers to a `Helm release name
-     <https://docs.helm.sh/glossary/#release>`_, an identifier used to
+     <https://helm.sh/docs/glossary/#release>`_, an identifier used to
      differentiate chart installations. You need it when you are changing or
      deleting the configuration of this chart installation. If your Kubernetes
      cluster will contain multiple JupyterHubs make sure to differentiate them.
@@ -131,7 +131,7 @@ Install JupyterHub
         Helm chart is paired with a specific version of JupyterHub. E.g.,
         ``0.7.0`` of the Helm chart runs JupyterHub ``0.9.2``.
         For a list of which JupyterHub version is installed in each version
-        of the Z2JH Helm Chart, see the `Helm Chart repository <https://github.com/jupyterhub/helm-chart#versions-coupled-to-each-chart-release>`_.
+        of the Z2JH Helm Chart, see the `Helm Chart repository <https://github.com/jupyterhub/helm-chart#release-notes>`_.
 
 3. While Step 2 is running, you can see the pods being created by entering in
    a different terminal:
