@@ -12,26 +12,48 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+
   ingress:
-    - from:
+    # allowed pods (hub.jupyter.org/network-access-hub) --> hub
+    - ports:
+        - port: http
+      from:
         - podSelector:
             matchLabels:
               hub.jupyter.org/network-access-hub: "true"
-      ports:
-        - port: http
-    {{- /* Useful if you want to give hub access to pods from other namespaces */}}
-    {{- if .Values.hub.networkPolicy.ingress}}
-    {{- .Values.hub.networkPolicy.ingress| toYaml | trimSuffix "\n" | nindent 4 }}
+
+    {{- with .Values.hub.networkPolicy.ingress }}
+    # default: nothing --> hub
+    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
+
   egress:
-    {{- /*
-    The default is to allow all egress for hub If you want to restrict it the
-    following egress is required
-      -  proxy:8001
-      -  singleuser:8888
-      -  Kubernetes api-server
-    */}}
-    {{- if .Values.hub.networkPolicy.egress }}
-    {{- .Values.hub.networkPolicy.egress | toYaml | trimSuffix "\n" | nindent 4 }}
+    # hub --> proxy
+    - ports:
+        - port: 8001
+      to:
+        - podSelector:
+            matchLabels:
+              {{- $_ := merge (dict "componentLabel" "proxy") . }}
+              {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
+    # hub --> singleuser-server
+    - ports:
+        - port: 8888
+      to:
+        - podSelector:
+            matchLabels:
+              {{- $_ := merge (dict "componentLabel" "singleuser-server") . }}
+              {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
+
+    # hub -> Kubernetes internal DNS
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+
+    {{- with .Values.hub.networkPolicy.egress }}
+    # hub --> default: everything
+    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
 {{- end }}

@@ -68,6 +68,12 @@ hub:
   networkPolicy:
     enabled: false
     ingress: []
+    ## egress for JupyterHub already includes Kubernetes internal DNS and
+    ## access to the proxy, but can be restricted further, but ensure to allow
+    ## access to the Kubernetes API server that couldn't be pinned ahead of
+    ## time.
+    ##
+    ## ref: https://stackoverflow.com/a/59016417/2220152
     egress:
       - to:
           - ipBlock:

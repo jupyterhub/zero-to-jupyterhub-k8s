@@ -16,37 +16,60 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+
   ingress:
+    # allowed pods (hub.jupyter.org/network-access-proxy-http) --> proxy (http/https port)
     - ports:
-      - port: http
-      {{- if or $manualHTTPS $manualHTTPSwithsecret}}
-      - port: https
-      {{- end }}
-    - from:
+        - port: http
+        {{- if or $manualHTTPS $manualHTTPSwithsecret }}
+        - port: https
+        {{- end }}
+      from:
         - podSelector:
             matchLabels:
               hub.jupyter.org/network-access-proxy-http: "true"
-      ports:
-        - port: http
-    - from:
+
+    # allowed pods (hub.jupyter.org/network-access-proxy-api) --> proxy (api port)
+    - ports:
+        - port: api
+      from:
         - podSelector:
             matchLabels:
               hub.jupyter.org/network-access-proxy-api: "true"
-      ports:
-        - port: api
-    {{- /* Useful if you want to give proxy access to pods from other namespaces */}}
-    {{- if .Values.proxy.networkPolicy.ingress}}
-    {{- .Values.proxy.networkPolicy.ingress | toYaml | trimSuffix "\n" | nindent 4 }}
+
+    {{- with .Values.proxy.networkPolicy.ingress}}
+    # default: nothing --> proxy
+    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
+
   egress:
-    {{- /*
-    The default is to allow all egress for proxy If you want to restrict it the
-    following egress is required
-      -  hub:8081
-      -  singleuser:8888
-      -  Kubernetes api-server
-    */}}
-    {{- if .Values.proxy.networkPolicy.egress }}
-    {{- .Values.proxy.networkPolicy.egress | toYaml | trimSuffix "\n" | nindent 4 }}
+    # proxy --> hub
+    - ports:
+        - port: 8081
+      to:
+        - podSelector:
+            matchLabels:
+              {{- $_ := merge (dict "componentLabel" "hub") . }}
+              {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
+
+    # proxy --> singleuser-server
+    - ports:
+        - port: 8888
+      to:
+        - podSelector:
+            matchLabels:
+              {{- $_ := merge (dict "componentLabel" "singleuser-server") . }}
+              {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
+
+    # proxy -> Kubernetes internal DNS
+    - ports:
+      - protocol: UDP
+        port: 53
+      - protocol: TCP
+        port: 53
+
+    {{- with .Values.proxy.networkPolicy.egress }}
+    # proxy --> default: everything
+    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
 {{- end }}
