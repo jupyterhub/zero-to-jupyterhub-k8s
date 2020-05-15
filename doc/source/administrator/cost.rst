@@ -45,7 +45,7 @@ This requires significantly fewer storage resources, and also results in faster
 load times.
 
 For an indicator of how costs scale with computational resources, see the
-`Google Cloud pricing page <https://cloud.google.com/compute/pricing>`_.
+`Google Cloud pricing page <https://cloud.google.com/compute/all-pricing>`_.
 
 Users
 ~~~~~

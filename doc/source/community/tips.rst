@@ -21,7 +21,7 @@ and references to objects when using ``kubectl``. This lets you
 Helm also has an auto-completion script that lets you :kbd:`TAB`-complete
 your commands when using Helm.
 
-`Here are the instructions to install helm auto-completion <https://docs.helm.sh/helm/#helm-completion>`_.
+`Here are the instructions to install helm auto-completion <https://helm.sh/docs/helm/helm_completion/>`_.
 
 
 Managing ``kubectl`` contexts

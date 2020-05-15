@@ -13,12 +13,12 @@ installations.
 ## Ingress
 
 If you are using a Kubernetes Cluster that does not provide public IPs for
-services directly, you need to use
-an [ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)
-to get traffic into your JupyterHub. This varies wildly
-based on how your cluster was set up, which is why this is in the 'Advanced' section.
+services directly, you need to use a [Kubernetes Ingress
+resource](https://kubernetes.io/docs/concepts/services-networking/ingress/) to
+get traffic into your JupyterHub. This varies wildly based on how your cluster
+was set up, which is why this is in the 'Advanced' section.
 
-You can enable the required `ingress` object with the following in your
+You can enable the required Ingress resources with the following in your
 `config.yaml`
 
 ```yaml
@@ -31,8 +31,8 @@ ingress:
 You can specify multiple hosts that should be routed to the hub by listing them
 under `ingress.hosts`.
 
-Note that you need to install and configure an
-[Ingress Controller](https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-controllers)
+Note that you need to install and configure an [Ingress
+controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/)
 for the ingress object to work.
 
 We recommend the community-maintained [nginx-ingress](https://github.com/helm/charts/tree/master/stable/nginx-ingress)
@@ -199,7 +199,9 @@ The items in this list must be valid kubernetes
 
 ### Specifying suitable hub storage
 
-By default, the hub's sqlite-pvc setting will dynamically create a disk to store the sqlite database.
-It is possible to [configure other storage classes](https://zero-to-jupyterhub.readthedocs.io/en/latest/reference.html?highlight=pvc#hub-db-type) under hub.db.pvc, but make sure to choose one that
-the hub can write quickly and safely to. Slow or higher latency storage classes can cause hub operations to lag which
-may ultimately lead to HTTP errors in user environments.
+By default, the hub's sqlite-pvc setting will dynamically create a disk to store
+the sqlite database. It is possible to [configure other storage
+classes](reference/reference.html#hub-db-type) under hub.db.pvc, but make sure
+to choose one that the hub can write quickly and safely to. Slow or higher
+latency storage classes can cause hub operations to lag which may ultimately
+lead to HTTP errors in user environments.

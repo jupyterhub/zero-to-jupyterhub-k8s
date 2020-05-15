@@ -160,7 +160,7 @@ The Procedure
 
     You should see a list of two nodes, each beginning with ``ip``.
 
-    If you want to use kubectl and helm locally (necessary for step #3 in `Setting up Helm <https://z2jh.jupyter.org/en/latest/setup-helm.html#initialization>`_):
+    If you want to use kubectl and helm locally (necessary for step #3 in `Setting up Helm <setup-helm#initialization>`_):
 
     * run the following on CI host: ``kops export kubecfg``
     * copy the contents of ``~/.kube/config`` to the same place on your local system

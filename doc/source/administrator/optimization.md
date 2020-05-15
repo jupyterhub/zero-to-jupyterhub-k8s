@@ -69,7 +69,7 @@ situations:
     introduced will be pulled to the nodes before the hub pod is updated to
     utilize the new image. The name hook-image-puller is a technical name
     referring to how a [Helm
-    hook](https://docs.helm.sh/developing_charts/#hooks) is used to accomplish
+    hook](https://helm.sh/docs/topics/charts_hooks/) is used to accomplish
     this, a more informative name would have been *pre-upgrade-image-puller*.
 
     **NOTE**: With this enabled your `helm upgrade` will take a long time if you
@@ -215,7 +215,7 @@ where he analyzed its introduction on mybinder.org.
 priority depending on how your cluster autoscaler is configured. This is known
 to work on GKE, but we don't know how it works on other cloud providers or
 kubernetes. See the [configuration
-reference](https://zero-to-jupyterhub.readthedocs.io/en/latest/reference.html#scheduling-podpriority) for more details.
+reference](/reference/reference.html#scheduling-podpriority) for more details.
 
 ### Scaling down efficiently
 
@@ -246,7 +246,7 @@ pods.
 #### Using a dedicated node pool for users
 
 To set up a dedicated node pool for user pods, we can use [*taints and
-tolerations*](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/).
+tolerations*](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/).
 If we add a taint to all the nodes in the node pool, and a toleration on the
 user pods to tolerate being scheduled on a tainted node, we have practically
 dedicated the node pool to be used only by user pods.

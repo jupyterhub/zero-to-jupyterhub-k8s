@@ -159,5 +159,5 @@ to configure JupyterHub to build off of this image:
 .. REFERENCES USED:
 
 .. _repo2docker: https://github.com/jupyter/repo2docker
-.. _downloading and installing Docker: https://www.docker.com/community-edition
-.. _pip: https://pip.readthedocs.io/en/latest/user_guide/#requirements-files
+.. _downloading and installing Docker: https://docs.docker.com/get-docker/
+.. _pip: https://pip.pypa.io/en/latest/user_guide/#requirements-files
