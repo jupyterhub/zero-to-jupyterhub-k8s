@@ -13,30 +13,40 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+
   ingress:
-    - from:
+    # allowed pods (hub.jupyter.org/network-access-singleuser) --> singleuser-server
+    - ports:
+        - port: notebook-port
+      from:
         - podSelector:
             matchLabels:
               hub.jupyter.org/network-access-singleuser: "true"
-      ports:
-        - port: 8888
-    {{- /* Useful if you want to give user server access to pods from other namespaces */}}
-    {{- if .Values.singleuser.networkPolicy.ingress }}
-    {{- .Values.singleuser.networkPolicy.ingress | toYaml | trimSuffix "\n" | nindent 4 }}
+
+    {{- with .Values.singleuser.networkPolicy.ingress }}
+    # default: nothing --> singleuser-server
+    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
+
   egress:
-    - to:
+    # singleuser-server --> hub
+    - ports:
+        - port: 8081
+      to:
         - podSelector:
             matchLabels:
-              {{- /*
-              Override componentLabel because we need the label of the
-              destination, not the source
-              */}}
               {{- $_ := merge (dict "componentLabel" "hub") . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
-      ports:
-        - port: 8081
-    {{- if .Values.singleuser.networkPolicy.egress }}
-    {{- .Values.singleuser.networkPolicy.egress | toYaml | trimSuffix "\n" | nindent 4 }}
+
+    # singleuser-server -> Kubernetes internal DNS
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+
+    {{- with .Values.singleuser.networkPolicy.egress }}
+    # singleuser-server --> default: everything
+    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
 {{- end }}
