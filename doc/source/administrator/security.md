@@ -53,7 +53,7 @@ changes to your `config.yaml` file:
 ***
 **NOTE:**
 
-If the proxy service is of type `LoadBalancer`, then a specific static IP address can be requested (if available) instead of a dynamically acquired one.  
+If the proxy service is of type `LoadBalancer`, which it is by default, then a specific static IP address can be requested (if available) instead of a dynamically acquired one.  
 Although not essential for HTTPS, using a static IP address is a recommended practice for domain names referencing fixed IPs.
 This ensures the same IP address for multiple deployments.
 The IP can be provided like:
