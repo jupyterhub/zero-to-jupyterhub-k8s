@@ -162,6 +162,24 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
         print(server_model)
         pod_name = server_model["state"]["pod_name"]
 
+        c = subprocess.run([
+            "kubectl", "exec", pod_name,
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+            "--",
+            "nslookup", "hub",
+        ])
+        assert c.returncode == 0, "DNS issue: failed to resolve 'hub' from a singleuser-server"
+
+        c = subprocess.run([
+            "kubectl", "exec", pod_name,
+            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
+            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
+            "--",
+            "nslookup", "jupyter.org",
+        ])
+        assert c.returncode == 0, "DNS issue: failed to resolve 'jupyter.org' from a singleuser-server"
+
         # Must match CIDR in singleuser.networkPolicy.egress.
         allowed_url = "http://jupyter.org"
         blocked_url = "http://mybinder.org"
@@ -173,14 +191,14 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
             "--",
             "wget", "--quiet", "--tries=1", "--timeout=3", allowed_url,
         ])
-        assert c.returncode == 0, "Unable to get allowed domain (or failed to resolve the domain name)"
+        assert c.returncode == 0, "Unable to get allowed domain"
 
         c = subprocess.run([
             "kubectl", "exec", pod_name,
             "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
             "--context", os.environ["Z2JH_KUBE_CONTEXT"],
             "--",
-            "wget", "--quiet", "--tries=1", "--timeout=3", blocked_url,
+            "wget", "--quiet", "--server-response", "-O-", "--tries=1", "--timeout=3", blocked_url,
         ])
         assert c.returncode > 0, "Blocked domain was allowed"
 
