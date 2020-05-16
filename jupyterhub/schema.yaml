@@ -511,18 +511,15 @@ properties:
           loadBalancerIP:
             type: string
             description: |
-              The public IP address the hub service should be exposed on.
-
-              This sets the IP address that should be used by the LoadBalancer for exposing the hub service.
-              Set this if you want the hub service to be provided with a fixed external IP address instead of a dynamically acquired one.
-              Useful to ensure a stable IP to access to the hub with, for example if you have reserved an IP address in your network to communicate with the JupyterHub.
-
-              To be provided like:
-              ```
-              hub:
-                service:
-                  loadBalancerIP: xxx.xxx.xxx.xxx
-              ```
+              The public IP address the proxy-public Kubernetes service should
+              be exposed on. This entry will end up at the configurable proxy
+              server that JupyterHub manages, which will direct traffic to user
+              pods at the `/user` path and the hub pod at the `/hub` path.
+              
+              Set this if you want to use a fixed external IP address instead of
+              a dynamically acquired one. This is relevant if you have a domain
+              name that you want to point to a specific IP and want to ensure it
+              doesn't change.
           loadBalancerSourceRanges:
             type: list
             description: |
