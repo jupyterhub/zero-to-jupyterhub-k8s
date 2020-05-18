@@ -156,6 +156,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            {{- if .Values.proxy.chp.enabled }}
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -166,6 +167,7 @@ spec:
                   {{- end }}
                   key: proxy.token
             {{- if .Values.auth.state.enabled }}
+            {{- end }}
             - name: JUPYTERHUB_CRYPT_KEY
               valueFrom:
                 secretKeyRef:

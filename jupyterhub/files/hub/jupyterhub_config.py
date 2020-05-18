@@ -20,9 +20,11 @@ AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
 
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
+use_chp = get_config('proxy.chp.enabled')
+if use_chp:
 # Connect to a proxy running in a different pod
-c.ConfigurableHTTPProxy.api_url = 'http://{}:{}'.format(os.environ['PROXY_API_SERVICE_HOST'], int(os.environ['PROXY_API_SERVICE_PORT']))
-c.ConfigurableHTTPProxy.should_start = False
+    c.ConfigurableHTTPProxy.api_url = 'http://{}:{}'.format(os.environ['PROXY_API_SERVICE_HOST'], int(os.environ['PROXY_API_SERVICE_PORT']))
+    c.ConfigurableHTTPProxy.should_start = False
 
 # Do not shut down user pods when hub is restarted
 c.JupyterHub.cleanup_servers = False
@@ -74,8 +76,9 @@ for trait, cfg_key in (
         cfg_key = camelCaseify(trait)
     set_config_if_not_none(c.JupyterHub, trait, 'hub.' + cfg_key)
 
-c.JupyterHub.ip = os.environ['PROXY_PUBLIC_SERVICE_HOST']
-c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
+if use_chp:
+    c.JupyterHub.ip = os.environ['PROXY_PUBLIC_SERVICE_HOST']
+    c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
 
 # the hub should listen on all interfaces, so the proxy can access it
 c.JupyterHub.hub_ip = '0.0.0.0'

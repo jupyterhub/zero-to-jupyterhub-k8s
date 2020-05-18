@@ -1,3 +1,4 @@
+{{- if .Values.proxy.chp.enabled }}
 {{- $HTTPS := .Values.proxy.https.enabled -}}
 {{- $autoHTTPS := and $HTTPS (and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
 {{- $manualHTTPS := and $HTTPS (eq .Values.proxy.https.type "manual") -}}
@@ -72,4 +73,5 @@ spec:
     # proxy --> default: everything
     {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
+{{- end }}
 {{- end }}
