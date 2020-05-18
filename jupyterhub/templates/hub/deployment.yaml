@@ -166,8 +166,8 @@ spec:
                   name: hub-secret
                   {{- end }}
                   key: proxy.token
-            {{- if .Values.auth.state.enabled }}
             {{- end }}
+            {{- if .Values.auth.state.enabled }}
             - name: JUPYTERHUB_CRYPT_KEY
               valueFrom:
                 secretKeyRef:
