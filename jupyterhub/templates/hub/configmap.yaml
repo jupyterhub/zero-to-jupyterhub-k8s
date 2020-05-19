@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 data:
-{{- $values := pick .Values "auth" "cull" "custom" "debug" "hub" "scheduling" "singleuser" }}
+{{- $values := pick .Values "auth" "cull" "custom" "debug" "hub" "scheduling" "singleuser" "proxy" }}
 {{- /* trim secret values. Update here if new secrets are added! */ -}}
 {{- /* make a copy of values.auth to avoid modifying the original */ -}}
 {{- $_ := set $values "auth" (merge dict .Values.auth) }}
@@ -24,6 +24,9 @@ data:
     {{- $_ := set $values.hub.services $key (omit $service "apiToken") }}
   {{- end }}
 {{- end }}
+{{- /* proxy */ -}}
+{{- $_ := set $values "proxy" dict }}
+{{- $_ := set $values.proxy "chp" (pick .Values.proxy.chp "enabled") }}
 {{- /* copy values.singleuser */ -}}
 {{- $_ := set $values "singleuser" (omit .Values.singleuser "imagePullSecret") }}
 {{- $_ := set $values.singleuser "imagePullSecret" (omit .Values.singleuser.imagePullSecret "password") }}
