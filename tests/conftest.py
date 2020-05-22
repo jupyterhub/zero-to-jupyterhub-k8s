@@ -8,7 +8,11 @@ import requests
 import uuid
 
 import pytest
+import urllib3
 import yaml
+
+# Ignore InsecureRequestWarning associated with https:// web requests
+urllib3.disable_warnings()
 
 
 @pytest.fixture(scope="module")
@@ -17,11 +21,11 @@ def request_data():
     with open(os.path.join(basedir, "dev-config.yaml")) as f:
         y = yaml.safe_load(f)
     token = y["hub"]["services"]["test"]["apiToken"]
-    host = os.environ.get("Z2JH_PORT_FORWARD_ADDRESS", "localhost")
-    port = os.environ.get("Z2JH_PORT_FORWARD_PORT", "8080")
+    host = "jupyter.test"
+    port = "30443"
     return {
         "token": token,
-        "hub_url": f'http://{host}:{port}/hub/api',
+        "hub_url": f'https://{host}:{port}/hub/api',
         "headers": {"Authorization": f"token {token}"},
         "test_timeout": 300,
         "request_timeout": 60,
@@ -38,19 +42,19 @@ class JupyterRequest(object):
 
     def delete(self, api, **kwargs):
         self._setup_kwargs(kwargs)
-        return requests.delete(self.request_data["hub_url"] + api, **kwargs)
+        return requests.delete(self.request_data["hub_url"] + api, verify=False, **kwargs)
 
     def get(self, api, **kwargs):
         self._setup_kwargs(kwargs)
-        return requests.get(self.request_data["hub_url"] + api, **kwargs)
+        return requests.get(self.request_data["hub_url"] + api, verify=False, **kwargs)
 
     def post(self, api, **kwargs):
         self._setup_kwargs(kwargs)
-        return requests.post(self.request_data["hub_url"] + api, **kwargs)
+        return requests.post(self.request_data["hub_url"] + api, verify=False, **kwargs)
 
     def put(self, api, **kwargs):
         self._setup_kwargs(kwargs)
-        return requests.put(self.request_data["hub_url"] + api, **kwargs)
+        return requests.put(self.request_data["hub_url"] + api, verify=False, **kwargs)
 
 
 @pytest.fixture(scope="function")

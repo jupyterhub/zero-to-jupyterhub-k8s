@@ -137,7 +137,8 @@ def test_hub_api_request_user_spawn(api_request, jupyter_user, request_data):
         r = requests.get(
             request_data["hub_url"].partition("/hub/api")[0]
             + server_model["url"]
-            + "api"
+            + "api",
+            verify=False,
         )
         assert r.status_code == 200
         assert "version" in r.json()
@@ -186,8 +187,6 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
 
         c = subprocess.run([
             "kubectl", "exec", pod_name,
-            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
-            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
             "--",
             "wget", "--quiet", "--tries=1", "--timeout=3", allowed_url,
         ])
@@ -195,8 +194,6 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
 
         c = subprocess.run([
             "kubectl", "exec", pod_name,
-            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
-            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
             "--",
             "wget", "--quiet", "--server-response", "-O-", "--tries=1", "--timeout=3", blocked_url,
         ])
