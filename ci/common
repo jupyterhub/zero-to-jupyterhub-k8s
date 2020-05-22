@@ -1,100 +1,66 @@
-#!/bin/bash
-
-## common - source this file with ". ./ci/common" to set environment
-## variables and make useful functions available.
-
-mkdir -p bin
-export PATH="$PWD/bin:$PATH"
-
-## NOTE: These are default values for relevant environment variables
-##
-if [ -z ${Z2JH_KUBE_VERSION:-} ]; then
-    ## NOTE: Z2JH_KUBE_VERSION is limited by the available kindest/node images
-    ## 
-    ## ref: https://hub.docker.com/r/kindest/node/tags
-    ## ref: https://github.com/kubernetes/kubernetes/releases
-    ##
-    export Z2JH_KUBE_VERSION=1.15.6
-fi
-if [ -z ${Z2JH_KIND_VERSION:-} ]; then
-    ## ref: https://github.com/kubernetes-sigs/kind/releases
-    ##
-    export Z2JH_KIND_VERSION=0.6.0
-fi
-if [ -z ${Z2JH_HELM_VERSION:-} ]; then
-    ## ref: https://github.com/helm/helm/releases
-    ##
-    export Z2JH_HELM_VERSION=2.15.1
-fi
-if [ -z ${Z2JH_KUBEVAL_VERSION:-} ]; then
-    ## ref: https://github.com/instrumenta/kubeval/releases
-    ##
-    export Z2JH_KUBEVAL_VERSION=0.14.0
-fi
-
-## NOTE: The setup_... functions cache downloads but ensure the correct version
-##
-setup_kubectl () {
-    echo "setup kubectl ${Z2JH_KUBE_VERSION}"
-    if ! [ -f "bin/kubectl-${Z2JH_KUBE_VERSION}" ]; then
-        curl -sSLo "bin/kubectl-${Z2JH_KUBE_VERSION}" "https://storage.googleapis.com/kubernetes-release/release/v${Z2JH_KUBE_VERSION}/bin/linux/amd64/kubectl"
-        chmod +x "bin/kubectl-${Z2JH_KUBE_VERSION}"
-    fi
-    cp "bin/kubectl-${Z2JH_KUBE_VERSION}" bin/kubectl
-}
-
-setup_kind () {
-    echo "setup kind ${Z2JH_KIND_VERSION}"
-    if ! [ -f "bin/kind-${Z2JH_KIND_VERSION}" ]; then
-        curl -sSLo "bin/kind-${Z2JH_KIND_VERSION}" "https://github.com/kubernetes-sigs/kind/releases/download/v${Z2JH_KIND_VERSION}/kind-linux-amd64"
-        chmod +x "bin/kind-${Z2JH_KIND_VERSION}"
-    fi
-    cp "bin/kind-${Z2JH_KIND_VERSION}" bin/kind
-}
+#!/bin/sh
+# Use https://www.shellcheck.net/ to reduce mistakes if you make changes to this file.
 
 setup_helm () {
-    echo "setup helm ${Z2JH_HELM_VERSION}"
-    if ! [ -f "bin/helm-${Z2JH_HELM_VERSION}" ]; then
-        curl -sSLo "bin/helm-${Z2JH_HELM_VERSION}.tar.gz" "https://get.helm.sh/helm-v${Z2JH_HELM_VERSION}-linux-amd64.tar.gz"
-        tar -xf "bin/helm-${Z2JH_HELM_VERSION}.tar.gz" --directory bin --strip-components 1 linux-amd64/helm
-        rm "bin/helm-${Z2JH_HELM_VERSION}.tar.gz"
-        mv bin/helm "bin/helm-${Z2JH_HELM_VERSION}"
-    fi
-    cp bin/helm-${Z2JH_HELM_VERSION} bin/helm
+    echo "setup helm ${HELM_VERSION}"
+    curl -sf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
 }
 
-init_helm () {
-    if [ "${Z2JH_HELM_VERSION%%.*}" = "2" ]; then
-        helm init --client-only
-    fi
+setup_k3s () {
+    echo "setup k3s ${K3S_VERSION}"
+    # https://rancher.com/docs/k3s/latest/en/installation/install-options/how-to-flags/
+
+    curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${K3S_VERSION} sh -s - \
+        --write-kubeconfig-mode=644 \
+        "${k3s_disable_command:---disable}" metrics-server \
+        "${k3s_disable_command:---disable}" traefik \
+        "${k3s_disable_command:---disable}" local-path-provisioner \
+        --disable-network-policy \
+        --docker \
+    || {
+        echo "Setup of k3s failed!"
+        systemctl status k3s.service
+        journalctl --no-pager --utc | tail -n 100
+        exit 1
+    }
+
+    export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 }
 
-setup_kubeval () {
-    echo "setup kubeval ${Z2JH_KUBEVAL_VERSION}"
-    if ! [ -f "bin/kubeval-${Z2JH_KUBEVAL_VERSION}" ]; then
-        curl -sSLo "bin/kubeval-${Z2JH_KUBEVAL_VERSION}.tar.gz" "https://github.com/instrumenta/kubeval/releases/download/${Z2JH_KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz"
-        tar -xf "bin/kubeval-${Z2JH_KUBEVAL_VERSION}.tar.gz" --directory bin
-        rm "bin/kubeval-${Z2JH_KUBEVAL_VERSION}.tar.gz"
-        mv bin/kubeval "bin/kubeval-${Z2JH_KUBEVAL_VERSION}"
-    fi
-    cp bin/kubeval-${Z2JH_KUBEVAL_VERSION} bin/kubeval
+patch_coredns() {
+    echo "Patching CoreDNS to resolve the top level domain \"test\" and"
+    echo "its subdomains to the proxy-public service ClusterIP."
+    kubectl get configmap -n kube-system coredns -o jsonpath='{.data.Corefile}' \
+    | grep "template ANY ANY test" > /dev/null \
+    && echo "Already patched!" && return
+
+    # shellcheck disable=SC1004
+    kubectl get configmap -n kube-system coredns -o jsonpath='{.data.Corefile}' \
+    | sed '/ready$/a\
+    template ANY ANY test {\
+      match "^([^\.]+\.)*test\.$"\
+      answer "{{ .Name }} 60 IN CNAME proxy-public.default.svc.cluster.local"\
+      upstream\
+    }' \
+    > /tmp/Corefile
+
+    kubectl create configmap -n kube-system coredns --from-file Corefile=/tmp/Corefile -o yaml --dry-run \
+    | kubectl apply -f -
 }
 
-setup_git_crypt () {
-    Z2JH_GIT_CRYPT_VERSION=0.5.0
-    Z2JH_GIT_CRYPT_VERSION_SHA=46c288cc849c23a28239de3386c6050e5c7d7acd50b1d0248d86e6efff09c61b
-    echo "setup git-crypt ${Z2JH_GIT_CRYPT_VERSION}"
-    if ! [ -f "bin/git-crypt-${Z2JH_GIT_CRYPT_VERSION}" ]; then
-        curl -sSLo "bin/git-crypt-${Z2JH_GIT_CRYPT_VERSION}" https://github.com/minrk/git-crypt-bin/releases/download/${Z2JH_GIT_CRYPT_VERSION}/git-crypt
-        chmod +x "bin/git-crypt-${Z2JH_GIT_CRYPT_VERSION}"
-        echo "${Z2JH_GIT_CRYPT_VERSION_SHA}  bin/git-crypt-${Z2JH_GIT_CRYPT_VERSION}" | shasum -a 256 -c -
+await_tls_cert_acquisition() {
+    i=0; while [ $i -ne 60 ]; do
+        kubectl logs deploy/pebble -c pebble | grep "Issued certificate" \
+        && acquired_cert=true && break \
+        || acquired_cert=false && sleep 0.5 && i=$((i + 1))
+    done
+    if [ "$acquired_cert" != "true" ]; then
+        echo "Certificate acquisition failed!"
+        kubectl get service,networkpolicy,configmap,pod
+        kubectl describe pod -l app.kubernetes.io/name=pebble
+        kubectl logs deploy/pebble --all-containers
+        kubectl describe pod -l component=autohttps
+        kubectl logs deploy/autohttps --all-containers
+        exit 1
     fi
-    cp bin/git-crypt-${Z2JH_GIT_CRYPT_VERSION} bin/git-crypt
 }
-
-if [ "${1:-}" = "--setup" ]; then
-    setup_kubectl
-    setup_kind
-    setup_helm
-    setup_kubeval
-fi

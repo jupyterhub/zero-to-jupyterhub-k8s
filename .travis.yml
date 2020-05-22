@@ -1,7 +1,8 @@
+os: linux
 dist: bionic
 language: python
 python:
-  - 3.6
+  - 3.7
 git:
   ## depth set to false overrides travis default behavior to use shallow clones
   ## with depth 50 that can cause issues
@@ -9,96 +10,117 @@ git:
   ## ref: https://github.com/jupyterhub/chartpress#shallow-clones
   ##
   depth: false
+addons:
+  ## hosts takes a list of hostnames that will point to localhost through its
+  ## managed /etc/hosts file
+  hosts:
+    - jupyter.test
 services:
   - docker
-## stages declares and orders stages
-##
-## ref: https://docs.travis-ci.com/user/build-stages/#build-stages-and-deployments
-##
+
 stages:
-  - name: lint and validate
   - name: test
   - name: publish
-    if: >
-      (
-        branch IN (master)
-        AND
-        type IN (push)
-      )
-      OR
-      tag IS present
-install:
+    if: tag IS present OR ( branch IN (master) AND type IN (push) )
+
+before_install:
+  # Exit immediately if a command exits with a non-zero status.
   - set -e
+install:
   - pip3 install --no-cache-dir -r dev-requirements.txt
   - . ci/common
 
-stage: test
 script:
-  - setup_kubectl
-  - setup_kind
-  - setup_helm
+  # Apply fix to avoid rebuilding images already built
   - ./ci/travis-docker-fix
-  - ./dev kind create
+
+  # Setup our k3s based Kubernetes cluster and use its kubectl as well
+  - setup_k3s
+
+  # Make CoreDNS which is installed as part of k3s resolve the test domain and
+  # subdomains (like jupyter.test or hub.binder.test) to the proxy-public
+  # service ClusterIP.
+  - patch_coredns
+  - kubectl delete pod -n kube-system -l k8s-app=kube-dns
+
+  # Install the helm binary
+  - setup_helm
+
+  # Install the ACME server we use instead of Let's Encrypt
   - helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
   - helm repo update
-  - ./dev upgrade --chart jupyterhub/jupyterhub --version 0.8.2
-  - ./dev upgrade --chart ./jupyterhub
-  - ./dev port-forward
-  - ./dev test
-env:
-  ## NOTE: The environment variables will be expanded to multiple jobs. For
-  ##       additional individual jobs, only the first entry is used.
-  ##
-  ## ref: https://docs.travis-ci.com/user/build-stages/#build-stages-and-build-matrix-expansion
-  ##
-  ##
-  ## Z2JH_KUBE_VERSION should match a released kindest/node image tag, but they
-  ## are currently not automatically published.
-  ##
-  ## ref: https://hub.docker.com/r/kindest/node/tags
-  ## ref: https://github.com/kubernetes-sigs/kind/issues/197
-  ##
-  - Z2JH_KUBE_VERSION=1.13.12
-  - Z2JH_KUBE_VERSION=1.15.6
-  - Z2JH_KUBE_VERSION=1.16.3
-  - Z2JH_KUBE_VERSION=1.16.3 Z2JH_HELM_VERSION=3.0.2
+  - helm install pebble jupyterhub/pebble
+
+  # Build our images if needed and update values.yaml with the tags
+  - chartpress
+
+  # Await the ACME server and DNS server
+  - kubectl rollout status --watch --timeout 300s deployment/pebble
+  - kubectl rollout status --watch --timeout 300s deployment/coredns -n kube-system
+
+  # Install JupyterHub
+  - helm install jupyterhub ./jupyterhub --values dev-config.yaml
+
+  # Await hub startup
+  - kubectl rollout status --watch --timeout 300s deployment/hub
+
+  # Await autohttps startup and its TLS certificate acquisition
+  - kubectl rollout status --watch --timeout 300s deployment/autohttps
+  - await_tls_cert_acquisition
+
+  # Provide general purpose info
+  - kubectl get all --all-namespaces
+  - kubectl get events --all-namespaces
+
+  # FIX ME: k3s has a Network Policy Controller, but it is not robust enough for
+  #         use, so for now we disable the netpol test and actively disable it
+  #         with the --disable-network-policy flag.
+  #
+  #         ref: https://github.com/rancher/k3s/issues/947#issuecomment-627641541
+  #
+
+  # Run tests
+  - pytest --verbose --exitfirst --deselect tests/test_spawn.py::test_singleuser_netpol ./tests
 
 jobs:
-  ## allow experimental setups to fail
-  ##
-  ## ref: https://docs.travis-ci.com/user/customizing-the-build/#rows-that-are-allowed-to-fail
-  ##
-  allow_failures:
-    - name: check docs
   ## don't wait for the jobs that are allowed to fail to report success
   ##
+  ## ref: https://docs.travis-ci.com/user/customizing-the-build/#rows-that-are-allowed-to-fail
   ## ref: https://docs.travis-ci.com/user/customizing-the-build/#fast-finishing
   ##
+  allow_failures:
+    - name: docs:link-check
   fast_finish: true
 
-  ## include additional individual jobs
-  ##
+  ## define individual jobs that can rely on defaults from above
+  ## k3s versions:  https://github.com/rancher/k3s/releases
+  ## helm versions: https://github.com/helm/helm/releases
   include:
-    - stage: lint and validate
-      script:
-        - setup_helm
-        - setup_kubeval
-        - ./dev check templates
-      env:
-        ## inclusions of more than three versions cause rate limiting failures
-        - Z2JH_VALIDATE_KUBE_VERSIONS=1.11.0,1.14.0,1.16.0
-    - stage: lint and validate
-      name: check docs
-      script:
+    - stage: test
+      name: chart:k8s-1.18
+      env: K3S_VERSION=v1.18.2+k3s1 HELM_VERSION=v3.2.1
+
+    - stage: test
+      name: chart:k8s-1.17
+      env: K3S_VERSION=v1.17.5+k3s1 HELM_VERSION=v3.2.1
+
+    - stage: test
+      name: chart:k8s-1.16
+      env: K3S_VERSION=v1.16.9+k3s1 HELM_VERSION=v3.2.1 k3s_disable_command=--no-deploy
+
+    - stage: test
+      name: docs:link-check
+      install:
         - pip install -r doc/doc-requirements.txt
+      script:
         - cd doc
         - make html SPHINXOPTS='-W --keep-going'
         - make linkcheck
+
     - stage: publish
+      name: publish:helm-chart
       script:
-        - setup_git_crypt
         - setup_helm
-        - init_helm
         - ./ci/travis-docker-fix
         - ./ci/publish
       env:

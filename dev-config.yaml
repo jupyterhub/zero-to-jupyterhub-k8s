@@ -1,38 +1,61 @@
+# FIXME: All network policies are disabled as k3s fail to enforce them robustly,
+# see this issue for more info:
+# https://github.com/rancher/k3s/issues/947#issuecomment-627641541
+
 proxy:
-  secretToken: 97141abb55ea5321867979cb57bb2e6a86a2f4d6bb166fca45aedb07c212c42d
+  secretToken: pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
   service:
     type: NodePort
     nodePorts:
       http: 30080
       https: 30443
+  https:
+    enabled: true
+    type: letsencrypt
+    hosts: [jupyter.test]
+    letsencrypt:
+      contactEmail: 'jovyan@jupyter.test'
+      acmeServer: https://pebble/dir
+  traefik:
+    extraVolumes:
+      - name: pebble-root-cert
+        configMap:
+          name: pebble
+    extraVolumeMounts:
+      - name: pebble-root-cert
+        subPath: root-cert.pem
+        mountPath: /etc/pebble/root-cert.pem
+    extraEnv:
+      - name: LEGO_CA_CERTIFICATES
+        value: /etc/pebble/root-cert.pem
+  networkPolicy:
+    enabled: false
+    egress: []  # overrides allowance of 0.0.0.0/0
   chp:
     resources:
       requests:
         memory: 0
         cpu: 0
-  networkPolicy:
-    enabled: true
-    egress: []  # overrides allowance of 0.0.0.0/0
 
 hub:
-  cookieSecret: 1470700e01f77171c2c67b12130c25081dfbdf2697af8c2f2bd05621b31100bf
+  cookieSecret: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
   db:
     type: sqlite-memory
-  resources:
-    requests:
-      memory: 0
-      cpu: 0
   services:
     test:
       admin: true
-      apiToken: 0cc05feaefeeb29179e924ffc6d3886ffacf0d1a28ab225f5c210436ffc5cfd5
+      apiToken: ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
   networkPolicy:
-    enabled: true
+    enabled: false
     egress:  # overrides allowance of 0.0.0.0/0
       # In kind/k3s clusters the Kubernetes API server is exposing this port
       - ports:
         - protocol: TCP
           port: 6443
+  resources:
+    requests:
+      memory: 0
+      cpu: 0
 
 singleuser:
   storage:
@@ -40,7 +63,7 @@ singleuser:
   memory:
     guarantee: null
   networkPolicy:
-    enabled: true
+    enabled: false
     # For testing purposes in test_singleuser_netpol
     egress:
       - to:
@@ -52,10 +75,6 @@ singleuser:
 prePuller:
   hook:
     enabled: false
-
-scheduling:
-  userScheduler:
-    enabled: true
 
 debug:
   enabled: true
