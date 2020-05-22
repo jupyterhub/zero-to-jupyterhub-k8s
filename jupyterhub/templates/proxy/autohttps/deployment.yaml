@@ -1,7 +1,6 @@
 {{- $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled) }}
 {{- $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt")) }}
 {{- if $autoHTTPS -}}
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -39,6 +38,9 @@ spec:
         - name: traefik-config
           configMap:
             name: traefik-proxy-config
+        {{- with .Values.proxy.traefik.extraVolumes }}
+        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- end }}
       initContainers:
       - name: load-acme
         image: "{{ .Values.proxy.secretSync.image.name }}:{{ .Values.proxy.secretSync.image.tag }}"
@@ -75,6 +77,13 @@ spec:
               mountPath: /etc/traefik
             - name: certificates
               mountPath: /etc/acme
+            {{- with .Values.proxy.traefik.extraVolumeMounts }}
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- end }}
+          {{- with .Values.proxy.traefik.extraEnv }}
+          env:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
           readinessProbe:
             tcpSocket:
               port: http
