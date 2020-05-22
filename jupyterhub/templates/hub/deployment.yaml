@@ -224,17 +224,15 @@ spec:
           # database upgrades midway or ending up in an infinite restart
           # loop.
           livenessProbe:
+            tcpSocket:
+              port: http
             initialDelaySeconds: {{ .Values.hub.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.hub.livenessProbe.periodSeconds }}
-            httpGet:
-              path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
-              port: http
           {{- end }}
           {{- if .Values.hub.readinessProbe.enabled }}
           readinessProbe:
+            tcpSocket:
+              port: http
             initialDelaySeconds: {{ .Values.hub.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.hub.readinessProbe.periodSeconds }}
-            httpGet:
-              path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
-              port: http
           {{- end }}
