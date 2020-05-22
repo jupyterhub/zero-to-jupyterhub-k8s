@@ -78,9 +78,8 @@ spec:
           readinessProbe:
             tcpSocket:
               port: http
-            initialDelaySeconds: 1
-            periodSeconds: 1
-            failureThreshold: 3
+            initialDelaySeconds: 0
+            periodSeconds: 2
         - name: secret-sync
           image: "{{ .Values.proxy.secretSync.image.name }}:{{ .Values.proxy.secretSync.image.tag }}"
           {{- with .Values.proxy.secretSync.image.pullPolicy }}
