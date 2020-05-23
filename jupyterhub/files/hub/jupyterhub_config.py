@@ -62,6 +62,7 @@ for trait, cfg_key in (
     ('active_server_limit', None),
     # base url prefix
     ('base_url', None),
+    ('cookie_secret', None),
     ('allow_named_servers', None),
     ('named_server_limit_per_user', None),
     ('authenticate_prometheus', None),

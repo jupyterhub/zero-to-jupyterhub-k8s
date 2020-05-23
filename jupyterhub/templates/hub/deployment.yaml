@@ -147,17 +147,6 @@ spec:
               value: "1"
             - name: HELM_RELEASE_NAME
               value: {{ .Release.Name | quote }}
-            {{- if .Values.hub.cookieSecret }}
-            - name: JPY_COOKIE_SECRET
-              valueFrom:
-                secretKeyRef:
-                  {{- if .Values.hub.existingSecret }}
-                  name: {{ .Values.hub.existingSecret }}
-                  {{- else }}
-                  name: hub-secret
-                  {{- end }}
-                  key: hub.cookie-secret
-            {{- end }}
             - name: POD_NAMESPACE
               valueFrom:
                 fieldRef:
