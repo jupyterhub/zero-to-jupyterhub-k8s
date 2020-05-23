@@ -14,7 +14,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    {{- $_ := merge (dict "componentLabel" "proxy") . }}
+    {{- $_ := merge (dict "Values" (dict "componentLabel" "proxy")) . }}
     {{- include "jupyterhub.matchLabels" $_ | nindent 4 }}
   ports:
     - port: 8000

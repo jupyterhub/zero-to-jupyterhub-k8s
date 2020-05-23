@@ -8,7 +8,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      {{- $_ := merge (dict "componentLabel" "singleuser-server") . }}
+      {{- $_ := merge (dict "Values" (dict "componentLabel" "singleuser-server")) . }}
       {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}
   policyTypes:
     - Ingress
@@ -35,7 +35,7 @@ spec:
       to:
         - podSelector:
             matchLabels:
-              {{- $_ := merge (dict "componentLabel" "hub") . }}
+              {{- $_ := merge (dict "Values" (dict "componentLabel" "hub")) . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
 
     # singleuser-server -> Kubernetes internal DNS

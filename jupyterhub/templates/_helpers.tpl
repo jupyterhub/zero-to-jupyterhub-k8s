@@ -91,7 +91,6 @@
 {{ .Values.nameOverride | default .Chart.Name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
-
 {{- /*
   jupyterhub.componentLabel:
     Used by "jupyterhub.labels" and "jupyterhub.nameField".
@@ -105,8 +104,8 @@
 {{- define "jupyterhub.componentLabel" -}}
 {{- $file := .Template.Name | base | trimSuffix ".yaml" -}}
 {{- $parent := .Template.Name | dir | base | trimPrefix "templates" -}}
-{{- $component := .componentLabel | default $parent | default $file -}}
-{{- $component := print (.componentPrefix | default "") $component (.componentSuffix | default "") -}}
+{{- $component := .Values.componentLabel | default $parent | default $file -}}
+{{- $component := print .Values.componentPrefix $component .Values.componentSuffix -}}
 {{ $component }}
 {{- end }}
 
@@ -122,7 +121,7 @@
         .Values to allow for multiple deployments within a single namespace.
 */}}
 {{- define "jupyterhub.nameField" -}}
-{{- $name := print (.namePrefix | default "") (include "jupyterhub.componentLabel" .) (.nameSuffix | default "") -}}
+{{- $name := print .Values.namePrefix (include "jupyterhub.componentLabel" .) .Values.nameSuffix -}}
 {{ printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -133,11 +132,11 @@
     Provides labels: app, release, (chart and heritage).
 */}}
 {{- define "jupyterhub.commonLabels" -}}
-app: {{ .appLabel | default (include "jupyterhub.appLabel" .) }}
+app: {{ .Values.appLabel | default (include "jupyterhub.appLabel" .) }}
 release: {{ .Release.Name }}
-{{- if not .matchLabels }}
+{{- if not .Values.matchLabels }}
 chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-heritage: {{ .heritageLabel | default .Release.Service }}
+heritage: {{ .Values.heritageLabel | default .Release.Service }}
 {{- end }}
 {{- end }}
 
@@ -157,7 +156,7 @@ component: {{ include "jupyterhub.componentLabel" . }}
     Used to provide pod selection labels: component, app, release.
 */}}
 {{- define "jupyterhub.matchLabels" -}}
-{{- $_ := merge (dict "matchLabels" true) . -}}
+{{- $_ := merge (dict "Values" (dict "matchLabels" true)) . -}}
 {{ include "jupyterhub.labels" $_ }}
 {{- end }}
 

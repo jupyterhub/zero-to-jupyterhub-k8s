@@ -49,7 +49,7 @@ spec:
       to:
         - podSelector:
             matchLabels:
-              {{- $_ := merge (dict "componentLabel" "hub") . }}
+              {{- $_ := merge (dict "Values" (dict "componentLabel" "hub")) . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
 
     # proxy --> singleuser-server
@@ -58,7 +58,7 @@ spec:
       to:
         - podSelector:
             matchLabels:
-              {{- $_ := merge (dict "componentLabel" "singleuser-server") . }}
+              {{- $_ := merge (dict "Values" (dict "componentLabel" "singleuser-server")) . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
 
     # proxy -> Kubernetes internal DNS

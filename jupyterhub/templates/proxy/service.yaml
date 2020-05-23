@@ -8,7 +8,7 @@ kind: Service
 metadata:
   name: proxy-api
   labels:
-    {{- $_ := merge (dict "componentSuffix" "-api") . }}
+    {{- $_ := merge (dict "Values" (dict "componentSuffix" "-api")) . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
 spec:
   selector:
@@ -22,7 +22,7 @@ kind: Service
 metadata:
   name: proxy-public
   labels:
-    {{- $_ := merge (dict "componentSuffix" "-public") . }}
+    {{- $_ := merge (dict "Values" (dict "componentSuffix" "-public")) . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
     {{- if .Values.proxy.service.labels }}
     {{- .Values.proxy.service.labels | toYaml | trimSuffix "\n" | nindent 4 }}

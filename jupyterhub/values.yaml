@@ -5,8 +5,8 @@ hub:
     type: ClusterIP
     annotations: {}
     ports:
-      nodePort:
-    loadBalancerIP:
+      nodePort: 0
+    loadBalancerIP: ""
   baseUrl: /
   cookieSecret:
   publicURL:
@@ -27,7 +27,7 @@ hub:
     type: Recreate
   db:
     type: sqlite-pvc
-    upgrade:
+    upgrade: false
     pvc:
       annotations: {}
       selector: {}
@@ -37,7 +37,7 @@ hub:
       subPath:
       storageClassName:
     url:
-    password:
+    password: ""
   labels: {}
   annotations: {}
   extraConfig: {}
@@ -49,8 +49,8 @@ hub:
   image:
     name: jupyterhub/k8s-hub
     tag: 'set-by-chartpress'
-    # pullSecrets:
-    #   - secretName
+    pullPolicy: ""
+    pullSecrets: []
   resources:
     requests:
       cpu: 200m
@@ -93,7 +93,7 @@ hub:
     enabled: true
     initialDelaySeconds: 0
     periodSeconds: 2
-  # existingSecret: existing-secret
+  existingSecret: ""
 
 rbac:
   enabled: true
@@ -101,6 +101,7 @@ rbac:
 
 proxy:
   secretToken: ''
+  annotations: {}
   deploymentStrategy:
     ## type: Recreate
     ## - JupyterHub's interaction with the CHP proxy becomes a lot more robust
@@ -134,12 +135,13 @@ proxy:
     nodePorts:
       http:
       https:
-    loadBalancerIP:
+    loadBalancerIP: ""
     loadBalancerSourceRanges: []
   chp:
     image:
       name: jupyterhub/configurable-http-proxy
       tag: 4.2.1
+      pullPolicy: ""
     livenessProbe:
       enabled: true
       initialDelaySeconds: 60
@@ -156,6 +158,7 @@ proxy:
     image:
       name: traefik
       tag: v2.2 # ref: https://hub.docker.com/_/traefik?tab=tags
+      pullPolicy: ""
     hsts:
       includeSubdomains: false
       preload: false
@@ -167,6 +170,7 @@ proxy:
     image:
       name: jupyterhub/k8s-secret-sync
       tag: 'set-by-chartpress'
+      pullPolicy: ""
     resources: {}
   labels: {}
   nodeSelector: {}
@@ -214,7 +218,7 @@ auth:
     user: {}
   state:
     enabled: false
-    cryptoKey:
+    cryptoKey: ""
 
 
 singleuser:
@@ -233,6 +237,7 @@ singleuser:
     image:
       name: jupyterhub/k8s-network-tools
       tag: 'set-by-chartpress'
+      pullPolicy: ""
   cloudMetadata:
     enabled: false
     ip: 169.254.169.254
@@ -275,9 +280,8 @@ singleuser:
   image:
     name: jupyterhub/k8s-singleuser-sample
     tag: 'set-by-chartpress'
-    pullPolicy: IfNotPresent
-    # pullSecrets:
-    #   - secretName
+    pullPolicy: ""
+    pullSecrets: []
   imagePullSecret:
     enabled: false
     registry:
@@ -286,10 +290,10 @@ singleuser:
     password:
   startTimeout: 300
   cpu:
-    limit:
-    guarantee:
+    limit: ""
+    guarantee: ""
   memory:
-    limit:
+    limit: ""
     guarantee: 1G
   extraResource:
     limits: {}
@@ -297,6 +301,7 @@ singleuser:
   cmd: jupyterhub-singleuser
   defaultUrl:
   extraPodConfig: {}
+  profileList: []
 
 
 scheduling:
@@ -375,3 +380,15 @@ cull:
 
 debug:
   enabled: false
+
+# default values are set to please helm lint --strict,
+# but they will be overridden internally in various helm templates
+appLabel: ""        # defaults to nameOverride
+nameOverride: ""    # defaults to .Chart.Name
+namePrefix: ""      # not used, part of unused jupyterhub.nameField template
+nameSuffix: ""      # not used, part of unused jupyterhub.nameField template
+componentLabel: ""  # defaults to containing folder name or template filename
+componentPrefix: "" # prefix componentLabel
+componentSuffix: "" # suffix componentLabel
+heritageLabel: ""   # defaults to .Release.Service
+matchLabels: false

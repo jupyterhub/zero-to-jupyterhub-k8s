@@ -5,7 +5,7 @@ image-awaiter job confirms the required images to be pulled, the daemonset is
 deleted. Only then will the actual helm upgrade start.
 */}}
 {{- if .Values.prePuller.hook.enabled }}
-{{- $_ := merge (dict "hook" true "componentPrefix" "hook-") . }}
+{{- $_ := merge (dict "Values" (dict "hook" true "componentPrefix" "hook-")) . }}
 {{- include "jupyterhub.imagePuller.daemonset" $_ }}
 {{- end }}
 ---
@@ -15,6 +15,6 @@ that are added in between helm upgrades, for example by manually adding a node
 or by the cluster autoscaler.
 */}}
 {{- if .Values.prePuller.continuous.enabled }}
-{{- $_ := merge (dict "hook" false "componentPrefix" "continuous-") . }}
+{{- $_ := merge (dict "Values" (dict "hook" false "componentPrefix" "continuous-")) . }}
 {{ include "jupyterhub.imagePuller.daemonset" $_ }}
 {{- end }}

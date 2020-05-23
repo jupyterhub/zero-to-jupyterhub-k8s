@@ -7,13 +7,13 @@ Returns an image-puller daemonset. Two daemonsets will be created like this.
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ print .componentPrefix "image-puller" }}
+  name: {{ print .Values.componentPrefix "image-puller" }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
-    {{- if .hook }}
+    {{- if .Values.hook }}
     hub.jupyter.org/deletable: "true"
     {{- end }}
-  {{- if .hook }}
+  {{- if .Values.hook }}
   annotations:
     {{- /*
     Allows the daemonset to be deleted when the image-awaiter job is completed.
@@ -51,7 +51,7 @@ spec:
       {{- if or .Values.singleuser.imagePullSecret.enabled .Values.singleuser.image.pullSecrets }}
       imagePullSecrets:
         {{- if .Values.singleuser.imagePullSecret.enabled }}
-        - name: {{ if .hook -}} hook- {{- end -}} singleuser-image-credentials
+        - name: {{ if .Values.hook -}} hook- {{- end -}} singleuser-image-credentials
         {{ else }}
         {{- range .Values.singleuser.image.pullSecrets }}
         - name: {{ . }}

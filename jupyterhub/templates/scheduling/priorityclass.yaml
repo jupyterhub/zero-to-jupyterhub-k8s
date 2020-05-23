@@ -4,7 +4,7 @@ kind: PriorityClass
 metadata:
   name: {{ .Release.Name }}-default-priority
   labels:
-    {{- $_ := merge (dict "componentLabel" "default-priority") . }}
+    {{- $_ := merge (dict "Values" (dict "componentLabel" "default-priority")) . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
   annotations:
     # PriorityClasses must be added before the other resources reference them.
