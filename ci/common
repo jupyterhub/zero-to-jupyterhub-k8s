@@ -27,27 +27,6 @@ setup_k3s () {
     export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 }
 
-patch_coredns() {
-    echo "Patching CoreDNS to resolve the top level domain \"test\" and"
-    echo "its subdomains to the proxy-public service ClusterIP."
-    kubectl get configmap -n kube-system coredns -o jsonpath='{.data.Corefile}' \
-    | grep "template ANY ANY test" > /dev/null \
-    && echo "Already patched!" && return
-
-    # shellcheck disable=SC1004
-    kubectl get configmap -n kube-system coredns -o jsonpath='{.data.Corefile}' \
-    | sed '/ready$/a\
-    template ANY ANY test {\
-      match "^([^\.]+\.)*test\.$"\
-      answer "{{ .Name }} 60 IN CNAME proxy-public.default.svc.cluster.local"\
-      upstream\
-    }' \
-    > /tmp/Corefile
-
-    kubectl create configmap -n kube-system coredns --from-file Corefile=/tmp/Corefile -o yaml --dry-run \
-    | kubectl apply -f -
-}
-
 await_tls_cert_acquisition() {
     i=0; while [ $i -ne 60 ]; do
         kubectl logs deploy/pebble -c pebble | grep "Issued certificate" \
@@ -58,9 +37,11 @@ await_tls_cert_acquisition() {
         echo "Certificate acquisition failed!"
         kubectl get service,networkpolicy,configmap,pod
         kubectl describe pod -l app.kubernetes.io/name=pebble
-        kubectl logs deploy/pebble --all-containers
+        kubectl logs deploy/pebble --all-containers --prefix
+        kubectl describe pod -l app.kubernetes.io/name=pebble-coredns
+        kubectl logs deploy/pebble-coredns --all-containers --prefix
         kubectl describe pod -l component=autohttps
-        kubectl logs deploy/autohttps --all-containers
+        kubectl logs deploy/autohttps --all-containers --prefix
         exit 1
     fi
 }

@@ -37,25 +37,20 @@ script:
   # Setup our k3s based Kubernetes cluster and use its kubectl as well
   - setup_k3s
 
-  # Make CoreDNS which is installed as part of k3s resolve the test domain and
-  # subdomains (like jupyter.test or hub.binder.test) to the proxy-public
-  # service ClusterIP.
-  - patch_coredns
-  - kubectl delete pod -n kube-system -l k8s-app=kube-dns
-
   # Install the helm binary
   - setup_helm
 
   # Install the ACME server we use instead of Let's Encrypt
   - helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
   - helm repo update
-  - helm install pebble jupyterhub/pebble
+  - helm install pebble jupyterhub/pebble --values dev-config.yaml
 
   # Build our images if needed and update values.yaml with the tags
   - chartpress
 
   # Await the ACME server and DNS server
   - kubectl rollout status --watch --timeout 300s deployment/pebble
+  - kubectl rollout status --watch --timeout 300s deployment/pebble-coredns
   - kubectl rollout status --watch --timeout 300s deployment/coredns -n kube-system
 
   # Install JupyterHub

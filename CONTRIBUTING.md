@@ -146,31 +146,15 @@ __Install Pebble__
 ```shell
 helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
 helm repo update
-helm install pebble jupyterhub/pebble
+helm install pebble jupyterhub/pebble --values dev-config.yaml
 ```
 
 __Redirect jupyter.test__
 
 We test with `jupyter.test` as a domain name.
 
-1. Make your own computer redirect `jupyter.test` traffic to `127.0.0.1`
-   (localhost) by adding an entry in `/etc/hosts`.
-
-1. Make the pods in the Kubernetes cluster redirect `jupyter.test` to the
-   `proxy-public` service.
-
-   Note that this configuration is sadly overwritten on k3s restarts, but it is
-   mostly needed by the pebble pod when it will try reach `jupyter.test` as part
-   of an HTTP-01 challenge triggered by the autohttps pod's Traefik proxy making
-   use of its ACME client called LEGO.
-
-   ```shell
-   # Use the patch_coredns function defined in ci/common to update the k3s/k3d
-   # clusters DNS server's configuration to point all .test domain lookups to
-   # the IP to the proxy-public service.
-   . ci/common
-   patch_coredns
-   ```
+Make your own computer redirect `jupyter.test` traffic to `127.0.0.1`
+(localhost) by adding an entry in `/etc/hosts`.
 
 ## 4: Build images, update values, install chart
 
