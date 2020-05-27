@@ -33,7 +33,7 @@ before doing the cloud provider specific setup.
 
   .. code-block:: bash
 
-     helm delete <YOUR-HELM-RELEASE-NAME> --purge
+     helm delete <YOUR-HELM-RELEASE-NAME>
 
    ``<YOUR-HELM-RELEASE-NAME>`` is the name provided to ``helm upgrade`` when
    initially setting up the hub. If you had forgotten what you used, you

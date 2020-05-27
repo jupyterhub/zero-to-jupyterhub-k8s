@@ -112,13 +112,13 @@ Install JupyterHub
         to your terminal. JupyterHub is being installed in the background.
 
       * If you get a ``release named <YOUR-RELEASE-NAME> already exists`` error,
-        then you should delete the release by running ``helm delete --purge
+        then you should delete the release by running ``helm delete
         <YOUR-RELEASE-NAME>``. Then reinstall by repeating this step. If it
         persists, also do ``kubectl delete namespace <YOUR-NAMESPACE>`` and try
         again.
 
       * In general, if something goes *wrong* with the install step, delete the
-        Helm release by running ``helm delete --purge <YOUR-RELEASE-NAME>``
+        Helm release by running ``helm delete <YOUR-RELEASE-NAME>``
         before re-running the install command.
 
       * If you're pulling from a large Docker image you may get a

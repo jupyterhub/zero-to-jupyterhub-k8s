@@ -147,7 +147,7 @@ If the upgrade is failing on a test system or a system that does not serve users
 deleting the helm chart using:
 
 ```
-helm delete <YOUR-HELM-RELEASE-NAME> --purge
+helm delete <YOUR-HELM-RELEASE-NAME>
 ```
 
 `helm list` may be used to find <YOUR-HELM-RELEASE-NAME>.
