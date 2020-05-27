@@ -75,3 +75,7 @@ If you are using a namespace other than `default` create it now:
    kubectl create namespace $NAMESPACE
 
 Now continue with :ref:`setup-jupyterhub`.
+
+
+Migrate from Helm 2 to Helm 3
+=============================
