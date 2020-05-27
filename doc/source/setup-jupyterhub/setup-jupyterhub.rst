@@ -87,7 +87,8 @@ Install JupyterHub
       RELEASE=jhub
       NAMESPACE=jhub
 
-      helm upgrade --install $RELEASE jupyterhub/jupyterhub \
+      helm upgrade --cleanup-on-fail \
+        --install $RELEASE jupyterhub/jupyterhub \
         --namespace $NAMESPACE  \
         --version=0.9.0 \
         --values config.yaml
