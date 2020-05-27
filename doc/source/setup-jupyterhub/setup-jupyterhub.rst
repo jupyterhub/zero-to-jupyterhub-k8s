@@ -123,7 +123,7 @@ Install JupyterHub
 
       * If you're pulling from a large Docker image you may get a
         ``Error: timed out waiting for the condition`` error, add a
-        ``--timeout=SOME-LARGE-NUMBER-OF-SECONDS`` parameter to the ``helm
+        ``--timeout=<NUMBER-OF-MINUTES>m<NUMBER-OF-SECONDS>s`` parameter to the ``helm
         install`` command.
 
       * The ``--version`` parameter corresponds to the *version of the Helm
