@@ -45,3 +45,9 @@ await_tls_cert_acquisition() {
         exit 1
     fi
 }
+
+setup_kubeval () {
+    echo "setup kubeval ${KUBEVAL_VERSION}"
+    curl -L https://github.com/instrumenta/kubeval/releases/download/0.15.0/kubeval-linux-amd64.tar.gz | tar xz kubeval
+    sudo mv kubeval /usr/local/bin/
+}

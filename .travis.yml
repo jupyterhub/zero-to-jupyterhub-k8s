@@ -21,9 +21,9 @@ stages:
 before_install:
   # Exit immediately if a command exits with a non-zero status.
   - set -e
+  - . ci/common
 install:
   - pip3 install --no-cache-dir -r dev-requirements.txt
-  - . ci/common
 
 script:
   # Apply fix to avoid rebuilding images already built
@@ -97,6 +97,15 @@ jobs:
     - stage: test
       name: chart:k8s-1.16
       env: K3S_VERSION=v1.16.9+k3s1 HELM_VERSION=v3.2.1 k3s_disable_command=--no-deploy
+
+    - stage: test
+      name: chart:lint-and-validate
+      install:
+        - setup_helm
+        - setup_kubeval
+        - pip install yamllint
+      script:
+        - tools/templates/lint-and-validate.py --kubernetes-versions 1.11.0,1.14.0,1.18.0
 
     - stage: test
       name: docs:link-check
