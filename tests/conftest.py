@@ -21,7 +21,7 @@ def request_data():
     with open(os.path.join(basedir, "dev-config.yaml")) as f:
         y = yaml.safe_load(f)
     token = y["hub"]["services"]["test"]["apiToken"]
-    host = "jupyter.test"
+    host = "local.jovyan.org"
     port = "30443"
     return {
         "token": token,

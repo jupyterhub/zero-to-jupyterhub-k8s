@@ -128,7 +128,7 @@ k3d create --enable-registry --wait 60 --publish 30080:30080 --publish 30443:304
 export KUBECONFIG="$(k3d get-kubeconfig --name='k3s-default')"
 ```
 
-## 3: Install a local ACME server and redirect jupyter.test
+## 3: Install a local ACME server
 
 Testing automatic TLS certificate acquisition with an ACME server like Let's
 Encrypt from a local Kubernetes cluster is tricky. First you need a public
@@ -148,13 +148,6 @@ helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
 helm repo update
 helm install pebble jupyterhub/pebble --values dev-config.yaml
 ```
-
-__Redirect jupyter.test__
-
-We test with `jupyter.test` as a domain name.
-
-Make your own computer redirect `jupyter.test` traffic to `127.0.0.1`
-(localhost) by adding an entry in `/etc/hosts`.
 
 ## 4: Build images, update values, install chart
 
@@ -199,9 +192,9 @@ only rebuild images if their dependent files in their respective directories or
 
 ## 5: Visit the JupyterHub
 
-Soon you should be able to visit https://jupyter.test:30443 where you manually
-need to choose to accept to trust certificates signed by a certificate authority
-you don't already trust.
+Soon you should be able to visit https://local.jovyan.org:30443 where you
+manually need to choose to accept to trust certificates signed by a certificate
+authority you don't already trust.
 
 ## 6: Run tests
 

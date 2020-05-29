@@ -12,7 +12,7 @@ proxy:
   https:
     enabled: true
     type: letsencrypt
-    hosts: [jupyter.test]
+    hosts: [local.jovyan.org]
     letsencrypt:
       contactEmail: 'jovyan@jupyter.test'
       acmeServer: https://pebble/dir
@@ -83,6 +83,6 @@ debug:
 # all .test domains to our proxy-public service.
 coredns:
   corefileSegment: |-
-    template ANY ANY test {
+    template ANY ANY local.jovyan.org {
       answer "{{ .Name }} 60 IN CNAME proxy-public.{$PEBBLE_NAMESPACE}.svc.cluster.local"
     }

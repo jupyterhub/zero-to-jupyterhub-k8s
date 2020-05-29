@@ -10,11 +10,6 @@ git:
   ## ref: https://github.com/jupyterhub/chartpress#shallow-clones
   ##
   depth: false
-addons:
-  ## hosts takes a list of hostnames that will point to localhost through its
-  ## managed /etc/hosts file
-  hosts:
-    - jupyter.test
 services:
   - docker
 
