@@ -6,9 +6,10 @@ ref: https://docs.pytest.org/en/latest/writing_plugins.html#conftest-py-plugins
 import os
 import requests
 import uuid
+import urllib3
+from urllib.parse import urlparse
 
 import pytest
-import urllib3
 import yaml
 
 # Ignore InsecureRequestWarning associated with https:// web requests
@@ -21,11 +22,10 @@ def request_data():
     with open(os.path.join(basedir, "dev-config.yaml")) as f:
         y = yaml.safe_load(f)
     token = y["hub"]["services"]["test"]["apiToken"]
-    host = "local.jovyan.org"
-    port = "30443"
+    hub_url = os.environ.get("HUB_URL", "https://local.jovyan.org:30443")
     return {
         "token": token,
-        "hub_url": f'https://{host}:{port}/hub/api',
+        "hub_url": f'{hub_url.rstrip("/")}/hub/api',
         "headers": {"Authorization": f"token {token}"},
         "test_timeout": 300,
         "request_timeout": 60,
