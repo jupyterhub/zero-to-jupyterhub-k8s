@@ -26,51 +26,31 @@ install:
   - pip3 install --no-cache-dir -r dev-requirements.txt
 
 script:
-  # Apply fix to avoid rebuilding images already built
-  - ./ci/travis-docker-fix
+  # Fix to avoid rebuilding images already built
+  - remove_docker_mirror_on_travis
 
   # Setup our k3s based Kubernetes cluster and use its kubectl as well
   - setup_k3s
-
-  # Install the helm binary
   - setup_helm
-
-  # Install the ACME server we use instead of Let's Encrypt
   - helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
   - helm repo update
+
+  # Install a local ACME server
   - helm install pebble jupyterhub/pebble --values dev-config.yaml
 
   # Build our images if needed and update values.yaml with the tags
   - chartpress
 
-  # Await the ACME server and DNS server
-  - kubectl rollout status --watch --timeout 300s deployment/pebble
-  - kubectl rollout status --watch --timeout 300s deployment/pebble-coredns
-  - kubectl rollout status --watch --timeout 300s deployment/coredns -n kube-system
-
+  # Pre-install JupyterHub
+  - await_dns
+  - await_pebble
   # Install JupyterHub
   - helm install jupyterhub ./jupyterhub --values dev-config.yaml
-
-  # Await hub startup
-  - kubectl rollout status --watch --timeout 300s deployment/hub
-
-  # Await autohttps startup and its TLS certificate acquisition
-  - kubectl rollout status --watch --timeout 300s deployment/autohttps
+  - await_jupyterhub
   - await_tls_cert_acquisition
 
-  # Provide general purpose info
-  - kubectl get all --all-namespaces
-  - kubectl get events --all-namespaces
-
-  # FIX ME: k3s has a Network Policy Controller, but it is not robust enough for
-  #         use, so for now we disable the netpol test and actively disable it
-  #         with the --disable-network-policy flag.
-  #
-  #         ref: https://github.com/rancher/k3s/issues/947#issuecomment-627641541
-  #
-
   # Run tests
-  - pytest --verbose --exitfirst --deselect tests/test_spawn.py::test_singleuser_netpol ./tests
+  - pytest --verbose --exitfirst ./tests
 
 jobs:
   ## don't wait for the jobs that are allowed to fail to report success
@@ -120,7 +100,7 @@ jobs:
       name: publish:helm-chart
       script:
         - setup_helm
-        - ./ci/travis-docker-fix
+        - remove_docker_mirror_on_travis
         - ./ci/publish
       env:
         ## encrypted environment variables DOCKER_USERNAME and DOCKER_PASSWORD,

@@ -66,6 +66,7 @@ curl -sfL https://get.k3s.io | sh -s - \
     --disable metrics-server \
     --disable traefik \
     --disable local-storage \
+    --disable-network-policy \
     --docker
 
 # Ensure kubectl will work with our k3s cluster
@@ -124,7 +125,10 @@ For this setup to work, make `registry.local` point to `127.0.0.1` (localhost)
 by adding an entry in `/etc/hosts`.
 
 ```shell
-k3d create --enable-registry --wait 60 --publish 30080:30080 --publish 30443:30443
+# Ports exposed to k8s services through nodePorts:
+# 30443: proxy-public - where you reach both /hub/home and /user/myuser (HTTPS)
+# 32444: pebble - where you reach /roots/0 on Pebble's management API (HTTPS)
+k3d create --enable-registry --wait 60 --publish 30443:30443 --publish 32444:32444
 export KUBECONFIG="$(k3d get-kubeconfig --name='k3s-default')"
 ```
 
@@ -201,7 +205,7 @@ authority you don't already trust.
 The test suite runs outside your Kubernetes cluster.
 
 ```shell
-pytest --verbose --exitfirst --deselect tests/test_spawn.py::test_singleuser_netpol ./tests
+pytest -vx -m "not netpol" ./tests
 ```
 
 Note that we have disabled the creation of NetworkPolicy Kubernetes resources in

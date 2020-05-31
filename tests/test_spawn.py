@@ -146,6 +146,7 @@ def test_hub_api_request_user_spawn(api_request, jupyter_user, request_data):
         _delete_server(api_request, jupyter_user, request_data["test_timeout"])
 
 
+@pytest.mark.netpol
 def test_singleuser_netpol(api_request, jupyter_user, request_data):
     """
     Tests a spawned user pods ability to communicate with allowed and blocked
@@ -164,19 +165,13 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
         pod_name = server_model["state"]["pod_name"]
 
         c = subprocess.run([
-            "kubectl", "exec", pod_name,
-            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
-            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
-            "--",
+            "kubectl", "exec", pod_name, "--",
             "nslookup", "hub",
         ])
         assert c.returncode == 0, "DNS issue: failed to resolve 'hub' from a singleuser-server"
 
         c = subprocess.run([
-            "kubectl", "exec", pod_name,
-            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
-            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
-            "--",
+            "kubectl", "exec", pod_name, "--",
             "nslookup", "jupyter.org",
         ])
         assert c.returncode == 0, "DNS issue: failed to resolve 'jupyter.org' from a singleuser-server"
@@ -186,15 +181,13 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
         blocked_url = "http://mybinder.org"
 
         c = subprocess.run([
-            "kubectl", "exec", pod_name,
-            "--",
+            "kubectl", "exec", pod_name, "--",
             "wget", "--quiet", "--tries=1", "--timeout=3", allowed_url,
         ])
         assert c.returncode == 0, "Unable to get allowed domain"
 
         c = subprocess.run([
-            "kubectl", "exec", pod_name,
-            "--",
+            "kubectl", "exec", pod_name, "--",
             "wget", "--quiet", "--server-response", "-O-", "--tries=1", "--timeout=3", blocked_url,
         ])
         assert c.returncode > 0, "Blocked domain was allowed"

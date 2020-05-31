@@ -1,6 +1,19 @@
 #!/bin/sh
 # Use https://www.shellcheck.net/ to reduce mistakes if you make changes to this file.
 
+remove_docker_mirror_on_travis() {
+    # This is a workaround to an issue caused by the existence of a docker
+    # registry mirror in our CI environment. Without this fix that removes the
+    # mirror, chartpress fails to realize the existence of already built images
+    # and rebuilds them.
+    #
+    # ref: https://github.com/moby/moby/issues/39120
+    sudo cat /etc/docker/daemon.json
+    echo '{"mtu": 1460}' | sudo dd of=/etc/docker/daemon.json
+    sudo systemctl restart docker
+    docker ps -a
+}
+
 setup_helm () {
     echo "setup helm ${HELM_VERSION}"
     curl -sf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
@@ -10,21 +23,116 @@ setup_k3s () {
     echo "setup k3s ${K3S_VERSION}"
     # https://rancher.com/docs/k3s/latest/en/installation/install-options/how-to-flags/
 
+    # NOTE: k3s has a Network Policy controller called kube-router, but it is
+    #       not robust enough for use, so we disable it and install our own.
+    #
+    #       ref: https://github.com/rancher/k3s/issues/947#issuecomment-627641541
+    #
     curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${K3S_VERSION} sh -s - \
         --write-kubeconfig-mode=644 \
         "${k3s_disable_command:---disable}" metrics-server \
         "${k3s_disable_command:---disable}" traefik \
-        "${k3s_disable_command:---disable}" local-path-provisioner \
+        "${k3s_disable_command:---disable}" local-storage \
         --disable-network-policy \
+        --flannel-backend=none \
         --docker \
-    || {
+ || {
         echo "Setup of k3s failed!"
         systemctl status k3s.service
         journalctl --no-pager --utc | tail -n 100
         exit 1
     }
-
     export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+
+    setup_cni calico
+}
+
+setup_cni() {
+    # Install canal or calico as a CNI to enforce our NetworkPolicies.
+    #
+    # ref: https://rancher.com/docs/k3s/latest/en/installation/network-options/
+    #
+    curl -sfL https://docs.projectcalico.org/manifests/${1}.yaml \
+  | sed '/"type": "calico"/a\
+          "container_settings": {\
+            "allow_ip_forwarding": true\
+          },' \
+  | kubectl apply -f -
+}
+
+await_cni() {
+    if [ "${1}" == "canal" ]; then
+        daemonset_name="canal"
+    else
+        daemonset_name="calico-node"
+    fi
+    kubectl rollout status --watch --timeout 300s daemonset/$daemonset_name -n kube-system \
+ && kubectl rollout status --watch --timeout 300s deployment/calico-kube-controllers -n kube-system \
+ || {
+        echo "Startup of ${1:-calico} failed!"
+        kubectl describe pod -n kube-system -l k8s-app=$daemonset_name
+        kubectl logs daemonset/$daemonset_name -n kube-system --all-containers --prefix
+        kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
+        kubectl logs deployment/calico-kube-controllers -n kube-system --all-containers --prefix
+        exit 1
+    }
+}
+
+await_dns() {
+    kubectl rollout status --watch --timeout 300s deployment/coredns -n kube-system \
+ || {
+        echo "Startup of Kubernetes DNS server failed!"
+        kubectl describe pod -n kube-system -l k8s-app=kube-dns
+        kubectl logs deployment/coredns -n kube-system --all-containers --prefix
+        exit 1
+    }
+}
+
+# This function can be used to ensure we can resolve jupyter.org as an external
+# domain name from a pod in the K8s cluster, as required by netpol tests.
+await_dns_with_hub_pod() {
+    i=0; while [ $i -ne 5 ]; do
+        kubectl exec deploy/hub -- nslookup jupyter.org \
+        && resolved_ip=true && break \
+        || resolved_ip=false && sleep 2 && i=$((i + 1))
+        echo "Waiting ($i)..."
+    done
+    if [ "$resolved_ip" != "true" ]; then
+        echo "Something is wrong with the DNS resolution!"
+        kubectl describe pod -n kube-system -l k8s-app=kube-dns
+        kubectl logs deploy/coredns -n kube-system --all-containers --prefix
+        exit 1
+    fi
+}
+
+await_pebble() {
+    kubectl rollout status --watch --timeout 300s deployment/pebble \
+ && kubectl rollout status --watch --timeout 300s deployment/pebble-coredns \
+ || {
+        echo "Startup of Pebble failed!"
+        kubectl describe pod -l app.kubernetes.io/name=pebble
+        kubectl logs deploy/pebble --all-containers --prefix
+        kubectl describe pod -l app.kubernetes.io/name=pebble-coredns
+        kubectl logs deploy/pebble-coredns --all-containers --prefix
+        exit 1
+    }
+}
+
+await_jupyterhub() {
+    kubectl rollout status --watch --timeout 300s deployment/proxy \
+ && kubectl rollout status --watch --timeout 300s deployment/hub \
+ && kubectl rollout status --watch --timeout 300s deployment/autohttps \
+ || {
+        echo "Startup of JupyterHub failed!"
+        kubectl get all
+        kubectl describe pod -l component=hub
+        kubectl logs deploy/hub --all-containers --prefix
+        kubectl describe pod -l component=proxy
+        kubectl logs deploy/proxy --all-containers --prefix
+        kubectl describe pod -l component=autohttps
+        kubectl logs deploy/autohttps --all-containers --prefix
+        exit 1
+    }
 }
 
 await_tls_cert_acquisition() {
@@ -44,10 +152,13 @@ await_tls_cert_acquisition() {
         kubectl logs deploy/autohttps --all-containers --prefix
         exit 1
     fi
+    # a precausion as pebble logs is a bad indicator of the readiness state of
+    # Traefik's readiness to use the cert for TLS termination.
+    sleep 1
 }
 
 setup_kubeval () {
     echo "setup kubeval ${KUBEVAL_VERSION}"
-    curl -L https://github.com/instrumenta/kubeval/releases/download/0.15.0/kubeval-linux-amd64.tar.gz | tar xz kubeval
+    curl -sfL https://github.com/instrumenta/kubeval/releases/download/0.15.0/kubeval-linux-amd64.tar.gz | tar xz kubeval
     sudo mv kubeval /usr/local/bin/
 }
