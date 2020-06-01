@@ -120,7 +120,7 @@ def test_hub_can_talk_to_proxy(api_request, request_data):
     assert r.status_code == 200, "Failed to get /proxy"
 
 
-def test_hub_api_request_user_spawn(api_request, jupyter_user, request_data):
+def test_hub_api_request_user_spawn(api_request, jupyter_user, request_data, pebble_acme_ca_cert):
     """
     Tests the hub api's /users/:user/server POST endpoint. A user pod should be
     created.
@@ -138,7 +138,7 @@ def test_hub_api_request_user_spawn(api_request, jupyter_user, request_data):
             request_data["hub_url"].partition("/hub/api")[0]
             + server_model["url"]
             + "api",
-            verify=False,
+            verify=pebble_acme_ca_cert,
         )
         assert r.status_code == 200
         assert "version" in r.json()
