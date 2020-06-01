@@ -1,7 +1,3 @@
-# FIXME: All network policies are disabled as k3s fail to enforce them robustly,
-# see this issue for more info:
-# https://github.com/rancher/k3s/issues/947#issuecomment-627641541
-
 proxy:
   secretToken: pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
   service:

@@ -121,7 +121,11 @@ await_pebble() {
 await_jupyterhub() {
     kubectl rollout status --watch --timeout 300s deployment/proxy \
  && kubectl rollout status --watch --timeout 300s deployment/hub \
- && kubectl rollout status --watch --timeout 300s deployment/autohttps \
+ && (
+        if kubectl get deploy/autohttps &> /dev/null; then
+            kubectl rollout status --watch --timeout 300s deployment/autohttps || exit 1
+        fi
+    )\
  || {
         echo "Startup of JupyterHub failed!"
         kubectl get all
@@ -129,8 +133,8 @@ await_jupyterhub() {
         kubectl logs deploy/hub --all-containers --prefix
         kubectl describe pod -l component=proxy
         kubectl logs deploy/proxy --all-containers --prefix
-        kubectl describe pod -l component=autohttps
-        kubectl logs deploy/autohttps --all-containers --prefix
+        kubectl describe pod -l component=autohttps || true
+        kubectl logs deploy/autohttps --all-containers --prefix || true
         exit 1
     }
 }

@@ -22,10 +22,14 @@ before_install:
   # Exit immediately if a command exits with a non-zero status.
   - set -e
   - . ci/common
+
+# The default install script below will prepare a k8s cluster to work with, but
+# not install JupyterHub itself, as upgrade tests may want to make multiple
+# installations in sequence etc.
 install:
+  # Install chartpress, pytest, etc.
   - pip3 install --no-cache-dir -r dev-requirements.txt
 
-script:
   # Fix to avoid rebuilding images already built
   - remove_docker_mirror_on_travis
 
@@ -44,6 +48,7 @@ script:
   # Pre-install JupyterHub
   - await_dns
   - await_pebble
+script:
   # Install JupyterHub
   - helm install jupyterhub ./jupyterhub --values dev-config.yaml
   - await_jupyterhub
@@ -51,6 +56,11 @@ script:
 
   # Run tests
   - pytest --verbose --exitfirst ./tests
+
+env:
+  global:
+    - K3S_VERSION=v1.18.2+k3s1
+    - HELM_VERSION=v3.2.1
 
 jobs:
   ## don't wait for the jobs that are allowed to fail to report success
@@ -68,7 +78,6 @@ jobs:
   include:
     - stage: test
       name: chart:k8s-1.18
-      env: K3S_VERSION=v1.18.2+k3s1 HELM_VERSION=v3.2.1
 
     - stage: test
       name: chart:k8s-1.17
@@ -77,6 +86,31 @@ jobs:
     - stage: test
       name: chart:k8s-1.16
       env: K3S_VERSION=v1.16.9+k3s1 HELM_VERSION=v3.2.1 k3s_disable_command=--no-deploy
+
+    - stage: test
+      name: chart:install-latest-then-upgrade
+      script:
+        ## Install latest released JupyterHub
+        ## NOTE: For 0.9.0 we have disabled some parts here because they would
+        ##       require custom configuration that isn't needed post 0.9.0.
+        ##       This regards proxy.traefik.extraVolumes etc and more complete
+        ##       network policies that contain more of whats required by
+        ##       default.
+        - |
+            helm install jupyterhub jupyterhub/jupyterhub --values dev-config.yaml \
+                --set proxy.https.enabled=false \
+                --set hub.networkPolicy.enabled=false \
+                --set proxy.networkPolicy.enabled=false \
+                --set singleuser.networkPolicy.enabled=false
+        - await_jupyterhub
+
+        # Upgrade JupyterHub to what's locally available
+        - helm upgrade jupyterhub ./jupyterhub --values dev-config.yaml
+        - await_jupyterhub
+        - await_tls_cert_acquisition
+
+        # Run tests
+        - pytest --verbose --exitfirst ./tests
 
     - stage: test
       name: chart:lint-and-validate
@@ -90,7 +124,7 @@ jobs:
     - stage: test
       name: docs:link-check
       install:
-        - pip install -r doc/doc-requirements.txt
+        - pip install --no-cache-dir -r doc/doc-requirements.txt
       script:
         - cd doc
         - make html SPHINXOPTS='-W --keep-going'
@@ -98,6 +132,8 @@ jobs:
 
     - stage: publish
       name: publish:helm-chart
+      install:
+        - pip3 install --no-cache-dir -r dev-requirements.txt
       script:
         - setup_helm
         - remove_docker_mirror_on_travis
