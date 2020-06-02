@@ -8,6 +8,6 @@ RUN wget -qO /tini https://github.com/krallin/tini/releases/download/v0.19.0/tin
 ENV PYTHONUNBUFFERED=1
 
 RUN pip install --no-cache kubernetes
-COPY secret-sync.py /usr/local/bin/secret-sync.py
+COPY acme-secret-sync.py /usr/local/bin/
 
-ENTRYPOINT [ "/tini", "--", "/usr/local/bin/secret-sync.py" ]
+ENTRYPOINT [ "/tini", "--", "/usr/local/bin/acme-secret-sync.py" ]
