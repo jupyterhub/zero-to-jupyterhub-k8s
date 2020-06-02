@@ -60,6 +60,8 @@ setup_cni() {
   | kubectl apply -f -
 }
 
+# FIXME: we cannot use --prefix with kubectl logs unless we have kubectl 1.17+
+
 await_cni() {
     if [ "${1}" == "canal" ]; then
         daemonset_name="canal"
@@ -71,9 +73,9 @@ await_cni() {
  || {
         echo "Startup of ${1:-calico} failed!"
         kubectl describe pod -n kube-system -l k8s-app=$daemonset_name
-        kubectl logs daemonset/$daemonset_name -n kube-system --all-containers --prefix
+        kubectl logs daemonset/$daemonset_name -n kube-system --all-containers # --prefix
         kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
-        kubectl logs deployment/calico-kube-controllers -n kube-system --all-containers --prefix
+        kubectl logs deployment/calico-kube-controllers -n kube-system --all-containers # --prefix
         exit 1
     }
 }
@@ -83,7 +85,7 @@ await_dns() {
  || {
         echo "Startup of Kubernetes DNS server failed!"
         kubectl describe pod -n kube-system -l k8s-app=kube-dns
-        kubectl logs deployment/coredns -n kube-system --all-containers --prefix
+        kubectl logs deployment/coredns -n kube-system --all-containers # --prefix
         exit 1
     }
 }
@@ -100,7 +102,7 @@ await_dns_with_hub_pod() {
     if [ "$resolved_ip" != "true" ]; then
         echo "Something is wrong with the DNS resolution!"
         kubectl describe pod -n kube-system -l k8s-app=kube-dns
-        kubectl logs deploy/coredns -n kube-system --all-containers --prefix
+        kubectl logs deploy/coredns -n kube-system --all-containers # --prefix
         exit 1
     fi
 }
@@ -111,9 +113,9 @@ await_pebble() {
  || {
         echo "Startup of Pebble failed!"
         kubectl describe pod -l app.kubernetes.io/name=pebble
-        kubectl logs deploy/pebble --all-containers --prefix
+        kubectl logs deploy/pebble --all-containers # --prefix
         kubectl describe pod -l app.kubernetes.io/name=pebble-coredns
-        kubectl logs deploy/pebble-coredns --all-containers --prefix
+        kubectl logs deploy/pebble-coredns --all-containers # --prefix
         exit 1
     }
 }
@@ -130,11 +132,11 @@ await_jupyterhub() {
         echo "Startup of JupyterHub failed!"
         kubectl get all
         kubectl describe pod -l component=hub
-        kubectl logs deploy/hub --all-containers --prefix
+        kubectl logs deploy/hub --all-containers # --prefix
         kubectl describe pod -l component=proxy
-        kubectl logs deploy/proxy --all-containers --prefix
+        kubectl logs deploy/proxy --all-containers # --prefix
         kubectl describe pod -l component=autohttps || true
-        kubectl logs deploy/autohttps --all-containers --prefix || true
+        kubectl logs deploy/autohttps --all-containers || true # --prefix || true
         exit 1
     }
 }
@@ -149,11 +151,11 @@ await_tls_cert_acquisition() {
         echo "Certificate acquisition failed!"
         kubectl get service,networkpolicy,configmap,pod
         kubectl describe pod -l app.kubernetes.io/name=pebble
-        kubectl logs deploy/pebble --all-containers --prefix
+        kubectl logs deploy/pebble --all-containers # --prefix
         kubectl describe pod -l app.kubernetes.io/name=pebble-coredns
-        kubectl logs deploy/pebble-coredns --all-containers --prefix
+        kubectl logs deploy/pebble-coredns --all-containers # --prefix
         kubectl describe pod -l component=autohttps
-        kubectl logs deploy/autohttps --all-containers --prefix
+        kubectl logs deploy/autohttps --all-containers # --prefix
         exit 1
     fi
     # a precausion as pebble logs is a bad indicator of the readiness state of
