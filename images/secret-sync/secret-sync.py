@@ -92,9 +92,9 @@ def get_secret_value(namespace, secret_name, key):
 
 def setup_logging():
     """
-    Set up root logger to log to stderr
+    Set up root logger
     """
-    logging.basicConfig(format="%(asctime)s %(message)s", level=logging.INFO, stream=sys.stderr)
+    logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s", level=logging.INFO)
 
 def main():
     argparser = argparse.ArgumentParser()
@@ -132,13 +132,14 @@ def main():
     args = argparser.parse_args()
 
     setup_logging()
+    logging.info(str.join(" ", sys.argv))
 
     if not args.namespace:
         try:
             with open("/var/run/secrets/kubernetes.io/serviceaccount/namespace") as f:
                 args.namespace = f.read().strip()
         except FileNotFoundError:
-            print("Can not determine a namespace, must be explicitly set with --namespace", file=sys.stderr)
+            logging.error("Can not determine a namespace, must be explicitly set with --namespace")
             sys.exit(1)
 
     if args.action == 'load':
