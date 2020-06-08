@@ -57,7 +57,7 @@ entryPoints:
 #
 # ref: https://docs.traefik.io/observability/logs
 log:
-  level: {{ if .Values.debug.enabled -}} INFO {{- else -}} WARN {{- end }}
+  level: {{ if .Values.debug.enabled -}} DEBUG {{- else -}} WARN {{- end }}
 
 # Let Traefik monitor another file we mount for dynamic configuration. As we
 # mount this file through this configmap, we can make a `kubectl edit` on the
