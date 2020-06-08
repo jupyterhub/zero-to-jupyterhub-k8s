@@ -60,7 +60,7 @@ __Install__
 ```shell
 # Installs a ~50 MB k3s binary, setups and starts a systemctl service called
 # k3s which is also enabled to run on startup, provides a k3s-uninstall.sh
-# script, disables not needed functionality
+# script, disables not needed functionality. You will be asked for sudo rights
 curl -sfL https://get.k3s.io | sh -s - \
     --write-kubeconfig-mode=644 \
     --disable metrics-server \
@@ -79,11 +79,10 @@ With `systemctl` you can `start` and `stop` the service named `k3s` representing
 the cluster, as well as `enable` and `disable` the service's automatic startup
 with your computer.
 
-At the moment, there is a workaround needed while stopping.
+At the moment, there is a workaround making us need to run `docker stop` due to [this issue](https://github.com/rancher/k3s/issues/1469) to fully stop.
 
 ```shell
 sudo systemctl stop k3s
-# ... and a temporary workaround of https://github.com/rancher/k3s/issues/1469
 docker stop $(docker container list --quiet --filter "name=k8s_")
 ```
 
@@ -127,7 +126,9 @@ by adding an entry in `/etc/hosts`.
 ```shell
 # Ports exposed to k8s services through nodePorts:
 # 30443: proxy-public - where you reach both /hub/home and /user/myuser (HTTPS)
-# 32444: pebble - where you reach /roots/0 on Pebble's management API (HTTPS)
+# 32444: pebble - where you reach /roots/0 on Pebble's management API (HTTPS).
+#        For more details about Pebble which we use as a local ACME server, see
+#        the section below and https://github.com/jupyterhub/pebble-helm-chart.
 k3d create --enable-registry --wait 60 --publish 30443:30443 --publish 32444:32444
 export KUBECONFIG="$(k3d get-kubeconfig --name='k3s-default')"
 ```
@@ -155,8 +156,8 @@ helm install pebble jupyterhub/pebble --values dev-config-pebble.yaml
 
 ## 4: Build images, update values, install chart
 
-This repository contains various `Dockerfile`s that builds to docker images in
-use by the Helm chart. To help us build these docker images only when needed,
+This repository contains various `Dockerfile`s that are used to build docker images
+required by the Helm chart. To help us build these docker images only when needed,
 and to update the Helm chart's [values.yaml](jupyterhub/values.yaml) file to use
 the most recent image, we rely on a command line tool called
 [`chartpress`](https://github.com/jupyterhub/chartpress) that is installed as
@@ -166,14 +167,14 @@ Chartpress is configured through [chartpress.yaml](chartpress.yaml), and will
 only rebuild images if their dependent files in their respective directories or
 `chartpress.yaml` itself has changed.
 
-1. Ensure the latest git tags are available locally, as `chartpress` use them.
+1. Ensure the latest git tags are available locally, as `chartpress` uses them.
 
    ```shell
    git fetch origin --tags
    ```
 
 1. Use [`chartpress`](https://github.com/jupyterhub/chartpress) to rebuild
-   images that needs to be rebuilt and update the chart's
+   images that need to be rebuilt and update the chart's
    [values.yaml](jupyterhub/values.yaml) file with the appropriate image tags.
 
    ```shell
@@ -188,31 +189,24 @@ only rebuild images if their dependent files in their respective directories or
 1. Use `helm` to upgrade (and install) your Helm chart.
 
    ```shell
-   # note that --cleanup-on-fail is a very good practice to avoid
-   # "<resource name> already exist" in future upgrades following
-   # a failed upgrade.
    helm upgrade --install jupyterhub ./jupyterhub --cleanup-on-fail --values dev-config.yaml
    ```
 
+   Note that `--cleanup-on-fail` is a very good practice to avoid `<resource
+   name> already exist` in future upgrades following a failed upgrade.
+
 ## 5: Visit the JupyterHub
 
-Soon you should be able to visit https://local.jovyan.org:30443 where you
-manually need to choose to accept to trust certificates signed by a certificate
-authority you don't already trust.
+Soon you will be able to visit https://local.jovyan.org:30443 where you
+must accept the certificates signed by the Pebble certificate authority used for testing.
 
 ## 6: Run tests
 
 The test suite runs outside your Kubernetes cluster.
 
 ```shell
-pytest -vx -m "not netpol" ./tests
+pytest -vx ./tests
 ```
-
-Note that we have disabled the creation of NetworkPolicy Kubernetes resources in
-our [dev-config.yaml](dev-config.yaml) and we choose to not run a test of them
-at the moment. This is because the built in NetworkPolicy controller in k3s is
-not robustly enforcing them, as discussed in [this
-issue](https://github.com/rancher/k3s/issues/947#issuecomment-627641541).
 
 # Debugging
 
@@ -232,12 +226,12 @@ A good debugging strategy is to start with the following steps.
 
 ## HTTPS errors
 
-If you experience the need to confirm that you trust the certificate, that is
+If you are asked to trust the certificate, that is
 expected, as the certificate authority isn't and shouldn't be trusted unless it
 is solely for testing purposes.
 
 But if Chrome presents `ERR_SSL_PROTOCOL_ERROR` or Firefox presents
-`SSL_ERROR_INTERNARROR_ALERT`, then the autohttps pod have probably failed to
+`SSL_ERROR_INTERNARROR_ALERT`, then the `autohttps` pod has probably failed to
 acquire a TLS certificate from the ACME server.
 
 ```shell
@@ -256,7 +250,7 @@ kubectl logs deploy/pebble -c pebble
 Have you seen the hub pod get a restart count > 0? JupyterHub 1.1.0 is typically
 crashing after 20 seconds if it started up without the configurable proxy pod
 available. This harmless error can be confirmed by doing a `kubectl logs
-deploy/hub --previous` if you spot a message about a timeout after ~20 000 ms in
+deploy/hub --previous` if you spot a message about a timeout after ~20 seconds in
 the logs.
 
 ## Network errors
