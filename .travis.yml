@@ -58,6 +58,7 @@ script:
   - pytest --verbose --exitfirst ./tests
 
 env:
+  # Global environment variables will act as defaults, jobs will override them
   global:
     - K3S_VERSION=v1.18.2+k3s1
     - HELM_VERSION=v3.2.1
@@ -90,12 +91,13 @@ jobs:
     - stage: test
       name: chart:install-latest-then-upgrade
       script:
-        ## Install latest released JupyterHub
-        ## NOTE: For 0.9.0 we have disabled some parts here because they would
-        ##       require custom configuration that isn't needed post 0.9.0.
-        ##       This regards proxy.traefik.extraVolumes etc and more complete
-        ##       network policies that contain more of whats required by
-        ##       default.
+        ## NOTE: To use Pebble in TravisCI, we require the ability to mount a
+        ##       certificate on the autohttps pod, but we can't because that
+        ##       configuration ability was added after 0.9.0. Due to this
+        ##       autohttps is disabled here.
+        ##       The current dev-config.yaml require network policies to contain
+        ##       more pre-defined defaults to reach the DNS server not present
+        ##       in 0.9.0, and are due to this disabled.
         - |
             helm install jupyterhub jupyterhub/jupyterhub --values dev-config.yaml \
                 --set proxy.https.enabled=false \
@@ -133,7 +135,7 @@ jobs:
     - stage: publish
       name: publish:helm-chart
       install:
-        - pip3 install --no-cache-dir -r dev-requirements.txt
+        - pip install --no-cache-dir -r dev-requirements.txt
       script:
         - setup_helm
         - remove_docker_mirror_on_travis

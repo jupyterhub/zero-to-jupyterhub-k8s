@@ -28,6 +28,8 @@ setup_k3s () {
     #
     #       ref: https://github.com/rancher/k3s/issues/947#issuecomment-627641541
     #
+    # NOTE: k3s 1.16 and older needed a flag named --no-deploy instead of --disable.
+    #
     curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${K3S_VERSION} sh -s - \
         --write-kubeconfig-mode=644 \
         "${k3s_disable_command:---disable}" metrics-server \
@@ -48,7 +50,8 @@ setup_k3s () {
 }
 
 setup_cni() {
-    # Install canal or calico as a CNI to enforce our NetworkPolicies.
+    # Install canal or calico as a CNI to enforce our NetworkPolicies. Note
+    # that canal was hard to get working with TravisCI for unknown reason.
     #
     # ref: https://rancher.com/docs/k3s/latest/en/installation/network-options/
     #

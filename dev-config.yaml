@@ -8,7 +8,8 @@ proxy:
   https:
     enabled: true
     type: letsencrypt
-    hosts: [local.jovyan.org]
+    hosts:
+      - local.jovyan.org
     letsencrypt:
       contactEmail: 'jovyan@jupyter.test'
       acmeServer: https://pebble/dir
