@@ -29,8 +29,7 @@ This needs to be installed:
 - [docker](https://docs.docker.com/get-docker/)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) (also [setup tab completion](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion))
 - [helm](https://helm.sh/docs/intro/install/) (also [setup tab completion](https://helm.sh/docs/helm/helm_completion/))
-- Python 3.7+ ([Anaconda.com](https://www.anaconda.com/distribution/),
-  [Python.org](https://www.python.org/downloads/)) and dependencies:
+- Python 3.6+ (install at [Anaconda.com](https://www.anaconda.com/distribution/) or [Python.org](https://www.python.org/downloads/)) and dependencies:
   ```shell
   pip install -r dev-requirements.txt
   pip install -r doc/doc-requirements.txt
@@ -51,7 +50,9 @@ chartpress --version
 We need a Kubernetes cluster to work against.
 If you are using Linux you can either install [k3s](#linux-only-kubernetes-setup-with-k3s) or [k3d](#linux-mac-and-maybe-windows-kubernetes-setup-with-k3d).
 For all other operating systems install [k3d](#linux-mac-and-maybe-windows-kubernetes-setup-with-k3d).
+
 ### Linux only: Kubernetes setup with k3s
+
 With [k3s](https://github.com/rancher/k3s) we can _quickly_ create a Kubernetes
 cluster, and we _don't have to transfer docker images_ built on our computer to
 make them available in the Kubernetes cluster.
