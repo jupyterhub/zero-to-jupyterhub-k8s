@@ -49,7 +49,8 @@ chartpress --version
 ## 2: Setup a Kubernetes cluster
 
 We need a Kubernetes cluster to work against.
-
+If you are using Linux you can either install [k3s](#linux-only-kubernetes-setup-with-k3s) or [k3d](#linux-mac-and-maybe-windows-kubernetes-setup-with-k3d).
+For all other operating systems install [k3d](#linux-mac-and-maybe-windows-kubernetes-setup-with-k3d).
 ### Linux only: Kubernetes setup with k3s
 With [k3s](https://github.com/rancher/k3s) we can _quickly_ create a Kubernetes
 cluster, and we _don't have to transfer docker images_ built on our computer to
@@ -138,7 +139,7 @@ export KUBECONFIG="$(k3d get-kubeconfig --name='k3s-default')"
 Testing automatic TLS certificate acquisition with an ACME server like Let's
 Encrypt from a local Kubernetes cluster is tricky. First you need a public
 domain name registered and pointing to some public IP, and you need traffic to
-that IP end up inside your Kubernetes cluster. In our TravisCI setup we must
+that IP end up inside your Kubernetes cluster. In our Travis CI setup we must
 install a local ACME server instead, and that is also recommended for local
 development.
 

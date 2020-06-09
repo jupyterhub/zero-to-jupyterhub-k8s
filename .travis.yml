@@ -91,7 +91,7 @@ jobs:
     - stage: test
       name: chart:install-latest-then-upgrade
       script:
-        ## NOTE: To use Pebble in TravisCI, we require the ability to mount a
+        ## NOTE: To use Pebble in Travis CI, we require the ability to mount a
         ##       certificate on the autohttps pod, but we can't because that
         ##       configuration ability was added after 0.9.0. Due to this
         ##       autohttps is disabled here.

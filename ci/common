@@ -51,7 +51,7 @@ setup_k3s () {
 
 setup_cni() {
     # Install canal or calico as a CNI to enforce our NetworkPolicies. Note
-    # that canal was hard to get working with TravisCI for unknown reason.
+    # that canal was hard to get working with Travis CI for unknown reason.
     #
     # ref: https://rancher.com/docs/k3s/latest/en/installation/network-options/
     #
