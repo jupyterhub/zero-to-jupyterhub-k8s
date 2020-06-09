@@ -246,6 +246,18 @@ elif storage_type == 'static':
 c.KubeSpawner.volumes.extend(get_config('singleuser.storage.extraVolumes', []))
 c.KubeSpawner.volume_mounts.extend(get_config('singleuser.storage.extraVolumeMounts', []))
 
+if get_config('singleuser.etcJupyter'):
+    c.KubeSpawner.volumes.extend({
+        'name': 'user-etc-jupyter',
+        'configMap': {
+            'name': 'user-etc-jupyter'
+        }
+    })
+
+    c.KubeSpawner.volume_mounts.extend({
+        'name': 'user-etc-jupyter',
+        'mountPath': '/etc/jupyter'
+    })
 # Gives spawned containers access to the API of the hub
 c.JupyterHub.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
 c.JupyterHub.hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])

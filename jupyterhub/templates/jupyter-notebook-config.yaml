@@ -1,0 +1,17 @@
+{{- if .Values.singleuser.etcJupyter }}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: user-etc-jupyter
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4}}
+data:
+  {{- range $name, $content := .Values.singleuser.etcJupyter }}
+  {{- if eq (typeOf $content) "string" }}
+  {{ $name }}: |
+    {{- $content | nindent 4 }}
+  {{- else }}
+  {{ $name }}: {{ $content | toJson | quote }}
+  {{- end }}
+  {{- end }}
+{{- end }}
