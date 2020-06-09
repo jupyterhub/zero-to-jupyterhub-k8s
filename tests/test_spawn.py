@@ -182,15 +182,15 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
 
         c = subprocess.run([
             "kubectl", "exec", pod_name, "--",
-            "wget", "--quiet", "--tries=1", "--timeout=3", allowed_url,
+            "wget", "--quiet", "--tries=3", "--timeout=3", allowed_url,
         ])
-        assert c.returncode == 0, "Unable to get allowed domain"
+        assert c.returncode == 0, f"Network issue: access to '{blocked_url}' was supposed to be allowed"
 
         c = subprocess.run([
             "kubectl", "exec", pod_name, "--",
-            "wget", "--quiet", "--server-response", "-O-", "--tries=1", "--timeout=3", blocked_url,
+            "wget", "--quiet", "--server-response", "-O-", "--tries=3", "--timeout=3", blocked_url,
         ])
-        assert c.returncode > 0, "Blocked domain was allowed"
+        assert c.returncode > 0, f"Network issue: access to '{blocked_url}' was supposed to be denied"
 
     finally:
         _delete_server(api_request, jupyter_user, request_data["test_timeout"])
