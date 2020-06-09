@@ -92,27 +92,21 @@ user interface for Jupyter about to replace the classic user interface (UI).
 While users already can interchange ``/tree`` and ``/lab`` in the URL to switch between
 the classic UI and JupyterLab, they will default to use the classic UI.
 
-To let users use JupyterLab by default, add the following entries to your
-:term:`config.yaml`:
+The classic Jupyter Notebook UI is the default provided, but you can change it to
+JupyterLab with the following config in your :term:`config.yaml`:
 
 .. code-block:: yaml
 
    singleuser:
      defaultUrl: "/lab"
 
-   hub:
-     extraConfig:
-       jupyterlab: |
-         c.Spawner.cmd = ['jupyter-labhub']
-
 .. note::
 
+   You need the `jupyterlab <https://github.com/jupyterlab/jupyterlab>`_
+   package (installable via ``pip`` or ``conda``) for this to work.
    All images in the `jupyter/docker-stacks repository
    <https://github.com/jupyter/docker-stacks/>`_ come pre-installed with
-   JupyterLab and the `JupyterLab-Hub extension
-   <https://github.com/jupyterhub/jupyterlab-hub>`_ required for this
-   configuration to work.
-
+   it.
 
 
 .. _custom-docker-image:
