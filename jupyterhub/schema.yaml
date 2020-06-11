@@ -7,7 +7,7 @@ properties:
       nameOverride:
         type: string
         description: |
-          Overwrite name of the proxy
+          Override name of the hub
       cookieSecret:
         type:
           - string
