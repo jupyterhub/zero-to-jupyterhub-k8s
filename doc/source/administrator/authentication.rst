@@ -124,7 +124,8 @@ For more information on authenticating with Google oauth, see the :ref:`google_o
        clientId: "yourlongclientidstring.apps.googleusercontent.com"
        clientSecret: "adifferentlongstring"
        callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
-       hostedDomain: "youruniversity.edu"
+       hostedDomain:
+         - "youruniversity.edu"
        loginService: "Your University"
 
 CILogon
