@@ -53,11 +53,8 @@ setup_k3s () {
 }
 
 setup_calico() {
-    # Install calico as a CNI to enforce our NetworkPolicies.
-    #
-    # Note: Canal could have done the job as well, but we failed to set it up in
-    #       Travis CI. The await_dns_functionality_using_hub_pod function has a
-    #       note about this.
+    # Install calico as a CNI to enforce our NetworkPolicies. Note that canal
+    # could do this job as well, but we failed to set it up in Travis CI.
     #
     # Below we download the calico.yaml Kubernetes manifest and insert a
     # container_settings section just below the phrase '"type": "calico"' and
@@ -65,7 +62,7 @@ setup_calico() {
     #
     # ref: https://rancher.com/docs/k3s/latest/en/installation/network-options/
     #
-    curl -sfL https://docs.projectcalico.org/manifests/calico.yaml \
+    curl -sfL https://docs.projectcalico.org/v3.14/manifests/calico.yaml \
   | sed '/"type": "calico"/a\
           "container_settings": {\
             "allow_ip_forwarding": true\
@@ -96,25 +93,6 @@ await_dns() {
         kubectl logs deployment/coredns -n kube-system --all-containers # --prefix
         exit 1
     }
-}
-
-# This function can be used to ensure we can resolve jupyter.org as an external
-# domain name from a pod in the K8s cluster, as required by netpol tests. It is
-# not currently used in .travis.yml but is useful if we ever want to install
-# canal instead of calico for Travis CI. This is how it failed.
-await_dns_functionality_using_hub_pod() {
-    i=0; while [ $i -ne 5 ]; do
-        kubectl exec deploy/hub -- nslookup jupyter.org \
-        && resolved_ip=true && break \
-        || resolved_ip=false && sleep 2 && i=$((i + 1))
-        echo "Waiting ($i)..."
-    done
-    if [ "$resolved_ip" != "true" ]; then
-        echo "Something is wrong with the DNS resolution!"
-        kubectl describe pod -n kube-system -l k8s-app=kube-dns
-        kubectl logs deploy/coredns -n kube-system --all-containers # --prefix
-        exit 1
-    fi
 }
 
 await_pebble() {
