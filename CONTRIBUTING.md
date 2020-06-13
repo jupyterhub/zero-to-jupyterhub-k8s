@@ -62,7 +62,7 @@ __Install__
 ```shell
 # Installs a ~50 MB k3s binary, setups and starts a systemctl service called
 # k3s which is also enabled to run on startup, provides a k3s-uninstall.sh
-# script, disables not needed functionality. You will be asked for sudo rights
+# script, disables not needed functionality. You will be asked for sudo rights.
 curl -sfL https://get.k3s.io | sh -s - \
     --write-kubeconfig-mode=644 \
     --disable metrics-server \
@@ -114,7 +114,7 @@ k3s-uninstall.sh
 docker stop $(docker container list --all --quiet --filter "name=k8s_") | xargs docker rm
 ```
 
-### Linux, Mac, and maybe Windows: Kubernetes setup with k3d
+### Linux, Mac, and possibly Windows: Kubernetes setup with k3d
 
 [k3d](https://github.com/rancher/k3d) encapsulates k3s in containers. It is less
 mature than [k3s](https://github.com/rancher/k3s) and will require locally built
@@ -123,16 +123,42 @@ by the pods in the Kubernetes cluster, until [this
 issue](https://github.com/rancher/k3d/issues/113) is resolved.
 
 For this setup to work, make `registry.local` point to `127.0.0.1` (localhost)
-by adding an entry in `/etc/hosts`.
+by adding an entry in `/etc/hosts` or its equivalent in Windows.
+
+__Install__
 
 ```shell
-# Ports exposed to k8s services through nodePorts:
-# 30443: proxy-public - where you reach both /hub/home and /user/myuser (HTTPS)
-# 32444: pebble - where you reach /roots/0 on Pebble's management API (HTTPS).
-#        For more details about Pebble which we use as a local ACME server, see
-#        the section below and https://github.com/jupyterhub/pebble-helm-chart.
-k3d create --enable-registry --wait 60 --publish 30443:30443 --publish 32444:32444
+k3d create --enable-registry --wait 60 --publish 30443:30443 --publish 32444:32444 \
+   --server-arg --no-deploy=metrics-server \
+   --server-arg --no-deploy=traefik \
+   --server-arg --no-deploy=local-storage \
+   --server-arg --disable-network-policy \
+   --server-arg --flannel-backend=none
+
+# For Linux/Mac:
 export KUBECONFIG="$(k3d get-kubeconfig --name='k3s-default')"
+. ci/common    # provides the setup_calico function
+setup_calico
+
+# For Windows:
+# These instructions aren't maintained, you need to figure it out yourself =/
+```
+
+__About the published ports__
+- 30443: This port exposes the `proxy-public` service. It will route to the
+         `autohttps` pod for TLS termination, then onwards to the `proxy` pod
+         that routes to the `hub` pod or individual user pods depending on paths
+         (`/hub` vs `/user`) and how JupyterHub dynamically has configured it.
+- 32444: This port exposes the `pebble` service which which accepts two ports,
+         and this specific port will route to the `pebble` pod's management API
+         where we can access paths like `/roots/0`. For more details about
+         Pebble which we use as a local ACME server, see the section below and
+         https://github.com/jupyterhub/pebble-helm-chart.
+
+__Stop__
+
+```shell
+k3d delete
 ```
 
 ## 3: Install a local ACME server

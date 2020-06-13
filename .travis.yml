@@ -27,9 +27,6 @@ before_install:
 # not install JupyterHub itself, as upgrade tests may want to make multiple
 # installations in sequence etc.
 install:
-  # Install chartpress, pytest, etc.
-  - pip3 install --no-cache-dir -r dev-requirements.txt
-
   # Fix to avoid rebuilding images already built
   - remove_docker_mirror_on_travis
 
@@ -43,16 +40,18 @@ install:
   - helm install pebble jupyterhub/pebble --values dev-config-pebble.yaml
 
   # Build our images if needed and update values.yaml with the tags
+  - pip3 install --no-cache-dir -r dev-requirements.txt
   - chartpress
 
   # Pre-install JupyterHub
-  - await_dns
-  - await_pebble
+  - await_dns     # part of k3s, jupyterhub needs it while referencing https://pebble/dir
+  - await_calico  # installed with setup_k3s, enforces netpol
+  - await_pebble  # jupyterhub's autohttps communicates with it as the ACME server
 script:
   # Install JupyterHub
   - helm install jupyterhub ./jupyterhub --values dev-config.yaml
   - await_jupyterhub
-  - await_tls_cert_acquisition
+  - await_autohttps_tls_cert_acquisition
 
   # Run tests
   - pytest --verbose --exitfirst ./tests
@@ -109,7 +108,7 @@ jobs:
         # Upgrade JupyterHub to what's locally available
         - helm upgrade jupyterhub ./jupyterhub --values dev-config.yaml
         - await_jupyterhub
-        - await_tls_cert_acquisition
+        - await_autohttps_tls_cert_acquisition
 
         # Run tests
         - pytest --verbose --exitfirst ./tests

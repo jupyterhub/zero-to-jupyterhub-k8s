@@ -24,11 +24,14 @@ setup_k3s () {
     # https://rancher.com/docs/k3s/latest/en/installation/install-options/how-to-flags/
 
     # NOTE: k3s has a Network Policy controller called kube-router, but it is
-    #       not robust enough for use, so we disable it and install our own.
+    #       not robust enough for use, so we disable it and install our own:
+    #       calico. --flannel-backend=none should not be passed if we don't want
+    #       to install our own CNI.
     #
     #       ref: https://github.com/rancher/k3s/issues/947#issuecomment-627641541
     #
-    # NOTE: k3s 1.16 and older needed a flag named --no-deploy instead of --disable.
+    # NOTE: k3s 1.16 and older needed a flag named --no-deploy instead of
+    #       --disable.
     #
     curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${K3S_VERSION} sh -s - \
         --write-kubeconfig-mode=644 \
@@ -46,16 +49,23 @@ setup_k3s () {
     }
     export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
-    setup_cni calico
+    setup_calico
 }
 
-setup_cni() {
-    # Install canal or calico as a CNI to enforce our NetworkPolicies. Note
-    # that canal was hard to get working with Travis CI for unknown reason.
+setup_calico() {
+    # Install calico as a CNI to enforce our NetworkPolicies.
+    #
+    # Note: Canal could have done the job as well, but we failed to set it up in
+    #       Travis CI. The await_dns_functionality_using_hub_pod function has a
+    #       note about this.
+    #
+    # Below we download the calico.yaml Kubernetes manifest and insert a
+    # container_settings section just below the phrase '"type": "calico"' and
+    # then `kubectl apply` it.
     #
     # ref: https://rancher.com/docs/k3s/latest/en/installation/network-options/
     #
-    curl -sfL https://docs.projectcalico.org/manifests/${1}.yaml \
+    curl -sfL https://docs.projectcalico.org/manifests/calico.yaml \
   | sed '/"type": "calico"/a\
           "container_settings": {\
             "allow_ip_forwarding": true\
@@ -65,18 +75,13 @@ setup_cni() {
 
 # FIXME: we cannot use --prefix with kubectl logs unless we have kubectl 1.17+
 
-await_cni() {
-    if [ "${1}" == "canal" ]; then
-        daemonset_name="canal"
-    else
-        daemonset_name="calico-node"
-    fi
-    kubectl rollout status --watch --timeout 300s daemonset/$daemonset_name -n kube-system \
+await_calico() {
+    kubectl rollout status --watch --timeout 300s daemonset/calico-node -n kube-system \
  && kubectl rollout status --watch --timeout 300s deployment/calico-kube-controllers -n kube-system \
  || {
-        echo "Startup of ${1:-calico} failed!"
-        kubectl describe pod -n kube-system -l k8s-app=$daemonset_name
-        kubectl logs daemonset/$daemonset_name -n kube-system --all-containers # --prefix
+        echo "Startup of calico failed!"
+        kubectl describe pod -n kube-system -l k8s-app=calico-node
+        kubectl logs daemonset/calico-node -n kube-system --all-containers # --prefix
         kubectl describe pod -n kube-system -l k8s-app=calico-kube-controllers
         kubectl logs deployment/calico-kube-controllers -n kube-system --all-containers # --prefix
         exit 1
@@ -94,8 +99,10 @@ await_dns() {
 }
 
 # This function can be used to ensure we can resolve jupyter.org as an external
-# domain name from a pod in the K8s cluster, as required by netpol tests.
-await_dns_with_hub_pod() {
+# domain name from a pod in the K8s cluster, as required by netpol tests. It is
+# not currently used in .travis.yml but is useful if we ever want to install
+# canal instead of calico for Travis CI. This is how it failed.
+await_dns_functionality_using_hub_pod() {
     i=0; while [ $i -ne 5 ]; do
         kubectl exec deploy/hub -- nslookup jupyter.org \
         && resolved_ip=true && break \
@@ -144,7 +151,7 @@ await_jupyterhub() {
     }
 }
 
-await_tls_cert_acquisition() {
+await_autohttps_tls_cert_acquisition() {
     i=0; while [ $i -ne 60 ]; do
         kubectl logs deploy/pebble -c pebble | grep "Issued certificate" \
         && acquired_cert=true && break \
