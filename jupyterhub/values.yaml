@@ -161,6 +161,9 @@ proxy:
       preload: false
       maxAge: 15724800 # About 6 months
     resources: {}
+    extraEnv: []
+    extraVolumes: []
+    extraVolumeMounts: []
     extraStaticConfig: {}
     extraDynamicConfig: {}
   secretSync:
