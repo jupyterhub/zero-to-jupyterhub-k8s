@@ -128,7 +128,8 @@ by adding an entry in `/etc/hosts` or its equivalent in Windows.
 __Install__
 
 ```shell
-k3d create --enable-registry --wait 60 --publish 30443:30443 --publish 32444:32444 \
+k3d create --publish 30443:30443 --publish 32444:32444 --wait 60 \
+   --enable-registry --registry-name local.jovyan.org \
    --server-arg --no-deploy=metrics-server \
    --server-arg --no-deploy=traefik \
    --server-arg --no-deploy=local-storage \
@@ -211,22 +212,28 @@ only rebuild images if their dependent files in their respective directories or
    chartpress
 
    # run this if you are using k3d
-   chartpress --image-prefix=registry.local:5000/ --push
+   chartpress --image-prefix=local.jovyan.org:5000/ --push
    ```
 
-1. Use `helm` to upgrade (and install) your Helm chart.
+1. Use `helm` to upgrade (or install) your local JupyterHub Helm chart.
 
    ```shell
    helm upgrade --install jupyterhub ./jupyterhub --cleanup-on-fail --values dev-config.yaml
    ```
 
    Note that `--cleanup-on-fail` is a very good practice to avoid `<resource
-   name> already exist` in future upgrades following a failed upgrade.
+   name> already exist` errors in future upgrades following a failed upgrade.
 
 ## 5: Visit the JupyterHub
 
-Soon you will be able to visit https://local.jovyan.org:30443 where you
-must accept the certificates signed by the Pebble certificate authority used for testing.
+After all your pods are running and the `autohttps` pod succesfully has acquired
+a certificate from the `pebble` pod acting as an ACME server, you should be able
+to access https://local.jovyan.org:30443. Your browser will probably require you
+to accept the TLS certificate as its signed an untrusted certificate authority.
+
+Note that `local.jovyan.org` and its subdomains are Project Jupyter managed
+domains pointing to the localhost IP of `127.0.0.1`, we use them to avoid
+needing to add entries to `/etc/hosts`.
 
 ## 6: Run tests
 
@@ -254,11 +261,11 @@ A good debugging strategy is to start with the following steps.
 
 ## HTTPS errors
 
-If you are asked to trust the certificate, that is
-expected, as the certificate authority isn't and shouldn't be trusted unless it
-is solely for testing purposes.
+Your browser is expected to complain about the TLS certificate when visiting
+https://local.jovyan.org:30443 as its signed by an untrusted certificate
+authority and shouldn't be trusted unless it is solely for testing purposes.
 
-But if Chrome presents `ERR_SSL_PROTOCOL_ERROR` or Firefox presents
+But if for example Chrome presents `ERR_SSL_PROTOCOL_ERROR` or Firefox presents
 `SSL_ERROR_INTERNARROR_ALERT`, then the `autohttps` pod has probably failed to
 acquire a TLS certificate from the ACME server.
 
@@ -272,6 +279,15 @@ kubectl logs deploy/autohttps -c traefik
 # these logs should contain "Issued certificate"
 kubectl logs deploy/pebble -c pebble
 ```
+
+If the ACME client library used by Traefik in the autohttps pod attempted to
+acquire the certificate from our ACME server (Pebble) before the Kubernetes
+cluster's DNS server or Pebble and it's DNS server had started fully, it would
+fail to acquire a certificate. For this situation, a restart of the autohttps
+pod by `kubectl delete pod -l component=autohttps` will hopefully resolve the
+issue. To avoid this in our CI system, we run the `await_dns` and `await_pebble`
+scripts in `ci/common` before we install the JupyterHub Helm chart which will
+startup the autohttps pod.
 
 ## Hub restarts
 
