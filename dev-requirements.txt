@@ -1,29 +1,16 @@
-## chartpress is important for local development, CI and CD
-## - builds images and can push them also (--push)
-## - updates image names and tags in values.yaml
-## - can publish the built Helm chart (--publish)
-##
-## chartpress is used by
-## - test
-## - publish
-##
-## ref: https://github.com/jupyterhub/chartpress
-##
+# chartpress is important for local development, CI and CD
+# - builds images and can push them also (--push)
+# - updates image names and tags in values.yaml
+# - can publish the built Helm chart (--publish)
+#
+# ref: https://github.com/jupyterhub/chartpress
+#
 chartpress==0.6.*
 
-## pytest run tests that require requests, pytest is run from test
-## script
-##
+# pytest run tests that require requests and pyyaml
 pytest>=3.7.1
+pyyaml
 requests
-
-## yamllint is used by the tools/templates/lint-and-validate.py
-##
-yamllint>=1.17.0
-
-## ./dev use these
-colorama
-python-dotenv
 
 # click is used to make cli scripts
 click

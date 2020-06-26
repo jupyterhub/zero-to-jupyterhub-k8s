@@ -1,7 +1,8 @@
+os: linux
 dist: bionic
 language: python
 python:
-  - 3.6
+  - 3.7
 git:
   ## depth set to false overrides travis default behavior to use shallow clones
   ## with depth 50 that can cause issues
@@ -11,95 +12,132 @@ git:
   depth: false
 services:
   - docker
-## stages declares and orders stages
-##
-## ref: https://docs.travis-ci.com/user/build-stages/#build-stages-and-deployments
-##
+
 stages:
-  - name: lint and validate
   - name: test
   - name: publish
-    if: >
-      (
-        branch IN (master)
-        AND
-        type IN (push)
-      )
-      OR
-      tag IS present
-install:
+    if: tag IS present OR ( branch IN (master) AND type IN (push) )
+
+before_install:
+  # Exit immediately if a command exits with a non-zero status.
   - set -e
-  - pip3 install --no-cache-dir -r dev-requirements.txt
   - . ci/common
 
-stage: test
-script:
-  - setup_kubectl
-  - setup_kind
+# The default install script below will prepare a k8s cluster to work with, but
+# not install JupyterHub itself, as upgrade tests may want to make multiple
+# installations in sequence etc.
+install:
+  # Fix to avoid rebuilding images already built
+  - remove_docker_mirror_on_travis
+
+  # Setup our k3s based Kubernetes cluster and use its kubectl as well
+  - setup_k3s
   - setup_helm
-  - ./ci/travis-docker-fix
-  - ./dev kind create
   - helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
   - helm repo update
-  - ./dev upgrade --chart jupyterhub/jupyterhub --version 0.8.2
-  - ./dev upgrade --chart ./jupyterhub
-  - ./dev port-forward
-  - ./dev test
+
+  # Install a local ACME server
+  - helm install pebble jupyterhub/pebble --values dev-config-pebble.yaml
+
+  # Build our images if needed and update values.yaml with the tags
+  - pip3 install --no-cache-dir -r dev-requirements.txt
+  - chartpress
+
+  # Pre-install JupyterHub
+  - await_dns     # part of k3s, jupyterhub needs it while referencing https://pebble/dir
+  - await_calico  # installed with setup_k3s, enforces netpol
+  - await_pebble  # jupyterhub's autohttps communicates with it as the ACME server
+script:
+  # Install JupyterHub
+  - helm install jupyterhub ./jupyterhub --values dev-config.yaml
+  - await_jupyterhub
+  - await_autohttps_tls_cert_acquisition
+
+  # Run tests
+  - pytest --verbose --exitfirst ./tests
+
 env:
-  ## NOTE: The environment variables will be expanded to multiple jobs. For
-  ##       additional individual jobs, only the first entry is used.
-  ##
-  ## ref: https://docs.travis-ci.com/user/build-stages/#build-stages-and-build-matrix-expansion
-  ##
-  ##
-  ## Z2JH_KUBE_VERSION should match a released kindest/node image tag, but they
-  ## are currently not automatically published.
-  ##
-  ## ref: https://hub.docker.com/r/kindest/node/tags
-  ## ref: https://github.com/kubernetes-sigs/kind/issues/197
-  ##
-  - Z2JH_KUBE_VERSION=1.13.12
-  - Z2JH_KUBE_VERSION=1.15.6
-  - Z2JH_KUBE_VERSION=1.16.3
-  - Z2JH_KUBE_VERSION=1.16.3 Z2JH_HELM_VERSION=3.0.2
+  # Global environment variables will act as defaults, jobs will override them
+  global:
+    - K3S_VERSION=v1.18.3+k3s1
+    - HELM_VERSION=v3.2.3
 
 jobs:
-  ## allow experimental setups to fail
-  ##
-  ## ref: https://docs.travis-ci.com/user/customizing-the-build/#rows-that-are-allowed-to-fail
-  ##
-  allow_failures:
-    - name: check docs
   ## don't wait for the jobs that are allowed to fail to report success
   ##
+  ## ref: https://docs.travis-ci.com/user/customizing-the-build/#rows-that-are-allowed-to-fail
   ## ref: https://docs.travis-ci.com/user/customizing-the-build/#fast-finishing
   ##
+  allow_failures:
+    - name: docs:link-check
   fast_finish: true
 
-  ## include additional individual jobs
-  ##
+  ## define individual jobs that can rely on defaults from above
+  ## k3s versions:  https://github.com/rancher/k3s/releases
+  ## helm versions: https://github.com/helm/helm/releases
   include:
-    - stage: lint and validate
+    - stage: test
+      name: chart:k8s-1.18
+
+    - stage: test
+      name: chart:k8s-1.17
+      env: K3S_VERSION=v1.17.6+k3s1
+
+    - stage: test
+      name: chart:k8s-1.16
+      env: K3S_VERSION=v1.16.10+k3s1 k3s_disable_command=--no-deploy
+
+    - stage: test
+      name: chart:install-latest-then-upgrade
       script:
+        ## NOTE: To use Pebble in Travis CI, we require the ability to mount a
+        ##       certificate on the autohttps pod, but we can't because that
+        ##       configuration ability was added after 0.9.0. Due to this
+        ##       autohttps is disabled here.
+        ##       The current dev-config.yaml require network policies to contain
+        ##       more pre-defined defaults to reach the DNS server not present
+        ##       in 0.9.0, and are due to this disabled.
+        - |
+            helm install jupyterhub jupyterhub/jupyterhub --values dev-config.yaml \
+                --set proxy.https.enabled=false \
+                --set hub.networkPolicy.enabled=false \
+                --set proxy.networkPolicy.enabled=false \
+                --set singleuser.networkPolicy.enabled=false
+        - await_jupyterhub
+
+        # Upgrade JupyterHub to what's locally available
+        - helm upgrade jupyterhub ./jupyterhub --values dev-config.yaml
+        - await_jupyterhub
+        - await_autohttps_tls_cert_acquisition
+
+        # Run tests
+        - pytest --verbose --exitfirst ./tests
+
+    - stage: test
+      name: chart:lint-and-validate
+      install:
         - setup_helm
         - setup_kubeval
-        - ./dev check templates
-      env:
-        ## inclusions of more than three versions cause rate limiting failures
-        - Z2JH_VALIDATE_KUBE_VERSIONS=1.11.0,1.14.0,1.16.0
-    - stage: lint and validate
-      name: check docs
+        - pip install yamllint
       script:
-        - pip install -r doc/doc-requirements.txt
+        - tools/templates/lint-and-validate.py --kubernetes-versions 1.11.0,1.14.0,1.18.0
+
+    - stage: test
+      name: docs:link-check
+      install:
+        - pip install --no-cache-dir -r doc/doc-requirements.txt
+      script:
         - cd doc
         - make html SPHINXOPTS='-W --keep-going'
         - make linkcheck
+
     - stage: publish
+      name: publish:helm-chart
+      install:
+        - pip install --no-cache-dir -r dev-requirements.txt
       script:
-        - setup_git_crypt
         - setup_helm
-        - init_helm
-        - ./ci/travis-docker-fix
+        - remove_docker_mirror_on_travis
         - ./ci/publish
       env:
         ## encrypted environment variables DOCKER_USERNAME and DOCKER_PASSWORD,

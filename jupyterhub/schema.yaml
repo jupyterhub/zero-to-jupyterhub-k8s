@@ -315,7 +315,7 @@ properties:
           ```
 
           **NOTE**: We still support this field being a list of
-          [EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#envvar-v1-core)
+          [EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#envvar-v1-core)
           objects as well.
 
           These are usually used in two circumstances:
@@ -873,7 +873,7 @@ properties:
           for more info.
 
           Pass this field an array of
-          [`Toleration`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#toleration-v1-core)
+          [`Toleration`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#toleration-v1-core)
           objects.
       extraNodeAffinity:
         type: object
@@ -892,13 +892,13 @@ properties:
             type: list
             description: |
               Pass this field an array of
-              [`NodeSelectorTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#nodeselectorterm-v1-core)
+              [`NodeSelectorTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#nodeselectorterm-v1-core)
               objects.
           preferred:
             type: list
             description: |
               Pass this field an array of
-              [`PreferredSchedulingTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#preferredschedulingterm-v1-core)
+              [`PreferredSchedulingTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#preferredschedulingterm-v1-core)
               objects.
       extraPodAffinity:
         type: object
@@ -909,13 +909,13 @@ properties:
             type: list
             description: |
               Pass this field an array of
-              [`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#podaffinityterm-v1-core)
+              [`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#podaffinityterm-v1-core)
               objects.
           preferred:
             type: list
             description: |
               Pass this field an array of
-              [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#weightedpodaffinityterm-v1-core)
+              [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#weightedpodaffinityterm-v1-core)
               objects.
       extraPodAntiAffinity:
         type: object
@@ -926,13 +926,13 @@ properties:
             type: list
             description: |
               Pass this field an array of
-              [`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#podaffinityterm-v1-core)
+              [`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#podaffinityterm-v1-core)
               objects.
           preferred:
             type: list
             description: |
               Pass this field an array of
-              [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#weightedpodaffinityterm-v1-core)
+              [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#weightedpodaffinityterm-v1-core)
               objects.
 
 

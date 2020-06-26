@@ -120,7 +120,7 @@ def test_hub_can_talk_to_proxy(api_request, request_data):
     assert r.status_code == 200, "Failed to get /proxy"
 
 
-def test_hub_api_request_user_spawn(api_request, jupyter_user, request_data):
+def test_hub_api_request_user_spawn(api_request, jupyter_user, request_data, pebble_acme_ca_cert):
     """
     Tests the hub api's /users/:user/server POST endpoint. A user pod should be
     created.
@@ -137,7 +137,8 @@ def test_hub_api_request_user_spawn(api_request, jupyter_user, request_data):
         r = requests.get(
             request_data["hub_url"].partition("/hub/api")[0]
             + server_model["url"]
-            + "api"
+            + "api",
+            verify=pebble_acme_ca_cert,
         )
         assert r.status_code == 200
         assert "version" in r.json()
@@ -145,6 +146,7 @@ def test_hub_api_request_user_spawn(api_request, jupyter_user, request_data):
         _delete_server(api_request, jupyter_user, request_data["test_timeout"])
 
 
+@pytest.mark.netpol
 def test_singleuser_netpol(api_request, jupyter_user, request_data):
     """
     Tests a spawned user pods ability to communicate with allowed and blocked
@@ -163,19 +165,13 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
         pod_name = server_model["state"]["pod_name"]
 
         c = subprocess.run([
-            "kubectl", "exec", pod_name,
-            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
-            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
-            "--",
+            "kubectl", "exec", pod_name, "--",
             "nslookup", "hub",
         ])
         assert c.returncode == 0, "DNS issue: failed to resolve 'hub' from a singleuser-server"
 
         c = subprocess.run([
-            "kubectl", "exec", pod_name,
-            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
-            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
-            "--",
+            "kubectl", "exec", pod_name, "--",
             "nslookup", "jupyter.org",
         ])
         assert c.returncode == 0, "DNS issue: failed to resolve 'jupyter.org' from a singleuser-server"
@@ -185,22 +181,16 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
         blocked_url = "http://mybinder.org"
 
         c = subprocess.run([
-            "kubectl", "exec", pod_name,
-            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
-            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
-            "--",
-            "wget", "--quiet", "--tries=1", "--timeout=3", allowed_url,
+            "kubectl", "exec", pod_name, "--",
+            "wget", "--quiet", "--tries=3", "--timeout=3", allowed_url,
         ])
-        assert c.returncode == 0, "Unable to get allowed domain"
+        assert c.returncode == 0, f"Network issue: access to '{blocked_url}' was supposed to be allowed"
 
         c = subprocess.run([
-            "kubectl", "exec", pod_name,
-            "--namespace", os.environ["Z2JH_KUBE_NAMESPACE"],
-            "--context", os.environ["Z2JH_KUBE_CONTEXT"],
-            "--",
-            "wget", "--quiet", "--server-response", "-O-", "--tries=1", "--timeout=3", blocked_url,
+            "kubectl", "exec", pod_name, "--",
+            "wget", "--quiet", "--server-response", "-O-", "--tries=3", "--timeout=3", blocked_url,
         ])
-        assert c.returncode > 0, "Blocked domain was allowed"
+        assert c.returncode > 0, f"Network issue: access to '{blocked_url}' was supposed to be denied"
 
     finally:
         _delete_server(api_request, jupyter_user, request_data["test_timeout"])
