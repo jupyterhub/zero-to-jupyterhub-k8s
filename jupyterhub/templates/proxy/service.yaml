@@ -1,4 +1,4 @@
-{{- if .Values.proxy.chp.enabled }}
+{{- if eq .Values.proxy.externalIngressController false }}
 {{- $HTTPS := .Values.proxy.https.enabled -}}
 {{- $autoHTTPS := and $HTTPS (and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
 {{- $offloadHTTPS := and $HTTPS (eq .Values.proxy.https.type "offload") -}}

@@ -1,4 +1,4 @@
-{{- if .Values.proxy.chp.enabled }}
+{{- if eq .Values.proxy.externalIngressController false }}
 {{- $manualHTTPS := and .Values.proxy.https.enabled (eq .Values.proxy.https.type "manual") -}}
 {{- $manualHTTPSwithsecret := and .Values.proxy.https.enabled (eq .Values.proxy.https.type "secret") -}}
 apiVersion: apps/v1

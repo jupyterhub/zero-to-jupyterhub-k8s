@@ -1,4 +1,4 @@
-{{- if .Values.proxy.chp.enabled }}
+{{- if eq .Values.proxy.externalIngressController false }}
 {{- if .Values.proxy.pdb.enabled -}}
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget

@@ -20,8 +20,11 @@ AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
 
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
-use_chp = get_config('proxy.chp.enabled')
-if use_chp:
+externalIngressController = get_config('proxy.externalIngressController')
+if externalIngressController:
+    c.JupyterHub.proxy_class = 'kubespawner.proxy.KubeIngressProxy'
+    c.KubeIngressProxy.should_start = False
+else:
 # Connect to a proxy running in a different pod
     c.ConfigurableHTTPProxy.api_url = 'http://{}:{}'.format(os.environ['PROXY_API_SERVICE_HOST'], int(os.environ['PROXY_API_SERVICE_PORT']))
     c.ConfigurableHTTPProxy.should_start = False
@@ -76,7 +79,7 @@ for trait, cfg_key in (
         cfg_key = camelCaseify(trait)
     set_config_if_not_none(c.JupyterHub, trait, 'hub.' + cfg_key)
 
-if use_chp:
+if not externalIngressController:
     c.JupyterHub.ip = os.environ['PROXY_PUBLIC_SERVICE_HOST']
     c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
 

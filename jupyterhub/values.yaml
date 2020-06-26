@@ -138,7 +138,6 @@ proxy:
     loadBalancerSourceRanges: []
   externalIngressController: false
   chp:
-    enabled: true
     image:
       name: jupyterhub/configurable-http-proxy
       tag: 4.2.1

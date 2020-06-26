@@ -25,8 +25,7 @@ data:
   {{- end }}
 {{- end }}
 {{- /* proxy */ -}}
-{{- $_ := set $values "proxy" dict }}
-{{- $_ := set $values.proxy "chp" (pick .Values.proxy.chp "enabled") }}
+{{- $_ := set $values "proxy" (pick $values.proxy "externalIngressController") }}
 {{- /* copy values.singleuser */ -}}
 {{- $_ := set $values "singleuser" (omit .Values.singleuser "imagePullSecret") }}
 {{- $_ := set $values.singleuser "imagePullSecret" (omit .Values.singleuser.imagePullSecret "password") }}
