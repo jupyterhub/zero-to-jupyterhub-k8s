@@ -1,0 +1,56 @@
+proxy:
+  secretToken: pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
+  service:
+    type: NodePort
+    nodePorts:
+      http: 30080
+      https: 30443
+  externalIngressController: true
+  networkPolicy:
+    enabled: true
+    egress: []  # overrides allowance of 0.0.0.0/0
+
+hub:
+  image:
+    name: remche/k8s-hub
+    tag: ingress-extv1b1
+  cookieSecret: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+  db:
+    type: sqlite-memory
+  services:
+    test:
+      admin: true
+      apiToken: ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+  networkPolicy:
+    enabled: true
+    egress:  # overrides allowance of 0.0.0.0/0
+      # In kind/k3s clusters the Kubernetes API server is exposing this port
+      - ports:
+        - protocol: TCP
+          port: 6443
+  resources:
+    requests:
+      memory: 0
+      cpu: 0
+
+singleuser:
+  storage:
+    type: none
+  memory:
+    guarantee: null
+  networkPolicy:
+    enabled: true
+    # For testing purposes in test_singleuser_netpol
+    egress:
+      - to:
+        - ipBlock:
+            cidr: 104.28.9.110/32       # jupyter.org 1
+        - ipBlock:
+            cidr: 104.28.8.110/32       # jupyter.org 2
+
+prePuller:
+  hook:
+    enabled: false
+
+debug:
+  enabled: true
