@@ -1,7 +1,7 @@
 {{- $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled) }}
 {{- $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt")) }}
 {{- if $autoHTTPS -}}
-{{- $_ := required .Values.proxy.https.letsencrypt.contactEmail "proxy.https.letsencrypt.contactEmail is a required field" -}}
+{{- $_ := .Values.proxy.https.letsencrypt.contactEmail | required "proxy.https.letsencrypt.contactEmail is a required field" -}}
 
 # This configmap contains Traefik configuration files to be mounted.
 # - traefik.yaml will only be read during startup (static configuration)
