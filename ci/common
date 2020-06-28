@@ -121,8 +121,10 @@ await_jupyterhub() {
         kubectl get all
         kubectl describe pod -l component=hub
         kubectl logs deploy/hub --all-containers # --prefix
-        kubectl describe pod -l component=proxy
-        kubectl logs deploy/proxy --all-containers # --prefix
+        if [ "CONFIG_FILE" == "dev-config.yaml" ]; then
+            kubectl describe pod -l component=proxy
+            kubectl logs deploy/proxy --all-containers # --prefix
+        fi
         kubectl describe pod -l component=autohttps || true
         kubectl logs deploy/autohttps --all-containers || true # --prefix || true
         exit 1
