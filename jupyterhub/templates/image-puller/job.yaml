@@ -24,7 +24,7 @@ spec:
         {{- /* Changes here will cause the Job to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
       annotations:
-        {{- include ".Values.prePuller.annotations" . | nindent 8 }}
+        {{- toYaml ".Values.prePuller.annotations" | nindent 8 }}
     spec:
       restartPolicy: Never
       {{- if .Values.rbac.enabled }}
