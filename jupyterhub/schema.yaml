@@ -1163,6 +1163,11 @@ properties:
   prePuller:
     type: object
     properties:
+      annotations:
+        type: object
+        description: |
+          Annotations to apply to the hook and continous image puller pods. One example use case is to
+          disable istio sidecars which could interfere with the image pulling.
       hook:
         description: |
           See the [*optimization
