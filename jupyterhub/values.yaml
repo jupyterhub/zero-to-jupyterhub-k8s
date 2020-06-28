@@ -344,6 +344,7 @@ scheduling:
 
 
 prePuller:
+  annotations: {}
   hook:
     enabled: true
     image:
