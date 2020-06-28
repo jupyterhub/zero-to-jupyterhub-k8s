@@ -35,8 +35,10 @@ spec:
       labels:
         {{- /* Changes here will cause the DaemonSet to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
+      {{- if ".Values.prePuller.annotations" }}
       annotations:
         {{- toYaml ".Values.prePuller.annotations" | nindent 8 }}
+      {{- end }}
     spec:
       tolerations:
         {{- include "jupyterhub.userTolerations" . | nindent 8 }}
