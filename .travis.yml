@@ -87,12 +87,12 @@ jobs:
   ## k3s versions:  https://github.com/rancher/k3s/releases
   ## helm versions: https://github.com/helm/helm/releases
   include:
-     - stage: test
-       name: toto
-       script: 
-       - echo $K3S_VERSION
-       - echo $CONFIG_FILE
-       - echo $k3s_disable_command
+    - stage: test
+      name: toto
+      script: 
+      - echo $K3S_VERSION
+      - echo $CONFIG_FILE
+      - echo $k3s_disable_command
 
 #    - stage: test
 #      name: chart:install-latest-then-upgrade
