@@ -85,8 +85,6 @@ jobs:
   ## helm versions: https://github.com/helm/helm/releases
   include:
     - stage: test
-      name: chart
-    - stage: test
       name: chart:install-latest-then-upgrade
       script:
         ## NOTE: To use Pebble in Travis CI, we require the ability to mount a
