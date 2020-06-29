@@ -37,14 +37,10 @@ setup_k3s () {
     if [ "$CONFIG_FILE" == "dev-config.yaml" ]; then
         DISABLE="${DISABLE} ${k3s_disable_command:---disable} traefik"
     fi
-    if [ "$CONFIG_FILE" == "dev-config-external-ingress.yaml" ]; then
-        PUBLISH="--publish 8000:80"
-    fi
 
     curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${K3S_VERSION} sh -s - \
         --write-kubeconfig-mode=644 \
         ${DISABLE} \
-        ${PUBLISH} \
         --disable-network-policy \
         --flannel-backend=none \
         --docker \
@@ -145,6 +141,8 @@ await_jupyterhub() {
            exit 1
             }
            kubectl describe ingress -A     
+           kubectl describe service -A     
+           curl http://localhost/
     fi
 }
 
