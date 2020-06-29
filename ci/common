@@ -129,7 +129,7 @@ await_jupyterhub() {
                 exit 1
             }
     elif  [ "$CONFIG_FILE" == "dev-config-external-ingress.yaml" ]; then
-           kubectl rollout status --watch --timeout 300s deployment/hub
+           kubectl rollout status --watch --timeout 300s deployment/hub \
        || {
            echo "Startup of JupyterHub failed!"
            kubectl get all
