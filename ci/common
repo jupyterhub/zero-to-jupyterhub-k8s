@@ -109,26 +109,42 @@ await_pebble() {
 }
 
 await_jupyterhub() {
-    kubectl rollout status --watch --timeout 300s deployment/proxy \
- && kubectl rollout status --watch --timeout 300s deployment/hub \
- && (
-        if kubectl get deploy/autohttps &> /dev/null; then
-            kubectl rollout status --watch --timeout 300s deployment/autohttps || exit 1
-        fi
-    )\
- || {
-        echo "Startup of JupyterHub failed!"
-        kubectl get all
-        kubectl describe pod -l component=hub
-        kubectl logs deploy/hub --all-containers # --prefix
-        if [ "CONFIG_FILE" == "dev-config.yaml" ]; then
-            kubectl describe pod -l component=proxy
-            kubectl logs deploy/proxy --all-containers # --prefix
-        fi
-        kubectl describe pod -l component=autohttps || true
-        kubectl logs deploy/autohttps --all-containers || true # --prefix || true
-        exit 1
-    }
+    if [ "$CONFIG_FILE" == "dev-config.yaml" ]; then
+            kubectl rollout status --watch --timeout 300s deployment/proxy \
+         && kubectl rollout status --watch --timeout 300s deployment/hub \
+         && (
+                if kubectl get deploy/autohttps &> /dev/null; then
+                    kubectl rollout status --watch --timeout 300s deployment/autohttps || exit 1
+                fi
+            )\
+         || {
+                echo "Startup of JupyterHub failed!"
+                kubectl get all
+                kubectl describe pod -l component=hub
+                kubectl logs deploy/hub --all-containers # --prefix
+                kubectl describe pod -l component=proxy
+                kubectl logs deploy/proxy --all-containers # --prefix
+                kubectl describe pod -l component=autohttps || true
+                kubectl logs deploy/autohttps --all-containers || true # --prefix || true
+                exit 1
+            }
+    elif  [ "$CONFIG_FILE" == "dev-config-external-ingress.yaml" ]; then
+                kubectl rollout status --watch --timeout 300s deployment/hub \
+             && (
+                if kubectl get deploy/autohttps &> /dev/null; then
+                    kubectl rollout status --watch --timeout 300s deployment/autohttps || exit 1
+                fi
+            )\
+            || {
+                echo "Startup of JupyterHub failed!"
+                kubectl get all
+                kubectl describe pod -l component=hub
+                kubectl logs deploy/hub --all-containers # --prefix
+                kubectl describe pod -l component=autohttps || true
+                kubectl logs deploy/autohttps --all-containers || true # --prefix || true
+                exit 1
+            }
+    fi
 }
 
 await_autohttps_tls_cert_acquisition() {
