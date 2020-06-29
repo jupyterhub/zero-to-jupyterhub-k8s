@@ -41,7 +41,7 @@ install:
 
   # Build our images if needed and update values.yaml with the tags
   - pip3 install --no-cache-dir -r dev-requirements.txt
-  - chartpress
+  - chartpress --skip-build
 
   # Pre-install JupyterHub
   - await_dns     # part of k3s, jupyterhub needs it while referencing https://pebble/dir
@@ -62,8 +62,8 @@ env:
     #- K3S_VERSION=v1.17.6+k3s1 CONFIG_FILE=dev-config.yaml
     #- K3S_VERSION=v1.16.10+k3s1 k3s_disable_command=--no-deploy CONFIG_FILE=dev-config.yaml
 
-    - K3S_VERSION=v1.18.3+k3s1 CONFIG_FILE=dev-config-external-ingress.yaml HUB_URL='http://local.jovyan.org:8000'
-      #- K3S_VERSION=v1.17.6+k3s1 CONFIG_FILE=dev-config-external-ingress.yaml HUB_URL='http://local.jovyan.org:8000'
+    - K3S_VERSION=v1.18.3+k3s1 CONFIG_FILE=dev-config-external-ingress.yaml HUB_URL='http://local.jovyan.org:80'
+      #- K3S_VERSION=v1.17.6+k3s1 CONFIG_FILE=dev-config-external-ingress.yaml HUB_URL='http://local.jovyan.org:80'
       #- K3S_VERSION=v1.16.10+k3s1 k3s_disable_command=--no-deploy CONFIG_FILE=dev-config-external-ingress.yaml HUB_URL='http://local.jovyan.org:80'
 
   # Global environment variables will act as defaults, jobs will override them
