@@ -49,19 +49,25 @@ install:
   - await_pebble  # jupyterhub's autohttps communicates with it as the ACME server
 script:
   # Install JupyterHub
-  - helm install jupyterhub ./jupyterhub --values $CONFIG_FILE
-  - await_jupyterhub
-  - await_autohttps_tls_cert_acquisition
+  #- helm install jupyterhub ./jupyterhub --values $CONFIG_FILE
+  #- await_jupyterhub
+  #- await_autohttps_tls_cert_acquisition
+  - echo $K3S_VERSION
+  - echo $CONFIG_FILE
+  - echo $k3s_disable_command
 
   # Run tests
   - pytest --verbose --exitfirst ./tests
 
 env:
+  - K3S_VERSION=v1.18.3+k3s1
+  - K3S_VERSION=v1.17.6+k3s1
+  - K3S_VERSION=v1.16.10+k3s1 k3s_disable_command=--no-deploy
+  - CONFIG_FILE=dev-config.yaml
+  - CONFIG_FILE=dev-config-externa-ingress.yaml
   # Global environment variables will act as defaults, jobs will override them
   global:
-    - K3S_VERSION=v1.18.3+k3s1
     - HELM_VERSION=v3.2.3
-    - CONFIG_FILE=dev-config.yaml
 
 jobs:
   ## don't wait for the jobs that are allowed to fail to report success
@@ -77,107 +83,74 @@ jobs:
   ## k3s versions:  https://github.com/rancher/k3s/releases
   ## helm versions: https://github.com/helm/helm/releases
   include:
-    - stage: test
-      name: chart:k8s-1.18
-
-    - stage: test
-      name: chart:k8s-1.17
-      env:
-        - K3S_VERSION=v1.17.6+k3s1
-
-    - stage: test
-      name: chart:k8s-1.16
-      env:
-        - K3S_VERSION=v1.16.10+k3s1
-        - k3s_disable_command=--no-deploy
-
-    - stage: test
-      name: chart:k8s-1.18:external-ingress
-      env:
-        - CONFIG_FILE=dev-config-external-ingress.yaml
-
-    - stage: test
-      name: chart:k8s-1.17:external-ingress
-      env:
-        - K3S_VERSION=v1.17.6+k3s1
-        - CONFIG_FILE=dev-config-external-ingress.yaml
-
-    - stage: test
-      name: chart:k8s-1.16:external-ingress
-      env:
-        - K3S_VERSION=v1.16.10+k3s1
-        - k3s_disable_command=--no-deploy
-        - CONFIG_FILE=dev-config-external-ingress.yaml
-
-    - stage: test
-      name: chart:install-latest-then-upgrade
-      script:
-        ## NOTE: To use Pebble in Travis CI, we require the ability to mount a
-        ##       certificate on the autohttps pod, but we can't because that
-        ##       configuration ability was added after 0.9.0. Due to this
-        ##       autohttps is disabled here.
-        ##       The current dev-config.yaml require network policies to contain
-        ##       more pre-defined defaults to reach the DNS server not present
-        ##       in 0.9.0, and are due to this disabled.
-        - |
-            helm install jupyterhub jupyterhub/jupyterhub --values dev-config.yaml \
-                --set proxy.https.enabled=false \
-                --set hub.networkPolicy.enabled=false \
-                --set proxy.networkPolicy.enabled=false \
-                --set singleuser.networkPolicy.enabled=false
-        - await_jupyterhub
-
-        # Upgrade JupyterHub to what's locally available
-        - helm upgrade jupyterhub ./jupyterhub --values dev-config.yaml
-        - await_jupyterhub
-        - await_autohttps_tls_cert_acquisition
-
-        # Run tests
-        - pytest --verbose --exitfirst ./tests
-
-    - stage: test
-      name: chart:install-latest-then-upgrade:external-ingress
-      script:
-        ## NOTE: To use Pebble in Travis CI, we require the ability to mount a
-        ##       certificate on the autohttps pod, but we can't because that
-        ##       configuration ability was added after 0.9.0. Due to this
-        ##       autohttps is disabled here.
-        ##       The current dev-config.yaml require network policies to contain
-        ##       more pre-defined defaults to reach the DNS server not present
-        ##       in 0.9.0, and are due to this disabled.
-        - |
-            helm install jupyterhub jupyterhub/jupyterhub --values dev-config-external-ingress.yaml \
-                --set proxy.https.enabled=false \
-                --set hub.networkPolicy.enabled=false \
-                --set proxy.networkPolicy.enabled=false \
-                --set singleuser.networkPolicy.enabled=false
-        - await_jupyterhub
-
-        # Upgrade JupyterHub to what's locally available
-        - helm upgrade jupyterhub ./jupyterhub --values dev-config.yaml
-        - await_jupyterhub
-        - await_autohttps_tls_cert_acquisition
-
-        # Run tests
-        - pytest --verbose --exitfirst ./tests
-
-    - stage: test
-      name: chart:lint-and-validate
-      install:
-        - setup_helm
-        - setup_kubeval
-        - pip install yamllint
-      script:
-        - tools/templates/lint-and-validate.py --kubernetes-versions 1.11.0,1.14.0,1.18.0
-
-    - stage: test
-      name: docs:link-check
-      install:
-        - pip install --no-cache-dir -r doc/doc-requirements.txt
-      script:
-        - cd doc
-        - make html SPHINXOPTS='-W --keep-going'
-        - make linkcheck
+#    - stage: test
+#      name: chart:install-latest-then-upgrade
+#      script:
+#        ## NOTE: To use Pebble in Travis CI, we require the ability to mount a
+#        ##       certificate on the autohttps pod, but we can't because that
+#        ##       configuration ability was added after 0.9.0. Due to this
+#        ##       autohttps is disabled here.
+#        ##       The current dev-config.yaml require network policies to contain
+#        ##       more pre-defined defaults to reach the DNS server not present
+#        ##       in 0.9.0, and are due to this disabled.
+#        - |
+#            helm install jupyterhub jupyterhub/jupyterhub --values dev-config.yaml \
+#                --set proxy.https.enabled=false \
+#                --set hub.networkPolicy.enabled=false \
+#                --set proxy.networkPolicy.enabled=false \
+#                --set singleuser.networkPolicy.enabled=false
+#        - await_jupyterhub
+#
+#        # Upgrade JupyterHub to what's locally available
+#        - helm upgrade jupyterhub ./jupyterhub --values dev-config.yaml
+#        - await_jupyterhub
+#        - await_autohttps_tls_cert_acquisition
+#
+#        # Run tests
+#        - pytest --verbose --exitfirst ./tests
+#
+#    - stage: test
+#      name: chart:install-latest-then-upgrade:external-ingress
+#      script:
+#        ## NOTE: To use Pebble in Travis CI, we require the ability to mount a
+#        ##       certificate on the autohttps pod, but we can't because that
+#        ##       configuration ability was added after 0.9.0. Due to this
+#        ##       autohttps is disabled here.
+#        ##       The current dev-config.yaml require network policies to contain
+#        ##       more pre-defined defaults to reach the DNS server not present
+#        ##       in 0.9.0, and are due to this disabled.
+#        - |
+#            helm install jupyterhub jupyterhub/jupyterhub --values dev-config-external-ingress.yaml \
+#                --set proxy.https.enabled=false \
+#                --set hub.networkPolicy.enabled=false \
+#                --set proxy.networkPolicy.enabled=false \
+#                --set singleuser.networkPolicy.enabled=false
+#        - await_jupyterhub
+#
+#        # Upgrade JupyterHub to what's locally available
+#        - helm upgrade jupyterhub ./jupyterhub --values dev-config-external-ingress.yaml
+#        - await_jupyterhub
+#
+#        # Run tests
+#        - pytest --verbose --exitfirst ./tests
+#
+#    - stage: test
+#      name: chart:lint-and-validate
+#      install:
+#        - setup_helm
+#        - setup_kubeval
+#        - pip install yamllint
+#      script:
+#        - tools/templates/lint-and-validate.py --kubernetes-versions 1.11.0,1.14.0,1.18.0
+#
+#    - stage: test
+#      name: docs:link-check
+#      install:
+#        - pip install --no-cache-dir -r doc/doc-requirements.txt
+#      script:
+#        - cd doc
+#        - make html SPHINXOPTS='-W --keep-going'
+#        - make linkcheck
 
     - stage: publish
       name: publish:helm-chart
