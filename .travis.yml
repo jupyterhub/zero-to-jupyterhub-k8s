@@ -60,11 +60,12 @@ script:
   - pytest --verbose --exitfirst ./tests
 
 env:
+  jobs:
   - K3S_VERSION=v1.18.3+k3s1
   - K3S_VERSION=v1.17.6+k3s1
   - K3S_VERSION=v1.16.10+k3s1 k3s_disable_command=--no-deploy
   - CONFIG_FILE=dev-config.yaml
-  - CONFIG_FILE=dev-config-externa-ingress.yaml
+  - CONFIG_FILE=dev-config-external-ingress.yaml
   # Global environment variables will act as defaults, jobs will override them
   global:
     - HELM_VERSION=v3.2.3
