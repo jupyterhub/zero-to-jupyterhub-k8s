@@ -88,6 +88,11 @@ jobs:
   ## helm versions: https://github.com/helm/helm/releases
   include:
      - stage: test
+       script: 
+       - echo $K3S_VERSION
+       - echo $CONFIG_FILE
+       - echo $k3s_disable_command
+
 #    - stage: test
 #      name: chart:install-latest-then-upgrade
 #      script:
