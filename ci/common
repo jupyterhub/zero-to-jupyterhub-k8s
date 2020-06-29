@@ -142,7 +142,7 @@ await_jupyterhub() {
             }
            kubectl describe ingress -A     
            kubectl describe service -A     
-           curl http://localhost/
+           curl http://localhost:80/hub/api
     fi
 }
 
