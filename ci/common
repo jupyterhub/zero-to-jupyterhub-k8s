@@ -33,11 +33,14 @@ setup_k3s () {
     # NOTE: k3s 1.16 and older needed a flag named --no-deploy instead of
     #       --disable.
     #
+    DISABLE="${k3s_disable_command:---disable} metrics-server ${k3s_disable_command:---disable} local-storage"
+    if [ "$CONFIG_FILE" == "dev-config.yaml" ]; then
+        DISABLE="${DISABLE} ${k3s_disable_command:---disable} traefik"
+    fi
+
     curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${K3S_VERSION} sh -s - \
         --write-kubeconfig-mode=644 \
-        "${k3s_disable_command:---disable}" metrics-server \
-        "${k3s_disable_command:---disable}" traefik \
-        "${k3s_disable_command:---disable}" local-storage \
+        ${DISABLE} \
         --disable-network-policy \
         --flannel-backend=none \
         --docker \
@@ -137,6 +140,7 @@ await_jupyterhub() {
            kubectl logs deploy/hub --all-containers # --prefix
            exit 1
             }
+           kubectl describe ingress -A     
     fi
 }
 
