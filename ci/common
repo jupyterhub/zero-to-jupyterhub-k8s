@@ -38,7 +38,7 @@ setup_k3s () {
         DISABLE="${DISABLE} ${k3s_disable_command:---disable} traefik"
     fi
     if [ "$CONFIG_FILE" == "dev-config-external-ingress.yaml" ]; then
-        PUBLISH="--publish 80"
+        PUBLISH="--publish 8000:80"
     fi
 
     curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${K3S_VERSION} sh -s - \
