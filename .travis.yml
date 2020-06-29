@@ -62,8 +62,8 @@ env:
     #- K3S_VERSION=v1.17.6+k3s1 CONFIG_FILE=dev-config.yaml
     #- K3S_VERSION=v1.16.10+k3s1 k3s_disable_command=--no-deploy CONFIG_FILE=dev-config.yaml
 
-    - K3S_VERSION=v1.18.3+k3s1 CONFIG_FILE=dev-config-external-ingress.yaml HUB_URL='http://localhost:80'
-      #- K3S_VERSION=v1.17.6+k3s1 CONFIG_FILE=dev-config-external-ingress.yaml HUB_URL='http://local.jovyan.org:80'
+      #- K3S_VERSION=v1.18.3+k3s1 CONFIG_FILE=dev-config-external-ingress.yaml HUB_URL='http://localhost:80'
+      - K3S_VERSION=v1.17.6+k3s1 CONFIG_FILE=dev-config-external-ingress.yaml HUB_URL='http://local.jovyan.org:80'
       #- K3S_VERSION=v1.16.10+k3s1 k3s_disable_command=--no-deploy CONFIG_FILE=dev-config-external-ingress.yaml HUB_URL='http://local.jovyan.org:80'
 
   # Global environment variables will act as defaults, jobs will override them
