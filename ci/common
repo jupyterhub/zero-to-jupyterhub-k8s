@@ -140,6 +140,7 @@ await_jupyterhub() {
            kubectl logs deploy/hub --all-containers # --prefix
            exit 1
             }
+           kubectl logs deploy/hub --all-containers # --prefix
            kubectl describe ingress -A     
            kubectl describe service -A     
            curl http://localhost:80/hub/api
