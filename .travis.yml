@@ -84,32 +84,32 @@ jobs:
   ## k3s versions:  https://github.com/rancher/k3s/releases
   ## helm versions: https://github.com/helm/helm/releases
   include:
-#    - stage: test
-#      name: chart:install-latest-then-upgrade
-#      script:
-#        ## NOTE: To use Pebble in Travis CI, we require the ability to mount a
-#        ##       certificate on the autohttps pod, but we can't because that
-#        ##       configuration ability was added after 0.9.0. Due to this
-#        ##       autohttps is disabled here.
-#        ##       The current dev-config.yaml require network policies to contain
-#        ##       more pre-defined defaults to reach the DNS server not present
-#        ##       in 0.9.0, and are due to this disabled.
-#        - |
-#            helm install jupyterhub jupyterhub/jupyterhub --values dev-config.yaml \
-#                --set proxy.https.enabled=false \
-#                --set hub.networkPolicy.enabled=false \
-#                --set proxy.networkPolicy.enabled=false \
-#                --set singleuser.networkPolicy.enabled=false
-#        - await_jupyterhub
-#
-#        # Upgrade JupyterHub to what's locally available
-#        - helm upgrade jupyterhub ./jupyterhub --values dev-config.yaml
-#        - await_jupyterhub
-#        - await_autohttps_tls_cert_acquisition
-#
-#        # Run tests
-#        - pytest --verbose --exitfirst ./tests
-#
+    - stage: test
+      name: chart:install-latest-then-upgrade
+      script:
+        ## NOTE: To use Pebble in Travis CI, we require the ability to mount a
+        ##       certificate on the autohttps pod, but we can't because that
+        ##       configuration ability was added after 0.9.0. Due to this
+        ##       autohttps is disabled here.
+        ##       The current dev-config.yaml require network policies to contain
+        ##       more pre-defined defaults to reach the DNS server not present
+        ##       in 0.9.0, and are due to this disabled.
+        - |
+            helm install jupyterhub jupyterhub/jupyterhub --values dev-config.yaml \
+                --set proxy.https.enabled=false \
+                --set hub.networkPolicy.enabled=false \
+                --set proxy.networkPolicy.enabled=false \
+                --set singleuser.networkPolicy.enabled=false
+        - await_jupyterhub
+
+        # Upgrade JupyterHub to what's locally available
+        - helm upgrade jupyterhub ./jupyterhub --values dev-config.yaml
+        - await_jupyterhub
+        - await_autohttps_tls_cert_acquisition
+
+        # Run tests
+        - pytest --verbose --exitfirst ./tests
+
 #    - stage: test
 #      name: chart:install-latest-then-upgrade:external-ingress
 #      script:
