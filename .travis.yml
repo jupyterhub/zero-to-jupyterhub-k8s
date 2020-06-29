@@ -54,7 +54,7 @@ script:
   - await_autohttps_tls_cert_acquisition
 
   # Run tests
-  #- pytest --verbose --exitfirst ./tests
+  - pytest --verbose --exitfirst ./tests
 
 env:
   jobs:
@@ -83,7 +83,7 @@ jobs:
   ## define individual jobs that can rely on defaults from above
   ## k3s versions:  https://github.com/rancher/k3s/releases
   ## helm versions: https://github.com/helm/helm/releases
-  #  include:
+  include:
 #    - stage: test
 #      name: chart:install-latest-then-upgrade
 #      script:
