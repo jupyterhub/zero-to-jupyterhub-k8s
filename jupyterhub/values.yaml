@@ -11,7 +11,7 @@ hub:
   cookieSecret:
   publicURL:
   initContainers: []
-  uid: 1000
+  uid: &hubUid 1000
   fsGid: 1000
   nodeSelector: {}
   concurrentSpawnLimit: 64
@@ -55,6 +55,10 @@ hub:
     requests:
       cpu: 200m
       memory: 512Mi
+  containerSecurityContext:
+    runAsUser: *hubUid
+    # Don't allow any process to execute as root inside the container
+    allowPrivilegeEscalation: false
   services: {}
   imagePullSecret:
     enabled: false
