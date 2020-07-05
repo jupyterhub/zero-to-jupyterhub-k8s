@@ -59,8 +59,8 @@ script:
 env:
   # Global environment variables will act as defaults, jobs will override them
   global:
-    - K3S_VERSION=v1.18.3+k3s1
-    - HELM_VERSION=v3.2.3
+    - K3S_VERSION=v1.18.4+k3s1
+    - HELM_VERSION=v3.2.4
 
 jobs:
   ## don't wait for the jobs that are allowed to fail to report success
@@ -81,11 +81,11 @@ jobs:
 
     - stage: test
       name: chart:k8s-1.17
-      env: K3S_VERSION=v1.17.6+k3s1
+      env: K3S_VERSION=v1.17.7+k3s1
 
     - stage: test
       name: chart:k8s-1.16
-      env: K3S_VERSION=v1.16.10+k3s1 k3s_disable_command=--no-deploy
+      env: K3S_VERSION=v1.16.11+k3s1 k3s_disable_command=--no-deploy
 
     - stage: test
       name: chart:install-latest-then-upgrade
