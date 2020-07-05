@@ -77,9 +77,6 @@ master_doc = 'index'
 # The suffix(es) of source filenames.
 source_suffix = ['.rst', '.md']
 
-# Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
-
 
 # -- Generate the Helm chart configuration reference from a schema file ------
 
