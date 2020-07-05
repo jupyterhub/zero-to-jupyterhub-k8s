@@ -525,8 +525,6 @@ properties:
             description: |
               A list of IP CIDR ranges that are allowed to access the load balancer service.
               Defaults to allowing everyone to access it.
-
-              For more information please check the [Kubernetes documentation](https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service).
       https:
         type: object
         description: |
