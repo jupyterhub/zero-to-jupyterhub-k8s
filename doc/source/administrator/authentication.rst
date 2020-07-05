@@ -96,7 +96,7 @@ but we recommend ``read:user`` as this requires no additional configuration by
 GitHub organisations and users.
 For example, omitting the scope means members of an organisation must `set
 their membership to Public
-<https://help.github.com/en/github/setting-up-and-managing-your-github-user-account/publicizing-or-hiding-organization-membership>`_
+<https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/publicizing-or-hiding-organization-membership>`_
 to login, whereas setting it to ``read:org`` may require approval of the
 application by a GitHub organisation admin.
 Please see `this issue
@@ -349,7 +349,7 @@ Adding a Whitelist
 ------------------
 
 JupyterHub can be configured to only allow a specified
-`whitelist <https://jupyterhub.readthedocs.io/en/latest/getting-started/authenticators-users-basics.html#create-a-whitelist-of-users>`_
+`whitelist <https://jupyterhub.readthedocs.io/en/latest/getting-started/authenticators-users-basics.html#create-a-set-of-allowed-users>`_
 of users to login. This is especially useful if you are
 using an authenticator with an authentication service open to the general
 public, such as GitHub or Google.
