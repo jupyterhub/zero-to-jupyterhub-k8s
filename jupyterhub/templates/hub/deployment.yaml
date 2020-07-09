@@ -132,8 +132,16 @@ spec:
           {{- with .Values.hub.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
+          {{- /* Below is deprecation logic of .Values.hub.uid */}}
+          {{- if .Values.hub.containerSecurityContext }}
+          {{- $securityContext := dict }}
+          {{- if hasKey .Values.hub "uid" }}
+          {{- $_ := merge $securityContext (dict "runAsUser" .Values.hub.uid) }}
+          {{- end }}
+          {{- $_ := merge $securityContext .Values.hub.containerSecurityContext }}
           securityContext:
-            {{- .Values.hub.containerSecurityContext | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- $securityContext | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
           env:
             - name: PYTHONUNBUFFERED
               value: "1"

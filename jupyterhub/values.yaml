@@ -56,7 +56,6 @@ hub:
       memory: 512Mi
   containerSecurityContext:
     runAsUser: 1000
-    # Don't allow any process to execute as root inside the container
     allowPrivilegeEscalation: false
   services: {}
   imagePullSecret:
@@ -130,6 +129,8 @@ proxy:
     ##     Error: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
     ##     Error: UPGRADE FAILED: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
     rollingUpdate:
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
   service:
     type: LoadBalancer
     labels: {}
@@ -169,6 +170,8 @@ proxy:
     extraVolumeMounts: []
     extraStaticConfig: {}
     extraDynamicConfig: {}
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
   secretSync:
     image:
       name: jupyterhub/k8s-secret-sync
