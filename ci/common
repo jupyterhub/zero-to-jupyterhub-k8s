@@ -138,13 +138,20 @@ await_autohttps_tls_cert_acquisition() {
     if [ "$acquired_cert" != "true" ]; then
         echo "Certificate acquisition failed!"
         kubectl get service,networkpolicy,configmap,pod
-        kubectl describe pod -l app.kubernetes.io/name=pebble
-        kubectl logs deploy/pebble --all-containers # --prefix
         kubectl describe pod -l app.kubernetes.io/name=pebble-coredns
         kubectl logs deploy/pebble-coredns --all-containers # --prefix
+        kubectl describe pod -l app.kubernetes.io/name=pebble
+        kubectl logs deploy/pebble --all-containers # --prefix
         kubectl describe pod -l component=autohttps
         kubectl logs deploy/autohttps --all-containers # --prefix
         exit 1
+    else
+        # REMOVE ME SOON: show logs even during success for comparison
+        kubectl get service,networkpolicy,configmap,pod
+        kubectl describe pod -l app.kubernetes.io/name=pebble
+        kubectl logs deploy/pebble --all-containers # --prefix
+        kubectl describe pod -l component=autohttps
+        kubectl logs deploy/autohttps --all-containers # --prefix
     fi
     # a precausion as pebble logs is a bad indicator of the readiness state of
     # Traefik's readiness to use the cert for TLS termination.
