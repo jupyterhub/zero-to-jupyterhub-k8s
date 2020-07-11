@@ -1,7 +1,25 @@
 # This configuration is meant to map lookups of local.jovyan.org to the
 # ClusterIP of JupyterHub's proxy-public service
+#
+# ref: https://github.com/jupyterhub/pebble-helm-chart/blob/master/pebble/values.yaml
+#
 coredns:
   corefileSegment: |-
     template ANY ANY local.jovyan.org {
       answer "{{ .Name }} 60 IN CNAME proxy-public.{$PEBBLE_NAMESPACE}.svc.cluster.local"
     }
+
+pebble:
+  env:
+    ## ref: https://github.com/letsencrypt/pebble#testing-at-full-speed
+    - name: PEBBLE_VA_NOSLEEP
+      value: "1"
+    ## ref: https://github.com/letsencrypt/pebble#invalid-anti-replay-nonce-errors
+    - name: PEBBLE_WFE_NONCEREJECT
+      value: "0"
+    ## ref: https://github.com/letsencrypt/pebble#authorization-reuse
+    - name: PEBBLE_AUTHZREUSE
+      value: "0"
+    # ## ref: https://github.com/letsencrypt/pebble#skipping-validation
+    # - name: PEBBLE_VA_ALWAYS_VALID
+    #   value: "0"
