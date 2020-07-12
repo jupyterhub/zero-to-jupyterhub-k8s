@@ -159,7 +159,10 @@ proxy:
   traefik:
     image:
       name: traefik
-      tag: v2.2.2 # ref: https://hub.docker.com/_/traefik?tab=tags
+      # NOTE: we are pinning to patch version only to ensure we don't use a
+      #       cached old version of v2.2. When we bump this to v2.3 we should
+      #       stop using the patch version.
+      tag: v2.2.4 # ref: https://hub.docker.com/_/traefik?tab=tags
     hsts:
       includeSubdomains: false
       preload: false
