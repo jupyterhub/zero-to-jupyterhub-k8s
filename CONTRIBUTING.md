@@ -180,7 +180,7 @@ __Install Pebble__
 ```shell
 helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
 helm repo update
-helm install pebble jupyterhub/pebble --values dev-config-pebble.yaml
+helm upgrade --install pebble jupyterhub/pebble --cleanup-on-fail --values dev-config-pebble.yaml
 ```
 
 ## 4: Build images, update values, install chart
