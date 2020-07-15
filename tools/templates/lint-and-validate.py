@@ -60,25 +60,30 @@ def lint(yamllint_config, values, kubernetes_versions, output_dir, debug):
         helm_lint_cmd.append('--debug')
     check_call(helm_lint_cmd)
 
-    print("### 2/4 - helm template: generate kubernetes resources")
-    helm_template_cmd = [
-        'helm', 'template', '../../jupyterhub',
-        '--values', values,
-        '--output-dir', output_dir
-    ]
-    if debug:
-        helm_template_cmd.append('--debug')
-    check_call(helm_template_cmd)
-
-    print("### 3/4 - yamllint: yaml lint generated kubernetes resources")
-    check_call([
-        'yamllint', '-c', yamllint_config, output_dir
-    ])
-
-    print("### 4/4 - kubeval: validate generated kubernetes resources")
     for kubernetes_version in kubernetes_versions.split(","):
         print("#### kubernetes_version ", kubernetes_version)
-        for filename in glob.iglob(output_dir + '/**/*.yaml', recursive=True):
+        version_output_dir = output_dir + '/' + kubernetes_version
+        check_call([
+            'mkdir', '-p', version_output_dir,
+        ])
+        print("### 2/4 - helm template: generate kubernetes resources")
+        helm_template_cmd = [
+            'helm', 'template', '../../jupyterhub',
+            '--values', values,
+            '--kube-version', kubernetes_version,
+            '--output-dir', version_output_dir
+        ]
+        if debug:
+            helm_template_cmd.append('--debug')
+        check_call(helm_template_cmd)
+
+        print("### 3/4 - yamllint: yaml lint generated kubernetes resources")
+        check_call([
+            'yamllint', '-c', yamllint_config, version_output_dir
+        ])
+
+        print("### 4/4 - kubeval: validate generated kubernetes resources")
+        for filename in glob.iglob(version_output_dir + '/**/*.yaml', recursive=True):
             check_call([
                 'kubeval', filename,
                 '--kubernetes-version', kubernetes_version,
