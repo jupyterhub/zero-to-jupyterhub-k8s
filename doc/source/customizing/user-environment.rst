@@ -102,11 +102,9 @@ JupyterLab with the following config in your :term:`config.yaml`:
 
 .. note::
 
-   You need the `jupyterlab <https://github.com/jupyterlab/jupyterlab>`_
-   package (installable via ``pip`` or ``conda``) for this to work.
-   All images in the `jupyter/docker-stacks repository
-   <https://github.com/jupyter/docker-stacks/>`_ come pre-installed with
-   it.
+   You need the ``jupyterlab`` package (installable via ``pip`` or ``conda``)
+   for this to work. All images in the `jupyter/docker-stacks repository
+   <https://github.com/jupyter/docker-stacks/>`_ come pre-installed with it.
 
 
 .. _custom-docker-image:
