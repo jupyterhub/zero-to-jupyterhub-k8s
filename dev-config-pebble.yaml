@@ -8,29 +8,3 @@ coredns:
     template ANY ANY local.jovyan.org {
       answer "{{ .Name }} 60 IN CNAME proxy-public.{$PEBBLE_NAMESPACE}.svc.cluster.local"
     }
-
-pebble:
-  env:
-    ## ref: https://github.com/letsencrypt/pebble#testing-at-full-speed
-    ##
-    ## WARNING: PEBBLE_VA_NOSLEEP=1 or a low value of PEBBLE_VA_SLEEPTIME make
-    ##          Traefik unstable. As the SLEEPTIME setting is a upper limit of a
-    ##          random variable, no value is really safe.
-    ##
-    ##          - PEBBLE_VA_SLEEPTIME=1 made it fail 7/50 times
-    ##          - PEBBLE_VA_SLEEPTIME=3 made it fail 1/50 times
-    ##          - PEBBLE_VA_SLEEPTIME=5 made it fail 0/100 times
-    ##          - PEBBLE_VA_SLEEPTIME=10 made it fail 0/100 times
-    - name: PEBBLE_VA_NOSLEEP
-      value: "0"
-    - name: PEBBLE_VA_SLEEPTIME
-      value: "10"
-    ## ref: https://github.com/letsencrypt/pebble#invalid-anti-replay-nonce-errors
-    - name: PEBBLE_WFE_NONCEREJECT
-      value: "0"
-    ## ref: https://github.com/letsencrypt/pebble#authorization-reuse
-    - name: PEBBLE_AUTHZREUSE
-      value: "0"
-    # ## ref: https://github.com/letsencrypt/pebble#skipping-validation
-    # - name: PEBBLE_VA_ALWAYS_VALID
-    #   value: "0"
