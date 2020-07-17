@@ -4,6 +4,20 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ## [0.9]
 
+### [0.9.1] - 2020-07-17
+
+This is a security fix, patching CVE-2020-15110 / GHSA-v7m9-9497-p9gr
+in KubeSpawner 0.11, only affecting some deployments with allow_named_servers enabled (not default):
+
+When named-servers are enabled,
+certain username patterns, depending on authenticator,
+could allow collisions with other usernames and named servers.
+The default named-server template is changed to prevent collisions,
+meaning that upgrading will lose associations of
+named-servers with their PVCs if the default templates are used.
+Data should not be lost (old PVCs should be ignored, not deleted),
+but will need manual migration to new PVCs prior to deletion of old PVCs.
+
 ### [0.9.0] - 2020-04-15
 
 #### Release summary

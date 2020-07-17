@@ -48,7 +48,7 @@ hub:
   extraVolumeMounts: []
   image:
     name: jupyterhub/k8s-hub
-    tag: 'set-by-chartpress'
+    tag: '0.9.1'
     # pullSecrets:
     #   - secretName
   resources:
@@ -157,7 +157,7 @@ proxy:
   secretSync:
     image:
       name: jupyterhub/k8s-secret-sync
-      tag: 'set-by-chartpress'
+      tag: '0.9.1'
     resources: {}
   labels: {}
   nodeSelector: {}
@@ -223,7 +223,7 @@ singleuser:
   networkTools:
     image:
       name: jupyterhub/k8s-network-tools
-      tag: 'set-by-chartpress'
+      tag: '0.9.1'
   cloudMetadata:
     enabled: false
     ip: 169.254.169.254
@@ -265,7 +265,7 @@ singleuser:
       storageAccessModes: [ReadWriteOnce]
   image:
     name: jupyterhub/k8s-singleuser-sample
-    tag: 'set-by-chartpress'
+    tag: '0.9.1'
     pullPolicy: IfNotPresent
     # pullSecrets:
     #   - secretName
@@ -336,7 +336,7 @@ prePuller:
     enabled: true
     image:
       name: jupyterhub/k8s-image-awaiter
-      tag: 'set-by-chartpress'
+      tag: '0.9.1'
   continuous:
     enabled: true
   extraImages: {}
