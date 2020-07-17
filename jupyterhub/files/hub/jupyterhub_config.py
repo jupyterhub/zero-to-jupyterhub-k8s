@@ -18,7 +18,42 @@ from z2jh import get_config, set_config_if_not_none
 # at the rate required.
 AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
 
-c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
+# Patch for CVE-2020-15110: change default template for named servers
+# with kubespawner 0.11, {servername} *contains* a leading '-'
+# leading `{user}-{server}` to create `username--servername`,
+# preventing collision.
+# kubespawner 0.12 does not contain `-` in {servername},
+# and uses default name template `{username}--{servername}`
+# so this patch must not be used with kubespawner >= 0.12
+
+from distutils.version import LooseVersion as V
+from traitlets import default
+import kubespawner
+from kubespawner import KubeSpawner
+
+
+class PatchedKubeSpawner(KubeSpawner):
+    @default("pod_name_template")
+    def _default_pod_name_template(self):
+        if self.name:
+            return "jupyter-{username}-{servername}"
+        else:
+            return "jupyter-{username}"
+
+    @default("pvc_name_template")
+    def _default_pvc_name_template(self):
+        if self.name:
+            return "claim-{username}-{servername}"
+        else:
+            return "claim-{username}"
+
+
+kubespawner_version = getattr(kubespawner, "__version__", "0.11")
+if V(kubespawner_version) < V("0.11.999"):
+    c.JupyterHub.spawner_class = PatchedKubeSpawner
+else:
+    # 0.12 or greater, defaults are safe
+    c.JupyterHub.spawner_class = KubeSpawner
 
 # Connect to a proxy running in a different pod
 c.ConfigurableHTTPProxy.api_url = 'http://{}:{}'.format(os.environ['PROXY_API_SERVICE_HOST'], int(os.environ['PROXY_API_SERVICE_PORT']))
