@@ -48,8 +48,7 @@ hub:
   image:
     name: jupyterhub/k8s-hub
     tag: 'set-by-chartpress'
-    # pullSecrets:
-    #   - secretName
+    pullSecrets: secretName
   resources:
     requests:
       cpu: 200m
