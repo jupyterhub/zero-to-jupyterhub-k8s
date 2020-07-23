@@ -76,6 +76,7 @@ setup_traefik(){
         helm repo add traefik https://containous.github.io/traefik-helm-chart
         helm repo update
         helm install traefik traefik/traefik \
+          --namespace kube-system \
           --set image.tag=2.2 \
           --set providers.kubernetesCRD.enabled=false \
           --set ingressRoute.dashboard.enabled=false
