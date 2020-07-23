@@ -33,6 +33,7 @@ install:
   # Setup our k3s based Kubernetes cluster and use its kubectl as well
   - setup_k3s
   - setup_helm
+  - setup_traefik
   - helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
   - helm repo update
 
@@ -46,6 +47,7 @@ install:
   # Pre-install JupyterHub
   - await_dns     # part of k3s, jupyterhub needs it while referencing https://pebble/dir
   - await_calico  # installed with setup_k3s, enforces netpol
+  - await_traefik
   - await_pebble  # jupyterhub's autohttps communicates with it as the ACME server
 script:
   # Install JupyterHub

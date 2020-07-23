@@ -33,10 +33,7 @@ setup_k3s () {
     # NOTE: k3s 1.16 and older needed a flag named --no-deploy instead of
     #       --disable.
     #
-    DISABLE="${k3s_disable_command:---disable} metrics-server ${k3s_disable_command:---disable} local-storage"
-    if [ "$CONFIG_FILE" == "dev-config.yaml" ]; then
-        DISABLE="${DISABLE} ${k3s_disable_command:---disable} traefik"
-    fi
+    DISABLE="${k3s_disable_command:---disable} metrics-server ${k3s_disable_command:---disable} local-storage ${k3s_disable_command:---disable} traefik"
 
     curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${K3S_VERSION} sh -s - \
         --write-kubeconfig-mode=644 \
@@ -73,6 +70,18 @@ setup_calico() {
   | kubectl apply -f -
 }
 
+setup_traefik(){
+    if  [ "$CONFIG_FILE" == "dev-config-external-ingress.yaml" ]; then
+        # Manually install Traefik because k3s version wont work in Travis CI.
+        helm repo add traefik https://containous.github.io/traefik-helm-chart
+        helm repo update
+        helm install traefik traefik/traefik \
+          --set image.tag=2.2 \
+          --set providers.kubernetesCRD.enabled=false \
+          --set ingressRoute.dashboard.enabled=false
+    fi
+}
+
 # FIXME: we cannot use --prefix with kubectl logs unless we have kubectl 1.17+
 
 await_calico() {
@@ -98,17 +107,31 @@ await_dns() {
     }
 }
 
+await_traefik() {
+    if  [ "$CONFIG_FILE" == "dev-config-external-ingress.yaml" ]; then
+            kubectl rollout status --watch --timeout 300s deployment/traefik -n kube-system \
+         || {
+                echo "Startup of Traefik failed!"
+                kubectl describe pod -n kube-system -l app.kubernetes.io/name=traefik
+                kubectl logs deployment/traefik -n kube-system --all-containers # --prefix
+                exit 1
+            }
+    fi
+}
+
 await_pebble() {
-    kubectl rollout status --watch --timeout 300s deployment/pebble \
- && kubectl rollout status --watch --timeout 300s deployment/pebble-coredns \
- || {
-        echo "Startup of Pebble failed!"
-        kubectl describe pod -l app.kubernetes.io/name=pebble
-        kubectl logs deploy/pebble --all-containers # --prefix
-        kubectl describe pod -l app.kubernetes.io/name=pebble-coredns
-        kubectl logs deploy/pebble-coredns --all-containers # --prefix
-        exit 1
-    }
+    if  [ "$CONFIG_FILE" == "dev-config-external-ingress.yaml" ]; then
+        kubectl rollout status --watch --timeout 300s deployment/pebble \
+     && kubectl rollout status --watch --timeout 300s deployment/pebble-coredns \
+     || {
+            echo "Startup of Pebble failed!"
+            kubectl describe pod -l app.kubernetes.io/name=pebble
+            kubectl logs deploy/pebble --all-containers # --prefix
+            kubectl describe pod -l app.kubernetes.io/name=pebble-coredns
+            kubectl logs deploy/pebble-coredns --all-containers # --prefix
+            exit 1
+        }
+    fi
 }
 
 await_jupyterhub() {
