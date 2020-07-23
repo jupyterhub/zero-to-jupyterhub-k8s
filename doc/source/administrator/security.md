@@ -315,11 +315,8 @@ specify a list of IP CIDR addresses in your `config.yaml` as follows:
 proxy:
   service:
     loadBalancerSourceRanges:
-      - 111.222.333.444/32
-      - 222.333.444.555/32
+      - 111.111.111.111/32
+      - 222.222.222.222/32
 ```
 
-This would restrict the access to only two IP addresses: `111.222.333.444` and `222.333.444.555`.
-
-For more information please check the [Kubernetes documentation](https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service)
-on restricting load balancer access.
+This would restrict the access to only two IP addresses: `111.111.111.111` and `222.222.222.222`.

@@ -525,8 +525,6 @@ properties:
             description: |
               A list of IP CIDR ranges that are allowed to access the load balancer service.
               Defaults to allowing everyone to access it.
-
-              For more information please check the [Kubernetes documentation](https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service).
       https:
         type: object
         description: |
@@ -1163,6 +1161,11 @@ properties:
   prePuller:
     type: object
     properties:
+      annotations:
+        type: object
+        description: |
+          Annotations to apply to the hook and continous image puller pods. One example use case is to
+          disable istio sidecars which could interfere with the image pulling.
       hook:
         description: |
           See the [*optimization

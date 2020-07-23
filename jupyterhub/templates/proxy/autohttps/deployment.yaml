@@ -84,11 +84,10 @@ spec:
           env:
             {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
           {{- end }}
-          readinessProbe:
-            tcpSocket:
-              port: http
-            initialDelaySeconds: 0
-            periodSeconds: 2
+          {{- with .Values.proxy.traefik.containerSecurityContext }}
+          securityContext:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
         - name: secret-sync
           image: "{{ .Values.proxy.secretSync.image.name }}:{{ .Values.proxy.secretSync.image.tag }}"
           {{- with .Values.proxy.secretSync.image.pullPolicy }}

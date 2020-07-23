@@ -68,7 +68,8 @@ env:
 
   # Global environment variables will act as defaults, jobs will override them
   global:
-    - HELM_VERSION=v3.2.3
+    - K3S_VERSION=v1.18.4+k3s1
+    - HELM_VERSION=v3.2.4
 
 jobs:
   ## don't wait for the jobs that are allowed to fail to report success

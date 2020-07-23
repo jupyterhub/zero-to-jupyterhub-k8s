@@ -32,7 +32,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 chartpress_yaml = os.path.join(here, os.pardir, os.pardir, "chartpress.yaml")
 values_yaml = os.path.join(here, os.pardir, os.pardir, "jupyterhub", "values.yaml")
 dependencies_image = 'hub-dependencies'
-pip_tools_version="4.*"
+pip_tools_version="5.*"
 
 
 @lru_cache()

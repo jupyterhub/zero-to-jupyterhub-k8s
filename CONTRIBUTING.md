@@ -2,7 +2,7 @@
 
 Welcome dear open source colleague! As this is a [Jupyter](https://jupyter.org)
 project please start by looking at the [Jupyter contributor
-guide](https://jupyter.readthedocs.io/en/latest/contributor/content-contributor.html),
+guide](https://jupyter.readthedocs.io/en/latest/contributing/content-contributor.html),
 and follow [Project Jupyter's Code of
 Conduct](https://github.com/jupyter/governance/blob/master/conduct/code_of_conduct.md)
 to help us sustain a warm and welcoming collaborative environment.
@@ -180,7 +180,7 @@ __Install Pebble__
 ```shell
 helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
 helm repo update
-helm install pebble jupyterhub/pebble --values dev-config-pebble.yaml
+helm upgrade --install pebble jupyterhub/pebble --cleanup-on-fail --values dev-config-pebble.yaml
 ```
 
 ## 4: Build images, update values, install chart
