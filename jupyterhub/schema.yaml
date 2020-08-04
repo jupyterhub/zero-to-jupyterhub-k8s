@@ -642,7 +642,7 @@ properties:
             type: boolean
             description: |
               Enable persisting auth_state (if available).
-              See: http://jupyterhub.readthedocs.io/en/latest/api/auth.html
+              See: [the documentation on authenticators](http://jupyterhub.readthedocs.io/en/latest/api/auth.html)
           cryptoKey:
             type:
               - string
