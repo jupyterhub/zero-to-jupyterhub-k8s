@@ -827,6 +827,21 @@ properties:
                   pullSecrets:
                     - gcr-pull
               ```
+      initContainers:
+        type: list
+        description: |
+          list of initContainers to be run every singleuser pod. See [Kubernetes Docs](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/)
+          
+          ```yaml
+          singleuser:
+            initContainers:
+              - name: init-myservice
+                image: busybox:1.28
+                command: ['sh', '-c', 'command1']
+              - name: init-mydb
+                image: busybox:1.28
+                command: ['sh', '-c', 'command2']
+          ```
       profileList:
         type: list
         description: |
