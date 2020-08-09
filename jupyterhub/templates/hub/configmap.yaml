@@ -1,7 +1,7 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: hub-config
+  name: {{ .Release.Name }}-hub-config
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 data:

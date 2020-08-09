@@ -38,13 +38,13 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: hub-config
+            name: {{ .Release.Name }}-hub-config
         - name: secret
           secret:
             {{- if .Values.hub.existingSecret }}
             secretName: {{ .Values.hub.existingSecret }}
             {{- else }}
-            secretName: hub-secret
+            secretName: {{ .Release.Name }}-hub-secret
             {{- end }}
         {{- if .Values.hub.extraVolumes }}
         {{- .Values.hub.extraVolumes | toYaml | trimSuffix "\n" | nindent 8 }}
@@ -62,7 +62,7 @@ spec:
       {{- if or .Values.hub.imagePullSecret.enabled .Values.hub.image.pullSecrets }}
       imagePullSecrets:
         {{- if .Values.hub.imagePullSecret.enabled }}
-        - name: hub-image-credentials
+        - name: {{ .Release.Name }}-hub-image-credentials
         {{ else }}
         {{- range .Values.hub.image.pullSecrets }}
         - name: {{ . }}
@@ -154,7 +154,7 @@ spec:
                   {{- if .Values.hub.existingSecret }}
                   name: {{ .Values.hub.existingSecret }}
                   {{- else }}
-                  name: hub-secret
+                  name: {{ .Release.Name }}-hub-secret
                   {{- end }}
                   key: hub.cookie-secret
             {{- end }}
@@ -168,7 +168,7 @@ spec:
                   {{- if .Values.hub.existingSecret }}
                   name: {{ .Values.hub.existingSecret }}
                   {{- else }}
-                  name: hub-secret
+                  name: {{ .Release.Name }}-hub-secret
                   {{- end }}
                   key: proxy.token
             {{- if .Values.auth.state.enabled }}
@@ -178,7 +178,7 @@ spec:
                   {{- if .Values.hub.existingSecret }}
                   name: {{ .Values.hub.existingSecret }}
                   {{- else }}
-                  name: hub-secret
+                  name: {{ .Release.Name }}-hub-secret
                   {{- end }}
                   key: auth.state.crypto-key
             {{- end }}
@@ -190,7 +190,7 @@ spec:
                   {{- if .Values.hub.existingSecret }}
                   name: {{ .Values.hub.existingSecret }}
                   {{- else }}
-                  name: hub-secret
+                  name: {{ .Release.Name }}-hub-secret
                   {{- end }}
                   key: hub.db.password
             {{- else if eq .Values.hub.db.type "postgres" }}
@@ -200,7 +200,7 @@ spec:
                   {{- if .Values.hub.existingSecret }}
                   name: {{ .Values.hub.existingSecret }}
                   {{- else }}
-                  name: hub-secret
+                  name: {{ .Release.Name }}-hub-secret
                   {{- end }}
                   key: hub.db.password
             {{- end }}
