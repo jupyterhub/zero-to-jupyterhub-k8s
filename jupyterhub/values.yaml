@@ -1,5 +1,7 @@
 custom: {}
 
+# the resource whose users land when they arrive, and that is used to spawn and forward them to 
+# their own nodes
 hub:
   service:
     type: ClusterIP
@@ -229,6 +231,7 @@ auth:
     cryptoKey:
 
 
+## Configuration of the pod that runs when a user requests one.
 singleuser:
   extraTolerations: []
   nodeSelector: {}
