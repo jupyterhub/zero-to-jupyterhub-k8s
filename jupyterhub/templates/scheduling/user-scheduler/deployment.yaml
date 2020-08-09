@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-scheduler
+  name: {{ .Release.Name }}-user-scheduler
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
@@ -20,7 +20,7 @@ spec:
         checksum/config-map: {{ include (print $.Template.BasePath "/scheduling/user-scheduler/configmap.yaml") . | sha256sum }}
     spec:
       {{- if .Values.rbac.enabled }}
-      serviceAccountName: user-scheduler
+      serviceAccountName: {{ .Release.Name }}-user-scheduler
       {{- end }}
       {{- if .Values.scheduling.podPriority.enabled }}
       priorityClassName: {{ .Release.Name }}-default-priority
@@ -28,14 +28,14 @@ spec:
       nodeSelector: {{ toJson .Values.scheduling.userScheduler.nodeSelector }}
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
       containers:
-        - name: user-scheduler
+        - name: {{ .Release.Name }}-user-scheduler
           image: {{ include "jupyterhub.scheduler.image" . }}
           command:
             - /usr/local/bin/kube-scheduler
             - --scheduler-name={{ .Release.Name }}-user-scheduler
-            - --policy-configmap=user-scheduler
+            - --policy-configmap={{ .Release.Name }}-user-scheduler
             - --policy-configmap-namespace={{ .Release.Namespace }}
-            - --lock-object-name=user-scheduler
+            - --lock-object-name={{ .Release.Name }}-user-scheduler
             - --lock-object-namespace={{ .Release.Namespace }}
             - --leader-elect-resource-lock=configmaps
             - --v={{ .Values.scheduling.userScheduler.logLevel | default 4 }}

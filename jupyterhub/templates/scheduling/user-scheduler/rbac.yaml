@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: user-scheduler
+  name: {{ .Release.Name }}-user-scheduler
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 ---
@@ -16,7 +16,7 @@ metadata:
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
 subjects:
   - kind: ServiceAccount
-    name: user-scheduler
+    name: {{ .Release.Name }}-user-scheduler
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
@@ -33,7 +33,7 @@ metadata:
 rules:
   # Support leader elections
   - apiGroups: [""]
-    resourceNames: ["user-scheduler"]
+    resourceNames: {{ list (printf "%s-%s" .Release.Name "user-scheduler") }}
     resources: ["configmaps"]
     verbs: ["get", "update"]
   # Workaround for missing permission in system:kube-scheduler as of k8s 1.10.4
@@ -54,7 +54,7 @@ metadata:
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
 subjects:
   - kind: ServiceAccount
-    name: user-scheduler
+    name: {{ .Release.Name }}-user-scheduler
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole

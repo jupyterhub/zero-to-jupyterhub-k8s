@@ -311,6 +311,7 @@ singleuser:
   extraPodConfig: {}
 
 
+## Used for scheduling user pods.
 scheduling:
   userScheduler:
     enabled: true
