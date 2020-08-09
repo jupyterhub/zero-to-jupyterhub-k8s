@@ -113,6 +113,9 @@ spec:
             - mountPath: /etc/jupyterhub/z2jh.py
               subPath: z2jh.py
               name: config
+            - mountPath: /etc/jupyterhub/helpers.py
+              subPath: helpers.py
+              name: config
             - mountPath: /etc/jupyterhub/config/
               name: config
             - mountPath: /etc/jupyterhub/secret/

@@ -39,6 +39,7 @@ hub:
     password:
   labels: {}
   annotations: {}
+  # maps keys to Python code that is directly executed during configuration of the hub
   extraConfig: {}
   extraConfigMap: {}
   extraEnv: {}

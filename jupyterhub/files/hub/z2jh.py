@@ -6,6 +6,7 @@ Methods here can be imported by extraConfig in values.yaml
 from collections import Mapping
 from functools import lru_cache
 import os
+import re
 
 import yaml
 
@@ -77,3 +78,12 @@ def set_config_if_not_none(cparent, name, key):
     data = get_config(key)
     if data is not None:
         setattr(cparent, name, data)
+
+
+def camelCaseify(s):
+    """convert snake_case to camelCase
+
+    For the common case where some_value is set from someValue
+    so we don't have to specify the name twice.
+    """
+    return re.sub(r"_([a-z])", lambda m: m.group(1).upper(), s)
