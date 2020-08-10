@@ -20,6 +20,9 @@ RUN apt-get update && \
       sqlite3 \
       curl \
       dnsutils \
+      jq \
+      apt-transport-https \
+      gnupg2 \
       # libc-bin explicitly added and pinned 2020-06-10 for a CVE found with trivy
       # ref: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1712#issuecomment-656425028
       libc-bin=2.27-3ubuntu1.2 \
@@ -28,7 +31,11 @@ RUN apt-get update && \
         echo nodejs=8.10.0~dfsg-2ubuntu0.2 nodejs-dev=8.10.0~dfsg-2ubuntu0.2 npm; \
       fi') \
       && \
-    apt-get purge && apt-get clean
+      curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - &&\
+      echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list && \
+      apt-get update && \
+      apt-get install -y --no-install-recommends kubectl && \
+      apt-get purge && apt-get clean
 
 ARG NB_USER=jovyan
 ARG NB_UID=1000
