@@ -60,6 +60,9 @@ RUN PYCURL_SSL_LIBRARY=openssl pip3 install --no-cache-dir \
             echo jupyterhub==${JUPYTERHUB_VERSION}; \
           fi')
 
+# Use custom version of kubespawner with internal_ssl support
+RUN pip uninstall -y jupyterhub-kubespawner && pip install git+https://github.com/chancez/kubespawner.git@internal-ssl#egg=jupyterhub-kubespawner
+
 WORKDIR /srv/jupyterhub
 
 # So we can actually write a db file here
