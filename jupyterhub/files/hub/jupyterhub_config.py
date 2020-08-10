@@ -409,6 +409,10 @@ if get_config('cull.enabled', False):
         '--url=' + protocol + '://localhost:8081' + url_path_join(base_url, 'hub/api')
     )
 
+    if https_enabled:
+        cull_cmd.append('--ssl-enabled')
+        cull_cmd.append('--internal-certs-location=%s' % c.JupyterHub.internal_certs_location)
+
     cull_timeout = get_config('cull.timeout')
     if cull_timeout:
         cull_cmd.append('--timeout=%s' % cull_timeout)
