@@ -63,6 +63,9 @@ RUN PYCURL_SSL_LIBRARY=openssl pip3 install --no-cache-dir \
 # Use custom version of kubespawner with internal_ssl support
 RUN pip uninstall -y jupyterhub-kubespawner && pip install git+https://github.com/chancez/kubespawner.git@internal-ssl#egg=jupyterhub-kubespawner
 
+# use version of jupyterhub-idle-culler with internal_ssl support
+RUN pip uninstall -y jupyterhub-idle-culler && pip install git+https://github.com/chancez/jupyterhub-idle-culler.git@support_internal_ssl#egg=jupyterhub-idle-culler
+
 # Install fork of jupyterhub with fix for internal SSL + OAuth2 auth server TLS verification
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
