@@ -54,6 +54,11 @@ spec:
           persistentVolumeClaim:
             claimName: hub-db-dir
         {{- end }}
+        {{- if .Values.hub.https.enabled }}
+        - name: hub-internal-ssl
+          persistentVolumeClaim:
+            claimName: hub-internal-ssl
+        {{- end }}
       {{- if .Values.rbac.enabled }}
       serviceAccountName: hub
       {{- end }}
@@ -69,9 +74,59 @@ spec:
         {{- end }}
         {{- end }}
       {{- end }}
-      {{- if .Values.hub.initContainers }}
+      {{- if or .Values.hub.initContainers .Values.hub.https.enabled }}
       initContainers:
+        {{- if .Values.hub.https.enabled }}
+        - name: init-tls
+          image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
+          command:
+            - "/bin/sh"
+            - "-ec"
+            - |
+              jupyterhub -f /etc/jupyterhub/jupyterhub_config.py --generate-certs
+              cd /srv/jupyterhub-internal-ssl/internal-ssl/
+              kubectl create secret generic \
+                --namespace $POD_NAMESPACE \
+                jupyterhub-certs \
+                --from-file=certipy.json \
+                --from-file=services-ca/services-ca.key \
+                --from-file=services-ca/services-ca.crt \
+                --from-file=notebooks-ca/notebooks-ca.key \
+                --from-file=notebooks-ca/notebooks-ca.crt \
+                --from-file=proxy-api-ca/proxy-api-ca.key \
+                --from-file=proxy-api-ca/proxy-api-ca.crt \
+                --from-file=proxy-client-ca/proxy-client-ca.key \
+                --from-file=proxy-client-ca/proxy-client-ca.crt \
+                --from-file=hub-ca/hub-ca.key \
+                --from-file=hub-ca/hub-ca.crt \
+                --from-file=hub-ca_trust.crt \
+                --from-file=proxy-api-ca_trust.crt \
+                --from-file=proxy-client-ca_trust.crt \
+                --from-file=notebooks-ca_trust.crt \
+                --from-file=services-ca_trust.crt \
+                --from-file=hub-internal/hub-internal.key \
+                --from-file=hub-internal/hub-internal.crt \
+                --from-file=proxy-api/proxy-api.key \
+                --from-file=proxy-api/proxy-api.crt \
+                --from-file=proxy-client/proxy-client.key \
+                --from-file=proxy-client/proxy-client.crt \
+                --dry-run -o yaml > jupyterhub-certs-secret.yaml
+                kubectl --namespace $POD_NAMESPACE create -f jupyterhub-certs-secret.yaml || kubectl --namespace $POD_NAMESPACE replace -f jupyterhub-certs-secret.yaml
+          env:
+            {{- include "jupyterhub.hub.env" . | nindent 12 }}
+          volumeMounts:
+            {{- include "jupyterhub.hub.volumeMounts" . | nindent 12 }}
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 200m
+            limits:
+              memory: 256Mi
+              cpu: 200m
+        {{- end }}
+        {{- if .Values.hub.initContainers  }}
         {{- .Values.hub.initContainers | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- end }}
       {{- end }}
       containers:
         {{- if .Values.hub.extraContainers }}
@@ -106,27 +161,10 @@ spec:
             - --upgrade-db
             {{- end }}
             {{- end }}
+          env:
+            {{- include "jupyterhub.hub.env" . | nindent 12 }}
           volumeMounts:
-            - mountPath: /etc/jupyterhub/jupyterhub_config.py
-              subPath: jupyterhub_config.py
-              name: config
-            - mountPath: /etc/jupyterhub/z2jh.py
-              subPath: z2jh.py
-              name: config
-            - mountPath: /etc/jupyterhub/config/
-              name: config
-            - mountPath: /etc/jupyterhub/secret/
-              name: secret
-            {{- if .Values.hub.extraVolumeMounts }}
-            {{- .Values.hub.extraVolumeMounts | toYaml | trimSuffix "\n" | nindent 12 }}
-            {{- end }}
-            {{- if eq .Values.hub.db.type "sqlite-pvc" }}
-            - mountPath: /srv/jupyterhub
-              name: hub-db-dir
-              {{- if .Values.hub.db.pvc.subPath }}
-              subPath: {{ .Values.hub.db.pvc.subPath | quote }}
-              {{- end }}
-            {{- end }}
+            {{- include "jupyterhub.hub.volumeMounts" . | nindent 12 }}
           resources:
             {{- .Values.hub.resources | toYaml | trimSuffix "\n" | nindent 12 }}
           {{- with .Values.hub.image.pullPolicy }}
@@ -142,82 +180,6 @@ spec:
           securityContext:
             {{- $securityContext | toYaml | trimSuffix "\n" | nindent 12 }}
           {{- end }}
-          env:
-            - name: PYTHONUNBUFFERED
-              value: "1"
-            - name: HELM_RELEASE_NAME
-              value: {{ .Release.Name | quote }}
-            {{- if .Values.hub.cookieSecret }}
-            - name: JPY_COOKIE_SECRET
-              valueFrom:
-                secretKeyRef:
-                  {{- if .Values.hub.existingSecret }}
-                  name: {{ .Values.hub.existingSecret }}
-                  {{- else }}
-                  name: hub-secret
-                  {{- end }}
-                  key: hub.cookie-secret
-            {{- end }}
-            - name: POD_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: CONFIGPROXY_AUTH_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  {{- if .Values.hub.existingSecret }}
-                  name: {{ .Values.hub.existingSecret }}
-                  {{- else }}
-                  name: hub-secret
-                  {{- end }}
-                  key: proxy.token
-            {{- if .Values.auth.state.enabled }}
-            - name: JUPYTERHUB_CRYPT_KEY
-              valueFrom:
-                secretKeyRef:
-                  {{- if .Values.hub.existingSecret }}
-                  name: {{ .Values.hub.existingSecret }}
-                  {{- else }}
-                  name: hub-secret
-                  {{- end }}
-                  key: auth.state.crypto-key
-            {{- end }}
-            {{- if .Values.hub.db.password }}
-            {{- if eq .Values.hub.db.type "mysql" }}
-            - name: MYSQL_PWD
-              valueFrom:
-                secretKeyRef:
-                  {{- if .Values.hub.existingSecret }}
-                  name: {{ .Values.hub.existingSecret }}
-                  {{- else }}
-                  name: hub-secret
-                  {{- end }}
-                  key: hub.db.password
-            {{- else if eq .Values.hub.db.type "postgres" }}
-            - name: PGPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  {{- if .Values.hub.existingSecret }}
-                  name: {{ .Values.hub.existingSecret }}
-                  {{- else }}
-                  name: hub-secret
-                  {{- end }}
-                  key: hub.db.password
-            {{- end }}
-            {{- end }}
-            {{- if .Values.hub.extraEnv }}
-            {{- $extraEnvType := typeOf .Values.hub.extraEnv }}
-            {{- /* If we have a list, embed that here directly. This allows for complex configuration from configmap, downward API, etc. */}}
-            {{- if eq $extraEnvType "[]interface {}" }}
-            {{- .Values.hub.extraEnv | toYaml | trimSuffix "\n" | nindent 12 }}
-            {{- else if eq $extraEnvType "map[string]interface {}" }}
-            {{- /* If we have a map, treat those as key-value pairs. */}}
-            {{- range $key, $value := .Values.hub.extraEnv }}
-            - name: {{ $key | quote }}
-              value: {{ $value | quote }}
-            {{- end }}
-            {{- end }}
-            {{- end }}
           ports:
             - name: http
               containerPort: 8081
@@ -232,15 +194,13 @@ spec:
           livenessProbe:
             initialDelaySeconds: {{ .Values.hub.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.hub.livenessProbe.periodSeconds }}
-            httpGet:
-              path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.hub.readinessProbe.enabled }}
           readinessProbe:
             initialDelaySeconds: {{ .Values.hub.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.hub.readinessProbe.periodSeconds }}
-            httpGet:
-              path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
+            tcpSocket:
               port: http
           {{- end }}

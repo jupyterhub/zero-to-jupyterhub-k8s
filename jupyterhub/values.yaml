@@ -7,6 +7,16 @@ hub:
     ports:
       nodePort:
     loadBalancerIP:
+  https:
+    enabled: false
+    pvc:
+      annotations: {}
+      selector: {}
+      accessModes:
+        - ReadWriteOnce
+      storage: 1Gi
+      subPath:
+      storageClassName:
   baseUrl: /
   cookieSecret:
   publicURL:
@@ -47,7 +57,7 @@ hub:
   extraVolumeMounts: []
   image:
     name: jupyterhub/k8s-hub
-    tag: 'set-by-chartpress'
+    tag: '0.9.0'
     # pullSecrets:
     #   - secretName
   resources:
@@ -99,7 +109,6 @@ hub:
 
 rbac:
   enabled: true
-
 
 proxy:
   secretToken: ''
@@ -178,7 +187,7 @@ proxy:
   secretSync:
     image:
       name: jupyterhub/k8s-secret-sync
-      tag: 'set-by-chartpress'
+      tag: '0.9.0'
     resources: {}
   labels: {}
   nodeSelector: {}
@@ -200,6 +209,16 @@ proxy:
       name: ''
       key: tls.key
       crt: tls.crt
+    internalSecret:
+      name: jupyterhub-certs
+      api:
+        key: proxy-api.key
+        crt: proxy-api.crt
+        ca: proxy-api-ca_trust.crt
+      client:
+        key: proxy-client.key
+        crt: proxy-client.crt
+        ca: proxy-client-ca_trust.crt
     hosts: []
   networkPolicy:
     enabled: false
@@ -208,7 +227,6 @@ proxy:
       - to:
           - ipBlock:
               cidr: 0.0.0.0/0
-
 
 auth:
   type: dummy
@@ -228,7 +246,6 @@ auth:
     enabled: false
     cryptoKey:
 
-
 singleuser:
   extraTolerations: []
   nodeSelector: {}
@@ -244,7 +261,7 @@ singleuser:
   networkTools:
     image:
       name: jupyterhub/k8s-network-tools
-      tag: 'set-by-chartpress'
+      tag: '0.9.0'
   cloudMetadata:
     enabled: false
     ip: 169.254.169.254
@@ -252,7 +269,7 @@ singleuser:
     enabled: false
     ingress: []
     egress:
-    # Required egress is handled by other rules so it's safe to modify this
+      # Required egress is handled by other rules so it's safe to modify this
       - to:
           - ipBlock:
               cidr: 0.0.0.0/0
@@ -286,7 +303,7 @@ singleuser:
       storageAccessModes: [ReadWriteOnce]
   image:
     name: jupyterhub/k8s-singleuser-sample
-    tag: 'set-by-chartpress'
+    tag: '0.9.0'
     pullPolicy: IfNotPresent
     # pullSecrets:
     #   - secretName
@@ -309,7 +326,6 @@ singleuser:
   cmd: jupyterhub-singleuser
   defaultUrl:
   extraPodConfig: {}
-
 
 scheduling:
   userScheduler:
@@ -351,14 +367,13 @@ scheduling:
     nodeAffinity:
       matchNodePurpose: prefer
 
-
 prePuller:
   annotations: {}
   hook:
     enabled: true
     image:
       name: jupyterhub/k8s-image-awaiter
-      tag: 'set-by-chartpress'
+      tag: '0.9.0'
   continuous:
     enabled: true
   extraImages: {}
@@ -367,14 +382,12 @@ prePuller:
       name: gcr.io/google_containers/pause
       tag: '3.1'
 
-
 ingress:
   enabled: false
   annotations: {}
   hosts: []
   pathSuffix: ''
   tls: []
-
 
 cull:
   enabled: true
@@ -384,7 +397,6 @@ cull:
   every: 600
   concurrency: 10
   maxAge: 0
-
 
 debug:
   enabled: false

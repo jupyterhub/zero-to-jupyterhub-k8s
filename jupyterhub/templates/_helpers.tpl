@@ -225,6 +225,126 @@ component: {{ include "jupyterhub.componentLabel" . }}
 {{- end }}
 
 {{- /*
+  jupyterhub.hub.env:
+    The env vars for the hub pod.
+*/}}
+{{- define "jupyterhub.hub.env" -}}
+- name: PYTHONUNBUFFERED
+  value: "1"
+- name: HELM_RELEASE_NAME
+  value: {{ .Release.Name | quote }}
+{{- if .Values.hub.cookieSecret }}
+- name: JPY_COOKIE_SECRET
+  valueFrom:
+    secretKeyRef:
+      {{- if .Values.hub.existingSecret }}
+      name: {{ .Values.hub.existingSecret }}
+      {{- else }}
+      name: hub-secret
+      {{- end }}
+      key: hub.cookie-secret
+{{- end }}
+- name: POD_NAMESPACE
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.namespace
+- name: CONFIGPROXY_AUTH_TOKEN
+  valueFrom:
+    secretKeyRef:
+      {{- if .Values.hub.existingSecret }}
+      name: {{ .Values.hub.existingSecret }}
+      {{- else }}
+      name: hub-secret
+      {{- end }}
+      key: proxy.token
+{{- if .Values.auth.state.enabled }}
+- name: JUPYTERHUB_CRYPT_KEY
+  valueFrom:
+    secretKeyRef:
+      {{- if .Values.hub.existingSecret }}
+      name: {{ .Values.hub.existingSecret }}
+      {{- else }}
+      name: hub-secret
+      {{- end }}
+      key: auth.state.crypto-key
+{{- end }}
+{{- if .Values.hub.db.password }}
+{{- if eq .Values.hub.db.type "mysql" }}
+- name: MYSQL_PWD
+  valueFrom:
+    secretKeyRef:
+      {{- if .Values.hub.existingSecret }}
+      name: {{ .Values.hub.existingSecret }}
+      {{- else }}
+      name: hub-secret
+      {{- end }}
+      key: hub.db.password
+{{- else if eq .Values.hub.db.type "postgres" }}
+- name: PGPASSWORD
+  valueFrom:
+    secretKeyRef:
+      {{- if .Values.hub.existingSecret }}
+      name: {{ .Values.hub.existingSecret }}
+      {{- else }}
+      name: hub-secret
+      {{- end }}
+      key: hub.db.password
+{{- end }}
+{{- end }}
+{{- if .Values.hub.extraEnv }}
+{{- $extraEnvType := typeOf .Values.hub.extraEnv }}
+{{- /* If we have a list, embed that here directly. This allows for complex configuration from configmap, downward API, etc. */}}
+{{- if eq $extraEnvType "[]interface {}" }}
+{{ .Values.hub.extraEnv | toYaml | trimSuffix "\n" }}
+{{- else if eq $extraEnvType "map[string]interface {}" }}
+{{- /* If we have a map, treat those as key-value pairs. */}}
+{{- range $key, $value := .Values.hub.extraEnv }}
+- name: {{ $key | quote }}
+  value: {{ $value | quote }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- end }}
+
+{{- /*
+  jupyterhub.hub.volumeMounts:
+    The volumeMounts for the hub pod.
+*/}}
+{{- define "jupyterhub.hub.volumeMounts" -}}
+- mountPath: /etc/jupyterhub/jupyterhub_config.py
+  subPath: jupyterhub_config.py
+  name: config
+- mountPath: /etc/jupyterhub/z2jh.py
+  subPath: z2jh.py
+  name: config
+- mountPath: /etc/jupyterhub/config/
+  name: config
+- mountPath: /etc/jupyterhub/secret/
+  name: secret
+{{- if .Values.hub.extraVolumeMounts }}
+{{ .Values.hub.extraVolumeMounts | toYaml | trimSuffix "\n" }}
+{{- end }}
+{{- if eq .Values.hub.db.type "sqlite-pvc" }}
+- mountPath: /srv/jupyterhub
+  name: hub-db-dir
+  {{- if .Values.hub.db.pvc.subPath }}
+  subPath: {{ .Values.hub.db.pvc.subPath | quote }}
+  {{- end }}
+{{- end }}
+{{- if .Values.hub.https.enabled }}
+- mountPath: /srv/jupyterhub-internal-ssl
+  name: hub-internal-ssl
+  {{- if .Values.hub.https.pvc.subPath }}
+  subPath: {{ .Values.hub.https.pvc.subPath | quote }}
+  {{- end }}
+{{- end }}
+
+{{- end }}
+
+
+
+{{- /*
   jupyterhub.resources:
     The resource request of a singleuser.
 */}}
