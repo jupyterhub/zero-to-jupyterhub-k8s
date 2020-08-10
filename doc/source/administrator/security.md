@@ -159,6 +159,22 @@ security report generator. Use the following URL structure to test your domain:
 http://ssllabs.com/ssltest/analyze.html?d=<YOUR-DOMAIN>
 ```
 
+### Internal JupyterHub TLS
+
+By default the internal communication of the Proxy, JupyterHub, and user notebooks are not encrypted by TLS.
+
+- Set `hub.https.enabled` to true
+- Set `hub.https.extraAltNames` to your public facing JupyterHub hostname.
+
+```yaml
+hub:
+  https:
+    enabled: true
+    extraAltNames:
+      - "DNS:jupyterhub.example.com"
+```
+
+
 ## Secure access to Helm
 
 In its default configuration, helm pretty much allows root access to all other
