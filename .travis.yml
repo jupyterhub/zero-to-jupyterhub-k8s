@@ -22,6 +22,7 @@ before_install:
   # Exit immediately if a command exits with a non-zero status.
   - set -e
   - . ci/common
+  - pip install "docker~=4.2.0"
 
 # The default install script below will prepare a k8s cluster to work with, but
 # not install JupyterHub itself, as upgrade tests may want to make multiple
