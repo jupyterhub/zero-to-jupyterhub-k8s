@@ -112,8 +112,8 @@ There are two ways to specify your manual certificate, directly in the config.ya
         hosts:
           - <your-domain-name>
         type: secret
-          secret:
-            name: example-tls
+        secret:
+          name: example-tls
     ```
 
 3. Apply the config changes by running helm upgrade ....
