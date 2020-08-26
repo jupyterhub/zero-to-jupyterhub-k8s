@@ -2,6 +2,21 @@
 
 Here you can find upgrade changes in between releases and upgrade instructions.
 
+## [0.10]
+
+### [0.10.0]
+
+#### Breaking changes:
+
+- [network policies](network-policies) are now enabled by default.
+  While this should not be a breaking change for many,
+  enabling network policies may require additional configuration,
+  especially for deployments that include additional components
+  that access jupyterhub pods directly(i.e. not through the proxy-public service).
+  See the [security documentation](https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/security.html#kubernetes-network-policies)
+  for more on configuring network policies and caveats about network policy support.
+
+
 ## [0.9]
 
 ### [0.9.0] - 2020-04-15

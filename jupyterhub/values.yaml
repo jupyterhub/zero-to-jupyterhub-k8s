@@ -67,7 +67,7 @@ hub:
     enabled: true
     minAvailable: 1
   networkPolicy:
-    enabled: false
+    enabled: true
     ingress: []
     ## egress for JupyterHub already includes Kubernetes internal DNS and
     ## access to the proxy, but can be restricted further, but ensure to allow
@@ -201,7 +201,7 @@ proxy:
       crt: tls.crt
     hosts: []
   networkPolicy:
-    enabled: false
+    enabled: true
     ingress: []
     egress:
       - to:
@@ -248,7 +248,7 @@ singleuser:
     enabled: false
     ip: 169.254.169.254
   networkPolicy:
-    enabled: false
+    enabled: true
     ingress: []
     egress:
     # Required egress is handled by other rules so it's safe to modify this
