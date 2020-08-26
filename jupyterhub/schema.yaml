@@ -308,20 +308,38 @@ properties:
         description: |
           Extra environment variables that should be set for the hub pod.
 
+          Environment variables are usually used to:
+            - Pass parameters to some custom code in `hub.extraConfig`.
+            - Configure code running in the hub pod, such as an authenticator or
+              spawner.
+
           ```yaml
           hub:
             extraEnv:
-              MY_ENV_VARS_NAME: "my env vars value"
+              # short notation, only for hardcoded string values
+              MY_ENV_VARS_NAME1: "my env var value 1"
+
+              # long notation, Kubernetes native syntax
+              dummyKey1:
+                name: HUB_NAMESPACE
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.namespace
+              dummyKey2:
+                name: PREFIXED_HUB_NAMESPACE
+                value: "my-prefix-$(HUB_NAMESPACE)"
+              dummyKey3:
+                name: SECRET_VALUE
+                valueFrom:
+                  secretKeyRef:
+                    name: my-k8s-secret
+                    key: password
           ```
 
-          **NOTE**: We still support this field being a list of
-          [EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#envvar-v1-core)
-          objects as well.
-
-          These are usually used in two circumstances:
-            - Passing parameters to some custom code specified with `extraConfig`
-            - Passing parameters to an authenticator or spawner that can be directly customized
-              by environment variables (rarer)
+          In the long notation, you can provide any [Kubernetes
+          EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#envvar-v1-core)
+          specification, and the name of the key (`dummyKey1`) will have no
+          impact.
       extraConfig:
         type: object
         description: |
