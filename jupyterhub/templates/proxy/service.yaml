@@ -1,8 +1,10 @@
 {{- $HTTPS := .Values.proxy.https.enabled -}}
-{{- $autoHTTPS := and $HTTPS (and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
-{{- $offloadHTTPS := and $HTTPS (eq .Values.proxy.https.type "offload") -}}
+# Automatic HTTPS via Let's Encrypt requires list of hostnames to be turned on
+{{- $autoHTTPS := and $HTTPS and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
+# Manual HTTPS with user provided certs does not require list of hostnames
 {{- $manualHTTPS := and $HTTPS (eq .Values.proxy.https.type "manual") -}}
-{{- $manualHTTPSwithsecret := and $HTTPS (eq .Values.proxy.https.type "secret") -}}
+# Offloading HTTPS to external LoadBalancer does not require list of hostnames either
+{{- $offloadHTTPS := and $HTTPS (eq .Values.proxy.https.type "offload") -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -40,9 +42,12 @@ spec:
     {{- end }}
     release: {{ .Release.Name }}
   ports:
-    {{- if $HTTPS }}
+    {{- if or $autoHTTPS (or $manualHTTPS $offloadHTTPS) }}
     - name: https
       port: 443
+      # When HTTPS is handled outside our helm chart, pass traffic
+      # coming in via port 443 to port 80. Termination happens
+      # outside of kubernetes somehow
       {{- if $offloadHTTPS }}
       targetPort: http
       {{- else }}

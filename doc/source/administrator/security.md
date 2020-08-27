@@ -82,8 +82,6 @@ There are two ways to specify your manual certificate, directly in the config.ya
     proxy:
       https:
         enabled: true
-        hosts:
-          - <your-domain-name>
         type: manual
         manual:
           key: |
