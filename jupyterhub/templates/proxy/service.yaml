@@ -1,6 +1,6 @@
 {{- $HTTPS := .Values.proxy.https.enabled -}}
 # Automatic HTTPS via Let's Encrypt requires list of hostnames to be turned on
-{{- $autoHTTPS := and $HTTPS and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
+{{- $autoHTTPS := and $HTTPS (and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
 # Manual HTTPS with user provided certs does not require list of hostnames
 {{- $manualHTTPS := and $HTTPS (eq .Values.proxy.https.type "manual") -}}
 # Offloading HTTPS to external LoadBalancer does not require list of hostnames either
