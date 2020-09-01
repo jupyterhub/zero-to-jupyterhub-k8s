@@ -1181,6 +1181,16 @@ properties:
         description: |
           Annotations to apply to the hook and continous image puller pods. One example use case is to
           disable istio sidecars which could interfere with the image pulling.
+      resources:
+        type: object
+        description: |
+          These are standard Kubernetes resources with requests and limits for
+          cpu and memory. They will be used on the containers in the pods
+          pulling images. These should be set extremely low as the containers
+          shut down directly or is a pause container that just idles.
+
+          They were made configurable as usage of ResourceQuota may require
+          containers in the namespace to have explicit resources set.
       hook:
         description: |
           See the [*optimization
