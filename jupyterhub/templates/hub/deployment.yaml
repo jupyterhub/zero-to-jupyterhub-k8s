@@ -205,30 +205,7 @@ spec:
                   key: hub.db.password
             {{- end }}
             {{- end }}
-            {{- if .Values.hub.extraEnv }}
-            {{- $extraEnvType := typeOf .Values.hub.extraEnv }}
-            {{- /* If hub.extraEnv is a list, we inject it as it is. */}}
-            {{- if eq $extraEnvType "[]interface {}" }}
-            {{- .Values.hub.extraEnv | toYaml | trimSuffix "\n" | nindent 12 }}
-            {{- /* If hub.extraEnv is a map, we differentiate two cases:
-              - If hub.extraEnv.someKey has a map value, then we add the value
-                as a list element and ignore the key.
-              - If hub.extraEnv.someKey has a string value, then we use the
-                key as the environment variable name for the value.
-            */}}
-            {{- else if eq $extraEnvType "map[string]interface {}" }}
-            {{- range $key, $value := .Values.hub.extraEnv }}
-            {{- if eq (typeOf $value) "map[string]interface {}" }}
-            {{- $value | list | toYaml | nindent 12 }}
-            {{- else if eq (typeOf $value) "string" }}
-            - name: {{ $key | quote }}
-              value: {{ $value | quote }}
-            {{- else }}
-            {{ printf "hub.extraEnv.%s had an unexpected type (%s)" $key (typeOf $value) | fail }}
-            {{- end }}
-            {{- end }}
-            {{- end }}
-            {{- end }}
+            {{- include "jupyterhub.extraEnv" .Values.hub.extraEnv | nindent 12 }}
           ports:
             - name: http
               containerPort: 8081
