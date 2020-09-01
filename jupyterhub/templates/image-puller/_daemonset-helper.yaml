@@ -33,13 +33,19 @@ spec:
   template:
     metadata:
       labels:
-        {{- /* Changes here will cause the DaemonSet to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
       {{- with .Values.prePuller.annotations }}
       annotations:
         {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
       {{- end }}
     spec:
+      {{- /*
+        continuous-image-puller pods are made evictable to save on the k8s pods
+        per node limit all k8s clusters have.
+      */}}
+      {{- if and (not .hook) .Values.scheduling.podPriority.enabled }}
+      priorityClassName: {{ .Release.Name }}-user-placeholder-priority
+      {{- end }}
       tolerations:
         {{- include "jupyterhub.userTolerations" . | nindent 8 }}
       nodeSelector: {{ toJson .Values.singleuser.nodeSelector }}
