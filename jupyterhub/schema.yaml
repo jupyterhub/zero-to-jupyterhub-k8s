@@ -313,7 +313,7 @@ properties:
             - Configure code running in the hub pod, such as an authenticator or
               spawner.
 
-          String literals with $(ENV_VAR_NAME) will be expanded by Kubelet which
+          String literals with `$(ENV_VAR_NAME)` will be expanded by Kubelet which
           is a part of Kubernetes.
 
           ```yaml
@@ -896,10 +896,10 @@ properties:
         description: |
           Extra environment variables that should be set for the user pods.
 
-          String literals with $(ENV_VAR_NAME) will be expanded by Kubelet which
+          String literals with `$(ENV_VAR_NAME)` will be expanded by Kubelet which
           is a part of Kubernetes. Note that the user pods will already have
           access to a set of environment variables that you can use, like
-          JUPYTERHUB_USER and JUPYTERHUB_HOST. For more information about these
+          `JUPYTERHUB_USER` and `JUPYTERHUB_HOST`. For more information about these
           inspect [this source
           code](https://github.com/jupyterhub/jupyterhub/blob/cc8e7806530466dce8968567d1bbd2b39a7afa26/jupyterhub/spawner.py#L763).
 
