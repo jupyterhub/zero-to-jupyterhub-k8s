@@ -232,6 +232,8 @@ spec:
           livenessProbe:
             initialDelaySeconds: {{ .Values.hub.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.hub.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.hub.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.hub.livenessProbe.failureThreshold }}
             httpGet:
               path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
               port: http
@@ -240,6 +242,8 @@ spec:
           readinessProbe:
             initialDelaySeconds: {{ .Values.hub.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.hub.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.hub.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.hub.readinessProbe.failureThreshold }}
             httpGet:
               path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
               port: http
