@@ -90,10 +90,14 @@ hub:
     enabled: false
     initialDelaySeconds: 60
     periodSeconds: 10
+    failureThreshold: 3
+    timeoutSeconds: 1
   readinessProbe:
     enabled: true
     initialDelaySeconds: 0
     periodSeconds: 2
+    failureThreshold: 3
+    timeoutSeconds: 1
   # existingSecret: existing-secret
 
 rbac:
