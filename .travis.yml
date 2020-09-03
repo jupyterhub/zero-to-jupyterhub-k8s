@@ -124,7 +124,18 @@ jobs:
         - setup_kubeval
         - pip install yamllint
       script:
-        - tools/templates/lint-and-validate.py --kubernetes-versions 1.11.0,1.14.0,1.18.0
+        # NOTE: Kubernetes resource validation can only be done against
+        #       Kubernetes versions with schemas available in:
+        #       https://github.com/instrumenta/kubernetes-json-schema
+        #
+        # NOTE: The "helm template" command will evaluate
+        #       .Capabilities.APIVersion.Has in templates based on a Kubernetes
+        #       version associated with the helm binary's version. Since we
+        #       render the templates with a specific helm version, we end up
+        #       rendering templates using a mocked k8s version unrelated to the
+        #       Kubernetes version we want to validate against. This issue has
+        #       made us not validate against versions lower than 1.14.
+        - tools/templates/lint-and-validate.py --kubernetes-versions 1.14.0,1.18.0
 
     - stage: test
       name: docs:link-check
