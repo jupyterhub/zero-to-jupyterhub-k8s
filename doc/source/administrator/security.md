@@ -159,17 +159,11 @@ http://ssllabs.com/ssltest/analyze.html?d=<YOUR-DOMAIN>
 
 ## Secure access to Helm
 
-In its default configuration, helm pretty much allows root access to all other
-pods running in your cluster. See this [Bitnami Helm security article](https://engineering.bitnami.com/articles/helm-security.html)
-for more information. As a consequence, the default allows all users in your cluster to pretty much have root access to your whole cluster!
+Helm 3 supports the security, identity, and authorization features of modern Kubernetes. Helm’s permissions are evaluated using your kubeconfig file. Cluster administrators can restrict user permissions at whatever granularity they see fit.
 
-You can mitigate this by limiting public access to the Tiller API. To do so, use the following command:
+Read more about organizing cluster access using kubeconfig files in the
+[Kubernetes docs](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/).
 
-```bash
-kubectl --namespace=kube-system patch deployment tiller-deploy --type=json --patch='[{"op": "add", "path": "/spec/template/spec/containers/0/command", "value": ["/tiller", "--listen=localhost:44134"]}]'
-```
-
-This limit shouldn't affect helm functionality in any form.
 
 ## Audit Cloud Metadata server access
 
