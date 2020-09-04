@@ -78,6 +78,8 @@ spec:
             - /bin/sh
             - -c
             - echo "Pulling complete"
+          resources:
+            {{- .Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
         {{- range $k, $container := .Values.singleuser.profileList }}
         {{- if $container.kubespawner_override }}
         {{- if $container.kubespawner_override.image }}
@@ -87,6 +89,8 @@ spec:
             - /bin/sh
             - -c
             - echo "Pulling complete"
+          resources:
+            {{- .Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
         {{- end }}
         {{- end }}
         {{- end }}
@@ -100,6 +104,8 @@ spec:
             - /bin/sh
             - -c
             - echo "Pulling complete"
+          resources:
+            {{- .Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
         {{- end }}
         {{- range $k, $v := .Values.prePuller.extraImages }}
         - name: image-pull-{{ $k }}
@@ -111,6 +117,8 @@ spec:
             - /bin/sh
             - -c
             - echo "Pulling complete"
+          resources:
+            {{- $.Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
         {{- end }}
         {{- range $k, $container := .Values.singleuser.extraContainers }}
         - name: image-pull-singleuser-extra-container-{{ $k }}
@@ -122,8 +130,12 @@ spec:
             - /bin/sh
             - -c
             - echo "Pulling complete"
+          resources:
+            {{- $.Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
         {{- end }}
       containers:
         - name: pause
           image: {{ .Values.prePuller.pause.image.name }}:{{ .Values.prePuller.pause.image.tag }}
+          resources:
+            {{- .Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
 {{- end }}
