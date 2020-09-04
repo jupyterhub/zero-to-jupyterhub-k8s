@@ -195,7 +195,7 @@ in kubernetes that as a long list of cool use cases. Some example use cases are:
 2. Servers / other daemons that are used by code in your `hub.customConfig`
 
 The items in this list must be valid kubernetes
-[container specifications](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#container-v1-core).
+[container specifications](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#container-v1-core).
 
 ### Specifying suitable hub storage
 

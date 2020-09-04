@@ -346,7 +346,7 @@ This example is equivalent to that given in the
          - 'cn=operations,ou=groups,dc=wikimedia,dc=org'
 
 Example Auth0 Configuration
-------------------
+---------------------------
 
 Auth0 (even on free billing plan) allows you to leverage its OAuth flow. It is based on OpenID Connect implementation, but extends it. Assuming the application is already created and you fetched Client Id, Client Secret and Auth0 authorization domain.
 

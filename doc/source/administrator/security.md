@@ -2,7 +2,7 @@
 
 The information in this document focuses primarily on cloud based deployments. For on-premise deployments, additional security work that is specific to your installation method would also be required. Note that your specific installation's security needs might be more or less stringent than what we can offer you here.
 
-Brad Geesamen gave a wonderful talk titled [Hacking and Hardening Kubernetes by Example](https://kccncna17.sched.com/event/CU6z/hacking-and-hardening-kubernetes-clusters-by-example-i-brad-geesaman-symantec) at Kubecon NA 2017. You can [watch the talk](https://www.youtube.com/watch?v=vTgQLzeBfRU) or [read the slides](https://schd.ws/hosted_files/kccncna17/47/Hacking%20and%20Hardening%20Kubernetes%20By%20Example%20v1.pdf). Highly recommended that you do so to understand the security issues you are up against when using Kubernetes to run JupyterHub.
+Brad Geesamen gave a wonderful talk titled [Hacking and Hardening Kubernetes by Example](https://kccncna17.sched.com/event/CU6z/hacking-and-hardening-kubernetes-clusters-by-example-i-brad-geesaman-symantec) at Kubecon NA 2017. You can [watch the talk](https://www.youtube.com/watch?v=vTgQLzeBfRU) or [read the slides](https://github.com/sbueringer/kubecon-slides/blob/master/slides/2017-kubecon-na/Hacking%20and%20Hardening%20Kubernetes%20Clusters%20by%20Example%20%5BI%5D%20-%20Brad%20Geesaman%2C%20Symantec%20-%20Hacking%20and%20Hardening%20Kubernetes%20By%20Example%20v2.pdf). Highly recommended that you do so to understand the security issues you are up against when using Kubernetes to run JupyterHub.
 
 ## Reporting a security issue
 
@@ -145,9 +145,7 @@ proxy:
       service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "3600"
 ```
 
-Annotation options will vary by provider. Kubernetes provides a list for
-popular cloud providers in their
-[documentation](https://kubernetes.io/docs/concepts/cluster-administration/cloud-providers/).
+Annotation options will vary by provider.
 
 ### Confirm that your domain is running HTTPS
 
