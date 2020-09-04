@@ -308,20 +308,39 @@ properties:
         description: |
           Extra environment variables that should be set for the hub pod.
 
+          Environment variables are usually used to:
+            - Pass parameters to some custom code in `hub.extraConfig`.
+            - Configure code running in the hub pod, such as an authenticator or
+              spawner.
+
+          String literals with `$(ENV_VAR_NAME)` will be expanded by Kubelet which
+          is a part of Kubernetes.
+
           ```yaml
           hub:
             extraEnv:
-              MY_ENV_VARS_NAME: "my env vars value"
+              # basic notation (for literal values only)
+              MY_ENV_VARS_NAME1: "my env var value 1"
+
+              # explicit notation (the "name" field takes precedence)
+              HUB_NAMESPACE:
+                name: HUB_NAMESPACE
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.namespace
+
+              # implicit notation (the "name" field is implied)
+              PREFIXED_HUB_NAMESPACE:
+                value: "my-prefix-$(HUB_NAMESPACE)"
+              SECRET_VALUE:
+                valueFrom:
+                  secretKeyRef:
+                    name: my-k8s-secret
+                    key: password
           ```
 
-          **NOTE**: We still support this field being a list of
-          [EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#envvar-v1-core)
-          objects as well.
-
-          These are usually used in two circumstances:
-            - Passing parameters to some custom code specified with `extraConfig`
-            - Passing parameters to an authenticator or spawner that can be directly customized
-              by environment variables (rarer)
+          For more information, see the [Kubernetes EnvVar
+          specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#envvar-v1-core).
       extraConfig:
         type: object
         description: |
@@ -872,6 +891,43 @@ properties:
         description: |
           Deprecated and no longer does anything. Use the user-scheduler instead
           in order to accomplish a good packing of the user pods.
+      extraEnv:
+        type: object
+        description: |
+          Extra environment variables that should be set for the user pods.
+
+          String literals with `$(ENV_VAR_NAME)` will be expanded by Kubelet which
+          is a part of Kubernetes. Note that the user pods will already have
+          access to a set of environment variables that you can use, like
+          `JUPYTERHUB_USER` and `JUPYTERHUB_HOST`. For more information about these
+          inspect [this source
+          code](https://github.com/jupyterhub/jupyterhub/blob/cc8e7806530466dce8968567d1bbd2b39a7afa26/jupyterhub/spawner.py#L763).
+
+          ```yaml
+          singleuser:
+            extraEnv:
+              # basic notation (for literal values only)
+              MY_ENV_VARS_NAME1: "my env var value 1"
+
+              # explicit notation (the "name" field takes precedence)
+              USER_NAMESPACE:
+                name: USER_NAMESPACE
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.namespace
+
+              # implicit notation (the "name" field is implied)
+              PREFIXED_USER_NAMESPACE:
+                value: "my-prefix-$(USER_NAMESPACE)"
+              SECRET_VALUE:
+                valueFrom:
+                  secretKeyRef:
+                    name: my-k8s-secret
+                    key: password
+          ```
+
+          For more information, see the [Kubernetes EnvVar
+          specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#envvar-v1-core).
       extraTolerations:
         type: list
         description: |
