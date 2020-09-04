@@ -123,13 +123,14 @@ def test_hub_can_talk_to_proxy(api_request, request_data):
 def test_hub_api_request_user_spawn(api_request, jupyter_user, request_data, pebble_acme_ca_cert):
     """
     Tests the hub api's /users/:user/server POST endpoint. A user pod should be
-    created.
+    created with environment variables defined in singleuser.extraEnv etc.
     """
 
     print("asking kubespawner to spawn a server for a test user")
     r = api_request.post("/users/" + jupyter_user + "/server")
     assert r.status_code in (201, 202)
     try:
+        # check successfull spawn
         server_model = _wait_for_user_to_spawn(
             api_request, jupyter_user, request_data["test_timeout"]
         )
@@ -142,6 +143,14 @@ def test_hub_api_request_user_spawn(api_request, jupyter_user, request_data, peb
         )
         assert r.status_code == 200
         assert "version" in r.json()
+
+        # check user pod's extra environment variable
+        pod_name = server_model["state"]["pod_name"]
+        c = subprocess.run([
+            "kubectl", "exec", pod_name, "--",
+            "sh", "-c", "if [ -z $TEST_ENV_FIELDREF_TO_NAMESPACE ]; then exit 1; fi",
+        ])
+        assert c.returncode == 0, f"singleuser.extraEnv didn't lead to a mounted environment variable!"
     finally:
         _delete_server(api_request, jupyter_user, request_data["test_timeout"])
 
