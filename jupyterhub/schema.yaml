@@ -1190,6 +1190,19 @@ properties:
         properties:
           enabled:
             type: bool
+          strictCheckDuration:
+            description: |
+              In this initial duration, the `hook-image-awaiter` has the
+              criteria to await all the pods to finish image pulling. After this
+              duration the criteria switch to await all pods that have scheduled
+              to finish image pulling. This is useful as sometimes pods fail to
+              schedule because a node is maxed out on pods.
+
+              The default value is 10 seconds which gives ample time for the
+              pods that can schedule to actually schedule. For an infinite
+              duration, configure the value `-1`.
+            type: int
+
       continuous:
         description: |
           See the [*optimization

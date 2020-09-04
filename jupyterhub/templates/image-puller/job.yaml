@@ -43,4 +43,5 @@ spec:
             - -api-server-address=https://$(KUBERNETES_SERVICE_HOST):$(KUBERNETES_SERVICE_PORT)
             - -namespace={{ .Release.Namespace }}
             - -daemonset=hook-image-puller
+            - -strict-check-duration={{ .Values.prePuller.hook.strictCheckDuration }}
 {{- end }}
