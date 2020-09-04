@@ -21,6 +21,11 @@ This documentation is for jupyterhub chart version |release|, which deploys Jupy
 
 This version of the chart requires kubernetes ≥1.11 and helm ≥2.11.
 
+.. note::
+
+   Helm 2 is deprecated since of November 2019, and
+   `will receive bugfixes until August 13, 2020 <https://helm.sh/blog/covid-19-extending-helm-v2-bug-fixes>`_.
+   So, the Helm references in this documentation are Helm v3.
 
 .. _about-guide:
 
@@ -32,7 +37,7 @@ While doing this, you will gain valuable experience with:
 
 * **A cloud provider** such as Google Cloud, Microsoft Azure, Amazon EC2, IBM Cloud...
 * **Kubernetes** to manage resources on the cloud
-* **Helm** to configure and control the packaged JupyterHub installation
+* **Helm v3** to configure and control the packaged JupyterHub installation
 * **JupyterHub** to give users access to a Jupyter computing environment
 * **A terminal interface** on some operating system
 

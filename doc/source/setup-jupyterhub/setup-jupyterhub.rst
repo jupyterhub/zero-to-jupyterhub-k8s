@@ -87,8 +87,10 @@ Install JupyterHub
       RELEASE=jhub
       NAMESPACE=jhub
 
-      helm upgrade --install $RELEASE jupyterhub/jupyterhub \
-        --namespace $NAMESPACE  \
+      helm upgrade --cleanup-on-fail \
+        --install $RELEASE jupyterhub/jupyterhub \
+        --namespace $NAMESPACE \
+        --create-namespace \
         --version=0.9.0 \
         --values config.yaml
 
@@ -112,18 +114,18 @@ Install JupyterHub
         to your terminal. JupyterHub is being installed in the background.
 
       * If you get a ``release named <YOUR-RELEASE-NAME> already exists`` error,
-        then you should delete the release by running ``helm delete --purge
+        then you should delete the release by running ``helm delete
         <YOUR-RELEASE-NAME>``. Then reinstall by repeating this step. If it
         persists, also do ``kubectl delete namespace <YOUR-NAMESPACE>`` and try
         again.
 
       * In general, if something goes *wrong* with the install step, delete the
-        Helm release by running ``helm delete --purge <YOUR-RELEASE-NAME>``
+        Helm release by running ``helm delete <YOUR-RELEASE-NAME>``
         before re-running the install command.
 
       * If you're pulling from a large Docker image you may get a
         ``Error: timed out waiting for the condition`` error, add a
-        ``--timeout=SOME-LARGE-NUMBER-OF-SECONDS`` parameter to the ``helm
+        ``--timeout=<NUMBER-OF-MINUTES>m<NUMBER-OF-SECONDS>s`` parameter to the ``helm
         install`` command.
 
       * The ``--version`` parameter corresponds to the *version of the Helm
