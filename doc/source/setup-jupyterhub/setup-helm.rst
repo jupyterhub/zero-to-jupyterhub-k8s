@@ -35,8 +35,7 @@ simplest way to install Helm is to run Helm's installer script in a terminal:
    curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
 Helm 3 uses the same security mechanisms as other Kubernetes clients such as
-`kubectl`. Since it does not have a separate server process no special steps
-are required to secure it.
+`kubectl`.
 
 Verify
 ------
