@@ -203,7 +203,7 @@ hub:
 ```
 
 **NOTE**: We still support this field being a list of
-[EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#envvar-v1-core)
+[EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core)
 objects as well.
 
 These are usually used in two circumstances:
@@ -486,14 +486,14 @@ See the description of `singleuser.extraNodeAffinity`.
 #### singleuser.extraPodAntiAffinity.preferred
 
 Pass this field an array of
-[`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#weightedpodaffinityterm-v1-core)
+[`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#weightedpodaffinityterm-v1-core)
 objects.
 
 
 #### singleuser.extraPodAntiAffinity.required
 
 Pass this field an array of
-[`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#podaffinityterm-v1-core)
+[`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#podaffinityterm-v1-core)
 objects.
 
 
@@ -505,14 +505,14 @@ See the description of `singleuser.extraNodeAffinity`.
 #### singleuser.extraPodAffinity.preferred
 
 Pass this field an array of
-[`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#weightedpodaffinityterm-v1-core)
+[`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#weightedpodaffinityterm-v1-core)
 objects.
 
 
 #### singleuser.extraPodAffinity.required
 
 Pass this field an array of
-[`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#podaffinityterm-v1-core)
+[`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#podaffinityterm-v1-core)
 objects.
 
 
@@ -547,14 +547,14 @@ for more info.
 #### singleuser.extraNodeAffinity.preferred
 
 Pass this field an array of
-[`PreferredSchedulingTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#preferredschedulingterm-v1-core)
+[`PreferredSchedulingTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#preferredschedulingterm-v1-core)
 objects.
 
 
 #### singleuser.extraNodeAffinity.required
 
 Pass this field an array of
-[`NodeSelectorTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#nodeselectorterm-v1-core)
+[`NodeSelectorTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#nodeselectorterm-v1-core)
 objects.
 
 
@@ -693,7 +693,7 @@ See the [Kubernetes docs](https://kubernetes.io/docs/concepts/configuration/tain
 for more info.
 
 Pass this field an array of
-[`Toleration`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#toleration-v1-core)
+[`Toleration`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#toleration-v1-core)
 objects.
 
 
