@@ -1,7 +1,7 @@
 .. _setup-helm:
 
-Setting up Helm (v.3)
-=====================
+Setting up Helm
+===============
 
 `Helm <https://helm.sh/>`_, the package manager for Kubernetes, is a useful tool
 for: installing, upgrading and managing applications on a Kubernetes cluster.
@@ -14,14 +14,15 @@ multiple `yaml` files for package dependencies with the required variables, and
 then runs `kubectl apply` to apply the configuration to the resource and install
 the package.
 
-Helm 3 includes several major breaking changes including:
 
-- The Tiller server component is removed. Helm now uses the default Kubernetes
-  security mechanisms. This greatly improves security.
-- Uses a three way instead of two way strategic merge. This may affect how
-  upgrades are merged into an existing deployment.
+.. note::
 
-See the `Helm 3 FAQ <https://helm.sh/docs/faq/>`_ for more information.
+   If you previously installed Z2JH using Helm 2, it is worth noting that
+   Helm 3 includes several major **breaking changes**. See the
+   `Helm 3 FAQ <https://helm.sh/docs/faq/>`_ for more information.
+
+   For **migrating from Helm v2 to v3**, checkout the official
+   `Helm guide <https://helm.sh/docs/topics/v2_v3_migration/>`_.
 
 Installation
 ------------
