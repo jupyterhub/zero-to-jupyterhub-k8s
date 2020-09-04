@@ -35,8 +35,10 @@ simplest way to install Helm is to run Helm's installer script in a terminal:
 
    curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
-Helm 3 uses the same security mechanisms as other Kubernetes clients such as
-`kubectl`.
+* The minimum supported version of Helm in Z2JH is `3.2.0`.
+
+* Helm 3 uses the same security mechanisms as other Kubernetes clients such as `kubectl`.
+
 
 Verify
 ------
@@ -57,11 +59,5 @@ You should see an empty list since no Helm charts have been installed:
 Next Step
 ---------
 
-Helm 3 will not automatically create a namespace for JupyterHub.
-If you are using a namespace other than `default` create it now:
+Congratulations, Helm is now set up! Let's continue with :ref:`setup-jupyterhub`!
 
-.. code:: bash
-
-   kubectl create namespace $NAMESPACE
-
-Now continue with :ref:`setup-jupyterhub`.
