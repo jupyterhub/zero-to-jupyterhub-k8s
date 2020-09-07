@@ -1,9 +1,8 @@
 FROM ubuntu:20.04
 
-## NOTE: This is a default and be overridden by chartpress using the
-##       chartpress.yaml configuration
-ARG JUPYTERHUB_VERSION=1.1.*
 
+ENV DEBIAN_FRONTEND=noninteractive \
+    LANG=C.UTF-8
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
       git \
@@ -27,8 +26,6 @@ ARG NB_USER=jovyan
 ARG NB_UID=1000
 ARG HOME=/home/jovyan
 
-ENV LANG C.UTF-8
-
 RUN adduser --disabled-password \
     --gecos "Default user" \
     --uid ${NB_UID} \
@@ -38,6 +35,11 @@ RUN adduser --disabled-password \
 
 RUN python3 -m pip install --upgrade --no-cache setuptools pip
 COPY requirements.txt /tmp/requirements.txt
+
+## NOTE: This is a default and be overridden by chartpress using the
+##       chartpress.yaml configuration
+ARG JUPYTERHUB_VERSION=1.1.*
+
 RUN PYCURL_SSL_LIBRARY=openssl pip3 install --no-cache-dir \
          -r /tmp/requirements.txt \
          $(bash -c 'if [[ $JUPYTERHUB_VERSION == "git"* ]]; then \
