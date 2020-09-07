@@ -20,13 +20,6 @@ RUN apt-get update && \
       sqlite3 \
       curl \
       dnsutils \
-      # libc-bin explicitly added and pinned 2020-06-10 for a CVE found with trivy
-      # ref: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1712#issuecomment-656425028
-      libc-bin=2.27-3ubuntu1.2 \
-      $(bash -c 'if [[ $JUPYTERHUB_VERSION == "git"* ]]; then \
-        # workaround for https://bugs.launchpad.net/ubuntu/+source/nodejs/+bug/1794589
-        echo nodejs=8.10.0~dfsg-2ubuntu0.2 nodejs-dev=8.10.0~dfsg-2ubuntu0.2 npm; \
-      fi') \
       && \
     apt-get purge && apt-get clean
 
