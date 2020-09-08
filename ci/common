@@ -78,8 +78,6 @@ setup_traefik(){
         helm install traefik traefik/traefik \
           --namespace kube-system \
           --set image.tag=2.2 \
-          --set deployment.podAnnotations."hub\.jupyter\.org/network-access-hub": "true"
-          --set deployment.podAnnotations."hub\.jupyter\.org/network-access-singleuser": "true"
           --set providers.kubernetesCRD.enabled=false \
           --set ingressRoute.dashboard.enabled=false
     fi
@@ -113,6 +111,8 @@ await_dns() {
 await_traefik() {
     if  [ "$CONFIG_FILE" == "dev-config-external-ingress.yaml" ]; then
             kubectl rollout status --watch --timeout 300s deployment/traefik -n kube-system \
+         && kubectl label pod -l app.kubernetes.io/name=traefik hub.jupyter.org/network-access-hub=true \
+         && kubectl label pod -l app.kubernetes.io/name=traefik hub.jupyter.org/network-access-singleuser=true \
          || {
                 echo "Startup of Traefik failed!"
                 kubectl describe pod -n kube-system -l app.kubernetes.io/name=traefik
