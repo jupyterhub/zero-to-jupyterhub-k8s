@@ -267,3 +267,42 @@ limits:
   {{- end }}
 {{- end }}
 {{- end }}
+
+{{- /*
+  jupyterhub.extraEnv:
+    Output YAML formatted EnvVar entries for use in a containers env field.
+*/}}
+{{- define "jupyterhub.extraEnv" -}}
+{{- include "jupyterhub.extraEnv.withTrailingNewLine" . | trimSuffix "\n" }}
+{{- end }}
+
+{{- define "jupyterhub.extraEnv.withTrailingNewLine" -}}
+{{- if . }}
+{{- /* If extraEnv is a list, we inject it as it is. */}}
+{{- if eq (typeOf .) "[]interface {}" }}
+{{- . | toYaml }}
+
+{{- /* If extraEnv is a map, we differentiate two cases: */}}
+{{- else if eq (typeOf .) "map[string]interface {}" }}
+{{- range $key, $value := . }}
+{{- /*
+    - If extraEnv.someKey has a map value, then we add the value as a YAML
+      parsed list element and use the key as the name value unless its
+      explicitly set.
+*/}}
+{{- if eq (typeOf $value) "map[string]interface {}" }}
+{{- merge (dict) $value (dict "name" $key) | list | toYaml | println }}
+{{- /*
+    - If extraEnv.someKey has a string value, then we use the key as the
+      environment variable name for the value.
+*/}}
+{{- else if eq (typeOf $value) "string" -}}
+- name: {{ $key | quote }}
+  value: {{ $value | quote | println }}
+{{- else }}
+{{- printf "?.extraEnv.%s had an unexpected type (%s)" $key (typeOf $value) | fail }}
+{{- end }}
+{{- end }} {{- /* end of range */}}
+{{- end }}
+{{- end }} {{- /* end of: if . */}}
+{{- end }} {{- /* end of definition */}}

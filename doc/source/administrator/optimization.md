@@ -74,7 +74,7 @@ situations:
 
     **NOTE**: With this enabled your `helm upgrade` will take a long time if you
     introduce a new image as it will wait for the pulling to complete. We
-    recommend that you add `--timeout 600` or similar to your `helm upgrade`
+    recommend that you add `--timeout 10m0s` or similar to your `helm upgrade`
     command to give it enough time.
 
     The hook-image-puller is enabled by default. To disable it, use the

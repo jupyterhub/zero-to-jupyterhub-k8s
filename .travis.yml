@@ -14,14 +14,18 @@ services:
   - docker
 
 stages:
-  - name: test
   - name: publish
     if: tag IS present OR ( branch IN (master) AND type IN (push) )
+  - name: test
 
 before_install:
   # Exit immediately if a command exits with a non-zero status.
   - set -e
   - . ci/common
+  # NOTE: The latest docker python package (4.3.0) requires a more modern docker
+  #       version (newer than 18.06.0-ce / API version: 1.38) which is not yet
+  #       available on travis.
+  - pip install "docker~=4.2.0"
 
 # The default install script below will prepare a k8s cluster to work with, but
 # not install JupyterHub itself, as upgrade tests may want to make multiple

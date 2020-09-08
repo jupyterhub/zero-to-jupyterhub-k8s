@@ -48,8 +48,7 @@ hub:
   image:
     name: jupyterhub/k8s-hub
     tag: 'set-by-chartpress'
-    # pullSecrets:
-    #   - secretName
+    pullSecrets:
   resources:
     requests:
       cpu: 200m
@@ -91,10 +90,14 @@ hub:
     enabled: false
     initialDelaySeconds: 60
     periodSeconds: 10
+    failureThreshold: 3
+    timeoutSeconds: 1
   readinessProbe:
     enabled: true
     initialDelaySeconds: 0
     periodSeconds: 2
+    failureThreshold: 3
+    timeoutSeconds: 1
   # existingSecret: existing-secret
 
 rbac:
@@ -160,10 +163,7 @@ proxy:
   traefik:
     image:
       name: traefik
-      # NOTE: we are pinning to patch version only to ensure we don't use a
-      #       cached old version of v2.2. When we bump this to v2.3 we should
-      #       stop using the patch version.
-      tag: v2.2.4 # ref: https://hub.docker.com/_/traefik?tab=tags
+      tag: v2.3 # ref: https://hub.docker.com/_/traefik?tab=tags
     hsts:
       includeSubdomains: false
       preload: false
@@ -187,7 +187,7 @@ proxy:
     enabled: true
     minAvailable: 1
   https:
-    enabled: true
+    enabled: false
     type: letsencrypt
     #type: letsencrypt, manual, offload, secret
     letsencrypt:
@@ -328,7 +328,7 @@ scheduling:
     policy: {}
     image:
       name: gcr.io/google_containers/kube-scheduler-amd64
-      tag: v1.13.12
+      tag: v1.16.11
     nodeSelector: {}
     pdb:
       enabled: true
@@ -355,6 +355,13 @@ scheduling:
 
 prePuller:
   annotations: {}
+  resources:
+    requests:
+      cpu: 0
+      memory: 0
+    limits:
+      cpu: 10m
+      memory: 10Mi
   hook:
     enabled: true
     image:

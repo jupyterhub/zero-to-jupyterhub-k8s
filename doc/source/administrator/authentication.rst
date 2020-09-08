@@ -345,6 +345,36 @@ This example is equivalent to that given in the
          - 'cn=researcher,ou=groups,dc=wikimedia,dc=org'
          - 'cn=operations,ou=groups,dc=wikimedia,dc=org'
 
+Example Auth0 Configuration
+---------------------------
+
+Auth0 (even on free billing plan) allows you to leverage its OAuth flow. It is based on OpenID Connect implementation, but extends it. Assuming the application is already created and you fetched Client Id, Client Secret and Auth0 authorization domain.
+
+.. code-block:: yaml
+
+   hub:
+     extraEnv:
+       OAUTH_CALLBACK_URL: https://<HUB_DOMAIN>/hub/oauth_callback
+   auth:
+     type: custom
+     scopes: # that is essential to request certain scope, otherwise user profile call won't return anything
+       - "openid"
+       - "name"
+       - "profile"
+       - "email"
+     custom:
+       className: oauthenticator.generic.GenericOAuthenticator
+       config:
+         login_service: "My Auth0"
+         client_id: "<CLIENT_ID>"
+         client_secret: "<CLIENT_SECRET>"
+         authorize_url: https://<DOMAIN>.us.auth0.com/authorize
+         token_url: https://<DOMAIN>.us.auth0.com/oauth/token
+         userdata_url: https://<DOMAIN>.us.auth0.com/userinfo
+         userdata_method: GET
+         username_key: name # define the specific key to for username from JSON returned by `/userinfo`
+
+
 
 Adding a Whitelist
 ------------------

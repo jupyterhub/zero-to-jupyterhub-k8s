@@ -207,19 +207,7 @@ spec:
                   key: hub.db.password
             {{- end }}
             {{- end }}
-            {{- if .Values.hub.extraEnv }}
-            {{- $extraEnvType := typeOf .Values.hub.extraEnv }}
-            {{- /* If we have a list, embed that here directly. This allows for complex configuration from configmap, downward API, etc. */}}
-            {{- if eq $extraEnvType "[]interface {}" }}
-            {{- .Values.hub.extraEnv | toYaml | trimSuffix "\n" | nindent 12 }}
-            {{- else if eq $extraEnvType "map[string]interface {}" }}
-            {{- /* If we have a map, treat those as key-value pairs. */}}
-            {{- range $key, $value := .Values.hub.extraEnv }}
-            - name: {{ $key | quote }}
-              value: {{ $value | quote }}
-            {{- end }}
-            {{- end }}
-            {{- end }}
+            {{- include "jupyterhub.extraEnv" .Values.hub.extraEnv | nindent 12 }}
           ports:
             - name: http
               containerPort: 8081
@@ -234,6 +222,8 @@ spec:
           livenessProbe:
             initialDelaySeconds: {{ .Values.hub.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.hub.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.hub.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.hub.livenessProbe.failureThreshold }}
             httpGet:
               path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
               port: http
@@ -242,6 +232,8 @@ spec:
           readinessProbe:
             initialDelaySeconds: {{ .Values.hub.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.hub.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.hub.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.hub.readinessProbe.failureThreshold }}
             httpGet:
               path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
               port: http
