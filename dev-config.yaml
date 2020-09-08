@@ -68,11 +68,11 @@ singleuser:
             cidr: 104.28.9.110/32       # jupyter.org 1
         - ipBlock:
             cidr: 104.28.8.110/32       # jupyter.org 2
-            #  extraEnv:
-            #    TEST_ENV_FIELDREF_TO_NAMESPACE:
-            #      valueFrom:
-            #        fieldRef:
-            #          fieldPath: metadata.namespace
+  extraEnv:
+    TEST_ENV_FIELDREF_TO_NAMESPACE:
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
 
 prePuller:
   hook:
