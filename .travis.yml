@@ -92,17 +92,6 @@ jobs:
   ## helm versions: https://github.com/helm/helm/releases
 include:
     - stage: test
-      name: chart:k8s-1.18
-
-    - stage: test
-      name: chart:k8s-1.17
-      env: K3S_VERSION=v1.17.7+k3s1
-
-    - stage: test
-      name: chart:k8s-1.16
-      env: K3S_VERSION=v1.16.11+k3s1 k3s_disable_command=--no-deploy
-
-    - stage: test
       name: chart:install-latest-then-upgrade
       script:
         ## NOTE: To use Pebble in Travis CI, we require the ability to mount a
