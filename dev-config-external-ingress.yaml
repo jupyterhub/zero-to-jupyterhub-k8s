@@ -22,7 +22,7 @@ hub:
       admin: true
       apiToken: ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
   networkPolicy:
-    enabled: true
+    enabled: false
     egress:  # overrides allowance of 0.0.0.0/0
       # In kind/k3s clusters the Kubernetes API server is exposing this port
       - ports:
