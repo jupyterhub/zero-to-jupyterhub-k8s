@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: hub-db-dir
+  name: {{ .Release.Name }}-hub-db-dir
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
   {{- if .Values.hub.db.pvc.annotations }}

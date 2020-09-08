@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hub
+  name: {{ .Release.Name }}-hub
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
@@ -38,13 +38,13 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: hub-config
+            name: {{ .Release.Name }}-hub-config
         - name: secret
           secret:
             {{- if .Values.hub.existingSecret }}
             secretName: {{ .Values.hub.existingSecret }}
             {{- else }}
-            secretName: hub-secret
+            secretName: {{ .Release.Name }}-hub-secret
             {{- end }}
         {{- if .Values.hub.extraVolumes }}
         {{- .Values.hub.extraVolumes | toYaml | trimSuffix "\n" | nindent 8 }}
@@ -52,10 +52,10 @@ spec:
         {{- if eq .Values.hub.db.type "sqlite-pvc" }}
         - name: hub-db-dir
           persistentVolumeClaim:
-            claimName: hub-db-dir
+            claimName: {{ .Release.Name }}-hub-db-dir
         {{- end }}
       {{- if .Values.rbac.enabled }}
-      serviceAccountName: hub
+      serviceAccountName: {{ .Release.Name }}-hub
       {{- end }}
       securityContext:
         fsGroup: {{ .Values.hub.fsGid }}

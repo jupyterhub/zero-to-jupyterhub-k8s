@@ -2,14 +2,14 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: hub
+  name: {{ .Release.Name }}-hub
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: hub
+  name: {{ .Release.Name }}-hub
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 rules:
@@ -23,15 +23,15 @@ rules:
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: hub
+  name: {{ .Release.Name }}-hub
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 subjects:
   - kind: ServiceAccount
-    name: hub
+    name: {{ .Release.Name }}-hub
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: Role
-  name: hub
+  name: {{ .Release.Name }}-hub
   apiGroup: rbac.authorization.k8s.io
 {{- end }}

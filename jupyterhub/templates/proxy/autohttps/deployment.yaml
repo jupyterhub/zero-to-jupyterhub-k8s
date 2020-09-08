@@ -4,7 +4,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: autohttps
+  name: {{ .Release.Name }}-autohttps
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
@@ -25,7 +25,7 @@ spec:
         checksum/static-config: {{ include "jupyterhub.traefik.yaml" . | fromYaml | merge .Values.proxy.traefik.extraStaticConfig | toYaml | sha256sum }}
     spec:
       {{- if .Values.rbac.enabled }}
-      serviceAccountName: autohttps
+      serviceAccountName: {{ .Release.Name }}-autohttps
       {{- end }}
       {{- if .Values.scheduling.podPriority.enabled }}
       priorityClassName: {{ .Release.Name }}-default-priority

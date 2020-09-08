@@ -6,7 +6,7 @@ it would help in order to scale down a node.
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: user-placeholder
+  name: {{ .Release.Name }}-user-placeholder
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:

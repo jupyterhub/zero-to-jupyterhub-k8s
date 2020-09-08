@@ -9,7 +9,7 @@ command.
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: hook-image-awaiter
+  name: {{ .Release.Name }}-hook-image-awaiter
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
     hub.jupyter.org/deletable: "true"
@@ -30,11 +30,11 @@ spec:
     spec:
       restartPolicy: Never
       {{- if .Values.rbac.enabled }}
-      serviceAccountName: hook-image-awaiter
+      serviceAccountName: {{ .Release.Name }}-hook-image-awaiter
       {{- end }}
       containers:
         - image: {{ .Values.prePuller.hook.image.name }}:{{ .Values.prePuller.hook.image.tag }}
-          name: hook-image-awaiter
+          name: {{ .Release.Name }}-hook-image-awaiter
           imagePullPolicy: IfNotPresent
           command:
             - /image-awaiter

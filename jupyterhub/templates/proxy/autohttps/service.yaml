@@ -4,7 +4,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: proxy-http
+  name: {{ .Release.Name }}-proxy-http
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
     {{- range $key, $value := .Values.proxy.service.labels }}

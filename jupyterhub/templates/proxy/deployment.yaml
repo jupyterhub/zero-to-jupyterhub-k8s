@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: proxy
+  name: {{ .Release.Name }}-proxy
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
@@ -41,7 +41,7 @@ spec:
       volumes:
         - name: tls-secret
           secret:
-            secretName: proxy-manual-tls
+            secretName: {{ .Release.Name }}-proxy-manual-tls
       {{- else if $manualHTTPSwithsecret }}
       volumes:
         - name: tls-secret

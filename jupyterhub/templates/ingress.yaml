@@ -6,7 +6,7 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
-  name: jupyterhub
+  name: {{ .Release.Name }}-jupyterhub
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
   {{- if .Values.ingress.annotations }}
@@ -23,7 +23,7 @@ spec:
         paths:
           - path: {{ $.Values.hub.baseUrl }}{{ $.Values.ingress.pathSuffix }}
             backend:
-              serviceName: proxy-public
+              serviceName: {{ .Release.Name }}-proxy-public
               servicePort: 80
     {{- end }}
   {{- if .Values.ingress.tls }}
