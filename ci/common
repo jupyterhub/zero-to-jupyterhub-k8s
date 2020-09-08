@@ -111,8 +111,8 @@ await_dns() {
 await_traefik() {
     if  [ "$CONFIG_FILE" == "dev-config-external-ingress.yaml" ]; then
             kubectl rollout status --watch --timeout 300s deployment/traefik -n kube-system \
-         && kubectl label pod -l app.kubernetes.io/name=traefik hub.jupyter.org/network-access-hub=true \
-         && kubectl label pod -l app.kubernetes.io/name=traefik hub.jupyter.org/network-access-singleuser=true \
+         && kubectl label pod -n kube-system -l app.kubernetes.io/name=traefik hub.jupyter.org/network-access-hub=true \
+         && kubectl label pod -n kube-system -l app.kubernetes.io/name=traefik hub.jupyter.org/network-access-singleuser=true \
          || {
                 echo "Startup of Traefik failed!"
                 kubectl describe pod -n kube-system -l app.kubernetes.io/name=traefik
