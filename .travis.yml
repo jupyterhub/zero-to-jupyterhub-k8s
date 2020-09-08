@@ -17,6 +17,7 @@ stages:
   - name: publish
     if: tag IS present OR ( branch IN (master) AND type IN (push) )
   - name: test
+  - name: check
 
 before_install:
   # Exit immediately if a command exits with a non-zero status.
@@ -91,7 +92,7 @@ jobs:
   ## k3s versions:  https://github.com/rancher/k3s/releases
   ## helm versions: https://github.com/helm/helm/releases
 include:
-    - stage: test
+    - stage: check
       name: chart:install-latest-then-upgrade
       script:
         ## NOTE: To use Pebble in Travis CI, we require the ability to mount a
@@ -117,7 +118,7 @@ include:
         # Run tests
         - pytest --verbose --exitfirst ./tests
 
-    - stage: test
+    - stage: check
       name: chart:lint-and-validate
       install:
         - setup_helm
@@ -137,7 +138,7 @@ include:
         #       made us not validate against versions lower than 1.14.
         - tools/templates/lint-and-validate.py --kubernetes-versions 1.14.0,1.18.0
 
-    - stage: test
+    - stage: check
       name: docs:link-check
       install:
         - pip install --no-cache-dir -r doc/doc-requirements.txt
