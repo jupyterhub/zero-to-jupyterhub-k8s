@@ -41,6 +41,7 @@ changes to your `config.yaml` file:
    ```yaml
    proxy:
      https:
+       enabled: true
        hosts:
          - <your-domain-name>
        letsencrypt:
@@ -80,8 +81,7 @@ There are two ways to specify your manual certificate, directly in the config.ya
     ```yaml
     proxy:
       https:
-        hosts:
-          - <your-domain-name>
+        enabled: true
         type: manual
         manual:
           key: |
@@ -109,6 +109,7 @@ There are two ways to specify your manual certificate, directly in the config.ya
     ```yaml
     proxy:
       https:
+        enabled: true
         hosts:
           - <your-domain-name>
         type: secret
