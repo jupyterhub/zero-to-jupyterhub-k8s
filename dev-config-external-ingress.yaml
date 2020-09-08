@@ -55,7 +55,7 @@ hub:
             }
             return routes
 
-      c.JupyterHub.proxy_class = 'FixedKubeIngressProxy'
+      c.JupyterHub.proxy_class = FixedKubeIngressProxy
 
 
 
