@@ -122,18 +122,16 @@ await_traefik() {
 }
 
 await_pebble() {
-    if  [ "$CONFIG_FILE" == "dev-config-external-ingress.yaml" ]; then
-        kubectl rollout status --watch --timeout 300s deployment/pebble \
-     && kubectl rollout status --watch --timeout 300s deployment/pebble-coredns \
-     || {
-            echo "Startup of Pebble failed!"
-            kubectl describe pod -l app.kubernetes.io/name=pebble
-            kubectl logs deploy/pebble --all-containers # --prefix
-            kubectl describe pod -l app.kubernetes.io/name=pebble-coredns
-            kubectl logs deploy/pebble-coredns --all-containers # --prefix
-            exit 1
-        }
-    fi
+    kubectl rollout status --watch --timeout 300s deployment/pebble \
+ && kubectl rollout status --watch --timeout 300s deployment/pebble-coredns \
+ || {
+        echo "Startup of Pebble failed!"
+        kubectl describe pod -l app.kubernetes.io/name=pebble
+        kubectl logs deploy/pebble --all-containers # --prefix
+        kubectl describe pod -l app.kubernetes.io/name=pebble-coredns
+        kubectl logs deploy/pebble-coredns --all-containers # --prefix
+        exit 1
+    }
 }
 
 await_jupyterhub() {
