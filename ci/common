@@ -171,25 +171,27 @@ await_jupyterhub() {
 }
 
 await_autohttps_tls_cert_acquisition() {
-    i=0; while [ $i -ne 60 ]; do
-        kubectl logs deploy/pebble -c pebble | grep "Issued certificate" \
-        && acquired_cert=true && break \
-        || acquired_cert=false && sleep 0.5 && i=$((i + 1))
-    done
-    if [ "$acquired_cert" != "true" ]; then
-        echo "Certificate acquisition failed!"
-        kubectl get service,networkpolicy,configmap,pod
-        kubectl describe pod -l app.kubernetes.io/name=pebble
-        kubectl logs deploy/pebble --all-containers # --prefix
-        kubectl describe pod -l app.kubernetes.io/name=pebble-coredns
-        kubectl logs deploy/pebble-coredns --all-containers # --prefix
-        kubectl describe pod -l component=autohttps
-        kubectl logs deploy/autohttps --all-containers # --prefix
-        exit 1
+    if [ "$CONFIG_FILE" == "dev-config.yaml" ]; then
+        i=0; while [ $i -ne 60 ]; do
+            kubectl logs deploy/pebble -c pebble | grep "Issued certificate" \
+            && acquired_cert=true && break \
+            || acquired_cert=false && sleep 0.5 && i=$((i + 1))
+        done
+        if [ "$acquired_cert" != "true" ]; then
+            echo "Certificate acquisition failed!"
+            kubectl get service,networkpolicy,configmap,pod
+            kubectl describe pod -l app.kubernetes.io/name=pebble
+            kubectl logs deploy/pebble --all-containers # --prefix
+            kubectl describe pod -l app.kubernetes.io/name=pebble-coredns
+            kubectl logs deploy/pebble-coredns --all-containers # --prefix
+            kubectl describe pod -l component=autohttps
+            kubectl logs deploy/autohttps --all-containers # --prefix
+            exit 1
+        fi
+        # a precausion as pebble logs is a bad indicator of the readiness state of
+        # Traefik's readiness to use the cert for TLS termination.
+        sleep 1
     fi
-    # a precausion as pebble logs is a bad indicator of the readiness state of
-    # Traefik's readiness to use the cert for TLS termination.
-    sleep 1
 }
 
 setup_kubeval () {
