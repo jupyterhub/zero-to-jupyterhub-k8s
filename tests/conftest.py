@@ -65,6 +65,7 @@ def pebble_acme_ca_cert():
 class JupyterRequest(object):
     def __init__(self, request_data, pebble_acme_ca_cert):
         self.request_data = request_data
+        print(self.request_data)
         self.pebble_acme_ca_cert = pebble_acme_ca_cert
 
     def _setup_kwargs(self, kwargs):

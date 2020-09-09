@@ -1,0 +1,89 @@
+proxy:
+  secretToken: pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
+  service:
+    type: NodePort
+    nodePorts:
+      http: 30080
+      https: 30443
+  externalIngressController: true
+  networkPolicy:
+    enabled: true
+    egress: []  # overrides allowance of 0.0.0.0/0
+
+hub:
+  #  image:
+  #  name: remche/k8s-hub
+  #  tag: ingress-extv1b1
+  cookieSecret: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+  db:
+    type: sqlite-memory
+  services:
+    test:
+      admin: true
+      apiToken: ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+  networkPolicy:
+    enabled: true
+    egress:  # overrides allowance of 0.0.0.0/0
+      # In kind/k3s clusters the Kubernetes API server is exposing this port
+      - ports:
+        - protocol: TCP
+          port: 6443
+  resources:
+    requests:
+      memory: 0
+      cpu: 0
+  extraConfig:
+    fix_kubespawner.py: |
+      from tornado import gen
+      from kubespawner.proxy import KubeIngressProxy
+
+      class FixedKubeIngressProxy(KubeIngressProxy):
+        @gen.coroutine
+        def get_all_routes(self):
+            # copy everything, because iterating over this directly is not threadsafe
+            # FIXME: is this performance intensive? It could be! Measure?
+            # FIXME: Validate that this shallow copy *is* thread safe
+            ingress_copy = dict(self.ingress_reflector.ingresses)
+            routes = {
+                ingress["metadata"]["annotations"]['hub.jupyter.org/proxy-routespec']:
+                {
+                    'routespec': ingress["metadata"]["annotations"]['hub.jupyter.org/proxy-routespec'],
+                    'target': ingress["metadata"]["annotations"]['hub.jupyter.org/proxy-target'],
+                    'data': json.loads(ingress["metadata"]["annotations"]['hub.jupyter.org/proxy-data'])
+                }
+                for ingress in ingress_copy.values()
+            }
+            return routes
+
+      c.JupyterHub.proxy_class = FixedKubeIngressProxy
+      c.FixedKubeIngressProxy.should_start = False
+
+
+
+singleuser:
+  storage:
+    type: none
+  memory:
+    guarantee: null
+  networkPolicy:
+    enabled: true
+    # For testing purposes in test_singleuser_netpol
+    egress:
+      - to:
+        - ipBlock:
+            cidr: 104.28.9.110/32       # jupyter.org 1
+        - ipBlock:
+            cidr: 104.28.8.110/32       # jupyter.org 2
+  extraEnv:
+    TEST_ENV_FIELDREF_TO_NAMESPACE:
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+
+
+prePuller:
+  hook:
+    enabled: false
+
+debug:
+  enabled: true

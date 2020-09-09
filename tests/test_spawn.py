@@ -107,17 +107,18 @@ def test_hub_can_talk_to_proxy(api_request, request_data):
         [I 2019-09-25 12:03:12.395 JupyterHub log:174] 200 GET /hub/api/proxy (test@127.0.0.1) 13.48ms
     """
 
-    endtime = time.time() + request_data["test_timeout"]
-    while time.time() < endtime:
-        try:
-            r = api_request.get("/proxy")
-            if r.status_code == 200:
-                break
-            print(r.json())
-        except requests.RequestException as e:
-            print(e)
-        time.sleep(1)
-    assert r.status_code == 200, "Failed to get /proxy"
+    if os.environ.get("CONFIG_FILE") != "dev-config-external-ingress.yaml":
+        endtime = time.time() + request_data["test_timeout"]
+        while time.time() < endtime:
+            try:
+                r = api_request.get("/proxy")
+                if r.status_code == 200:
+                    break
+                print(r.json())
+            except requests.RequestException as e:
+                print(e)
+            time.sleep(1)
+        assert r.status_code == 200, "Failed to get /proxy"
 
 
 def test_hub_api_request_user_spawn(api_request, jupyter_user, request_data, pebble_acme_ca_cert):

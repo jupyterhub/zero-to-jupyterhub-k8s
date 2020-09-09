@@ -17,6 +17,7 @@ stages:
   - name: publish
     if: tag IS present OR ( branch IN (master) AND type IN (push) )
   - name: test
+  - name: check
 
 before_install:
   # Exit immediately if a command exits with a non-zero status.
@@ -37,6 +38,7 @@ install:
   # Setup our k3s based Kubernetes cluster and use its kubectl as well
   - setup_k3s
   - setup_helm
+  - setup_traefik
   - helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
   - helm repo update
 
@@ -50,10 +52,11 @@ install:
   # Pre-install JupyterHub
   - await_dns     # part of k3s, jupyterhub needs it while referencing https://pebble/dir
   - await_calico  # installed with setup_k3s, enforces netpol
+  - await_traefik
   - await_pebble  # jupyterhub's autohttps communicates with it as the ACME server
 script:
   # Install JupyterHub
-  - helm install jupyterhub ./jupyterhub --values dev-config.yaml
+  - helm install jupyterhub ./jupyterhub --values $CONFIG_FILE
   - await_jupyterhub
   - await_autohttps_tls_cert_acquisition
 
@@ -61,6 +64,15 @@ script:
   - pytest --verbose --exitfirst ./tests
 
 env:
+  jobs:
+    - K3S_VERSION=v1.18.3+k3s1 CONFIG_FILE=dev-config.yaml
+    - K3S_VERSION=v1.17.6+k3s1 CONFIG_FILE=dev-config.yaml
+    - K3S_VERSION=v1.16.10+k3s1 k3s_disable_command=--no-deploy CONFIG_FILE=dev-config.yaml
+
+    - K3S_VERSION=v1.18.3+k3s1 CONFIG_FILE=dev-config-external-ingress.yaml HUB_URL='http://localhost:80'
+    - K3S_VERSION=v1.17.6+k3s1 CONFIG_FILE=dev-config-external-ingress.yaml HUB_URL='http://local.jovyan.org:80'
+    - K3S_VERSION=v1.16.10+k3s1 k3s_disable_command=--no-deploy CONFIG_FILE=dev-config-external-ingress.yaml HUB_URL='http://local.jovyan.org:80'
+
   # Global environment variables will act as defaults, jobs will override them
   global:
     - K3S_VERSION=v1.18.4+k3s1
@@ -79,19 +91,8 @@ jobs:
   ## define individual jobs that can rely on defaults from above
   ## k3s versions:  https://github.com/rancher/k3s/releases
   ## helm versions: https://github.com/helm/helm/releases
-  include:
-    - stage: test
-      name: chart:k8s-1.18
-
-    - stage: test
-      name: chart:k8s-1.17
-      env: K3S_VERSION=v1.17.7+k3s1
-
-    - stage: test
-      name: chart:k8s-1.16
-      env: K3S_VERSION=v1.16.11+k3s1 k3s_disable_command=--no-deploy
-
-    - stage: test
+include:
+    - stage: check
       name: chart:install-latest-then-upgrade
       script:
         ## NOTE: To use Pebble in Travis CI, we require the ability to mount a
@@ -117,7 +118,7 @@ jobs:
         # Run tests
         - pytest --verbose --exitfirst ./tests
 
-    - stage: test
+    - stage: check
       name: chart:lint-and-validate
       install:
         - setup_helm
@@ -137,7 +138,7 @@ jobs:
         #       made us not validate against versions lower than 1.14.
         - tools/templates/lint-and-validate.py --kubernetes-versions 1.14.0,1.18.0
 
-    - stage: test
+    - stage: check
       name: docs:link-check
       install:
         - pip install --no-cache-dir -r doc/doc-requirements.txt

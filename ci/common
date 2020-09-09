@@ -33,11 +33,11 @@ setup_k3s () {
     # NOTE: k3s 1.16 and older needed a flag named --no-deploy instead of
     #       --disable.
     #
+    DISABLE="${k3s_disable_command:---disable} metrics-server ${k3s_disable_command:---disable} local-storage ${k3s_disable_command:---disable} traefik"
+
     curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${K3S_VERSION} sh -s - \
         --write-kubeconfig-mode=644 \
-        "${k3s_disable_command:---disable}" metrics-server \
-        "${k3s_disable_command:---disable}" traefik \
-        "${k3s_disable_command:---disable}" local-storage \
+        ${DISABLE} \
         --disable-network-policy \
         --flannel-backend=none \
         --docker \
@@ -70,6 +70,18 @@ setup_calico() {
   | kubectl apply -f -
 }
 
+setup_traefik(){
+    if  [ "$CONFIG_FILE" == "dev-config-external-ingress.yaml" ]; then
+        # Manually install Traefik because k3s version wont work in Travis CI.
+        helm repo add traefik https://containous.github.io/traefik-helm-chart
+        helm repo update
+        helm install traefik traefik/traefik \
+          --set image.tag=2.2 \
+          --set providers.kubernetesCRD.enabled=false \
+          --set ingressRoute.dashboard.enabled=false
+    fi
+}
+
 # FIXME: we cannot use --prefix with kubectl logs unless we have kubectl 1.17+
 
 await_calico() {
@@ -95,60 +107,93 @@ await_dns() {
     }
 }
 
+await_traefik() {
+    if  [ "$CONFIG_FILE" == "dev-config-external-ingress.yaml" ]; then
+            kubectl rollout status --watch --timeout 300s deployment/traefik \
+         && kubectl label pod -l app.kubernetes.io/name=traefik hub.jupyter.org/network-access-hub=true \
+         && kubectl label pod -l app.kubernetes.io/name=traefik hub.jupyter.org/network-access-singleuser=true \
+         || {
+                echo "Startup of Traefik failed!"
+                kubectl describe pod -l app.kubernetes.io/name=traefik
+                kubectl logs deployment/traefik --all-containers # --prefix
+                exit 1
+            }
+    fi
+}
+
 await_pebble() {
-    kubectl rollout status --watch --timeout 300s deployment/pebble \
- && kubectl rollout status --watch --timeout 300s deployment/pebble-coredns \
- || {
-        echo "Startup of Pebble failed!"
-        kubectl describe pod -l app.kubernetes.io/name=pebble
-        kubectl logs deploy/pebble --all-containers # --prefix
-        kubectl describe pod -l app.kubernetes.io/name=pebble-coredns
-        kubectl logs deploy/pebble-coredns --all-containers # --prefix
-        exit 1
-    }
+    if  [ "$CONFIG_FILE" == "dev-config-external-ingress.yaml" ]; then
+        kubectl rollout status --watch --timeout 300s deployment/pebble \
+     && kubectl rollout status --watch --timeout 300s deployment/pebble-coredns \
+     || {
+            echo "Startup of Pebble failed!"
+            kubectl describe pod -l app.kubernetes.io/name=pebble
+            kubectl logs deploy/pebble --all-containers # --prefix
+            kubectl describe pod -l app.kubernetes.io/name=pebble-coredns
+            kubectl logs deploy/pebble-coredns --all-containers # --prefix
+            exit 1
+        }
+    fi
 }
 
 await_jupyterhub() {
-    kubectl rollout status --watch --timeout 300s deployment/proxy \
- && kubectl rollout status --watch --timeout 300s deployment/hub \
- && (
-        if kubectl get deploy/autohttps &> /dev/null; then
-            kubectl rollout status --watch --timeout 300s deployment/autohttps || exit 1
-        fi
-    )\
- || {
-        echo "Startup of JupyterHub failed!"
-        kubectl get all
-        kubectl describe pod -l component=hub
-        kubectl logs deploy/hub --all-containers # --prefix
-        kubectl describe pod -l component=proxy
-        kubectl logs deploy/proxy --all-containers # --prefix
-        kubectl describe pod -l component=autohttps || true
-        kubectl logs deploy/autohttps --all-containers || true # --prefix || true
-        exit 1
-    }
+    if [ "$CONFIG_FILE" == "dev-config.yaml" ]; then
+            kubectl rollout status --watch --timeout 300s deployment/proxy \
+         && kubectl rollout status --watch --timeout 300s deployment/hub \
+         && (
+                if kubectl get deploy/autohttps &> /dev/null; then
+                    kubectl rollout status --watch --timeout 300s deployment/autohttps || exit 1
+                fi
+            )\
+         || {
+                echo "Startup of JupyterHub failed!"
+                kubectl get all
+                kubectl describe pod -l component=hub
+                kubectl logs deploy/hub --all-containers # --prefix
+                kubectl describe pod -l component=proxy
+                kubectl logs deploy/proxy --all-containers # --prefix
+                kubectl describe pod -l component=autohttps || true
+                kubectl logs deploy/autohttps --all-containers || true # --prefix || true
+                exit 1
+            }
+    elif  [ "$CONFIG_FILE" == "dev-config-external-ingress.yaml" ]; then
+           kubectl rollout status --watch --timeout 300s deployment/hub \
+       || {
+           echo "Startup of JupyterHub failed!"
+           kubectl get all
+           kubectl describe pod -l component=hub
+           kubectl logs deploy/hub --all-containers # --prefix
+           exit 1
+            }
+           kubectl logs deploy/hub --all-containers # --prefix
+           kubectl describe ingress -A     
+           kubectl describe service -A     
+           curl http://localhost:80/hub/api
+    fi
 }
 
 await_autohttps_tls_cert_acquisition() {
-    i=0; while [ $i -ne 60 ]; do
-        kubectl logs deploy/pebble -c pebble | grep "Issued certificate" \
-        && acquired_cert=true && break \
-        || acquired_cert=false && sleep 0.5 && i=$((i + 1))
-    done
-    if [ "$acquired_cert" != "true" ]; then
-        echo "Certificate acquisition failed!"
-        kubectl get service,networkpolicy,configmap,pod
-        kubectl describe pod -l app.kubernetes.io/name=pebble
-        kubectl logs deploy/pebble --all-containers # --prefix
-        kubectl describe pod -l app.kubernetes.io/name=pebble-coredns
-        kubectl logs deploy/pebble-coredns --all-containers # --prefix
-        kubectl describe pod -l component=autohttps
-        kubectl logs deploy/autohttps --all-containers # --prefix
-        exit 1
+    if [ "$CONFIG_FILE" == "dev-config.yaml" ]; then
+        i=0; while [ $i -ne 60 ]; do
+            kubectl logs deploy/pebble -c pebble | grep "Issued certificate" \
+            && acquired_cert=true && break \
+            || acquired_cert=false && sleep 0.5 && i=$((i + 1))
+        done
+        if [ "$acquired_cert" != "true" ]; then
+            echo "Certificate acquisition failed!"
+            kubectl get service,networkpolicy,configmap,pod
+            kubectl describe pod -l app.kubernetes.io/name=pebble
+            kubectl logs deploy/pebble --all-containers # --prefix
+            kubectl describe pod -l app.kubernetes.io/name=pebble-coredns
+            kubectl logs deploy/pebble-coredns --all-containers # --prefix
+            kubectl describe pod -l component=autohttps
+            kubectl logs deploy/autohttps --all-containers # --prefix
+            exit 1
+        fi
+        # a precausion as pebble logs is a bad indicator of the readiness state of
+        # Traefik's readiness to use the cert for TLS termination.
+        sleep 1
     fi
-    # a precausion as pebble logs is a bad indicator of the readiness state of
-    # Traefik's readiness to use the cert for TLS termination.
-    sleep 1
 }
 
 setup_kubeval () {
