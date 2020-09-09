@@ -16,8 +16,8 @@ services:
 stages:
   - name: publish
     if: tag IS present OR ( branch IN (master) AND type IN (push) )
-  - name: test
   - name: check
+  - name: test
 
 before_install:
   # Exit immediately if a command exits with a non-zero status.
