@@ -20,9 +20,7 @@ data:
 {{- $_ := set $values "hub" (omit $values.hub "cookieSecret" "extraEnv" "extraConfigMap") -}}
 {{- $_ := set $values.hub "services" dict }}
 {{- range $key, $service := .Values.hub.services }}
-  {{- if $service.apiToken }}
-    {{- $_ := set $values.hub.services $key (omit $service "apiToken") }}
-  {{- end }}
+  {{- $_ := set $values.hub.services $key (omit $service "apiToken") }}
 {{- end }}
 {{- /* proxy */ -}}
 {{- $_ := set $values "proxy" (pick $values.proxy "externalIngressController") }}

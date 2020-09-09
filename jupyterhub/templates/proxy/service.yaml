@@ -1,9 +1,19 @@
+<<<<<<< HEAD
 {{- if eq .Values.proxy.externalIngressController false }}
 {{- $HTTPS := .Values.proxy.https.enabled -}}
 {{- $autoHTTPS := and $HTTPS (and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
 {{- $offloadHTTPS := and $HTTPS (eq .Values.proxy.https.type "offload") -}}
 {{- $manualHTTPS := and $HTTPS (eq .Values.proxy.https.type "manual") -}}
 {{- $manualHTTPSwithsecret := and $HTTPS (eq .Values.proxy.https.type "secret") -}}
+=======
+{{- $enabled := .Values.proxy.https.enabled -}}
+{{- $autoHTTPS := and $enabled (and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
+{{- $manualHTTPS := and $enabled (eq .Values.proxy.https.type "manual") -}}
+{{- $manualHTTPSwithsecret := and $enabled (eq .Values.proxy.https.type "secret") -}}
+{{- $offloadHTTPS := and $enabled (eq .Values.proxy.https.type "offload") -}}
+{{- $valid := or $autoHTTPS (or $manualHTTPS (or $manualHTTPSwithsecret $offloadHTTPS)) -}}
+{{- $HTTPS := and $enabled $valid  -}}
+>>>>>>> upstream/master
 apiVersion: v1
 kind: Service
 metadata:
@@ -44,6 +54,9 @@ spec:
     {{- if $HTTPS }}
     - name: https
       port: 443
+      # When HTTPS termination is handled outside our helm chart, pass traffic
+      # coming in via this Service's port 443 to targeted pod's port meant for
+      # HTTP traffic.
       {{- if $offloadHTTPS }}
       targetPort: http
       {{- else }}

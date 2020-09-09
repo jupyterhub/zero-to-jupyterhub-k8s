@@ -74,7 +74,7 @@ situations:
 
     **NOTE**: With this enabled your `helm upgrade` will take a long time if you
     introduce a new image as it will wait for the pulling to complete. We
-    recommend that you add `--timeout 600` or similar to your `helm upgrade`
+    recommend that you add `--timeout 10m0s` or similar to your `helm upgrade`
     command to give it enough time.
 
     The hook-image-puller is enabled by default. To disable it, use the
@@ -230,7 +230,7 @@ and some JupyterHub pods (without a permissive
 Consider for example that many users arrive to your JupyterHub during the
 daytime. New nodes are added by the CA. Some system pod ends up on the new nodes
 along with the user pods for some reason. At night when the
-[*culler*](user-management.html#culling-user-pods) has removed many inactive
+[*culler*](/customizing/user-management.html#culling-user-pods) has removed many inactive
 pods from some nodes. They are now free from user pods but there is still a
 single system pod stopping the CA from removing the node.
 

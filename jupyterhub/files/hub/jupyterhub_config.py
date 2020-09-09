@@ -117,6 +117,7 @@ set_config_if_not_none(
 for trait, cfg_key in (
     ('start_timeout', None),
     ('image_pull_policy', 'image.pullPolicy'),
+    ('image_pull_secrets', 'image.pullSecrets'),
     ('events_enabled', 'events'),
     ('extra_labels', None),
     ('extra_annotations', None),
@@ -252,7 +253,9 @@ elif storage_type == 'static':
 c.KubeSpawner.volumes.extend(get_config('singleuser.storage.extraVolumes', []))
 c.KubeSpawner.volume_mounts.extend(get_config('singleuser.storage.extraVolumeMounts', []))
 
-# Gives spawned containers access to the API of the hub
+# Gives spawned containers access to the API of the hub.
+# Note that the HUB_SERVICE_* values come from kubernetes:
+# https://kubernetes.io/docs/concepts/services-networking/service/#environment-variables
 c.JupyterHub.hub_connect_ip = os.environ['HUB_SERVICE_HOST']
 c.JupyterHub.hub_connect_port = int(os.environ['HUB_SERVICE_PORT'])
 

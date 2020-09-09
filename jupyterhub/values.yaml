@@ -11,7 +11,6 @@ hub:
   cookieSecret:
   publicURL:
   initContainers: []
-  uid: 1000
   fsGid: 1000
   nodeSelector: {}
   concurrentSpawnLimit: 64
@@ -49,12 +48,14 @@ hub:
   image:
     name: jupyterhub/k8s-hub
     tag: 'set-by-chartpress'
-    # pullSecrets:
-    #   - secretName
+    pullSecrets:
   resources:
     requests:
       cpu: 200m
       memory: 512Mi
+  containerSecurityContext:
+    runAsUser: 1000
+    allowPrivilegeEscalation: false
   services: {}
   imagePullSecret:
     enabled: false
@@ -89,10 +90,14 @@ hub:
     enabled: false
     initialDelaySeconds: 60
     periodSeconds: 10
+    failureThreshold: 3
+    timeoutSeconds: 1
   readinessProbe:
     enabled: true
     initialDelaySeconds: 0
     periodSeconds: 2
+    failureThreshold: 3
+    timeoutSeconds: 1
   # existingSecret: existing-secret
 
 rbac:
@@ -127,6 +132,8 @@ proxy:
     ##     Error: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
     ##     Error: UPGRADE FAILED: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
     rollingUpdate:
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
   service:
     type: LoadBalancer
     labels: {}
@@ -156,14 +163,19 @@ proxy:
   traefik:
     image:
       name: traefik
-      tag: v2.2 # ref: https://hub.docker.com/_/traefik?tab=tags
+      tag: v2.3 # ref: https://hub.docker.com/_/traefik?tab=tags
     hsts:
       includeSubdomains: false
       preload: false
       maxAge: 15724800 # About 6 months
     resources: {}
+    extraEnv: []
+    extraVolumes: []
+    extraVolumeMounts: []
     extraStaticConfig: {}
     extraDynamicConfig: {}
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
   secretSync:
     image:
       name: jupyterhub/k8s-secret-sync
@@ -175,7 +187,7 @@ proxy:
     enabled: true
     minAvailable: 1
   https:
-    enabled: true
+    enabled: false
     type: letsencrypt
     #type: letsencrypt, manual, offload, secret
     letsencrypt:
@@ -316,7 +328,7 @@ scheduling:
     policy: {}
     image:
       name: gcr.io/google_containers/kube-scheduler-amd64
-      tag: v1.13.12
+      tag: v1.16.11
     nodeSelector: {}
     pdb:
       enabled: true
@@ -342,6 +354,14 @@ scheduling:
 
 
 prePuller:
+  annotations: {}
+  resources:
+    requests:
+      cpu: 0
+      memory: 0
+    limits:
+      cpu: 10m
+      memory: 10Mi
   hook:
     enabled: true
     image:

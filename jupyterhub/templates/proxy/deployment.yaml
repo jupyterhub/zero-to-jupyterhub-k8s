@@ -85,9 +85,10 @@ spec:
           {{- end }}
           resources:
             {{- .Values.proxy.chp.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- with .Values.proxy.containerSecurityContext }}
           securityContext:
-            # Don't allow any process to execute as root inside the container
-            allowPrivilegeEscalation: false
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
           env:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:

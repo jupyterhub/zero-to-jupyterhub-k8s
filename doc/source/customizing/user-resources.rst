@@ -166,13 +166,13 @@ Google Cloud Platform
 ~~~~~~~~~~~~~~~~~~~~~
 Use the ``resize`` command and
 provide a new cluster size (i.e. number of nodes) as a command line option
-``--size``:
+``--num-nodes``:
 
 .. code-block:: bash
 
    gcloud container clusters resize \
        <YOUR-CLUSTER-NAME> \
-       --size <NEW-SIZE> \
+       --num-nodes <NEW-SIZE> \
        --zone <YOUR-CLUSTER-ZONE>
 
 To display the cluster's name, zone, or current size, use the command:
