@@ -1,11 +1,4 @@
-<<<<<<< HEAD
 {{- if eq .Values.proxy.externalIngressController false }}
-{{- $HTTPS := .Values.proxy.https.enabled -}}
-{{- $autoHTTPS := and $HTTPS (and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
-{{- $offloadHTTPS := and $HTTPS (eq .Values.proxy.https.type "offload") -}}
-{{- $manualHTTPS := and $HTTPS (eq .Values.proxy.https.type "manual") -}}
-{{- $manualHTTPSwithsecret := and $HTTPS (eq .Values.proxy.https.type "secret") -}}
-=======
 {{- $enabled := .Values.proxy.https.enabled -}}
 {{- $autoHTTPS := and $enabled (and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
 {{- $manualHTTPS := and $enabled (eq .Values.proxy.https.type "manual") -}}
@@ -13,7 +6,6 @@
 {{- $offloadHTTPS := and $enabled (eq .Values.proxy.https.type "offload") -}}
 {{- $valid := or $autoHTTPS (or $manualHTTPS (or $manualHTTPSwithsecret $offloadHTTPS)) -}}
 {{- $HTTPS := and $enabled $valid  -}}
->>>>>>> upstream/master
 apiVersion: v1
 kind: Service
 metadata:
