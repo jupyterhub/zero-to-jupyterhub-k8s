@@ -25,16 +25,23 @@ spec:
       {{- end }}
       nodeSelector: {{ toJson .Values.scheduling.userScheduler.nodeSelector }}
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
+      volumes:
+        - name: config
+          configMap:
+            name: user-scheduler
       containers:
         - name: user-scheduler
           image: {{ include "jupyterhub.scheduler.image" . }}
           command:
             # ref: https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/
             - /usr/local/bin/kube-scheduler
-            - --scheduler-name={{ .Release.Name }}-user-scheduler
-            - --policy-configmap=user-scheduler
-            - --policy-configmap-namespace={{ .Release.Namespace }}
+            - --config=/etc/user-scheduler/config.yaml
+            - --leader-elect-resource-name=user-scheduler
+            - --leader-elect-resource-namespace={{ .Release.Namespace }}
             - --v={{ .Values.scheduling.userScheduler.logLevel | default 4 }}
+          volumeMounts:
+            - mountPath: /etc/user-scheduler
+              name: config
           livenessProbe:
             httpGet:
               path: /healthz
