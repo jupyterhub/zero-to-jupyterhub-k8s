@@ -122,9 +122,6 @@ docker images to be pushed to a dedicated registry before they can be accessed
 by the pods in the Kubernetes cluster, until [this
 issue](https://github.com/rancher/k3d/issues/113) is resolved.
 
-For this setup to work, make `registry.local` point to `127.0.0.1` (localhost)
-by adding an entry in `/etc/hosts` or its equivalent in Windows.
-
 __Install__
 
 ```shell
