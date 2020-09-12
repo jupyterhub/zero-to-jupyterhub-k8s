@@ -326,8 +326,8 @@ scheduling:
     ## to breaking changes in the kube-scheduler binary.
     policy: {}
     image:
-      name: gcr.io/google_containers/kube-scheduler-amd64
-      tag: v1.16.11
+      name: k8s.gcr.io/kube-scheduler
+      tag: v1.19.1
     nodeSelector: {}
     pdb:
       enabled: true

@@ -13,10 +13,8 @@ spec:
   template:
     metadata:
       labels:
-        {{- /* Changes here will cause the Deployment to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
       annotations:
-        # This lets us autorestart when the configmap changes!
         checksum/config-map: {{ include (print $.Template.BasePath "/scheduling/user-scheduler/configmap.yaml") . | sha256sum }}
     spec:
       {{- if .Values.rbac.enabled }}
@@ -31,13 +29,11 @@ spec:
         - name: user-scheduler
           image: {{ include "jupyterhub.scheduler.image" . }}
           command:
+            # ref: https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/
             - /usr/local/bin/kube-scheduler
             - --scheduler-name={{ .Release.Name }}-user-scheduler
             - --policy-configmap=user-scheduler
             - --policy-configmap-namespace={{ .Release.Namespace }}
-            - --lock-object-name=user-scheduler
-            - --lock-object-namespace={{ .Release.Namespace }}
-            - --leader-elect-resource-lock=configmaps
             - --v={{ .Values.scheduling.userScheduler.logLevel | default 4 }}
           livenessProbe:
             httpGet:
