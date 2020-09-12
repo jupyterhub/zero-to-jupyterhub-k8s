@@ -16,10 +16,10 @@ metadata:
 rules:
   # Copied from the system:kube-scheduler ClusterRole of the k8s version
   # matching the kube-scheduler binary we use. A modification of two resource
-  # name references from kube-scheduler to user-scheduler was made.
+  # name references from kube-scheduler to user-scheduler-lock was made.
   #
-  # NOTE: These have been unchanged between 1.12 and 1.15, but changed in 1.16
-  #       and in 1.17, but not 1.18 and 1.19.
+  # NOTE: These rules have been unchanged between 1.12 and 1.15, then changed in
+  #       1.16 and in 1.17, but unchanged in 1.18 and 1.19.
   #
   # ref: https://github.com/kubernetes/kubernetes/blob/v1.19.0/plugin/pkg/auth/authorizer/rbac/bootstrappolicy/testdata/cluster-roles.yaml#L696-L829
   - apiGroups:
@@ -40,7 +40,7 @@ rules:
   - apiGroups:
     - coordination.k8s.io
     resourceNames:
-    - user-scheduler
+    - user-scheduler-lock
     resources:
     - leases
     verbs:
@@ -55,7 +55,7 @@ rules:
   - apiGroups:
     - ""
     resourceNames:
-    - user-scheduler
+    - user-scheduler-lock
     resources:
     - endpoints
     verbs:
@@ -157,8 +157,9 @@ rules:
     - watch
 
   # Copied from the system:volume-scheduler ClusterRole of the k8s version
-  # matching the kube-scheduler binary we use. These have not changed between
-  # 1.12 and 1.19.
+  # matching the kube-scheduler binary we use.
+  #
+  # NOTE: These rules have not changed between 1.12 and 1.19.
   #
   # ref: https://github.com/kubernetes/kubernetes/blob/v1.19.0/plugin/pkg/auth/authorizer/rbac/bootstrappolicy/testdata/cluster-roles.yaml#L1213-L1240
   - apiGroups:

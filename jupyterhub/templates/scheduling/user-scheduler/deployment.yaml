@@ -33,11 +33,14 @@ spec:
         - name: user-scheduler
           image: {{ include "jupyterhub.scheduler.image" . }}
           command:
+            # NOTE: --leader-elect- flags are silently ignored in favor of whats
+            #       defined in the passed KubeSchedulerConfiguration.
+            #
+            # ref: https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/
             # ref: https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/
             - /usr/local/bin/kube-scheduler
+            - --scheduler-name={{ .Release.Name }}-user-scheduler
             - --config=/etc/user-scheduler/config.yaml
-            - --leader-elect-resource-name=user-scheduler
-            - --leader-elect-resource-namespace={{ .Release.Namespace }}
             - --v={{ .Values.scheduling.userScheduler.logLevel | default 4 }}
           volumeMounts:
             - mountPath: /etc/user-scheduler

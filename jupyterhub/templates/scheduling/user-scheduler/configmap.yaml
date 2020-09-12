@@ -10,6 +10,10 @@ data:
   config.yaml: |
     apiVersion: kubescheduler.config.k8s.io/v1beta1
     kind: KubeSchedulerConfiguration
+    leaderElection:
+      resourceLock: endpoints
+      resourceName: user-scheduler-lock
+      resourceNamespace: {{ .Release.Namespace }}
     profiles:
       - schedulerName: {{ .Release.Name }}-user-scheduler
         plugins:
