@@ -31,16 +31,31 @@ spec:
             name: user-scheduler
       containers:
         - name: user-scheduler
-          image: {{ include "jupyterhub.scheduler.image" . }}
+          # NOTE: When kube-scheduler 1.17+ fail to find CSINode resource in the
+          #       cluster, they fail to startup. Due to this, we fallback to the
+          #       latest functional version with its legacy configuration.
+          {{- if .Capabilities.APIVersions.Has "storage.k8s.io/v1/CSINode" }}
+          image: {{ .Values.scheduling.userScheduler.image.name }}:{{ .Values.scheduling.userScheduler.image.tag }}
+          {{- else }}
+          image: {{ .Values.scheduling.userScheduler.image.name }}:v1.16.15
+          {{- end }}
           command:
-            # NOTE: --leader-elect- flags are silently ignored in favor of whats
-            #       defined in the passed KubeSchedulerConfiguration.
+            # NOTE: --leader-elect-... (new) and --lock-object-... (deprecated)
+            #       flags are silently ignored in favor of whats defined in the
+            #       passed KubeSchedulerConfiguration whenever --config is
+            #       passed.
             #
             # ref: https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/
             # ref: https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/
             - /usr/local/bin/kube-scheduler
-            - --scheduler-name={{ .Release.Name }}-user-scheduler
+            {{- if .Capabilities.APIVersions.Has "storage.k8s.io/v1/CSINode" }}
             - --config=/etc/user-scheduler/config.yaml
+            {{- else }}
+            - --scheduler-name={{ .Release.Name }}-user-scheduler
+            - --policy-config-file=/etc/user-scheduler/policy.cfg
+            - --lock-object-name=user-scheduler-lock
+            - --lock-object-namespace={{ .Release.Namespace }}
+            {{- end }}
             - --v={{ .Values.scheduling.userScheduler.logLevel | default 4 }}
           volumeMounts:
             - mountPath: /etc/user-scheduler

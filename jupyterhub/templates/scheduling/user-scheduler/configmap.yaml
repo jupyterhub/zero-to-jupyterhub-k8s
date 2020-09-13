@@ -27,4 +27,7 @@ data:
             enabled:
               - name: NodeResourcesMostAllocated
           {{- end }}
+
+  {{- $defaultPolicy := .Files.Get "files/userscheduler-defaultpolicy.yaml" | fromYaml }}
+  policy.cfg: {{ .Values.scheduling.userScheduler.policy | default $defaultPolicy | toJson | quote }}
 {{- end }}
