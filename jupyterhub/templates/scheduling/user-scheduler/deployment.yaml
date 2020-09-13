@@ -31,23 +31,24 @@ spec:
             name: user-scheduler
       containers:
         - name: user-scheduler
-          # NOTE: When kube-scheduler 1.17+ fail to find CSINode resource in the
-          #       cluster, they fail to startup. Due to this, we fallback to the
-          #       latest functional version with its legacy configuration.
+          # NOTE: When the kube-scheduler 1.17+ binaries fail to find CSINode
+          #       resource in the cluster, they won't start scheduling. Due to
+          #       this, we fallback to the latest functional version with its
+          #       legacy configuration format. This fallback can be removed when
+          #       we assume k8s 1.17 where CSINode is generally available.
           {{- if .Capabilities.APIVersions.Has "storage.k8s.io/v1/CSINode" }}
           image: {{ .Values.scheduling.userScheduler.image.name }}:{{ .Values.scheduling.userScheduler.image.tag }}
           {{- else }}
           image: {{ .Values.scheduling.userScheduler.image.name }}:v1.16.15
           {{- end }}
           command:
+            - /usr/local/bin/kube-scheduler
             # NOTE: --leader-elect-... (new) and --lock-object-... (deprecated)
             #       flags are silently ignored in favor of whats defined in the
             #       passed KubeSchedulerConfiguration whenever --config is
             #       passed.
             #
             # ref: https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/
-            # ref: https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/
-            - /usr/local/bin/kube-scheduler
             {{- if .Capabilities.APIVersions.Has "storage.k8s.io/v1/CSINode" }}
             - --config=/etc/user-scheduler/config.yaml
             {{- else }}
