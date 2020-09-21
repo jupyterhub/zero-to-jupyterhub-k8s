@@ -98,6 +98,7 @@ spec:
                   name: hub-secret
                   {{- end }}
                   key: proxy.token
+            {{- include "jupyterhub.extraEnv" .Values.proxy.extraEnv | nindent 12 }}
           {{- with .Values.proxy.chp.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
