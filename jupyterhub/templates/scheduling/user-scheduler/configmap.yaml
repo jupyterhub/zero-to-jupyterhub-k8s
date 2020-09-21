@@ -22,8 +22,10 @@ data:
           {{- else }}
           score:
             disabled:
+              - name: ImageLocality
               - name: NodeResourcesLeastAllocated
               - name: NodeResourcesBalancedAllocation
+              - name: SelectorSpread
             enabled:
               - name: NodeResourcesMostAllocated
           {{- end }}
