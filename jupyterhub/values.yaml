@@ -371,7 +371,7 @@ prePuller:
   extraImages: {}
   pause:
     image:
-      name: gcr.io/google_containers/pause
+      name: k8s.gcr.io/pause
       # Pick version from https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/pause?gcrImageListsize=30
       tag: '3.2'
 
