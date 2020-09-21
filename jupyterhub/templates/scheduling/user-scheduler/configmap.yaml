@@ -17,18 +17,7 @@ data:
     profiles:
       - schedulerName: {{ .Release.Name }}-user-scheduler
         plugins:
-          {{- if .Values.scheduling.userScheduler.plugins }}
           {{- .Values.scheduling.userScheduler.plugins | toYaml | trimSuffix "\n" | nindent 10 }}
-          {{- else }}
-          score:
-            disabled:
-              - name: ImageLocality
-              - name: NodeResourcesLeastAllocated
-              - name: NodeResourcesBalancedAllocation
-              - name: SelectorSpread
-            enabled:
-              - name: NodeResourcesMostAllocated
-          {{- end }}
 
   {{- $defaultPolicy := .Files.Get "files/userscheduler-defaultpolicy.yaml" | fromYaml }}
   policy.cfg: {{ .Values.scheduling.userScheduler.policy | default $defaultPolicy | toJson | quote }}
