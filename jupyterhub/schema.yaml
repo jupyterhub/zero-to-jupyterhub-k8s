@@ -1256,6 +1256,24 @@ properties:
         properties:
           enabled:
             type: bool
+          podSchedulingWaitDuration:
+            description: |
+              The `hook-image-awaiter` has a criteria to await all the
+              `hook-image-puller` DaemonSet's pods to both schedule and finish
+              their image pulling. This flag can be used to relax this criteria
+              to instead only await the pods that _has already scheduled_ to
+              finish image pulling after a certain duration.
+
+              The value of this is that sometimes the newly created
+              `hook-image-puller` pods cannot be scheduled because nodes are
+              full, and then it probably won't make sense to block a `helm
+              upgrade`.
+
+              An infinite duration to wait for pods to schedule can be
+              represented by `-1`. This was the default behavior of version
+              0.9.0 and earlier.
+            type: int
+
       continuous:
         description: |
           See the [*optimization
