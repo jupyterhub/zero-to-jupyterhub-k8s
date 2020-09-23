@@ -67,13 +67,13 @@ func getDaemonSet(transportPtr *http.Transport, server string, headers map[strin
 // Return a bool indicating if the provided DaemonSet's _currently_ scheduled
 // pods (which does the image pulling) are ready, or in the case of a
 // strictCheck, if the _desired_ number of scheduled pods are ready.
-func areDaemonSetPodsReady(ds *DaemonSet, strictCheck bool) bool {
+func areDaemonSetPodsReady(ds *DaemonSet, waitForPodsToSchedule bool) bool {
 	current := ds.Status.CurrentNumberScheduled
 	desired := ds.Status.DesiredNumberScheduled
 	ready := ds.Status.NumberReady
 
 	log.Printf("%d image puller pods are ready out of the %d currently scheduled and %d desired number scheduled.", ready, current, desired)
-	if strictCheck {
+	if waitForPodsToSchedule {
 		return ready == desired
 	} else {
 		return ready >= current

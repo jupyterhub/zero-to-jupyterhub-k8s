@@ -85,8 +85,8 @@ func main() {
 	flag.StringVar(&daemonSet, "daemonset", "hook-image-puller", "The name DaemonSet that will perform image pulling")
 	var debug bool
 	flag.BoolVar(&debug, "debug", false, "Communicate through a 'kubectl proxy --port 8080' setup instead.")
-	var strictCheckDuration int
-	flag.IntVar(&strictCheckDuration, "strict-check-duration", 10, "Duration of seconds to wait for the desired number of scheduled pods to be ready until transitioning to wait for the currently scheduled pods to be ready instead. Set to -1 for an infinite duration.")
+	var podSchedulingWaitDuration int
+	flag.IntVar(&podSchedulingWaitDuration, "pod-scheduling-wait-duration", 10, "Duration of seconds to await the desired number of scheduled pods to become ready until transitioning to awaiting the currently scheduled pods to become ready instead. Set to -1 for an infinite duration.")
 
 	flag.Parse()
 
@@ -110,8 +110,8 @@ func main() {
 			log.Fatal(err)
 		}
 
-		strictCheck := strictCheckDuration == -1 || i < strictCheckDuration
-		if areDaemonSetPodsReady(ds, strictCheck) {
+		waitForPodsToSchedule := podSchedulingWaitDuration == -1 || i < podSchedulingWaitDuration
+		if areDaemonSetPodsReady(ds, waitForPodsToSchedule) {
 			log.Printf("Image download on nodes awaited successfully: shutting down!")
 			break
 		}
