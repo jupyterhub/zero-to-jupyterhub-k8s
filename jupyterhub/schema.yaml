@@ -467,6 +467,28 @@ properties:
   proxy:
     type: object
     properties:
+      chp:
+        type: object
+        description: |
+          Configure the configurable-http-proxy (chp) pod managed by jupyterhub to route traffic
+          both to itself and to user pods.
+        properties:
+          extraEnv:
+            type: array
+            description: |
+              Provide extra environment variables to the chp pod. Can be provided as an array or
+              as an object.
+              
+              as an array:
+              ```yaml
+                - name: MY_ENVVAR
+                  value: MY_ENVVAR_VALUE
+              ```
+
+              as an object:
+              ```yaml
+                MY_ENVVAR: MY_ENVVAR_VALUE
+              ```
       secretToken:
         type: string
         description: |
@@ -649,6 +671,27 @@ properties:
             type: integer
             description: |
               Minimum number of pods to be available during the voluntary disruptions.
+      traefik:
+        type: object
+        description: |
+          Configure the traefik proxy used to terminate TLS when 'autohttps' is enabled
+        properties:
+          extraEnv:
+            type: array
+            description: |
+              Provide extra environment variables to the traefik pod. Can be provided as an array or
+              as an object.
+              
+              as an array:
+              ```yaml
+                - name: MY_ENVVAR
+                  value: MY_ENVVAR_VALUE
+              ```
+
+              as an object:
+              ```yaml
+                MY_ENVVAR: MY_ENVVAR_VALUE
+              ```
     required:
       - secretToken
   auth:

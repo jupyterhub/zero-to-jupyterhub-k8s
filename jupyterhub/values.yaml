@@ -159,6 +159,7 @@ proxy:
       requests:
         cpu: 200m
         memory: 512Mi
+    extraEnv: []
   traefik:
     image:
       name: traefik
