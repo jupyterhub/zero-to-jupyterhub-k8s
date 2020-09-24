@@ -159,6 +159,7 @@ proxy:
       requests:
         cpu: 200m
         memory: 512Mi
+    extraEnv: {}
   traefik:
     image:
       name: traefik
@@ -168,7 +169,7 @@ proxy:
       preload: false
       maxAge: 15724800 # About 6 months
     resources: {}
-    extraEnv: []
+    extraEnv: {}
     extraVolumes: []
     extraVolumeMounts: []
     extraStaticConfig: {}

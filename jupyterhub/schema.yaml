@@ -467,6 +467,50 @@ properties:
   proxy:
     type: object
     properties:
+      chp:
+        type: object
+        description: |
+          Configure the configurable-http-proxy (chp) pod managed by jupyterhub to route traffic
+          both to itself and to user pods.
+        properties:
+          extraEnv:
+            type: object
+            description: |
+              Extra environment variables that should be set for the chp pod.
+
+              Environment variables are usually used here to:
+                - override HUB_SERVICE_PORT or HUB_SERVICE_HOST default values
+                - set CONFIGPROXY_SSL_KEY_PASSPHRASE for setting passphrase of SSL keys
+
+              String literals with `$(ENV_VAR_NAME)` will be expanded by Kubelet which
+              is a part of Kubernetes.
+
+              ```yaml
+              proxy:
+                chp:
+                  extraEnv:
+                    # basic notation (for literal values only)
+                    MY_ENV_VARS_NAME1: "my env var value 1"
+
+                    # explicit notation (the "name" field takes precedence)
+                    CHP_NAMESPACE:
+                      name: CHP_NAMESPACE
+                      valueFrom:
+                        fieldRef:
+                          fieldPath: metadata.namespace
+
+                    # implicit notation (the "name" field is implied)
+                    PREFIXED_CHP_NAMESPACE:
+                      value: "my-prefix-$(CHP_NAMESPACE)"
+                    SECRET_VALUE:
+                      valueFrom:
+                        secretKeyRef:
+                          name: my-k8s-secret
+                          key: password
+              ```
+
+              For more information, see the [Kubernetes EnvVar
+              specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core).
       secretToken:
         type: string
         description: |
@@ -649,6 +693,47 @@ properties:
             type: integer
             description: |
               Minimum number of pods to be available during the voluntary disruptions.
+      traefik:
+        type: object
+        description: |
+          Configure the traefik proxy used to terminate TLS when 'autohttps' is enabled
+        properties:
+          extraEnv:
+            type: object
+            description: |
+              Extra environment variables that should be set for the traefik pod.
+
+              Environment Variables here may be used to configure traefik.
+
+              String literals with `$(ENV_VAR_NAME)` will be expanded by Kubelet which
+              is a part of Kubernetes.
+
+              ```yaml
+              proxy:
+                traefik:
+                  extraEnv:
+                    # basic notation (for literal values only)
+                    MY_ENV_VARS_NAME1: "my env var value 1"
+
+                    # explicit notation (the "name" field takes precedence)
+                    TRAEFIK_NAMESPACE:
+                      name: TRAEFIK_NAMESPACE
+                      valueFrom:
+                        fieldRef:
+                          fieldPath: metadata.namespace
+
+                    # implicit notation (the "name" field is implied)
+                    PREFIXED_TRAEFIK_NAMESPACE:
+                      value: "my-prefix-$(TRAEFIK_NAMESPACE)"
+                    SECRET_VALUE:
+                      valueFrom:
+                        secretKeyRef:
+                          name: my-k8s-secret
+                          key: password
+              ```
+
+              For more information, see the [Kubernetes EnvVar
+              specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core).
     required:
       - secretToken
   auth:
