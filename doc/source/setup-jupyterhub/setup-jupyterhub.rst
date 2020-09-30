@@ -87,15 +87,17 @@ Install JupyterHub
       RELEASE=jhub
       NAMESPACE=jhub
 
-      helm upgrade --install $RELEASE jupyterhub/jupyterhub \
-        --namespace $NAMESPACE  \
-        --version=0.8.2 \
+      helm upgrade --cleanup-on-fail \
+        --install $RELEASE jupyterhub/jupyterhub \
+        --namespace $NAMESPACE \
+        --create-namespace \
+        --version=0.9.0 \
         --values config.yaml
 
    where:
 
    - ``RELEASE`` refers to a `Helm release name
-     <https://docs.helm.sh/glossary/#release>`_, an identifier used to
+     <https://helm.sh/docs/glossary/#release>`_, an identifier used to
      differentiate chart installations. You need it when you are changing or
      deleting the configuration of this chart installation. If your Kubernetes
      cluster will contain multiple JupyterHubs make sure to differentiate them.
@@ -112,18 +114,18 @@ Install JupyterHub
         to your terminal. JupyterHub is being installed in the background.
 
       * If you get a ``release named <YOUR-RELEASE-NAME> already exists`` error,
-        then you should delete the release by running ``helm delete --purge
+        then you should delete the release by running ``helm delete
         <YOUR-RELEASE-NAME>``. Then reinstall by repeating this step. If it
         persists, also do ``kubectl delete namespace <YOUR-NAMESPACE>`` and try
         again.
 
       * In general, if something goes *wrong* with the install step, delete the
-        Helm release by running ``helm delete --purge <YOUR-RELEASE-NAME>``
+        Helm release by running ``helm delete <YOUR-RELEASE-NAME>``
         before re-running the install command.
 
       * If you're pulling from a large Docker image you may get a
         ``Error: timed out waiting for the condition`` error, add a
-        ``--timeout=SOME-LARGE-NUMBER-OF-SECONDS`` parameter to the ``helm
+        ``--timeout=<NUMBER-OF-MINUTES>m<NUMBER-OF-SECONDS>s`` parameter to the ``helm
         install`` command.
 
       * The ``--version`` parameter corresponds to the *version of the Helm
@@ -131,7 +133,7 @@ Install JupyterHub
         Helm chart is paired with a specific version of JupyterHub. E.g.,
         ``0.7.0`` of the Helm chart runs JupyterHub ``0.9.2``.
         For a list of which JupyterHub version is installed in each version
-        of the Z2JH Helm Chart, see the `Helm Chart repository <https://github.com/jupyterhub/helm-chart#versions-coupled-to-each-chart-release>`_.
+        of the Z2JH Helm Chart, see the `Helm Chart repository <https://github.com/jupyterhub/helm-chart#release-notes>`_.
 
 3. While Step 2 is running, you can see the pods being created by entering in
    a different terminal:

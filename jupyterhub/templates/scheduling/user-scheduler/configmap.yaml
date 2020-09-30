@@ -6,6 +6,19 @@ metadata:
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 data:
+  # ref: https://kubernetes.io/docs/reference/scheduling/config/
+  config.yaml: |
+    apiVersion: kubescheduler.config.k8s.io/v1beta1
+    kind: KubeSchedulerConfiguration
+    leaderElection:
+      resourceLock: endpoints
+      resourceName: user-scheduler-lock
+      resourceNamespace: {{ .Release.Namespace }}
+    profiles:
+      - schedulerName: {{ .Release.Name }}-user-scheduler
+        plugins:
+          {{- .Values.scheduling.userScheduler.plugins | toYaml | trimSuffix "\n" | nindent 10 }}
+
   {{- $defaultPolicy := .Files.Get "files/userscheduler-defaultpolicy.yaml" | fromYaml }}
   policy.cfg: {{ .Values.scheduling.userScheduler.policy | default $defaultPolicy | toJson | quote }}
 {{- end }}

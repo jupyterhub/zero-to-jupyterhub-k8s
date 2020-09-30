@@ -63,13 +63,13 @@ a production system!
 To run the upgrade:
 
 ```
-helm upgrade <YOUR-HELM-RELEASE-NAME> jupyterhub/jupyterhub --version=<RELEASE-VERSION> -f config.yaml
+helm upgrade --cleanup-on-fail <YOUR-HELM-RELEASE-NAME> jupyterhub/jupyterhub --version=<RELEASE-VERSION> -f config.yaml
 ```
 
 For example, to upgrade to v0.6, enter and substituting `<YOUR-HELM-RELEASE-NAME>` and version v0.6:
 
 ```
-helm upgrade <YOUR-HELM-RELEASE-NAME> jupyterhub/jupyterhub --version=v0.6 -f config.yaml
+helm upgrade --cleanup-on-fail <YOUR-HELM-RELEASE-NAME> jupyterhub/jupyterhub --version=v0.6 -f config.yaml
 ```
 
 ### Database
@@ -97,7 +97,7 @@ will be performed automatically when you do a `helm upgrade`.
 5. Remove the lines added in step 3, and do another [`helm upgrade`](#upgrade-command).
 
 
-### [Role based access control](https://zero-to-jupyterhub.readthedocs.io/en/latest/security.html#use-role-based-access-control-rbac)
+### [Role based access control](/security.html#use-role-based-access-control-rbac)
 
 [RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) is the user security model
 in Kubernetes that gives applications only as much access they need to the kubernetes
@@ -138,7 +138,7 @@ RUN pip install --no-cache-dir jupyterhub==0.8.1
 ## JupyterHub versions installed in each Helm Chart
 
 Each Helm Chart is packaged with a specific version of JupyterHub (and
-other software as well). See the [Helm Chart repository](https://github.com/jupyterhub/helm-chart#versions-coupled-to-each-chart-release>) for
+other software as well). See the [Helm Chart repository](https://github.com/jupyterhub/helm-chart#release-notes>) for
 information about the versions of relevant software packages.
 
 ## Troubleshooting
@@ -147,7 +147,7 @@ If the upgrade is failing on a test system or a system that does not serve users
 deleting the helm chart using:
 
 ```
-helm delete <YOUR-HELM-RELEASE-NAME> --purge
+helm delete <YOUR-HELM-RELEASE-NAME>
 ```
 
 `helm list` may be used to find <YOUR-HELM-RELEASE-NAME>.

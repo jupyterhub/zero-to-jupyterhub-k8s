@@ -1,8 +1,10 @@
-{{- $HTTPS := .Values.proxy.https.enabled -}}
-{{- $autoHTTPS := and $HTTPS (and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
-{{- $offloadHTTPS := and $HTTPS (eq .Values.proxy.https.type "offload") -}}
-{{- $manualHTTPS := and $HTTPS (eq .Values.proxy.https.type "manual") -}}
-{{- $manualHTTPSwithsecret := and $HTTPS (eq .Values.proxy.https.type "secret") -}}
+{{- $enabled := .Values.proxy.https.enabled -}}
+{{- $autoHTTPS := and $enabled (and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
+{{- $manualHTTPS := and $enabled (eq .Values.proxy.https.type "manual") -}}
+{{- $manualHTTPSwithsecret := and $enabled (eq .Values.proxy.https.type "secret") -}}
+{{- $offloadHTTPS := and $enabled (eq .Values.proxy.https.type "offload") -}}
+{{- $valid := or $autoHTTPS (or $manualHTTPS (or $manualHTTPSwithsecret $offloadHTTPS)) -}}
+{{- $HTTPS := and $enabled $valid  -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -14,9 +16,8 @@ spec:
   selector:
     {{- include "jupyterhub.matchLabels" . | nindent 4 }}
   ports:
-    - protocol: TCP
-      port: 8001
-      targetPort: 8001
+    - port: 8001
+      targetPort: api
 ---
 apiVersion: v1
 kind: Service
@@ -44,13 +45,13 @@ spec:
     {{- if $HTTPS }}
     - name: https
       port: 443
-      protocol: TCP
-      {{- if or $manualHTTPS $manualHTTPSwithsecret }}
-      targetPort: 8443
-      {{- else if $offloadHTTPS }}
-      targetPort: 8000
+      # When HTTPS termination is handled outside our helm chart, pass traffic
+      # coming in via this Service's port 443 to targeted pod's port meant for
+      # HTTP traffic.
+      {{- if $offloadHTTPS }}
+      targetPort: http
       {{- else }}
-      targetPort: 443
+      targetPort: https
       {{- end }}
       {{- with .Values.proxy.service.nodePorts.https }}
       nodePort: {{ . }}
@@ -58,12 +59,7 @@ spec:
     {{- end }}
     - name: http
       port: 80
-      protocol: TCP
-      {{- if $autoHTTPS }}
-      targetPort: 80
-      {{- else }}
-      targetPort: 8000
-      {{- end }}
+      targetPort: http
       {{- with .Values.proxy.service.nodePorts.http }}
       nodePort: {{ . }}
       {{- end }}

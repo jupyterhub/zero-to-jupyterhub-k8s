@@ -13,12 +13,12 @@ installations.
 ## Ingress
 
 If you are using a Kubernetes Cluster that does not provide public IPs for
-services directly, you need to use
-an [ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)
-to get traffic into your JupyterHub. This varies wildly
-based on how your cluster was set up, which is why this is in the 'Advanced' section.
+services directly, you need to use a [Kubernetes Ingress
+resource](https://kubernetes.io/docs/concepts/services-networking/ingress/) to
+get traffic into your JupyterHub. This varies wildly based on how your cluster
+was set up, which is why this is in the 'Advanced' section.
 
-You can enable the required `ingress` object with the following in your
+You can enable the required Ingress resources with the following in your
 `config.yaml`
 
 ```yaml
@@ -31,8 +31,8 @@ ingress:
 You can specify multiple hosts that should be routed to the hub by listing them
 under `ingress.hosts`.
 
-Note that you need to install and configure an
-[Ingress Controller](https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-controllers)
+Note that you need to install and configure an [Ingress
+controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/)
 for the ingress object to work.
 
 We recommend the community-maintained [nginx-ingress](https://github.com/helm/charts/tree/master/stable/nginx-ingress)
@@ -169,13 +169,11 @@ In your `hub.extraConfig`,
 You need to have a `import z2jh` at the top of your `extraConfig` for
 `z2jh.get_config()` to work.
 
-```eval_rst
-.. versionchanged:: 0.8
-
-  `hub.extraConfigMap` used to be required for specifying additional values
-  to pass, which was more restrictive.
-  `hub.extraConfigMap` is deprecated in favor of the new
-  top-level `custom` field, which allows fully arbitrary yaml.
+```{versionchanged} 0.8
+`hub.extraConfigMap` used to be required for specifying additional values
+to pass, which was more restrictive.
+`hub.extraConfigMap` is deprecated in favor of the new
+top-level `custom` field, which allows fully arbitrary yaml.
 ```
 
 ### `hub.extraEnv`
@@ -197,11 +195,13 @@ in kubernetes that as a long list of cool use cases. Some example use cases are:
 2. Servers / other daemons that are used by code in your `hub.customConfig`
 
 The items in this list must be valid kubernetes
-[container specifications](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#container-v1-core).
+[container specifications](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#container-v1-core).
 
 ### Specifying suitable hub storage
 
-By default, the hub's sqlite-pvc setting will dynamically create a disk to store the sqlite database.
-It is possible to [configure other storage classes](https://zero-to-jupyterhub.readthedocs.io/en/latest/reference.html?highlight=pvc#hub-db-type) under hub.db.pvc, but make sure to choose one that
-the hub can write quickly and safely to. Slow or higher latency storage classes can cause hub operations to lag which
-may ultimately lead to HTTP errors in user environments.
+By default, the hub's sqlite-pvc setting will dynamically create a disk to store
+the sqlite database. It is possible to [configure other storage
+classes](reference/reference.html#hub-db-type) under hub.db.pvc, but make sure
+to choose one that the hub can write quickly and safely to. Slow or higher
+latency storage classes can cause hub operations to lag which may ultimately
+lead to HTTP errors in user environments.

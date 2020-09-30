@@ -1,43 +1,50 @@
 #!/usr/bin/env python3
 """
-Helper script to perform two-way sync of files to k8s secret objects.
+Helper script to perform two-way sync of a specific json file to a k8s secret
+object.
 
-traefik expects a JSON file (acme.json) to persist across time,
-to make sure Let's Encrypt certificates work. In kubernetes,
-pod restarts clear out the filesystem, making this hard. We could
-add a persistent volume to the proxy, but this is excessive for
-a single file.
+traefik expects a JSON file (acme.json) to persist across time, to make sure
+Let's Encrypt certificates work. In kubernetes, pod restarts clear out the
+filesystem, making this hard. We could add a persistent volume to the proxy, but
+this is excessive for a single file.
 
-This script can do a 'two way' sync of a given file and a key
-in a kubernetes secret object. The file should be in an emptyDir
-volume in the traefik pod, which should also have this script
-running as a sidecar.
+This script can do a 'two way' sync of a given file and a key in a kubernetes
+secret object. The file should be in an emptyDir volume in the traefik pod,
+which should also have this script running as a sidecar.
 
 ## Kubernetes Secret -> File system
 
-This needs to happen only once when the pod starts - we do not
-support modifications to the secret by other actors. The
-'load' command is used to specify the secret name, key and
-path to load it into
+This needs to happen only once when the pod starts - we do not support
+modifications to the secret by other actors. The 'load' command is used to
+specify the secret name, key and path to load it into
 
 ## File system -> Kubernetes secret
 
-traefik might write new contents to the acme.json file over
-time, and we need to sync it to the kubernetes secret object.
-Ideally, we would watch for changes to the file with inotify
-and update the secret object as needed. However, for now we
-just operate in a 30s loop. This is good enough, since
-traefik can always re-generate certs if needed.
+traefik might write new contents to the acme.json file over time, and we need to
+sync it to the kubernetes secret object so it remains available if the pod
+restarts.
+
+There is a check that ensures that this sync is only made if we have acquired a
+certificate, this is to avoid syncing a temporary state that may lock the pod
+into a bad state even after restart. Note that this decision makes this script
+specific to the acme.json file, but it can be re-generalized again by providing
+a predicate hook to provide a criteria for syncing.
+
+Ideally, we would watch for changes to the file with inotify and update the
+secret object as needed. However, for now we just operate in a 30s loop. This is
+good enough, since traefik can always re-generate certs if needed.
 """
-import sys
+import argparse
+import base64
+import io
+import json
+import logging
 import os
 import subprocess
-import argparse
-import time
+import sys
 import tarfile
-import io
-import base64
-import logging
+import time
+
 from kubernetes import client, config
 
 def update_secret(namespace, secret_name, labels, key, value):
@@ -91,9 +98,9 @@ def get_secret_value(namespace, secret_name, key):
 
 def setup_logging():
     """
-    Set up root logger to log to stderr
+    Set up root logger
     """
-    logging.basicConfig(format="%(asctime)s %(message)s", level=logging.INFO, stream=sys.stderr)
+    logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s", level=logging.INFO)
 
 def main():
     argparser = argparse.ArgumentParser()
@@ -131,13 +138,14 @@ def main():
     args = argparser.parse_args()
 
     setup_logging()
+    logging.info(str.join(" ", sys.argv))
 
     if not args.namespace:
         try:
             with open("/var/run/secrets/kubernetes.io/serviceaccount/namespace") as f:
                 args.namespace = f.read().strip()
         except FileNotFoundError:
-            print("Can not determine a namespace, must be explicitly set with --namespace", file=sys.stderr)
+            logging.error("Can not determine a namespace, must be explicitly set with --namespace")
             sys.exit(1)
 
     if args.action == 'load':
@@ -153,9 +161,24 @@ def main():
             labels[l_splits[0]] = l_splits[1]
         # FIXME: use inotifiy
         while True:
-            if os.path.exists(args.path):
+            if not os.path.exists(args.path):
+                logging.warning(f'Watched file {args.path} not found')
+            else:
                 with open(args.path, 'rb') as f:
-                    update_secret(args.namespace, args.secret_name, labels, args.key, f.read())
+                    file_content = f.read()
+
+                if not file_content:
+                    logging.info(f'Watched file {args.path} is currently empty')
+                else:
+                    file_dict = json.loads(file_content)
+
+                    for cert_resolver in file_dict.values():
+                        if cert_resolver.get("Certificates"):
+                            update_secret(args.namespace, args.secret_name, labels, args.key, file_content)
+                            break
+                    else:
+                        logging.info(f'No certificate detected in {args.path}')
+
             time.sleep(30)
 
 if __name__ == '__main__':

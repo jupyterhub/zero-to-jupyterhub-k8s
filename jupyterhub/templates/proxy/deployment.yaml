@@ -84,9 +84,10 @@ spec:
           {{- end }}
           resources:
             {{- .Values.proxy.chp.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- with .Values.proxy.containerSecurityContext }}
           securityContext:
-            # Don't allow any process to execute as root inside the container
-            allowPrivilegeEscalation: false
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
           env:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
@@ -97,18 +98,19 @@ spec:
                   name: hub-secret
                   {{- end }}
                   key: proxy.token
+            {{- include "jupyterhub.extraEnv" .Values.proxy.chp.extraEnv | nindent 12 }}
           {{- with .Values.proxy.chp.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
           ports:
             {{- if or $manualHTTPS $manualHTTPSwithsecret }}
-            - containerPort: 8443
-              name: proxy-https
+            - name: https
+              containerPort: 8443
             {{- end }}
-            - containerPort: 8000
-              name: proxy-public
-            - containerPort: 8001
-              name: api
+            - name: http
+              containerPort: 8000
+            - name: api
+              containerPort: 8001
           {{- if .Values.proxy.chp.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.proxy.chp.livenessProbe.initialDelaySeconds }}
@@ -116,10 +118,10 @@ spec:
             httpGet:
               path: /_chp_healthz
               {{- if or $manualHTTPS $manualHTTPSwithsecret }}
-              port: proxy-https
+              port: https
               scheme: HTTPS
               {{- else }}
-              port: proxy-public
+              port: http
               scheme: HTTP
               {{- end }}
           {{- end }}
@@ -130,10 +132,10 @@ spec:
             httpGet:
               path: /_chp_healthz
               {{- if or $manualHTTPS $manualHTTPSwithsecret }}
-              port: proxy-https
+              port: https
               scheme: HTTPS
               {{- else }}
-              port: proxy-public
+              port: http
               scheme: HTTP
               {{- end }}
           {{- end }}

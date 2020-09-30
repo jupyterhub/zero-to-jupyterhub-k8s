@@ -12,14 +12,11 @@ have to start their server again, and the state of their previous session
 (variables they've created, any in-memory data, etc)
 will be lost. This is known as *culling*.
 
-```eval_rst
-
-.. note::
-
-  In JupyterHub, "inactivity" is defined as no response from the user's
-  browser. JupyterHub constantly pings the user's JupyterHub browser session
-  to check whether it is open. This means that leaving the computer running
-  with the JupyterHub window open will **not** be treated as inactivity.
+```{note}
+In JupyterHub, "inactivity" is defined as no response from the user's
+browser. JupyterHub constantly pings the user's JupyterHub browser session
+to check whether it is open. This means that leaving the computer running
+with the JupyterHub window open will **not** be treated as inactivity.
 ```
 
 To disable culling, put the following into `config.yaml`:
@@ -40,13 +37,10 @@ cull:
   every: <number-of-seconds-this-check-is-done>
 ```
 
-```eval_rst
-
-.. note::
-
-   While JupyterHub automatically runs the culling process, it is not a
-   replacement for keeping an eye on your cluster to make sure resources
-   are being used as expected.
+```{note}
+While JupyterHub automatically runs the culling process, it is not a
+replacement for keeping an eye on your cluster to make sure resources
+are being used as expected.
 ```
 
 ## Admin Users

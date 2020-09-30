@@ -4,16 +4,22 @@ Lints and validates the chart's template files and their rendered output without
 any cluster interaction. For this script to function, you must install yamllint
 and kubeval.
 
-- https://github.com/adrienverge/yamllint
+USAGE:
 
-pip install yamllint
+  tools/templates/lint-and-validate.py
 
-- https://github.com/instrumenta/kubeval
+DEPENDENCIES:
 
-LATEST=curl --silent "https://api.github.com/repos/instrumenta/kubeval/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'
-wget https://github.com/instrumenta/kubeval/releases/download/$LATEST/kubeval-linux-amd64.tar.gz
-tar xf kubeval-darwin-amd64.tar.gz
-mv kubeval /usr/local/bin
+yamllint: https://github.com/adrienverge/yamllint
+
+  pip install yamllint
+
+kubeval: https://github.com/instrumenta/kubeval
+
+  LATEST=$(curl --silent "https://api.github.com/repos/instrumenta/kubeval/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+  wget https://github.com/instrumenta/kubeval/releases/download/$LATEST/kubeval-linux-amd64.tar.gz
+  tar xf kubeval-linux-amd64.tar.gz
+  sudo mv kubeval /usr/local/bin
 """
 
 import os

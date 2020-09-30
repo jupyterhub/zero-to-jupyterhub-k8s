@@ -11,7 +11,6 @@ hub:
   cookieSecret:
   publicURL:
   initContainers: []
-  uid: 1000
   fsGid: 1000
   nodeSelector: {}
   concurrentSpawnLimit: 64
@@ -49,12 +48,14 @@ hub:
   image:
     name: jupyterhub/k8s-hub
     tag: 'set-by-chartpress'
-    # pullSecrets:
-    #   - secretName
+    pullSecrets:
   resources:
     requests:
       cpu: 200m
       memory: 512Mi
+  containerSecurityContext:
+    runAsUser: 1000
+    allowPrivilegeEscalation: false
   services: {}
   imagePullSecret:
     enabled: false
@@ -66,8 +67,14 @@ hub:
     enabled: true
     minAvailable: 1
   networkPolicy:
-    enabled: false
+    enabled: true
     ingress: []
+    ## egress for JupyterHub already includes Kubernetes internal DNS and
+    ## access to the proxy, but can be restricted further, but ensure to allow
+    ## access to the Kubernetes API server that couldn't be pinned ahead of
+    ## time.
+    ##
+    ## ref: https://stackoverflow.com/a/59016417/2220152
     egress:
       - to:
           - ipBlock:
@@ -81,12 +88,16 @@ hub:
   templateVars: {}
   livenessProbe:
     enabled: false
-    initialDelaySeconds: 30
+    initialDelaySeconds: 60
     periodSeconds: 10
+    failureThreshold: 3
+    timeoutSeconds: 1
   readinessProbe:
     enabled: true
     initialDelaySeconds: 0
-    periodSeconds: 10
+    periodSeconds: 2
+    failureThreshold: 3
+    timeoutSeconds: 1
   # existingSecret: existing-secret
 
 rbac:
@@ -121,6 +132,8 @@ proxy:
     ##     Error: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
     ##     Error: UPGRADE FAILED: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
     rollingUpdate:
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
   service:
     type: LoadBalancer
     labels: {}
@@ -136,24 +149,33 @@ proxy:
       tag: 4.2.1
     livenessProbe:
       enabled: true
-      initialDelaySeconds: 30
+      initialDelaySeconds: 60
       periodSeconds: 10
     readinessProbe:
       enabled: true
       initialDelaySeconds: 0
-      periodSeconds: 10
+      periodSeconds: 2
     resources:
       requests:
         cpu: 200m
         memory: 512Mi
+    extraEnv: {}
   traefik:
     image:
       name: traefik
-      tag: v2.2 # ref: https://hub.docker.com/_/traefik?tab=tags
+      tag: v2.3 # ref: https://hub.docker.com/_/traefik?tab=tags
     hsts:
-      maxAge: 15724800 # About 6 months
       includeSubdomains: false
+      preload: false
+      maxAge: 15724800 # About 6 months
     resources: {}
+    extraEnv: {}
+    extraVolumes: []
+    extraVolumeMounts: []
+    extraStaticConfig: {}
+    extraDynamicConfig: {}
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
   secretSync:
     image:
       name: jupyterhub/k8s-secret-sync
@@ -165,13 +187,13 @@ proxy:
     enabled: true
     minAvailable: 1
   https:
-    enabled: true
+    enabled: false
     type: letsencrypt
     #type: letsencrypt, manual, offload, secret
     letsencrypt:
       contactEmail: ''
       # Specify custom server here (https://acme-staging-v02.api.letsencrypt.org/directory) to hit staging LE
-      acmeServer: ''
+      acmeServer: https://acme-v02.api.letsencrypt.org/directory
     manual:
       key:
       cert:
@@ -181,7 +203,7 @@ proxy:
       crt: tls.crt
     hosts: []
   networkPolicy:
-    enabled: false
+    enabled: true
     ingress: []
     egress:
       - to:
@@ -228,10 +250,15 @@ singleuser:
     enabled: false
     ip: 169.254.169.254
   networkPolicy:
-    enabled: false
+    enabled: true
     ingress: []
     egress:
-    # Required egress is handled by other rules so it's safe to modify this
+      # Required egress to communicate with the hub and DNS servers will be
+      # augmented to these egress rules.
+      #
+      # This default rule explicitly allows all outbound traffic from singleuser
+      # pods, except to a typical IP used to return metadata that can be used by
+      # someone with malicious intent.
       - to:
           - ipBlock:
               cidr: 0.0.0.0/0
@@ -295,18 +322,18 @@ scheduling:
     enabled: true
     replicas: 2
     logLevel: 4
-    ## policy:
-    ## Allows you to provide custom YAML/JSON to render into a JSON policy.cfg,
-    ## a configuration file for the kube-scheduler binary.
-    ## NOTE: The kube-scheduler binary in the kube-scheduler image we are
-    ## currently using may be version bumped. It would for example happen if we
-    ## increase the lowest supported k8s version for the helm chart. At this
-    ## point, the provided policy.cfg may require a change along with that due
-    ## to breaking changes in the kube-scheduler binary.
-    policy: {}
+    plugins:
+      score:
+        disabled:
+          - name: ImageLocality
+          - name: NodeResourcesLeastAllocated
+          - name: NodeResourcesBalancedAllocation
+          - name: SelectorSpread
+        enabled:
+          - name: NodeResourcesMostAllocated
     image:
-      name: gcr.io/google_containers/kube-scheduler-amd64
-      tag: v1.13.12
+      name: k8s.gcr.io/kube-scheduler
+      tag: v1.19.1
     nodeSelector: {}
     pdb:
       enabled: true
@@ -332,18 +359,25 @@ scheduling:
 
 
 prePuller:
+  annotations: {}
+  resources:
+    requests:
+      cpu: 0
+      memory: 0
   hook:
     enabled: true
     image:
       name: jupyterhub/k8s-image-awaiter
       tag: 'set-by-chartpress'
+    podSchedulingWaitDuration: -1
   continuous:
     enabled: true
   extraImages: {}
   pause:
     image:
-      name: gcr.io/google_containers/pause
-      tag: '3.1'
+      name: k8s.gcr.io/pause
+      # Pick version from https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/pause?gcrImageListsize=30
+      tag: '3.2'
 
 
 ingress:

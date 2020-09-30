@@ -14,7 +14,9 @@ ARG JUPYTERHUB_VERSION=1.1.*
 # NOTE: git is already available in the jupyter/minimal-notebook image.
 USER root
 RUN apt-get update && apt-get install --yes --no-install-recommends \
+    dnsutils \
     git \
+    iputils-ping \
  && rm -rf /var/lib/apt/lists/*
 USER $NB_USER
 

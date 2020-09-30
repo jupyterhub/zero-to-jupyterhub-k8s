@@ -308,20 +308,39 @@ properties:
         description: |
           Extra environment variables that should be set for the hub pod.
 
+          Environment variables are usually used to:
+            - Pass parameters to some custom code in `hub.extraConfig`.
+            - Configure code running in the hub pod, such as an authenticator or
+              spawner.
+
+          String literals with `$(ENV_VAR_NAME)` will be expanded by Kubelet which
+          is a part of Kubernetes.
+
           ```yaml
           hub:
             extraEnv:
-              MY_ENV_VARS_NAME: "my env vars value"
+              # basic notation (for literal values only)
+              MY_ENV_VARS_NAME1: "my env var value 1"
+
+              # explicit notation (the "name" field takes precedence)
+              HUB_NAMESPACE:
+                name: HUB_NAMESPACE
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.namespace
+
+              # implicit notation (the "name" field is implied)
+              PREFIXED_HUB_NAMESPACE:
+                value: "my-prefix-$(HUB_NAMESPACE)"
+              SECRET_VALUE:
+                valueFrom:
+                  secretKeyRef:
+                    name: my-k8s-secret
+                    key: password
           ```
 
-          **NOTE**: We still support this field being a list of
-          [EnvVar](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#envvar-v1-core)
-          objects as well.
-
-          These are usually used in two circumstances:
-            - Passing parameters to some custom code specified with `extraConfig`
-            - Passing parameters to an authenticator or spawner that can be directly customized
-              by environment variables (rarer)
+          For more information, see the [Kubernetes EnvVar
+          specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core).
       extraConfig:
         type: object
         description: |
@@ -395,28 +414,6 @@ properties:
               The default type is `ClusterIP`.
               See the [Kubernetes docs](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
               to learn more about service types.
-          loadBalancerIP:
-            type: string
-            description: |
-              The public IP address the hub service should be exposed on.
-
-              This sets the IP address that should be used by the LoadBalancer for exposing the hub service.
-              Set this if you want the hub service to be provided with a fixed external IP address instead of a dynamically acquired one.
-              Useful to ensure a stable IP to access to the hub with, for example if you have reserved an IP address in your network to communicate with the JupyterHub.
-
-              To be provided like:
-              ```
-              hub:
-                service:
-                  loadBalancerIP: xxx.xxx.xxx.xxx
-              ```
-          loadBalancerSourceRanges:
-            type: list
-            description: |
-              A list of IP CIDR ranges that are allowed to access the load balancer service.
-              Defaults to allowing everyone to access it.
-
-              For more information please check the [Kubernetes documentation](https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service).
           ports:
             type: object
             description: |
@@ -470,6 +467,50 @@ properties:
   proxy:
     type: object
     properties:
+      chp:
+        type: object
+        description: |
+          Configure the configurable-http-proxy (chp) pod managed by jupyterhub to route traffic
+          both to itself and to user pods.
+        properties:
+          extraEnv:
+            type: object
+            description: |
+              Extra environment variables that should be set for the chp pod.
+
+              Environment variables are usually used here to:
+                - override HUB_SERVICE_PORT or HUB_SERVICE_HOST default values
+                - set CONFIGPROXY_SSL_KEY_PASSPHRASE for setting passphrase of SSL keys
+
+              String literals with `$(ENV_VAR_NAME)` will be expanded by Kubelet which
+              is a part of Kubernetes.
+
+              ```yaml
+              proxy:
+                chp:
+                  extraEnv:
+                    # basic notation (for literal values only)
+                    MY_ENV_VARS_NAME1: "my env var value 1"
+
+                    # explicit notation (the "name" field takes precedence)
+                    CHP_NAMESPACE:
+                      name: CHP_NAMESPACE
+                      valueFrom:
+                        fieldRef:
+                          fieldPath: metadata.namespace
+
+                    # implicit notation (the "name" field is implied)
+                    PREFIXED_CHP_NAMESPACE:
+                      value: "my-prefix-$(CHP_NAMESPACE)"
+                    SECRET_VALUE:
+                      valueFrom:
+                        secretKeyRef:
+                          name: my-k8s-secret
+                          key: password
+              ```
+
+              For more information, see the [Kubernetes EnvVar
+              specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core).
       secretToken:
         type: string
         description: |
@@ -497,7 +538,7 @@ properties:
               - LoadBalancer
               - ExternalName
             description: |
-              See `hub.service.type`.
+              Default `LoadBalancer`. See `hub.service.type` for supported values.
           labels:
             type: object
             description: |
@@ -533,12 +574,25 @@ properties:
           loadBalancerIP:
             type: string
             description: |
-              See `hub.service.loadBalancerIP`
+              The public IP address the proxy-public Kubernetes service should
+              be exposed on. This entry will end up at the configurable proxy
+              server that JupyterHub manages, which will direct traffic to user
+              pods at the `/user` path and the hub pod at the `/hub` path.
+              
+              Set this if you want to use a fixed external IP address instead of
+              a dynamically acquired one. This is relevant if you have a domain
+              name that you want to point to a specific IP and want to ensure it
+              doesn't change.
+          loadBalancerSourceRanges:
+            type: list
+            description: |
+              A list of IP CIDR ranges that are allowed to access the load balancer service.
+              Defaults to allowing everyone to access it.
       https:
         type: object
         description: |
           Object for customizing the settings for HTTPS used by the JupyterHub's proxy.
-          For more information on configuring HTTPS for your JupyterHub, see the [HTTPS section in our security guide](https://zero-to-jupyterhub.readthedocs.io/en/stable/security.html?highlight=security#https)
+          For more information on configuring HTTPS for your JupyterHub, see the [HTTPS section in our security guide](/administrator/security.html#https)
         properties:
           enabled:
             type: boolean
@@ -561,13 +615,13 @@ properties:
               contactEmail:
                 type: string
                 description: |
-                  The contact email to be used for automatically provisioned HTTPS certificates by Let's Encrypt. For more information see [Set up automatic HTTPS](https://zero-to-jupyterhub.readthedocs.io/en/stable/security.html?highlight=security#set-up-automatic-https).
+                  The contact email to be used for automatically provisioned HTTPS certificates by Let's Encrypt. For more information see [Set up automatic HTTPS](/administrator/security.html#set-up-automatic-https).
                   Required for automatic HTTPS.
           manual:
             type: object
             description: |
               Object for providing own certificates for manual HTTPS configuration. To be provided when setting `https.type` to `manual`.
-              See [Set up manual HTTPS](https://zero-to-jupyterhub.readthedocs.io/en/stable/security.html?highlight=security#set-up-manual-https)
+              See [Set up manual HTTPS](/administrator/security.html#set-up-manual-https)
             properties:
               key:
                 type: string
@@ -616,7 +670,7 @@ properties:
             type: list
             description: |
               You domain in list form.
-              Required for automatic HTTPS. See [Set up automatic HTTPS](https://zero-to-jupyterhub.readthedocs.io/en/stable/security.html?highlight=security#set-up-automatic-https).
+              Required for automatic HTTPS. See [Set up automatic HTTPS](/administrator/security.html#set-up-automatic-https).
               To be provided like:
               ```
               hosts:
@@ -639,6 +693,47 @@ properties:
             type: integer
             description: |
               Minimum number of pods to be available during the voluntary disruptions.
+      traefik:
+        type: object
+        description: |
+          Configure the traefik proxy used to terminate TLS when 'autohttps' is enabled
+        properties:
+          extraEnv:
+            type: object
+            description: |
+              Extra environment variables that should be set for the traefik pod.
+
+              Environment Variables here may be used to configure traefik.
+
+              String literals with `$(ENV_VAR_NAME)` will be expanded by Kubelet which
+              is a part of Kubernetes.
+
+              ```yaml
+              proxy:
+                traefik:
+                  extraEnv:
+                    # basic notation (for literal values only)
+                    MY_ENV_VARS_NAME1: "my env var value 1"
+
+                    # explicit notation (the "name" field takes precedence)
+                    TRAEFIK_NAMESPACE:
+                      name: TRAEFIK_NAMESPACE
+                      valueFrom:
+                        fieldRef:
+                          fieldPath: metadata.namespace
+
+                    # implicit notation (the "name" field is implied)
+                    PREFIXED_TRAEFIK_NAMESPACE:
+                      value: "my-prefix-$(TRAEFIK_NAMESPACE)"
+                    SECRET_VALUE:
+                      valueFrom:
+                        secretKeyRef:
+                          name: my-k8s-secret
+                          key: password
+              ```
+
+              For more information, see the [Kubernetes EnvVar
+              specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core).
     required:
       - secretToken
   auth:
@@ -651,7 +746,7 @@ properties:
             type: boolean
             description: |
               Enable persisting auth_state (if available).
-              See: http://jupyterhub.readthedocs.io/en/latest/api/auth.html
+              See: [the documentation on authenticators](http://jupyterhub.readthedocs.io/en/latest/api/auth.html)
           cryptoKey:
             type:
               - string
@@ -679,7 +774,7 @@ properties:
         type: object
         description: |
           Set CPU limits & guarantees that are enforced for each user.
-          See: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+          See: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
         properties:
           limit:
             type:
@@ -694,7 +789,7 @@ properties:
         description: |
           Set Memory limits & guarantees that are enforced for each user.
           
-          See the [Kubernetes docs](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container)
+          See the [Kubernetes docs](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
           for more info.
         properties:
           limit:
@@ -836,6 +931,21 @@ properties:
                   pullSecrets:
                     - gcr-pull
               ```
+      initContainers:
+        type: list
+        description: |
+          list of initContainers to be run every singleuser pod. See [Kubernetes Docs](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/)
+          
+          ```yaml
+          singleuser:
+            initContainers:
+              - name: init-myservice
+                image: busybox:1.28
+                command: ['sh', '-c', 'command1']
+              - name: init-mydb
+                image: busybox:1.28
+                command: ['sh', '-c', 'command2']
+          ```
       profileList:
         type: list
         description: |
@@ -866,6 +976,43 @@ properties:
         description: |
           Deprecated and no longer does anything. Use the user-scheduler instead
           in order to accomplish a good packing of the user pods.
+      extraEnv:
+        type: object
+        description: |
+          Extra environment variables that should be set for the user pods.
+
+          String literals with `$(ENV_VAR_NAME)` will be expanded by Kubelet which
+          is a part of Kubernetes. Note that the user pods will already have
+          access to a set of environment variables that you can use, like
+          `JUPYTERHUB_USER` and `JUPYTERHUB_HOST`. For more information about these
+          inspect [this source
+          code](https://github.com/jupyterhub/jupyterhub/blob/cc8e7806530466dce8968567d1bbd2b39a7afa26/jupyterhub/spawner.py#L763).
+
+          ```yaml
+          singleuser:
+            extraEnv:
+              # basic notation (for literal values only)
+              MY_ENV_VARS_NAME1: "my env var value 1"
+
+              # explicit notation (the "name" field takes precedence)
+              USER_NAMESPACE:
+                name: USER_NAMESPACE
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.namespace
+
+              # implicit notation (the "name" field is implied)
+              PREFIXED_USER_NAMESPACE:
+                value: "my-prefix-$(USER_NAMESPACE)"
+              SECRET_VALUE:
+                valueFrom:
+                  secretKeyRef:
+                    name: my-k8s-secret
+                    key: password
+          ```
+
+          For more information, see the [Kubernetes EnvVar
+          specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core).
       extraTolerations:
         type: list
         description: |
@@ -876,11 +1023,11 @@ properties:
           of tolerations exist where `/` is replaced with `_` as the Google
           cloud does not support the character `/` yet in the toleration.
 
-          See the [Kubernetes docs](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)
+          See the [Kubernetes docs](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
           for more info.
 
           Pass this field an array of
-          [`Toleration`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#toleration-v1-core)
+          [`Toleration`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#toleration-v1-core)
           objects.
       extraNodeAffinity:
         type: object
@@ -892,20 +1039,20 @@ properties:
           and anti pod affinity).
           
           See the [Kubernetes
-          docs](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/)
+          docs](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/)
           for more info.
         properties:
           required:
             type: list
             description: |
               Pass this field an array of
-              [`NodeSelectorTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#nodeselectorterm-v1-core)
+              [`NodeSelectorTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#nodeselectorterm-v1-core)
               objects.
           preferred:
             type: list
             description: |
               Pass this field an array of
-              [`PreferredSchedulingTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#preferredschedulingterm-v1-core)
+              [`PreferredSchedulingTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#preferredschedulingterm-v1-core)
               objects.
       extraPodAffinity:
         type: object
@@ -916,13 +1063,13 @@ properties:
             type: list
             description: |
               Pass this field an array of
-              [`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#podaffinityterm-v1-core)
+              [`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#podaffinityterm-v1-core)
               objects.
           preferred:
             type: list
             description: |
               Pass this field an array of
-              [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#weightedpodaffinityterm-v1-core)
+              [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#weightedpodaffinityterm-v1-core)
               objects.
       extraPodAntiAffinity:
         type: object
@@ -933,13 +1080,13 @@ properties:
             type: list
             description: |
               Pass this field an array of
-              [`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#podaffinityterm-v1-core)
+              [`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#podaffinityterm-v1-core)
               objects.
           preferred:
             type: list
             description: |
               Pass this field an array of
-              [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.11/#weightedpodaffinityterm-v1-core)
+              [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#weightedpodaffinityterm-v1-core)
               objects.
 
 
@@ -1138,7 +1285,7 @@ properties:
           Enable the creation of a Kubernetes Ingress to proxy-public service.
 
           See [Advanced Topics — Zero to JupyterHub with Kubernetes
-          0.7.0 documentation](https://zero-to-jupyterhub.readthedocs.io/en/stable/advanced.html#ingress)
+          0.7.0 documentation](/administrator/advanced.html#ingress)
           for more details.
       annotations:
         type: object
@@ -1170,19 +1317,52 @@ properties:
   prePuller:
     type: object
     properties:
+      annotations:
+        type: object
+        description: |
+          Annotations to apply to the hook and continous image puller pods. One example use case is to
+          disable istio sidecars which could interfere with the image pulling.
+      resources:
+        type: object
+        description: |
+          These are standard Kubernetes resources with requests and limits for
+          cpu and memory. They will be used on the containers in the pods
+          pulling images. These should be set extremely low as the containers
+          shut down directly or is a pause container that just idles.
+
+          They were made configurable as usage of ResourceQuota may require
+          containers in the namespace to have explicit resources set.
       hook:
         description: |
           See the [*optimization
-          section*](https://zero-to-jupyterhub.readthedocs.io/en/stable/administrator/optimization.html#pulling-images-before-users-arrive)
+          section*](/administrator/optimization.html#pulling-images-before-users-arrive)
           for more details.
         type: object
         properties:
           enabled:
             type: bool
+          podSchedulingWaitDuration:
+            description: |
+              The `hook-image-awaiter` has a criteria to await all the
+              `hook-image-puller` DaemonSet's pods to both schedule and finish
+              their image pulling. This flag can be used to relax this criteria
+              to instead only await the pods that _has already scheduled_ to
+              finish image pulling after a certain duration.
+
+              The value of this is that sometimes the newly created
+              `hook-image-puller` pods cannot be scheduled because nodes are
+              full, and then it probably won't make sense to block a `helm
+              upgrade`.
+
+              An infinite duration to wait for pods to schedule can be
+              represented by `-1`. This was the default behavior of version
+              0.9.0 and earlier.
+            type: int
+
       continuous:
         description: |
           See the [*optimization
-          section*](https://zero-to-jupyterhub.readthedocs.io/en/stable/administrator/optimization.html#pulling-images-before-users-arrive)
+          section*](/administrator/optimization.html#pulling-images-before-users-arrive)
           for more details.
 
           **NOTE**: If used with a Cluster Autoscaler (an autoscaling node
@@ -1195,7 +1375,7 @@ properties:
         type: object
         description: |
           See the [*optimization
-          section*](https://zero-to-jupyterhub.readthedocs.io/en/stable/administrator/optimization.html#the-images-that-will-be-pulled)
+          section*](/administrator/optimization.html#the-images-that-will-be-pulled)
           for more details.
 
           ```yaml

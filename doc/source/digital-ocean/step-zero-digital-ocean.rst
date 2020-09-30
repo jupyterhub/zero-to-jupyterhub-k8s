@@ -35,7 +35,7 @@ If you prefer to use the Digital Ocean portal see the `Digital Ocean Get Started
    .. code-block:: bash
 
       export DIGITALOCEAN_ENABLE_BETA=1
-      doctl k8s cluster create jupyter-kubernetes --region lon1 --version 1.12.1-do.2 --node-pool="name=worker-pool;count=3
+      doctl k8s cluster create jupyter-kubernetes --region lon1 --version 1.18.8-do.0 --node-pool="name=worker-pool;count=3"
 
 #. Export your cluster config.
    You can change the default location from $HOME/.kube by setting the KUBECONFIG environment variable.

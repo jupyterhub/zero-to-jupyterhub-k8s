@@ -36,3 +36,10 @@ WARNING: You are using user placeholders without pod priority enabled, either
 enable pod priority or stop using the user placeholders to avoid wasting cloud
 resources.
 {{- end }}
+
+{{- if hasKey .Values.hub "uid" }}
+
+DEPRECATION: hub.uid is deprecated in jupyterhub chart 0.9. Set the hub.containerSecurityContext.runAsUser value
+directly instead.
+
+{{- end }}

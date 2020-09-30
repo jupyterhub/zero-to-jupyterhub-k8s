@@ -3,6 +3,7 @@ tools/templates/rendered-templates/
 bin/
 .vagrant/
 tools/github.sqlite
+ci/ephemeral*
 
 .vscode
 
@@ -149,3 +150,5 @@ pyvenv.cfg
 
 # Emacs
 .#*
+
+.idea

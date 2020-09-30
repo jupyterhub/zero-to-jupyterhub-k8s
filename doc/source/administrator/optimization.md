@@ -1,7 +1,4 @@
-```eval_rst
-.. _optimization:
-```
-
+(optimization)=
 # Optimizations
 
 This page contains information and guidelines for improving the reliability,
@@ -72,12 +69,12 @@ situations:
     introduced will be pulled to the nodes before the hub pod is updated to
     utilize the new image. The name hook-image-puller is a technical name
     referring to how a [Helm
-    hook](https://docs.helm.sh/developing_charts/#hooks) is used to accomplish
+    hook](https://helm.sh/docs/topics/charts_hooks/) is used to accomplish
     this, a more informative name would have been *pre-upgrade-image-puller*.
-    
+
     **NOTE**: With this enabled your `helm upgrade` will take a long time if you
     introduce a new image as it will wait for the pulling to complete. We
-    recommend that you add `--timeout 600` or similar to your `helm upgrade`
+    recommend that you add `--timeout 10m0s` or similar to your `helm upgrade`
     command to give it enough time.
 
     The hook-image-puller is enabled by default. To disable it, use the
@@ -165,10 +162,7 @@ prePuller:
       tag: 2343e33dec46
 ```
 
-```eval_rst
-.. _efficient-cluster-autoscaling:
-```
-
+(efficient-cluster-autoscaling)=
 ## Efficient Cluster Autoscaling
 
 A [*Cluster
@@ -221,7 +215,7 @@ where he analyzed its introduction on mybinder.org.
 priority depending on how your cluster autoscaler is configured. This is known
 to work on GKE, but we don't know how it works on other cloud providers or
 kubernetes. See the [configuration
-reference](https://zero-to-jupyterhub.readthedocs.io/en/latest/reference.html#scheduling-podpriority) for more details.
+reference](/reference/reference.html#scheduling-podpriority) for more details.
 
 ### Scaling down efficiently
 
@@ -236,7 +230,7 @@ and some JupyterHub pods (without a permissive
 Consider for example that many users arrive to your JupyterHub during the
 daytime. New nodes are added by the CA. Some system pod ends up on the new nodes
 along with the user pods for some reason. At night when the
-[*culler*](user-management.html#culling-user-pods) has removed many inactive
+[*culler*](/customizing/user-management.html#culling-user-pods) has removed many inactive
 pods from some nodes. They are now free from user pods but there is still a
 single system pod stopping the CA from removing the node.
 
@@ -252,7 +246,7 @@ pods.
 #### Using a dedicated node pool for users
 
 To set up a dedicated node pool for user pods, we can use [*taints and
-tolerations*](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/).
+tolerations*](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/).
 If we add a taint to all the nodes in the node pool, and a toleration on the
 user pods to tolerate being scheduled on a tainted node, we have practically
 dedicated the node pool to be used only by user pods.
@@ -271,7 +265,7 @@ following:
       kubernetes labels, but this label must be a kubernetes label.
 
     - The taint: `hub.jupyter.org/dedicated=user:NoSchedule`
-    
+
       **NOTE**: You may need to replace `/` with `_` due cloud provider
       limitations. Both taints are tolerated by the user pods.
 

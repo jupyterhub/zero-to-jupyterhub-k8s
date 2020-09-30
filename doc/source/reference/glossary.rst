@@ -54,7 +54,7 @@ details.
       behave on a computer. Some common examples are ``PATH``, ``HOME``, and
       ``EDITOR``.
 
-   `Helm chart <https://docs.helm.sh/developing_charts/#charts>`_
+   `Helm chart <https://helm.sh/docs/topics/charts/>`_
       A Helm chart is a group of :term:`Helm templates <Helm template>` that
       can, given its default values and overrides in provided ``yaml`` files,
       render to a set of :term:`Kubernetes resources <Kubernetes resource>` that
@@ -62,11 +62,11 @@ details.
       chart is like a configurable installation of software and infrastructure
       to exist on a cloud.
 
-   `Helm template <https://docs.helm.sh/chart_template_guide/#the-chart-template-developer-s-guide>`_
+   `Helm template <https://helm.sh/docs/chart_template_guide/>`_
       A Helm template (``.yaml`` files), can given values, render to a
       :term:`Kubernetes resource`.
 
-   `Helm values <https://docs.helm.sh/chart_template_guide/#values-files>`_
+   `Helm values <https://helm.sh/docs/chart_template_guide/values_files/>`_
       :term:`Helm charts <Helm chart>` has a set of predefined values
       (`values.yaml`) typically overridden by other values in `config.yaml`. The
       final values are used to generate :term:`Kubernetes resources <Kubernetes

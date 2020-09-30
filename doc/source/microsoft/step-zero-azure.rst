@@ -81,7 +81,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
    * ``--location`` specifies the location of the data center you want your resource to be in.
      In this case, we used the ``centralus`` location. For other options, see the
      `Azure list of locations that support AKS
-     <https://docs.microsoft.com/en-us/azure/aks/container-service-quotas#region-availability>`_.
+     <https://docs.microsoft.com/en-us/azure/aks/quotas-skus-regions#region-availability>`_.
    * ``--output table`` specifies that the output should be in human readable
      format, rather than the default JSON output. We shall use this with most
      commands when executing them by hand.
@@ -168,7 +168,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
    .. code-block:: bash
 
-      SP_PASSWD=$(az ad create-for-rbac \
+      SP_PASSWD=$(az ad sp create-for-rbac \
           --name <SERVICE-PRINCIPAL-NAME> \
           --role Contributor \
           --scopes $VNET_ID \

@@ -8,12 +8,22 @@ import (
 	"net/http"
 )
 
-// Partial structure of a Kubernetes DaemonSet object
-// Only contains fields we will actively be using, to make JSON parsing nicer
+// Partial structure of a Kubernetes DaemonSet object. Note that we want to use
+// the non-optional fields of the Status struct only to ensure this is a robust
+// implementation.
+//
+// ref: https://github.com/kubernetes/kubernetes/blob/e23d83eead3b5ae57731afb0209f4a2aaa4009dd/pkg/apis/apps/types.go#L590
 type DaemonSet struct {
 	Kind   string `json:"kind"`
 	Status struct {
+		// The number of nodes that are running at least 1
+		// daemon pod and are supposed to run the daemon pod.
+		CurrentNumberScheduled int `json:"currentNumberScheduled"`
+		// The number of nodes that are running the daemon pod, but are
+		// not supposed to run the daemon pod.
 		DesiredNumberScheduled int `json:"desiredNumberScheduled"`
+		// The number of nodes that should be running the daemon pod and have one
+		// or more of the daemon pod running and ready.
 		NumberReady            int `json:"numberReady"`
 	} `json:"status"`
 }
@@ -54,11 +64,18 @@ func getDaemonSet(transportPtr *http.Transport, server string, headers map[strin
 	return ds, err
 }
 
-func isImagesPresent(ds *DaemonSet) bool {
+// Return a bool indicating if the provided DaemonSet's _currently_ scheduled
+// pods (which does the image pulling) are ready, or in the case of a
+// strictCheck, if the _desired_ number of scheduled pods are ready.
+func areDaemonSetPodsReady(ds *DaemonSet, waitForPodsToSchedule bool) bool {
+	current := ds.Status.CurrentNumberScheduled
 	desired := ds.Status.DesiredNumberScheduled
 	ready := ds.Status.NumberReady
 
-	log.Printf("%d of %d nodes currently has the required images.", ready, desired)
-
-	return desired == ready
+	log.Printf("%d image puller pods are ready out of the %d currently scheduled and %d desired number scheduled.", ready, current, desired)
+	if waitForPodsToSchedule {
+		return ready == desired
+	} else {
+		return ready >= current
+	}
 }

@@ -2,6 +2,31 @@
 
 Here you can find upgrade changes in between releases and upgrade instructions.
 
+## [0.10]
+
+### [0.10.0]
+
+#### Breaking changes:
+
+- Predefined Kubernetes
+  [NetworkPolicies](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
+  are now created by default, explicitly describing allowed incoming (_ingress_)
+  and outgoing (_egress_) network communication for the hub, proxy, and user
+  pods. These network policies explicitly allow only the network communication
+  known to be needed, with the exception of the user pods outgoing
+  communication, where all outgoing communication is allowed by default.
+  
+  Note that these network policies only influence network communication in a
+  Kubernetes cluster if a NetworkPolicy controller enforce them, such as Calico.
+
+  With network policies enabled, you may require additional configuration,
+  especially for deployments that include additional components that access
+  JupyterHub pods directly (i.e. not through the `proxy-public` service).
+
+  See the [security
+  documentation](https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/security.html#kubernetes-network-policies)
+  for more details on this.
+
 ## [0.9]
 
 ### [0.9.0] - 2020-04-15
@@ -307,7 +332,7 @@ Bumped the underlying JupyterHub to 0.9.5.
 ### [0.8.0] - [Richie Benaud](https://en.wikipedia.org/wiki/Richie_Benaud) - 2019-01-24
 
 This release contains JupyterHub version 0.9.4. It requires Kubernetes >= 1.11 and Helm >= 2.11.0.
-See [the Helm Chart repository](https://github.com/jupyterhub/helm-chart#versions-coupled-to-each-chart-release) for
+See [the Helm Chart repository](https://github.com/jupyterhub/helm-chart#release-notes) for
 a list of relevant dependencies for all Helm Chart versions.
 
 It contains new features, additional configuration options, and bug fixes.

@@ -1,7 +1,4 @@
-```eval_rst
-.. _user-storage:
-```
-
+(user-storage)=
 # Customizing User Storage
 
 For the purposes of this guide, we'll describe "storage" as
@@ -48,7 +45,7 @@ In the future, when the user logs back in, JupyterHub will
 detect that the user has a pre-existing `PVC` and will simply
 attach it to their new pod, rather than creating a new `PVC`.
 
-### How can this process break down?
+## How can this process break down?
 
 When Kubernetes uses the `PVC` to create a new user `PV`, it
 is sending a command to the underlying API of whatever cloud
@@ -61,17 +58,15 @@ may be simultaneously attached to a node in your cluster. Check
 your cloud provider for details on the limits of storage
 resources you request.
 
-```eval_rst
-.. note::
-
-   Some cloud providers have a limited number of disks that can be attached to
-   each node. Since JupyterHub allocates one disk per user for
-   persistent storage, this limits the number of users that can be running in
-   a node at any point of time. If you need users to have
-   persistent storage, and you end up hitting this limit, you must use
-   *more* nodes in order to accommodate the disk for each user. In this
-   case, we recommend allocating *fewer* resources per node (e.g. RAM) since
-   you'll have fewer users packed onto a single node.
+```{note}
+Some cloud providers have a limited number of disks that can be attached to
+each node. Since JupyterHub allocates one disk per user for
+persistent storage, this limits the number of users that can be running in
+a node at any point of time. If you need users to have
+persistent storage, and you end up hitting this limit, you must use
+*more* nodes in order to accommodate the disk for each user. In this
+case, we recommend allocating *fewer* resources per node (e.g. RAM) since
+you'll have fewer users packed onto a single node.
 ```
 
 ## Configuration
@@ -199,9 +194,8 @@ singleuser:
     type: none
 ```
 
-```eval_rst
-Next :ref:`apply the changes <apply-config-changes>`.
-```
+Next {ref}`apply the changes <apply-config-changes>`.
+
 
 After the changes are applied, new users will no longer be allocated a
 persistent `$HOME` directory. Any currently running users will still have

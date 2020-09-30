@@ -52,7 +52,7 @@ elif db_type == "sqlite-memory":
     c.JupyterHub.db_url = "sqlite://"
 else:
     set_config_if_not_none(c.JupyterHub, "db_url", "hub.db.url")
-    
+
 
 for trait, cfg_key in (
     # Max number of servers that can be spawning at any one time
@@ -117,6 +117,7 @@ set_config_if_not_none(
 for trait, cfg_key in (
     ('start_timeout', None),
     ('image_pull_policy', 'image.pullPolicy'),
+    ('image_pull_secrets', 'image.pullSecrets'),
     ('events_enabled', 'events'),
     ('extra_labels', None),
     ('extra_annotations', None),
@@ -252,7 +253,9 @@ elif storage_type == 'static':
 c.KubeSpawner.volumes.extend(get_config('singleuser.storage.extraVolumes', []))
 c.KubeSpawner.volume_mounts.extend(get_config('singleuser.storage.extraVolumeMounts', []))
 
-# Gives spawned containers access to the API of the hub
+# Gives spawned containers access to the API of the hub.
+# Note that the HUB_SERVICE_* values come from kubernetes:
+# https://kubernetes.io/docs/concepts/services-networking/service/#environment-variables
 c.JupyterHub.hub_connect_url = f'http://hub:{os.environ['HUB_SERVICE_PORT']}'
 
 # Allow switching authenticators easily
@@ -380,7 +383,8 @@ c.JupyterHub.services = []
 if get_config('cull.enabled', False):
     cull_cmd = [
         'python3',
-        '/etc/jupyterhub/cull_idle_servers.py',
+        '-m',
+        'jupyterhub_idle_culler'
     ]
     base_url = c.JupyterHub.get('base_url', '/')
     cull_cmd.append(
