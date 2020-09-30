@@ -29,7 +29,7 @@ AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
 # Connect to a proxy running in a different pod
-c.ConfigurableHTTPProxy.api_url = 'http://proxy-api:8001'
+c.ConfigurableHTTPProxy.api_url = f'http://proxy-api:{os.environ['PROXY_API_SERVICE_PORT']}'
 c.ConfigurableHTTPProxy.should_start = False
 
 # Do not shut down user pods when hub is restarted
@@ -73,14 +73,18 @@ for trait, cfg_key in (
         cfg_key = camelCaseify(trait)
     set_config_if_not_none(c.JupyterHub, trait, 'hub.' + cfg_key)
 
-c.JupyterHub.bind_url = 'http://proxy-public'
+c.JupyterHub.bind_url = f'http://proxy-public:{os.environ['PROXY_PUBLIC_SERVICE_PORT']}'
 
 # the hub should listen on all interfaces, so the proxy can access it
 # tornados httpserver only listens on a single address family
 # this deviates from Linux's standard behaviour. Right now JupyterHub
 # does not support dual-stack setups.
-ipv6 = ':' in os.environ['KUBERNETES_SERVICE_HOST']
-c.JupyterHub.hub_bind_url = 'http://[::]:8081' if ipv6 else 'http://0.0.0.0:8081'
+ipv6_enabled_cluster = ':' in os.environ['KUBERNETES_SERVICE_HOST']
+hub_container_port = 8081
+if ipv6_enabled_cluster:
+    c.JupyterHub.hub_bind_url = f'http://[::]:{hub_container_port}'
+else:
+    c.JupyterHub.hub_bind_url = f'http://0.0.0.0:{hub_container_port}'
 
 # implement common labels
 # this duplicates the jupyterhub.commonLabels helper
@@ -249,7 +253,7 @@ c.KubeSpawner.volumes.extend(get_config('singleuser.storage.extraVolumes', []))
 c.KubeSpawner.volume_mounts.extend(get_config('singleuser.storage.extraVolumeMounts', []))
 
 # Gives spawned containers access to the API of the hub
-c.JupyterHub.hub_connect_url = 'http://hub:8081'
+c.JupyterHub.hub_connect_url = f'http://hub:{os.environ['HUB_SERVICE_PORT']}'
 
 # Allow switching authenticators easily
 auth_type = get_config('auth.type')
