@@ -26,7 +26,6 @@ proxy:
       - name: LEGO_CA_CERTIFICATES
         value: /etc/pebble/root-cert.pem
   networkPolicy:
-    enabled: true
     egress: []  # overrides allowance of 0.0.0.0/0
   chp:
     resources:
@@ -43,7 +42,6 @@ hub:
       admin: true
       apiToken: ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
   networkPolicy:
-    enabled: true
     egress:  # overrides allowance of 0.0.0.0/0
       # In kind/k3s clusters the Kubernetes API server is exposing this port
       - ports:
@@ -60,7 +58,6 @@ singleuser:
   memory:
     guarantee: null
   networkPolicy:
-    enabled: true
     # For testing purposes in test_singleuser_netpol
     egress:
       - to:
