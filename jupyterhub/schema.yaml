@@ -770,6 +770,10 @@ properties:
     description: |
       Options for customizing the environment that is provided to the users after they log in.
     properties:
+      podNameTemplate:
+        type: string
+        description: |
+          Template for the pod name of each user, such as `jupyter-{username}{servername}`.
       cpu:
         type: object
         description: |
