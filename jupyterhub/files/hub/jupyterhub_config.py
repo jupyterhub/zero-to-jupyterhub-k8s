@@ -73,18 +73,26 @@ for trait, cfg_key in (
         cfg_key = camelCaseify(trait)
     set_config_if_not_none(c.JupyterHub, trait, 'hub.' + cfg_key)
 
-c.JupyterHub.bind_url = f'http://proxy-public:{os.environ['PROXY_PUBLIC_SERVICE_PORT']}'
+# Note that *_SERVICE_PORT and *_SERVICE_HOST environment variables are set by
+# Kubernetes to help processes in containers discover Kubernetes services.
+#
+# ref: https://kubernetes.io/docs/concepts/services-networking/service/#environment-variables
 
-# the hub should listen on all interfaces, so the proxy can access it
-# tornados httpserver only listens on a single address family
-# this deviates from Linux's standard behaviour. Right now JupyterHub
-# does not support dual-stack setups.
-ipv6_enabled_cluster = ':' in os.environ['KUBERNETES_SERVICE_HOST']
+# hub_bind_url configures what the JupyterHub process within the hub pod's
+# container should listen to.
 hub_container_port = 8081
-if ipv6_enabled_cluster:
+# Tornados httpserver can only listens to either IPv4 or IPv6 traffic, which
+# deviates from Linux's standard behavior. Due to this, JupyterHub currently
+# does not support dual-stacks setup where either IPv4 or IPv6 can be used.
+ipv6_enabled_cluster = ':' in os.environ['KUBERNETES_SERVICE_HOST']
+if ipv6_enabled_cluster
     c.JupyterHub.hub_bind_url = f'http://[::]:{hub_container_port}'
 else:
     c.JupyterHub.hub_bind_url = f'http://0.0.0.0:{hub_container_port}'
+
+# hub_connect_url is the URL for connecting to the hub for use by external
+# JupyterHub services such as the proxy.
+c.JupyterHub.hub_connect_url = f'http://hub:{os.environ['HUB_SERVICE_PORT']}'
 
 # implement common labels
 # this duplicates the jupyterhub.commonLabels helper
@@ -252,11 +260,6 @@ elif storage_type == 'static':
 
 c.KubeSpawner.volumes.extend(get_config('singleuser.storage.extraVolumes', []))
 c.KubeSpawner.volume_mounts.extend(get_config('singleuser.storage.extraVolumeMounts', []))
-
-# Gives spawned containers access to the API of the hub.
-# Note that the HUB_SERVICE_* values come from kubernetes:
-# https://kubernetes.io/docs/concepts/services-networking/service/#environment-variables
-c.JupyterHub.hub_connect_url = f'http://hub:{os.environ['HUB_SERVICE_PORT']}'
 
 # Allow switching authenticators easily
 auth_type = get_config('auth.type')
