@@ -29,7 +29,7 @@ AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
 # Connect to a proxy running in a different pod
-c.ConfigurableHTTPProxy.api_url = f'http://proxy-api:{os.environ['PROXY_API_SERVICE_PORT']}'
+c.ConfigurableHTTPProxy.api_url = f"http://proxy-api:{os.environ['PROXY_API_SERVICE_PORT']}"
 c.ConfigurableHTTPProxy.should_start = False
 
 # Do not shut down user pods when hub is restarted
@@ -85,14 +85,14 @@ hub_container_port = 8081
 # deviates from Linux's standard behavior. Due to this, JupyterHub currently
 # does not support dual-stacks setup where either IPv4 or IPv6 can be used.
 ipv6_enabled_cluster = ':' in os.environ['KUBERNETES_SERVICE_HOST']
-if ipv6_enabled_cluster
+if ipv6_enabled_cluster:
     c.JupyterHub.hub_bind_url = f'http://[::]:{hub_container_port}'
 else:
     c.JupyterHub.hub_bind_url = f'http://0.0.0.0:{hub_container_port}'
 
 # hub_connect_url is the URL for connecting to the hub for use by external
 # JupyterHub services such as the proxy.
-c.JupyterHub.hub_connect_url = f'http://hub:{os.environ['HUB_SERVICE_PORT']}'
+c.JupyterHub.hub_connect_url = f"http://hub:{os.environ['HUB_SERVICE_PORT']}"
 
 # implement common labels
 # this duplicates the jupyterhub.commonLabels helper
