@@ -30,7 +30,8 @@ AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
 
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
-# Connect to a proxy running in a different pod
+# Connect to a proxy running in a different pod. Note that *_SERVICE_*
+# environment variables are set by Kubernetes for Services
 c.ConfigurableHTTPProxy.api_url = f"http://proxy-api:{os.environ['PROXY_API_SERVICE_PORT']}"
 c.ConfigurableHTTPProxy.should_start = False
 
@@ -79,25 +80,14 @@ cookie_secret_hex = get_config("hub.cookieSecret")
 if cookie_secret_hex:
     c.JupyterHub.cookie_secret = a2b_hex(cookie_secret_hex)
 
-# Note that *_SERVICE_PORT and *_SERVICE_HOST environment variables are set by
-# Kubernetes to help processes in containers discover Kubernetes services.
-#
-# ref: https://kubernetes.io/docs/concepts/services-networking/service/#environment-variables
-#
 # hub_bind_url configures what the JupyterHub process within the hub pod's
 # container should listen to.
 hub_container_port = 8081
-# Tornados httpserver can only listens to either IPv4 or IPv6 traffic, which
-# deviates from Linux's standard behavior. Due to this, JupyterHub currently
-# does not support dual-stacks setup where either IPv4 or IPv6 can be used.
-ipv6_enabled_cluster = ':' in os.environ['KUBERNETES_SERVICE_HOST']
-if ipv6_enabled_cluster:
-    c.JupyterHub.hub_bind_url = f'http://[::]:{hub_container_port}'
-else:
-    c.JupyterHub.hub_bind_url = f'http://0.0.0.0:{hub_container_port}'
+c.JupyterHub.hub_bind_url = f'http://:{hub_container_port}'
 
 # hub_connect_url is the URL for connecting to the hub for use by external
-# JupyterHub services such as the proxy.
+# JupyterHub services such as the proxy. Note that *_SERVICE_* environment
+# variables are set by Kubernetes for Services.
 c.JupyterHub.hub_connect_url = f"http://hub:{os.environ['HUB_SERVICE_PORT']}"
 
 # implement common labels
