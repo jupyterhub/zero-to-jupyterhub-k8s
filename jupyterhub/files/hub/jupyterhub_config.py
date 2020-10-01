@@ -2,6 +2,8 @@ import os
 import re
 import sys
 
+from binascii import a2b_hex
+
 from tornado.httpclient import AsyncHTTPClient
 from kubernetes import client
 from jupyterhub.utils import url_path_join
@@ -55,13 +57,12 @@ else:
     set_config_if_not_none(c.JupyterHub, "db_url", "hub.db.url")
 
 
+# c.JupyterHub configuration from Helm chart's configmap
 for trait, cfg_key in (
-    # Max number of servers that can be spawning at any one time
     ('concurrent_spawn_limit', None),
-    # Max number of servers to be running at one time
     ('active_server_limit', None),
-    # base url prefix
     ('base_url', None),
+    # ('cookie_secret', None),  # requires a Hex -> Byte transformation
     ('allow_named_servers', None),
     ('named_server_limit_per_user', None),
     ('authenticate_prometheus', None),
@@ -73,6 +74,12 @@ for trait, cfg_key in (
     if cfg_key is None:
         cfg_key = camelCaseify(trait)
     set_config_if_not_none(c.JupyterHub, trait, 'hub.' + cfg_key)
+
+# a required Hex -> Byte transformation
+cookie_secret_hex = get_config("hub.cookieSecret")
+if cookie_secret_hex:
+    c.JupyterHub.cookie_secret = a2b_hex(cookie_secret_hex)
+
 
 c.JupyterHub.ip = os.environ['PROXY_PUBLIC_SERVICE_HOST']
 c.JupyterHub.port = int(os.environ['PROXY_PUBLIC_SERVICE_PORT'])
