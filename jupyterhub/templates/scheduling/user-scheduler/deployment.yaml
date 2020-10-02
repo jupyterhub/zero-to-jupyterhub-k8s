@@ -42,6 +42,9 @@ spec:
           {{- else }}
           image: {{ .Values.scheduling.userScheduler.image.name }}:v1.16.15
           {{- end }}
+          {{- with .Values.scheduling.userScheduler.image.pullPolicy }}
+          imagePullPolicy: {{ . }}
+          {{- end }}
           command:
             - /usr/local/bin/kube-scheduler
             # NOTE: --leader-elect-... (new) and --lock-object-... (deprecated)

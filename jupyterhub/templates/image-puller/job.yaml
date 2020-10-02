@@ -37,7 +37,9 @@ spec:
       containers:
         - image: {{ .Values.prePuller.hook.image.name }}:{{ .Values.prePuller.hook.image.tag }}
           name: hook-image-awaiter
-          imagePullPolicy: IfNotPresent
+          {{- with .Values.prePuller.hook.image.pullPolicy }}
+          imagePullPolicy: {{ . }}
+          {{- end }}
           command:
             - /image-awaiter
             - -ca-path=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
