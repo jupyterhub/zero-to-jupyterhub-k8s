@@ -88,9 +88,6 @@ spec:
         {{- /* --- Pull default image --- */}}
         - name: image-pull-singleuser
           image: {{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}
-          {{- with .Values.singleuser.image.pullPolicy }}
-          imagePullPolicy: {{ . }}
-          {{- end }}
           command:
             - /bin/sh
             - -c
@@ -102,9 +99,6 @@ spec:
         {{- range $k, $container := .Values.singleuser.extraContainers }}
         - name: image-pull-singleuser-extra-container-{{ $k }}
           image: {{ $container.image }}
-          {{- with $container.imagePullPolicy }}
-          imagePullPolicy: {{ . }}
-          {{- end }}
           command:
             - /bin/sh
             - -c
@@ -143,9 +137,6 @@ spec:
         {{- range $k, $v := .Values.prePuller.extraImages }}
         - name: image-pull-{{ $k }}
           image: {{ $v.name }}:{{ $v.tag }}
-          {{- with $v.pullPolicy }}
-          imagePullPolicy: {{ . }}
-          {{- end }}
           command:
             - /bin/sh
             - -c
