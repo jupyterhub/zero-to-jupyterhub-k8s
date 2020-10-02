@@ -370,7 +370,7 @@ prePuller:
     image:
       name: jupyterhub/k8s-image-awaiter
       tag: 'set-by-chartpress'
-    podSchedulingWaitDuration: -1
+    podSchedulingWaitDuration: 10
   continuous:
     enabled: true
   extraImages: {}
