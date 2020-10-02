@@ -229,6 +229,30 @@ and obtain the confidential client credentials.
          userdata_params: {'state': 'state'}
          username_key: preferred_username
 
+Auth0
+^^^^^
+
+Auth0 is a popular commercial provider of identity management. The JupyterHub helm chart does not include support for
+Auth0 by default.  To use Auth0, ``extraEnv`` and ``extraConfig`` must be configured as follows:
+
+Note that without the scope defined, authenticating to JupyterHub after already being logged in to Auth0 will fail.
+
+.. code-block:: yaml
+
+    hub:
+      extraEnv:
+        AUTH0_SUBDOMAIN: 'prod-8ua-1yy9'
+      extraConfig:
+        myConfig.py: |
+          c.JupyterHub.authenticator_class = 'oauthenticator.auth0.Auth0OAuthenticator'
+          c.Auth0OAuthenticator.client_id = 'client-id-from-auth0-here'
+          c.Auth0OAuthenticator.client_secret = 'client-secret-from-auth0-here'
+          c.Auth0OAuthenticator.oauth_callback_url = 'https://<your_jupyterhub_host>/hub/oauth_callback'
+          c.Auth0OAuthenticator.scope = ['openid', 'email']
+          c.Authenticator.admin_users = {
+              'devops@example.com'
+          }
+          c.Authenticator.auto_login = True
 .. _google_oauth:
 
 Full Example of Google OAuth2
