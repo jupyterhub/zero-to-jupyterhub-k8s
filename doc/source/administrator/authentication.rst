@@ -245,15 +245,14 @@ Note that without the scope defined, authenticating to JupyterHub after already 
       extraConfig:
         myConfig.py: |
           c.JupyterHub.authenticator_class = 'oauthenticator.auth0.Auth0OAuthenticator'
-          c.Auth0OAuthenticator.client_id = 'y0urc1logonc1ient1d'
-          c.Auth0OAuthenticator.client_secret = 'an0ther1ongs3cretstr1ng'
+          c.Auth0OAuthenticator.client_id = 'client-id-from-auth0-here'
+          c.Auth0OAuthenticator.client_secret = 'client-secret-from-auth0-here'
           c.Auth0OAuthenticator.oauth_callback_url = 'https://<your_jupyterhub_host>/hub/oauth_callback'
           c.Auth0OAuthenticator.scope = ['openid', 'email']
           c.Authenticator.admin_users = {
-                'devops@example.com'
-              }
+              'devops@example.com'
+          }
           c.Authenticator.auto_login = True
-
 .. _google_oauth:
 
 Full Example of Google OAuth2
