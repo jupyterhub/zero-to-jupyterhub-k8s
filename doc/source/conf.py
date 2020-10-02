@@ -138,7 +138,19 @@ linkcheck_anchors_ignore = [
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
+
 html_theme = 'pydata_sphinx_theme'
+html_theme_options = {
+    "github_url": "https://github.com/jupyterhub/zero-to-jupyterhub-k8s/",
+    "use_edit_page_button": True,
+}
+html_context = {
+    "github_user": "jupyterhub",
+    "github_repo": "zero-to-jupyterhub-k8s",
+    "github_version": "master",
+    "doc_path":"doc",
+}
+
 html_favicon = '_static/images/logo/favicon.ico'
 html_logo = '_static/images/logo/logo.png'
 
