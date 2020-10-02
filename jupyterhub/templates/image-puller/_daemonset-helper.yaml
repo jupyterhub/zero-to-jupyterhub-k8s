@@ -58,15 +58,8 @@ spec:
       {{- end }}
       terminationGracePeriodSeconds: 0
       automountServiceAccountToken: false
-      {{- if or .Values.singleuser.imagePullSecret.enabled .Values.singleuser.image.pullSecrets }}
-      imagePullSecrets:
-        {{- if .Values.singleuser.imagePullSecret.enabled }}
-        - name: {{ if .hook -}} hook- {{- end -}} singleuser-image-credentials
-        {{ else }}
-        {{- range .Values.singleuser.image.pullSecrets }}
-        - name: {{ . }}
-        {{- end }}
-        {{ end }}
+      {{- with (include "jupyterhub.imagePullSecrets" .Values.singleuser) }}
+      imagePullSecrets: {{ . }}
       {{- end }}
       initContainers:
         {{- /* --- Conditionally pull an image all user pods will use in an initContainer --- */}}

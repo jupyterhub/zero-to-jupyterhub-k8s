@@ -30,6 +30,9 @@ spec:
         - name: config
           configMap:
             name: user-scheduler
+      {{- with (include "jupyterhub.imagePullSecrets" .Values.scheduling.userScheduler) }}
+      imagePullSecrets: {{ . }}
+      {{- end }}
       containers:
         - name: user-scheduler
           # NOTE: When the kube-scheduler 1.17+ binaries fail to find CSINode
