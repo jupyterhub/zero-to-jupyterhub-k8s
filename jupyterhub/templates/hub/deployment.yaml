@@ -60,7 +60,7 @@ spec:
       {{- end }}
       securityContext:
         fsGroup: {{ .Values.hub.fsGid }}
-      {{- with (include "jupyterhub.imagePullSecrets" .Values.hub) }}
+      {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.hub.image) }}
       imagePullSecrets: {{ . }}
       {{- end }}
       {{- if .Values.hub.initContainers }}

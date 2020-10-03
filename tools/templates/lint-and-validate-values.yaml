@@ -1,3 +1,12 @@
+global:
+  imagePullSecret:
+    create: true
+    registry: R
+    username: U
+    email: e@domain.com
+    password: P
+  imagePullSecrets: [a,b]
+
 hub:
   service:
     type: ClusterIP
@@ -31,6 +40,8 @@ hub:
     mock: mock
   annotations:
     mock: mock
+  image:
+    pullSecrets: [c]
   initContainers:
     - name: mock-init-container-name
       image: mock-init-container-image
@@ -298,12 +309,6 @@ singleuser:
       pvcNameTemplate: claim-{username}{servername}
       volumeNameTemplate: volume-{username}{servername}
       storageAccessModes: [ReadWriteOnce]
-  imagePullSecret:
-    enabled: true
-    registry: R
-    username: U
-    email: e@domain.com
-    password: P
   startTimeout: 300
   cpu:
     guarantees: 1G

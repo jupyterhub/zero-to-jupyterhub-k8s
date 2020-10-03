@@ -42,7 +42,7 @@ spec:
         {{- with .Values.proxy.traefik.extraVolumes }}
         {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
-      {{- with (include "jupyterhub.imagePullSecrets" .Values.proxy.traefik) }}
+      {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.proxy.traefik.image) }}
       imagePullSecrets: {{ . }}
       {{- end }}
       initContainers:

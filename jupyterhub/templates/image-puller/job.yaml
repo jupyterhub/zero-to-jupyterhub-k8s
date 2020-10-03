@@ -34,7 +34,7 @@ spec:
       {{- end }}
       tolerations: {{ toJson .Values.prePuller.hook.tolerations }}
       nodeSelector: {{ toJson .Values.prePuller.hook.nodeSelector }}
-      {{- with (include "jupyterhub.imagePullSecrets" .Values.prePuller.hook) }}
+      {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.prePuller.hook.image) }}
       imagePullSecrets: {{ . }}
       {{- end }}
       containers:

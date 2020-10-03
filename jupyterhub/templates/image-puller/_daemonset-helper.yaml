@@ -58,7 +58,7 @@ spec:
       {{- end }}
       terminationGracePeriodSeconds: 0
       automountServiceAccountToken: false
-      {{- with (include "jupyterhub.imagePullSecrets" .Values.singleuser) }}
+      {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.singleuser.image) }}
       imagePullSecrets: {{ . }}
       {{- end }}
       initContainers:

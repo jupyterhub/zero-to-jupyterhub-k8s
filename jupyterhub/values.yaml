@@ -81,12 +81,6 @@ hub:
     runAsGroup: 1000
     allowPrivilegeEscalation: false
   services: {}
-  imagePullSecret:
-    enabled: false
-    registry:
-    username:
-    email:
-    password:
   pdb:
     enabled: true
     minAvailable: 1
@@ -352,12 +346,6 @@ singleuser:
     tag: 'set-by-chartpress'
     pullPolicy: ''
     pullSecrets: []
-  imagePullSecret:
-    enabled: false
-    registry:
-    username:
-    email:
-    password:
   startTimeout: 300
   cpu:
     limit:

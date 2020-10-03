@@ -30,7 +30,7 @@ spec:
         - name: config
           configMap:
             name: user-scheduler
-      {{- with (include "jupyterhub.imagePullSecrets" .Values.scheduling.userScheduler) }}
+      {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.scheduling.userScheduler.image) }}
       imagePullSecrets: {{ . }}
       {{- end }}
       containers:

@@ -163,7 +163,7 @@ component: {{ include "jupyterhub.componentLabel" . }}
 
 
 {{- /*
-  jupyterhub.dockersingleuserconfigjson:
+  jupyterhub.dockerconfigjson:
     Creates a base64 encoded docker registry json blob for use in a image pull
     secret, just like the `kubectl create secret docker-registry` command does
     for the generated secrets data.dockerconfigjson field. The output is
@@ -172,12 +172,12 @@ component: {{ include "jupyterhub.componentLabel" . }}
 
     - https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
 */}}
-{{- define "jupyterhub.dockersingleuserconfigjson" -}}
-{{ include "jupyterhub.dockersingleuserconfigjson.yaml" . | b64enc }}
+{{- define "jupyterhub.dockerconfigjson" -}}
+{{ include "jupyterhub.dockerconfigjson.yaml" . | b64enc }}
 {{- end }}
 
-{{- define "jupyterhub.dockersingleuserconfigjson.yaml" -}}
-{{- with .Values.singleuser.imagePullSecret -}}
+{{- define "jupyterhub.dockerconfigjson.yaml" -}}
+{{- with .Values.global.imagePullSecret -}}
 {
   "auths": {
     {{ .registry | default "https://index.docker.io/v1/" | quote }}: {
@@ -194,33 +194,16 @@ component: {{ include "jupyterhub.componentLabel" . }}
 {{- end }}
 
 {{- /*
-  jupyterhub.dockerhubconfigjson:
-    Creates a base64 encoded docker registry json blob for use in a image pull
-    secret, just like the `kubectl create secret docker-registry` command does
-    for the generated secrets data.dockerhubconfigjson field. The output is
-    verified to be exactly the same even if you have a password spanning
-    multiple lines as you may need to use a private GCR registry.
-
-    - https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
+  jupyterhub.imagePullSecrets
+    Augments passed .pullSecrets with $.Values.global.imagePullSecrets
 */}}
-{{- define "jupyterhub.dockerhubconfigjson" -}}
-{{ include "jupyterhub.dockerhubconfigjson.yaml" . | b64enc }}
+{{- define "jupyterhub.imagePullSecrets" -}}
+{{- $_ := dict "list" (concat .image.pullSecrets .root.Values.global.imagePullSecrets | uniq) }}
+{{- if .root.Values.global.imagePullSecret.create }}
+{{- $_ := set $_ "list" (append $_.list "image-pull-secret" | uniq) -}}
 {{- end }}
-
-{{- define "jupyterhub.dockerhubconfigjson.yaml" -}}
-{{- with .Values.hub.imagePullSecret -}}
-{
-  "auths": {
-    {{ .registry | default "https://index.docker.io/v1/" | quote }}: {
-      "username": {{ .username | quote }},
-      "password": {{ .password | quote }},
-      {{- if .email }}
-      "email": {{ .email | quote }},
-      {{- end }}
-      "auth": {{ (print .username ":" .password) | b64enc | quote }}
-    }
-  }
-}
+{{- if not (eq ($_.list | toJson) "[]") }}
+{{- $_.list | toJson }}
 {{- end }}
 {{- end }}
 
