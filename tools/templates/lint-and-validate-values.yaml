@@ -68,7 +68,7 @@ hub:
 
 
 rbac:
-  enabled: true
+  create: true
 
 
 proxy:

@@ -29,7 +29,7 @@ spec:
       {{- end }}
     spec:
       restartPolicy: Never
-      {{- if .Values.rbac.enabled }}
+      {{- if .Values.rbac.create }}
       serviceAccountName: hook-image-awaiter
       {{- end }}
       containers:

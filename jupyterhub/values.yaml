@@ -101,7 +101,7 @@ hub:
   # existingSecret: existing-secret
 
 rbac:
-  enabled: true
+  create: true
 
 
 proxy:

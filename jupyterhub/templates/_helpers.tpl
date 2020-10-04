@@ -12,7 +12,7 @@
 
   When you ask a helper to render its content, one often forward the current
   scope to the helper in order to allow it to access .Release.Name,
-  .Values.rbac.enabled and similar values.
+  .Values.rbac.create and similar values.
 
   #### Example - Passing the current scope
   {{ include "jupyterhub.commonLabels" . }}
