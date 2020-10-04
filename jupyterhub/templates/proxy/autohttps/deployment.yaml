@@ -42,24 +42,28 @@ spec:
         {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
       initContainers:
-      - name: load-acme
-        image: "{{ .Values.proxy.secretSync.image.name }}:{{ .Values.proxy.secretSync.image.tag }}"
-        {{- with .Values.proxy.secretSync.image.pullPolicy }}
-        imagePullPolicy: {{ . }}
-        {{- end }}
-        args:
-          - load
-          - proxy-public-tls-acme
-          - acme.json
-          - /etc/acme/acme.json
-        env:
-        # We need this to get logs immediately
-        - name: PYTHONUNBUFFERED
-          value: "True"
-        {{- include "jupyterhub.extraEnv" .Values.proxy.traefik.extraEnv | nindent 8 }}
-        volumeMounts:
-          - name: certificates
-            mountPath: /etc/acme
+        - name: load-acme
+          image: "{{ .Values.proxy.secretSync.image.name }}:{{ .Values.proxy.secretSync.image.tag }}"
+          {{- with .Values.proxy.secretSync.image.pullPolicy }}
+          imagePullPolicy: {{ . }}
+          {{- end }}
+          args:
+            - load
+            - proxy-public-tls-acme
+            - acme.json
+            - /etc/acme/acme.json
+          env:
+            # We need this to get logs immediately
+            - name: PYTHONUNBUFFERED
+              value: "True"
+            {{- include "jupyterhub.extraEnv" .Values.proxy.traefik.extraEnv | nindent 12 }}
+          volumeMounts:
+            - name: certificates
+              mountPath: /etc/acme
+          {{- with .Values.proxy.secretSync.containerSecurityContext }}
+          securityContext:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
       containers:
         - name: traefik
           image: "{{ .Values.proxy.traefik.image.name }}:{{ .Values.proxy.traefik.image.tag }}"
@@ -110,4 +114,8 @@ spec:
           volumeMounts:
             - name: certificates
               mountPath: /etc/acme
+          {{- with .Values.proxy.secretSync.containerSecurityContext }}
+          securityContext:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
 {{- end }}

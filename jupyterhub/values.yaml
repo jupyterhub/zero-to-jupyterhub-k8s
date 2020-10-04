@@ -55,6 +55,7 @@ hub:
       memory: 512Mi
   containerSecurityContext:
     runAsUser: 1000
+    runAsGroup: 1000
     allowPrivilegeEscalation: false
   services: {}
   imagePullSecret:
@@ -132,8 +133,6 @@ proxy:
     ##     Error: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
     ##     Error: UPGRADE FAILED: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
     rollingUpdate:
-  containerSecurityContext:
-    allowPrivilegeEscalation: false
   service:
     type: LoadBalancer
     labels: {}
@@ -144,6 +143,10 @@ proxy:
     loadBalancerIP:
     loadBalancerSourceRanges: []
   chp:
+    containerSecurityContext:
+      runAsUser: 65534
+      runAsGroup: 65534
+      allowPrivilegeEscalation: false
     image:
       name: jupyterhub/configurable-http-proxy
       tag: 4.2.1
@@ -162,6 +165,10 @@ proxy:
         memory: 512Mi
     extraEnv: {}
   traefik:
+    containerSecurityContext:
+      runAsUser: 65534
+      runAsGroup: 65534
+      allowPrivilegeEscalation: false
     image:
       name: traefik
       tag: v2.3 # ref: https://hub.docker.com/_/traefik?tab=tags
@@ -175,9 +182,11 @@ proxy:
     extraVolumeMounts: []
     extraStaticConfig: {}
     extraDynamicConfig: {}
-    containerSecurityContext:
-      allowPrivilegeEscalation: false
   secretSync:
+    containerSecurityContext:
+      runAsUser: 65534
+      runAsGroup: 65534
+      allowPrivilegeEscalation: false
     image:
       name: jupyterhub/k8s-secret-sync
       tag: 'set-by-chartpress'
@@ -335,6 +344,10 @@ scheduling:
           - name: SelectorSpread
         enabled:
           - name: NodeResourcesMostAllocated
+    containerSecurityContext:
+      runAsUser: 65534
+      runAsGroup: 65534
+      allowPrivilegeEscalation: false
     image:
       name: k8s.gcr.io/kube-scheduler
       tag: v1.19.1
@@ -354,6 +367,10 @@ scheduling:
   userPlaceholder:
     enabled: true
     replicas: 0
+    containerSecurityContext:
+      runAsUser: 65534
+      runAsGroup: 65534
+      allowPrivilegeEscalation: false
   corePods:
     nodeAffinity:
       matchNodePurpose: prefer
@@ -368,17 +385,29 @@ prePuller:
     requests:
       cpu: 0
       memory: 0
+  containerSecurityContext:
+    runAsUser: 65534
+    runAsGroup: 65534
+    allowPrivilegeEscalation: false
   hook:
     enabled: true
     image:
       name: jupyterhub/k8s-image-awaiter
       tag: 'set-by-chartpress'
+    containerSecurityContext:
+      runAsUser: 65534
+      runAsGroup: 65534
+      allowPrivilegeEscalation: false
     podSchedulingWaitDuration: 10
   continuous:
     enabled: true
   pullProfileListImages: true
   extraImages: {}
   pause:
+    containerSecurityContext:
+      runAsUser: 65534
+      runAsGroup: 65534
+      allowPrivilegeEscalation: false
     image:
       name: k8s.gcr.io/pause
       # Pick version from https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/pause?gcrImageListsize=30

@@ -47,4 +47,8 @@ spec:
           image: {{ .Values.prePuller.pause.image.name }}:{{ .Values.prePuller.pause.image.tag }}
           resources:
             {{- include "jupyterhub.resources" . | nindent 12 }}
+          {{- with .Values.scheduling.userPlaceholder.containerSecurityContext }}
+          securityContext:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
 {{- end }}

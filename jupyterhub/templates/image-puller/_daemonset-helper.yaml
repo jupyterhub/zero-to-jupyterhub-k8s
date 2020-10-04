@@ -69,6 +69,7 @@ spec:
         {{ end }}
       {{- end }}
       initContainers:
+        {{- /* --- Pull default image --- */}}
         - name: image-pull-singleuser
           image: {{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}
           {{- with .Values.singleuser.image.pullPolicy }}
@@ -80,6 +81,8 @@ spec:
             - echo "Pulling complete"
           resources:
             {{- .Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+
+        {{- /* --- Pull extra containers' images --- */}}
         {{- range $k, $container := .Values.singleuser.extraContainers }}
         - name: image-pull-singleuser-extra-container-{{ $k }}
           image: {{ $container.image }}
@@ -92,7 +95,13 @@ spec:
             - echo "Pulling complete"
           resources:
             {{- $.Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- with $.Values.prePuller.containerSecurityContext }}
+          securityContext:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
         {{- end }}
+
+        {{- /* --- Conditionally pull profileList images --- */}}
         {{- if .Values.prePuller.pullProfileListImages }}
         {{- range $k, $container := .Values.singleuser.profileList }}
         {{- if $container.kubespawner_override }}
@@ -105,10 +114,16 @@ spec:
             - echo "Pulling complete"
           resources:
             {{- $.Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- with $.Values.prePuller.containerSecurityContext }}
+          securityContext:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- end }}
         {{- end }}
         {{- end }}
+
+        {{- /* --- Pull extra images --- */}}
         {{- range $k, $v := .Values.prePuller.extraImages }}
         - name: image-pull-{{ $k }}
           image: {{ $v.name }}:{{ $v.tag }}
@@ -121,10 +136,18 @@ spec:
             - echo "Pulling complete"
           resources:
             {{- $.Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- with $.Values.prePuller.containerSecurityContext }}
+          securityContext:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
         {{- end }}
       containers:
         - name: pause
           image: {{ .Values.prePuller.pause.image.name }}:{{ .Values.prePuller.pause.image.tag }}
           resources:
             {{- .Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- with .Values.prePuller.pause.containerSecurityContext }}
+          securityContext:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
 {{- end }}

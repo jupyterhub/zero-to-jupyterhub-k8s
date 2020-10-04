@@ -44,4 +44,8 @@ spec:
             - -namespace={{ .Release.Namespace }}
             - -daemonset=hook-image-puller
             - -pod-scheduling-wait-duration={{ .Values.prePuller.hook.podSchedulingWaitDuration }}
+          {{- with .Values.prePuller.hook.containerSecurityContext }}
+          securityContext:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
 {{- end }}

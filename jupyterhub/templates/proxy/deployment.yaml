@@ -87,10 +87,6 @@ spec:
           {{- end }}
           resources:
             {{- .Values.proxy.chp.resources | toYaml | trimSuffix "\n" | nindent 12 }}
-          {{- with .Values.proxy.containerSecurityContext }}
-          securityContext:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
-          {{- end }}
           env:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
@@ -141,4 +137,8 @@ spec:
               port: http
               scheme: HTTP
               {{- end }}
+          {{- end }}
+          {{- with .Values.proxy.chp.containerSecurityContext }}
+          securityContext:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
           {{- end }}
