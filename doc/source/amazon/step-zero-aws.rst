@@ -46,13 +46,13 @@ The Procedure
    ".k8s.local".  Per the docs, if the DNS name ends in .k8s.local the cluster
    will use internal hosted DNS.
 
-   .. code-block:: bash
+   .. code-block:: console
 
       export NAME=<somename>.k8s.local
 
 #. Setup an ssh keypair to use with the cluster:
 
-   .. code-block:: bash
+   .. code-block:: console
 
       ssh-keygen
 
@@ -63,19 +63,19 @@ The Procedure
    KOPS commands.  It is automatically detected by the kops tool as an env
    variable.
 
-   .. code-block:: bash
+   .. code-block:: console
    
       export KOPS_STATE_STORE=s3://<your_s3_bucket_name_here>
 
 #. Set the region to deploy in:
 
-   .. code-block:: bash
+   .. code-block:: console
 
       export REGION=`curl -s http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}'`
 
 #. Install the AWS CLI:
 
-   .. code-block:: bash
+   .. code-block:: console
 
       sudo apt-get update
       sudo apt-get install awscli
@@ -84,7 +84,7 @@ The Procedure
 
    For this guide we will be allowing nodes to be deployed in all AZs:
 
-   .. code-block:: bash
+   .. code-block:: console
 
       export ZONES=$(aws ec2 describe-availability-zones --region $REGION | grep ZoneName | awk '{print $2}' | tr -d '"')
 
@@ -92,7 +92,7 @@ The Procedure
 
    For a basic setup run the following (All sizes measured in GB):
 
-   .. code-block:: bash
+   .. code-block:: console
 
       kops create cluster $NAME \
       --zones "$ZONES" \
@@ -105,7 +105,7 @@ The Procedure
 
    For a more secure setup add the following params to the kops command::
 
-   .. code-block:: bash
+   .. code-block:: console
 
       --topology private \
       --networking weave \
@@ -119,7 +119,7 @@ The Procedure
 
    Settings to consider (not covered in this guide):
 
-   .. code-block:: bash
+   .. code-block:: console
 
       --vpc
         Allows you to use a custom VPC or share a VPC
@@ -153,7 +153,7 @@ The Procedure
 
    Keep running ``kops validate cluster`` until you see "Your cluster $NAME is ready" at the end of the output::
 
-   .. code-block:: bash
+   .. code-block:: console
 
       time until kops validate cluster; do sleep 15; done
       
@@ -166,7 +166,7 @@ The Procedure
 
    Run:
 
-   .. code-block:: bash
+   .. code-block:: console
 
       kubectl get nodes
 
@@ -179,7 +179,7 @@ The Procedure
 
    If you wish to put the kube config file in a different location, you will need to run:
     
-   .. code-block:: bash
+   .. code-block:: console
 
       export KUBECONFIG=<other kube config location>
 
@@ -215,7 +215,7 @@ The Procedure
 
    Next, run this command:
 
-   .. code-block:: bash
+   .. code-block:: console
 
       kubectl apply -f storageclass.yml
 
@@ -257,7 +257,7 @@ The main difference is the addition of the line `encrypted: "true"` and make not
 
 Next run these commands:
 
-.. code-block:: bash
+.. code-block:: console
 
    kubectl delete storageclass gp2
    kubectl apply -f storageclass.yml
@@ -272,7 +272,7 @@ Then perform the following steps:
 
 #. Verify weave is running:
 
-   .. code-block:: bash
+   .. code-block:: console
 
       kubectl --namespace kube-system get pods
 
@@ -280,7 +280,7 @@ Then perform the following steps:
 
 #. Create Kubernetes secret with a private password of sufficient strength. A random 128 bytes is used in this example:
 
-   .. code-block:: bash
+   .. code-block:: console
 
       openssl rand -hex 128 >weave-passwd
       kubectl create secret -n kube-system generic weave-passwd --from-file=./weave-passwd
@@ -289,14 +289,14 @@ Then perform the following steps:
 
 #. Patch Weave with the password:
 
-   .. code-block:: bash
+   .. code-block:: console
 
       kubectl patch --namespace=kube-system daemonset/weave-net --type json -p '[ { "op": "add", "path": "/spec/template/spec/containers/0/env/0", "value": { "name": "WEAVE_PASSWORD", "valueFrom": { "secretKeyRef": { "key": "weave-passwd", "name": "weave-passwd" } } } } ]'
 
 
    If you want to remove the encryption you can use the following patch:
 
-   .. code-block:: bash
+   .. code-block:: console
 
       kubectl patch --namespace=kube-system daemonset/weave-net --type json -p '[ { "op": "remove", "path": "/spec/template/spec/containers/0/env/0"} ]'
 
@@ -304,7 +304,7 @@ Then perform the following steps:
 
 #. You can verify encryption is turned on with the following command:
 
-   .. code-block:: bash
+   .. code-block:: console
 
       kubectl exec -n kube-system weave-net-<pod> -c weave -- /home/weave/weave --local status
 
