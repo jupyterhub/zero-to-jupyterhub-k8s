@@ -124,59 +124,56 @@ properties:
           # to generate a value, run
           openssl rand -hex 32
           ```
-      imagePullPolicy:
-        type: string
-        enum:
-          - IfNotPresent
-          - Always
-          - Never
-        description: |
-          Set the imagePullPolicy on the hub pod.
-
-          See the [Kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
-          for more info on what the values mean.
-      image:
+      image: &image-spec
         type: object
         description: |
-          Set custom image name / tag for the hub pod.
-
-          Use this to customize which hub image is used. Note that you must use a version of
-          the hub image that was bundled with this particular version of the helm-chart - using
-          other images might not work.
+          Set custom image name, tag, pullPolicy, or pullSecrets for the pod.
         properties:
           name:
             type: string
             description: |
-              Name of the image, without the tag.
+              The name of the image, without the tag.
 
               ```
-              # example names
-              yuvipanda/wikimedia-hub
-              gcr.io/my-project/my-hub
+              # example name
+              gcr.io/my-project/my-image
               ```
           tag:
             type: string
             description: |
-              The tag of the image to pull.
-              
-              This is the value after the `:` in your full image name.
+              The tag of the image to pull. This is the value following `:` in
+              complete image specifications.
 
               ```
               # example tags
               v1.11.1
               zhy270a
               ```
+          pullPolicy:
+            type: string
+            enum:
+              - IfNotPresent
+              - Always
+              - Never
+            description: |
+              Configures the Pod's `spec.imagePullPolicy`.
+
+              See the [Kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
+              for more info.
           pullSecrets:
             type: list
             description: |
-              Use an existing kubernetes secret to pull the custom image.
+              A list of references to existing Kubernetes Secrets with
+              credentials to pull the image.
               
               ```yaml
-              # example existing pull secret.
-              singleuser:
-                image:
-                  pullSecrets:
-                    - gcr-pull
+              # example - k8s native syntax
+              pullSecrets:
+                - name: my-k8s-secret-with-image-registry-credentials
+              
+              # example - simplified syntax
+              pullSecrets:
+                - my-k8s-secret-with-image-registry-credentials
               ```
       db:
         type: object
@@ -879,50 +876,7 @@ properties:
               - "null"
             description: |
               Note that this field is referred to as *requests* by the Kubernetes API.
-      image:
-        type: object
-        description: |
-          Set custom image name / tag used for spawned users.
-
-          This image is used to launch the pod for each user.
-        properties:
-          name:
-            type: string
-            description: |
-              Name of the image, without the tag.
-
-              Examples:
-                - yuvipanda/wikimedia-hub-user
-                - gcr.io/my-project/my-user-image
-          tag:
-            type: string
-            description: |
-              The tag of the image to use.
-
-              This is the value after the `:` in your full image name.
-          pullPolicy:
-            type: string
-            enum:
-              - IfNotPresent
-              - Always
-              - Never
-            description: |
-              Set the imagePullPolicy on the singleuser pods that are spun up by the hub.
-
-              See the [Kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
-              for more info.
-          pullSecrets:
-            type: list
-            description: |
-              Use an existing kubernetes secret to pull the custom image.
-              
-              ```yaml
-              # example existing pull secret
-              singleuser:
-                image:
-                  pullSecrets:
-                    - gcr-pull
-              ```
+      image: *image-spec
       initContainers:
         type: list
         description: |
@@ -1089,18 +1043,7 @@ properties:
             description: |
               You can have multiple schedulers to share the workload or improve
               availability on node failure.
-          image:
-            type: object
-            description: |
-              The image containing the [kube-scheduler
-              binary](https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/kube-scheduler-amd64).
-            properties:
-              name:
-                type: string
-              tag:
-                type:
-                  - string
-                  - "null"
+          image: *image-spec
           pdb:
             type: object
             description: |
