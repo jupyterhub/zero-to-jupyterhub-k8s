@@ -198,12 +198,29 @@ component: {{ include "jupyterhub.componentLabel" . }}
     Augments passed .pullSecrets with $.Values.global.imagePullSecrets
 */}}
 {{- define "jupyterhub.imagePullSecrets" -}}
+{{- /* Populate $_.list with all relevant entries */}}
 {{- $_ := dict "list" (concat .image.pullSecrets .root.Values.global.imagePullSecrets | uniq) }}
 {{- if .root.Values.global.imagePullSecret.create }}
-{{- $_ := set $_ "list" (append $_.list "image-pull-secret" | uniq) -}}
+{{- $__ := set $_ "list" (append $_.list "image-registry-credentials" | uniq) }}
 {{- end }}
+
+{{- /* Decide if something should be written */}}
 {{- if not (eq ($_.list | toJson) "[]") }}
-{{- $_.list | toJson }}
+
+{{- /* Process the $_.list where strings become dicts with a name key and the
+strings become the name keys' values into $_.res */}}
+{{- $_ := set $_ "res" list }}
+{{- range $_.list }}
+{{- if eq (typeOf .) "string" }}
+{{- $__ := set $_ "res" (append $_.res (dict "name" .)) }}
+{{- else }}
+{{- $__ := set $_ "res" (append $_.res .) }}
+{{- end }}
+{{- end }}
+
+{{- /* Write the results */}}
+{{- $_.res | toJson }}
+
 {{- end }}
 {{- end }}
 
