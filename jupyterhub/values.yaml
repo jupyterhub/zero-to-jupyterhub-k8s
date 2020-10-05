@@ -144,8 +144,8 @@ proxy:
     loadBalancerSourceRanges: []
   chp:
     containerSecurityContext:
-      runAsUser: 65534
-      runAsGroup: 65534
+      runAsUser: 65534  # nobody user
+      runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
     image:
       name: jupyterhub/configurable-http-proxy
@@ -166,8 +166,8 @@ proxy:
     extraEnv: {}
   traefik:
     containerSecurityContext:
-      runAsUser: 65534
-      runAsGroup: 65534
+      runAsUser: 65534  # nobody user
+      runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
     image:
       name: traefik
@@ -184,8 +184,8 @@ proxy:
     extraDynamicConfig: {}
   secretSync:
     containerSecurityContext:
-      runAsUser: 65534
-      runAsGroup: 65534
+      runAsUser: 65534  # nobody user
+      runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
     image:
       name: jupyterhub/k8s-secret-sync
@@ -345,8 +345,8 @@ scheduling:
         enabled:
           - name: NodeResourcesMostAllocated
     containerSecurityContext:
-      runAsUser: 65534
-      runAsGroup: 65534
+      runAsUser: 65534  # nobody user
+      runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
     image:
       name: k8s.gcr.io/kube-scheduler
@@ -368,8 +368,8 @@ scheduling:
     enabled: true
     replicas: 0
     containerSecurityContext:
-      runAsUser: 65534
-      runAsGroup: 65534
+      runAsUser: 65534  # nobody user
+      runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
   corePods:
     nodeAffinity:
@@ -386,8 +386,8 @@ prePuller:
       cpu: 0
       memory: 0
   containerSecurityContext:
-    runAsUser: 65534
-    runAsGroup: 65534
+    runAsUser: 65534  # nobody user
+    runAsGroup: 65534 # nobody group
     allowPrivilegeEscalation: false
   hook:
     enabled: true
@@ -395,8 +395,8 @@ prePuller:
       name: jupyterhub/k8s-image-awaiter
       tag: 'set-by-chartpress'
     containerSecurityContext:
-      runAsUser: 65534
-      runAsGroup: 65534
+      runAsUser: 65534  # nobody user
+      runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
     podSchedulingWaitDuration: 10
   continuous:
@@ -405,8 +405,8 @@ prePuller:
   extraImages: {}
   pause:
     containerSecurityContext:
-      runAsUser: 65534
-      runAsGroup: 65534
+      runAsUser: 65534  # nobody user
+      runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
     image:
       name: k8s.gcr.io/pause
