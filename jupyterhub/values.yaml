@@ -94,7 +94,7 @@ hub:
     timeoutSeconds: 1
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 0
+    initialDelaySeconds: 60
     periodSeconds: 2
     failureThreshold: 3
     timeoutSeconds: 1
