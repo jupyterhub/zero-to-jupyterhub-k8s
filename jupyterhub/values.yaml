@@ -88,7 +88,7 @@ hub:
   templateVars: {}
   livenessProbe:
     enabled: false
-    initialDelaySeconds: 60
+    initialDelaySeconds: 180
     periodSeconds: 10
     failureThreshold: 3
     timeoutSeconds: 1
