@@ -1,3 +1,9 @@
+# This file can automatically be used to update requirements.txt with pinned
+# versions by running:
+#
+#    ./dependencies freeze --upgrade
+#
+
 # JupyterHub's version is defined in chartpress.yaml
 
 ## Authenticators
