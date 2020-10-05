@@ -119,7 +119,7 @@ def freeze(build, upgrade, upgrade_package):
             "--rm",
             "-it",
             "-e",
-            "CUSTOM_COMPILE_COMMAND=./dependencies freeze",
+            "CUSTOM_COMPILE_COMMAND=./dependencies freeze --upgrade",
             "--volume",
             f"{here}:/io",
             "--workdir",
