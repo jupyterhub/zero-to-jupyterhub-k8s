@@ -166,20 +166,6 @@ Read more about organizing cluster access using kubeconfig files in the
 [Kubernetes docs](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/).
 
 
-## Audit Cloud Metadata server access
-
-Most cloud providers have a static IP you can hit from any of the compute nodes, including the user pod, to get metadata about the cloud. This metadata can contain very sensitive info, and this metadata, in the wrong hands, can allow attackers to take full control of your cluster and cloud resources. It is **critical** to secure the metadata service. We block access to this IP by default (as of v0.6), so you are protected from this!
-
-The slides beginning at [_Slide 38_](https://schd.ws/hosted_files/kccncna17/d8/Hacking%20and%20Hardening%20Kubernetes%20By%20Example%20v2.pdf) provides more information on the dangers presented by this attack.
-
-If you need to enable access to the metadata server for some reason, you can do the following in config.yaml:
-
-```yaml
-singleuser:
-  cloudMetadata:
-    enabled: true
-```
-
 ## Delete the Kubernetes Dashboard
 
 The [Kubernetes Dashboard](https://github.com/kubernetes/dashboard) gets created by default in many installations. Although the Dashboard contains useful information, the Dashboard also poses a security risk. We **recommend** deleting it and not using it for the time being until the Dashboard becomes properly securable.
@@ -243,6 +229,45 @@ This is a sensitive security issue (similar to writing sudo rules in a
 traditional computing environment), so be very careful.
 
 There's ongoing work on making this easier!
+
+## Audit Cloud Metadata server access
+
+Most cloud providers have a static IP that pods can reach to get metadata about
+the cloud. This metadata can contain very sensitive info and in the wrong hands
+allow attackers to take full control of your cluster and cloud resources. Due to
+this, it is **critical** to secure the metadata service from your user pods that
+could end up running malicious code without knowing it.
+
+The slides beginning at [_Slide
+38_](https://schd.ws/hosted_files/kccncna17/d8/Hacking%20and%20Hardening%20Kubernetes%20By%20Example%20v2.pdf)
+provides more information on the dangers presented by this attack.
+
+This Helm chart blocks access to this metadata in two ways by default, but you
+only need one.
+
+### Block metadata with a NetworkPolicy enforced by a NetworkPolicy controller
+
+If you have _NetworkPolicy controller_ such as Calico in the Kubernetes cluster,
+it will enforce the NetworkPolicy resource created by this chart
+(`singleuser.networkPolicy.*`) that blocks user access to the metadata server.
+We recommend relying on this approach if you you had a NetworkPolicy controller,
+and then you can disable the other option.
+
+### Block metadata with a privileged initContainer running `iptables`
+
+If you can't rely on the NetworkPolicy approach to block access to the metadata
+server, we suggest relying on this option. When
+`singleuser.cloudMetadata.blockWithIptables` is true as it is by default, an
+`initContainer` is added to the user pods. It will run with elevated privileges
+and use the `iptables` command line tool to block access to the metadata server.
+
+```yaml
+# default configuration
+singleuser:
+  cloudMetadata:
+    blockWithIptables: true
+    ip: 169.254.169.254
+```
 
 ## Kubernetes Network Policies
 

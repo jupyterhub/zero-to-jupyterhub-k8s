@@ -248,7 +248,9 @@ singleuser:
       name: jupyterhub/k8s-network-tools
       tag: 'set-by-chartpress'
   cloudMetadata:
-    enabled: false
+    # block set to true will append a privileged initContainer using the
+    # iptables to block the sensitive metadata server at the provided ip.
+    blockWithIptables: true
     ip: 169.254.169.254
   networkPolicy:
     enabled: true
