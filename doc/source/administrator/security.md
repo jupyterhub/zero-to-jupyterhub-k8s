@@ -248,7 +248,7 @@ only need one.
 ### Block metadata with a NetworkPolicy enforced by a NetworkPolicy controller
 
 If you have _NetworkPolicy controller_ such as Calico in the Kubernetes cluster,
-it will enforce the NetworkPolicy resource created by this chart that blocks
+it will enforce the NetworkPolicy resource created by this chart (`singleuser.networkPolicy.*`) that blocks
 user access to the metadata server. We recommend relying on this approach if you
 you had a NetworkPolicy controller, and then you can disable the other option.
 
