@@ -94,19 +94,6 @@ spec:
         {{- end }}
         {{- end }}
         {{- end }}
-        {{- if not .Values.singleuser.cloudMetadata.enabled }}
-        - name: image-pull-metadata-block
-          image: {{ .Values.singleuser.networkTools.image.name }}:{{ .Values.singleuser.networkTools.image.tag }}
-          {{- with .Values.singleuser.networkTools.image.pullPolicy }}
-          imagePullPolicy: {{ . }}
-          {{- end }}
-          command:
-            - /bin/sh
-            - -c
-            - echo "Pulling complete"
-          resources:
-            {{- .Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
-        {{- end }}
         {{- range $k, $v := .Values.prePuller.extraImages }}
         - name: image-pull-{{ $k }}
           image: {{ $v.name }}:{{ $v.tag }}
