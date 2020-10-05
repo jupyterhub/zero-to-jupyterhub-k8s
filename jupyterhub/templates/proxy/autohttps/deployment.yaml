@@ -83,7 +83,7 @@ spec:
             {{- end }}
           {{- with .Values.proxy.traefik.extraEnv }}
           env:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- include "jupyterhub.extraEnv" . | nindent 12 }}
           {{- end }}
           {{- with .Values.proxy.traefik.containerSecurityContext }}
           securityContext:

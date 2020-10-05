@@ -95,6 +95,9 @@ proxy:
       limits:
         cpu: 200m
         memory: 1Gi
+    extraEnv:
+      - name: LEGO_CA_CERTIFICATES
+        value: /etc/pebble/root-cert.pem
   secretSync:
     resources:
       requests:
