@@ -250,7 +250,7 @@ singleuser:
   cloudMetadata:
     # block set to true will append a privileged initContainer using the
     # iptables to block the sensitive metadata server at the provided ip.
-    block: true
+    blockWithIptables: true
     ip: 169.254.169.254
   networkPolicy:
     enabled: true

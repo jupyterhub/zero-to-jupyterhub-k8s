@@ -21,7 +21,7 @@ Note that this is still an alpha release! If you have questions, feel free to
 
 {{- if hasKey .Values.singleuser.cloudMetadata "enabled" }}
 
-DEPRECATION: singleuser.cloudMetadata.enabled is deprecated, instead of singleuser.cloudMetadata.block
+DEPRECATION: singleuser.cloudMetadata.enabled is deprecated, instead of singleuser.cloudMetadata.blockWithIptables
 
 {{- end }}
 

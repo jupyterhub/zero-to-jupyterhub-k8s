@@ -248,30 +248,24 @@ only need one.
 ### Block metadata with a NetworkPolicy enforced by a NetworkPolicy controller
 
 If you have _NetworkPolicy controller_ such as Calico in the Kubernetes cluster,
-it will enforce the NetworkPolicy resource created by this chart (`singleuser.networkPolicy.*`) that blocks
-user access to the metadata server. We recommend relying on this approach if you
-you had a NetworkPolicy controller, and then you can disable the other option.
-
-```yaml
-# default configuration
-singleuser:
-  netpol:
-    enabled: true
-```
+it will enforce the NetworkPolicy resource created by this chart
+(`singleuser.networkPolicy.*`) that blocks user access to the metadata server.
+We recommend relying on this approach if you you had a NetworkPolicy controller,
+and then you can disable the other option.
 
 ### Block metadata with a privileged initContainer running `iptables`
 
 If you can't rely on the NetworkPolicy approach to block access to the metadata
-server, we suggest relying on this option. When `singleuser.cloudMetadata.block`
-is true as it is by default, an `initContainer` is added to the user pods. It
-will run with elevated privileges and use the `iptables` command line tool to
-block access to the metadata server.
+server, we suggest relying on this option. When
+`singleuser.cloudMetadata.blockWithIptables` is true as it is by default, an
+`initContainer` is added to the user pods. It will run with elevated privileges
+and use the `iptables` command line tool to block access to the metadata server.
 
 ```yaml
 # default configuration
 singleuser:
   cloudMetadata:
-    block: true
+    blockWithIptables: true
     ip: 169.254.169.254
 ```
 

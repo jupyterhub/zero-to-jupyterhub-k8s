@@ -208,7 +208,7 @@ singleuser:
               values: [test]
           topologyKey: kubernetes.io/hostname
   cloudMetadata:
-    block: true
+    blockWithIptables: true
     ip: 169.254.169.254
   networkPolicy:
     enabled: true
