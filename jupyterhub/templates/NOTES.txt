@@ -19,10 +19,10 @@ Note that this is still an alpha release! If you have questions, feel free to
   2. Chat with us at https://gitter.im/jupyterhub/jupyterhub
   3. File issues at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
 
+
 {{- if hasKey .Values.singleuser.cloudMetadata "enabled" }}
 
-DEPRECATION: singleuser.cloudMetadata.enabled is deprecated, instead of singleuser.cloudMetadata.blockWithIptables
-
+DEPRECATION: singleuser.cloudMetadata.enabled is deprecated, instead use singleuser.cloudMetadata.blockWithIptables with the inverted value.
 {{- end }}
 
 
