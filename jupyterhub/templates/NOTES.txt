@@ -25,6 +25,16 @@ DEPRECATION: singleuser.cloudMetadata.enabled is deprecated, instead of singleus
 
 {{- end }}
 
+
+{{- /* Warn about an attempt to configure HTTPS but not having enabled it. */ }}
+{{- if eq .Values.proxy.https.enabled false }}
+{{- if or (not (eq .Values.proxy.https.type "letsencrypt")) (not (eq .Values.proxy.https.letsencrypt.contactEmail "")) }}
+
+WARNING: Configuring proxy.https without setting proxy.https.enabled to true is no longer allowed.
+{{- end }}
+{{- end }}
+
+
 {{- if .Values.hub.extraConfigMap }}
 
 DEPRECATION: hub.extraConfigMap is deprecated in jupyterhub chart 0.8.
