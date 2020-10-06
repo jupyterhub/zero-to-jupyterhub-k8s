@@ -45,14 +45,7 @@ spec:
     {{- if $HTTPS }}
     - name: https
       port: 443
-      # When HTTPS termination is handled outside our helm chart, pass traffic
-      # coming in via this Service's port 443 to targeted pod's port meant for
-      # HTTP traffic.
-      {{- if $offloadHTTPS }}
-      targetPort: http
-      {{- else }}
       targetPort: https
-      {{- end }}
       {{- with .Values.proxy.service.nodePorts.https }}
       nodePort: {{ . }}
       {{- end }}

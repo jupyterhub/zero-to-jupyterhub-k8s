@@ -1,5 +1,6 @@
 {{- $manualHTTPS := and .Values.proxy.https.enabled (eq .Values.proxy.https.type "manual") -}}
 {{- $manualHTTPSwithsecret := and .Values.proxy.https.enabled (eq .Values.proxy.https.type "secret") -}}
+{{- $offloadHTTPS := and .Values.proxy.https.enabled (eq .Values.proxy.https.type "offload") -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -70,6 +71,10 @@ spec:
             - --redirect-to=443
             - --ssl-key=/etc/chp/tls/{{ .Values.proxy.https.secret.key }}
             - --ssl-cert=/etc/chp/tls/{{ .Values.proxy.https.secret.crt }}
+            {{- else if $offloadHTTPS }}
+            - --port=8443
+            - --redirect-port=8000
+            - --redirect-to=443
             {{- else }}
             - --port=8000
             {{- end }}
@@ -103,7 +108,7 @@ spec:
           imagePullPolicy: {{ . }}
           {{- end }}
           ports:
-            {{- if or $manualHTTPS $manualHTTPSwithsecret }}
+            {{- if or (or $manualHTTPS $manualHTTPSwithsecret) $offloadHTTPS }}
             - name: https
               containerPort: 8443
             {{- end }}
