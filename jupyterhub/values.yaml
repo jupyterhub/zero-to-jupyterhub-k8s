@@ -147,6 +147,7 @@ proxy:
     image:
       name: jupyterhub/configurable-http-proxy
       tag: 4.2.1
+    extraCommandLineFlags: []
     livenessProbe:
       enabled: true
       initialDelaySeconds: 60
