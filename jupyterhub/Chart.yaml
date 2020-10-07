@@ -1,3 +1,5 @@
+# Chart.yaml v1 reference: https://v2.helm.sh/docs/developing_charts/#the-chart-yaml-file
+# Chart.yaml v2 reference: https://helm.sh/docs/topics/charts/#the-chartyaml-file
 apiVersion: v1
 name: jupyterhub
 version: 0.0.1-set.by.chartpress
@@ -9,3 +11,6 @@ sources:
 icon: https://jupyter.org/assets/hublogo.svg
 kubeVersion: '>=1.11.0-0'
 tillerVersion: '>=2.11.0-0'
+maintainers:
+  - name: Erik Sundell
+    email: erik@sundellopensource.se
