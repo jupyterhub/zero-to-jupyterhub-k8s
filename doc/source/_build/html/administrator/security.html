@@ -1,0 +1,667 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Upgrading your Helm chart" href="upgrading.html" />
+    <link rel="prev" title="Optimizations" href="optimization.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../customizing/index.html">Customization Guide</a>
+        </li>
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+      
+      
+      
+      
+      
+      
+        
+          
+              <li class="">
+                  <a href="architecture.html">The JupyterHub Architecture</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="debug.html">Debugging</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="authentication.html">Authentication</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="optimization.html">Optimizations</a>
+              </li>
+          
+        
+          
+              <li class="active">
+                  <a href="">Security</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="upgrading.html">Upgrading your Helm chart</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="troubleshooting.html">FAQ</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="advanced.html">Advanced Topics</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="cost.html">Appendix: Projecting deployment costs</a>
+              </li>
+          
+        
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#reporting-a-security-issue" class="nav-link">Reporting a security issue</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#https" class="nav-link">HTTPS</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#set-up-your-domain" class="nav-link">Set up your domain</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#set-up-automatic-https" class="nav-link">Set up automatic HTTPS</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#set-up-manual-https" class="nav-link">Set up manual HTTPS</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#specify-certificate-in-config-yaml" class="nav-link">Specify certificate in config.yaml</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#specify-certificate-through-secret-resource" class="nav-link">Specify certificate through Secret resource</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#off-loading-ssl-to-a-load-balancer" class="nav-link">Off-loading SSL to a Load Balancer</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#confirm-that-your-domain-is-running-https" class="nav-link">Confirm that your domain is running HTTPS</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#secure-access-to-helm" class="nav-link">Secure access to Helm</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#audit-cloud-metadata-server-access" class="nav-link">Audit Cloud Metadata server access</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#delete-the-kubernetes-dashboard" class="nav-link">Delete the Kubernetes Dashboard</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#use-role-based-access-control-rbac" class="nav-link">Use Role Based Access Control (RBAC)</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#kubernetes-api-access" class="nav-link">Kubernetes API Access</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#kubernetes-network-policies" class="nav-link">Kubernetes Network Policies</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#enabling-and-disabling-network-policies" class="nav-link">Enabling and disabling network policies</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#granting-network-access-to-jupyterhub-pods-ingress" class="nav-link">Granting network access to jupyterhub pods (ingress)</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#limiting-network-access-from-pods-egress" class="nav-link">Limiting network access from pods (egress)</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#restricting-load-balancer-access" class="nav-link">Restricting Load Balancer Access</a>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="security">
+<h1>Security<a class="headerlink" href="#security" title="Permalink to this headline">¶</a></h1>
+<p>The information in this document focuses primarily on cloud based deployments. For on-premise deployments, additional security work that is specific to your installation method would also be required. Note that your specific installation’s security needs might be more or less stringent than what we can offer you here.</p>
+<p>Brad Geesamen gave a wonderful talk titled <a class="reference external" href="https://kccncna17.sched.com/event/CU6z/hacking-and-hardening-kubernetes-clusters-by-example-i-brad-geesaman-symantec">Hacking and Hardening Kubernetes by Example</a> at Kubecon NA 2017. You can <a class="reference external" href="https://www.youtube.com/watch?v=vTgQLzeBfRU">watch the talk</a> or <a class="reference external" href="https://github.com/sbueringer/kubecon-slides/blob/master/slides/2017-kubecon-na/Hacking%20and%20Hardening%20Kubernetes%20Clusters%20by%20Example%20%5BI%5D%20-%20Brad%20Geesaman%2C%20Symantec%20-%20Hacking%20and%20Hardening%20Kubernetes%20By%20Example%20v2.pdf">read the slides</a>. Highly recommended that you do so to understand the security issues you are up against when using Kubernetes to run JupyterHub.</p>
+<div class="section" id="reporting-a-security-issue">
+<h2>Reporting a security issue<a class="headerlink" href="#reporting-a-security-issue" title="Permalink to this headline">¶</a></h2>
+<p>If you find a security vulnerability in JupyterHub, either a failure of the
+code to properly implement the model described here, or a failure of the
+model itself, please report it to <a class="reference external" href="mailto:security&#37;&#52;&#48;ipython&#46;org">security<span>&#64;</span>ipython<span>&#46;</span>org</a>.</p>
+<p>If you prefer to encrypt your security reports, you can use
+<a class="reference external" href="https://ipython.org/ipython-doc/2/_downloads/ipython_security.asc">this PGP public key</a>.</p>
+</div>
+<div class="section" id="https">
+<h2>HTTPS<a class="headerlink" href="#https" title="Permalink to this headline">¶</a></h2>
+<p>This section describes how to enable HTTPS on your JupyterHub. The easiest way to do so is by using <a class="reference external" href="https://letsencrypt.org/">Let’s Encrypt</a>, though we’ll also cover how to set up your own HTTPS credentials. For more information
+on HTTPS security see the certificates section of <a class="reference external" href="https://blog.hartleybrody.com/https-certificates/">this blog post</a>.</p>
+<div class="section" id="set-up-your-domain">
+<h3>Set up your domain<a class="headerlink" href="#set-up-your-domain" title="Permalink to this headline">¶</a></h3>
+<ol>
+<li><p>Buy a domain name from a registrar. Pick whichever one you want.</p></li>
+<li><p>Create an A record from the domain you want to use, pointing to the EXTERNAL-IP of the proxy-public service. The exact way to do this will depend on the DNS provider that you’re using.</p></li>
+<li><p>Wait for the change to propagate. Propagation can take several minutes to several hours. Wait until you can type in the name of the domain you bought and it shows you the JupyterHub landing page.</p>
+<p>It is important that you wait - prematurely going to the next step might cause problems!</p>
+</li>
+</ol>
+</div>
+<div class="section" id="set-up-automatic-https">
+<h3>Set up automatic HTTPS<a class="headerlink" href="#set-up-automatic-https" title="Permalink to this headline">¶</a></h3>
+<p>JupyterHub uses <a class="reference external" href="https://letsencrypt.org/">Let’s Encrypt</a> to automatically create
+HTTPS certificates for your deployment. This will cause your HTTPS certificate
+to automatically renew every few months. To enable this, make the following
+changes to your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file:</p>
+<ol>
+<li><p>Specify the two bits of information that we need to automatically provision
+HTTPS certificates - your domain name &amp; a contact email address.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">proxy</span><span class="p">:</span>
+  <span class="nt">https</span><span class="p">:</span>
+    <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">hosts</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-domain-name&gt;</span>
+    <span class="nt">letsencrypt</span><span class="p">:</span>
+      <span class="nt">contactEmail</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-email-address&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Apply the config changes by running <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span> <span class="pre">...</span></code></p></li>
+<li><p>Wait for about a minute, now your hub should be HTTPS enabled!</p></li>
+</ol>
+<hr class="docutils" />
+<p><strong>NOTE:</strong></p>
+<p>If the proxy service is of type <code class="docutils literal notranslate"><span class="pre">LoadBalancer</span></code>, which it is by default, then a specific static IP address can be requested (if available) instead of a dynamically acquired one.<br />
+Although not essential for HTTPS, using a static IP address is a recommended practice for domain names referencing fixed IPs.
+This ensures the same IP address for multiple deployments.
+The IP can be provided like:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span>  <span class="nt">proxy</span><span class="p">:</span>
+    <span class="nt">service</span><span class="p">:</span>
+      <span class="nt">loadBalancerIP</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">xxx.xxx.xxx.xxx</span>
+</pre></div>
+</div>
+<p>More info about this can be found on the <a class="reference internal" href="../reference/reference.html#helm-chart-configuration-reference"><span class="std std-ref">Configuration Reference</span></a> page.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="set-up-manual-https">
+<h3>Set up manual HTTPS<a class="headerlink" href="#set-up-manual-https" title="Permalink to this headline">¶</a></h3>
+<p>If you have your own HTTPS certificates &amp; want to use those instead of the automatically provisioned Let’s Encrypt ones, that’s also possible. Note that this is considered an advanced option, so we recommend not doing it unless you have good reasons.</p>
+<p>There are two ways to specify your manual certificate, directly in the config.yaml or by creating a <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/secret/">Kubernetes <code class="docutils literal notranslate"><span class="pre">secret</span></code></a>.</p>
+<div class="section" id="specify-certificate-in-config-yaml">
+<h4>Specify certificate in config.yaml<a class="headerlink" href="#specify-certificate-in-config-yaml" title="Permalink to this headline">¶</a></h4>
+<ol>
+<li><p>Add your domain name &amp; HTTPS certificate info to your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">proxy</span><span class="p">:</span>
+  <span class="nt">https</span><span class="p">:</span>
+    <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">manual</span>
+    <span class="nt">manual</span><span class="p">:</span>
+      <span class="nt">key</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+        <span class="no">-----BEGIN RSA PRIVATE KEY-----</span>
+        <span class="no">...</span>
+        <span class="no">-----END RSA PRIVATE KEY-----</span>
+      <span class="nt">cert</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+        <span class="no">-----BEGIN CERTIFICATE-----</span>
+        <span class="no">...</span>
+        <span class="no">-----END CERTIFICATE-----</span>
+</pre></div>
+</div>
+</li>
+<li><p>Apply the config changes by running helm upgrade ….</p></li>
+<li><p>Wait for about a minute, now your hub should be HTTPS enabled!</p></li>
+</ol>
+</div>
+<div class="section" id="specify-certificate-through-secret-resource">
+<h4>Specify certificate through Secret resource<a class="headerlink" href="#specify-certificate-through-secret-resource" title="Permalink to this headline">¶</a></h4>
+<ol>
+<li><p>Create a <code class="docutils literal notranslate"><span class="pre">secret</span></code> resource with type <code class="docutils literal notranslate"><span class="pre">kubernetes.io/tls</span></code> containing your certificate.</p>
+<p><code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">create</span> <span class="pre">secret</span> <span class="pre">tls</span> <span class="pre">example-tls</span> <span class="pre">--key=&quot;tls.key&quot;</span> <span class="pre">--cert=&quot;tls.crt&quot;</span></code></p>
+</li>
+<li><p>Add your domain and the name of your <code class="docutils literal notranslate"><span class="pre">secret</span></code> to your config.yaml.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">proxy</span><span class="p">:</span>
+  <span class="nt">https</span><span class="p">:</span>
+    <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">hosts</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-domain-name&gt;</span>
+    <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">secret</span>
+    <span class="nt">secret</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">example-tls</span>
+</pre></div>
+</div>
+</li>
+<li><p>Apply the config changes by running helm upgrade ….</p></li>
+<li><p>Wait for about a minute, now your hub should be HTTPS enabled!</p></li>
+</ol>
+</div>
+</div>
+<div class="section" id="off-loading-ssl-to-a-load-balancer">
+<h3>Off-loading SSL to a Load Balancer<a class="headerlink" href="#off-loading-ssl-to-a-load-balancer" title="Permalink to this headline">¶</a></h3>
+<p>In some environments with a trusted network, you may want to terminate SSL at a
+load balancer. If https is enabled, and <code class="docutils literal notranslate"><span class="pre">proxy.https.type</span></code> is set to <code class="docutils literal notranslate"><span class="pre">offload</span></code>,
+the HTTP and HTTPS front ends target the HTTP port from JupyterHub.</p>
+<p>The HTTPS listener on the load balancer will need to be configured based on the
+provider. If you’re using AWS and a certificate provided by their certificate
+manager, your config.yml might look something like:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">proxy</span><span class="p">:</span>
+  <span class="nt">https</span><span class="p">:</span>
+    <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">offload</span>
+  <span class="nt">service</span><span class="p">:</span>
+    <span class="nt">annotations</span><span class="p">:</span>
+      <span class="c1"># Certificate ARN</span>
+      <span class="nt">service.beta.kubernetes.io/aws-load-balancer-ssl-cert</span><span class="p">:</span> <span class="s">&quot;arn:aws:acm:us-east-1:1234567891011:certificate/uuid&quot;</span>
+      <span class="c1"># The protocol to use on the backend, we use TCP since we&#39;re using websockets</span>
+      <span class="nt">service.beta.kubernetes.io/aws-load-balancer-backend-protocol</span><span class="p">:</span> <span class="s">&quot;tcp&quot;</span>
+      <span class="c1"># Which ports should use SSL</span>
+      <span class="nt">service.beta.kubernetes.io/aws-load-balancer-ssl-ports</span><span class="p">:</span> <span class="s">&quot;https&quot;</span>
+      <span class="nt">service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout</span><span class="p">:</span> <span class="s">&quot;3600&quot;</span>
+</pre></div>
+</div>
+<p>Annotation options will vary by provider.</p>
+</div>
+<div class="section" id="confirm-that-your-domain-is-running-https">
+<h3>Confirm that your domain is running HTTPS<a class="headerlink" href="#confirm-that-your-domain-is-running-https" title="Permalink to this headline">¶</a></h3>
+<p>There are many ways to confirm that a domain is running trusted HTTPS
+certificates. One options is to use the <a class="reference external" href="https://www.ssllabs.com/">Qualys SSL Labs</a>
+security report generator. Use the following URL structure to test your domain:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://ssllabs.com/ssltest/analyze.html?d=&lt;YOUR-DOMAIN&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="secure-access-to-helm">
+<h2>Secure access to Helm<a class="headerlink" href="#secure-access-to-helm" title="Permalink to this headline">¶</a></h2>
+<p>Helm 3 supports the security, identity, and authorization features of modern Kubernetes. Helm’s permissions are evaluated using your kubeconfig file. Cluster administrators can restrict user permissions at whatever granularity they see fit.</p>
+<p>Read more about organizing cluster access using kubeconfig files in the
+<a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/">Kubernetes docs</a>.</p>
+</div>
+<div class="section" id="audit-cloud-metadata-server-access">
+<h2>Audit Cloud Metadata server access<a class="headerlink" href="#audit-cloud-metadata-server-access" title="Permalink to this headline">¶</a></h2>
+<p>Most cloud providers have a static IP you can hit from any of the compute nodes, including the user pod, to get metadata about the cloud. This metadata can contain very sensitive info, and this metadata, in the wrong hands, can allow attackers to take full control of your cluster and cloud resources. It is <strong>critical</strong> to secure the metadata service. We block access to this IP by default (as of v0.6), so you are protected from this!</p>
+<p>The slides beginning at <a class="reference external" href="https://schd.ws/hosted_files/kccncna17/d8/Hacking%20and%20Hardening%20Kubernetes%20By%20Example%20v2.pdf"><em>Slide 38</em></a> provides more information on the dangers presented by this attack.</p>
+<p>If you need to enable access to the metadata server for some reason, you can do the following in config.yaml:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">singleuser</span><span class="p">:</span>
+  <span class="nt">cloudMetadata</span><span class="p">:</span>
+    <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="delete-the-kubernetes-dashboard">
+<h2>Delete the Kubernetes Dashboard<a class="headerlink" href="#delete-the-kubernetes-dashboard" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/kubernetes/dashboard">Kubernetes Dashboard</a> gets created by default in many installations. Although the Dashboard contains useful information, the Dashboard also poses a security risk. We <strong>recommend</strong> deleting it and not using it for the time being until the Dashboard becomes properly securable.</p>
+<p>You can mitigate this by deleting the Kubernetes Dashboard deployment from your cluster. This can be most likely performed with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl --namespace<span class="o">=</span>kube-system delete deployment kubernetes-dashboard
+</pre></div>
+</div>
+<p>In older clusters, you might have to do:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl --namespace<span class="o">=</span>kube-system delete rc kubernetes-dashboard
+</pre></div>
+</div>
+</div>
+<div class="section" id="use-role-based-access-control-rbac">
+<h2>Use Role Based Access Control (RBAC)<a class="headerlink" href="#use-role-based-access-control-rbac" title="Permalink to this headline">¶</a></h2>
+<p>Kubernetes supports, and often requires, using <a class="reference external" href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/">Role Based Access Control (RBAC)</a>
+to secure which pods / users can perform what kinds of actions on the cluster. RBAC rules can be set to provide users with minimal necessary access based on their administrative needs.</p>
+<p>It is <strong>critical</strong> to understand that if RBAC is disabled, all pods are given <code class="docutils literal notranslate"><span class="pre">root</span></code> equivalent permission on the Kubernetes cluster and all the nodes in it. This opens up very bad vulnerabilites for your security.</p>
+<p>As of the Helm chart v0.5 used with JupyterHub and BinderHub, the helm chart can natively work with RBAC enabled clusters. To provide sensible security defaults, we ship appropriate minimal RBAC rules for the various components we use. We <strong>highly recommend</strong> using these minimal or more restrictive RBAC rules.</p>
+<p>If you want to disable the RBAC rules, for whatever reason, you can do so with the following snippet in your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">rbac</span><span class="p">:</span>
+  <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+<p>We strongly <strong>discourage disabling</strong> the RBAC rules and remind you that this
+action will open up security vulnerabilities. However, some cloud providers may
+not support RBAC in which case you can disable it with this config.</p>
+</div>
+<div class="section" id="kubernetes-api-access">
+<h2>Kubernetes API Access<a class="headerlink" href="#kubernetes-api-access" title="Permalink to this headline">¶</a></h2>
+<p>Allowing direct user access to the Kubernetes API can be dangerous. It allows
+users to grant themselves more privileges, access other users’ content without
+permission, run (unprofitable) bitcoin mining operations &amp; various other
+not-legitimate activities. By default, we do not allow access to the <a class="reference external" href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/">service
+account credentials</a> needed
+to access the Kubernetes API from user servers for this reason.</p>
+<p>If you want to (carefully!) give access to the Kubernetes API to your users, you
+can do so with the following in your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">singleuser</span><span class="p">:</span>
+  <span class="nt">serviceAccountName</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;service-account-name&gt;</span>
+</pre></div>
+</div>
+<p>You can either manually create a service account for use by your users and
+specify the name of that here (recommended) or use <code class="docutils literal notranslate"><span class="pre">default</span></code> to give them access
+to the default service account for the namespace. You should ideally also
+(manually) set up <a class="reference external" href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/">RBAC</a>
+rules for this service account to specify what permissions users will have.</p>
+<p>This is a sensitive security issue (similar to writing sudo rules in a
+traditional computing environment), so be very careful.</p>
+<p>There’s ongoing work on making this easier!</p>
+</div>
+<div class="section" id="kubernetes-network-policies">
+<h2>Kubernetes Network Policies<a class="headerlink" href="#kubernetes-network-policies" title="Permalink to this headline">¶</a></h2>
+<p><strong>Important</strong>: When using network policies, you should be aware
+that a Kubernetes cluster may have partial, full, or no support for network policies.
+Kubernetes will <strong>silently ignore</strong> policies that aren’t supported.
+Please use <strong>caution</strong> before relying on network policy enforcement
+and verify the policies behave as expected,
+especially if you rely on them to restrict what users can access.</p>
+<p>Kubernetes has optional support for <a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/network-policies/">network
+policies</a>
+which lets you restrict how pods can communicate with each other and the outside
+world. This can provide additional security within JupyterHub, and can also be
+used to limit network access for users of JupyterHub.</p>
+<p>By default, the JupyterHub helm chart <strong>enables</strong> network policies in 0.10 or later.
+They are <strong>disabled</strong> by default in 0.9 and earlier.</p>
+<p>The JupyterHub chart has three network policies,
+one for each component (hub, proxy, single-user servers),
+which can be enabled and configured separately.</p>
+<div class="section" id="enabling-and-disabling-network-policies">
+<h3>Enabling and disabling network policies<a class="headerlink" href="#enabling-and-disabling-network-policies" title="Permalink to this headline">¶</a></h3>
+<p>By default, the JupyterHub helm chart <strong>enables</strong> network policies in 0.10 or later.
+They are <strong>disabled</strong> by default in 0.9 and earlier.</p>
+<p>You can enable or disable enforcement of each network policy in config.yaml:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
+  <span class="nt">networkPolicy</span><span class="p">:</span>
+    <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>  <span class="c1"># or false to disable</span>
+<span class="nt">proxy</span><span class="p">:</span>
+  <span class="nt">networkPolicy</span><span class="p">:</span>
+    <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="nt">singleuser</span><span class="p">:</span>
+  <span class="nt">networkPolicy</span><span class="p">:</span>
+    <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="granting-network-access-to-jupyterhub-pods-ingress">
+<h3>Granting network access to jupyterhub pods (ingress)<a class="headerlink" href="#granting-network-access-to-jupyterhub-pods-ingress" title="Permalink to this headline">¶</a></h3>
+<p>The chart’s network policy default behavior ensures that all of the jupyterhub components can talk to each other,
+so all of the following connections are allowed:</p>
+<ul class="simple">
+<li><p>proxy ⇨ hub</p></li>
+<li><p>proxy ⇨ singleuser</p></li>
+<li><p>hub ⇨ proxy api</p></li>
+<li><p>hub ⬄ singleuser</p></li>
+<li><p>everything ⇨ DNS</p></li>
+</ul>
+<p>and by default do not allow any other pods to talk to the jupyterhub components.</p>
+<p>The network policies use label selectors that look like:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ingress</span><span class="p">:</span>
+  <span class="c1"># allowed pods (hub.jupyter.org/network-access-hub) --&gt; hub</span>
+  <span class="p p-Indicator">-</span> <span class="nt">from</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">podSelector</span><span class="p">:</span>
+          <span class="nt">matchLabels</span><span class="p">:</span>
+            <span class="nt">hub.jupyter.org/network-access-hub</span><span class="p">:</span> <span class="s">&quot;true&quot;</span>
+</pre></div>
+</div>
+<p>So if you are creating additional pods that want to talk to these,
+you can grant them access to jupyterhub components one by one by adding the right labels.
+Here is an example set of labels granting access to all jupyterhub components
+(i.e. the same behavior as without network policies):</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my-service</span>
+  <span class="nt">labels</span><span class="p">:</span>
+    <span class="nt">hub.jupyter.org/network-access-hub</span><span class="p">:</span> <span class="s">&quot;true&quot;</span>  <span class="c1"># access the hub api</span>
+    <span class="nt">hub.jupyter.org/network-access-proxy-http</span><span class="p">:</span> <span class="s">&quot;true&quot;</span>  <span class="c1"># access proxy public http endpoint</span>
+    <span class="nt">hub.jupyter.org/network-access-proxy-api</span><span class="p">:</span> <span class="s">&quot;true&quot;</span>  <span class="c1"># access proxy api</span>
+    <span class="nt">hub.jupyter.org/network-access-singleuser</span><span class="p">:</span> <span class="s">&quot;true&quot;</span>  <span class="c1"># access single-user servers directly</span>
+</pre></div>
+</div>
+<p>You can also add additional <code class="docutils literal notranslate"><span class="pre">ingress</span></code> rules to each network policy in your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>.
+See the <a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/network-policies/">Kubernetes documentation</a>
+for how to define ingress rules.</p>
+</div>
+<div class="section" id="limiting-network-access-from-pods-egress">
+<h3>Limiting network access from pods (egress)<a class="headerlink" href="#limiting-network-access-from-pods-egress" title="Permalink to this headline">¶</a></h3>
+<p>By default, all of the pods allow all <code class="docutils literal notranslate"><span class="pre">egress</span></code> traffic,
+which means that code in each of the pods may make connections to anywhere in the cluster or on the Internet
+(unless that would be blocked by the ingress rules of the destination).
+This is very permissive.
+The default policy for all components allows all outbound (egress) network traffic,
+meaning JupyterHub users are able to connect to all resources inside and outside your network.
+You can override the <code class="docutils literal notranslate"><span class="pre">egress</span></code> configuration of each policy
+to make it more restrictive.
+For example, to restrict user outbound traffic to DNS, HTTP, and HTTPS:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">singleuser</span><span class="p">:</span>
+  <span class="nt">networkPolicy</span><span class="p">:</span>
+    <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">egress</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">ports</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">53</span>
+            <span class="nt">protocol</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">UDP</span>
+      <span class="p p-Indicator">-</span> <span class="nt">ports</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">80</span>
+      <span class="p p-Indicator">-</span> <span class="nt">ports</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">443</span>
+</pre></div>
+</div>
+<p>See the <a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/network-policies/">Kubernetes
+documentation</a>
+for further information on defining policies.</p>
+</div>
+</div>
+<div class="section" id="restricting-load-balancer-access">
+<h2>Restricting Load Balancer Access<a class="headerlink" href="#restricting-load-balancer-access" title="Permalink to this headline">¶</a></h2>
+<p>By default any IP address can access your JupyterHub deployment through the load balancer service.
+In case you want to restrict which IP addresses are allowed to access the load balancer, you can
+specify a list of IP CIDR addresses in your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> as follows:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">proxy</span><span class="p">:</span>
+  <span class="nt">service</span><span class="p">:</span>
+    <span class="nt">loadBalancerSourceRanges</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">111.111.111.111/32</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">222.222.222.222/32</span>
+</pre></div>
+</div>
+<p>This would restrict the access to only two IP addresses: <code class="docutils literal notranslate"><span class="pre">111.111.111.111</span></code> and <code class="docutils literal notranslate"><span class="pre">222.222.222.222</span></code>.</p>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="optimization.html" title="previous page">Optimizations</a>
+    <a class='right-next' id="next-link" href="upgrading.html" title="next page">Upgrading your Helm chart</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

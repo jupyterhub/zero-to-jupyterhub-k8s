@@ -1,0 +1,433 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upgrading your Helm chart &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FAQ" href="troubleshooting.html" />
+    <link rel="prev" title="Security" href="security.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../customizing/index.html">Customization Guide</a>
+        </li>
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+      
+      
+      
+      
+      
+      
+        
+          
+              <li class="">
+                  <a href="architecture.html">The JupyterHub Architecture</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="debug.html">Debugging</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="authentication.html">Authentication</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="optimization.html">Optimizations</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="security.html">Security</a>
+              </li>
+          
+        
+          
+              <li class="active">
+                  <a href="">Upgrading your Helm chart</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="troubleshooting.html">FAQ</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="advanced.html">Advanced Topics</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="cost.html">Appendix: Projecting deployment costs</a>
+              </li>
+          
+        
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#major-helm-chart-upgrades" class="nav-link">Major helm-chart upgrades</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#v0-5-to-v0-6" class="nav-link">v0.5 to v0.6</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#v0-4-to-v0-5" class="nav-link">v0.4 to v0.5</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#subtopics" class="nav-link">Subtopics</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#helm-upgrade-command" class="nav-link">helm upgrade command</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#database" class="nav-link">Database</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#role-based-access-control" class="nav-link">Role based access control</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#custom-docker-images-jupyterhub-version-match" class="nav-link">Custom Docker Images: JupyterHub version match</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#jupyterhub-versions-installed-in-each-helm-chart" class="nav-link">JupyterHub versions installed in each Helm Chart</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#troubleshooting" class="nav-link">Troubleshooting</a>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="upgrading-your-helm-chart">
+<h1>Upgrading your Helm chart<a class="headerlink" href="#upgrading-your-helm-chart" title="Permalink to this headline">¶</a></h1>
+<p>This page covers best-practices in upgrading your JupyterHub deployment via updates
+to the Helm Chart.</p>
+<p>Upgrading from one version of the Helm Chart to the
+next should be as seamless as possible, and generally shouldn’t require major
+changes to your deployment. Check the <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md">CHANGELOG</a>
+for each release to find out if there are any breaking changes in the newest version.</p>
+<p>For additional help, feel free to reach out to us on <a class="reference external" href="https://gitter.im/jupyterhub/jupyterhub">gitter</a>
+or the <a class="reference external" href="https://groups.google.com/forum/#%21forum/jupyter">mailing list</a>!</p>
+<div class="section" id="major-helm-chart-upgrades">
+<h2>Major helm-chart upgrades<a class="headerlink" href="#major-helm-chart-upgrades" title="Permalink to this headline">¶</a></h2>
+<p>These steps are <strong>critical</strong> before performing a major upgrade.</p>
+<ol class="simple">
+<li><p>Always backup your database!</p></li>
+<li><p>Review the <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md">CHANGELOG</a> for incompatible changes and upgrade instructions.</p></li>
+<li><p>Update your configuration accordingly.</p></li>
+<li><p>User servers may need be stopped prior to the upgrade,
+or restarted after it.</p></li>
+<li><p>If you are planning an upgrade of a critical major installation,
+we recommend you test the upgrade out on a staging cluster first
+before applying it to production.</p></li>
+</ol>
+<div class="section" id="v0-5-to-v0-6">
+<h3>v0.5 to v0.6<a class="headerlink" href="#v0-5-to-v0-6" title="Permalink to this headline">¶</a></h3>
+<p>See the <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md#06---ellyse-perry---2017-01-29">CHANGELOG</a>.</p>
+</div>
+<div class="section" id="v0-4-to-v0-5">
+<h3>v0.4 to v0.5<a class="headerlink" href="#v0-4-to-v0-5" title="Permalink to this headline">¶</a></h3>
+<p>Release 0.5 contains a major JupyterHub version bump (from 0.7.2 to 0.8).
+Since it is a major upgrade of JupyterHub that changes how authentication is
+implemented, user servers must be stopped during the upgrade.
+The database schema has also changed, so a database upgrade must be performed.</p>
+<p>See the <a class="reference external" href="https://zero-to-jupyterhub.readthedocs.io/en/v0.5-doc/upgrading.html">documentation for v0.5 for the upgrade process</a>
+as well as the <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CHANGELOG.md#05---hamid-hassan---2017-12-05">CHANGELOG</a>
+for this release for more information about changes.</p>
+</div>
+</div>
+<div class="section" id="subtopics">
+<h2>Subtopics<a class="headerlink" href="#subtopics" title="Permalink to this headline">¶</a></h2>
+<p>This section covers upgrade information specific to the following:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code> command</p></li>
+<li><p>Databases</p></li>
+<li><p>RBAC (Role Based Access Control)</p></li>
+<li><p>Custom Docker images</p></li>
+</ul>
+<div class="section" id="helm-upgrade-command">
+<h3><code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code> command<a class="headerlink" href="#helm-upgrade-command" title="Permalink to this headline">¶</a></h3>
+<p>After modifying your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file according to the CHANGELOG, you will need
+<code class="docutils literal notranslate"><span class="pre">&lt;YOUR-HELM-RELEASE-NAME&gt;</span></code> to run the upgrade commands. To find <code class="docutils literal notranslate"><span class="pre">&lt;YOUR-RELEASE-NAME&gt;</span></code>, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="nb">list</span>
+</pre></div>
+</div>
+<p>Make sure to test the upgrade on a staging environment before doing the upgrade on
+a production system!</p>
+<p>To run the upgrade:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">upgrade</span> <span class="o">--</span><span class="n">cleanup</span><span class="o">-</span><span class="n">on</span><span class="o">-</span><span class="n">fail</span> <span class="o">&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">HELM</span><span class="o">-</span><span class="n">RELEASE</span><span class="o">-</span><span class="n">NAME</span><span class="o">&gt;</span> <span class="n">jupyterhub</span><span class="o">/</span><span class="n">jupyterhub</span> <span class="o">--</span><span class="n">version</span><span class="o">=&lt;</span><span class="n">RELEASE</span><span class="o">-</span><span class="n">VERSION</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">f</span> <span class="n">config</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<p>For example, to upgrade to v0.6, enter and substituting <code class="docutils literal notranslate"><span class="pre">&lt;YOUR-HELM-RELEASE-NAME&gt;</span></code> and version v0.6:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">upgrade</span> <span class="o">--</span><span class="n">cleanup</span><span class="o">-</span><span class="n">on</span><span class="o">-</span><span class="n">fail</span> <span class="o">&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">HELM</span><span class="o">-</span><span class="n">RELEASE</span><span class="o">-</span><span class="n">NAME</span><span class="o">&gt;</span> <span class="n">jupyterhub</span><span class="o">/</span><span class="n">jupyterhub</span> <span class="o">--</span><span class="n">version</span><span class="o">=</span><span class="n">v0</span><span class="o">.</span><span class="mi">6</span> <span class="o">-</span><span class="n">f</span> <span class="n">config</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="database">
+<h3>Database<a class="headerlink" href="#database" title="Permalink to this headline">¶</a></h3>
+<p>This release contains a major JupyterHub version bump (from 0.7.2 to 0.8). If
+you are using the default database provider (SQLite), then the required db upgrades
+will be performed automatically when you do a <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code>.</p>
+<p><strong>Default (SQLite)</strong>: The database upgrade will be performed automatically when you
+<a class="reference external" href="#upgrade-command">perform the upgrade</a></p>
+<p><strong>MySQL / PostgreSQL</strong>: You will execute the following steps, which includes a manual update of your database:</p>
+<ol>
+<li><p>Make a full backup of your database, just in case things go bad.</p></li>
+<li><p>Make sure that the database user used by JupyterHub to connect to your database
+can perform schema migrations like adding new tables, altering tables, etc.</p></li>
+<li><p>In your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>, add the following config:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
+  <span class="nt">db</span><span class="p">:</span>
+    <span class="nt">upgrade</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+</li>
+<li><p>Do a <a class="reference external" href="#upgrade-command"><code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code></a>. This should perform the database upgrade needed.</p></li>
+<li><p>Remove the lines added in step 3, and do another <a class="reference external" href="#upgrade-command"><code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code></a>.</p></li>
+</ol>
+</div>
+<div class="section" id="role-based-access-control">
+<h3><a class="reference external" href="/security.html#use-role-based-access-control-rbac">Role based access control</a><a class="headerlink" href="#role-based-access-control" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/">RBAC</a> is the user security model
+in Kubernetes that gives applications only as much access they need to the kubernetes
+API and not more. Prior to this, applications were all running with the equivalent
+of root on your Kubernetes cluster. This release adds appropriate roles for the
+various components of JupyterHub, for much better ability to secure clusters.</p>
+<p>RBAC is turned on by default. But, if your cluster is older than 1.8, or you have RBAC
+enforcement turned off, you might want to explicitly disable it. You can do so by adding
+the following snippet to your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">rbac</span><span class="p">:</span>
+  <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+<p>This is especially true if you get an error like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Error</span><span class="p">:</span> <span class="n">the</span> <span class="n">server</span> <span class="n">rejected</span> <span class="n">our</span> <span class="n">request</span> <span class="k">for</span> <span class="n">an</span> <span class="n">unknown</span> <span class="n">reason</span> <span class="p">(</span><span class="n">get</span> <span class="n">clusterrolebindings</span><span class="o">.</span><span class="n">rbac</span><span class="o">.</span><span class="n">authorization</span><span class="o">.</span><span class="n">k8s</span><span class="o">.</span><span class="n">io</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>when doing the upgrade!</p>
+</div>
+<div class="section" id="custom-docker-images-jupyterhub-version-match">
+<h3>Custom Docker Images: JupyterHub version match<a class="headerlink" href="#custom-docker-images-jupyterhub-version-match" title="Permalink to this headline">¶</a></h3>
+<p>If you are using a custom built image, make sure that the version of the
+JupyterHub package installed in it is now 0.8.1. It needs to be 0.8.1 for it to work with
+v0.6 of the helm chart.</p>
+<p>For example, if you are using <code class="docutils literal notranslate"><span class="pre">pip</span></code> to install JupyterHub in your custom Docker Image,
+you would use:</p>
+<div class="highlight-Dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">RUN</span> pip install --no-cache-dir <span class="nv">jupyterhub</span><span class="o">==</span><span class="m">0</span>.8.1
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="jupyterhub-versions-installed-in-each-helm-chart">
+<h2>JupyterHub versions installed in each Helm Chart<a class="headerlink" href="#jupyterhub-versions-installed-in-each-helm-chart" title="Permalink to this headline">¶</a></h2>
+<p>Each Helm Chart is packaged with a specific version of JupyterHub (and
+other software as well). See the <a class="reference external" href="https://github.com/jupyterhub/helm-chart#release-notes%3E">Helm Chart repository</a> for
+information about the versions of relevant software packages.</p>
+</div>
+<div class="section" id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
+<p>If the upgrade is failing on a test system or a system that does not serve users, you can try
+deleting the helm chart using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">delete</span> <span class="o">&lt;</span><span class="n">YOUR</span><span class="o">-</span><span class="n">HELM</span><span class="o">-</span><span class="n">RELEASE</span><span class="o">-</span><span class="n">NAME</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">list</span></code> may be used to find <YOUR-HELM-RELEASE-NAME>.</p>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="security.html" title="previous page">Security</a>
+    <a class='right-next' id="next-link" href="troubleshooting.html" title="next page">FAQ</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

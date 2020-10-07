@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kubernetes on OVHcloud (OVH) &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Setup JupyterHub" href="../setup-jupyterhub/index.html" />
+    <link rel="prev" title="Kubernetes on Digital Ocean" href="../digital-ocean/step-zero-digital-ocean.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../customizing/index.html">Customization Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../administrator/index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+        
+          
+              <li class="">
+                  <a href="../google/step-zero-gcp.html">Kubernetes on Google Cloud (GKE)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../microsoft/step-zero-azure.html">Kubernetes on Microsoft Azure Kubernetes Service (AKS)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../microsoft/step-zero-azure-autoscale.html">Kubernetes on Microsoft Azure Kubernetes Service (AKS) with Autoscaling</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../amazon/step-zero-aws.html">Kubernetes on Amazon Web Services (AWS)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../amazon/step-zero-aws-eks.html">Kubernetes on Amazon Web Services (AWS) with Elastic Container with Kubernetes (EKS)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../redhat/step-zero-openshift.html">Kubernetes on Red Hat OpenShift</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../ibm/step-zero-ibm.html">Kubernetes on IBM Cloud</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../digital-ocean/step-zero-digital-ocean.html">Kubernetes on Digital Ocean</a>
+              </li>
+          
+        
+          
+              <li class="active">
+                  <a href="">Kubernetes on OVHcloud (OVH)</a>
+              </li>
+          
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="kubernetes-on-ovhcloud-ovh">
+<span id="ovh"></span><h1>Kubernetes on <a class="reference external" href="https://ovh.com/">OVHcloud</a> (OVH)<a class="headerlink" href="#kubernetes-on-ovhcloud-ovh" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://ovh.com/">OVHcloud</a> is a leader in the hosted private cloud services space in Europe.</p>
+<p>They offer a managed Kubernetes service as well as a managed private registry for Docker images.</p>
+<p>This page describes how to create a Kubernetes cluster using the OVH Control Panel,
+and how to access the cluster using the command line with <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>.</p>
+<ol class="arabic">
+<li><p>Log in to the <a class="reference external" href="https://www.ovh.com/auth/">OVH Control Panel</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You first need to create an OVH account if you don’t have one already.</p>
+</div>
+</li>
+<li><p>Click on the <strong>Public Cloud</strong> tab in the navigation bar.</p>
+<img alt="Public Cloud entry in the navigation bar" src="../_images/public-cloud.png" />
+</li>
+<li><p>If you don’t have an OVH Stack, you can create one by clicking on the following button:</p>
+<img alt="Button to create an OVH stack" src="../_images/create-ovh-stack.png" />
+</li>
+<li><p>Select a name for the project</p></li>
+<li><p>If you don’t have a payment method yet, select one and click on “Create my project”:</p>
+<img alt="Select a payment method" src="../_images/payment.png" />
+</li>
+<li><p>Using the <strong>Public Cloud interface</strong>, click on <strong>Managed Kubernetes Service</strong> and
+then <strong>Create a Kubernetes cluster</strong>:</p>
+<img alt="Create a new Kubernetes cluster" src="../_images/create-cluster-button.png" />
+</li>
+<li><p>Select a <strong>Location</strong>, <strong>1.15</strong> as the Kubernetes version and a <strong>name</strong> for the cluster:</p>
+<img alt="Create a new Kubernetes cluster - Options" src="../_images/create-cluster-options.png" />
+</li>
+<li><p>Click on <strong>Send</strong></p></li>
+<li><p>Once the cluster is ready, click on <strong>Nodes</strong> to add 2 nodes:</p>
+<img alt="Add nodes to the cluster" src="../_images/add-nodes.png" />
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can start with the <strong>b2-7</strong> flavor, or choosing a different flavor based
+on your requirements.</p>
+</div>
+</li>
+<li><p>Download the <code class="docutils literal notranslate"><span class="pre">kubeconfig</span></code> file and store it under <code class="docutils literal notranslate"><span class="pre">~/.kube/config</span></code> on your machine.</p></li>
+</ol>
+<blockquote>
+<div><img alt="Download the kubeconfig" src="../_images/kubeconfig.png" />
+</div></blockquote>
+<ol class="arabic simple" start="11">
+<li><p>To test if your cluster is initialized, run:</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get node
+</pre></div>
+</div>
+<p>The response should list two running nodes (or however many nodes you
+set with <code class="docutils literal notranslate"><span class="pre">--num-nodes</span></code> above).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Check out the <a class="reference external" href="https://kubernetes.io/docs/tasks/tools/install-kubectl">Kubernetes Documentation</a>
+to install <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>.</p>
+</div>
+</div></blockquote>
+<p>Congrats! Now that you have your Kubernetes cluster running, it’s time to
+begin <a class="reference internal" href="../index.html#creating-your-jupyterhub"><span class="std std-ref">Setup JupyterHub</span></a>.</p>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="../digital-ocean/step-zero-digital-ocean.html" title="previous page">Kubernetes on Digital Ocean</a>
+    <a class='right-next' id="next-link" href="../setup-jupyterhub/index.html" title="next page">Setup JupyterHub</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

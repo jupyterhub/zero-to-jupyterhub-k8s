@@ -1,0 +1,538 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customizing User Environment &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../administrator/index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#choose-and-use-an-existing-docker-image" class="nav-link">Choose and use an existing Docker image</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#use-jupyterlab-by-default" class="nav-link">Use JupyterLab by default</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#customize-an-existing-docker-image" class="nav-link">Customize an existing Docker image</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#set-environment-variables" class="nav-link">Set environment variables</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#about-user-storage-and-adding-files-to-it" class="nav-link">About user storage and adding files to it</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#using-nbgitpuller-to-synchronize-a-folder" class="nav-link">Using nbgitpuller to synchronize a folder</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#allow-users-to-create-their-own-conda-environments-for-notebooks" class="nav-link">Allow users to create their own conda environments for notebooks</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#using-multiple-profiles-to-let-users-select-their-environment" class="nav-link">Using multiple profiles to let users select their environment</a>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="customizing-user-environment">
+<span id="user-environment"></span><h1>Customizing User Environment<a class="headerlink" href="#customizing-user-environment" title="Permalink to this headline">¶</a></h1>
+<p>This page contains instructions for common ways to enhance the user experience.
+For a list of all the configurable Helm chart options, see the
+<a class="reference internal" href="../reference/reference.html#helm-chart-configuration-reference"><span class="std std-ref">Configuration Reference</span></a>.</p>
+<p>The <em>user environment</em> is the set of software packages, environment variables,
+and various files that are present when the user logs into JupyterHub. The user
+may also see different tools that provide interfaces to perform specialized
+tasks, such as JupyterLab, RStudio, RISE and others.</p>
+<p>A <a class="reference internal" href="../reference/glossary.html#term-Docker-image"><span class="xref std std-term">Docker image</span></a> built from a <a class="reference internal" href="../reference/glossary.html#term-Dockerfile"><span class="xref std std-term">Dockerfile</span></a> will lay the foundation for
+the environment that you will provide for the users. The image will for example
+determine what Linux software (curl, vim …), programming languages (Julia,
+Python, R, …) and development environments (JupyterLab, RStudio, …) are made
+available for use.</p>
+<p>To get started customizing the user environment, see the topics below.</p>
+<div class="section" id="choose-and-use-an-existing-docker-image">
+<span id="existing-docker-image"></span><h2>Choose and use an existing Docker image<a class="headerlink" href="#choose-and-use-an-existing-docker-image" title="Permalink to this headline">¶</a></h2>
+<p>Project Jupyter maintains the <a class="reference external" href="https://github.com/jupyter/docker-stacks/">jupyter/docker-stacks repository</a>, which contains ready to use
+Docker images. Each image includes a set of commonly used science and data
+science libraries and tools. They also provide excellent documentation on <a class="reference external" href="https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html">how
+to choose a suitable image</a>.</p>
+<p>If you wish to use another image from jupyter/docker-stacks than the
+<a class="reference external" href="https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-base-notebook">base-notebook</a>
+used by default, such as the <a class="reference external" href="https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-datascience-notebook">datascience-notebook</a>
+image containing useful tools and libraries for datascience, complete these steps:</p>
+<ol class="arabic">
+<li><p>Modify your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file to specify the image. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">singleuser</span><span class="p">:</span>
+  <span class="nt">image</span><span class="p">:</span>
+    <span class="c1"># Get the latest image tag at:</span>
+    <span class="c1"># https://hub.docker.com/r/jupyter/datascience-notebook/tags/</span>
+    <span class="c1"># Inspect the Dockerfile at:</span>
+    <span class="c1"># https://github.com/jupyter/docker-stacks/tree/master/datascience-notebook/Dockerfile</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyter/datascience-notebook</span>
+    <span class="nt">tag</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">177037d09156</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Container image names cannot be longer than 63 characters.</p>
+<p>Always use an explicit <code class="docutils literal notranslate"><span class="pre">tag</span></code>, such as a specific commit. Avoid using
+<code class="docutils literal notranslate"><span class="pre">latest</span></code> as it might cause a several minute delay, confusion, or
+failures for users when a new version of the image is released.</p>
+</div>
+</li>
+<li><p>Apply the changes by following the directions listed in
+<a class="reference internal" href="../pre-requisites/extending-jupyterhub.html#apply-config-changes"><span class="std std-ref">apply the changes</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you have configured <em>prePuller.hook.enabled</em>, all the nodes in your
+cluster will pull the image before the hub is upgraded to let users
+use the image. The image pulling may take several minutes to complete,
+depending on the size of the image.</p>
+</div>
+</li>
+<li><p>Restart your server from JupyterHub control panel if you are already logged in.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you’d like users to select an environment from <strong>multiple docker images</strong>,
+see <a class="reference internal" href="../pre-requisites/user-environment.html#multiple-profiles"><span class="std std-ref">Using multiple profiles to let users select their environment</span></a>.</p>
+</div>
+</div>
+<div class="section" id="use-jupyterlab-by-default">
+<span id="jupyterlab-by-default"></span><h2>Use JupyterLab by default<a class="headerlink" href="#use-jupyterlab-by-default" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://jupyterlab.readthedocs.io/en/stable/index.html">JupyterLab</a> is a new
+user interface for Jupyter about to replace the classic user interface (UI).
+While users already can interchange <code class="docutils literal notranslate"><span class="pre">/tree</span></code> and <code class="docutils literal notranslate"><span class="pre">/lab</span></code> in the URL to switch between
+the classic UI and JupyterLab, they will default to use the classic UI.</p>
+<p>The classic Jupyter Notebook UI is the default provided, but you can change it to
+JupyterLab with the following config in your <a class="reference internal" href="../reference/glossary.html#term-config.yaml"><span class="xref std std-term">config.yaml</span></a>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">singleuser</span><span class="p">:</span>
+  <span class="nt">defaultUrl</span><span class="p">:</span> <span class="s">&quot;/lab&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You need the <code class="docutils literal notranslate"><span class="pre">jupyterlab</span></code> package (installable via <code class="docutils literal notranslate"><span class="pre">pip</span></code> or <code class="docutils literal notranslate"><span class="pre">conda</span></code>)
+for this to work. All images in the <a class="reference external" href="https://github.com/jupyter/docker-stacks/">jupyter/docker-stacks repository</a> come pre-installed with it.</p>
+</div>
+</div>
+<div class="section" id="customize-an-existing-docker-image">
+<span id="custom-docker-image"></span><h2>Customize an existing Docker image<a class="headerlink" href="#customize-an-existing-docker-image" title="Permalink to this headline">¶</a></h2>
+<p>If you are missing something in the image that you would like all users to have,
+we recommend that you build a new image on top of an existing Docker image from
+jupyter/docker-stacks.</p>
+<p>Below is an example <a class="reference internal" href="../reference/glossary.html#term-Dockerfile"><span class="xref std std-term">Dockerfile</span></a> building on top of the <em>minimal-notebook</em>
+image. This file can be built to a <a class="reference internal" href="../reference/glossary.html#term-Docker-image"><span class="xref std std-term">Docker image</span></a>, and pushed to a
+<a class="reference internal" href="../reference/glossary.html#term-image-registry"><span class="xref std std-term">image registry</span></a>, and finally configured in <a class="reference internal" href="../reference/glossary.html#term-config.yaml"><span class="xref std std-term">config.yaml</span></a> to be used
+by the Helm chart.</p>
+<div class="highlight-Dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span> <span class="s">jupyter/minimal-notebook:177037d09156</span>
+<span class="c"># Get the latest image tag at:</span>
+<span class="c"># https://hub.docker.com/r/jupyter/minimal-notebook/tags/</span>
+<span class="c"># Inspect the Dockerfile at:</span>
+<span class="c"># https://github.com/jupyter/docker-stacks/tree/master/minimal-notebook/Dockerfile</span>
+
+<span class="c"># install additional package...</span>
+<span class="k">RUN</span> pip install --no-cache-dir astropy
+</pre></div>
+</div>
+</div>
+<div class="section" id="set-environment-variables">
+<span id="set-env-vars"></span><h2>Set environment variables<a class="headerlink" href="#set-environment-variables" title="Permalink to this headline">¶</a></h2>
+<p>One way to affect your user’s environment is by setting <a class="reference internal" href="../reference/glossary.html#term-environment-variables"><span class="xref std std-term">environment
+variables</span></a>. While you can set them up in your Docker image if you build it
+yourself, it is often easier to configure your Helm chart through values
+provided in your <a class="reference internal" href="../reference/glossary.html#term-config.yaml"><span class="xref std std-term">config.yaml</span></a>.</p>
+<p>To set this up, edit your <a class="reference internal" href="../reference/glossary.html#term-config.yaml"><span class="xref std std-term">config.yaml</span></a> and
+<a class="reference internal" href="../pre-requisites/extending-jupyterhub.html#apply-config-changes"><span class="std std-ref">apply the changes</span></a>.
+For example, this code snippet will set the environment variable <code class="docutils literal notranslate"><span class="pre">EDITOR</span></code> to the
+value <code class="docutils literal notranslate"><span class="pre">vim</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">singleuser</span><span class="p">:</span>
+  <span class="nt">extraEnv</span><span class="p">:</span>
+    <span class="nt">EDITOR</span><span class="p">:</span> <span class="s">&quot;vim&quot;</span>
+</pre></div>
+</div>
+<p>You can set any number of static environment variables in the
+<a class="reference internal" href="../reference/glossary.html#term-config.yaml"><span class="xref std std-term">config.yaml</span></a> file.</p>
+<p>Users can read the environment variables in their code in various ways. In
+Python, for example, the following code reads an environment variable’s value:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="n">my_value</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;MY_ENVIRONMENT_VARIABLE&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="about-user-storage-and-adding-files-to-it">
+<span id="add-files-to-home"></span><h2>About user storage and adding files to it<a class="headerlink" href="#about-user-storage-and-adding-files-to-it" title="Permalink to this headline">¶</a></h2>
+<p>It is important to understand the basics of how user storage is set up. By
+default, each user will get 10GB of space on a harddrive that will persist in
+between restarts of their server. This harddrive will be mounted to their home
+directory. In practice this means that everything a user writes to the home
+directory (<code class="docutils literal notranslate"><span class="pre">/home/jovyan</span></code>) will remain, and everything else will be reset in
+between server restarts.</p>
+<p>A server can be shut down by <em>culling</em>. By default, JupyterHub’s culling service
+is configured to cull a users server that has been inactive for one hour. Note
+that JupyterLab will autosave files, and as long as the file was within the
+users home directory no work is lost.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In Kubernetes, a <em>PersistantVolume</em> (PV) represents the harddrive.
+KubeSpawner will create a PersistantVolumeClaim that requests a PV from the
+cloud. By default, deleting the PVC will cause the cloud to delete the PV.</p>
+</div>
+<p>Docker image’s $HOME directory will be hidden from the user. To make these
+contents visible to the user, you must pre-populate the user’s filesystem. To do
+so, you would include commands in the <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> that would be run each
+time a user starts their server. The following pattern can be used in
+<a class="reference internal" href="../reference/glossary.html#term-config.yaml"><span class="xref std std-term">config.yaml</span></a>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">singleuser</span><span class="p">:</span>
+  <span class="nt">lifecycleHooks</span><span class="p">:</span>
+    <span class="nt">postStart</span><span class="p">:</span>
+      <span class="nt">exec</span><span class="p">:</span>
+        <span class="nt">command</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;cp&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;-a&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;src&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;target&quot;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>Each element of the command needs to be a separate item in the list. Note that
+this command will be run from the <code class="docutils literal notranslate"><span class="pre">$HOME</span></code> location of the user’s running
+container, meaning that commands that place files relative to <code class="docutils literal notranslate"><span class="pre">./</span></code> will result
+in users seeing those files in their home directory. You can use commands like
+<code class="docutils literal notranslate"><span class="pre">wget</span></code> to place files where you like.</p>
+<p>A simple way to populate the notebook user’s home directory is to add the
+required files to the container’s <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> directory and then copy them to
+<code class="docutils literal notranslate"><span class="pre">/home/jovyan</span></code> using a <code class="docutils literal notranslate"><span class="pre">postStart</span></code> hook. This example shows the use of
+multiple commands.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">singleuser</span><span class="p">:</span>
+ <span class="nt">lifecycleHooks</span><span class="p">:</span>
+     <span class="nt">postStart</span><span class="p">:</span>
+       <span class="nt">exec</span><span class="p">:</span>
+         <span class="nt">command</span><span class="p">:</span>
+           <span class="p p-Indicator">-</span> <span class="s">&quot;sh&quot;</span>
+           <span class="p p-Indicator">-</span> <span class="s">&quot;-c&quot;</span>
+           <span class="p p-Indicator">-</span> <span class="p p-Indicator">&gt;</span>
+             <span class="no">cp -r /tmp/foo /home/jovyan;</span>
+             <span class="no">cp -r /tmp/bar /home/jovyan</span>
+</pre></div>
+</div>
+<p>Keep in mind that commands will be run <strong>each time</strong> a user starts
+their server. For this reason, we recommend using <code class="docutils literal notranslate"><span class="pre">nbgitpuller</span></code> to synchronize
+your user folders with a git repository.</p>
+<div class="section" id="using-nbgitpuller-to-synchronize-a-folder">
+<span id="use-nbgitpuller"></span><h3>Using <code class="docutils literal notranslate"><span class="pre">nbgitpuller</span></code> to synchronize a folder<a class="headerlink" href="#using-nbgitpuller-to-synchronize-a-folder" title="Permalink to this headline">¶</a></h3>
+<p>We recommend using the tool <a class="reference external" href="https://github.com/jupyterhub/nbgitpuller">nbgitpuller</a> to synchronize a folder
+in your user’s filesystem with a <code class="docutils literal notranslate"><span class="pre">git</span></code> repository whenever a user
+starts their server.  This synchronization can also be triggered by
+letting a user visit a link like
+<code class="docutils literal notranslate"><span class="pre">https://your-domain.com/hub/user-redirect/git-pull?repo=https://github.com/data-8/materials-fa18</span></code>
+(e.g., as alternative start url).</p>
+<p>To use <code class="docutils literal notranslate"><span class="pre">nbgitpuller</span></code>, first make sure that you <a class="reference external" href="https://github.com/jupyterhub/nbgitpuller#installation">install it in your Docker
+image</a>. Once this is done,
+you’ll have access to the <code class="docutils literal notranslate"><span class="pre">nbgitpuller</span></code> CLI from within JupyterHub. You can
+run it with a <code class="docutils literal notranslate"><span class="pre">postStart</span></code> hook with the following configuration</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">singleuser</span><span class="p">:</span>
+  <span class="nt">lifecycleHooks</span><span class="p">:</span>
+    <span class="nt">postStart</span><span class="p">:</span>
+      <span class="nt">exec</span><span class="p">:</span>
+        <span class="nt">command</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;gitpuller&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;https://github.com/data-8/materials-fa17&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;master&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;materials-fa&quot;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>This will synchronize the master branch of the repository to a folder called
+<code class="docutils literal notranslate"><span class="pre">$HOME/materials-fa</span></code> each time a user logs in. See <a class="reference external" href="https://github.com/jupyterhub/nbgitpuller">the nbgitpuller
+documentation</a> for more information on
+using this tool.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">nbgitpuller</span></code> will attempt to automatically resolve merge conflicts if your
+user’s repository has changed since the last sync. You should familiarize
+yourself with the <a class="reference external" href="https://github.com/jupyterhub/nbgitpuller#merging-behavior">nbgitpuller merging behavior</a> prior to using the
+tool in production.</p>
+</div>
+</div>
+<div class="section" id="allow-users-to-create-their-own-conda-environments-for-notebooks">
+<span id="setup-conda-envs"></span><h3>Allow users to create their own <code class="docutils literal notranslate"><span class="pre">conda</span></code> environments for notebooks<a class="headerlink" href="#allow-users-to-create-their-own-conda-environments-for-notebooks" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes you want users to be able to create their own <code class="docutils literal notranslate"><span class="pre">conda</span></code> environments.
+By default, any environments created in a JupyterHub session will not persist
+across sessions. To resolve this, take the following steps:</p>
+<ol class="arabic">
+<li><p>Ensure the <code class="docutils literal notranslate"><span class="pre">nb_conda_kernels</span></code> package is installed in the root
+environment (e.g., see <a class="reference internal" href="../repo2docker.html#r2d-custom-image"><span class="std std-ref">Build a Docker image with repo2docker</span></a>)</p></li>
+<li><p>Configure Anaconda to install user environments to a folder within <code class="docutils literal notranslate"><span class="pre">$HOME</span></code>.</p>
+<p>Create a file called <code class="docutils literal notranslate"><span class="pre">.condarc</span></code> in the home folder for all users, and make
+sure that the following lines are inside:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">envs_dirs</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">/home/jovyan/my-conda-envs/</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><p>The text above will cause Anaconda to install new environments to this folder,
+which will persist across sessions.</p>
+</div></blockquote>
+<p>These environments are supposed to be used in notebooks, so a typical use case:</p>
+<ol class="arabic simple">
+<li><p>Create one with at least a kernel, e.g. for Python it’s <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">create</span> <span class="pre">-n</span> <span class="pre">myenv</span> <span class="pre">ipykernel</span> <span class="pre">scipy</span></code></p></li>
+<li><p>Now this env should be available in the list of kernels</p></li>
+</ol>
+</div>
+</div>
+<div class="section" id="using-multiple-profiles-to-let-users-select-their-environment">
+<span id="multiple-profiles"></span><h2>Using multiple profiles to let users select their environment<a class="headerlink" href="#using-multiple-profiles-to-let-users-select-their-environment" title="Permalink to this headline">¶</a></h2>
+<p>You can create configurations for multiple user environments,
+and let users select from them once they log in to your JupyterHub. This
+is done by creating multiple <strong>profiles</strong>, each of which is attached to a set
+of configuration options that override your JupyterHub’s default configuration
+(specified in your Helm Chart). This can be used to let users choose among many
+Docker images, to select the hardware on which they want their jobs to run,
+or to configure default interfaces such as Jupyter Lab vs. RStudio.</p>
+<p>Each configuration is a set of options for <a class="reference external" href="https://github.com/jupyterhub/kubespawner">Kubespawner</a>,
+which defines how Kubernetes should launch a new user server pod. Any
+configuration options passed to the <code class="docutils literal notranslate"><span class="pre">profileList</span></code> configuration will
+overwrite the defaults in Kubespawner (or any configuration you’ve
+added elsewhere in your helm chart).</p>
+<p>Profiles are stored under <code class="docutils literal notranslate"><span class="pre">singleuser.profileList</span></code>, and are defined as
+a list of profiles with specific configuration options each. Here’s an example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">singleuser</span><span class="p">:</span>
+  <span class="nt">profileList</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">display_name</span><span class="p">:</span> <span class="s">&quot;Name</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">be</span><span class="nv"> </span><span class="s">displayed</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">users&quot;</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="s">&quot;Longer</span><span class="nv"> </span><span class="s">description</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">users.&quot;</span>
+      <span class="c1"># Configuration unique to this profile</span>
+      <span class="nt">kubespawner_override</span><span class="p">:</span>
+        <span class="nt">your_config</span><span class="p">:</span> <span class="s">&quot;Your</span><span class="nv"> </span><span class="s">value&quot;</span>
+      <span class="c1"># Defines the default profile - only use for one profile</span>
+      <span class="nt">default</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<p>The above configuration will show a screen with information about this profile
+displayed when users start a new server.</p>
+<p>Here’s an example with four profiles that lets users select the environment they
+wish to use.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">singleuser</span><span class="p">:</span>
+  <span class="c1"># Defines the default image</span>
+  <span class="nt">image</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyter/minimal-notebook</span>
+    <span class="nt">tag</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2343e33dec46</span>
+  <span class="nt">profileList</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">display_name</span><span class="p">:</span> <span class="s">&quot;Minimal</span><span class="nv"> </span><span class="s">environment&quot;</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="s">&quot;To</span><span class="nv"> </span><span class="s">avoid</span><span class="nv"> </span><span class="s">too</span><span class="nv"> </span><span class="s">much</span><span class="nv"> </span><span class="s">bells</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">whistles:</span><span class="nv"> </span><span class="s">Python.&quot;</span>
+      <span class="nt">default</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="p p-Indicator">-</span> <span class="nt">display_name</span><span class="p">:</span> <span class="s">&quot;Datascience</span><span class="nv"> </span><span class="s">environment&quot;</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="s">&quot;If</span><span class="nv"> </span><span class="s">you</span><span class="nv"> </span><span class="s">want</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">additional</span><span class="nv"> </span><span class="s">bells</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">whistles:</span><span class="nv"> </span><span class="s">Python,</span><span class="nv"> </span><span class="s">R,</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">Julia.&quot;</span>
+      <span class="nt">kubespawner_override</span><span class="p">:</span>
+        <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyter/datascience-notebook:2343e33dec46</span>
+    <span class="p p-Indicator">-</span> <span class="nt">display_name</span><span class="p">:</span> <span class="s">&quot;Spark</span><span class="nv"> </span><span class="s">environment&quot;</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="s">&quot;The</span><span class="nv"> </span><span class="s">Jupyter</span><span class="nv"> </span><span class="s">Stacks</span><span class="nv"> </span><span class="s">spark</span><span class="nv"> </span><span class="s">image!&quot;</span>
+      <span class="nt">kubespawner_override</span><span class="p">:</span>
+        <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyter/all-spark-notebook:2343e33dec46</span>
+    <span class="p p-Indicator">-</span> <span class="nt">display_name</span><span class="p">:</span> <span class="s">&quot;Learning</span><span class="nv"> </span><span class="s">Data</span><span class="nv"> </span><span class="s">Science&quot;</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="s">&quot;Datascience</span><span class="nv"> </span><span class="s">Environment</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">Sample</span><span class="nv"> </span><span class="s">Notebooks&quot;</span>
+      <span class="nt">kubespawner_override</span><span class="p">:</span>
+        <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyter/datascience-notebook:2343e33dec46</span>
+        <span class="nt">lifecycle_hooks</span><span class="p">:</span>
+          <span class="nt">postStart</span><span class="p">:</span>
+            <span class="nt">exec</span><span class="p">:</span>
+              <span class="nt">command</span><span class="p">:</span>
+                <span class="p p-Indicator">-</span> <span class="s">&quot;sh&quot;</span>
+                <span class="p p-Indicator">-</span> <span class="s">&quot;-c&quot;</span>
+                <span class="p p-Indicator">-</span> <span class="p p-Indicator">&gt;</span>
+                  <span class="no">gitpuller https://github.com/data-8/materials-fa17 master materials-fa;</span>
+</pre></div>
+</div>
+<p>This allows users to select from three profiles, each with their own
+environment (defined by each Docker image in the configuration above).</p>
+<p>The “Learning Data Science” environment in the above example overrides the postStart lifecycle hook. Note that when
+using <code class="docutils literal notranslate"><span class="pre">kubespawner_override</span></code> the values must be in the format that comply with the <a class="reference external" href="https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html">KubeSpawner configuration</a>.
+For instance, when overriding the lifecycle
+hooks in <code class="docutils literal notranslate"><span class="pre">kubespawner_override</span></code>, the configuration is for <code class="docutils literal notranslate"><span class="pre">lifecycle_hooks</span></code> (snake_case) rather than <code class="docutils literal notranslate"><span class="pre">lifecycleHooks</span></code> (camelCase) which is
+how it is used directly under the <code class="docutils literal notranslate"><span class="pre">singleuser</span></code> configuration section.
+<a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1242#issuecomment-484895216">A further explanation for this can be found in this github issue.</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can also <strong>control the HTML used for the profile selection page</strong> by
+using the Kubespawner <code class="docutils literal notranslate"><span class="pre">profile_form_template</span></code> configuration. See the
+<a class="reference external" href="https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html">Kubespawner configuration reference</a>
+for more information.</p>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

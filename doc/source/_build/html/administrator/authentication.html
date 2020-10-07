@@ -1,0 +1,673 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Authentication &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Optimizations" href="optimization.html" />
+    <link rel="prev" title="Debugging" href="debug.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../customizing/index.html">Customization Guide</a>
+        </li>
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+      
+      
+      
+      
+      
+      
+        
+          
+              <li class="">
+                  <a href="architecture.html">The JupyterHub Architecture</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="debug.html">Debugging</a>
+              </li>
+          
+        
+          
+              <li class="active">
+                  <a href="">Authentication</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="optimization.html">Optimizations</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="security.html">Security</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="upgrading.html">Upgrading your Helm chart</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="troubleshooting.html">FAQ</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="advanced.html">Advanced Topics</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="cost.html">Appendix: Projecting deployment costs</a>
+              </li>
+          
+        
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#authenticating-with-oauth2" class="nav-link">Authenticating with OAuth2</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#github" class="nav-link">GitHub</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#giving-access-to-individual-github-users" class="nav-link">Giving access to individual GitHub users</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#giving-access-to-organizations-on-github" class="nav-link">Giving access to organizations on GitHub</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#google" class="nav-link">Google</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#cilogon" class="nav-link">CILogon</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#globus" class="nav-link">Globus</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#azure-active-directory" class="nav-link">Azure Active Directory</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#openid-connect" class="nav-link">OpenID Connect</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#full-example-of-google-oauth2" class="nav-link">Full Example of Google OAuth2</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#authenticating-with-ldap" class="nav-link">Authenticating with LDAP</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#example-ldap-configuration" class="nav-link">Example LDAP Configuration</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#example-active-directory-configuration" class="nav-link">Example Active Directory Configuration</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#example-auth0-configuration" class="nav-link">Example Auth0 Configuration</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#adding-a-whitelist" class="nav-link">Adding a Whitelist</a>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="authentication">
+<span id="id1"></span><h1>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h1>
+<p>Authentication allows you to control who has access to your JupyterHub deployment.
+There are many options available to you in controlling authentication, many of
+which are described below.</p>
+<div class="section" id="authenticating-with-oauth2">
+<h2>Authenticating with OAuth2<a class="headerlink" href="#authenticating-with-oauth2" title="Permalink to this headline">¶</a></h2>
+<p>JupyterHub’s <a class="reference external" href="https://github.com/jupyterhub/oauthenticator">oauthenticator</a>
+has support for enabling your users to authenticate via a third-party OAuth
+provider, including GitHub, Google, and CILogon.</p>
+<p>Follow the service-specific instructions linked on the
+<a class="reference external" href="https://github.com/jupyterhub/oauthenticator">oauthenticator repository</a>
+to generate your JupyterHub instance’s OAuth2 client ID and client secret. Then
+declare the values in the helm chart (<code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>).</p>
+<p>Here are example configurations for common authentication services. Note
+that in each case, you need to get the authentication credential information
+before you can configure the helm chart for authentication.</p>
+<div class="section" id="github">
+<h3>GitHub<a class="headerlink" href="#github" title="Permalink to this headline">¶</a></h3>
+<p>GitHub is the largest hosting service for git repositories. It is free to create an account
+at GitHub, and relatively straightforward to set up OAuth credentials so that
+users can authenticate with their GitHub username/password.</p>
+<p>To create OAuth credentials on GitHub, follow these steps:</p>
+<ul class="simple">
+<li><p>Click your profile picture -&gt; settings -&gt; developer settings</p></li>
+<li><p>Make sure you’re on the “OAuth Apps” tab, then click “New OAuth App”</p></li>
+<li><p>Fill out the forms (you’ll need your hub address) and generate your ID/Secret.</p></li>
+</ul>
+<p>To enable GitHub authentication, add the following to your <code class="docutils literal notranslate"><span class="pre">config.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">auth</span><span class="p">:</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">github</span>
+  <span class="nt">github</span><span class="p">:</span>
+    <span class="nt">clientId</span><span class="p">:</span> <span class="s">&quot;y0urg1thubc1ient1d&quot;</span>
+    <span class="nt">clientSecret</span><span class="p">:</span> <span class="s">&quot;an0ther1ongs3cretstr1ng&quot;</span>
+    <span class="nt">callbackUrl</span><span class="p">:</span> <span class="s">&quot;http://&lt;your_jupyterhub_host&gt;/hub/oauth_callback&quot;</span>
+</pre></div>
+</div>
+<p>Make sure that the <code class="docutils literal notranslate"><span class="pre">callbackUrl</span></code> matches the one you set in GitHub.</p>
+<div class="section" id="giving-access-to-individual-github-users">
+<h4>Giving access to individual GitHub users<a class="headerlink" href="#giving-access-to-individual-github-users" title="Permalink to this headline">¶</a></h4>
+<p>The configuration above will allow <em>any</em> GitHub user to access your JupyterHub.
+You can restrict access to a white-list of GitHub users by adding the following
+to your configuration.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">auth</span><span class="p">:</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">github</span>
+  <span class="nt">admin</span><span class="p">:</span>
+    <span class="nt">access</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">users</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">user1</span>
+      <span class="c1"># ...</span>
+  <span class="nt">whitelist</span><span class="p">:</span>
+    <span class="nt">users</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">user2</span>
+      <span class="c1"># ...</span>
+</pre></div>
+</div>
+<p>In this case, <code class="docutils literal notranslate"><span class="pre">user1</span></code> will have <em>admin</em> access and <code class="docutils literal notranslate"><span class="pre">user2</span></code> will have regular
+access to your JupyterHub.</p>
+</div>
+<div class="section" id="giving-access-to-organizations-on-github">
+<h4>Giving access to organizations on GitHub<a class="headerlink" href="#giving-access-to-organizations-on-github" title="Permalink to this headline">¶</a></h4>
+<p>You can also restrict access to all of the members of one or more GitHub
+organizations. To do so, see the configuration below.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">auth</span><span class="p">:</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">github</span>
+  <span class="nt">github</span><span class="p">:</span>
+    <span class="c1"># ...</span>
+    <span class="nt">orgWhitelist</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;SomeOrgName&quot;</span>
+  <span class="nt">scopes</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;read:user&quot;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">auth.scopes</span></code> can take other values as described in the <a class="reference external" href="https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/">GitHub Oauth scopes
+documentation</a>
+but we recommend <code class="docutils literal notranslate"><span class="pre">read:user</span></code> as this requires no additional configuration by
+GitHub organisations and users.
+For example, omitting the scope means members of an organisation must <a class="reference external" href="https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/publicizing-or-hiding-organization-membership">set
+their membership to Public</a>
+to login, whereas setting it to <code class="docutils literal notranslate"><span class="pre">read:org</span></code> may require approval of the
+application by a GitHub organisation admin.
+Please see <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/687">this issue</a> for further
+information.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Changing <code class="docutils literal notranslate"><span class="pre">auth.scopes</span></code> will not change the scope for existing OAuth tokens, you must invalidate them.</p>
+</div>
+</div>
+</div>
+<div class="section" id="google">
+<h3>Google<a class="headerlink" href="#google" title="Permalink to this headline">¶</a></h3>
+<p>Google authentication is used by many universities (it is part of the “G Suite”).
+Note that using Google authentication requires your Hub to have a domain name
+(it cannot <strong>only</strong> be accessible via an IP address).
+For more information on authenticating with Google oauth, see the <a class="reference internal" href="#google-oauth"><span class="std std-ref">Full Example of Google OAuth2</span></a>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">auth</span><span class="p">:</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">google</span>
+  <span class="nt">google</span><span class="p">:</span>
+    <span class="nt">clientId</span><span class="p">:</span> <span class="s">&quot;yourlongclientidstring.apps.googleusercontent.com&quot;</span>
+    <span class="nt">clientSecret</span><span class="p">:</span> <span class="s">&quot;adifferentlongstring&quot;</span>
+    <span class="nt">callbackUrl</span><span class="p">:</span> <span class="s">&quot;http://&lt;your_jupyterhub_host&gt;/hub/oauth_callback&quot;</span>
+    <span class="nt">hostedDomain</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&quot;youruniversity.edu&quot;</span>
+    <span class="nt">loginService</span><span class="p">:</span> <span class="s">&quot;Your</span><span class="nv"> </span><span class="s">University&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cilogon">
+<h3>CILogon<a class="headerlink" href="#cilogon" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">auth</span><span class="p">:</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cilogon</span>
+  <span class="nt">cilogon</span><span class="p">:</span>
+    <span class="nt">clientId</span><span class="p">:</span> <span class="s">&quot;y0urc1logonc1ient1d&quot;</span>
+    <span class="nt">clientSecret</span><span class="p">:</span> <span class="s">&quot;an0ther1ongs3cretstr1ng&quot;</span>
+    <span class="nt">callbackUrl</span><span class="p">:</span> <span class="s">&quot;http://&lt;your_jupyterhub_host&gt;/hub/oauth_callback&quot;</span>
+</pre></div>
+</div>
+<p>In order to overcome the <a class="reference external" href="https://github.com/jupyterhub/oauthenticator/blob/master/oauthenticator/cilogon.py">caveats</a> of implementing CILogon OAuthAuthenticator for JupyterHub,
+i.e. default username_claim of ePPN does not work for all providers, e.g. generic OAuth such as Google, Use c.CILogonOAuthenticator.username_claim = ‘email’ to use email instead of ePPN as the JupyterHub username:</p>
+<p>Add to your config.yaml file to <a class="reference external" href="/reference/reference.html#hub-extraconfig">inject extra python based configuration that should be in jupyterhub_config.py</a> as below:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
+  <span class="nt">extraConfig</span><span class="p">:</span>
+    <span class="nt">myAuthConfig</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">c.CILogonOAuthenticator.username_claim = &#39;email&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="globus">
+<h3>Globus<a class="headerlink" href="#globus" title="Permalink to this headline">¶</a></h3>
+<p>Globus Auth is a foundational identity and access management platform service
+designed to address unique needs of the science and engineering community.
+Globus provides cloud-based services for reliably moving, sharing, publishing
+and discovering data, whether your files live on a supercomputer, lab cluster,
+tape archive, public cloud, or your own laptop. Start a Globus app
+<a class="reference external" href="https://developers.globus.org/">here</a>!</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">auth</span><span class="p">:</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">globus</span>
+  <span class="nt">globus</span><span class="p">:</span>
+    <span class="nt">clientId</span><span class="p">:</span> <span class="s">&quot;y0urc1logonc1ient1d&quot;</span>
+    <span class="nt">clientSecret</span><span class="p">:</span> <span class="s">&quot;an0ther1ongs3cretstr1ng&quot;</span>
+    <span class="nt">callbackUrl</span><span class="p">:</span> <span class="s">&quot;https://&lt;your_jupyterhub_host&gt;/hub/oauth_callback&quot;</span>
+    <span class="nt">identityProvider</span><span class="p">:</span> <span class="s">&quot;youruniversity.edu&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="azure-active-directory">
+<h3>Azure Active Directory<a class="headerlink" href="#azure-active-directory" title="Permalink to this headline">¶</a></h3>
+<p>Azure Active Directory &lt;<a class="reference external" href="https://docs.microsoft.com/en-us/azure/active-directory/">https://docs.microsoft.com/en-us/azure/active-directory/</a>&gt;`_
+is an identity provider from Microsoft Azure.
+The main additional option to configure for Azure AD from any other
+oauth provider is the tenant id.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">auth</span><span class="p">:</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">azuread</span>
+  <span class="nt">azuread</span><span class="p">:</span>
+    <span class="nt">clientId</span><span class="p">:</span> <span class="s">&quot;your-aad-client-id&quot;</span>
+    <span class="nt">clientSecret</span><span class="p">:</span> <span class="s">&quot;your-aad-client-secret&quot;</span>
+    <span class="nt">tenantId</span><span class="p">:</span> <span class="s">&quot;your-aad-tenant-id&quot;</span>
+    <span class="nt">callbackUrl</span><span class="p">:</span> <span class="s">&quot;https://&lt;your_jupyterhub_host&gt;/hub/oauth_callback&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="openid-connect">
+<h3>OpenID Connect<a class="headerlink" href="#openid-connect" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://openid.net/connect">OpenID Connect</a> is an identity layer on top of the
+OAuth 2.0 protocol, implemented by
+<a class="reference external" href="https://openid.net/developers/certified/#OPServices">various servers and services</a>.
+While OpenID Connect endpoint discovery is not supported by oauthentiator,
+you can still configure JupyterHub to authenticate with OpenID Connect providers
+by specifying all endpoints in GenericOAuthenticator.
+By setting <code class="docutils literal notranslate"><span class="pre">login_service</span></code> you can customize the label on the login button.</p>
+<p>Here’s an example for authenticating against <a class="reference external" href="https://www.keycloak.org/docs/latest/securing_apps/index.html#endpoints">keycloak</a>,
+after you <a class="reference external" href="https://www.keycloak.org/docs/latest/server_admin/index.html#oidc-clients">configure an OIDC Client</a>
+and obtain the confidential client credentials.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
+  <span class="nt">extraEnv</span><span class="p">:</span>
+    <span class="nt">OAUTH2_AUTHORIZE_URL</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://${host}/auth/realms/${realm}/protocol/openid-connect/auth</span>
+    <span class="nt">OAUTH2_TOKEN_URL</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://${host}/auth/realms/${realm}/protocol/openid-connect/token</span>
+    <span class="nt">OAUTH_CALLBACK_URL</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://&lt;your_jupyterhub_host&gt;/hub/oauth_callback</span>
+<span class="nt">auth</span><span class="p">:</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">custom</span>
+  <span class="nt">custom</span><span class="p">:</span>
+    <span class="nt">className</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">oauthenticator.generic.GenericOAuthenticator</span>
+    <span class="nt">config</span><span class="p">:</span>
+      <span class="nt">login_service</span><span class="p">:</span> <span class="s">&quot;keycloak&quot;</span>
+      <span class="nt">client_id</span><span class="p">:</span> <span class="s">&quot;y0urc1logonc1ient1d&quot;</span>
+      <span class="nt">client_secret</span><span class="p">:</span> <span class="s">&quot;an0ther1ongs3cretstr1ng&quot;</span>
+      <span class="nt">token_url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://${host}/auth/realms/${realm}/protocol/openid-connect/token</span>
+      <span class="nt">userdata_url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://${host}/auth/realms/${realm}/protocol/openid-connect/userinfo</span>
+      <span class="nt">userdata_method</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">GET</span>
+      <span class="nt">userdata_params</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="s">&#39;state&#39;</span><span class="p p-Indicator">:</span> <span class="s">&#39;state&#39;</span><span class="p p-Indicator">}</span>
+      <span class="nt">username_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">preferred_username</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="full-example-of-google-oauth2">
+<span id="google-oauth"></span><h2>Full Example of Google OAuth2<a class="headerlink" href="#full-example-of-google-oauth2" title="Permalink to this headline">¶</a></h2>
+<p>If your institution is a <a class="reference external" href="https://gsuite.google.com">G Suite customer</a> that
+integrates with Google services such as Gmail, Calendar, and Drive, you can
+authenticate users to your JupyterHub using Google for authentication.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Google requires that you specify a fully qualified domain name for your
+hub rather than an IP address.</p>
+</div>
+<ol class="arabic simple">
+<li><p>Log in to the <a class="reference external" href="https://console.developers.google.com">Google API Console</a>.</p></li>
+<li><p>Select a project &gt; Create a project… and set ‘Project name’. This is a
+short term that is only displayed in the console. If you have already
+created a project you may skip this step.</p></li>
+<li><p>Type “Credentials” in the search field at the top and click to access the
+Credentials API.</p></li>
+<li><p>Click “Create credentials”, then “OAuth client ID”. Choose
+“Application type” &gt; “Web application”.</p></li>
+<li><p>Enter a name for your JupyterHub instance. You can give it a descriptive
+name or set it to be the hub’s hostname.</p></li>
+<li><p>Set “Authorized JavaScript origins” to be your hub’s URL.</p></li>
+<li><p>Set “Authorized redirect URIs” to be your hub’s URL followed by
+“/hub/oauth_callback”. For example, <code class="docutils literal notranslate"><span class="pre">http://{example.com}/hub/oauth_callback</span></code>.</p></li>
+<li><p>When you click “Create”, the console will generate and display a Client ID
+and Client Secret. Save these values.</p></li>
+<li><p>Type “consent screen” in the search field at the top and click to access the
+OAuth consent screen. Here you will customize what your users see when they
+login to your JupyterHub instance for the first time. Click Save when you
+are done.</p></li>
+<li><p>In your helm chart, create a stanza that contains these OAuth fields:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>auth:
+  type: google
+  google:
+    clientId: <span class="s2">&quot;yourlongclientidstring.apps.googleusercontent.com&quot;</span>
+    clientSecret: <span class="s2">&quot;adifferentlongstring&quot;</span>
+    callbackUrl: <span class="s2">&quot;http://&lt;your_jupyterhub_host&gt;/hub/oauth_callback&quot;</span>
+    hostedDomain: <span class="s2">&quot;youruniversity.edu&quot;</span>
+    loginService: <span class="s2">&quot;Your University&quot;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">callbackUrl</span></code> key is set to the authorized redirect URI you specified
+earlier. Set <code class="docutils literal notranslate"><span class="pre">hostedDomain</span></code> to your institution’s domain name. The value of
+<code class="docutils literal notranslate"><span class="pre">loginService</span></code> is a descriptive term for your institution that reminds your
+users which account they are using to login.</p>
+</div>
+<div class="section" id="authenticating-with-ldap">
+<h2>Authenticating with LDAP<a class="headerlink" href="#authenticating-with-ldap" title="Permalink to this headline">¶</a></h2>
+<p>JupyterHub supports LDAP and Active Directory authentication.
+Read the <a class="reference external" href="https://github.com/jupyterhub/ldapauthenticator">ldapauthenticator</a>
+documentation for a full explanation of the available parameters.</p>
+<div class="section" id="example-ldap-configuration">
+<h3>Example LDAP Configuration<a class="headerlink" href="#example-ldap-configuration" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">auth.ldap.server.address</span></code> and <code class="docutils literal notranslate"><span class="pre">auth.ldap.dn.templates</span></code> are required. Other
+fields are optional.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">auth</span><span class="p">:</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ldap</span>
+  <span class="nt">ldap</span><span class="p">:</span>
+    <span class="nt">server</span><span class="p">:</span>
+      <span class="nt">address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ldap.EXAMPLE.org</span>
+    <span class="nt">dn</span><span class="p">:</span>
+      <span class="nt">templates</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="s">&#39;cn={username},ou=edir,ou=people,ou=EXAMPLE-UNIT,o=EXAMPLE&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-active-directory-configuration">
+<h3>Example Active Directory Configuration<a class="headerlink" href="#example-active-directory-configuration" title="Permalink to this headline">¶</a></h3>
+<p>This example is equivalent to that given in the
+<a class="reference external" href="https://github.com/jupyterhub/ldapauthenticator/blob/master/README.md">ldapauthenticator README</a>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">auth</span><span class="p">:</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ldap</span>
+  <span class="nt">ldap</span><span class="p">:</span>
+    <span class="nt">server</span><span class="p">:</span>
+      <span class="nt">address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ad.EXAMPLE.org</span>
+    <span class="nt">dn</span><span class="p">:</span>
+      <span class="nt">lookup</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+      <span class="nt">search</span><span class="p">:</span>
+        <span class="nt">filter</span><span class="p">:</span> <span class="s">&#39;({login_attr}={login})&#39;</span>
+        <span class="nt">user</span><span class="p">:</span> <span class="s">&#39;ldap_search_user_technical_account&#39;</span>
+        <span class="nt">password</span><span class="p">:</span> <span class="s">&#39;secret&#39;</span>
+      <span class="nt">templates</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="s">&#39;uid={username},ou=people,dc=wikimedia,dc=org&#39;</span>
+        <span class="p p-Indicator">-</span> <span class="s">&#39;uid={username},ou=developers,dc=wikimedia,dc=org&#39;</span>
+      <span class="nt">user</span><span class="p">:</span>
+        <span class="nt">searchBase</span><span class="p">:</span> <span class="s">&#39;ou=people,dc=wikimedia,dc=org&#39;</span>
+        <span class="nt">escape</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+        <span class="nt">attribute</span><span class="p">:</span> <span class="s">&#39;sAMAccountName&#39;</span>
+        <span class="nt">dnAttribute</span><span class="p">:</span> <span class="s">&#39;cn&#39;</span>
+    <span class="nt">allowedGroups</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&#39;cn=researcher,ou=groups,dc=wikimedia,dc=org&#39;</span>
+      <span class="p p-Indicator">-</span> <span class="s">&#39;cn=operations,ou=groups,dc=wikimedia,dc=org&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="example-auth0-configuration">
+<h2>Example Auth0 Configuration<a class="headerlink" href="#example-auth0-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Auth0 (even on free billing plan) allows you to leverage its OAuth flow. It is based on OpenID Connect implementation, but extends it. Assuming the application is already created and you fetched Client Id, Client Secret and Auth0 authorization domain.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
+  <span class="nt">extraEnv</span><span class="p">:</span>
+    <span class="nt">OAUTH_CALLBACK_URL</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://&lt;HUB_DOMAIN&gt;/hub/oauth_callback</span>
+<span class="nt">auth</span><span class="p">:</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">custom</span>
+  <span class="nt">scopes</span><span class="p">:</span> <span class="c1"># that is essential to request certain scope, otherwise user profile call won&#39;t return anything</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;openid&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;name&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;profile&quot;</span>
+    <span class="p p-Indicator">-</span> <span class="s">&quot;email&quot;</span>
+  <span class="nt">custom</span><span class="p">:</span>
+    <span class="nt">className</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">oauthenticator.generic.GenericOAuthenticator</span>
+    <span class="nt">config</span><span class="p">:</span>
+      <span class="nt">login_service</span><span class="p">:</span> <span class="s">&quot;My</span><span class="nv"> </span><span class="s">Auth0&quot;</span>
+      <span class="nt">client_id</span><span class="p">:</span> <span class="s">&quot;&lt;CLIENT_ID&gt;&quot;</span>
+      <span class="nt">client_secret</span><span class="p">:</span> <span class="s">&quot;&lt;CLIENT_SECRET&gt;&quot;</span>
+      <span class="nt">authorize_url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://&lt;DOMAIN&gt;.us.auth0.com/authorize</span>
+      <span class="nt">token_url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://&lt;DOMAIN&gt;.us.auth0.com/oauth/token</span>
+      <span class="nt">userdata_url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://&lt;DOMAIN&gt;.us.auth0.com/userinfo</span>
+      <span class="nt">userdata_method</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">GET</span>
+      <span class="nt">username_key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">name</span> <span class="c1"># define the specific key to for username from JSON returned by `/userinfo`</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="adding-a-whitelist">
+<h2>Adding a Whitelist<a class="headerlink" href="#adding-a-whitelist" title="Permalink to this headline">¶</a></h2>
+<p>JupyterHub can be configured to only allow a specified
+<a class="reference external" href="https://jupyterhub.readthedocs.io/en/latest/getting-started/authenticators-users-basics.html#create-a-set-of-allowed-users">whitelist</a>
+of users to login. This is especially useful if you are
+using an authenticator with an authentication service open to the general
+public, such as GitHub or Google.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A whitelist must be used <strong>along with another authenticator</strong>. It simply restricts the usernames that
+are allowed for your JupyterHub, but is not an authenticator by itself.</p>
+</div>
+<p>You can specify this list of usernames in your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">auth</span><span class="p">:</span>
+  <span class="nt">whitelist</span><span class="p">:</span>
+    <span class="nt">users</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">user1</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">user2</span>
+</pre></div>
+</div>
+<p>For example, here’s the configuration to use a white list along with the Dummy Authenticator.
+By default, the Dummy Authenticator will accept any username if they provide the right password.
+But combining it with a whitelist, users must input <strong>both</strong> an accepted username <em>and</em> password.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">auth</span><span class="p">:</span>
+  <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">dummy</span>
+  <span class="nt">dummy</span><span class="p">:</span>
+    <span class="nt">password</span><span class="p">:</span> <span class="s">&#39;mypassword&#39;</span>
+  <span class="nt">whitelist</span><span class="p">:</span>
+    <span class="nt">users</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">user1</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">user2</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="debug.html" title="previous page">Debugging</a>
+    <a class='right-next' id="next-link" href="optimization.html" title="next page">Optimizations</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,603 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Optimizations &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Security" href="security.html" />
+    <link rel="prev" title="Authentication" href="authentication.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../customizing/index.html">Customization Guide</a>
+        </li>
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+      
+      
+      
+      
+      
+      
+        
+          
+              <li class="">
+                  <a href="architecture.html">The JupyterHub Architecture</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="debug.html">Debugging</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="authentication.html">Authentication</a>
+              </li>
+          
+        
+          
+              <li class="active">
+                  <a href="">Optimizations</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="security.html">Security</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="upgrading.html">Upgrading your Helm chart</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="troubleshooting.html">FAQ</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="advanced.html">Advanced Topics</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="cost.html">Appendix: Projecting deployment costs</a>
+              </li>
+          
+        
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#pulling-images-before-users-arrive" class="nav-link">Pulling images before users arrive</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#the-images-that-will-be-pulled" class="nav-link">The images that will be pulled</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#relevant-image-sources" class="nav-link">Relevant image sources</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#additional-sources" class="nav-link">Additional sources</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#efficient-cluster-autoscaling" class="nav-link">Efficient Cluster Autoscaling</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#scaling-up-in-time-user-placeholders" class="nav-link">Scaling up in time (user placeholders)</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#scaling-down-efficiently" class="nav-link">Scaling down efficiently</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#using-a-dedicated-node-pool-for-users" class="nav-link">Using a dedicated node pool for users</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#using-available-nodes-efficiently-the-user-scheduler" class="nav-link">Using available nodes efficiently (the user scheduler)</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+            </ul>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="optimizations">
+<span id="optimization"></span><h1>Optimizations<a class="headerlink" href="#optimizations" title="Permalink to this headline">¶</a></h1>
+<p>This page contains information and guidelines for improving the reliability,
+flexibility and stability of your JupyterHub deployment. Many of the settings
+described is only purposeful for a better autoscaling experience.</p>
+<p>To summarize, for a good autoscaling experience, we recommend you to:</p>
+<ul class="simple">
+<li><p>Enable the <em>continuous image puller</em>, to prepare added nodes for arriving
+users.</p></li>
+<li><p>Enable <em>pod priority</em> and add <em>user placeholders</em>, to scale up nodes ahead of
+real users’ arrivals.</p></li>
+<li><p>Enable the <em>user scheduler</em>, to pack users tight on some nodes and let other
+nodes become empty and scaled down.</p></li>
+<li><p>Set up an autoscaling node pool and dedicate it to user pods by <em>tainting</em> the
+node and requiring user pods, which <em>tolerate</em> the nodes’ taint, to schedule
+on these nodes. This way, only user pods can then block scale down.</p></li>
+<li><p>Set appropriate user resource <em>requests</em> and <em>limits</em>, to allow a reasonable
+amount of users to share a node.</p></li>
+</ul>
+<p>A reasonable final configuration for efficient autoscaling could look something
+like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">scheduling</span><span class="p">:</span>
+  <span class="nt">userScheduler</span><span class="p">:</span>
+    <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">podPriority</span><span class="p">:</span>
+    <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">userPlaceholder</span><span class="p">:</span>
+    <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="nt">replicas</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">4</span>
+  <span class="nt">userPods</span><span class="p">:</span>
+    <span class="nt">nodeAffinity</span><span class="p">:</span>
+      <span class="nt">matchNodePurpose</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">require</span>
+
+<span class="nt">cull</span><span class="p">:</span>
+  <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3600</span>
+  <span class="nt">every</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">300</span>
+
+<span class="c1"># The resources requested is very important to consider in</span>
+<span class="c1"># relation to your machine type. If you have a n1-highmem-4 node</span>
+<span class="c1"># on Google Cloud for example you get 4 cores and 26 GB of</span>
+<span class="c1"># memory. With the configuration below you would  be able to have</span>
+<span class="c1"># at most about 50 users per node. This can be reasonable, but it</span>
+<span class="c1"># may not be, it will depend on your users. Are they mostly</span>
+<span class="c1"># writing and reading or are they mostly executing code?</span>
+<span class="nt">singleuser</span><span class="p">:</span>
+  <span class="nt">cpu</span><span class="p">:</span>
+    <span class="nt">limit</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">4</span>
+    <span class="nt">guarantee</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.05</span>
+  <span class="nt">memory</span><span class="p">:</span>
+    <span class="nt">limit</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">4G</span>
+    <span class="nt">guarantee</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">512M</span>
+</pre></div>
+</div>
+<div class="section" id="pulling-images-before-users-arrive">
+<h2>Pulling images before users arrive<a class="headerlink" href="#pulling-images-before-users-arrive" title="Permalink to this headline">¶</a></h2>
+<p>If a user pod is scheduled on a node requesting a Docker image that isn’t
+already pulled onto that node, the user will have to wait for it. If the image
+is large, the wait can be 5 to 10 minutes. This commonly occurs in two
+situations:</p>
+<ol>
+<li><p>A new single-user image is introduced (<code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code>)</p>
+<p>With the <em>hook-image-puller</em> enabled (the default), the user images being
+introduced will be pulled to the nodes before the hub pod is updated to
+utilize the new image. The name hook-image-puller is a technical name
+referring to how a <a class="reference external" href="https://helm.sh/docs/topics/charts_hooks/">Helm
+hook</a> is used to accomplish
+this, a more informative name would have been <em>pre-upgrade-image-puller</em>.</p>
+<p><strong>NOTE</strong>: With this enabled your <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code> will take a long time if you
+introduce a new image as it will wait for the pulling to complete. We
+recommend that you add <code class="docutils literal notranslate"><span class="pre">--timeout</span> <span class="pre">10m0s</span></code> or similar to your <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code>
+command to give it enough time.</p>
+<p>The hook-image-puller is enabled by default. To disable it, use the
+following snippet in your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">prePuller</span><span class="p">:</span>
+  <span class="nt">hook</span><span class="p">:</span>
+    <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+</li>
+<li><p>A node is added (Cluster Autoscaler)</p>
+<p>The amount of nodes in a Kubernetes cluster can increase, either by manually
+scaling up the cluster size or by a cluster autoscaler. As new nodes will
+come fresh without any images on their disks, a user pod arriving to this
+node will be forced to wait while the image is pulled.</p>
+<p>With the <em>continuous-image-puller</em> enabled (<strong>enabled</strong> by default), the user’s
+container image will be pulled when a new node is added. New nodes can for
+example be added manually or by a cluster autoscaler. The continuous
+image-puller uses a
+<a class="reference external" href="https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/">daemonset</a>
+to force Kubernetes to pull the user image on all nodes as soon as a node is
+present.</p>
+<p>The continuous-image-puller is enabled by default. To disable it, use the
+following snippet in your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">prePuller</span><span class="p">:</span>
+  <span class="nt">continuous</span><span class="p">:</span>
+    <span class="c1"># NOTE: if used with a Cluster Autoscaler, also add user-placeholders</span>
+    <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+<p>It is important to realize that if the continuous-image-puller together with
+a Cluster Autoscaler (CA) won’t guarantee a reduced wait time for users. It
+only helps if the CA scales up before real users arrive, but the CA will
+generally fail to do so. This is because it will only add a node if one or
+more pods won’t fit on the current nodes but would fit more if a node is
+added, but at that point users are already waiting. To scale up nodes ahead
+of time we can use <a class="reference external" href="#scaling-up-in-time-user-placeholders">user-placeholders</a>.</p>
+</li>
+</ol>
+<div class="section" id="the-images-that-will-be-pulled">
+<h3>The images that will be pulled<a class="headerlink" href="#the-images-that-will-be-pulled" title="Permalink to this headline">¶</a></h3>
+<p>The hook-image-puller and the continuous-image-puller has various sources
+influencing what images they will pull, as it does in order to prepare nodes
+ahead of time that may need images. These sources are all found in the values
+provided with the Helm chart (that can be overridden with <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>) under
+the following paths:</p>
+<div class="section" id="relevant-image-sources">
+<h4>Relevant image sources<a class="headerlink" href="#relevant-image-sources" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">singleuser.image</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">singleuser.profileList[].kubespawner_override.image</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">singleuser.extraContainers[].image</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prePuller.extraImages.someName</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="additional-sources">
+<h4>Additional sources<a class="headerlink" href="#additional-sources" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">singleuser.networkTools.image</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prePuller.pause.image</span></code></p></li>
+</ul>
+<p>For example, with the following configuration, three images would be pulled by
+the image pullers in order to prepare the nodes that may end up using these
+images.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">singleuser</span><span class="p">:</span>
+  <span class="nt">image</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyter/minimal-notebook</span>
+    <span class="nt">tag</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2343e33dec46</span>
+  <span class="nt">profileList</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">display_name</span><span class="p">:</span> <span class="s">&quot;Minimal</span><span class="nv"> </span><span class="s">environment&quot;</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="s">&quot;To</span><span class="nv"> </span><span class="s">avoid</span><span class="nv"> </span><span class="s">too</span><span class="nv"> </span><span class="s">much</span><span class="nv"> </span><span class="s">bells</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">whistles:</span><span class="nv"> </span><span class="s">Python.&quot;</span>
+      <span class="nt">default</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+    <span class="p p-Indicator">-</span> <span class="nt">display_name</span><span class="p">:</span> <span class="s">&quot;Datascience</span><span class="nv"> </span><span class="s">environment&quot;</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="s">&quot;If</span><span class="nv"> </span><span class="s">you</span><span class="nv"> </span><span class="s">want</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">additional</span><span class="nv"> </span><span class="s">bells</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">whistles:</span><span class="nv"> </span><span class="s">Python,</span><span class="nv"> </span><span class="s">R,</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">Julia.&quot;</span>
+      <span class="nt">kubespawner_override</span><span class="p">:</span>
+        <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyter/datascience-notebook:2343e33dec46</span>
+
+<span class="nt">prePuller</span><span class="p">:</span>
+  <span class="nt">extraImages</span><span class="p">:</span>
+    <span class="nt">myOtherImageIWantPulled</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyter/all-spark-notebook</span>
+      <span class="nt">tag</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2343e33dec46</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="efficient-cluster-autoscaling">
+<span id="id1"></span><h2>Efficient Cluster Autoscaling<a class="headerlink" href="#efficient-cluster-autoscaling" title="Permalink to this headline">¶</a></h2>
+<p>A <a class="reference external" href="https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler"><em>Cluster
+Autoscaler</em></a>
+(CA) will help you add and remove nodes from the cluster. But the CA needs some
+help to function well. Without help, it will both fail to scale up before users
+arrive and scale down nodes aggressively enough without disrupting users.</p>
+<div class="section" id="scaling-up-in-time-user-placeholders">
+<h3>Scaling up in time (user placeholders)<a class="headerlink" href="#scaling-up-in-time-user-placeholders" title="Permalink to this headline">¶</a></h3>
+<p>A <em>Cluster Autoscaler</em> (CA) will add nodes when pods don’t fit on available
+nodes but would fit if another node is added. But, this may lead to a long
+waiting time for the pod, and as a pod can represent a user, it can lead to a
+long waiting time for a user. There are now options to address this.</p>
+<p>With Kubernetes 1.11+ (that requires Helm 2.11+), <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/">Pod Priority and
+Preemption</a>
+was introduced. This allows pods with higher priority to preempt / evict pods
+with lower priority if that would help the higher priority pod fit on a node.</p>
+<p>This priority mechanism allows us to add dummy users or <em>user-placeholders</em> with
+low priority that can take up resources until a real user with (higher priority)
+requires it. At this time, the lower priority pod will get preempted to make
+room for the high priority pod. This now evicted user-placeholder will now be
+able to signal to the CA that it needs to scale up.</p>
+<p>The user placeholders will have the same resources requests as the default user.
+This means that if you have three user placeholders running, real users will
+only need to wait for a scale up if more than three users arrive in an interval
+of time less than it takes to make a node ready for use.</p>
+<p>To use three user placeholders for example, that can do their job thanks to pod
+priority, add the following configuration:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">scheduling</span><span class="p">:</span>
+  <span class="nt">podPriority</span><span class="p">:</span>
+    <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">userPlaceholder</span><span class="p">:</span>
+    <span class="c1"># Specify three dummy user pods will be used as placeholders</span>
+    <span class="nt">replicas</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
+</pre></div>
+</div>
+<p>For further discussion about user placeholders, see <a class="reference external" href="https://discourse.jupyter.org/t/planning-placeholders-with-jupyterhub-helm-chart-0-8-tested-on-mybinder-org/213">&#64;MinRK’s excellent
+post</a>
+where he analyzed its introduction on mybinder.org.</p>
+<p><strong>IMPORTANT</strong>: Further settings may be required for successful use of the pod
+priority depending on how your cluster autoscaler is configured. This is known
+to work on GKE, but we don’t know how it works on other cloud providers or
+kubernetes. See the <a class="reference external" href="/reference/reference.html#scheduling-podpriority">configuration
+reference</a> for more details.</p>
+</div>
+<div class="section" id="scaling-down-efficiently">
+<h3>Scaling down efficiently<a class="headerlink" href="#scaling-down-efficiently" title="Permalink to this headline">¶</a></h3>
+<p>Scaling up is the easy part, scaling down is harder. To scale down a node,
+<a class="reference external" href="https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#what-types-of-pods-can-prevent-ca-from-removing-a-node">certain technical
+criteria</a>
+need to be met. The central one is in order for a node to be scaled down, it
+must be free from pods that aren’t allowed to be disrupted. Pods that are not
+allowed to be disrupted are, for example, real user pods, important system pods,
+and some JupyterHub pods (without a permissive
+<a class="reference external" href="https://kubernetes.io/docs/concepts/workloads/pods/disruptions/">PodDisruptionBudget</a>).
+Consider for example that many users arrive to your JupyterHub during the
+daytime. New nodes are added by the CA. Some system pod ends up on the new nodes
+along with the user pods for some reason. At night when the
+<a class="reference external" href="/customizing/user-management.html#culling-user-pods"><em>culler</em></a> has removed many inactive
+pods from some nodes. They are now free from user pods but there is still a
+single system pod stopping the CA from removing the node.</p>
+<p>To avoid these scale down failures, we recommend using a <em>dedicated node pool</em>
+for the user pods. That way, all the important system pods will run at one or a
+limited set of nodes, so the autoscaling user nodes can scale from 0 to X and
+back from X to 0.</p>
+<p>This section about scaling down efficiently, will also explains how the <em>user
+scheduler</em> can help you reduce the failures to scale down due to blocking user
+pods.</p>
+<div class="section" id="using-a-dedicated-node-pool-for-users">
+<h4>Using a dedicated node pool for users<a class="headerlink" href="#using-a-dedicated-node-pool-for-users" title="Permalink to this headline">¶</a></h4>
+<p>To set up a dedicated node pool for user pods, we can use <a class="reference external" href="https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/"><em>taints and
+tolerations</em></a>.
+If we add a taint to all the nodes in the node pool, and a toleration on the
+user pods to tolerate being scheduled on a tainted node, we have practically
+dedicated the node pool to be used only by user pods.</p>
+<p>To make user pods schedule on a dedicated node for them, you need to do the
+following:</p>
+<ol>
+<li><p>Setup a node pool (with autoscaling), a certain label, and a certain taint.</p>
+<p>If you need help on how to do this, please refer to your cloud providers
+documentation. A node pool may be called a node group.</p>
+<ul>
+<li><p>The label: <code class="docutils literal notranslate"><span class="pre">hub.jupyter.org/node-purpose=user</span></code></p>
+<p><strong>NOTE</strong>: Cloud providers often have their own labels, separate from
+kubernetes labels, but this label must be a kubernetes label.</p>
+</li>
+<li><p>The taint: <code class="docutils literal notranslate"><span class="pre">hub.jupyter.org/dedicated=user:NoSchedule</span></code></p>
+<p><strong>NOTE</strong>: You may need to replace <code class="docutils literal notranslate"><span class="pre">/</span></code> with <code class="docutils literal notranslate"><span class="pre">_</span></code> due cloud provider
+limitations. Both taints are tolerated by the user pods.</p>
+</li>
+</ul>
+</li>
+<li><p>Make user pods require to be scheduled on the node pool setup above</p>
+<p>If you don’t require the user pods to schedule on their dedicated node, you
+may fill up the nodes where the other software runs. This can cause a <code class="docutils literal notranslate"><span class="pre">helm</span>&#160; <span class="pre">upgrade</span></code> command to fail. For example, you may have run out of resources for
+non-user pods that cannot schedule on the autoscaling node pool as they need
+during a rolling update.</p>
+<p>The default setting is to make user pods <em>prefer</em> to be scheduled on nodes
+with the <code class="docutils literal notranslate"><span class="pre">hub.jupyter.org/node-purpose=user</span></code> label, but you can also make it
+<em>required</em> using the configuration below.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">scheduling</span><span class="p">:</span>
+  <span class="nt">userPods</span><span class="p">:</span>
+    <span class="nt">nodeAffinity</span><span class="p">:</span>
+      <span class="c1"># matchNodePurpose valid options:</span>
+      <span class="c1"># - ignore</span>
+      <span class="c1"># - prefer (the default)</span>
+      <span class="c1"># - require</span>
+      <span class="nt">matchNodePurpose</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">require</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>NOTE</strong>: If you end up <em>not</em> using a dedicated node pool for users and want to
+scale down efficiently, you will need to learn about PodDisruptionBudget
+resources and do quite a bit more work in order to avoid ending up with almost
+empty nodes not scaling down.</p>
+</div>
+<div class="section" id="using-available-nodes-efficiently-the-user-scheduler">
+<h4>Using available nodes efficiently (the user scheduler)<a class="headerlink" href="#using-available-nodes-efficiently-the-user-scheduler" title="Permalink to this headline">¶</a></h4>
+<p>If you have users starting new servers while the total number of active users
+decreasing, how will you free up a node so it can be scaled down?</p>
+<p>This is what the <em>user scheduler</em> helps you with. The user scheduler’s only task
+is to schedule new user pods to the <em>most utilized node</em>. This can be compared
+to the <em>default scheduler</em> that instead always tries to schedule pods so the
+<em>least utilized node</em>. Only the user scheduler would allow the underutilized
+nodes to free up over time as the total amount of users decrease but a few users
+still arrive.</p>
+<p><strong>NOTE</strong>: If you don’t want to scale down the nodes you have, it would make more
+sense to let the users spread out and utilize all available nodes. Only activate
+the user scheduler if you have an autoscaling node pool.</p>
+<p>To see the user scheduler in action, look at the following graph from the
+mybinder.org deployment. The graph is from when the user scheduler was enabled
+for the first time, it is showing the amount of user pods active on five
+different nodes. When the user scheduler was enabled, two nodes were in time
+freed up from user pods and scaled down.</p>
+<p><img alt="User scheduler node activity" src="../_images/user_scheduler.png" /></p>
+<p>To enable the user scheduler:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">scheduling</span><span class="p">:</span>
+  <span class="nt">userScheduler</span><span class="p">:</span>
+    <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<p><strong>NOTE</strong>: For the user scheduler to work well, you need old user pods to shut
+down at some point. Make sure to properly configure the
+<a class="reference external" href="user-management.html#culling-user-pods"><em>culler</em></a>.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="authentication.html" title="previous page">Authentication</a>
+    <a class='right-next' id="next-link" href="security.html" title="next page">Security</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

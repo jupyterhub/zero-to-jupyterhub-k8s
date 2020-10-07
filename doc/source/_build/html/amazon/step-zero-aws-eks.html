@@ -1,0 +1,368 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kubernetes on Amazon Web Services (AWS) with Elastic Container with Kubernetes (EKS) &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Kubernetes on Red Hat OpenShift" href="../redhat/step-zero-openshift.html" />
+    <link rel="prev" title="Kubernetes on Amazon Web Services (AWS)" href="step-zero-aws.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../customizing/index.html">Customization Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../administrator/index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+        
+          
+              <li class="">
+                  <a href="../google/step-zero-gcp.html">Kubernetes on Google Cloud (GKE)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../microsoft/step-zero-azure.html">Kubernetes on Microsoft Azure Kubernetes Service (AKS)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../microsoft/step-zero-azure-autoscale.html">Kubernetes on Microsoft Azure Kubernetes Service (AKS) with Autoscaling</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="step-zero-aws.html">Kubernetes on Amazon Web Services (AWS)</a>
+              </li>
+          
+        
+          
+              <li class="active">
+                  <a href="">Kubernetes on Amazon Web Services (AWS) with Elastic Container with Kubernetes (EKS)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../redhat/step-zero-openshift.html">Kubernetes on Red Hat OpenShift</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../ibm/step-zero-ibm.html">Kubernetes on IBM Cloud</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../digital-ocean/step-zero-digital-ocean.html">Kubernetes on Digital Ocean</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../ovh/step-zero-ovh.html">Kubernetes on OVHcloud (OVH)</a>
+              </li>
+          
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#procedure" class="nav-link">Procedure</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#cluster-autoscaler" class="nav-link">Cluster Autoscaler</a>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="kubernetes-on-amazon-web-services-aws-with-elastic-container-with-kubernetes-eks">
+<span id="amazon-aws-eks"></span><h1>Kubernetes on Amazon Web Services (AWS) with Elastic Container with Kubernetes (EKS)<a class="headerlink" href="#kubernetes-on-amazon-web-services-aws-with-elastic-container-with-kubernetes-eks" title="Permalink to this headline">¶</a></h1>
+<p>AWS has released native support for Kubernetes, which is available in <a class="reference external" href="https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/">selected regions</a>.</p>
+<p>This guide uses AWS to set up a cluster. This mirrors the steps found at <a class="reference external" href="https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html">Getting Started with Amazon EKS</a> with some details filled in that are absent</p>
+<div class="section" id="procedure">
+<h2>Procedure<a class="headerlink" href="#procedure" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p>Create a IAM Role for EKS Service Role.</p>
+<p>It should have the following policies</p>
+<ul class="simple">
+<li><p>AmazonEKSClusterPolicy</p></li>
+<li><p>AmazonEKSServicePolicy</p></li>
+<li><p>AmazonEC2ContainerRegistryReadOnly</p></li>
+</ul>
+<p>(From the user interface, select EKS as the service, then follow the default steps)</p>
+</li>
+<li><p>Create a VPC if you don’t already have one.</p>
+<blockquote>
+<div><p>This step has a lot of variability so it is left to the user. However, one deployment can be found at <a class="reference external" href="https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html">Getting Started with Amazon EKS</a>, under <em>Create your Amazon EKS Cluster VPC</em></p>
+</div></blockquote>
+</li>
+<li><p>Create a Security Group for the EKS Control Plane to use</p>
+<blockquote>
+<div><p>You do not need to set any permissions on this. The steps below will automatically define access control between the EKS Control Plane and the individual nodes</p>
+</div></blockquote>
+</li>
+<li><p>Create your EKS cluster (using the user interface)</p>
+<blockquote>
+<div><p>Use the IAM Role in step 1 and Security Group defined in step 3. The cluster name is going to be used throughout. We’ll use <code class="docutils literal notranslate"><span class="pre">Z2JHKubernetesCluster</span></code> as an example.</p>
+</div></blockquote>
+</li>
+<li><p>Install <strong>kubectl</strong> and <strong>aws-iam-authenticator</strong></p>
+<blockquote>
+<div><p>Refer to  <a class="reference external" href="https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html">Getting Started with Amazon EKS</a> on <em>Configure kubectl for Amazon EKS</em></p>
+</div></blockquote>
+</li>
+<li><p>Configure <em>kubeconfig</em></p>
+<p>Also see <a class="reference external" href="https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html">Getting Started with Amazon EKS</a> <em>Step 2: Configure kubectl for Amazon EKS</em></p>
+<p>From the user interface on AWS you can retrieve the <code class="docutils literal notranslate"><span class="pre">endpoint-url</span></code>, <code class="docutils literal notranslate"><span class="pre">base64-encoded-ca-cert</span></code>. <code class="docutils literal notranslate"><span class="pre">cluster-name</span></code> is the name given in step 4. If you are using profiles in your AWS configuration, you can uncomment the <code class="docutils literal notranslate"><span class="pre">env</span></code> block and specify your profile as <code class="docutils literal notranslate"><span class="pre">aws-profile</span></code>.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">apiVersion</span><span class="p">:</span> <span class="n">v1</span>
+<span class="n">clusters</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">cluster</span><span class="p">:</span>
+  <span class="n">server</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">endpoint</span><span class="o">-</span><span class="n">url</span><span class="o">&gt;</span>
+  <span class="n">certificate</span><span class="o">-</span><span class="n">authority</span><span class="o">-</span><span class="n">data</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">base64</span><span class="o">-</span><span class="n">encoded</span><span class="o">-</span><span class="n">ca</span><span class="o">-</span><span class="n">cert</span><span class="o">&gt;</span>
+  <span class="n">name</span><span class="p">:</span> <span class="n">kubernetes</span>
+  <span class="n">contexts</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">context</span><span class="p">:</span>
+    <span class="n">cluster</span><span class="p">:</span> <span class="n">kubernetes</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">aws</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">aws</span>
+    <span class="n">current</span><span class="o">-</span><span class="n">context</span><span class="p">:</span> <span class="n">aws</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="n">Config</span>
+    <span class="n">preferences</span><span class="p">:</span> <span class="p">{}</span>
+    <span class="n">users</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">aws</span>
+      <span class="n">user</span><span class="p">:</span>
+        <span class="n">exec</span><span class="p">:</span>
+          <span class="n">apiVersion</span><span class="p">:</span> <span class="n">client</span><span class="o">.</span><span class="n">authentication</span><span class="o">.</span><span class="n">k8s</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">v1alpha1</span>
+          <span class="n">command</span><span class="p">:</span> <span class="n">aws</span><span class="o">-</span><span class="n">iam</span><span class="o">-</span><span class="n">authenticator</span>
+          <span class="n">args</span><span class="p">:</span>
+          <span class="o">-</span> <span class="s2">&quot;token&quot;</span>
+          <span class="o">-</span> <span class="s2">&quot;-i&quot;</span>
+          <span class="o">-</span> <span class="s2">&quot;&lt;cluster-name&gt;&quot;</span>
+          <span class="c1"># env:</span>
+          <span class="c1"># - name: AWS_PROFILE</span>
+          <span class="c1">#   value: &quot;&lt;aws-profile&gt;&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Verify kubectl works</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get svc
+</pre></div>
+</div>
+<p>should return <code class="docutils literal notranslate"><span class="pre">kubernetes</span></code> and <code class="docutils literal notranslate"><span class="pre">ClusterIP</span></code></p>
+</li>
+<li><p>Create the nodes using CloudFormation</p>
+<blockquote>
+<div><p>See <a class="reference external" href="https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html">Getting Started with Amazon EKS</a> <em>Step 3: Launch and Configure Amazon EKS Worker Nodes</em></p>
+<p><strong>Warning</strong> if you are endeavoring to deploy on a private network, the cloudformation template creates a public IP for each worker node though there is no route to get there if you specified only private subnets. Regardless, if you wish to correct this, you can edit the cloudformation template by changing <code class="docutils literal notranslate"><span class="pre">Resources.NodeLaunchConfig.Properties.AssociatePublicIpAddress</span></code> from <code class="docutils literal notranslate"><span class="pre">'true'</span></code> to <code class="docutils literal notranslate"><span class="pre">'false'</span></code></p>
+</div></blockquote>
+</li>
+<li><p>Create a AWS authentication ConfigMap</p>
+<blockquote>
+<div><p>This is necessary for the workers to find the master plane.</p>
+<p>See <a class="reference external" href="https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html">Getting Started with Amazon EKS</a> <em>Step 3: Launch and Configure Amazon EKS Worker Nodes</em></p>
+</div></blockquote>
+</li>
+<li><p>Preparing authenticator for Helm</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There might be a better way to configure this</p>
+</div>
+<p>Since the described helm deployment in the next section uses RBAC, <code class="docutils literal notranslate"><span class="pre">system:anonymous</span></code> user must be given access to administer the cluster. This can be done by the following command</p>
+</li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl create clusterrolebinding cluster-system-anonymous --clusterrole<span class="o">=</span>cluster-admin --user<span class="o">=</span>system:anonymous
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="cluster-autoscaler">
+<h2>Cluster Autoscaler<a class="headerlink" href="#cluster-autoscaler" title="Permalink to this headline">¶</a></h2>
+<p>If you’d like to do some <a class="reference internal" href="../administrator/optimization.html#efficient-cluster-autoscaling"><span class="std std-ref">optimizations</span></a>, you need to deploy Cluster Autoscaler (CA) first.</p>
+<p>See <a class="reference external" href="https://www.eksworkshop.com/beginner/080_scaling/deploy_ca/">https://www.eksworkshop.com/beginner/080_scaling/deploy_ca/</a></p>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="step-zero-aws.html" title="previous page">Kubernetes on Amazon Web Services (AWS)</a>
+    <a class='right-next' id="next-link" href="../redhat/step-zero-openshift.html" title="next page">Kubernetes on Red Hat OpenShift</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

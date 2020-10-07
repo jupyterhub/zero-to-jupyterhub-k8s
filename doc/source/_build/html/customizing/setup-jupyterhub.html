@@ -1,0 +1,369 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Setting up JupyterHub &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="index.html">Installation</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../administrator/index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#prepare-configuration-file" class="nav-link">Prepare configuration file</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#install-jupyterhub" class="nav-link">Install JupyterHub</a>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="setting-up-jupyterhub">
+<span id="setup-jupyterhub"></span><h1>Setting up JupyterHub<a class="headerlink" href="#setting-up-jupyterhub" title="Permalink to this headline">¶</a></h1>
+<p>Now that we have a <a class="reference internal" href="../create-k8s-cluster.html"><span class="doc">Kubernetes cluster</span></a> and <a class="reference internal" href="setup-helm.html"><span class="doc">Helm</span></a> setup, we can proceed by using Helm to install JupyterHub
+and related <a class="reference internal" href="../reference/glossary.html#term-Kubernetes-resource"><span class="xref std std-term">Kubernetes resources</span></a> using a
+<a class="reference internal" href="../reference/glossary.html#term-Helm-chart"><span class="xref std std-term">Helm chart</span></a>.</p>
+<div class="section" id="prepare-configuration-file">
+<h2>Prepare configuration file<a class="headerlink" href="#prepare-configuration-file" title="Permalink to this headline">¶</a></h2>
+<p>In this step we will prepare a <a class="reference external" href="https://en.wikipedia.org/wiki/YAML">YAML</a>
+configuration file that we will refer to as <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>. It will contain the multiple
+<a class="reference internal" href="../reference/glossary.html#term-Helm-values"><span class="xref std std-term">Helm values</span></a> to be provided to a JupyterHub <a class="reference internal" href="../reference/glossary.html#term-Helm-chart"><span class="xref std std-term">Helm chart</span></a> developed
+specifically together with this guide.</p>
+<p>Helm charts contains <a class="reference internal" href="../reference/glossary.html#term-Helm-template"><span class="xref std std-term">templates</span></a> that with provided values will render to <a class="reference internal" href="../reference/glossary.html#term-Kubernetes-resource"><span class="xref std std-term">Kubernetes
+resources</span></a> to be installed in a Kubernetes cluster. This
+config file will provide the values to be used by our Helm chart.</p>
+<ol class="arabic">
+<li><p>Generate a random hex string representing 32 bytes to use as a security
+token. Run this command in a terminal and copy the output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>openssl rand -hex <span class="m">32</span>
+</pre></div>
+</div>
+</li>
+<li><p>Create and start editing a file called <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>. In the code snippet
+below we start the widely available <a class="reference external" href="https://en.wikipedia.org/wiki/GNU_nano">nano editor</a>, but any editor will do.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nano config.yaml
+</pre></div>
+</div>
+</li>
+<li><p>Write the following into the <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file but instead of writing
+<code class="docutils literal notranslate"><span class="pre">&lt;RANDOM-HEX&gt;</span></code> paste the generated hex string you copied in step 1.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">proxy</span><span class="p">:</span>
+  <span class="nt">secretToken</span><span class="p">:</span> <span class="s">&quot;&lt;RANDOM_HEX&gt;&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is common practice for Helm and Kubernetes YAML files to indent using
+two spaces.</p>
+</div>
+</li>
+<li><p>Save the <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file. In the nano editor this is done by pressing <strong>CTRL+X</strong> or
+<strong>CMD+X</strong> followed by a confirmation to save the changes.</p></li>
+</ol>
+</div>
+<div class="section" id="install-jupyterhub">
+<h2>Install JupyterHub<a class="headerlink" href="#install-jupyterhub" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p>Make Helm aware of the <a class="reference external" href="https://jupyterhub.github.io/helm-chart/">JupyterHub Helm chart repository</a> so you can install the
+JupyterHub chart from it without having to use a long URL name.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+helm repo update
+</pre></div>
+</div>
+<p>This should show output like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Hang tight while we grab the latest from your chart repositories...
+...Skip local chart repository
+...Successfully got an update from the &quot;stable&quot; chart repository
+...Successfully got an update from the &quot;jupyterhub&quot; chart repository
+Update Complete. ⎈ Happy Helming!⎈
+</pre></div>
+</div>
+</li>
+<li><p>Now install the chart configured by your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> by running this
+command from the directory that contains your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Suggested values: advanced users of Kubernetes and Helm should feel</span>
+<span class="c1"># free to use different values.</span>
+<span class="nv">RELEASE</span><span class="o">=</span>jhub
+<span class="nv">NAMESPACE</span><span class="o">=</span>jhub
+
+helm upgrade --cleanup-on-fail <span class="se">\</span>
+  --install <span class="nv">$RELEASE</span> jupyterhub/jupyterhub <span class="se">\</span>
+  --namespace <span class="nv">$NAMESPACE</span> <span class="se">\</span>
+  --create-namespace <span class="se">\</span>
+  --version<span class="o">=</span><span class="m">0</span>.9.0 <span class="se">\</span>
+  --values config.yaml
+</pre></div>
+</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">RELEASE</span></code> refers to a <a class="reference external" href="https://helm.sh/docs/glossary/#release">Helm release name</a>, an identifier used to
+differentiate chart installations. You need it when you are changing or
+deleting the configuration of this chart installation. If your Kubernetes
+cluster will contain multiple JupyterHubs make sure to differentiate them.
+You can list your Helm releases with <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">list</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NAMESPACE</span></code> refers to a <a class="reference external" href="https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/">Kubernetes namespace</a>,
+an identifier used to group Kubernetes resources, in this case all
+Kubernetes resources associated with the JupyterHub chart. You’ll need the
+namespace identifier for performing any commands with <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>This step may take a moment, during which time there will be no output
+to your terminal. JupyterHub is being installed in the background.</p></li>
+<li><p>If you get a <code class="docutils literal notranslate"><span class="pre">release</span> <span class="pre">named</span> <span class="pre">&lt;YOUR-RELEASE-NAME&gt;</span> <span class="pre">already</span> <span class="pre">exists</span></code> error,
+then you should delete the release by running <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">delete</span>
+<span class="pre">&lt;YOUR-RELEASE-NAME&gt;</span></code>. Then reinstall by repeating this step. If it
+persists, also do <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">delete</span> <span class="pre">namespace</span> <span class="pre">&lt;YOUR-NAMESPACE&gt;</span></code> and try
+again.</p></li>
+<li><p>In general, if something goes <em>wrong</em> with the install step, delete the
+Helm release by running <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">delete</span> <span class="pre">&lt;YOUR-RELEASE-NAME&gt;</span></code>
+before re-running the install command.</p></li>
+<li><p>If you’re pulling from a large Docker image you may get a
+<code class="docutils literal notranslate"><span class="pre">Error:</span> <span class="pre">timed</span> <span class="pre">out</span> <span class="pre">waiting</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">condition</span></code> error, add a
+<code class="docutils literal notranslate"><span class="pre">--timeout=&lt;NUMBER-OF-MINUTES&gt;m&lt;NUMBER-OF-SECONDS&gt;s</span></code> parameter to the <code class="docutils literal notranslate"><span class="pre">helm</span>
+<span class="pre">install</span></code> command.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">--version</span></code> parameter corresponds to the <em>version of the Helm
+chart</em>, not the version of JupyterHub. Each version of the JupyterHub
+Helm chart is paired with a specific version of JupyterHub. E.g.,
+<code class="docutils literal notranslate"><span class="pre">0.7.0</span></code> of the Helm chart runs JupyterHub <code class="docutils literal notranslate"><span class="pre">0.9.2</span></code>.
+For a list of which JupyterHub version is installed in each version
+of the Z2JH Helm Chart, see the <a class="reference external" href="https://github.com/jupyterhub/helm-chart#release-notes">Helm Chart repository</a>.</p></li>
+</ul>
+</div>
+</li>
+<li><p>While Step 2 is running, you can see the pods being created by entering in
+a different terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get pod --namespace jhub
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To remain sane we recommend that you <a class="reference external" href="https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion">enable autocompletion for kubectl</a>
+and set a default value for the <code class="docutils literal notranslate"><span class="pre">--namespace</span></code> flag:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl config set-context <span class="k">$(</span>kubectl config current-context<span class="k">)</span> --namespace <span class="si">${</span><span class="nv">NAMESPACE</span><span class="k">:-</span><span class="nv">jhub</span><span class="si">}</span>
+</pre></div>
+</div>
+</div>
+</li>
+<li><p>Wait for the <em>hub</em> and <em>proxy</em> pod to enter the <code class="docutils literal notranslate"><span class="pre">Running</span></code> state.</p>
+</li>
+<li><p>Find the IP we can use to access the JupyterHub. Run the following command
+until the <code class="docutils literal notranslate"><span class="pre">EXTERNAL-IP</span></code> of the <code class="docutils literal notranslate"><span class="pre">proxy-public</span></code> <a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/service/">service</a> is
+available like in the example output.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get service --namespace jhub
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>NAME           TYPE           CLUSTER-IP      EXTERNAL-IP     PORT<span class="o">(</span>S<span class="o">)</span>        AGE
+hub            ClusterIP      <span class="m">10</span>.51.243.14    &lt;none&gt;          <span class="m">8081</span>/TCP       1m
+proxy-api      ClusterIP      <span class="m">10</span>.51.247.198   &lt;none&gt;          <span class="m">8001</span>/TCP       1m
+proxy-public   LoadBalancer   <span class="m">10</span>.51.248.230   <span class="m">104</span>.196.41.97   <span class="m">80</span>:31916/TCP   1m
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the IP for <code class="docutils literal notranslate"><span class="pre">proxy-public</span></code> is too long to fit into the window, you
+can find the longer version by calling:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl describe service proxy-public --namespace jhub
+</pre></div>
+</div>
+</div>
+</li>
+</ol>
+<ol class="arabic simple" start="7">
+<li><p>To use JupyterHub, enter the external IP for the <code class="docutils literal notranslate"><span class="pre">proxy-public</span></code> service in
+to a browser. JupyterHub is running with a default <em>dummy</em> authenticator so
+entering any username and password combination will let you enter the hub.</p></li>
+</ol>
+<p>Congratulations! Now that you have basic JupyterHub running, you can <a class="reference internal" href="extending-jupyterhub.html#extending-jupyterhub"><span class="std std-ref">extend it</span></a> and <a class="reference internal" href="../administrator/optimization.html#optimization"><span class="std std-ref">optimize it</span></a> in many
+ways to meet your needs.</p>
+<p>Some examples of customisations are:</p>
+<ul class="simple">
+<li><p>Configure the login to use the account that makes sense to you (Google, GitHub, etc.).</p></li>
+<li><p>Use a suitable pre-built image for the user container or build your own.</p></li>
+<li><p>Host it on <a class="reference external" href="https://your-domain.com">https://your-domain.com</a>.</p></li>
+<li><p>…</p></li>
+</ul>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

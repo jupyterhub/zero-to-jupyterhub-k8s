@@ -1,0 +1,462 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Debugging &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Authentication" href="authentication.html" />
+    <link rel="prev" title="The JupyterHub Architecture" href="architecture.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../customizing/index.html">Customization Guide</a>
+        </li>
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+      
+      
+      
+      
+      
+      
+        
+          
+              <li class="">
+                  <a href="architecture.html">The JupyterHub Architecture</a>
+              </li>
+          
+        
+          
+              <li class="active">
+                  <a href="">Debugging</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="authentication.html">Authentication</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="optimization.html">Optimizations</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="security.html">Security</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="upgrading.html">Upgrading your Helm chart</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="troubleshooting.html">FAQ</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="advanced.html">Advanced Topics</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="cost.html">Appendix: Projecting deployment costs</a>
+              </li>
+          
+        
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#debugging-commands" class="nav-link">Debugging commands</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#kubectl-get-pod" class="nav-link">kubectl get pod</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#kubectl-describe-pod" class="nav-link">kubectl describe pod</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#kubectl-logs" class="nav-link">kubectl logs</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#troubleshooting-examples" class="nav-link">Troubleshooting Examples</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hub-fails-to-start" class="nav-link">Hub fails to start</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="debugging">
+<span id="debug"></span><h1>Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h1>
+<p>Sometimes your JupyterHub deployment doesn’t behave the way you’d expect.
+This section provides some tips on debugging and fixing some common problems.</p>
+<div class="section" id="debugging-commands">
+<h2>Debugging commands<a class="headerlink" href="#debugging-commands" title="Permalink to this headline">¶</a></h2>
+<p>In order to debug your JupyterHub deployment, you need to be able to inspect
+the state of the resources being used. The following are a few common commands
+for debugging.</p>
+<p><strong>Real world scenario:</strong> Let’s say you’ve got a JupyterHub deployed, and a user
+tells you that they are experiencing strange behavior. Let’s take a look
+at our deployment to figure out what is going on.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For our real world scenario, we’ll assume that our Kubernetes namespace
+is called <code class="docutils literal notranslate"><span class="pre">jhub</span></code>. Your namespace may be called something different</p>
+</div>
+<div class="section" id="kubectl-get-pod">
+<h3><code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">pod</span></code><a class="headerlink" href="#kubectl-get-pod" title="Permalink to this headline">¶</a></h3>
+<p>To list all pods in your Kubernetes deployment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="o">--</span><span class="n">namespace</span><span class="o">=</span><span class="n">jhub</span> <span class="n">get</span> <span class="n">pod</span>
+</pre></div>
+</div>
+<p>This will output a list of all pods being used in the deployment.</p>
+<p><strong>Real world scenario:</strong> In our case, we see two pods for the JupyterHub
+infrastructure (<code class="docutils literal notranslate"><span class="pre">hub</span></code> and <code class="docutils literal notranslate"><span class="pre">proxy</span></code>) as well as one user
+pod that was created when somebody logged in to the JupyterHub.</p>
+<p>Here’s an example of the output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ kubectl --namespace=jhub get pod
+NAME                                READY     STATUS         RESTARTS   AGE
+hub-3311438805-xnfvp     1/1       Running        0          2m
+jupyter-choldgraf                   0/1       ErrImagePull   0          25s
+proxy-1227971824-mn2wd   1/1       Running        0          5h
+</pre></div>
+</div>
+<p>Here we can see the two JupyterHub pods, as well as a single user pod. Note
+that all user pods will begin with <code class="docutils literal notranslate"><span class="pre">jupyter-</span></code>.</p>
+<p>In particular, keep an eye on the <code class="docutils literal notranslate"><span class="pre">STATUS</span></code> column. If a given
+pod contains something other than <code class="docutils literal notranslate"><span class="pre">Running</span></code>, then something may be wrong.</p>
+<p>In this case, we can see that our user’s pod is in the <code class="docutils literal notranslate"><span class="pre">ErrImagePull</span></code> state.
+This generally means that there’s something wrong with the Docker image that
+is defined in <code class="docutils literal notranslate"><span class="pre">singleuser</span></code> in our helm chart config. Let’s dig further…</p>
+</div>
+<div class="section" id="kubectl-describe-pod">
+<h3><code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">describe</span> <span class="pre">pod</span></code><a class="headerlink" href="#kubectl-describe-pod" title="Permalink to this headline">¶</a></h3>
+<p>To see more detail about the state of a specific pod, use the following
+command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="o">--</span><span class="n">namespace</span><span class="o">=</span><span class="n">jhub</span> <span class="n">describe</span> <span class="n">pod</span> <span class="o">&lt;</span><span class="n">POD_NAME</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>This will output several pieces of information, including configuration and
+settings for the pod. The final section you’ll see is a list of recent
+events. These can be particularly informative, as often an error will
+show up in this section.</p>
+<p><strong>Real world scenario:</strong> In our case, one of the lines in the events page
+displays an error:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ kubectl --namespace=jhub describe pod jupyter-choldgraf
+...
+2m            52s             4       kubelet, gke-jhubtest-default-pool-52c36683-jv6r        spec.containers{notebook}       Warning         Failed           Failed to pull image &quot;jupyter/scipy-notebook:v0.4&quot;: rpc error: code = 2 desc = Error response from daemon: {&quot;message&quot;:&quot;manifest for jupyter/scipy-notebook:v0.4 not found&quot;}
+...
+</pre></div>
+</div>
+<p>It seems there is indeed something wrong with the Docker image. Let’s confirm
+this by getting another view on the events that have transpired in the pod.</p>
+</div>
+<div class="section" id="kubectl-logs">
+<h3><code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">logs</span></code><a class="headerlink" href="#kubectl-logs" title="Permalink to this headline">¶</a></h3>
+<p>If you only want to see the latest logs for a pod, use the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="o">--</span><span class="n">namespace</span><span class="o">=</span><span class="n">jhub</span> <span class="n">logs</span> <span class="o">&lt;</span><span class="n">POD_NAME</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>This will show you the logs from the pod, which often contain useful
+information about what is going wrong. Parse these logs
+to see if something is generating an error.</p>
+<p><strong>Real world scenario:</strong> In our case, we get this line back:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ kubectl --namespace=jhub logs jupyter-choldgraf
+Error from server (BadRequest): container &quot;notebook&quot; in pod &quot;jupyter-choldgraf&quot; is waiting to start: trying and failing to pull image
+</pre></div>
+</div>
+<p>Now we are sure that something is wrong with our Dockerfile. Let’s check
+our <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file for the section where we specify the user’s
+Docker image. Here we see our problem:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">singleuser</span><span class="p">:</span>
+  <span class="n">image</span><span class="p">:</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">jupyter</span><span class="o">/</span><span class="n">scipy</span><span class="o">-</span><span class="n">notebook</span>
+</pre></div>
+</div>
+<p>We haven’t specified a <code class="docutils literal notranslate"><span class="pre">tag</span></code> for our Docker image! Not specifying a tag
+will cause it to default to <code class="docutils literal notranslate"><span class="pre">v0.4</span></code>, which isn’t what we want and is causing
+the pod to fail.</p>
+<p>To fix this, let’s add a tag to our <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">singleuser</span><span class="p">:</span>
+  <span class="n">image</span><span class="p">:</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">jupyter</span><span class="o">/</span><span class="n">scipy</span><span class="o">-</span><span class="n">notebook</span>
+    <span class="n">tag</span><span class="p">:</span> <span class="n">ae885c0a6226</span>
+</pre></div>
+</div>
+<p>Then run a helm upgrade:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">upgrade</span> <span class="o">--</span><span class="n">cleanup</span><span class="o">-</span><span class="n">on</span><span class="o">-</span><span class="n">fail</span> <span class="n">jhub</span> <span class="n">jupyterhub</span><span class="o">/</span><span class="n">jupyterhub</span> <span class="o">--</span><span class="n">version</span><span class="o">=</span><span class="n">v0</span><span class="o">.</span><span class="mi">6</span> <span class="o">-</span><span class="n">f</span> <span class="n">config</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">jhub</span></code> is the helm release name (substitute the release name that you
+chose during setup).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Depending on the size of the Docker image, this may take a while to complete.</p>
+</div>
+<p>Right after you run this command, let’s once again list the pods in our
+deployment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ kubectl --namespace=jhub get pod
+NAME                                READY     STATUS              RESTARTS   AGE
+hub-2653507799-r7wf8     0/1       ContainerCreating   0          31s
+hub-3311438805-xnfvp     1/1       Terminating         0          14m
+jupyter-choldgraf                   0/1       ImagePullBackOff    0          12m
+proxy-deployment-1227971824-mn2wd   1/1       Running             0          5h
+</pre></div>
+</div>
+<p>Here we can see one <code class="docutils literal notranslate"><span class="pre">hub</span></code> pod being destroyed, and another (based
+on the upgraded helm chart) being created. We also see our broken user pod,
+which will not be deleted automatically. Let’s manually delete it so a newer
+working pod can be started.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ kubectl --namespace=jhub delete pod jupyter-choldgraf
+</pre></div>
+</div>
+<p>Finally, we’ll tell our user to log back in to the JupyterHub. Then let’s
+list our running pods once again:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ kubectl --namespace=jhub get pod
+NAME                                READY     STATUS    RESTARTS   AGE
+hub-2653507799-r7wf8     1/1       Running   0          3m
+jupyter-choldgraf                   1/1       Running   0          18s
+proxy-deployment-1227971824-mn2wd   1/1       Running   0          5h
+</pre></div>
+</div>
+<p>And now we see that we have a running user pod!</p>
+<p>Note that many debugging situations are not as straightforward as this one.
+It will take some time before you get a feel for the errors that Kubernetes
+may throw at you, and how these are tied to your configuration files.</p>
+</div>
+</div>
+<div class="section" id="troubleshooting-examples">
+<h2>Troubleshooting Examples<a class="headerlink" href="#troubleshooting-examples" title="Permalink to this headline">¶</a></h2>
+<p>The following sections contain some case studies that illustrate some of the
+more common bugs / gotchas that you may experience using JupyterHub with
+Kubernetes.</p>
+<div class="section" id="hub-fails-to-start">
+<h3>Hub fails to start<a class="headerlink" href="#hub-fails-to-start" title="Permalink to this headline">¶</a></h3>
+<p><strong>Symptom:</strong> following <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">pod</span></code>, the <code class="docutils literal notranslate"><span class="pre">hub</span></code> pod is in
+<code class="docutils literal notranslate"><span class="pre">Error</span></code> or <code class="docutils literal notranslate"><span class="pre">CrashLoopBackoff</span></code> state, or appears to be running but accessing
+the website for the JupyterHub returns an error message in the browser).</p>
+<p><strong>Investigating:</strong> the output of <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">--namespace=jhub</span> <span class="pre">logs</span>
+<span class="pre">hub...</span></code> shows something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">File</span> <span class="s2">&quot;/usr/local/lib/python3.5/dist-packages/jupyterhub/proxy.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">589</span><span class="p">,</span> <span class="ow">in</span> <span class="n">get_all_routes</span>
+  <span class="n">resp</span> <span class="o">=</span> <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
+<span class="n">tornado</span><span class="o">.</span><span class="n">httpclient</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">:</span> <span class="n">HTTP</span> <span class="mi">403</span><span class="p">:</span> <span class="n">Forbidden</span>
+</pre></div>
+</div>
+<p><strong>Diagnosis:</strong> This is likely because the <code class="docutils literal notranslate"><span class="pre">hub</span></code> pod cannot
+communicate with the proxy pod API, likely because of a problem in the
+<code class="docutils literal notranslate"><span class="pre">secretToken</span></code> that was put in <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>.</p>
+<p><strong>Fix:</strong> Follow these steps:</p>
+<ol class="arabic">
+<li><p>Create a secret token:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">openssl</span> <span class="n">rand</span> <span class="o">-</span><span class="nb">hex</span> <span class="mi">32</span>
+</pre></div>
+</div>
+</li>
+<li><p>Add the token to <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> like so:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proxy</span><span class="p">:</span>
+   <span class="n">secretToken</span><span class="p">:</span> <span class="s1">&#39;&lt;output of `openssl rand -hex 32`&gt;&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Redeploy the helm chart:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">upgrade</span> <span class="o">--</span><span class="n">cleanup</span><span class="o">-</span><span class="n">on</span><span class="o">-</span><span class="n">fail</span> <span class="n">jhub</span> <span class="n">jupyterhub</span><span class="o">/</span><span class="n">jupyterhub</span> <span class="o">-</span><span class="n">f</span> <span class="n">config</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="architecture.html" title="previous page">The JupyterHub Architecture</a>
+    <a class='right-next' id="next-link" href="authentication.html" title="next page">Authentication</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

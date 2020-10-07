@@ -1,0 +1,576 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kubernetes on Microsoft Azure Kubernetes Service (AKS) with Autoscaling &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Kubernetes on Amazon Web Services (AWS)" href="../amazon/step-zero-aws.html" />
+    <link rel="prev" title="Kubernetes on Microsoft Azure Kubernetes Service (AKS)" href="step-zero-azure.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../customizing/index.html">Customization Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../administrator/index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+        
+          
+              <li class="">
+                  <a href="../google/step-zero-gcp.html">Kubernetes on Google Cloud (GKE)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="step-zero-azure.html">Kubernetes on Microsoft Azure Kubernetes Service (AKS)</a>
+              </li>
+          
+        
+          
+              <li class="active">
+                  <a href="">Kubernetes on Microsoft Azure Kubernetes Service (AKS) with Autoscaling</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../amazon/step-zero-aws.html">Kubernetes on Amazon Web Services (AWS)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../amazon/step-zero-aws-eks.html">Kubernetes on Amazon Web Services (AWS) with Elastic Container with Kubernetes (EKS)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../redhat/step-zero-openshift.html">Kubernetes on Red Hat OpenShift</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../ibm/step-zero-ibm.html">Kubernetes on IBM Cloud</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../digital-ocean/step-zero-digital-ocean.html">Kubernetes on Digital Ocean</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../ovh/step-zero-ovh.html">Kubernetes on OVHcloud (OVH)</a>
+              </li>
+          
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="kubernetes-on-microsoft-azure-kubernetes-service-aks-with-autoscaling">
+<span id="microsoft-azure-autoscale"></span><h1>Kubernetes on Microsoft Azure Kubernetes Service (AKS) with Autoscaling<a class="headerlink" href="#kubernetes-on-microsoft-azure-kubernetes-service-aks-with-autoscaling" title="Permalink to this headline">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>These instructions involve parts of the Azure command line that are in preview, hence the following documentation is subject to change.</p>
+</div>
+<p>You can create a Kubernetes cluster <a class="reference external" href="https://docs.microsoft.com/en-us/azure/aks/">either through the Azure portal website, or using the Azure command line tools</a>.</p>
+<p>This page describes the commands required to setup a Kubernetes cluster using the command line.
+If you prefer to use the Azure portal see the <a class="reference external" href="https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough-portal">Azure Kubernetes Service quickstart</a>.</p>
+<ol class="arabic">
+<li><p>Prepare your Azure shell environment. You have two options, one is to use
+the Azure interactive shell, the other is to install the Azure command-line
+tools locally. Instructions for each are below.</p>
+<ul>
+<li><p><strong>Using the Azure interactive shell</strong>. The <a class="reference external" href="https://portal.azure.com">Azure Portal</a>
+contains an interactive shell that you can use to communicate with your
+Kubernetes cluster. To access this shell, go to <a class="reference external" href="https://portal.azure.com">portal.azure.com</a>
+and click on the button below.</p>
+<img alt="../_images/cli_start.png" class="align-center" src="../_images/cli_start.png" />
+</li>
+</ul>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>If you get errors like <code class="docutils literal notranslate"><span class="pre">could</span> <span class="pre">not</span> <span class="pre">retrieve</span> <span class="pre">token</span> <span class="pre">from</span> <span class="pre">local</span> <span class="pre">cache</span></code>,
+try refreshing your browser window.</p></li>
+<li><p>The first time you do this, you’ll be asked to create a storage
+account where your shell filesystem will live.</p></li>
+</ul>
+</div>
+</div></blockquote>
+<ul>
+<li><p><strong>Install command-line tools locally</strong>. You can access the Azure CLI via
+a package that you can install locally.</p>
+<p>To do so, first follow the <a class="reference external" href="https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest">installation instructions</a> in the
+Azure documentation. Then run the following command to connect your local
+CLI with your account:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az login
+</pre></div>
+</div>
+<p>You’ll need to open a browser and follow the instructions in your terminal
+to log in.</p>
+</li>
+</ul>
+</li>
+<li><p>Activate the correct subscription. Azure uses the concept
+of <strong>subscriptions</strong> to manage spending. You can
+get a list of subscriptions your account has access to by running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az account list --refresh --output table
+</pre></div>
+</div>
+<p>Pick the subscription you want to use for creating the cluster, and set that
+as your default.
+If you only have one subscription you can ignore this step.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az account <span class="nb">set</span> --subscription &lt;YOUR-CHOSEN-SUBSCRIPTION-NAME&gt;
+</pre></div>
+</div>
+</li>
+<li><p>Setup the CLI for Autoscaling features.
+First install the <a class="reference external" href="https://github.com/Azure/azure-cli-extensions/tree/master/src/aks-preview">aks-preview</a> CLI extension.
+This will grant access to new commands.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az extension add --name aks-preview
+</pre></div>
+</div>
+<p>We then need to register the scale set feature.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az feature register --name VMSSPreview --namespace Microsoft.ContainerService
+</pre></div>
+</div>
+<p>A VMSS is a <a class="reference external" href="https://docs.microsoft.com/en-us/azure/virtual-machine-scale-sets/overview">Virtual Machine Scale Set</a>, that is to say an autoscalable set of virtual machines.</p>
+<p>The previous command will take a while to register.
+Use the following command to check it’s status.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az feature list <span class="se">\</span>
+  --output table <span class="se">\</span>
+  --query  <span class="s2">&quot;[?contains(name, &#39;Microsoft.ContainerService/VMSSPreview&#39;)].{Name:name,State:properties.state}&quot;</span>
+</pre></div>
+</div>
+<p>Once the VMSSPreview feature has been registered, refresh the registration with the following command.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az provider register --namespace Microsoft.ContainerService
+</pre></div>
+</div>
+</li>
+<li><p>Create a resource group. Azure uses the concept of
+<strong>resource groups</strong> to group related resources together.
+We need to create a resource group in a given data center location. We will create
+computational resources <em>within</em> this resource group.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az group create <span class="se">\</span>
+              --name<span class="o">=</span>&lt;RESOURCE-GROUP-NAME&gt; <span class="se">\</span>
+              --location<span class="o">=</span>&lt;LOCATION&gt; <span class="se">\</span>
+              --output table
+</pre></div>
+</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--name</span></code> specifies the name of your resource group. We recommend using something
+that uniquely identifies this hub. For example, if you are creating a resource group
+for UC Berkeley’s 2018 Spring Data100 Course, you may give it a
+<code class="docutils literal notranslate"><span class="pre">&lt;RESOURCE-GROUP-NAME&gt;</span></code> of <code class="docutils literal notranslate"><span class="pre">ucb_2018sp_data100_hub</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--location</span></code> specifies the location of the data center you want your resource to be in.
+For options, see the
+<a class="reference external" href="https://docs.microsoft.com/en-us/azure/aks/quotas-skus-regions#region-availability">Azure list of locations that support AKS</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--output</span> <span class="pre">table</span></code> specifies that the output should be in human readable
+format, rather than the default JSON output. We shall use this with most
+commands when executing them by hand.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Consider <a class="reference external" href="https://docs.microsoft.com/en-us/partner-center/set-an-azure-spending-budget-for-your-customers">setting a cloud budget</a>
+for your Azure account in order to make sure you don’t accidentally
+spend more than you wish to.</p>
+</div>
+</li>
+<li><p>Choose a cluster name.</p>
+<p>In the following steps we’ll run commands that ask you to input a cluster
+name. We recommend using something descriptive and short. We’ll refer to
+this as <code class="docutils literal notranslate"><span class="pre">&lt;CLUSTER-NAME&gt;</span></code> for the remainder of this section.</p>
+<p>The next step will create a few files on your filesystem, so first create
+a folder in which these files will go. We recommend giving it the same
+name as your cluster:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">&lt;</span><span class="n">CLUSTER</span><span class="o">-</span><span class="n">NAME</span><span class="o">&gt;</span>
+<span class="n">cd</span> <span class="o">&lt;</span><span class="n">CLUSTER</span><span class="o">-</span><span class="n">NAME</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Create an ssh key to secure your cluster.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh-keygen -f ssh-key-&lt;CLUSTER-NAME&gt;
+</pre></div>
+</div>
+<p>It will prompt you to add a password, which you can leave empty if you wish.
+This will create a public key named <code class="docutils literal notranslate"><span class="pre">ssh-key-&lt;CLUSTER-NAME&gt;.pub</span></code> and a private key named
+<code class="docutils literal notranslate"><span class="pre">ssh-key-&lt;CLUSTER-NAME&gt;</span></code>. Make sure both go into the folder we created earlier,
+and keep both of them safe!</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This command will also print out something to your terminal screen. You
+don’t need to do anything with this text.</p>
+</div>
+</li>
+<li><p>Create a virtual network and sub-network.</p>
+<p>Kubernetes does not by default come with a controller that enforces <code class="docutils literal notranslate"><span class="pre">networkpolicy</span></code> resources.
+<code class="docutils literal notranslate"><span class="pre">networkpolicy</span></code> resources are important as they define how Kubernetes pods can securely communicate with one another and the outside sources, for example, the internet.</p>
+<p>To enable this in Azure, we must first create a <a class="reference external" href="https://docs.microsoft.com/en-gb/azure/virtual-network/virtual-networks-overview">Virtual Network</a> with Azure’s own network policies enabled.</p>
+<p>This section of the documentation is following the Microsoft Azure tutorial on <a class="reference external" href="https://docs.microsoft.com/en-us/azure/aks/use-network-policies#create-an-aks-cluster-and-enable-network-policy">creating an AKS cluster and enabling network policy</a>, which includes information on using <a class="reference external" href="https://docs.projectcalico.org">Calico</a> network policies.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az network vnet create <span class="se">\</span>
+    --resource-group &lt;RESOURCE-GROUP-NAME&gt; <span class="se">\</span>
+    --name &lt;VNET-NAME&gt; <span class="se">\</span>
+    --address-prefixes <span class="m">10</span>.0.0.0/8 <span class="se">\</span>
+    --subnet-name &lt;SUBNET-NAME&gt; <span class="se">\</span>
+    --subnet-prefix <span class="m">10</span>.240.0.0/16
+</pre></div>
+</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--resource-group</span></code> is the ResourceGroup you created</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--name</span></code> is the name you want to assign to your virtual network, for example, <code class="docutils literal notranslate"><span class="pre">hub-vnet</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--address-prefixes</span></code> are the IP address prefixes for your virtual network</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--subnet-name</span></code> is your desired name for your subnet, for example, <code class="docutils literal notranslate"><span class="pre">hub-subnet</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--subnet-prefixes</span></code> are the IP address prefixes in <a class="reference external" href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">CIDR format</a> for the subnet</p></li>
+</ul>
+<p>We will now retrieve the application IDs of the VNet and subnet we just created and save them to bash variables.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">VNET_ID</span><span class="o">=</span><span class="k">$(</span>az network vnet show <span class="se">\</span>
+    --resource-group &lt;RESOURCE-GROUP-NAME&gt; <span class="se">\</span>
+    --name &lt;VNET-NAME&gt; <span class="se">\</span>
+    --query id <span class="se">\</span>
+    --output tsv<span class="k">)</span>
+<span class="nv">SUBNET_ID</span><span class="o">=</span><span class="k">$(</span>az network vnet subnet show <span class="se">\</span>
+    --resource-group &lt;RESOURCE-GROUP-NAME&gt; <span class="se">\</span>
+    --vnet-name &lt;VNET-NAME&gt; <span class="se">\</span>
+    --name &lt;SUBNET-NAME&gt; <span class="se">\</span>
+    --query id <span class="se">\</span>
+    --output tsv<span class="k">)</span>
+</pre></div>
+</div>
+<p>We will create an Azure Active Directory (Azure AD) <a class="reference external" href="https://docs.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals">service principal</a> for use with the cluster, and assign the <a class="reference external" href="https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#contributor">Contributor role</a> for use with the VNet.
+Make sure <code class="docutils literal notranslate"><span class="pre">SERVICE-PRINCIPAL-NAME</span></code> is something recognisable, for example, <code class="docutils literal notranslate"><span class="pre">binderhub-sp</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SP_PASSWD</span><span class="o">=</span><span class="k">$(</span>az ad sp create-for-rbac <span class="se">\</span>
+    --name &lt;SERVICE-PRINCIPAL-NAME&gt; <span class="se">\</span>
+    --role Contributor <span class="se">\</span>
+    --scope <span class="nv">$VNET_ID</span> <span class="se">\</span>
+    --query password <span class="se">\</span>
+    --output tsv<span class="k">)</span>
+<span class="nv">SP_ID</span><span class="o">=</span><span class="k">$(</span>az ad sp show <span class="se">\</span>
+    --id http://&lt;SERVICE-PRINCIPAL-NAME&gt; <span class="se">\</span>
+    --query appId <span class="se">\</span>
+    --output tsv<span class="k">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You will need Owner role on your subscription for this step to succeed.</p>
+</div>
+</li>
+<li><p>Create an AKS cluster.</p>
+<p>The following command will request a Kubernetes cluster within the resource
+group that we created earlier.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az aks create --name &lt;CLUSTER-NAME&gt; <span class="se">\</span>
+              --resource-group &lt;RESOURCE-GROUP-NAME&gt; <span class="se">\</span>
+              --ssh-key-value ssh-key-&lt;CLUSTER-NAME&gt;.pub <span class="se">\</span>
+              --node-count <span class="m">3</span> <span class="se">\</span>
+              --node-vm-size Standard_D2s_v3 <span class="se">\</span>
+              --enable-vmss <span class="se">\</span>
+              --enable-cluster-autoscaler <span class="se">\</span>
+              --min-count <span class="m">3</span> <span class="se">\</span>
+              --max-count <span class="m">6</span> <span class="se">\</span>
+              --kubernetes-version <span class="m">1</span>.12.7 <span class="se">\</span>
+              --service-principal <span class="nv">$SP_ID</span> <span class="se">\</span>
+              --client-secret <span class="nv">$SP_PASSWD</span> <span class="se">\</span>
+              --dns-service-ip <span class="m">10</span>.0.0.10 <span class="se">\</span>
+              --docker-bridge-address <span class="m">172</span>.17.0.1/16 <span class="se">\</span>
+              --network-plugin azure <span class="se">\</span>
+              --network-policy azure <span class="se">\</span>
+              --service-cidr <span class="m">10</span>.0.0.0/16 <span class="se">\</span>
+              --vnet-subnet-id <span class="nv">$SUBNET_ID</span> <span class="se">\</span>
+              --output table
+</pre></div>
+</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--name</span></code> is the name you want to use to refer to your cluster</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--resource-group</span></code> is the ResourceGroup you created</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--ssh-key-value</span></code> is the ssh public key created</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--node-count</span></code> is the number of nodes you want in your Kubernetes cluster</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--node-vm-size</span></code> is the size of the nodes you want to use, which varies based on
+what you are using your cluster for and how much RAM/CPU each of your users need.
+There is a <a class="reference external" href="https://docs.microsoft.com/en-us/azure/cloud-services/cloud-services-sizes-specs">list of all possible node sizes</a>
+for you to choose from, but not all might be available in your location.
+If you get an error whilst creating the cluster you can try changing either the region or the node size.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-vmss</span></code> deploys the cluster as a scale set.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-cluster-autoscaler</span></code> installs a <a class="reference external" href="https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler">Cluster Autoscaler</a> onto the cluster (though counterintuitively, does not enable it!).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--min-count</span></code>/<code class="docutils literal notranslate"><span class="pre">--max-count</span></code> are the minimum/maximum number of nodes in the cluster at any time.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--kubernetes-version</span></code> installs a specific version of Kubernetes onto the cluster. To autoscale, we require <code class="docutils literal notranslate"><span class="pre">&gt;=</span> <span class="pre">v</span> <span class="pre">1.12.4</span></code>, though it’s recommended to use the most recent version available.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--service-principal</span></code> is the application ID of the service principal we created</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--client-secret</span></code> is the password for the service principal we created</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--dns-service-ip</span></code> is an IP address assigned to the <a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/">Kubernetes DNS service</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--docker-bridge-address</span></code> is a specific IP address and netmask for the Docker bridge, using standard CIDR notation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--network-plugin</span></code> is the Kubernetes network plugin to use. In this example, we have used Azure’s own implementation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--network-policy</span></code> is the Kubernetes network policy to use. In this example, we have used Azure’s own implementation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--service-cidr</span></code> is a CIDR notation IP range from which to assign service cluster IPs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vnet-subnet-id</span></code> is the application ID of the subnet we created</p></li>
+</ul>
+<p>This should take a few minutes and provide you with a working Kubernetes cluster!</p>
+</li>
+<li><p>If you’re using the Azure CLI locally, install <a class="reference external" href="https://kubernetes.io/docs/reference/kubectl/overview/">kubectl</a>, a tool
+for accessing the Kubernetes API from the commandline:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az aks install-cli
+</pre></div>
+</div>
+<p>Note: kubectl is already installed in Azure Cloud Shell.</p>
+</li>
+<li><p>Get credentials from Azure for <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> to work:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az aks get-credentials <span class="se">\</span>
+             --name &lt;CLUSTER-NAME&gt; <span class="se">\</span>
+             --resource-group &lt;RESOURCE-GROUP-NAME&gt; <span class="se">\</span>
+             --output table
+</pre></div>
+</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--name</span></code> is the name you gave your cluster</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--resource-group</span></code> is the ResourceGroup you created</p></li>
+</ul>
+<p>This automatically updates your Kubernetes client configuration file.</p>
+</li>
+<li><p>Check if your cluster is fully functional</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get node
+</pre></div>
+</div>
+<p>The response should list three running nodes and their Kubernetes versions!
+Each node should have the status of <code class="docutils literal notranslate"><span class="pre">Ready</span></code>, note that this may take a
+few moments.</p>
+</li>
+<li><p>Enabling Autoscaling</p>
+<p>We now move to the Azure Portal to enable autoscaling and set rules to manage the Cluster Autoscaler.</p>
+<p>First we need to register <a class="reference external" href="https://docs.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview">Microsoft Insights</a> for use on the active subscription.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az provider register --namespace microsoft.insights
+</pre></div>
+</div>
+<p>To check the status of the registration, run the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az provider show -n microsoft.insights
+</pre></div>
+</div>
+<p>Once the application has been registered, navigate to your active subscription on the <a class="reference external" href="https://portal.azure.com/">Portal</a>.</p>
+<p>Under “Resources”, select the VMSS.
+It should be named something like <code class="docutils literal notranslate"><span class="pre">aks-nodepool1-&lt;random-str&gt;-vmss</span></code>.</p>
+<img alt="../_images/select_vmss.png" class="align-center" src="../_images/select_vmss.png" />
+<p>From the left-hand menu, select “Scaling”.
+Click the blue “Enable autoscaling” button and an autogenerated form for a scale condition will appear.
+We will add two new rules to this condition:</p>
+<ul class="simple">
+<li><p>Increase the instance count by 1 when the average CPU usage over 10 minutes is greater than 70%</p></li>
+<li><p>Decrease the instance count by 1 when the average CPU usage over 10 minutes is less than 5%</p></li>
+</ul>
+<img alt="../_images/scale_condition.png" class="align-center" src="../_images/scale_condition.png" />
+<p>Make sure the “Scale based on metric” option is selected and click “+ Add new rule”, another autogenerated form will appear.
+This will be pre-filled with the required settings to fulfill our first rule, so save it by clicking “Update” and click “+ Add new rule” again.</p>
+<img alt="../_images/scale_out.png" class="align-center" src="../_images/scale_out.png" />
+<p>The second form needs to be edited for the second rule to decrease the instance count by 1 when the average CPU usage over 10 minutes is less than 5%.
+Save this rule and then save the overall scale condition, the cluster will be updated automatically.</p>
+<img alt="../_images/scale_in.png" class="align-center" src="../_images/scale_in.png" />
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This form can also be used to change <code class="docutils literal notranslate"><span class="pre">--node-count</span></code>/<code class="docutils literal notranslate"><span class="pre">--min-count</span></code>/<code class="docutils literal notranslate"><span class="pre">--max-count</span></code> that was set previously by using the “Instance limits” section of the scale condition (“Default”, “Minimum” and “Maximum” respectively).</p>
+<p>If you prefer to use the command line, you can run the following:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az aks update <span class="se">\</span>
+  --name &lt;CLUSTER-NAME&gt; <span class="se">\</span>
+  --resource-group &lt;RESOURCE-GROUP&gt; <span class="se">\</span>
+  --update-cluster-autoscaler <span class="se">\</span>
+  --min-count &lt;DESIRED-MINIMUM-COUNT&gt; <span class="se">\</span>
+  --max-count &lt;DESIRED-MAXIMUM-COUNT&gt; <span class="se">\</span>
+  --output table
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>Both</strong> <code class="docutils literal notranslate"><span class="pre">--min-count</span></code> and <code class="docutils literal notranslate"><span class="pre">--max-count</span></code> must be defined.</p>
+</div>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you create the cluster using the Azure Portal you must enable RBAC.
+RBAC is enabled by default when using the command line tools.</p>
+</div>
+<p>Congrats. Now that you have your Kubernetes cluster running, it’s time to
+begin <a class="reference internal" href="../index.html#creating-your-jupyterhub"><span class="std std-ref">Setup JupyterHub</span></a>.</p>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="step-zero-azure.html" title="previous page">Kubernetes on Microsoft Azure Kubernetes Service (AKS)</a>
+    <a class='right-next' id="next-link" href="../amazon/step-zero-aws.html" title="next page">Kubernetes on Amazon Web Services (AWS)</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

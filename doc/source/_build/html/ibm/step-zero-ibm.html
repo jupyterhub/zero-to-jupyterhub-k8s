@@ -1,0 +1,341 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kubernetes on IBM Cloud &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Kubernetes on Digital Ocean" href="../digital-ocean/step-zero-digital-ocean.html" />
+    <link rel="prev" title="Kubernetes on Red Hat OpenShift" href="../redhat/step-zero-openshift.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../customizing/index.html">Customization Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../administrator/index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+        
+          
+              <li class="">
+                  <a href="../google/step-zero-gcp.html">Kubernetes on Google Cloud (GKE)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../microsoft/step-zero-azure.html">Kubernetes on Microsoft Azure Kubernetes Service (AKS)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../microsoft/step-zero-azure-autoscale.html">Kubernetes on Microsoft Azure Kubernetes Service (AKS) with Autoscaling</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../amazon/step-zero-aws.html">Kubernetes on Amazon Web Services (AWS)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../amazon/step-zero-aws-eks.html">Kubernetes on Amazon Web Services (AWS) with Elastic Container with Kubernetes (EKS)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../redhat/step-zero-openshift.html">Kubernetes on Red Hat OpenShift</a>
+              </li>
+          
+        
+          
+              <li class="active">
+                  <a href="">Kubernetes on IBM Cloud</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../digital-ocean/step-zero-digital-ocean.html">Kubernetes on Digital Ocean</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../ovh/step-zero-ovh.html">Kubernetes on OVHcloud (OVH)</a>
+              </li>
+          
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="kubernetes-on-ibm-cloud">
+<span id="ibm-cloud"></span><h1>Kubernetes on IBM Cloud<a class="headerlink" href="#kubernetes-on-ibm-cloud" title="Permalink to this headline">¶</a></h1>
+<p>This guide shows how to deploy JupyterHub on the IBM Cloud using their <a class="reference external" href="https://cloud.ibm.com/kubernetes/catalog/create)">Kubernetes service</a>.
+It should provide you with enough knowledge to create a cluster, deploy your application using a Docker image and use a custom domain to use the deployed app.</p>
+<p>Before you begin:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Understand the basics of <a class="reference external" href="https://kubernetes.io/docs/tutorials/kubernetes-basics/)">Kubernetes</a>.</dt><dd></dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Install the IBM Cloud Developer Tools</dt><dd><ul>
+<li><p>Install the <a class="reference external" href="https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started">IBM Cloud CLI</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">curl</span> <span class="pre">-sL</span> <span class="pre">https://ibm.biz/idt-installer</span> <span class="pre">|</span> <span class="pre">bash</span></code></p></li>
+<li><p>Verify your installation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ibmcloud</span> <span class="pre">dev</span> <span class="pre">help</span></code></p></li>
+<li><p>Connect to the proper IBM API endpoint for your IBM Cloud location. Example:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ibmcloud</span> <span class="pre">api</span> <span class="pre">https://api.ng.bluemix.net</span></code></p></li>
+<li><p>Log in to IBM Cloud using your IBMid</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ibmcloud</span> <span class="pre">login</span></code>. Use the <code class="docutils literal notranslate"><span class="pre">--sso</span></code> option to log in using your federated ID.</p></li>
+<li><p>Set up your org and space</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ibmcloud</span> <span class="pre">target</span> <span class="pre">--cf</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>To follow this guide, you can use a <strong>free</strong> cluster. You can also use a <strong>paid</strong> cluster of type <strong>standard</strong> on IBM Cloud.</p>
+<p>Procedure:</p>
+<ol class="arabic">
+<li><p>Create a Kubernetes cluster
+Kubernetes Service delivers powerful tools by combining Docker and Kubernetes technologies, an intuitive user experience, and built-in security and isolation to automate the deployment, operation, scaling, and monitoring of containerized apps in a cluster of computing hosts.</p>
+<dl>
+<dt>To set up the Kubernetes cluster:</dt><dd><ol class="arabic">
+<li><p>Create a Kubernetes cluster from the <a class="reference external" href="https://cloud.ibm.com/kubernetes/catalog/create)">IBM Cloud catalog</a>.</p></li>
+<li><p>When configuring the new cluster, select the <strong>Cluster type</strong> and click <strong>Create Cluster</strong> to provision a Kubernetes cluster.
+2.1 In the case of a free cluster you will see something similar to:</p>
+<img alt="../_images/create-free-kubernetes-cluster-ibm-cloud.png" class="align-center" src="../_images/create-free-kubernetes-cluster-ibm-cloud.png" />
+<p>2.2 In the case of a paid cluster you will see something similar to:</p>
+<img alt="../_images/create-paid-kubernetes-cluster-ibm-cloud.png" class="align-center" src="../_images/create-paid-kubernetes-cluster-ibm-cloud.png" />
+</li>
+<li><p>Check the status of your <strong>Cluster</strong> and <strong>Worker Nodes</strong> and wait for them to be <strong>ready</strong>.</p></li>
+</ol>
+<p>Or, if you prefer, create the cluster using the <a class="reference external" href="https://cloud.ibm.com/docs/containers?topic=containers-cs_cli_install)">IBM Cloud CLI tools</a></p>
+</dd>
+</dl>
+</li>
+<li><p>Configure kubectl</p>
+<p><a class="reference external" href="https://kubernetes.io/docs/reference/kubectl/overview/">kubectl</a> is a CLI tool to interact with a Kubernetes cluster. In this occasion, you will use it to point forward to the created Kubernetes cluster.</p>
+<ol class="arabic">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">ibmcloud</span> <span class="pre">login</span></code> to log in interactively into the IBM Cloud. Provide the organization (org), location and space under which the cluster is created. You can reconfirm the details by running <code class="docutils literal notranslate"><span class="pre">ibmcloud</span> <span class="pre">target</span></code> command.</p></li>
+<li><dl>
+<dt>When the cluster is ready, retrieve the cluster configuration by using the cluster’s name:</dt><dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ibmcloud cs cluster-config &lt;clusterName&gt;
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>Copy and paste the <strong>export</strong> command to set the KUBECONFIG environment variable as directed. The command should be something similar to:</dt><dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">KUBECONFIG</span><span class="o">=</span>/Users/user/.bluemix/plugins/container-service/clusters/JupyterHub/kube-config-***-JupyterHub.yml
+</pre></div>
+</div>
+<dl>
+<dt>To verify whether the KUBECONFIG environment variable is set correctly or not, run the following command:</dt><dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="nv">$KUBECONFIG</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>Check that the <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> command is correctly configured</dt><dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl cluster-info
+</pre></div>
+</div>
+<img alt="../_images/kubectl-cluster-info.png" class="align-center" src="../_images/kubectl-cluster-info.png" />
+</dd>
+</dl>
+</li>
+</ol>
+</li>
+</ol>
+<p>Hooray! You have your Kubernetes cluster running; it’s time to begin <a class="reference internal" href="../index.html#creating-your-jupyterhub"><span class="std std-ref">Setup JupyterHub</span></a>.</p>
+<dl class="simple">
+<dt>More info and readings:</dt><dd><ul class="simple">
+<li><p><a class="reference external" href="https://cloud.ibm.com/docs/tutorials?topic=solution-tutorials-scalable-webapp-kubernetes">https://cloud.ibm.com/docs/tutorials?topic=solution-tutorials-scalable-webapp-kubernetes</a></p></li>
+<li><p><a class="reference external" href="https://github.com/IBM-Cloud/get-started-python">https://github.com/IBM-Cloud/get-started-python</a></p></li>
+</ul>
+</dd>
+</dl>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="../redhat/step-zero-openshift.html" title="previous page">Kubernetes on Red Hat OpenShift</a>
+    <a class='right-next' id="next-link" href="../digital-ocean/step-zero-digital-ocean.html" title="next page">Kubernetes on Digital Ocean</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

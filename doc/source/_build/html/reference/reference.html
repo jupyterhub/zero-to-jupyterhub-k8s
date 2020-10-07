@@ -1,0 +1,2090 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Configuration Reference &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Related Projects" href="reference-docs.html" />
+    <link rel="prev" title="Reference" href="index.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../administrator/index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+        
+          
+              <li class="active">
+                  <a href="">Configuration Reference</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="reference-docs.html">Related Projects</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="tools.html">Utilized Tools</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="glossary.html">Glossary</a>
+              </li>
+          
+        
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#hub" class="nav-link">hub</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hub-cookiesecret" class="nav-link">hub.cookieSecret</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hub-imagepullpolicy" class="nav-link">hub.imagePullPolicy</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hub-imagepullsecret" class="nav-link">hub.imagePullSecret</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#hub-imagepullsecret-enabled" class="nav-link">hub.imagePullSecret.enabled</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#hub-imagepullsecret-registry" class="nav-link">hub.imagePullSecret.registry</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#hub-imagepullsecret-username" class="nav-link">hub.imagePullSecret.username</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#hub-imagepullsecret-password" class="nav-link">hub.imagePullSecret.password</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hub-image" class="nav-link">hub.image</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#hub-image-name" class="nav-link">hub.image.name</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#hub-image-tag" class="nav-link">hub.image.tag</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#hub-image-pullsecrets" class="nav-link">hub.image.pullSecrets</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hub-db" class="nav-link">hub.db</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#hub-db-type" class="nav-link">hub.db.type</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#hub-db-pvc" class="nav-link">hub.db.pvc</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h5">
+            <a href="#hub-db-pvc-annotations" class="nav-link">hub.db.pvc.annotations</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h5">
+            <a href="#hub-db-pvc-selector" class="nav-link">hub.db.pvc.selector</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h5">
+            <a href="#hub-db-pvc-storage" class="nav-link">hub.db.pvc.storage</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#hub-db-url" class="nav-link">hub.db.url</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#hub-db-password" class="nav-link">hub.db.password</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hub-labels" class="nav-link">hub.labels</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hub-initcontainers" class="nav-link">hub.initContainers</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hub-extraenv" class="nav-link">hub.extraEnv</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hub-extraconfig" class="nav-link">hub.extraConfig</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hub-uid" class="nav-link">hub.uid</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hub-fsgid" class="nav-link">hub.fsGid</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hub-service" class="nav-link">hub.service</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#hub-service-type" class="nav-link">hub.service.type</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#hub-service-ports" class="nav-link">hub.service.ports</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h5">
+            <a href="#hub-service-ports-nodeport" class="nav-link">hub.service.ports.nodePort</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#hub-service-annotations" class="nav-link">hub.service.annotations</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hub-pdb" class="nav-link">hub.pdb</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#hub-pdb-enabled" class="nav-link">hub.pdb.enabled</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#hub-pdb-minavailable" class="nav-link">hub.pdb.minAvailable</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hub-existingsecret" class="nav-link">hub.existingSecret</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#proxy" class="nav-link">proxy</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#proxy-chp" class="nav-link">proxy.chp</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#proxy-chp-extraenv" class="nav-link">proxy.chp.extraEnv</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#proxy-secrettoken" class="nav-link">proxy.secretToken</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#proxy-service" class="nav-link">proxy.service</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#proxy-service-type" class="nav-link">proxy.service.type</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#proxy-service-labels" class="nav-link">proxy.service.labels</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#proxy-service-annotations" class="nav-link">proxy.service.annotations</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#proxy-service-nodeports" class="nav-link">proxy.service.nodePorts</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h5">
+            <a href="#proxy-service-nodeports-http" class="nav-link">proxy.service.nodePorts.http</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h5">
+            <a href="#proxy-service-nodeports-https" class="nav-link">proxy.service.nodePorts.https</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#proxy-service-loadbalancerip" class="nav-link">proxy.service.loadBalancerIP</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#proxy-service-loadbalancersourceranges" class="nav-link">proxy.service.loadBalancerSourceRanges</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#proxy-https" class="nav-link">proxy.https</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#proxy-https-enabled" class="nav-link">proxy.https.enabled</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#proxy-https-type" class="nav-link">proxy.https.type</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#proxy-https-letsencrypt" class="nav-link">proxy.https.letsencrypt</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h5">
+            <a href="#proxy-https-letsencrypt-contactemail" class="nav-link">proxy.https.letsencrypt.contactEmail</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#proxy-https-manual" class="nav-link">proxy.https.manual</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h5">
+            <a href="#proxy-https-manual-key" class="nav-link">proxy.https.manual.key</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h5">
+            <a href="#proxy-https-manual-cert" class="nav-link">proxy.https.manual.cert</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#proxy-https-secret" class="nav-link">proxy.https.secret</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h5">
+            <a href="#proxy-https-secret-name" class="nav-link">proxy.https.secret.name</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h5">
+            <a href="#proxy-https-secret-key" class="nav-link">proxy.https.secret.key</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h5">
+            <a href="#proxy-https-secret-crt" class="nav-link">proxy.https.secret.crt</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#proxy-https-hosts" class="nav-link">proxy.https.hosts</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#proxy-pdb" class="nav-link">proxy.pdb</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#proxy-pdb-enabled" class="nav-link">proxy.pdb.enabled</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#proxy-pdb-minavailable" class="nav-link">proxy.pdb.minAvailable</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#proxy-traefik" class="nav-link">proxy.traefik</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#proxy-traefik-extraenv" class="nav-link">proxy.traefik.extraEnv</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#auth" class="nav-link">auth</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#auth-state" class="nav-link">auth.state</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#auth-state-enabled" class="nav-link">auth.state.enabled</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#auth-state-cryptokey" class="nav-link">auth.state.cryptoKey</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#singleuser" class="nav-link">singleuser</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#singleuser-podnametemplate" class="nav-link">singleuser.podNameTemplate</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#singleuser-cpu" class="nav-link">singleuser.cpu</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#singleuser-cpu-limit" class="nav-link">singleuser.cpu.limit</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#singleuser-cpu-guarantee" class="nav-link">singleuser.cpu.guarantee</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#singleuser-memory" class="nav-link">singleuser.memory</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#singleuser-memory-limit" class="nav-link">singleuser.memory.limit</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#singleuser-memory-guarantee" class="nav-link">singleuser.memory.guarantee</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#singleuser-imagepullsecret" class="nav-link">singleuser.imagePullSecret</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#singleuser-imagepullsecret-enabled" class="nav-link">singleuser.imagePullSecret.enabled</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#singleuser-imagepullsecret-registry" class="nav-link">singleuser.imagePullSecret.registry</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#singleuser-imagepullsecret-username" class="nav-link">singleuser.imagePullSecret.username</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#singleuser-imagepullsecret-password" class="nav-link">singleuser.imagePullSecret.password</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#singleuser-image" class="nav-link">singleuser.image</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#singleuser-image-name" class="nav-link">singleuser.image.name</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#singleuser-image-tag" class="nav-link">singleuser.image.tag</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#singleuser-image-pullpolicy" class="nav-link">singleuser.image.pullPolicy</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#singleuser-image-pullsecrets" class="nav-link">singleuser.image.pullSecrets</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#singleuser-initcontainers" class="nav-link">singleuser.initContainers</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#singleuser-profilelist" class="nav-link">singleuser.profileList</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#singleuser-schedulerstrategy" class="nav-link">singleuser.schedulerStrategy</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#singleuser-extraenv" class="nav-link">singleuser.extraEnv</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#singleuser-extratolerations" class="nav-link">singleuser.extraTolerations</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#singleuser-extranodeaffinity" class="nav-link">singleuser.extraNodeAffinity</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#singleuser-extranodeaffinity-required" class="nav-link">singleuser.extraNodeAffinity.required</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#singleuser-extranodeaffinity-preferred" class="nav-link">singleuser.extraNodeAffinity.preferred</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#singleuser-extrapodaffinity" class="nav-link">singleuser.extraPodAffinity</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#singleuser-extrapodaffinity-required" class="nav-link">singleuser.extraPodAffinity.required</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#singleuser-extrapodaffinity-preferred" class="nav-link">singleuser.extraPodAffinity.preferred</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#singleuser-extrapodantiaffinity" class="nav-link">singleuser.extraPodAntiAffinity</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#singleuser-extrapodantiaffinity-required" class="nav-link">singleuser.extraPodAntiAffinity.required</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#singleuser-extrapodantiaffinity-preferred" class="nav-link">singleuser.extraPodAntiAffinity.preferred</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#scheduling" class="nav-link">scheduling</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#scheduling-userscheduler" class="nav-link">scheduling.userScheduler</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#scheduling-userscheduler-enabled" class="nav-link">scheduling.userScheduler.enabled</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#scheduling-userscheduler-replicas" class="nav-link">scheduling.userScheduler.replicas</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#scheduling-userscheduler-image" class="nav-link">scheduling.userScheduler.image</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h5">
+            <a href="#scheduling-userscheduler-image-name" class="nav-link">scheduling.userScheduler.image.name</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h5">
+            <a href="#scheduling-userscheduler-image-tag" class="nav-link">scheduling.userScheduler.image.tag</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#scheduling-userscheduler-pdb" class="nav-link">scheduling.userScheduler.pdb</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h5">
+            <a href="#scheduling-userscheduler-pdb-enabled" class="nav-link">scheduling.userScheduler.pdb.enabled</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h5">
+            <a href="#scheduling-userscheduler-pdb-minavailable" class="nav-link">scheduling.userScheduler.pdb.minAvailable</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#scheduling-podpriority" class="nav-link">scheduling.podPriority</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#scheduling-podpriority-enabled" class="nav-link">scheduling.podPriority.enabled</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#scheduling-podpriority-globaldefault" class="nav-link">scheduling.podPriority.globalDefault</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#scheduling-podpriority-defaultpriority" class="nav-link">scheduling.podPriority.defaultPriority</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#scheduling-podpriority-userplaceholderpriority" class="nav-link">scheduling.podPriority.userPlaceholderPriority</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#scheduling-userplaceholder" class="nav-link">scheduling.userPlaceholder</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#scheduling-userplaceholder-enabled" class="nav-link">scheduling.userPlaceholder.enabled</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#scheduling-userplaceholder-replicas" class="nav-link">scheduling.userPlaceholder.replicas</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#scheduling-userplaceholder-resources" class="nav-link">scheduling.userPlaceholder.resources</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#scheduling-corepods" class="nav-link">scheduling.corePods</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#scheduling-corepods-nodeaffinity" class="nav-link">scheduling.corePods.nodeAffinity</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h5">
+            <a href="#scheduling-corepods-nodeaffinity-matchnodepurpose" class="nav-link">scheduling.corePods.nodeAffinity.matchNodePurpose</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#scheduling-userpods" class="nav-link">scheduling.userPods</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#scheduling-userpods-nodeaffinity" class="nav-link">scheduling.userPods.nodeAffinity</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h5">
+            <a href="#scheduling-userpods-nodeaffinity-matchnodepurpose" class="nav-link">scheduling.userPods.nodeAffinity.matchNodePurpose</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+            </ul>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#ingress" class="nav-link">ingress</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#ingress-enabled" class="nav-link">ingress.enabled</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#ingress-annotations" class="nav-link">ingress.annotations</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#ingress-hosts" class="nav-link">ingress.hosts</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#ingress-pathsuffix" class="nav-link">ingress.pathSuffix</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#ingress-tls" class="nav-link">ingress.tls</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#prepuller" class="nav-link">prePuller</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#prepuller-annotations" class="nav-link">prePuller.annotations</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#prepuller-resources" class="nav-link">prePuller.resources</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#prepuller-hook" class="nav-link">prePuller.hook</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#prepuller-hook-enabled" class="nav-link">prePuller.hook.enabled</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#prepuller-hook-podschedulingwaitduration" class="nav-link">prePuller.hook.podSchedulingWaitDuration</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#prepuller-continuous" class="nav-link">prePuller.continuous</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#prepuller-continuous-enabled" class="nav-link">prePuller.continuous.enabled</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#prepuller-extraimages" class="nav-link">prePuller.extraImages</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#custom" class="nav-link">custom</a>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="configuration-reference">
+<span id="helm-chart-configuration-reference"></span><h1>Configuration Reference<a class="headerlink" href="#configuration-reference" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s">JupyterHub Helm
+chart</a> is configurable by
+values in your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>. In this way, you can extend user resources, build off
+of different Docker images, manage security and authentication, and more.</p>
+<p>Below is a description of many <em>but not all</em> of the configurable values for the
+Helm chart. To see <em>all</em> configurable options, inspect their default values
+defined <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/jupyterhub/values.yaml">here</a>.</p>
+<p>For more guided information about some specific things you can do with
+modifications to the helm chart, see the <a class="reference internal" href="../index.html#customization-guide"><span class="std std-ref">Customization Guide</span></a>.</p>
+<div class="section" id="hub">
+<h2>hub<a class="headerlink" href="#hub" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="hub-cookiesecret">
+<h3>hub.cookieSecret<a class="headerlink" href="#hub-cookiesecret" title="Permalink to this headline">¶</a></h3>
+<p>A 32-byte cryptographically secure randomly generated string used to sign values of
+secure cookies set by the hub. If unset, jupyterhub will generate one on startup and
+save it in the file <code class="docutils literal notranslate"><span class="pre">jupyterhub_cookie_secret</span></code> in the <code class="docutils literal notranslate"><span class="pre">/srv/jupyterhub</span></code> directory of
+the hub container. A value set here will make JupyterHub overwrite any previous file.</p>
+<p>You do not need to set this at all if you are using the default configuration for
+storing databases - sqlite on a persistent volume (with <code class="docutils literal notranslate"><span class="pre">hub.db.type</span></code> set to the
+default <code class="docutils literal notranslate"><span class="pre">sqlite-pvc</span></code>). If you are using an external database, then you must set this
+value explicitly - or your users will keep getting logged out each time the hub pod
+restarts.</p>
+<p>Changing this value will all user logins to be invalidated. If this secret leaks,
+<em>immediately</em> change it to something else, or user data can be compromised</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># to generate a value, run</span>
+openssl rand -hex <span class="m">32</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="hub-imagepullpolicy">
+<h3>hub.imagePullPolicy<a class="headerlink" href="#hub-imagepullpolicy" title="Permalink to this headline">¶</a></h3>
+<p>Set the imagePullPolicy on the hub pod.</p>
+<p>See the <a class="reference external" href="https://kubernetes.io/docs/concepts/containers/images/#updating-images">Kubernetes docs</a>
+for more info on what the values mean.</p>
+</div>
+<div class="section" id="hub-imagepullsecret">
+<h3>hub.imagePullSecret<a class="headerlink" href="#hub-imagepullsecret" title="Permalink to this headline">¶</a></h3>
+<p>Creates an image pull secret for you and makes the hub pod utilize
+it, allowing it to pull images from private image registries.</p>
+<p>Using this configuration option automates the following steps that
+normally is required to pull from private image registries.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># you won&#39;t need to run this manually...</span>
+kubectl create secret docker-registry hub-image-credentials <span class="se">\</span>
+  --docker-server<span class="o">=</span>&lt;REGISTRY&gt; <span class="se">\</span>
+  --docker-username<span class="o">=</span>&lt;USERNAME&gt; <span class="se">\</span>
+  --docker-email<span class="o">=</span>&lt;EMAIL&gt; <span class="se">\</span>
+  --docker-password<span class="o">=</span>&lt;PASSWORD&gt;
+</pre></div>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># you won&#39;t need to specify this manually...</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">imagePullSecrets</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hub-image-credentials</span>
+</pre></div>
+</div>
+<p>To learn the username and password fields to access a gcr.io registry
+from a Kubernetes cluster not associated with the same google cloud
+credentials, look into <a class="reference external" href="http://docs.heptio.com/content/private-registries/pr-gcr.html">this
+guide</a>
+and read the notes about the password.</p>
+<div class="section" id="hub-imagepullsecret-enabled">
+<h4>hub.imagePullSecret.enabled<a class="headerlink" href="#hub-imagepullsecret-enabled" title="Permalink to this headline">¶</a></h4>
+<p>Enable the creation of a Kubernetes Secret containing credentials
+to access a image registry. By enabling this, the hub pod will also be configured
+to use these credentials when it pulls its container image.</p>
+</div>
+<div class="section" id="hub-imagepullsecret-registry">
+<h4>hub.imagePullSecret.registry<a class="headerlink" href="#hub-imagepullsecret-registry" title="Permalink to this headline">¶</a></h4>
+<p>Name of the private registry you want to create a credential set
+for. It will default to Docker Hub’s image registry.</p>
+<p>Examples:</p>
+<ul class="simple">
+<li><p>https://index.docker.io/v1/</p></li>
+<li><p>quay.io</p></li>
+<li><p>eu.gcr.io</p></li>
+<li><p>alexmorreale.privatereg.net</p></li>
+</ul>
+</div>
+<div class="section" id="hub-imagepullsecret-username">
+<h4>hub.imagePullSecret.username<a class="headerlink" href="#hub-imagepullsecret-username" title="Permalink to this headline">¶</a></h4>
+<p>Name of the user you want to use to connect to your private
+registry. For external gcr.io, you will use the <code class="docutils literal notranslate"><span class="pre">_json_key</span></code>.</p>
+<p>Examples:</p>
+<ul class="simple">
+<li><p>alexmorreale</p></li>
+<li><p>alex&#64;pfc.com</p></li>
+<li><p>_json_key</p></li>
+</ul>
+</div>
+<div class="section" id="hub-imagepullsecret-password">
+<h4>hub.imagePullSecret.password<a class="headerlink" href="#hub-imagepullsecret-password" title="Permalink to this headline">¶</a></h4>
+<p>Password of the user you want to use to connect to your private
+registry.</p>
+<p>Examples:</p>
+<ul class="simple">
+<li><p>plaintextpassword</p></li>
+<li><p>abc123SECRETzyx098</p></li>
+</ul>
+<p>For gcr.io registries the password will be a big JSON blob for a
+Google cloud service account, it should look something like below.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">password</span><span class="p">:</span> <span class="p p-Indicator">|-</span>
+  <span class="no">{</span>
+    <span class="no">&quot;type&quot;: &quot;service_account&quot;,</span>
+    <span class="no">&quot;project_id&quot;: &quot;jupyter-se&quot;,</span>
+    <span class="no">&quot;private_key_id&quot;: &quot;f2ba09118a8d3123b3321bd9a7d6d0d9dc6fdb85&quot;,</span>
+    <span class="no">...</span>
+  <span class="no">}</span>
+</pre></div>
+</div>
+<p>Learn more in <a class="reference external" href="http://docs.heptio.com/content/private-registries/pr-gcr.html">this
+guide</a>.</p>
+</div>
+</div>
+<div class="section" id="hub-image">
+<h3>hub.image<a class="headerlink" href="#hub-image" title="Permalink to this headline">¶</a></h3>
+<p>Set custom image name / tag for the hub pod.</p>
+<p>Use this to customize which hub image is used. Note that you must use a version of
+the hub image that was bundled with this particular version of the helm-chart - using
+other images might not work.</p>
+<div class="section" id="hub-image-name">
+<h4>hub.image.name<a class="headerlink" href="#hub-image-name" title="Permalink to this headline">¶</a></h4>
+<p>Name of the image, without the tag.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># example names</span>
+<span class="n">yuvipanda</span><span class="o">/</span><span class="n">wikimedia</span><span class="o">-</span><span class="n">hub</span>
+<span class="n">gcr</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">my</span><span class="o">-</span><span class="n">project</span><span class="o">/</span><span class="n">my</span><span class="o">-</span><span class="n">hub</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="hub-image-tag">
+<h4>hub.image.tag<a class="headerlink" href="#hub-image-tag" title="Permalink to this headline">¶</a></h4>
+<p>The tag of the image to pull.</p>
+<p>This is the value after the <code class="docutils literal notranslate"><span class="pre">:</span></code> in your full image name.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># example tags</span>
+<span class="n">v1</span><span class="o">.</span><span class="mf">11.1</span>
+<span class="n">zhy270a</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="hub-image-pullsecrets">
+<h4>hub.image.pullSecrets<a class="headerlink" href="#hub-image-pullsecrets" title="Permalink to this headline">¶</a></h4>
+<p>Use an existing kubernetes secret to pull the custom image.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># example existing pull secret.</span>
+<span class="nt">singleuser</span><span class="p">:</span>
+  <span class="nt">image</span><span class="p">:</span>
+    <span class="nt">pullSecrets</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">gcr-pull</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="hub-db">
+<h3>hub.db<a class="headerlink" href="#hub-db" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="hub-db-type">
+<h4>hub.db.type<a class="headerlink" href="#hub-db-type" title="Permalink to this headline">¶</a></h4>
+<p>Type of database backend to use for the hub database.</p>
+<p>The Hub requires a persistent database to function, and this lets you specify
+where it should be stored.</p>
+<p>The various options are:</p>
+<ol>
+<li><p><strong>sqlite-pvc</strong></p>
+<p>Use an <code class="docutils literal notranslate"><span class="pre">sqlite</span></code> database kept on a persistent volume attached to the hub.</p>
+<p>By default, this disk is created by the cloud provider using
+<em>dynamic provisioning</em> configured by a <a class="reference external" href="https://kubernetes.io/docs/concepts/storage/storage-classes/">storage
+class</a>.
+You can customize how this disk is created / attached by
+setting various properties under <code class="docutils literal notranslate"><span class="pre">hub.db.pvc</span></code>.</p>
+<p>This is the default setting, and should work well for most cloud provider
+deployments.</p>
+</li>
+<li><p><strong>sqlite-memory</strong></p>
+<p>Use an in-memory <code class="docutils literal notranslate"><span class="pre">sqlite</span></code> database. This should only be used for testing,
+since the database is erased whenever the hub pod restarts - causing the hub
+to lose all memory of users who had logged in before.</p>
+<p>When using this for testing, make sure you delete all other objects that the
+hub has created (such as user pods, user PVCs, etc) every time the hub restarts.
+Otherwise you might run into errors about duplicate resources.</p>
+</li>
+<li><p><strong>mysql</strong></p>
+<p>Use an externally hosted mysql database.</p>
+<p>You have to specify an sqlalchemy connection string for the mysql database you
+want to connect to in <code class="docutils literal notranslate"><span class="pre">hub.db.url</span></code> if using this option.</p>
+<p>The general format of the connection string is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mysql</span><span class="o">+</span><span class="n">pymysql</span><span class="p">:</span><span class="o">//&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">username</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">password</span><span class="o">&gt;@&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">hostname</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">port</span><span class="o">&gt;/&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>The user specified in the connection string must have the rights to create
+tables in the database specified.</p>
+<p>Note that if you use this, you <em>must</em> also set <code class="docutils literal notranslate"><span class="pre">hub.cookieSecret</span></code>.</p>
+</li>
+<li><p><strong>postgres</strong></p>
+<p>Use an externally hosted postgres database.</p>
+<p>You have to specify an sqlalchemy connection string for the postgres database you
+want to connect to in <code class="docutils literal notranslate"><span class="pre">hub.db.url</span></code> if using this option.</p>
+<p>The general format of the connection string is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">postgres</span><span class="o">+</span><span class="n">psycopg2</span><span class="p">:</span><span class="o">//&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">username</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">password</span><span class="o">&gt;@&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">hostname</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">port</span><span class="o">&gt;/&lt;</span><span class="n">db</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>The user specified in the connection string must have the rights to create
+tables in the database specified.</p>
+<p>Note that if you use this, you <em>must</em> also set <code class="docutils literal notranslate"><span class="pre">hub.cookieSecret</span></code>.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="hub-db-pvc">
+<h4>hub.db.pvc<a class="headerlink" href="#hub-db-pvc" title="Permalink to this headline">¶</a></h4>
+<p>Customize the Persistent Volume Claim used when <code class="docutils literal notranslate"><span class="pre">hub.db.type</span></code> is <code class="docutils literal notranslate"><span class="pre">sqlite-pvc</span></code>.</p>
+<div class="section" id="hub-db-pvc-annotations">
+<h5>hub.db.pvc.annotations<a class="headerlink" href="#hub-db-pvc-annotations" title="Permalink to this headline">¶</a></h5>
+<p>Annotations to apply to the PVC containing the sqlite database.</p>
+<p>See <a class="reference external" href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/">the Kubernetes
+documentation</a>
+for more details about annotations.</p>
+</div>
+<div class="section" id="hub-db-pvc-selector">
+<h5>hub.db.pvc.selector<a class="headerlink" href="#hub-db-pvc-selector" title="Permalink to this headline">¶</a></h5>
+<p>Label selectors to set for the PVC containing the sqlite database.</p>
+<p>Useful when you are using a specific PV, and want to bind to
+that and only that.</p>
+<p>See <a class="reference external" href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims">the Kubernetes
+documentation</a>
+for more details about using a label selector for what PV to
+bind to.</p>
+</div>
+<div class="section" id="hub-db-pvc-storage">
+<h5>hub.db.pvc.storage<a class="headerlink" href="#hub-db-pvc-storage" title="Permalink to this headline">¶</a></h5>
+<p>Size of disk to request for the database disk.</p>
+</div>
+</div>
+<div class="section" id="hub-db-url">
+<h4>hub.db.url<a class="headerlink" href="#hub-db-url" title="Permalink to this headline">¶</a></h4>
+<p>Connection string when <code class="docutils literal notranslate"><span class="pre">hub.db.type</span></code> is mysql or postgres.</p>
+<p>See documentation for <code class="docutils literal notranslate"><span class="pre">hub.db.type</span></code> for more details on the format of this property.</p>
+</div>
+<div class="section" id="hub-db-password">
+<h4>hub.db.password<a class="headerlink" href="#hub-db-password" title="Permalink to this headline">¶</a></h4>
+<p>Password for the database when <code class="docutils literal notranslate"><span class="pre">hub.db.type</span></code> is mysql or postgres.</p>
+</div>
+</div>
+<div class="section" id="hub-labels">
+<h3>hub.labels<a class="headerlink" href="#hub-labels" title="Permalink to this headline">¶</a></h3>
+<p>Extra labels to add to the hub pod.</p>
+<p>See the <a class="reference external" href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">Kubernetes docs</a>
+to learn more about labels.</p>
+</div>
+<div class="section" id="hub-initcontainers">
+<h3>hub.initContainers<a class="headerlink" href="#hub-initcontainers" title="Permalink to this headline">¶</a></h3>
+<p>list of initContainers to be run with hub pod. See <a class="reference external" href="https://kubernetes.io/docs/concepts/workloads/pods/init-containers/">Kubernetes Docs</a></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
+  <span class="nt">initContainers</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">init-myservice</span>
+      <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">busybox:1.28</span>
+      <span class="nt">command</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&#39;sh&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;-c&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;command1&#39;</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">init-mydb</span>
+      <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">busybox:1.28</span>
+      <span class="nt">command</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&#39;sh&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;-c&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;command2&#39;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="hub-extraenv">
+<h3>hub.extraEnv<a class="headerlink" href="#hub-extraenv" title="Permalink to this headline">¶</a></h3>
+<p>Extra environment variables that should be set for the hub pod.</p>
+<p>Environment variables are usually used to:</p>
+<ul class="simple">
+<li><p>Pass parameters to some custom code in <code class="docutils literal notranslate"><span class="pre">hub.extraConfig</span></code>.</p></li>
+<li><p>Configure code running in the hub pod, such as an authenticator or
+spawner.</p></li>
+</ul>
+<p>String literals with <code class="docutils literal notranslate"><span class="pre">$(ENV_VAR_NAME)</span></code> will be expanded by Kubelet which
+is a part of Kubernetes.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
+  <span class="nt">extraEnv</span><span class="p">:</span>
+    <span class="c1"># basic notation (for literal values only)</span>
+    <span class="nt">MY_ENV_VARS_NAME1</span><span class="p">:</span> <span class="s">&quot;my</span><span class="nv"> </span><span class="s">env</span><span class="nv"> </span><span class="s">var</span><span class="nv"> </span><span class="s">value</span><span class="nv"> </span><span class="s">1&quot;</span>
+
+    <span class="c1"># explicit notation (the &quot;name&quot; field takes precedence)</span>
+    <span class="nt">HUB_NAMESPACE</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">HUB_NAMESPACE</span>
+      <span class="nt">valueFrom</span><span class="p">:</span>
+        <span class="nt">fieldRef</span><span class="p">:</span>
+          <span class="nt">fieldPath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">metadata.namespace</span>
+
+    <span class="c1"># implicit notation (the &quot;name&quot; field is implied)</span>
+    <span class="nt">PREFIXED_HUB_NAMESPACE</span><span class="p">:</span>
+      <span class="nt">value</span><span class="p">:</span> <span class="s">&quot;my-prefix-$(HUB_NAMESPACE)&quot;</span>
+    <span class="nt">SECRET_VALUE</span><span class="p">:</span>
+      <span class="nt">valueFrom</span><span class="p">:</span>
+        <span class="nt">secretKeyRef</span><span class="p">:</span>
+          <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my-k8s-secret</span>
+          <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">password</span>
+</pre></div>
+</div>
+<p>For more information, see the <a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core">Kubernetes EnvVar
+specification</a>.</p>
+</div>
+<div class="section" id="hub-extraconfig">
+<h3>hub.extraConfig<a class="headerlink" href="#hub-extraconfig" title="Permalink to this headline">¶</a></h3>
+<p>Arbitrary extra python based configuration that should be in <code class="docutils literal notranslate"><span class="pre">jupyterhub_config.py</span></code>.</p>
+<p>This is the <em>escape hatch</em> - if you want to configure JupyterHub to do something specific
+that is not present here as an option, you can write the raw Python to do it here.</p>
+<p>extraConfig is a <em>dict</em>, so there can be multiple configuration snippets
+under different names.
+The configuration sections are run in alphabetical order.</p>
+<p>Non-exhaustive examples of things you can do here:</p>
+<ul class="simple">
+<li><p>Subclass authenticator / spawner to do a custom thing</p></li>
+<li><p>Dynamically launch different images for different sets of images</p></li>
+<li><p>Inject an auth token from GitHub authenticator into user pod</p></li>
+<li><p>Anything else you can think of!</p></li>
+</ul>
+<p>Since this is usually a multi-line string, you want to format it using YAML’s
+<a class="reference external" href="https://yaml.org/spec/1.2/spec.html#id2795688">| operator</a>.</p>
+<p>For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
+  <span class="nt">extraConfig</span><span class="p">:</span>
+    <span class="nt">myConfig.py</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">c.JupyterHub.something = &#39;something&#39;</span>
+      <span class="no">c.Spawner.somethingelse = &#39;something else&#39;</span>
+</pre></div>
+</div>
+<p>No validation of this python is performed! If you make a mistake here, it will probably
+manifest as either the hub pod going into <code class="docutils literal notranslate"><span class="pre">Error</span></code> or <code class="docutils literal notranslate"><span class="pre">CrashLoopBackoff</span></code> states, or in
+some special cases, the hub running but… just doing very random things. Be careful!</p>
+</div>
+<div class="section" id="hub-uid">
+<h3>hub.uid<a class="headerlink" href="#hub-uid" title="Permalink to this headline">¶</a></h3>
+<p>The UID the hub process should be running as.
+Use this only if you are building your own image &amp; know that a user with this uid exists inside the hub container! Advanced feature, handle with care!
+Defaults to 1000, which is the uid of the <code class="docutils literal notranslate"><span class="pre">jovyan</span></code> user that is present in the default hub image.</p>
+</div>
+<div class="section" id="hub-fsgid">
+<h3>hub.fsGid<a class="headerlink" href="#hub-fsgid" title="Permalink to this headline">¶</a></h3>
+<p>The gid the hub process should be using when touching any volumes mounted.
+Use this only if you are building your own image &amp; know that a group with this gid exists inside the hub container! Advanced feature, handle with care!
+Defaults to 1000, which is the gid of the <code class="docutils literal notranslate"><span class="pre">jovyan</span></code> user that is present in the default hub image.</p>
+</div>
+<div class="section" id="hub-service">
+<h3>hub.service<a class="headerlink" href="#hub-service" title="Permalink to this headline">¶</a></h3>
+<p>Object to configure the service the JupyterHub will be exposed on by the Kubernetes server.</p>
+<div class="section" id="hub-service-type">
+<h4>hub.service.type<a class="headerlink" href="#hub-service-type" title="Permalink to this headline">¶</a></h4>
+<p>The Kubernetes ServiceType to be used.</p>
+<p>The default type is <code class="docutils literal notranslate"><span class="pre">ClusterIP</span></code>.
+See the <a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types">Kubernetes docs</a>
+to learn more about service types.</p>
+</div>
+<div class="section" id="hub-service-ports">
+<h4>hub.service.ports<a class="headerlink" href="#hub-service-ports" title="Permalink to this headline">¶</a></h4>
+<p>Object to configure the ports the hub service will be deployed on.</p>
+<div class="section" id="hub-service-ports-nodeport">
+<h5>hub.service.ports.nodePort<a class="headerlink" href="#hub-service-ports-nodeport" title="Permalink to this headline">¶</a></h5>
+<p>The nodePort to deploy the hub service on.</p>
+</div>
+</div>
+<div class="section" id="hub-service-annotations">
+<h4>hub.service.annotations<a class="headerlink" href="#hub-service-annotations" title="Permalink to this headline">¶</a></h4>
+<p>Kubernetes annotations to apply to the hub service.</p>
+</div>
+</div>
+<div class="section" id="hub-pdb">
+<h3>hub.pdb<a class="headerlink" href="#hub-pdb" title="Permalink to this headline">¶</a></h3>
+<p>Set the Pod Disruption Budget for the hub pod.</p>
+<p>See <a class="reference external" href="https://kubernetes.io/docs/concepts/workloads/pods/disruptions/">the Kubernetes
+documentation</a>
+for more details about disruptions.</p>
+<div class="section" id="hub-pdb-enabled">
+<h4>hub.pdb.enabled<a class="headerlink" href="#hub-pdb-enabled" title="Permalink to this headline">¶</a></h4>
+<p>Whether PodDisruptionBudget is enabled for the hub pod.</p>
+</div>
+<div class="section" id="hub-pdb-minavailable">
+<h4>hub.pdb.minAvailable<a class="headerlink" href="#hub-pdb-minavailable" title="Permalink to this headline">¶</a></h4>
+<p>Minimum number of pods to be available during the voluntary disruptions.</p>
+</div>
+</div>
+<div class="section" id="hub-existingsecret">
+<h3>hub.existingSecret<a class="headerlink" href="#hub-existingsecret" title="Permalink to this headline">¶</a></h3>
+<p>Name of the existing secret in the kubernetes cluster, typically the <code class="docutils literal notranslate"><span class="pre">hub-secret</span></code>.</p>
+<p>This secret should represent the structure as otherwise generated by this chart:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">data</span><span class="p">:</span>
+  <span class="nt">proxy.token</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt; FILL IN &gt;</span>
+  <span class="nt">values.yaml</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt; FILL IN &gt;</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">hub-secret</span>
+</pre></div>
+</div>
+<p>NOTE: if you choose to manage the secret yourself, you are in charge of ensuring the
+secret having the proper contents.</p>
+</div>
+</div>
+<div class="section" id="proxy">
+<h2>proxy<a class="headerlink" href="#proxy" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="proxy-chp">
+<h3>proxy.chp<a class="headerlink" href="#proxy-chp" title="Permalink to this headline">¶</a></h3>
+<p>Configure the configurable-http-proxy (chp) pod managed by jupyterhub to route traffic
+both to itself and to user pods.</p>
+<div class="section" id="proxy-chp-extraenv">
+<h4>proxy.chp.extraEnv<a class="headerlink" href="#proxy-chp-extraenv" title="Permalink to this headline">¶</a></h4>
+<p>Extra environment variables that should be set for the chp pod.</p>
+<p>Environment variables are usually used here to:</p>
+<ul class="simple">
+<li><p>override HUB_SERVICE_PORT or HUB_SERVICE_HOST default values</p></li>
+<li><p>set CONFIGPROXY_SSL_KEY_PASSPHRASE for setting passphrase of SSL keys</p></li>
+</ul>
+<p>String literals with <code class="docutils literal notranslate"><span class="pre">$(ENV_VAR_NAME)</span></code> will be expanded by Kubelet which
+is a part of Kubernetes.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">proxy</span><span class="p">:</span>
+  <span class="nt">chp</span><span class="p">:</span>
+    <span class="nt">extraEnv</span><span class="p">:</span>
+      <span class="c1"># basic notation (for literal values only)</span>
+      <span class="nt">MY_ENV_VARS_NAME1</span><span class="p">:</span> <span class="s">&quot;my</span><span class="nv"> </span><span class="s">env</span><span class="nv"> </span><span class="s">var</span><span class="nv"> </span><span class="s">value</span><span class="nv"> </span><span class="s">1&quot;</span>
+
+      <span class="c1"># explicit notation (the &quot;name&quot; field takes precedence)</span>
+      <span class="nt">CHP_NAMESPACE</span><span class="p">:</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">CHP_NAMESPACE</span>
+        <span class="nt">valueFrom</span><span class="p">:</span>
+          <span class="nt">fieldRef</span><span class="p">:</span>
+            <span class="nt">fieldPath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">metadata.namespace</span>
+
+      <span class="c1"># implicit notation (the &quot;name&quot; field is implied)</span>
+      <span class="nt">PREFIXED_CHP_NAMESPACE</span><span class="p">:</span>
+        <span class="nt">value</span><span class="p">:</span> <span class="s">&quot;my-prefix-$(CHP_NAMESPACE)&quot;</span>
+      <span class="nt">SECRET_VALUE</span><span class="p">:</span>
+        <span class="nt">valueFrom</span><span class="p">:</span>
+          <span class="nt">secretKeyRef</span><span class="p">:</span>
+            <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my-k8s-secret</span>
+            <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">password</span>
+</pre></div>
+</div>
+<p>For more information, see the <a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core">Kubernetes EnvVar
+specification</a>.</p>
+</div>
+</div>
+<div class="section" id="proxy-secrettoken">
+<h3>proxy.secretToken<a class="headerlink" href="#proxy-secrettoken" title="Permalink to this headline">¶</a></h3>
+<p>A 32-byte cryptographically secure randomly generated string used to secure communications
+between the hub and the configurable-http-proxy.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># to generate a value, run</span>
+openssl rand -hex <span class="m">32</span>
+</pre></div>
+</div>
+<p>Changing this value will cause the proxy and hub pods to restart. It is good security
+practice to rotate these values over time. If this secret leaks, <em>immediately</em> change
+it to something else, or user data can be compromised</p>
+</div>
+<div class="section" id="proxy-service">
+<h3>proxy.service<a class="headerlink" href="#proxy-service" title="Permalink to this headline">¶</a></h3>
+<p>Object to configure the service the JupyterHub’s proxy will be exposed on by the Kubernetes server.</p>
+<div class="section" id="proxy-service-type">
+<h4>proxy.service.type<a class="headerlink" href="#proxy-service-type" title="Permalink to this headline">¶</a></h4>
+<p>Default <code class="docutils literal notranslate"><span class="pre">LoadBalancer</span></code>. See <code class="docutils literal notranslate"><span class="pre">hub.service.type</span></code> for supported values.</p>
+</div>
+<div class="section" id="proxy-service-labels">
+<h4>proxy.service.labels<a class="headerlink" href="#proxy-service-labels" title="Permalink to this headline">¶</a></h4>
+<p>Extra labels to add to the proxy service.</p>
+<p>See the <a class="reference external" href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">Kubernetes docs</a>
+to learn more about labels.</p>
+</div>
+<div class="section" id="proxy-service-annotations">
+<h4>proxy.service.annotations<a class="headerlink" href="#proxy-service-annotations" title="Permalink to this headline">¶</a></h4>
+<p>Annotations to apply to the service that is exposing the proxy.</p>
+<p>See <a class="reference external" href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/">the Kubernetes
+documentation</a>
+for more details about annotations.</p>
+</div>
+<div class="section" id="proxy-service-nodeports">
+<h4>proxy.service.nodePorts<a class="headerlink" href="#proxy-service-nodeports" title="Permalink to this headline">¶</a></h4>
+<p>Object to set NodePorts to expose the service on for http and https.</p>
+<p>See <a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/service/#nodeport">the Kubernetes
+documentation</a>
+for more details about NodePorts.</p>
+<div class="section" id="proxy-service-nodeports-http">
+<h5>proxy.service.nodePorts.http<a class="headerlink" href="#proxy-service-nodeports-http" title="Permalink to this headline">¶</a></h5>
+<p>The HTTP port the proxy-public service should be exposed on.</p>
+</div>
+<div class="section" id="proxy-service-nodeports-https">
+<h5>proxy.service.nodePorts.https<a class="headerlink" href="#proxy-service-nodeports-https" title="Permalink to this headline">¶</a></h5>
+<p>The HTTPS port the proxy-public service should be exposed on.</p>
+</div>
+</div>
+<div class="section" id="proxy-service-loadbalancerip">
+<h4>proxy.service.loadBalancerIP<a class="headerlink" href="#proxy-service-loadbalancerip" title="Permalink to this headline">¶</a></h4>
+<p>The public IP address the proxy-public Kubernetes service should
+be exposed on. This entry will end up at the configurable proxy
+server that JupyterHub manages, which will direct traffic to user
+pods at the <code class="docutils literal notranslate"><span class="pre">/user</span></code> path and the hub pod at the <code class="docutils literal notranslate"><span class="pre">/hub</span></code> path.</p>
+<p>Set this if you want to use a fixed external IP address instead of
+a dynamically acquired one. This is relevant if you have a domain
+name that you want to point to a specific IP and want to ensure it
+doesn’t change.</p>
+</div>
+<div class="section" id="proxy-service-loadbalancersourceranges">
+<h4>proxy.service.loadBalancerSourceRanges<a class="headerlink" href="#proxy-service-loadbalancersourceranges" title="Permalink to this headline">¶</a></h4>
+<p>A list of IP CIDR ranges that are allowed to access the load balancer service.
+Defaults to allowing everyone to access it.</p>
+</div>
+</div>
+<div class="section" id="proxy-https">
+<h3>proxy.https<a class="headerlink" href="#proxy-https" title="Permalink to this headline">¶</a></h3>
+<p>Object for customizing the settings for HTTPS used by the JupyterHub’s proxy.
+For more information on configuring HTTPS for your JupyterHub, see the <a class="reference external" href="/administrator/security.html#https">HTTPS section in our security guide</a></p>
+<div class="section" id="proxy-https-enabled">
+<h4>proxy.https.enabled<a class="headerlink" href="#proxy-https-enabled" title="Permalink to this headline">¶</a></h4>
+<p>Indicator to set whether HTTPS should be enabled or not on the proxy. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code> if the https object is provided.</p>
+</div>
+<div class="section" id="proxy-https-type">
+<h4>proxy.https.type<a class="headerlink" href="#proxy-https-type" title="Permalink to this headline">¶</a></h4>
+<p>The type of HTTPS encryption that is used.
+Decides on which ports and network policies are used for communication via HTTPS. Setting this to <code class="docutils literal notranslate"><span class="pre">secret</span></code> sets the type to manual HTTPS with a secret that has to be provided in the <code class="docutils literal notranslate"><span class="pre">https.secret</span></code> object.
+Defaults to <code class="docutils literal notranslate"><span class="pre">letsencrypt</span></code>.</p>
+</div>
+<div class="section" id="proxy-https-letsencrypt">
+<h4>proxy.https.letsencrypt<a class="headerlink" href="#proxy-https-letsencrypt" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="proxy-https-letsencrypt-contactemail">
+<h5>proxy.https.letsencrypt.contactEmail<a class="headerlink" href="#proxy-https-letsencrypt-contactemail" title="Permalink to this headline">¶</a></h5>
+<p>The contact email to be used for automatically provisioned HTTPS certificates by Let’s Encrypt. For more information see <a class="reference external" href="/administrator/security.html#set-up-automatic-https">Set up automatic HTTPS</a>.
+Required for automatic HTTPS.</p>
+</div>
+</div>
+<div class="section" id="proxy-https-manual">
+<h4>proxy.https.manual<a class="headerlink" href="#proxy-https-manual" title="Permalink to this headline">¶</a></h4>
+<p>Object for providing own certificates for manual HTTPS configuration. To be provided when setting <code class="docutils literal notranslate"><span class="pre">https.type</span></code> to <code class="docutils literal notranslate"><span class="pre">manual</span></code>.
+See <a class="reference external" href="/administrator/security.html#set-up-manual-https">Set up manual HTTPS</a></p>
+<div class="section" id="proxy-https-manual-key">
+<h5>proxy.https.manual.key<a class="headerlink" href="#proxy-https-manual-key" title="Permalink to this headline">¶</a></h5>
+<p>The RSA private key to be used for HTTPS.
+To be provided in the form of</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">key</span><span class="p">:</span> <span class="o">|</span>
+  <span class="o">-----</span><span class="n">BEGIN</span> <span class="n">RSA</span> <span class="n">PRIVATE</span> <span class="n">KEY</span><span class="o">-----</span>
+  <span class="o">...</span>
+  <span class="o">-----</span><span class="n">END</span> <span class="n">RSA</span> <span class="n">PRIVATE</span> <span class="n">KEY</span><span class="o">-----</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="proxy-https-manual-cert">
+<h5>proxy.https.manual.cert<a class="headerlink" href="#proxy-https-manual-cert" title="Permalink to this headline">¶</a></h5>
+<p>The certificate to be used for HTTPS.
+To be provided in the form of</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cert</span><span class="p">:</span> <span class="o">|</span>
+  <span class="o">-----</span><span class="n">BEGIN</span> <span class="n">CERTIFICATE</span><span class="o">-----</span>
+  <span class="o">...</span>
+  <span class="o">-----</span><span class="n">END</span> <span class="n">CERTIFICATE</span><span class="o">-----</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="proxy-https-secret">
+<h4>proxy.https.secret<a class="headerlink" href="#proxy-https-secret" title="Permalink to this headline">¶</a></h4>
+<p>Secret to be provided when setting <code class="docutils literal notranslate"><span class="pre">https.type</span></code> to <code class="docutils literal notranslate"><span class="pre">secret</span></code>.</p>
+<div class="section" id="proxy-https-secret-name">
+<h5>proxy.https.secret.name<a class="headerlink" href="#proxy-https-secret-name" title="Permalink to this headline">¶</a></h5>
+<p>Name of the secret</p>
+</div>
+<div class="section" id="proxy-https-secret-key">
+<h5>proxy.https.secret.key<a class="headerlink" href="#proxy-https-secret-key" title="Permalink to this headline">¶</a></h5>
+<p>Path to the private key to be used for HTTPS.
+Example: <code class="docutils literal notranslate"><span class="pre">'tls.key'</span></code></p>
+</div>
+<div class="section" id="proxy-https-secret-crt">
+<h5>proxy.https.secret.crt<a class="headerlink" href="#proxy-https-secret-crt" title="Permalink to this headline">¶</a></h5>
+<p>Path to the certificate to be used for HTTPS.
+Example: <code class="docutils literal notranslate"><span class="pre">'tls.crt'</span></code></p>
+</div>
+</div>
+<div class="section" id="proxy-https-hosts">
+<h4>proxy.https.hosts<a class="headerlink" href="#proxy-https-hosts" title="Permalink to this headline">¶</a></h4>
+<p>You domain in list form.
+Required for automatic HTTPS. See <a class="reference external" href="/administrator/security.html#set-up-automatic-https">Set up automatic HTTPS</a>.
+To be provided like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hosts</span><span class="p">:</span>
+  <span class="o">-</span> <span class="o">&lt;</span><span class="n">your</span><span class="o">-</span><span class="n">domain</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="proxy-pdb">
+<h3>proxy.pdb<a class="headerlink" href="#proxy-pdb" title="Permalink to this headline">¶</a></h3>
+<p>Set the Pod Disruption Budget for the proxy pod.</p>
+<p>See <a class="reference external" href="https://kubernetes.io/docs/concepts/workloads/pods/disruptions/">the Kubernetes
+documentation</a>
+for more details about disruptions.</p>
+<div class="section" id="proxy-pdb-enabled">
+<h4>proxy.pdb.enabled<a class="headerlink" href="#proxy-pdb-enabled" title="Permalink to this headline">¶</a></h4>
+<p>Whether PodDisruptionBudget is enabled for the proxy pod.</p>
+</div>
+<div class="section" id="proxy-pdb-minavailable">
+<h4>proxy.pdb.minAvailable<a class="headerlink" href="#proxy-pdb-minavailable" title="Permalink to this headline">¶</a></h4>
+<p>Minimum number of pods to be available during the voluntary disruptions.</p>
+</div>
+</div>
+<div class="section" id="proxy-traefik">
+<h3>proxy.traefik<a class="headerlink" href="#proxy-traefik" title="Permalink to this headline">¶</a></h3>
+<p>Configure the traefik proxy used to terminate TLS when ‘autohttps’ is enabled</p>
+<div class="section" id="proxy-traefik-extraenv">
+<h4>proxy.traefik.extraEnv<a class="headerlink" href="#proxy-traefik-extraenv" title="Permalink to this headline">¶</a></h4>
+<p>Extra environment variables that should be set for the traefik pod.</p>
+<p>Environment Variables here may be used to configure traefik.</p>
+<p>String literals with <code class="docutils literal notranslate"><span class="pre">$(ENV_VAR_NAME)</span></code> will be expanded by Kubelet which
+is a part of Kubernetes.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">proxy</span><span class="p">:</span>
+  <span class="nt">traefik</span><span class="p">:</span>
+    <span class="nt">extraEnv</span><span class="p">:</span>
+      <span class="c1"># basic notation (for literal values only)</span>
+      <span class="nt">MY_ENV_VARS_NAME1</span><span class="p">:</span> <span class="s">&quot;my</span><span class="nv"> </span><span class="s">env</span><span class="nv"> </span><span class="s">var</span><span class="nv"> </span><span class="s">value</span><span class="nv"> </span><span class="s">1&quot;</span>
+
+      <span class="c1"># explicit notation (the &quot;name&quot; field takes precedence)</span>
+      <span class="nt">TRAEFIK_NAMESPACE</span><span class="p">:</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">TRAEFIK_NAMESPACE</span>
+        <span class="nt">valueFrom</span><span class="p">:</span>
+          <span class="nt">fieldRef</span><span class="p">:</span>
+            <span class="nt">fieldPath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">metadata.namespace</span>
+
+      <span class="c1"># implicit notation (the &quot;name&quot; field is implied)</span>
+      <span class="nt">PREFIXED_TRAEFIK_NAMESPACE</span><span class="p">:</span>
+        <span class="nt">value</span><span class="p">:</span> <span class="s">&quot;my-prefix-$(TRAEFIK_NAMESPACE)&quot;</span>
+      <span class="nt">SECRET_VALUE</span><span class="p">:</span>
+        <span class="nt">valueFrom</span><span class="p">:</span>
+          <span class="nt">secretKeyRef</span><span class="p">:</span>
+            <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my-k8s-secret</span>
+            <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">password</span>
+</pre></div>
+</div>
+<p>For more information, see the <a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core">Kubernetes EnvVar
+specification</a>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="auth">
+<h2>auth<a class="headerlink" href="#auth" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="auth-state">
+<h3>auth.state<a class="headerlink" href="#auth-state" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="auth-state-enabled">
+<h4>auth.state.enabled<a class="headerlink" href="#auth-state-enabled" title="Permalink to this headline">¶</a></h4>
+<p>Enable persisting auth_state (if available).
+See: <a class="reference external" href="http://jupyterhub.readthedocs.io/en/latest/api/auth.html">the documentation on authenticators</a></p>
+</div>
+<div class="section" id="auth-state-cryptokey">
+<h4>auth.state.cryptoKey<a class="headerlink" href="#auth-state-cryptokey" title="Permalink to this headline">¶</a></h4>
+<p>auth_state will be encrypted and stored in the Hub’s database. This can include things like authentication tokens, etc. to be passed to Spawners as environment variables.
+Encrypting auth_state requires the cryptography package.
+It must contain one (or more, separated by ;) 32-byte encryption keys. These can be either base64 or hex-encoded.
+The JUPYTERHUB_CRYPT_KEY environment variable for the hub pod is set using this entry.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># to generate a value, run</span>
+openssl rand -hex <span class="m">32</span>
+</pre></div>
+</div>
+<p>If encryption is unavailable, auth_state cannot be persisted.</p>
+</div>
+</div>
+</div>
+<div class="section" id="singleuser">
+<h2>singleuser<a class="headerlink" href="#singleuser" title="Permalink to this headline">¶</a></h2>
+<p>Options for customizing the environment that is provided to the users after they log in.</p>
+<div class="section" id="singleuser-podnametemplate">
+<h3>singleuser.podNameTemplate<a class="headerlink" href="#singleuser-podnametemplate" title="Permalink to this headline">¶</a></h3>
+<p>Template for the pod name of each user, such as <code class="docutils literal notranslate"><span class="pre">jupyter-{username}{servername}</span></code>.</p>
+</div>
+<div class="section" id="singleuser-cpu">
+<h3>singleuser.cpu<a class="headerlink" href="#singleuser-cpu" title="Permalink to this headline">¶</a></h3>
+<p>Set CPU limits &amp; guarantees that are enforced for each user.
+See: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/</p>
+<div class="section" id="singleuser-cpu-limit">
+<h4>singleuser.cpu.limit<a class="headerlink" href="#singleuser-cpu-limit" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="singleuser-cpu-guarantee">
+<h4>singleuser.cpu.guarantee<a class="headerlink" href="#singleuser-cpu-guarantee" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+<div class="section" id="singleuser-memory">
+<h3>singleuser.memory<a class="headerlink" href="#singleuser-memory" title="Permalink to this headline">¶</a></h3>
+<p>Set Memory limits &amp; guarantees that are enforced for each user.</p>
+<p>See the <a class="reference external" href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">Kubernetes docs</a>
+for more info.</p>
+<div class="section" id="singleuser-memory-limit">
+<h4>singleuser.memory.limit<a class="headerlink" href="#singleuser-memory-limit" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="singleuser-memory-guarantee">
+<h4>singleuser.memory.guarantee<a class="headerlink" href="#singleuser-memory-guarantee" title="Permalink to this headline">¶</a></h4>
+<p>Note that this field is referred to as <em>requests</em> by the Kubernetes API.</p>
+</div>
+</div>
+<div class="section" id="singleuser-imagepullsecret">
+<h3>singleuser.imagePullSecret<a class="headerlink" href="#singleuser-imagepullsecret" title="Permalink to this headline">¶</a></h3>
+<p>Creates an image pull secret for you and makes the user pods utilize
+it, allowing them to pull images from private image registries.</p>
+<p>Using this configuration option automates the following steps that
+normally is required to pull from private image registries.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># you won&#39;t need to run this manually...</span>
+kubectl create secret docker-registry singleuser-image-credentials <span class="se">\</span>
+  --docker-server<span class="o">=</span>&lt;REGISTRY&gt; <span class="se">\</span>
+  --docker-username<span class="o">=</span>&lt;USERNAME&gt; <span class="se">\</span>
+  --docker-email<span class="o">=</span>&lt;EMAIL&gt; <span class="se">\</span>
+  --docker-password<span class="o">=</span>&lt;PASSWORD&gt;
+</pre></div>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># you won&#39;t need to specify this manually...</span>
+<span class="nt">spec</span><span class="p">:</span>
+  <span class="nt">imagePullSecrets</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">singleuser-image-credentials</span>
+</pre></div>
+</div>
+<p>To learn the username and password fields to access a gcr.io registry
+from a Kubernetes cluster not associated with the same google cloud
+credentials, look into <a class="reference external" href="http://docs.heptio.com/content/private-registries/pr-gcr.html">this
+guide</a>
+and read the notes about the password.</p>
+<div class="section" id="singleuser-imagepullsecret-enabled">
+<h4>singleuser.imagePullSecret.enabled<a class="headerlink" href="#singleuser-imagepullsecret-enabled" title="Permalink to this headline">¶</a></h4>
+<p>Enable the creation of a Kubernetes Secret containing credentials
+to access a image registry. By enabling this, user pods and image
+puller pods will also be configured to use these credentials when
+they pull their container images.</p>
+</div>
+<div class="section" id="singleuser-imagepullsecret-registry">
+<h4>singleuser.imagePullSecret.registry<a class="headerlink" href="#singleuser-imagepullsecret-registry" title="Permalink to this headline">¶</a></h4>
+<p>Name of the private registry you want to create a credential set
+for. It will default to Docker Hub’s image registry.</p>
+<p>Examples:</p>
+<ul class="simple">
+<li><p>https://index.docker.io/v1/</p></li>
+<li><p>quay.io</p></li>
+<li><p>eu.gcr.io</p></li>
+<li><p>alexmorreale.privatereg.net</p></li>
+</ul>
+</div>
+<div class="section" id="singleuser-imagepullsecret-username">
+<h4>singleuser.imagePullSecret.username<a class="headerlink" href="#singleuser-imagepullsecret-username" title="Permalink to this headline">¶</a></h4>
+<p>Name of the user you want to use to connect to your private
+registry. For external gcr.io, you will use the <code class="docutils literal notranslate"><span class="pre">_json_key</span></code>.</p>
+<p>Examples:</p>
+<ul class="simple">
+<li><p>alexmorreale</p></li>
+<li><p>alex&#64;pfc.com</p></li>
+<li><p>_json_key</p></li>
+</ul>
+</div>
+<div class="section" id="singleuser-imagepullsecret-password">
+<h4>singleuser.imagePullSecret.password<a class="headerlink" href="#singleuser-imagepullsecret-password" title="Permalink to this headline">¶</a></h4>
+<p>Password of the user you want to use to connect to your private
+registry.</p>
+<p>Examples:</p>
+<ul class="simple">
+<li><p>plaintextpassword</p></li>
+<li><p>abc123SECRETzyx098</p></li>
+</ul>
+<p>For gcr.io registries the password will be a big JSON blob for a
+Google cloud service account, it should look something like below.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">password</span><span class="p">:</span> <span class="p p-Indicator">|-</span>
+  <span class="no">{</span>
+    <span class="no">&quot;type&quot;: &quot;service_account&quot;,</span>
+    <span class="no">&quot;project_id&quot;: &quot;jupyter-se&quot;,</span>
+    <span class="no">&quot;private_key_id&quot;: &quot;f2ba09118a8d3123b3321bd9a7d6d0d9dc6fdb85&quot;,</span>
+    <span class="no">...</span>
+  <span class="no">}</span>
+</pre></div>
+</div>
+<p>Learn more in <a class="reference external" href="http://docs.heptio.com/content/private-registries/pr-gcr.html">this
+guide</a>.</p>
+</div>
+</div>
+<div class="section" id="singleuser-image">
+<h3>singleuser.image<a class="headerlink" href="#singleuser-image" title="Permalink to this headline">¶</a></h3>
+<p>Set custom image name / tag used for spawned users.</p>
+<p>This image is used to launch the pod for each user.</p>
+<div class="section" id="singleuser-image-name">
+<h4>singleuser.image.name<a class="headerlink" href="#singleuser-image-name" title="Permalink to this headline">¶</a></h4>
+<p>Name of the image, without the tag.</p>
+<p>Examples:</p>
+<ul class="simple">
+<li><p>yuvipanda/wikimedia-hub-user</p></li>
+<li><p>gcr.io/my-project/my-user-image</p></li>
+</ul>
+</div>
+<div class="section" id="singleuser-image-tag">
+<h4>singleuser.image.tag<a class="headerlink" href="#singleuser-image-tag" title="Permalink to this headline">¶</a></h4>
+<p>The tag of the image to use.</p>
+<p>This is the value after the <code class="docutils literal notranslate"><span class="pre">:</span></code> in your full image name.</p>
+</div>
+<div class="section" id="singleuser-image-pullpolicy">
+<h4>singleuser.image.pullPolicy<a class="headerlink" href="#singleuser-image-pullpolicy" title="Permalink to this headline">¶</a></h4>
+<p>Set the imagePullPolicy on the singleuser pods that are spun up by the hub.</p>
+<p>See the <a class="reference external" href="https://kubernetes.io/docs/concepts/containers/images/#updating-images">Kubernetes docs</a>
+for more info.</p>
+</div>
+<div class="section" id="singleuser-image-pullsecrets">
+<h4>singleuser.image.pullSecrets<a class="headerlink" href="#singleuser-image-pullsecrets" title="Permalink to this headline">¶</a></h4>
+<p>Use an existing kubernetes secret to pull the custom image.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># example existing pull secret</span>
+<span class="nt">singleuser</span><span class="p">:</span>
+  <span class="nt">image</span><span class="p">:</span>
+    <span class="nt">pullSecrets</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">gcr-pull</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="singleuser-initcontainers">
+<h3>singleuser.initContainers<a class="headerlink" href="#singleuser-initcontainers" title="Permalink to this headline">¶</a></h3>
+<p>list of initContainers to be run every singleuser pod. See <a class="reference external" href="https://kubernetes.io/docs/concepts/workloads/pods/init-containers/">Kubernetes Docs</a></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">singleuser</span><span class="p">:</span>
+  <span class="nt">initContainers</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">init-myservice</span>
+      <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">busybox:1.28</span>
+      <span class="nt">command</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&#39;sh&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;-c&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;command1&#39;</span><span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">init-mydb</span>
+      <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">busybox:1.28</span>
+      <span class="nt">command</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&#39;sh&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;-c&#39;</span><span class="p p-Indicator">,</span> <span class="s">&#39;command2&#39;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="singleuser-profilelist">
+<h3>singleuser.profileList<a class="headerlink" href="#singleuser-profilelist" title="Permalink to this headline">¶</a></h3>
+<p>For more information about the profile list, see <a class="reference external" href="https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner">KubeSpawner’s
+documentation</a>
+as this is simply a passthrough to that configuration.</p>
+<p><strong>NOTE</strong>: The image-pullers are aware of the overrides of images in
+<code class="docutils literal notranslate"><span class="pre">singleuser.profileList</span></code> but they won’t be if you configure it in
+JupyterHub’s configuration of ‘<code class="docutils literal notranslate"><span class="pre">c.KubeSpawner.profile_list</span></code>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">singleuser</span><span class="p">:</span>
+  <span class="nt">profileList</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">display_name</span><span class="p">:</span> <span class="s">&quot;Default:</span><span class="nv"> </span><span class="s">Shared,</span><span class="nv"> </span><span class="s">8</span><span class="nv"> </span><span class="s">CPU</span><span class="nv"> </span><span class="s">cores&quot;</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="s">&quot;Your</span><span class="nv"> </span><span class="s">code</span><span class="nv"> </span><span class="s">will</span><span class="nv"> </span><span class="s">run</span><span class="nv"> </span><span class="s">on</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">shared</span><span class="nv"> </span><span class="s">machine</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">CPU</span><span class="nv"> </span><span class="s">only.&quot;</span>
+      <span class="nt">default</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+    <span class="p p-Indicator">-</span> <span class="nt">display_name</span><span class="p">:</span> <span class="s">&quot;Personal,</span><span class="nv"> </span><span class="s">4</span><span class="nv"> </span><span class="s">CPU</span><span class="nv"> </span><span class="s">cores</span><span class="nv"> </span><span class="s">&amp;</span><span class="nv"> </span><span class="s">26GB</span><span class="nv"> </span><span class="s">RAM,</span><span class="nv"> </span><span class="s">1</span><span class="nv"> </span><span class="s">NVIDIA</span><span class="nv"> </span><span class="s">Tesla</span><span class="nv"> </span><span class="s">K80</span><span class="nv"> </span><span class="s">GPU&quot;</span>
+      <span class="nt">description</span><span class="p">:</span> <span class="s">&quot;Your</span><span class="nv"> </span><span class="s">code</span><span class="nv"> </span><span class="s">will</span><span class="nv"> </span><span class="s">run</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">personal</span><span class="nv"> </span><span class="s">machine</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">GPU.&quot;</span>
+      <span class="nt">kubespawner_override</span><span class="p">:</span>
+        <span class="nt">extra_resource_limits</span><span class="p">:</span>
+          <span class="nt">nvidia.com/gpu</span><span class="p">:</span> <span class="s">&quot;1&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="singleuser-schedulerstrategy">
+<h3>singleuser.schedulerStrategy<a class="headerlink" href="#singleuser-schedulerstrategy" title="Permalink to this headline">¶</a></h3>
+<p>Deprecated and no longer does anything. Use the user-scheduler instead
+in order to accomplish a good packing of the user pods.</p>
+</div>
+<div class="section" id="singleuser-extraenv">
+<h3>singleuser.extraEnv<a class="headerlink" href="#singleuser-extraenv" title="Permalink to this headline">¶</a></h3>
+<p>Extra environment variables that should be set for the user pods.</p>
+<p>String literals with <code class="docutils literal notranslate"><span class="pre">$(ENV_VAR_NAME)</span></code> will be expanded by Kubelet which
+is a part of Kubernetes. Note that the user pods will already have
+access to a set of environment variables that you can use, like
+<code class="docutils literal notranslate"><span class="pre">JUPYTERHUB_USER</span></code> and <code class="docutils literal notranslate"><span class="pre">JUPYTERHUB_HOST</span></code>. For more information about these
+inspect <a class="reference external" href="https://github.com/jupyterhub/jupyterhub/blob/cc8e7806530466dce8968567d1bbd2b39a7afa26/jupyterhub/spawner.py#L763">this source
+code</a>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">singleuser</span><span class="p">:</span>
+  <span class="nt">extraEnv</span><span class="p">:</span>
+    <span class="c1"># basic notation (for literal values only)</span>
+    <span class="nt">MY_ENV_VARS_NAME1</span><span class="p">:</span> <span class="s">&quot;my</span><span class="nv"> </span><span class="s">env</span><span class="nv"> </span><span class="s">var</span><span class="nv"> </span><span class="s">value</span><span class="nv"> </span><span class="s">1&quot;</span>
+
+    <span class="c1"># explicit notation (the &quot;name&quot; field takes precedence)</span>
+    <span class="nt">USER_NAMESPACE</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">USER_NAMESPACE</span>
+      <span class="nt">valueFrom</span><span class="p">:</span>
+        <span class="nt">fieldRef</span><span class="p">:</span>
+          <span class="nt">fieldPath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">metadata.namespace</span>
+
+    <span class="c1"># implicit notation (the &quot;name&quot; field is implied)</span>
+    <span class="nt">PREFIXED_USER_NAMESPACE</span><span class="p">:</span>
+      <span class="nt">value</span><span class="p">:</span> <span class="s">&quot;my-prefix-$(USER_NAMESPACE)&quot;</span>
+    <span class="nt">SECRET_VALUE</span><span class="p">:</span>
+      <span class="nt">valueFrom</span><span class="p">:</span>
+        <span class="nt">secretKeyRef</span><span class="p">:</span>
+          <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">my-k8s-secret</span>
+          <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">password</span>
+</pre></div>
+</div>
+<p>For more information, see the <a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core">Kubernetes EnvVar
+specification</a>.</p>
+</div>
+<div class="section" id="singleuser-extratolerations">
+<h3>singleuser.extraTolerations<a class="headerlink" href="#singleuser-extratolerations" title="Permalink to this headline">¶</a></h3>
+<p>Tolerations allow a pod to be scheduled on nodes with taints. These
+are additional tolerations other than the user pods and core pods
+default ones <code class="docutils literal notranslate"><span class="pre">hub.jupyter.org/dedicated=user:NoSchedule</span></code> or
+<code class="docutils literal notranslate"><span class="pre">hub.jupyter.org/dedicated=core:NoSchedule</span></code>. Note that a duplicate set
+of tolerations exist where <code class="docutils literal notranslate"><span class="pre">/</span></code> is replaced with <code class="docutils literal notranslate"><span class="pre">_</span></code> as the Google
+cloud does not support the character <code class="docutils literal notranslate"><span class="pre">/</span></code> yet in the toleration.</p>
+<p>See the <a class="reference external" href="https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/">Kubernetes docs</a>
+for more info.</p>
+<p>Pass this field an array of
+<a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#toleration-v1-core"><code class="docutils literal notranslate"><span class="pre">Toleration</span></code></a>
+objects.</p>
+</div>
+<div class="section" id="singleuser-extranodeaffinity">
+<h3>singleuser.extraNodeAffinity<a class="headerlink" href="#singleuser-extranodeaffinity" title="Permalink to this headline">¶</a></h3>
+<p>Affinities describe where pods prefer or require to be scheduled, they
+may prefer or require a node where they are to be scheduled to have a
+certain label (node affinity). They may also require to be scheduled
+in proximity or with a lack of proximity to another pod (pod affinity
+and anti pod affinity).</p>
+<p>See the <a class="reference external" href="https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/">Kubernetes
+docs</a>
+for more info.</p>
+<div class="section" id="singleuser-extranodeaffinity-required">
+<h4>singleuser.extraNodeAffinity.required<a class="headerlink" href="#singleuser-extranodeaffinity-required" title="Permalink to this headline">¶</a></h4>
+<p>Pass this field an array of
+<a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#nodeselectorterm-v1-core"><code class="docutils literal notranslate"><span class="pre">NodeSelectorTerm</span></code></a>
+objects.</p>
+</div>
+<div class="section" id="singleuser-extranodeaffinity-preferred">
+<h4>singleuser.extraNodeAffinity.preferred<a class="headerlink" href="#singleuser-extranodeaffinity-preferred" title="Permalink to this headline">¶</a></h4>
+<p>Pass this field an array of
+<a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#preferredschedulingterm-v1-core"><code class="docutils literal notranslate"><span class="pre">PreferredSchedulingTerm</span></code></a>
+objects.</p>
+</div>
+</div>
+<div class="section" id="singleuser-extrapodaffinity">
+<h3>singleuser.extraPodAffinity<a class="headerlink" href="#singleuser-extrapodaffinity" title="Permalink to this headline">¶</a></h3>
+<p>See the description of <code class="docutils literal notranslate"><span class="pre">singleuser.extraNodeAffinity</span></code>.</p>
+<div class="section" id="singleuser-extrapodaffinity-required">
+<h4>singleuser.extraPodAffinity.required<a class="headerlink" href="#singleuser-extrapodaffinity-required" title="Permalink to this headline">¶</a></h4>
+<p>Pass this field an array of
+<a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#podaffinityterm-v1-core"><code class="docutils literal notranslate"><span class="pre">PodAffinityTerm</span></code></a>
+objects.</p>
+</div>
+<div class="section" id="singleuser-extrapodaffinity-preferred">
+<h4>singleuser.extraPodAffinity.preferred<a class="headerlink" href="#singleuser-extrapodaffinity-preferred" title="Permalink to this headline">¶</a></h4>
+<p>Pass this field an array of
+<a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#weightedpodaffinityterm-v1-core"><code class="docutils literal notranslate"><span class="pre">WeightedPodAffinityTerm</span></code></a>
+objects.</p>
+</div>
+</div>
+<div class="section" id="singleuser-extrapodantiaffinity">
+<h3>singleuser.extraPodAntiAffinity<a class="headerlink" href="#singleuser-extrapodantiaffinity" title="Permalink to this headline">¶</a></h3>
+<p>See the description of <code class="docutils literal notranslate"><span class="pre">singleuser.extraNodeAffinity</span></code>.</p>
+<div class="section" id="singleuser-extrapodantiaffinity-required">
+<h4>singleuser.extraPodAntiAffinity.required<a class="headerlink" href="#singleuser-extrapodantiaffinity-required" title="Permalink to this headline">¶</a></h4>
+<p>Pass this field an array of
+<a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#podaffinityterm-v1-core"><code class="docutils literal notranslate"><span class="pre">PodAffinityTerm</span></code></a>
+objects.</p>
+</div>
+<div class="section" id="singleuser-extrapodantiaffinity-preferred">
+<h4>singleuser.extraPodAntiAffinity.preferred<a class="headerlink" href="#singleuser-extrapodantiaffinity-preferred" title="Permalink to this headline">¶</a></h4>
+<p>Pass this field an array of
+<a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#weightedpodaffinityterm-v1-core"><code class="docutils literal notranslate"><span class="pre">WeightedPodAffinityTerm</span></code></a>
+objects.</p>
+</div>
+</div>
+</div>
+<div class="section" id="scheduling">
+<h2>scheduling<a class="headerlink" href="#scheduling" title="Permalink to this headline">¶</a></h2>
+<p>Objects for customizing the scheduling of various pods on the nodes and
+related labels.</p>
+<div class="section" id="scheduling-userscheduler">
+<h3>scheduling.userScheduler<a class="headerlink" href="#scheduling-userscheduler" title="Permalink to this headline">¶</a></h3>
+<p>The user scheduler is making sure that user pods are scheduled
+tight on nodes, this is useful for autoscaling of user node pools.</p>
+<div class="section" id="scheduling-userscheduler-enabled">
+<h4>scheduling.userScheduler.enabled<a class="headerlink" href="#scheduling-userscheduler-enabled" title="Permalink to this headline">¶</a></h4>
+<p>Enables the user scheduler.</p>
+</div>
+<div class="section" id="scheduling-userscheduler-replicas">
+<h4>scheduling.userScheduler.replicas<a class="headerlink" href="#scheduling-userscheduler-replicas" title="Permalink to this headline">¶</a></h4>
+<p>You can have multiple schedulers to share the workload or improve
+availability on node failure.</p>
+</div>
+<div class="section" id="scheduling-userscheduler-image">
+<h4>scheduling.userScheduler.image<a class="headerlink" href="#scheduling-userscheduler-image" title="Permalink to this headline">¶</a></h4>
+<p>The image containing the <a class="reference external" href="https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/kube-scheduler-amd64">kube-scheduler
+binary</a>.</p>
+<div class="section" id="scheduling-userscheduler-image-name">
+<h5>scheduling.userScheduler.image.name<a class="headerlink" href="#scheduling-userscheduler-image-name" title="Permalink to this headline">¶</a></h5>
+</div>
+<div class="section" id="scheduling-userscheduler-image-tag">
+<h5>scheduling.userScheduler.image.tag<a class="headerlink" href="#scheduling-userscheduler-image-tag" title="Permalink to this headline">¶</a></h5>
+</div>
+</div>
+<div class="section" id="scheduling-userscheduler-pdb">
+<h4>scheduling.userScheduler.pdb<a class="headerlink" href="#scheduling-userscheduler-pdb" title="Permalink to this headline">¶</a></h4>
+<p>Set the Pod Disruption Budget for the user scheduler.</p>
+<p>See <a class="reference external" href="https://kubernetes.io/docs/concepts/workloads/pods/disruptions/">the Kubernetes
+documentation</a>
+for more details about disruptions.</p>
+<div class="section" id="scheduling-userscheduler-pdb-enabled">
+<h5>scheduling.userScheduler.pdb.enabled<a class="headerlink" href="#scheduling-userscheduler-pdb-enabled" title="Permalink to this headline">¶</a></h5>
+<p>Whether PodDisruptionBudget is enabled for the user scheduler.</p>
+</div>
+<div class="section" id="scheduling-userscheduler-pdb-minavailable">
+<h5>scheduling.userScheduler.pdb.minAvailable<a class="headerlink" href="#scheduling-userscheduler-pdb-minavailable" title="Permalink to this headline">¶</a></h5>
+<p>Minimum number of pods to be available during the voluntary disruptions.</p>
+</div>
+</div>
+</div>
+<div class="section" id="scheduling-podpriority">
+<h3>scheduling.podPriority<a class="headerlink" href="#scheduling-podpriority" title="Permalink to this headline">¶</a></h3>
+<p>Pod Priority is used to allow real users evict placeholder pods that
+in turn triggers a scale up by a cluster autoscaler. So, enabling this
+option will only make sense if the following conditions are met:</p>
+<ol class="simple">
+<li><p>Your Kubernetes cluster has at least version 1.11</p></li>
+<li><p>A cluster autoscaler is installed</p></li>
+<li><p>user-placeholer pods is configured to get a priority equal or
+higher than the cluster autoscaler’s priority cutoff</p></li>
+<li><p>Normal user pods have a higher priority than the user-placeholder
+pods</p></li>
+</ol>
+<p>Note that if the default priority cutoff if not configured on cluster
+autoscaler, it will currently default to 0, and that in the future
+this is meant to be lowered. If your cloud provider is installing the
+cluster autoscaler for you, they may also configure this specifically.</p>
+<p>Recommended settings for a cluster autoscaler…</p>
+<p>… with a priority cutoff of -10 (GKE):</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">podPriority</span><span class="p">:</span>
+  <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">globalDefault</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+  <span class="nt">defaultPriority</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+  <span class="nt">userPlaceholderPriority</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">-10</span>
+</pre></div>
+</div>
+<p>… with a priority cutoff of 0:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">podPriority</span><span class="p">:</span>
+  <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">globalDefault</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">defaultPriority</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+  <span class="nt">userPlaceholderPriority</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+</pre></div>
+</div>
+<div class="section" id="scheduling-podpriority-enabled">
+<h4>scheduling.podPriority.enabled<a class="headerlink" href="#scheduling-podpriority-enabled" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="scheduling-podpriority-globaldefault">
+<h4>scheduling.podPriority.globalDefault<a class="headerlink" href="#scheduling-podpriority-globaldefault" title="Permalink to this headline">¶</a></h4>
+<p>Warning! This will influence all pods in the cluster.</p>
+<p>The priority a pod usually get is 0. But this can be overridden
+with a PriorityClass resource if it is declared to be the global
+default. This configuration option allows for the creation of such
+global default.</p>
+</div>
+<div class="section" id="scheduling-podpriority-defaultpriority">
+<h4>scheduling.podPriority.defaultPriority<a class="headerlink" href="#scheduling-podpriority-defaultpriority" title="Permalink to this headline">¶</a></h4>
+<p>The actual value for the default pod priority.</p>
+</div>
+<div class="section" id="scheduling-podpriority-userplaceholderpriority">
+<h4>scheduling.podPriority.userPlaceholderPriority<a class="headerlink" href="#scheduling-podpriority-userplaceholderpriority" title="Permalink to this headline">¶</a></h4>
+<p>The actual value for the user-placeholder pods’ priority.</p>
+</div>
+</div>
+<div class="section" id="scheduling-userplaceholder">
+<h3>scheduling.userPlaceholder<a class="headerlink" href="#scheduling-userplaceholder" title="Permalink to this headline">¶</a></h3>
+<p>User placeholders simulate users but will thanks to PodPriority be
+evicted by the cluster autoscaler if a real user shows up. In this way
+placeholders allow you to create a headroom for the real users and
+reduce the risk of a user having to wait for a node to be added. Be
+sure to use the the continuous image puller as well along with
+placeholders, so the images are also available when real users arrive.</p>
+<p>To test your setup efficiently, you can adjust the amount of user
+placeholders with the following command:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure to have 3 user placeholders</span>
+kubectl scale sts/user-placeholder --replicas<span class="o">=</span><span class="m">3</span>
+</pre></div>
+</div>
+<div class="section" id="scheduling-userplaceholder-enabled">
+<h4>scheduling.userPlaceholder.enabled<a class="headerlink" href="#scheduling-userplaceholder-enabled" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="scheduling-userplaceholder-replicas">
+<h4>scheduling.userPlaceholder.replicas<a class="headerlink" href="#scheduling-userplaceholder-replicas" title="Permalink to this headline">¶</a></h4>
+<p>How many placeholder pods would you like to have?</p>
+</div>
+<div class="section" id="scheduling-userplaceholder-resources">
+<h4>scheduling.userPlaceholder.resources<a class="headerlink" href="#scheduling-userplaceholder-resources" title="Permalink to this headline">¶</a></h4>
+<p>Unless specified here, the placeholder pods will request the same
+resources specified for the real singleuser pods.</p>
+</div>
+</div>
+<div class="section" id="scheduling-corepods">
+<h3>scheduling.corePods<a class="headerlink" href="#scheduling-corepods" title="Permalink to this headline">¶</a></h3>
+<p>These settings influence the core pods like the hub, proxy and
+user-scheduler pods.</p>
+<div class="section" id="scheduling-corepods-nodeaffinity">
+<h4>scheduling.corePods.nodeAffinity<a class="headerlink" href="#scheduling-corepods-nodeaffinity" title="Permalink to this headline">¶</a></h4>
+<p>Where should pods be scheduled? Perhaps on nodes with a certain
+label is preferred or even required?</p>
+<div class="section" id="scheduling-corepods-nodeaffinity-matchnodepurpose">
+<h5>scheduling.corePods.nodeAffinity.matchNodePurpose<a class="headerlink" href="#scheduling-corepods-nodeaffinity-matchnodepurpose" title="Permalink to this headline">¶</a></h5>
+<p>Decide if core pods <em>ignore</em>, <em>prefer</em> or <em>require</em> to
+schedule on nodes with this label:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hub</span><span class="o">.</span><span class="n">jupyter</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">node</span><span class="o">-</span><span class="n">purpose</span><span class="o">=</span><span class="n">core</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="scheduling-userpods">
+<h3>scheduling.userPods<a class="headerlink" href="#scheduling-userpods" title="Permalink to this headline">¶</a></h3>
+<p>These settings influence the user pods like the user-placeholder,
+user-dummy and actual user pods named like jupyter-someusername.</p>
+<div class="section" id="scheduling-userpods-nodeaffinity">
+<h4>scheduling.userPods.nodeAffinity<a class="headerlink" href="#scheduling-userpods-nodeaffinity" title="Permalink to this headline">¶</a></h4>
+<p>Where should pods be scheduled? Perhaps on nodes with a certain
+label is preferred or even required?</p>
+<div class="section" id="scheduling-userpods-nodeaffinity-matchnodepurpose">
+<h5>scheduling.userPods.nodeAffinity.matchNodePurpose<a class="headerlink" href="#scheduling-userpods-nodeaffinity-matchnodepurpose" title="Permalink to this headline">¶</a></h5>
+<p>Decide if user pods <em>ignore</em>, <em>prefer</em> or <em>require</em> to
+schedule on nodes with this label:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hub</span><span class="o">.</span><span class="n">jupyter</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">node</span><span class="o">-</span><span class="n">purpose</span><span class="o">=</span><span class="n">user</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="ingress">
+<h2>ingress<a class="headerlink" href="#ingress" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="ingress-enabled">
+<h3>ingress.enabled<a class="headerlink" href="#ingress-enabled" title="Permalink to this headline">¶</a></h3>
+<p>Enable the creation of a Kubernetes Ingress to proxy-public service.</p>
+<p>See <a class="reference external" href="/administrator/advanced.html#ingress">Advanced Topics — Zero to JupyterHub with Kubernetes
+0.7.0 documentation</a>
+for more details.</p>
+</div>
+<div class="section" id="ingress-annotations">
+<h3>ingress.annotations<a class="headerlink" href="#ingress-annotations" title="Permalink to this headline">¶</a></h3>
+<p>Annotations to apply to the Ingress.</p>
+<p>See <a class="reference external" href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/">the Kubernetes
+documentation</a>
+for more details about annotations.</p>
+</div>
+<div class="section" id="ingress-hosts">
+<h3>ingress.hosts<a class="headerlink" href="#ingress-hosts" title="Permalink to this headline">¶</a></h3>
+<p>List of hosts to route requests to the proxy.</p>
+</div>
+<div class="section" id="ingress-pathsuffix">
+<h3>ingress.pathSuffix<a class="headerlink" href="#ingress-pathsuffix" title="Permalink to this headline">¶</a></h3>
+<p>Suffix added to Ingress’s routing path pattern.</p>
+<p>Specify <code class="docutils literal notranslate"><span class="pre">*</span></code> if your ingress matches path by glob pattern.</p>
+</div>
+<div class="section" id="ingress-tls">
+<h3>ingress.tls<a class="headerlink" href="#ingress-tls" title="Permalink to this headline">¶</a></h3>
+<p>TLS configurations for Ingress.</p>
+<p>See <a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/ingress/#tls">the Kubernetes
+documentation</a>
+for more details about annotations.</p>
+</div>
+</div>
+<div class="section" id="prepuller">
+<h2>prePuller<a class="headerlink" href="#prepuller" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="prepuller-annotations">
+<h3>prePuller.annotations<a class="headerlink" href="#prepuller-annotations" title="Permalink to this headline">¶</a></h3>
+<p>Annotations to apply to the hook and continous image puller pods. One example use case is to
+disable istio sidecars which could interfere with the image pulling.</p>
+</div>
+<div class="section" id="prepuller-resources">
+<h3>prePuller.resources<a class="headerlink" href="#prepuller-resources" title="Permalink to this headline">¶</a></h3>
+<p>These are standard Kubernetes resources with requests and limits for
+cpu and memory. They will be used on the containers in the pods
+pulling images. These should be set extremely low as the containers
+shut down directly or is a pause container that just idles.</p>
+<p>They were made configurable as usage of ResourceQuota may require
+containers in the namespace to have explicit resources set.</p>
+</div>
+<div class="section" id="prepuller-hook">
+<h3>prePuller.hook<a class="headerlink" href="#prepuller-hook" title="Permalink to this headline">¶</a></h3>
+<p>See the <a class="reference external" href="/administrator/optimization.html#pulling-images-before-users-arrive"><em>optimization
+section</em></a>
+for more details.</p>
+<div class="section" id="prepuller-hook-enabled">
+<h4>prePuller.hook.enabled<a class="headerlink" href="#prepuller-hook-enabled" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="prepuller-hook-podschedulingwaitduration">
+<h4>prePuller.hook.podSchedulingWaitDuration<a class="headerlink" href="#prepuller-hook-podschedulingwaitduration" title="Permalink to this headline">¶</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">hook-image-awaiter</span></code> has a criteria to await all the
+<code class="docutils literal notranslate"><span class="pre">hook-image-puller</span></code> DaemonSet’s pods to both schedule and finish
+their image pulling. This flag can be used to relax this criteria
+to instead only await the pods that <em>has already scheduled</em> to
+finish image pulling after a certain duration.</p>
+<p>The value of this is that sometimes the newly created
+<code class="docutils literal notranslate"><span class="pre">hook-image-puller</span></code> pods cannot be scheduled because nodes are
+full, and then it probably won’t make sense to block a <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code>.</p>
+<p>An infinite duration to wait for pods to schedule can be
+represented by <code class="docutils literal notranslate"><span class="pre">-1</span></code>. This was the default behavior of version
+0.9.0 and earlier.</p>
+</div>
+</div>
+<div class="section" id="prepuller-continuous">
+<h3>prePuller.continuous<a class="headerlink" href="#prepuller-continuous" title="Permalink to this headline">¶</a></h3>
+<p>See the <a class="reference external" href="/administrator/optimization.html#pulling-images-before-users-arrive"><em>optimization
+section</em></a>
+for more details.</p>
+<p><strong>NOTE</strong>: If used with a Cluster Autoscaler (an autoscaling node
+pool), also add user-placeholders and enable pod priority.</p>
+<div class="section" id="prepuller-continuous-enabled">
+<h4>prePuller.continuous.enabled<a class="headerlink" href="#prepuller-continuous-enabled" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+<div class="section" id="prepuller-extraimages">
+<h3>prePuller.extraImages<a class="headerlink" href="#prepuller-extraimages" title="Permalink to this headline">¶</a></h3>
+<p>See the <a class="reference external" href="/administrator/optimization.html#the-images-that-will-be-pulled"><em>optimization
+section</em></a>
+for more details.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">prePuller</span><span class="p">:</span>
+  <span class="nt">extraImages</span><span class="p">:</span>
+    <span class="nt">myExtraImageIWantPulled</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyter/all-spark-notebook</span>
+      <span class="nt">tag</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2343e33dec46</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="custom">
+<h2>custom<a class="headerlink" href="#custom" title="Permalink to this headline">¶</a></h2>
+<p>Additional values to pass to the Hub.
+JupyterHub will not itself look at these,
+but you can read values in your own custom config via <code class="docutils literal notranslate"><span class="pre">hub.extraConfig</span></code>.
+For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">custom</span><span class="p">:</span>
+  <span class="nt">myHost</span><span class="p">:</span> <span class="s">&quot;https://example.horse&quot;</span>
+<span class="nt">hub</span><span class="p">:</span>
+  <span class="nt">extraConfig</span><span class="p">:</span>
+    <span class="nt">myConfig.py</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">c.MyAuthenticator.host = get_config(&quot;custom.myHost&quot;)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">Reference</a>
+    <a class='right-next' id="next-link" href="reference-docs.html" title="next page">Related Projects</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,317 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tips and Snippets &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Used by" href="users-list.html" />
+    <link rel="prev" title="Community Resources" href="index.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../customizing/index.html">Customization Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../administrator/index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+        
+          
+              <li class="active">
+                  <a href="">Tips and Snippets</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="users-list.html">Used by</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="additional-resources.html">Additional Resources</a>
+              </li>
+          
+        
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#kubectl-autocompletion" class="nav-link">kubectl autocompletion</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#helm-autocompletion" class="nav-link">helm autocompletion</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#managing-kubectl-contexts" class="nav-link">Managing kubectl contexts</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#specifying-a-default-namespace-for-a-context" class="nav-link">Specifying a default namespace for a context</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#using-labels-and-selectors-with-kubectl" class="nav-link">Using labels and selectors with kubectl</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#asking-for-a-more-verbose-or-structured-output" class="nav-link">Asking for a more verbose or structured output</a>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="tips-and-snippets">
+<h1>Tips and Snippets<a class="headerlink" href="#tips-and-snippets" title="Permalink to this headline">¶</a></h1>
+<p>This is a page to collect a few particularly useful patterns and snippets
+that help you interact with your Kubernetes cluster and JupyterHub.
+If there’s something that you think is generic enough (and not obvious enough)
+to be added to this page, please feel free to make a PR!</p>
+<div class="section" id="kubectl-autocompletion">
+<h2><code class="docutils literal notranslate"><span class="pre">kubectl</span></code> autocompletion<a class="headerlink" href="#kubectl-autocompletion" title="Permalink to this headline">¶</a></h2>
+<p>Kubernetes has a helper script that allows you to auto-complete commands
+and references to objects when using <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>. This lets you
+<kbd class="kbd docutils literal notranslate">TAB</kbd>-complete and saves a lot of time.</p>
+<p><a class="reference external" href="https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion">Here are the instructions to install kubectl auto-completion</a>.</p>
+</div>
+<div class="section" id="helm-autocompletion">
+<h2><code class="docutils literal notranslate"><span class="pre">helm</span></code> autocompletion<a class="headerlink" href="#helm-autocompletion" title="Permalink to this headline">¶</a></h2>
+<p>Helm also has an auto-completion script that lets you <kbd class="kbd docutils literal notranslate">TAB</kbd>-complete
+your commands when using Helm.</p>
+<p><a class="reference external" href="https://helm.sh/docs/helm/helm_completion/">Here are the instructions to install helm auto-completion</a>.</p>
+</div>
+<div class="section" id="managing-kubectl-contexts">
+<h2>Managing <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> contexts<a class="headerlink" href="#managing-kubectl-contexts" title="Permalink to this headline">¶</a></h2>
+<p>Oftentimes people manage multiple Kubernetes deployments at the same time.
+<code class="docutils literal notranslate"><span class="pre">kubectl</span></code> handles this with the idea of “contexts”, which specify which
+Kubernetes deployment you are referring to when you type <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">XXX</span></code>.</p>
+<p>To see a list of contexts currently available to you, use the following
+command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl config get-contexts
+</pre></div>
+</div>
+<p>This will list all of your Kubernetes contexts. You can select a particular
+context by entering:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl config use-context &lt;CONTEXT-NAME&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="specifying-a-default-namespace-for-a-context">
+<h2>Specifying a default namespace for a context<a class="headerlink" href="#specifying-a-default-namespace-for-a-context" title="Permalink to this headline">¶</a></h2>
+<p>If you grow tired of typing <code class="docutils literal notranslate"><span class="pre">namespace=XXX</span></code> each time you type a kubernetes
+command, here’s a snippet that will allow you set a default namespace for
+a given Kubernetes context:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl config set-context <span class="k">$(</span>kubectl config current-context<span class="k">)</span> <span class="se">\</span>
+        --namespace<span class="o">=</span>&lt;YOUR-NAMESPACE&gt;
+</pre></div>
+</div>
+<p>The above command will only apply to the currently active context, and will
+allow you to skip the <code class="docutils literal notranslate"><span class="pre">--namespace=</span></code> part of your commands for this context.</p>
+</div>
+<div class="section" id="using-labels-and-selectors-with-kubectl">
+<h2>Using labels and selectors with <code class="docutils literal notranslate"><span class="pre">kubectl</span></code><a class="headerlink" href="#using-labels-and-selectors-with-kubectl" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes it’s useful to select an entire class of Kubernetes objects rather
+than referring to them by their name. You can attach an arbitrary set of
+labels to a Kubernetes object, and can then refer to those labels when
+searching with <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>.</p>
+<p>To search based on a label value, use the <code class="docutils literal notranslate"><span class="pre">-l</span></code> or <code class="docutils literal notranslate"><span class="pre">--selector=</span></code> keyword
+arguments. For example, JupyterHub creates a specific subset of labels for all
+user pods. You can search for all user pods with the following label query:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl --namespace<span class="o">=</span>&lt;YOUR-NAMESPACE&gt; get pod <span class="se">\</span>
+        -l <span class="s2">&quot;component=singleuser-server&quot;</span>
+</pre></div>
+</div>
+<p>For more information, see the <a class="reference external" href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">Kubernetes labels and selectors page</a>.</p>
+</div>
+<div class="section" id="asking-for-a-more-verbose-or-structured-output">
+<h2>Asking for a more verbose or structured output<a class="headerlink" href="#asking-for-a-more-verbose-or-structured-output" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes the information that’s in the default output for <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">&lt;XXX&gt;</span></code>
+is not enough for your needs, or isn’t structured the way you’d like. We
+recommend looking into the different Kubernetes output options, which can be
+modified like so:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl --namespace<span class="o">=</span>&lt;NAMESPACE&gt; get pod -o &lt;json<span class="p">|</span>yaml<span class="p">|</span>wide<span class="p">|</span>name...&gt;
+</pre></div>
+</div>
+<p>You can find more information on what kinds of output you can generate at
+<a class="reference external" href="https://kubernetes.io/docs/reference/kubectl/overview/">the kubectl information page</a>.
+(click and search for the text “Output Options”)</p>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">Community Resources</a>
+    <a class='right-next' id="next-link" href="users-list.html" title="next page">Used by</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,542 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kubernetes on Amazon Web Services (AWS) &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Kubernetes on Amazon Web Services (AWS) with Elastic Container with Kubernetes (EKS)" href="step-zero-aws-eks.html" />
+    <link rel="prev" title="Kubernetes on Microsoft Azure Kubernetes Service (AKS) with Autoscaling" href="../microsoft/step-zero-azure-autoscale.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../customizing/index.html">Customization Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../administrator/index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+        
+          
+              <li class="">
+                  <a href="../google/step-zero-gcp.html">Kubernetes on Google Cloud (GKE)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../microsoft/step-zero-azure.html">Kubernetes on Microsoft Azure Kubernetes Service (AKS)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../microsoft/step-zero-azure-autoscale.html">Kubernetes on Microsoft Azure Kubernetes Service (AKS) with Autoscaling</a>
+              </li>
+          
+        
+          
+              <li class="active">
+                  <a href="">Kubernetes on Amazon Web Services (AWS)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="step-zero-aws-eks.html">Kubernetes on Amazon Web Services (AWS) with Elastic Container with Kubernetes (EKS)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../redhat/step-zero-openshift.html">Kubernetes on Red Hat OpenShift</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../ibm/step-zero-ibm.html">Kubernetes on IBM Cloud</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../digital-ocean/step-zero-digital-ocean.html">Kubernetes on Digital Ocean</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../ovh/step-zero-ovh.html">Kubernetes on OVHcloud (OVH)</a>
+              </li>
+          
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#the-procedure" class="nav-link">The Procedure</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#encryption" class="nav-link">Encryption</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#shared-storage" class="nav-link">Shared Storage</a>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="kubernetes-on-amazon-web-services-aws">
+<span id="amazon-aws"></span><h1>Kubernetes on Amazon Web Services (AWS)<a class="headerlink" href="#kubernetes-on-amazon-web-services-aws" title="Permalink to this headline">¶</a></h1>
+<p>AWS does not have native support for Kubernetes, however there are
+many organizations that have put together their own solutions and
+guides for setting up Kubernetes on AWS.</p>
+<p>This guide uses kops to setup a cluster on AWS.  This should be seen as a rough template you will use to
+setup and shape your cluster.</p>
+<div class="section" id="the-procedure">
+<h2>The Procedure<a class="headerlink" href="#the-procedure" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p>Create a IAM Role</p>
+<p>This role will be used to give your CI host permission to create and destroy resources on AWS</p>
+<ul class="simple">
+<li><p>AmazonEC2FullAccess</p></li>
+<li><p>IAMFullAccess</p></li>
+<li><p>AmazonS3FullAccess</p></li>
+<li><p>AmazonVPCFullAccess</p></li>
+<li><p>Route53FullAccess (Optional)</p></li>
+</ul>
+</li>
+<li><p>Create a new instance to use as your CI host.  This node will deal with provisioning and tearing down the cluster.</p>
+<p>This instance can be small (t2.micro for example).</p>
+<p>When creating it, assign the IAM role created in step 1.</p>
+<p>Once created, download ssh keys.</p>
+</li>
+<li><p>SSH to your CI host</p></li>
+<li><p>Install kops and kubectl on your CI host</p>
+<ul class="simple">
+<li><p>Follow the instructions here: <a class="reference external" href="https://github.com/kubernetes/kops/blob/master/docs/install.md">https://github.com/kubernetes/kops/blob/master/docs/install.md</a></p></li>
+</ul>
+</li>
+<li><p>Choose a cluster name</p>
+<p>Since we are not using pre-configured DNS we will use the suffix “.k8s.local”.  Per the docs, if the DNS name ends in .k8s.local the cluster will use internal hosted DNS.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">NAME</span><span class="o">=</span>&lt;somename&gt;.k8s.local
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Setup an ssh keypair to use with the cluster</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh-keygen
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Create a S3 bucket to store your cluster configuration</p>
+<p>Since we are on AWS we can use a S3 backing store.  It is recommended to enabling versioning on the S3 bucket.
+We don’t need to pass this into the KOPS commands.  It is automatically detected by the kops tool as an env variable.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">KOPS_STATE_STORE</span><span class="o">=</span>s3://&lt;your_s3_bucket_name_here&gt;
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Set the region to deploy in</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">REGION</span><span class="o">=</span><span class="sb">`</span>curl -s http://169.254.169.254/latest/dynamic/instance-identity/document<span class="p">|</span>grep region<span class="p">|</span>awk -F<span class="se">\&quot;</span> <span class="s1">&#39;{print $4}&#39;</span><span class="sb">`</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Install the AWS CLI:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt-get update
+sudo apt-get install awscli
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Set the availability zones for the nodes</p>
+<p>For this guide we will be allowing nodes to be deployed in all AZs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.. code-block:: bash
+export ZONES=$(aws ec2 describe-availability-zones --region $REGION | grep ZoneName | awk &#39;{print $2}&#39; | tr -d &#39;&quot;&#39;)
+</pre></div>
+</div>
+</li>
+<li><p>Create the cluster</p>
+<p>For a basic setup run the following (All sizes measured in GB):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>kops create cluster $NAME \
+  --zones &quot;$ZONES&quot; \
+  --authorization RBAC \
+  --master-size t2.micro \
+  --master-volume-size 10 \
+  --node-size t2.medium \
+  --node-volume-size 10 \
+  --yes
+</pre></div>
+</div>
+<p>For a more secure setup add the following params to the kops command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">topology</span> <span class="n">private</span> \
+<span class="o">--</span><span class="n">networking</span> <span class="n">weave</span> \
+</pre></div>
+</div>
+<p>This creates a cluster where all of the masters and nodes are in private subnets and don’t have external IP addresses.  A mis-configured security group or insecure ssh configuration is less likely to compromise the cluster.
+In order to SSH into your cluster you will need to set up a bastion node.  Make sure you do that step below.
+If you have the default number of elastic IPs (10) you may need to put in a request to AWS support to bump up that limit.  The alternative is reducing the number of zones specified.</p>
+<p>More reading on this subject:
+<a class="reference external" href="https://github.com/kubernetes/kops/blob/master/docs/networking.md">https://github.com/kubernetes/kops/blob/master/docs/networking.md</a></p>
+<p>Settings to consider (not covered in this guide):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">vpc</span>
+  <span class="n">Allows</span> <span class="n">you</span> <span class="n">to</span> <span class="n">use</span> <span class="n">a</span> <span class="n">custom</span> <span class="n">VPC</span> <span class="ow">or</span> <span class="n">share</span> <span class="n">a</span> <span class="n">VPC</span>
+  <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">kubernetes</span><span class="o">/</span><span class="n">kops</span><span class="o">/</span><span class="n">blob</span><span class="o">/</span><span class="n">master</span><span class="o">/</span><span class="n">docs</span><span class="o">/</span><span class="n">run_in_existing_vpc</span><span class="o">.</span><span class="n">md</span>
+<span class="o">--</span><span class="n">master</span><span class="o">-</span><span class="n">count</span>
+  <span class="n">Spawns</span> <span class="n">more</span> <span class="n">masters</span> <span class="ow">in</span> <span class="n">one</span> <span class="ow">or</span> <span class="n">more</span> <span class="n">VPCs</span>
+  <span class="n">This</span> <span class="n">improves</span> <span class="n">redudancy</span> <span class="ow">and</span> <span class="n">reduces</span> <span class="n">downtime</span> <span class="n">during</span> <span class="n">cluster</span> <span class="n">upgrades</span>
+<span class="o">--</span><span class="n">master</span><span class="o">-</span><span class="n">zones</span>
+  <span class="n">specify</span> <span class="n">zones</span> <span class="n">to</span> <span class="n">run</span> <span class="n">the</span> <span class="n">master</span> <span class="ow">in</span>
+<span class="o">--</span><span class="n">node</span><span class="o">-</span><span class="n">count</span>
+  <span class="n">Increases</span> <span class="n">the</span> <span class="n">total</span> <span class="n">nodes</span> <span class="n">created</span> <span class="p">(</span><span class="n">default</span> <span class="mi">2</span><span class="p">)</span>
+<span class="o">--</span><span class="n">master</span><span class="o">/</span><span class="n">node</span><span class="o">-</span><span class="n">security</span><span class="o">-</span><span class="n">groups</span>
+  <span class="n">Allows</span> <span class="n">you</span> <span class="n">to</span> <span class="n">specify</span> <span class="n">additional</span> <span class="n">security</span> <span class="n">groups</span> <span class="n">to</span> <span class="n">put</span> <span class="n">the</span> <span class="n">masters</span> <span class="ow">and</span> <span class="n">nodes</span> <span class="ow">in</span> <span class="n">by</span> <span class="n">default</span>
+<span class="o">--</span><span class="n">ssh</span><span class="o">-</span><span class="n">access</span>
+  <span class="n">By</span> <span class="n">default</span> <span class="n">SSH</span> <span class="n">access</span> <span class="ow">is</span> <span class="nb">open</span> <span class="n">to</span> <span class="n">the</span> <span class="n">world</span> <span class="p">(</span><span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">)</span><span class="o">.</span>
+  <span class="n">If</span> <span class="n">you</span> <span class="n">are</span> <span class="n">using</span> <span class="n">a</span> <span class="n">private</span> <span class="n">topology</span><span class="p">,</span> <span class="n">this</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">a</span> <span class="n">problem</span><span class="o">.</span>
+  <span class="n">If</span> <span class="n">you</span> <span class="n">are</span> <span class="n">using</span> <span class="n">a</span> <span class="n">public</span> <span class="n">topology</span> <span class="n">make</span> <span class="n">sure</span> <span class="n">your</span> <span class="n">ssh</span> <span class="n">keys</span> <span class="n">are</span> <span class="n">strong</span> <span class="ow">and</span> <span class="n">you</span> <span class="n">keep</span> <span class="n">sshd</span> <span class="n">up</span> <span class="n">to</span> <span class="n">date</span> <span class="n">on</span> <span class="n">your</span> <span class="n">cluster</span><span class="s1">&#39;s nodes.</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Consider <a class="reference external" href="https://aws.amazon.com/aws-cost-management/aws-budgets/">setting a cloud budget</a>
+for your AWS account in order to make sure you don’t accidentally
+spend more than you wish to.</p>
+</div>
+</li>
+<li><p>Wait for the cluster to start-up</p>
+<blockquote>
+<div><p>Running the ‘kops validate cluster’ command will tell us what the current state of setup is.
+If you see “can not get nodes” initially, just be patient as the cluster can’t report until a
+few basic services are up and running.</p>
+<p>Keep running ‘kops validate cluster’ until you see “Your cluster $NAME is ready” at the end of the output.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">time</span> <span class="k">until</span> kops validate cluster<span class="p">;</span> <span class="k">do</span> sleep <span class="m">15</span> <span class="p">;</span> <span class="k">done</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>can be used to automate the waiting process.</p>
+<p>If at any point you wish to destroy your cluster after this step, run <code class="docutils literal notranslate"><span class="pre">kops</span> <span class="pre">delete</span> <span class="pre">cluster</span> <span class="pre">$NAME</span> <span class="pre">--yes</span></code></p>
+</div></blockquote>
+</li>
+<li><p>Confirm that <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> is connected to your Kubernetes cluster.</p>
+<blockquote>
+<div><p>Run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">code</span><span class="o">-</span><span class="n">block</span><span class="p">::</span> <span class="n">bash</span>
+
+   <span class="n">kubectl</span> <span class="n">get</span> <span class="n">nodes</span>
+</pre></div>
+</div>
+<p>You should see a list of two nodes, each beginning with <code class="docutils literal notranslate"><span class="pre">ip</span></code>.</p>
+<p>If you want to use kubectl and helm locally (necessary for step #3 in <a class="reference external" href="setup-helm#initialization">Setting up Helm</a>):</p>
+<ul class="simple">
+<li><p>run the following on CI host: <code class="docutils literal notranslate"><span class="pre">kops</span> <span class="pre">export</span> <span class="pre">kubecfg</span></code></p></li>
+<li><p>copy the contents of <code class="docutils literal notranslate"><span class="pre">~/.kube/config</span></code> to the same place on your local system</p></li>
+</ul>
+<p>If you wish to put the kube config file in a different location, you will need to</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">KUBECONFIG</span><span class="o">=</span>&lt;other kube config location&gt;
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Configure ssh bastion (Skip this step if you did not go with the <strong>–topology private</strong> option above!)</p>
+<blockquote>
+<div><p>Ideally we would simply be passing the –bastion flag into the kops command above.  However that flag is not functioning as intended at the moment.  <a class="reference external" href="https://github.com/kubernetes/kops/issues/2881">https://github.com/kubernetes/kops/issues/2881</a></p>
+<p>Instead we need to follow this guide: <a class="reference external" href="https://github.com/kubernetes/kops/blob/master/docs/examples/kops-tests-private-net-bastion-host.md#adding-a-bastion-host-to-our-cluster">https://github.com/kubernetes/kops/blob/master/docs/examples/kops-tests-private-net-bastion-host.md#adding-a-bastion-host-to-our-cluster</a></p>
+<p>At this point there are a few public endpoints left open which need to be addressed</p>
+<ul class="simple">
+<li><p>Bastion ELB security group defaults to access from 0.0.0.0</p></li>
+<li><p>API ELB security group defaults to access from 0.0.0.0</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Enable dynamic storage on your Kubernetes cluster.</p>
+<blockquote>
+<div><p>Create a file, <code class="docutils literal notranslate"><span class="pre">storageclass.yml</span></code> on your local computer, and enter
+this text:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kind</span><span class="p">:</span> <span class="n">StorageClass</span>
+<span class="n">apiVersion</span><span class="p">:</span> <span class="n">storage</span><span class="o">.</span><span class="n">k8s</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">v1</span>
+<span class="n">metadata</span><span class="p">:</span>
+  <span class="n">annotations</span><span class="p">:</span>
+     <span class="n">storageclass</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">kubernetes</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="ow">is</span><span class="o">-</span><span class="n">default</span><span class="o">-</span><span class="n">class</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span>
+  <span class="n">name</span><span class="p">:</span> <span class="n">gp2</span>
+<span class="n">provisioner</span><span class="p">:</span> <span class="n">kubernetes</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">aws</span><span class="o">-</span><span class="n">ebs</span>
+<span class="n">parameters</span><span class="p">:</span>
+  <span class="nb">type</span><span class="p">:</span> <span class="n">gp2</span>
+</pre></div>
+</div>
+<p>Next, run this command:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -f storageclass.yml
+</pre></div>
+</div>
+</div></blockquote>
+<p>This enables <a class="reference external" href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic">dynamic provisioning</a> of
+disks, allowing us to automatically assign a disk per user when they log
+in to JupyterHub.</p>
+</div></blockquote>
+</li>
+</ol>
+</div>
+<div class="section" id="encryption">
+<h2>Encryption<a class="headerlink" href="#encryption" title="Permalink to this headline">¶</a></h2>
+<p>There are simple methods for encrypting your Kubernetes cluster. Illustrated here are simple methods for encryption at rest and encryption in transit.</p>
+<p><strong>Encryption at Rest</strong></p>
+<p>Instead of performing step 13 above. Create the following <code class="docutils literal notranslate"><span class="pre">storageclass.yml</span></code> file on your local computer:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kind</span><span class="p">:</span> <span class="n">StorageClass</span>
+<span class="n">apiVersion</span><span class="p">:</span> <span class="n">storage</span><span class="o">.</span><span class="n">k8s</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">v1</span>
+<span class="n">metadata</span><span class="p">:</span>
+  <span class="n">annotations</span><span class="p">:</span>
+     <span class="n">storageclass</span><span class="o">.</span><span class="n">beta</span><span class="o">.</span><span class="n">kubernetes</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="ow">is</span><span class="o">-</span><span class="n">default</span><span class="o">-</span><span class="n">class</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span>
+  <span class="n">name</span><span class="p">:</span> <span class="n">gp2</span>
+<span class="n">provisioner</span><span class="p">:</span> <span class="n">kubernetes</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">aws</span><span class="o">-</span><span class="n">ebs</span>
+<span class="n">parameters</span><span class="p">:</span>
+  <span class="nb">type</span><span class="p">:</span> <span class="n">gp2</span>
+  <span class="n">encrypted</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span>
+</pre></div>
+</div>
+<p>The main difference is the addition of the line <code class="docutils literal notranslate"><span class="pre">encrypted:</span> <span class="pre">&quot;true&quot;</span></code> and make note that <code class="docutils literal notranslate"><span class="pre">true</span></code> is in double quotes.</p>
+<p>Next run these commands:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl delete storageclass gp2
+kubectl apply -f storageclass.yml
+</pre></div>
+</div>
+</div></blockquote>
+<p>Kubernetes will not allow you to modify storageclass gp2 in order to add the <code class="docutils literal notranslate"><span class="pre">encrypted</span></code> flag so you will have to delete it first.
+This will encrypt any dynamic volumes (such as your notebook)created by Kubernetes, it will not encrypt the storage on the Kubernetes nodes themselves.</p>
+<p><strong>Encryption in Transit</strong></p>
+<p>In step 9 above, set up the cluster with weave by including the <code class="docutils literal notranslate"><span class="pre">--networking</span> <span class="pre">weave</span></code> flag in the <code class="docutils literal notranslate"><span class="pre">kops</span> <span class="pre">create</span></code> command above.
+Then perform the following steps:</p>
+<ol class="arabic">
+<li><p>Verify weave is running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl --namespace kube-system get pods
+</pre></div>
+</div>
+<p>You should see several pods of the form <code class="docutils literal notranslate"><span class="pre">weave-net-abcde</span></code></p>
+</li>
+<li><p>Create Kubernetes secret with a private password of sufficient strength. A random 128 bytes is used in this example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>openssl rand -hex <span class="m">128</span> &gt;weave-passwd
+kubectl create secret -n kube-system generic weave-passwd --from-file<span class="o">=</span>./weave-passwd
+</pre></div>
+</div>
+<p>It is important that the secret name and its value (taken from the filename) are the same. If they do not match you may get a <code class="docutils literal notranslate"><span class="pre">ConfigError</span></code></p>
+</li>
+<li><p>Patch Weave with the password:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch --namespace<span class="o">=</span>kube-system daemonset/weave-net --type json -p <span class="s1">&#39;[ { &quot;op&quot;: &quot;add&quot;, &quot;path&quot;: &quot;/spec/template/spec/containers/0/env/0&quot;, &quot;value&quot;: { &quot;name&quot;: &quot;WEAVE_PASSWORD&quot;, &quot;valueFrom&quot;: { &quot;secretKeyRef&quot;: { &quot;key&quot;: &quot;weave-passwd&quot;, &quot;name&quot;: &quot;weave-passwd&quot; } } } } ]&#39;</span>
+</pre></div>
+</div>
+<p>If you want to remove the encryption you can use the following patch:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch --namespace<span class="o">=</span>kube-system daemonset/weave-net --type json -p <span class="s1">&#39;[ { &quot;op&quot;: &quot;remove&quot;, &quot;path&quot;: &quot;/spec/template/spec/containers/0/env/0&quot;} ]&#39;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Check to see that the pods are restarted. To expedite the process you can delete the old pods.</p></li>
+<li><p>You can verify encryption is turned on with the following command:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl <span class="nb">exec</span> -n kube-system weave-net-&lt;pod&gt; -c weave -- /home/weave/weave --local status
+</pre></div>
+</div>
+</div></blockquote>
+<p>You should see <code class="docutils literal notranslate"><span class="pre">encryption:</span> <span class="pre">enabled</span></code></p>
+<p>If you really want to insure encryption is working, you can listen on port <code class="docutils literal notranslate"><span class="pre">6783</span></code> of any node. If the traffic looks like gibberish, you know it is on.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="shared-storage">
+<h2>Shared Storage<a class="headerlink" href="#shared-storage" title="Permalink to this headline">¶</a></h2>
+<p>A shared volume is supposed to be mounted to multiple user pods, so we cannot use EBS. As an alternative, there’s AWS EFS:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="efs_storage.html#amazon-efs"><span class="std std-ref">Setting up EFS storage on AWS</span></a></p></li>
+<li><p><a class="reference internal" href="../customizing/user-storage.html#user-storage"><span class="std std-ref">Customizing User Storage</span></a></p></li>
+</ol>
+<p>Congrats. Now that you have your Kubernetes cluster running, it’s time to
+begin <a class="reference internal" href="../index.html#creating-your-jupyterhub"><span class="std std-ref">Setup JupyterHub</span></a>.</p>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="../microsoft/step-zero-azure-autoscale.html" title="previous page">Kubernetes on Microsoft Azure Kubernetes Service (AKS) with Autoscaling</a>
+    <a class='right-next' id="next-link" href="step-zero-aws-eks.html" title="next page">Kubernetes on Amazon Web Services (AWS) with Elastic Container with Kubernetes (EKS)</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

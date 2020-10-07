@@ -1,0 +1,371 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tearing Everything Down &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Customization Guide" href="../customizing/index.html" />
+    <link rel="prev" title="Setting up JupyterHub" href="setup-jupyterhub.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../customizing/index.html">Customization Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../administrator/index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+      
+      
+        
+          
+              <li class="">
+                  <a href="setup-helm.html">Setting up Helm</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="setup-jupyterhub.html">Setting up JupyterHub</a>
+              </li>
+          
+        
+          
+              <li class="active">
+                  <a href="">Tearing Everything Down</a>
+              </li>
+          
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#for-all-cloud-providers" class="nav-link">For all cloud providers</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#delete-the-helm-release" class="nav-link">Delete the helm release</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#google-cloud-platform" class="nav-link">Google Cloud Platform</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#microsoft-azure-aks" class="nav-link">Microsoft Azure AKS</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#amazon-web-services-aws" class="nav-link">Amazon Web Services (AWS)</a>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="tearing-everything-down">
+<span id="turn-off"></span><h1>Tearing Everything Down<a class="headerlink" href="#tearing-everything-down" title="Permalink to this headline">¶</a></h1>
+<p>When you are done with your hub, you should delete it so you are no longer
+paying money for it. The following sections describe how to delete your
+JupyterHub deployment and associated cloud resources on various cloud providers.</p>
+<p>Tearing down your JupyterHub entails:</p>
+<ol class="arabic simple">
+<li><p>Deleting your Kubernetes namespace, which deletes all objects created and
+managed by Kubernetes in it.</p></li>
+<li><p>Deleting any cloud resources you’ve requested from the cloud provider.</p></li>
+<li><p>Running a final check to make sure there aren’t any lingering resources that
+haven’t been deleted (e.g., storage volumes in some cloud providers).</p></li>
+</ol>
+<div class="section" id="for-all-cloud-providers">
+<h2>For all cloud providers<a class="headerlink" href="#for-all-cloud-providers" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="delete-the-helm-release">
+<span id="delete-namespace"></span><h3>Delete the helm release<a class="headerlink" href="#delete-the-helm-release" title="Permalink to this headline">¶</a></h3>
+<p>The steps in this section must be performed for all cloud providers first,
+before doing the cloud provider specific setup.</p>
+<ol class="arabic simple">
+<li><p>First, delete the Helm release. This deletes all resources that were created
+by Helm for your JupyterHub deployment.</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>  helm delete &lt;YOUR-HELM-RELEASE-NAME&gt;
+
+<span class="sb">``</span>&lt;YOUR-HELM-RELEASE-NAME&gt;<span class="sb">``</span> is the name provided to <span class="sb">``</span>helm upgrade<span class="sb">``</span> when
+initially setting up the hub. If you had forgotten what you used, you
+can run <span class="sb">``</span>helm list<span class="sb">``</span> to find all the release names in your cluster.
+You can also see the <span class="sb">``</span>namespace<span class="sb">``</span> value here that will be used in the next step.
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><p>Next, delete the Kubernetes namespace the hub was installed in. This deletes
+any disks that may have been created to store user’s data, and any IP
+addresses that may have been provisioned.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl delete namespace &lt;YOUR-NAMESPACE&gt;
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="google-cloud-platform">
+<h2>Google Cloud Platform<a class="headerlink" href="#google-cloud-platform" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p>Perform the steps in <a class="reference internal" href="#delete-namespace"><span class="std std-ref">Delete the helm release</span></a>. These cloud provider agnostic
+steps will delete the Helm release and the Kubernetes namespace. This must be
+done before proceeding.</p></li>
+<li><p>Delete the Kubernetes cluster. You can list all the clusters you have.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcloud container clusters list
+</pre></div>
+</div>
+<p>You can then delete the one you want.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcloud container clusters delete &lt;CLUSTER-NAME&gt; --zone<span class="o">=</span>&lt;CLUSTER-ZONE&gt;
+</pre></div>
+</div>
+</li>
+<li><p>Double check to make sure all the resources are now deleted, since anything you
+have not deleted will cost you money! You can check the <a class="reference external" href="https://console.cloud.google.com">web console</a>
+(make sure you are in the right project and account) to verify that everything
+has been deleted.</p>
+<p>At a minimum, check the following under the Hamburger (left top corner) menu:</p>
+<ol class="arabic simple">
+<li><p>Compute -&gt; Compute Engine -&gt; Disks</p></li>
+<li><p>Compute -&gt; Kubernetes Engine -&gt; Clusters</p></li>
+<li><p>Tools -&gt; Container Registry -&gt; Images</p></li>
+<li><p>Networking -&gt; Network Services -&gt; Load Balancing</p></li>
+</ol>
+<p>These might take several minutes to clear up, but they shouldn’t have anything
+related to your JupyterHub cluster after you have deleted the cluster.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="microsoft-azure-aks">
+<h2>Microsoft Azure AKS<a class="headerlink" href="#microsoft-azure-aks" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p>Perform the steps in <a class="reference internal" href="#delete-namespace"><span class="std std-ref">Delete the helm release</span></a>. These cloud provider agnostic
+steps will delete the Helm release and the Kubernetes namespace. This must be
+done before proceeding.</p></li>
+<li><p>Delete your resource group. You can list your active resource groups with
+the following command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az group list --output table
+</pre></div>
+</div>
+<p>You can then delete the one you want with the following command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az group delete --name &lt;YOUR-GROUP-NAME&gt;
+</pre></div>
+</div>
+<p>Be careful to delete the correct Resource Group, as doing so will irreversibly
+delete all resources within the group!</p>
+</li>
+<li><p>Double check to make sure all the resources are now deleted, since anything you
+have not deleted will cost you money! You can check the <a class="reference external" href="https://portal.azure.com">web portal</a>
+(check the “Resource Groups” page) to verify that everything has been deleted.</p>
+<p>These might take several minutes to clear up, but they shouldn’t have anything
+related to your JupyterHub cluster after you have deleted the resource group.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="amazon-web-services-aws">
+<h2>Amazon Web Services (AWS)<a class="headerlink" href="#amazon-web-services-aws" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Perform the steps in <a class="reference internal" href="#delete-namespace"><span class="std std-ref">Delete the helm release</span></a>. These cloud provider agnostic
+steps will delete the Helm release and the Kubernetes namespace. This must be
+done before proceeding.</p></li>
+<li><p>on CI host:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kops delete cluster &lt;CLUSTER-NAME&gt; --yes
+
+<span class="c1"># Leave CI host</span>
+<span class="nb">exit</span>
+
+<span class="c1"># Terminate CI host</span>
+aws ec2 stop-instances --instance-ids &lt;aws-instance id of CI host&gt;
+aws ec2 terminate-instances --instance-ids &lt;aws-instance id of CI host&gt;
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;CLUSTER</span> <span class="pre">NAME&gt;</span></code> should be <code class="docutils literal notranslate"><span class="pre">&lt;SOME</span> <span class="pre">NAME&gt;.k8s.local</span></code>.</p></li>
+<li><p>Stopping the CI host will still incur disk storage and IP address costs,
+but the host can be restarted at a later date.</p></li>
+<li><p>Sometimes AWS fails to delete parts of the stack on a first pass. Be sure
+to double-check that your stack has in fact been deleted, and re-perform
+the actions above if needed.</p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="setup-jupyterhub.html" title="previous page">Setting up JupyterHub</a>
+    <a class='right-next' id="next-link" href="../customizing/index.html" title="next page">Customization Guide</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

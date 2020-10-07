@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customizing User Management &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../administrator/index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#culling-user-pods" class="nav-link">Culling user pods</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#admin-users" class="nav-link">Admin Users</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#authenticating-users" class="nav-link">Authenticating Users</a>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="customizing-user-management">
+<h1>Customizing User Management<a class="headerlink" href="#customizing-user-management" title="Permalink to this headline">¶</a></h1>
+<p>This section describes management of users and their
+permissions on JupyterHub.</p>
+<div class="section" id="culling-user-pods">
+<h2>Culling user pods<a class="headerlink" href="#culling-user-pods" title="Permalink to this headline">¶</a></h2>
+<p>JupyterHub will automatically delete any user pods that have no activity
+for a period of time. This helps free up computational resources and keeps
+costs down if you are using an autoscaling cluster.
+When these users navigate back to your JupyterHub, they will
+have to start their server again, and the state of their previous session
+(variables they’ve created, any in-memory data, etc)
+will be lost. This is known as <em>culling</em>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In JupyterHub, “inactivity” is defined as no response from the user’s
+browser. JupyterHub constantly pings the user’s JupyterHub browser session
+to check whether it is open. This means that leaving the computer running
+with the JupyterHub window open will <strong>not</strong> be treated as inactivity.</p>
+</div>
+<p>To disable culling, put the following into <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cull</span><span class="p">:</span>
+  <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+<p>By default, JupyterHub will run the culling process every ten minutes
+and will cull any user pods that have been inactive for more than one hour.
+You can configure this behavior in your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file with the following
+fields:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cull</span><span class="p">:</span>
+  <span class="nt">timeout</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;max-idle-seconds-before-user-pod-is-deleted&gt;</span>
+  <span class="nt">every</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;number-of-seconds-this-check-is-done&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While JupyterHub automatically runs the culling process, it is not a
+replacement for keeping an eye on your cluster to make sure resources
+are being used as expected.</p>
+</div>
+</div>
+<div class="section" id="admin-users">
+<h2>Admin Users<a class="headerlink" href="#admin-users" title="Permalink to this headline">¶</a></h2>
+<p>JupyterHub has the concept of
+<a class="reference external" href="https://jupyterhub.readthedocs.io/en/latest/getting-started/authenticators-users-basics.html#configure-admins-admin-users">admin users</a>
+who have special rights. They can start / stop other user’s servers, and
+optionally access user’s notebooks. They will see a new <strong>Admin</strong> button in
+their Control Panel which will take them to an <strong>Admin Panel</strong> where they can
+perform all these actions.</p>
+<p>You can specify a list of admin users in your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">auth</span><span class="p">:</span>
+  <span class="nt">admin</span><span class="p">:</span>
+    <span class="nt">users</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">adminuser1</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">adminuser2</span>
+</pre></div>
+</div>
+<p>By default, admins can access user’s notebooks. If you wish to disable this, use
+this in your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">auth</span><span class="p">:</span>
+  <span class="nt">admin</span><span class="p">:</span>
+    <span class="nt">access</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="authenticating-users">
+<h2>Authenticating Users<a class="headerlink" href="#authenticating-users" title="Permalink to this headline">¶</a></h2>
+<p>For information on authenticating users in JupyterHub, see
+<a class="reference internal" href="../administrator/authentication.html"><span class="doc std std-doc">the Authentication guide</span></a>.</p>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

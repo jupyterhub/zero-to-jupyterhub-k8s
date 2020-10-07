@@ -1,0 +1,384 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zero to JupyterHub with Kubernetes &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Setup Kubernetes" href="create-k8s-cluster.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="#">
+      <img src="_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="administrator/index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#what-to-expect" class="nav-link">What To Expect</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#setup-a-kubernetes-cluster" class="nav-link">Setup a Kubernetes cluster</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#setup-jupyterhub" class="nav-link">Setup JupyterHub</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#customization-guide" class="nav-link">Customization Guide</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#administrator-guide" class="nav-link">Administrator Guide</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#resources-from-the-community" class="nav-link">Resources from the community</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#reference" class="nav-link">Reference</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#institutional-support" class="nav-link">Institutional support</a>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="zero-to-jupyterhub-with-kubernetes">
+<h1>Zero to JupyterHub with Kubernetes<a class="headerlink" href="#zero-to-jupyterhub-with-kubernetes" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://github.com/jupyterhub/jupyterhub">JupyterHub</a> allows users to interact with a computing environment through a
+webpage. As most devices have access to a web browser, JupyterHub makes it is
+easy to provide and standardize the computing environment of a group of people
+(e.g., for a class of students or an analytics team).</p>
+<p>This project will help you set up your own JupyterHub on a cloud and leverage
+the clouds scalable nature to support large groups of users. Thanks to
+<a class="reference internal" href="reference/glossary.html#term-Kubernetes"><span class="xref std std-term">Kubernetes</span></a>, we are not tied to a specific cloud provider.</p>
+<p>Note that this project is under active development so information and tools may
+change. <em>You can be a part of this change!</em> If you see anything that is incorrect
+or have any questions, feel free to reach out in the <a class="reference external" href="https://gitter.im/jupyterhub/jupyterhub">gitter chat</a> or create an issue at the <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">issues
+page</a>. If you have tips or deployments that you would like to share, see
+<a class="reference internal" href="#community-resources"><span class="std std-ref">Resources from the community</span></a>.</p>
+<p>This documentation is for jupyterhub chart version 0.0.1-set.by.chartpress, which deploys JupyterHub 1.1.0.</p>
+<p>This version of the chart requires kubernetes ≥1.11 and helm ≥2.11.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Helm 2 is deprecated since of November 2019, and
+<a class="reference external" href="https://helm.sh/blog/covid-19-extending-helm-v2-bug-fixes">will receive bugfixes until August 13, 2020</a>.
+So, the Helm references in this documentation are Helm v3.</p>
+</div>
+<div class="section" id="what-to-expect">
+<span id="about-guide"></span><h2>What To Expect<a class="headerlink" href="#what-to-expect" title="Permalink to this headline">¶</a></h2>
+<p>This guide will help you deploy and customize your own JupyterHub on a cloud.
+While doing this, you will gain valuable experience with:</p>
+<ul class="simple">
+<li><p><strong>A cloud provider</strong> such as Google Cloud, Microsoft Azure, Amazon EC2, IBM Cloud…</p></li>
+<li><p><strong>Kubernetes</strong> to manage resources on the cloud</p></li>
+<li><p><strong>Helm v3</strong> to configure and control the packaged JupyterHub installation</p></li>
+<li><p><strong>JupyterHub</strong> to give users access to a Jupyter computing environment</p></li>
+<li><p><strong>A terminal interface</strong> on some operating system</p></li>
+</ul>
+<p>It’s also possible you end up getting experienced with:</p>
+<ul class="simple">
+<li><p><strong>Docker</strong> to build customized image for the users</p></li>
+<li><p><strong>Domain registration</strong> to make the hub available at <a class="reference external" href="https://your-domain-name.com">https://your-domain-name.com</a></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a more elaborate introduction to the tools and services that JupyterHub
+depends upon, see our <a class="reference internal" href="reference/tools.html#tools"><span class="std std-ref">Utilized Tools</span></a> page.</p>
+</div>
+</div>
+<div class="section" id="setup-a-kubernetes-cluster">
+<span id="getting-to-zero"></span><h2>Setup a Kubernetes cluster<a class="headerlink" href="#setup-a-kubernetes-cluster" title="Permalink to this headline">¶</a></h2>
+<p>This section describes a Kubernetes cluster and outlines how to complete <em>Step Zero: your Kubernetes cluster</em> for
+different cloud providers and infrastructure.</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Setup a Kubernetes cluster</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="create-k8s-cluster.html">Setup Kubernetes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="google/step-zero-gcp.html">Kubernetes on Google Cloud (GKE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="microsoft/step-zero-azure.html">Kubernetes on Microsoft Azure Kubernetes Service (AKS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="microsoft/step-zero-azure-autoscale.html">Kubernetes on Microsoft Azure Kubernetes Service (AKS) with Autoscaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="amazon/step-zero-aws.html">Kubernetes on Amazon Web Services (AWS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="amazon/step-zero-aws-eks.html">Kubernetes on Amazon Web Services (AWS) with Elastic Container with Kubernetes (EKS)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="redhat/step-zero-openshift.html">Kubernetes on Red Hat OpenShift</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ibm/step-zero-ibm.html">Kubernetes on IBM Cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="digital-ocean/step-zero-digital-ocean.html">Kubernetes on Digital Ocean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ovh/step-zero-ovh.html">Kubernetes on OVHcloud (OVH)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="setup-jupyterhub">
+<span id="creating-your-jupyterhub"></span><h2>Setup JupyterHub<a class="headerlink" href="#setup-jupyterhub" title="Permalink to this headline">¶</a></h2>
+<p>This tutorial starts from <em>Step Zero: your Kubernetes cluster</em> and describes the
+steps needed for you to create a complete initial JupyterHub deployment.
+This will use the JupyterHub Helm chart which provides sensible defaults for
+an initial deployment.</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Setup JupyterHub</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="setup-jupyterhub/index.html">Setup JupyterHub</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="customization-guide">
+<span id="id1"></span><h2>Customization Guide<a class="headerlink" href="#customization-guide" title="Permalink to this headline">¶</a></h2>
+<p>JupyterHub can be configured and customized to fit a variety of deployment
+requirements. If you would like to expand JupyterHub, customize its setup,
+increase the computational resources available for users, or change
+authentication services, this guide will walk you through the steps.
+See the <a class="reference internal" href="reference/reference.html#helm-chart-configuration-reference"><span class="std std-ref">Configuration Reference</span></a> for a list of frequently
+used configurable helm chart fields.</p>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="administrator-guide">
+<span id="id2"></span><h2>Administrator Guide<a class="headerlink" href="#administrator-guide" title="Permalink to this headline">¶</a></h2>
+<p>This section provides information on managing and maintaining a staging or
+production deployment of JupyterHub. It has considerations for managing
+cloud-based deployments and tips for maintaining your deployment.</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Administrator Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="administrator/index.html">Administrator Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="administrator/architecture.html">The JupyterHub Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="administrator/debug.html">Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="administrator/authentication.html">Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="administrator/optimization.html">Optimizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="administrator/security.html">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="administrator/upgrading.html">Upgrading your Helm chart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="administrator/troubleshooting.html">FAQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="administrator/advanced.html">Advanced Topics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="administrator/cost.html">Appendix: Projecting deployment costs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="resources-from-the-community">
+<span id="community-resources"></span><h2>Resources from the community<a class="headerlink" href="#resources-from-the-community" title="Permalink to this headline">¶</a></h2>
+<p>This section gives the community a space to provide information on setting
+up, managing, and maintaining JupyterHub.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>We recognize that Kubernetes has many deployment options. As a project team
+with limited resources to provide end user support, we rely on community
+members to share their collective Kubernetes knowledge and JupyterHub
+experiences.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>Contributing to Z2JH</strong>. If you would like to help improve the Zero to
+JupyterHub guide, please see the <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues">issues page</a> as well as the <a class="reference external" href="https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CONTRIBUTING.md">contributor guide</a>.</p>
+</div>
+<p>We hope that you will use this section to share deployments with on a variety
+of infrastructure and for different use cases.
+There is also a <a class="reference internal" href="community/users-list.html"><span class="doc">community maintained list</span></a> of users of this
+Guide and the JupyterHub Helm Chart.</p>
+<p>Please submit a pull request to add to this section. Thanks.</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Community section</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="community/index.html">Community Resources</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="reference">
+<span id="id3"></span><h2>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="institutional-support">
+<h2>Institutional support<a class="headerlink" href="#institutional-support" title="Permalink to this headline">¶</a></h2>
+<p>This guide and the associated helm chart would not be possible without the
+amazing institutional support from the following
+organizations (and the organizations that support them!)</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://data.berkeley.edu/">UC Berkeley Data Science Division</a></p></li>
+<li><p><a class="reference external" href="https://bids.berkeley.edu/">Berkeley Institute for Data Science</a></p></li>
+<li><p><a class="reference external" href="https://www.calpoly.edu/">Cal Poly, San Luis Obispo</a></p></li>
+<li><p><a class="reference external" href="https://www.simula.no/">Simula Research Institute</a></p></li>
+</ul>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='right-next' id="next-link" href="create-k8s-cluster.html" title="next page">Setup Kubernetes</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

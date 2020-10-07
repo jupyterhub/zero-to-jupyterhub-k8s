@@ -1,0 +1,482 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced Topics &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Appendix: Projecting deployment costs" href="cost.html" />
+    <link rel="prev" title="FAQ" href="troubleshooting.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../customizing/index.html">Customization Guide</a>
+        </li>
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+      
+      
+      
+      
+      
+      
+        
+          
+              <li class="">
+                  <a href="architecture.html">The JupyterHub Architecture</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="debug.html">Debugging</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="authentication.html">Authentication</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="optimization.html">Optimizations</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="security.html">Security</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="upgrading.html">Upgrading your Helm chart</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="troubleshooting.html">FAQ</a>
+              </li>
+          
+        
+          
+              <li class="active">
+                  <a href="">Advanced Topics</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="cost.html">Appendix: Projecting deployment costs</a>
+              </li>
+          
+        
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#ingress" class="nav-link">Ingress</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#ingress-and-automatic-https-with-kube-lego-let-s-encrypt" class="nav-link">Ingress and Automatic HTTPS with kube-lego & Let’s Encrypt</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#arbitrary-extra-code-and-configuration-in-jupyterhub-config-py" class="nav-link">Arbitrary extra code and configuration in jupyterhub_config.py</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hub-extraconfig" class="nav-link">hub.extraConfig</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#custom-configuration" class="nav-link">custom configuration</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hub-extraenv" class="nav-link">hub.extraEnv</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#hub-extracontainers" class="nav-link">hub.extraContainers</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#specifying-suitable-hub-storage" class="nav-link">Specifying suitable hub storage</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="advanced-topics">
+<h1>Advanced Topics<a class="headerlink" href="#advanced-topics" title="Permalink to this headline">¶</a></h1>
+<p>This page contains a grab bag of various useful topics that don’t have an easy
+home elsewhere:</p>
+<ul class="simple">
+<li><p>Ingress</p></li>
+<li><p>Arbitrary extra code and configuration in <code class="docutils literal notranslate"><span class="pre">jupyterhub_config.py</span></code></p></li>
+</ul>
+<p>Most people setting up JupyterHubs on popular public clouds should not have
+to use any of this information, but these topics are essential for more complex
+installations.</p>
+<div class="section" id="ingress">
+<h2>Ingress<a class="headerlink" href="#ingress" title="Permalink to this headline">¶</a></h2>
+<p>If you are using a Kubernetes Cluster that does not provide public IPs for
+services directly, you need to use a <a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/ingress/">Kubernetes Ingress
+resource</a> to
+get traffic into your JupyterHub. This varies wildly based on how your cluster
+was set up, which is why this is in the ‘Advanced’ section.</p>
+<p>You can enable the required Ingress resources with the following in your
+<code class="docutils literal notranslate"><span class="pre">config.yaml</span></code></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ingress</span><span class="p">:</span>
+  <span class="nt">enabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+  <span class="nt">hosts</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;hostname&gt;</span>
+</pre></div>
+</div>
+<p>You can specify multiple hosts that should be routed to the hub by listing them
+under <code class="docutils literal notranslate"><span class="pre">ingress.hosts</span></code>.</p>
+<p>Note that you need to install and configure an <a class="reference external" href="https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/">Ingress
+controller</a>
+for the ingress object to work.</p>
+<p>We recommend the community-maintained <a class="reference external" href="https://github.com/helm/charts/tree/master/stable/nginx-ingress">nginx-ingress</a>
+controller, <a class="reference external" href="https://github.com/kubernetes/ingress-nginx"><strong>kubernetes/ingress-nginx</strong></a>.
+Note that Nginx maintains two additional ingress controllers.
+For most use cases, we recommend the community maintained <strong>kubernetes/ingress-nginx</strong> since that
+is the ingress controller that the development team has the most experience using.</p>
+<div class="section" id="ingress-and-automatic-https-with-kube-lego-let-s-encrypt">
+<h3>Ingress and Automatic HTTPS with kube-lego &amp; Let’s Encrypt<a class="headerlink" href="#ingress-and-automatic-https-with-kube-lego-let-s-encrypt" title="Permalink to this headline">¶</a></h3>
+<p>When using an ingress object, the default automatic HTTPS support does not work.
+To have automatic fetch and renewal of HTTPS certificates, you must set it up
+yourself.</p>
+<p>Here’s a method that uses <a class="reference external" href="https://github.com/jetstack/kube-lego">kube-lego</a>
+to automatically fetch and renew HTTPS certificates from <a class="reference external" href="https://letsencrypt.org/">Let’s Encrypt</a>.
+This approach with kube-lego and Let’s Encrypt currently only works with two ingress controllers:
+the community-maintained <a class="reference external" href="https://github.com/kubernetes/ingress-nginx"><strong>kubernetes/ingress-nginx</strong></a>
+and <strong>google cloud’s ingress controller</strong>.</p>
+<ol>
+<li><p>Make sure that DNS is properly set up (configuration depends on the ingress
+controller you are using and how your cluster was set up). Accessing
+<code class="docutils literal notranslate"><span class="pre">&lt;hostname&gt;</span></code> from a browser should route traffic to the hub.</p></li>
+<li><p>Install &amp; configure kube-lego using the
+<a class="reference external" href="https://github.com/helm/charts/tree/master/stable/kube-lego">kube-lego helm-chart</a>.
+Remember to change <code class="docutils literal notranslate"><span class="pre">config.LEGO_EMAIL</span></code> and <code class="docutils literal notranslate"><span class="pre">config.LEGO_URL</span></code> at the least.</p></li>
+<li><p>Add an annotation + TLS config to the ingress so kube-lego knows to get certificates for
+it:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ingress</span><span class="p">:</span>
+  <span class="nt">annotations</span><span class="p">:</span>
+    <span class="nt">kubernetes.io/tls-acme</span><span class="p">:</span> <span class="s">&quot;true&quot;</span>
+  <span class="nt">tls</span><span class="p">:</span>
+   <span class="p p-Indicator">-</span> <span class="nt">hosts</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">&lt;hostname&gt;</span>
+     <span class="nt">secretName</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">kubelego-tls-jupyterhub</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>This should provision a certificate, and keep renewing it whenever it gets close
+to expiry!</p>
+</div>
+</div>
+<div class="section" id="arbitrary-extra-code-and-configuration-in-jupyterhub-config-py">
+<h2>Arbitrary extra code and configuration in <code class="docutils literal notranslate"><span class="pre">jupyterhub_config.py</span></code><a class="headerlink" href="#arbitrary-extra-code-and-configuration-in-jupyterhub-config-py" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes the various options exposed via the helm-chart’s <code class="docutils literal notranslate"><span class="pre">values.yaml</span></code> is not
+enough, and you need to insert arbitrary extra code / config into
+<code class="docutils literal notranslate"><span class="pre">jupyterhub_config.py</span></code>. This is a valuable escape hatch for both prototyping new
+features that are not yet present in the helm-chart, and also for
+installation-specific customization that is not suited for upstreaming.</p>
+<p>There are four properties you can set in your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> to do this.</p>
+<div class="section" id="hub-extraconfig">
+<h3><code class="docutils literal notranslate"><span class="pre">hub.extraConfig</span></code><a class="headerlink" href="#hub-extraconfig" title="Permalink to this headline">¶</a></h3>
+<p>The value specified for <code class="docutils literal notranslate"><span class="pre">hub.extraConfig</span></code> is evaluated as python code at the end
+of <code class="docutils literal notranslate"><span class="pre">jupyterhub_config.py</span></code>. You can do anything here since it is arbitrary Python
+Code. Some examples of things you can do:</p>
+<ol class="simple">
+<li><p>Override various methods in the Spawner / Authenticator by subclassing them.
+For example, you can use this to pass authentication credentials for the user
+(such as GitHub OAuth tokens) to the environment. See
+<a class="reference external" href="https://jupyterhub.readthedocs.io/en/latest/reference/authenticators.html#authentication-state">the JupyterHub docs</a> for
+an example.</p></li>
+<li><p>Specify traitlets that take callables as values, allowing dynamic per-user
+configuration.</p></li>
+<li><p>Set traitlets for JupyterHub / Spawner / Authenticator that are not currently
+supported in the helm chart</p></li>
+</ol>
+<p>Unfortunately, you have to write your python <em>in</em> your YAML file. There’s no way
+to include a file in <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>.</p>
+<p>You can specify <code class="docutils literal notranslate"><span class="pre">hub.extraConfig</span></code> as a raw string (remember to use the <code class="docutils literal notranslate"><span class="pre">|</span></code> for multi-line
+YAML strings):</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
+  <span class="nt">extraConfig</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+    <span class="no">import time</span>
+    <span class="no">c.Spawner.environment += {</span>
+       <span class="no">&quot;CURRENT_TIME&quot;: str(time.time())</span>
+    <span class="no">}</span>
+</pre></div>
+</div>
+<p>You can also specify <code class="docutils literal notranslate"><span class="pre">hub.extraConfig</span></code> as a dictionary, if you want to logically
+split your customizations. The code will be evaluated in alphabetical sorted
+order of the key.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
+  <span class="nt">extraConfig</span><span class="p">:</span>
+    <span class="nt">00-first-config</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+      <span class="no"># some code</span>
+    <span class="nt">10-second-config</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+      <span class="no"># some other code</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="custom-configuration">
+<h3><code class="docutils literal notranslate"><span class="pre">custom</span></code> configuration<a class="headerlink" href="#custom-configuration" title="Permalink to this headline">¶</a></h3>
+<p>The contents of <code class="docutils literal notranslate"><span class="pre">values.yaml</span></code> is passed through to the Hub image.
+You can access these values via the <code class="docutils literal notranslate"><span class="pre">z2jh.get_config</span></code> function,
+for further customization of the hub pod.
+Version 0.8 of the chart adds a top-level <code class="docutils literal notranslate"><span class="pre">custom</span></code>
+field for passing through additional configuration that you may use.
+It can be arbitrary YAML.
+You can use this to separate your code (which goes in <code class="docutils literal notranslate"><span class="pre">hub.extraConfig</span></code>)
+from your config (which should go in <code class="docutils literal notranslate"><span class="pre">custom</span></code>).</p>
+<p>For example, if you use the following snippet in your config.yaml file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">custom</span><span class="p">:</span>
+  <span class="nt">myString</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Hello!</span>
+  <span class="nt">myList</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Item1</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Item2</span>
+  <span class="nt">myDict</span><span class="p">:</span>
+    <span class="nt">key</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">value</span>
+  <span class="nt">myLongString</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+    <span class="no">Line1</span>
+    <span class="no">Line2</span>
+</pre></div>
+</div>
+<p>In your <code class="docutils literal notranslate"><span class="pre">hub.extraConfig</span></code>,</p>
+<ol class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">z2jh.get_config('custom.myString')</span></code> will return a string <code class="docutils literal notranslate"><span class="pre">&quot;Hello!&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">z2jh.get_config('custom.myList')</span></code> will return a list <code class="docutils literal notranslate"><span class="pre">[&quot;Item1&quot;,</span> <span class="pre">&quot;Item2&quot;]</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">z2jh.get_config('custom.myDict')</span></code> will return a dict <code class="docutils literal notranslate"><span class="pre">{&quot;key&quot;:</span> <span class="pre">&quot;value&quot;}</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">z2jh.get_config('custom.myLongString')</span></code> will return a string <code class="docutils literal notranslate"><span class="pre">&quot;Line1\nLine2&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">z2jh.get_config('custom.nonExistent')</span></code> will return <code class="docutils literal notranslate"><span class="pre">None</span></code> (since you didn’t
+specify any value for <code class="docutils literal notranslate"><span class="pre">nonExistent</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">z2jh.get_config('custom.myDefault',</span> <span class="pre">True)</span></code> will return <code class="docutils literal notranslate"><span class="pre">True</span></code>, since that is
+specified as the second parameter (default)</p></li>
+</ol>
+<p>You need to have a <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">z2jh</span></code> at the top of your <code class="docutils literal notranslate"><span class="pre">extraConfig</span></code> for
+<code class="docutils literal notranslate"><span class="pre">z2jh.get_config()</span></code> to work.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.8: </span><code class="docutils literal notranslate"><span class="pre">hub.extraConfigMap</span></code> used to be required for specifying additional values
+to pass, which was more restrictive.
+<code class="docutils literal notranslate"><span class="pre">hub.extraConfigMap</span></code> is deprecated in favor of the new
+top-level <code class="docutils literal notranslate"><span class="pre">custom</span></code> field, which allows fully arbitrary yaml.</p>
+</div>
+</div>
+<div class="section" id="hub-extraenv">
+<h3><code class="docutils literal notranslate"><span class="pre">hub.extraEnv</span></code><a class="headerlink" href="#hub-extraenv" title="Permalink to this headline">¶</a></h3>
+<p>This property takes a dictionary that is set as environment variables in the hub
+container. You can use this to either pass in additional config to code in your
+<code class="docutils literal notranslate"><span class="pre">hub.extraConfig</span></code> or set some hub parameters that are not settable by other means.</p>
+</div>
+<div class="section" id="hub-extracontainers">
+<h3><code class="docutils literal notranslate"><span class="pre">hub.extraContainers</span></code><a class="headerlink" href="#hub-extracontainers" title="Permalink to this headline">¶</a></h3>
+<p>A list of extra containers that are bundled alongside the hub container in the
+same pod. This is a <a class="reference external" href="https://kubernetes.io/blog/2015/06/the-distributed-system-toolkit-patterns/">common
+pattern</a>
+in kubernetes that as a long list of cool use cases. Some example use cases are:</p>
+<ol class="simple">
+<li><p>Database Proxies, which are sometimes required for the hub to talk to its
+configured database
+(in <a class="reference external" href="https://cloud.google.com/sql/docs/mysql/sql-proxy">Google Cloud</a>) for example</p></li>
+<li><p>Servers / other daemons that are used by code in your <code class="docutils literal notranslate"><span class="pre">hub.customConfig</span></code></p></li>
+</ol>
+<p>The items in this list must be valid kubernetes
+<a class="reference external" href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#container-v1-core">container specifications</a>.</p>
+</div>
+<div class="section" id="specifying-suitable-hub-storage">
+<h3>Specifying suitable hub storage<a class="headerlink" href="#specifying-suitable-hub-storage" title="Permalink to this headline">¶</a></h3>
+<p>By default, the hub’s sqlite-pvc setting will dynamically create a disk to store
+the sqlite database. It is possible to <a class="reference external" href="reference/reference.html#hub-db-type">configure other storage
+classes</a> under hub.db.pvc, but make sure
+to choose one that the hub can write quickly and safely to. Slow or higher
+latency storage classes can cause hub operations to lag which may ultimately
+lead to HTTP errors in user environments.</p>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="troubleshooting.html" title="previous page">FAQ</a>
+    <a class='right-next' id="next-link" href="cost.html" title="next page">Appendix: Projecting deployment costs</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

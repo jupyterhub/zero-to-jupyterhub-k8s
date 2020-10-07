@@ -1,0 +1,445 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customizing User Resources &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Customizing User Storage" href="user-storage.html" />
+    <link rel="prev" title="Customizing User Environment" href="user-environment.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">Customization Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../administrator/index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+      
+      
+      
+      
+        
+          
+              <li class="">
+                  <a href="extending-jupyterhub.html">Customizing your Deployment</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="user-environment.html">Customizing User Environment</a>
+              </li>
+          
+        
+          
+              <li class="active">
+                  <a href="">Customizing User Resources</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="user-storage.html">Customizing User Storage</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="user-management.html">Customizing User Management</a>
+              </li>
+          
+        
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#set-user-memory-and-cpu-guarantees-limits" class="nav-link">Set user memory and CPU guarantees / limits</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#set-user-gpu-guarantees-limits" class="nav-link">Set user GPU guarantees / limits</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#modifying-user-shared-memory-size" class="nav-link">Modifying user shared memory size</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#modifying-user-storage-type-and-size" class="nav-link">Modifying user storage type and size</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#expanding-and-contracting-the-size-of-your-cluster" class="nav-link">Expanding and contracting the size of your cluster</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#google-cloud-platform" class="nav-link">Google Cloud Platform</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#microsoft-azure-platform" class="nav-link">Microsoft Azure Platform</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="customizing-user-resources">
+<span id="user-resources"></span><h1>Customizing User Resources<a class="headerlink" href="#customizing-user-resources" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a list of all the Helm chart options you can configure, see the
+<a class="reference internal" href="../reference/reference.html#helm-chart-configuration-reference"><span class="std std-ref">Configuration Reference</span></a>.</p>
+</div>
+<p>User resources include the CPU, RAM, and Storage which JupyterHub provides to
+users. Most of these can be controlled via modifications to the Helm chart.
+For information on deploying your modifications to the JupyterHub deployment,
+see <a class="reference internal" href="extending-jupyterhub.html#apply-config-changes"><span class="std std-ref">Applying configuration changes</span></a>.</p>
+<p>Since JupyterHub can serve many different types of users, JupyterHub managers
+and administrators must be able to flexibly <strong>allocate user resources</strong>, like
+memory or compute. For example, the Hub may be serving power users with large
+resource requirements as well as beginning users with more basic resource
+needs. The ability to customize the Hub’s resources to satisfy both user
+groups improves the user experience for all Hub users.</p>
+<div class="section" id="set-user-memory-and-cpu-guarantees-limits">
+<h2>Set user memory and CPU guarantees / limits<a class="headerlink" href="#set-user-memory-and-cpu-guarantees-limits" title="Permalink to this headline">¶</a></h2>
+<p>Each user on your JupyterHub gets a slice of memory and CPU to use. There are
+two ways to specify how much users get to use: resource <em>guarantees</em> and
+resource <em>limits</em>.</p>
+<p>A resource <em>guarantee</em> means that all users will have <em>at least</em> this resource
+available at all times, but they may be given more resources if they’re
+available. For example, if users are <em>guaranteed</em> 1G of RAM, users can
+technically use more than 1G of RAM if these resources aren’t being used by
+other users.</p>
+<p>A resource <em>limit</em> sets a hard limit on the resources available. In the example
+above, if there were a 1G memory limit, it would mean that users could use
+no more than 1G of RAM, no matter what other resources are being used on the
+machines.</p>
+<p>By default, each user is <em>guaranteed</em> 1G of RAM. All users have <em>at least</em> 1G,
+but they can technically use more if it is available. You can easily change the
+amount of these resources, and whether they are a <em>guarantee</em> or a <em>limit</em>, by
+changing your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file. This is done with the following structure.</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">singleuser</span><span class="p">:</span>
+  <span class="nt">memory</span><span class="p">:</span>
+    <span class="nt">limit</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1G</span>
+    <span class="nt">guarantee</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1G</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This sets a memory limit and guarantee of 1G. Kubernetes will make sure that
+each user will always have access to 1G of RAM, and requests for more RAM will
+fail (your kernel will usually die). You can set the limit to be higher than
+the guarantee to allow some users to use larger amounts of RAM for
+a very short-term time (e.g. when running a single, short-lived function that
+consumes a lot of memory).</p>
+<p>Similarly, you can limit CPU as follows:</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">singleuser</span><span class="p">:</span>
+  <span class="nt">cpu</span><span class="p">:</span>
+    <span class="nt">limit</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">.5</span>
+    <span class="nt">guarantee</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">.5</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This would limit your users to a maximum of .5 of a CPU (so 1/2 of a CPU core), as well as guarantee them that same amount.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Remember to <a class="reference internal" href="extending-jupyterhub.html#apply-config-changes"><span class="std std-ref">apply the change</span></a> after changing your <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file!</p>
+</div>
+</div>
+<div class="section" id="set-user-gpu-guarantees-limits">
+<h2>Set user GPU guarantees / limits<a class="headerlink" href="#set-user-gpu-guarantees-limits" title="Permalink to this headline">¶</a></h2>
+<p>It is possible to allocate GPUs to your user. This is useful for heavier
+workloads, such as deep learning, that can take advantage of GPUs.</p>
+<p>For example, to create a profile that allocates one NVIDIA GPU:</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">singleuser</span><span class="p">:</span>
+ <span class="nt">profileList</span><span class="p">:</span>
+   <span class="p p-Indicator">-</span> <span class="nt">display_name</span><span class="p">:</span> <span class="s">&quot;GPU</span><span class="nv"> </span><span class="s">Server&quot;</span>
+     <span class="nt">description</span><span class="p">:</span> <span class="s">&quot;Spawns</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">notebook</span><span class="nv"> </span><span class="s">server</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">access</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">GPU&quot;</span>
+     <span class="nt">kubespawner_override</span><span class="p">:</span>
+       <span class="nt">extra_resource_limits</span><span class="p">:</span>
+         <span class="nt">nvidia.com/gpu</span><span class="p">:</span> <span class="s">&quot;1&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This assumes that at least one of your Kubernetes nodes has compatible GPUs
+attached. The method for doing this differs according to your infrastructure
+provider. Here are a few links to help you get started:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://cloud.google.com/kubernetes-engine/docs/how-to/gpus">Google Kubernetes Engine (GKE)</a></p></li>
+<li><p><a class="reference external" href="https://aws.amazon.com/blogs/compute/running-gpu-accelerated-kubernetes-workloads-on-p3-and-p2-ec2-instances-with-amazon-eks/">Amazon Elastic Kubernetes Service (EKS)</a></p></li>
+<li><p><a class="reference external" href="https://cloud.google.com/kubernetes-engine/docs/how-to/gpus">Azure Kubernetes Service (AKS)</a></p></li>
+</ul>
+<p>You will also need to deploy the k8s-device-plugin following the instructions <a class="reference external" href="https://github.com/NVIDIA/k8s-device-plugin#quick-start">here</a>.</p>
+<p>To check that your GPUs are schedulable by Kubernetes, you can run the following command:</p>
+<blockquote>
+<div><div class="highlight-none notranslate"><div class="highlight"><pre><span></span>kubectl get nodes -o=custom-columns=NAME:.metadata.name,GPUs:.status.capacity.&#39;nvidia\.com/gpu&#39;
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="modifying-user-shared-memory-size">
+<h2>Modifying user shared memory size<a class="headerlink" href="#modifying-user-shared-memory-size" title="Permalink to this headline">¶</a></h2>
+<p>It is also beneficial to increase the shared memory (SHM) allocation on pods
+running workloads like deep learning. This is required for functions like
+PyTorch’s DataLoader to run properly.</p>
+<p>The following configuration will increase the SHM allocation by mounting a
+<code class="code docutils literal notranslate"><span class="pre">tmpfs</span></code> (ramdisk) at <code class="code docutils literal notranslate"><span class="pre">/dev/shm</span></code>, replacing the default 64MB allocation.</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">singleuser</span><span class="p">:</span>
+ <span class="nt">storage</span><span class="p">:</span>
+   <span class="nt">extraVolumes</span><span class="p">:</span>
+     <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">shm-volume</span>
+       <span class="nt">emptyDir</span><span class="p">:</span>
+         <span class="nt">medium</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Memory</span>
+   <span class="nt">extraVolumeMounts</span><span class="p">:</span>
+     <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">shm-volume</span>
+       <span class="nt">mountPath</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/dev/shm</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The volume <code class="code docutils literal notranslate"><span class="pre">shm-volume</span></code> will be created when the user’s pod is created,
+and destroyed after the pod is destroyed.</p>
+<p>Some important notes regarding SHM allocation:</p>
+<ul class="simple">
+<li><p>SHM usage by the pod will count towards its memory limit</p></li>
+<li><p>When the memory limit is exceeded, the pod will be evicted</p></li>
+</ul>
+</div>
+<div class="section" id="modifying-user-storage-type-and-size">
+<h2>Modifying user storage type and size<a class="headerlink" href="#modifying-user-storage-type-and-size" title="Permalink to this headline">¶</a></h2>
+<p>See the <a class="reference internal" href="user-storage.html#user-storage"><span class="std std-ref">Customizing User Storage</span></a> for information on how to modify the type and
+size of storage that your users have access to.</p>
+</div>
+<div class="section" id="expanding-and-contracting-the-size-of-your-cluster">
+<h2>Expanding and contracting the size of your cluster<a class="headerlink" href="#expanding-and-contracting-the-size-of-your-cluster" title="Permalink to this headline">¶</a></h2>
+<p>You can easily scale up or down your cluster’s size to meet usage demand or to
+save cost when the cluster is not being used. This is particularly useful
+when you have predictable spikes in usage. For example, if you are
+organizing and running a workshop, resizing a cluster gives you a way
+to save cost and prepare JupyterHub before the event. For example:</p>
+<ul class="simple">
+<li><p><strong>One week before the workshop:</strong> You can create the cluster, set
+everything up, and then resize the cluster to zero nodes to save cost.</p></li>
+<li><p><strong>On the day of the workshop:</strong> You can scale the cluster up to a suitable
+size for the workshop. This workflow also helps you avoid scrambling on
+the workshop day to set up the cluster and JupyterHub.</p></li>
+<li><p><strong>After the workshop:</strong> The cluster can be deleted.</p></li>
+</ul>
+<p>The following sections describe
+how to resize the cluster on various cloud platforms.</p>
+<div class="section" id="google-cloud-platform">
+<h3>Google Cloud Platform<a class="headerlink" href="#google-cloud-platform" title="Permalink to this headline">¶</a></h3>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">resize</span></code> command and
+provide a new cluster size (i.e. number of nodes) as a command line option
+<code class="docutils literal notranslate"><span class="pre">--num-nodes</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcloud container clusters resize <span class="se">\</span>
+    &lt;YOUR-CLUSTER-NAME&gt; <span class="se">\</span>
+    --num-nodes &lt;NEW-SIZE&gt; <span class="se">\</span>
+    --zone &lt;YOUR-CLUSTER-ZONE&gt;
+</pre></div>
+</div>
+<p>To display the cluster’s name, zone, or current size, use the command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcloud container clusters list
+</pre></div>
+</div>
+<p>After resizing the cluster, it may take a couple of minutes for the new cluster
+size to be reported back as the service is adding or removing nodes. You can
+find the true count of currently ‘ready’ nodes using <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">node</span></code> to
+report the current <code class="docutils literal notranslate"><span class="pre">Ready/NotReady</span></code> status of all nodes in the cluster.</p>
+</div>
+<div class="section" id="microsoft-azure-platform">
+<h3>Microsoft Azure Platform<a class="headerlink" href="#microsoft-azure-platform" title="Permalink to this headline">¶</a></h3>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">scale</span></code> command and
+provide a new cluster size (i.e. number of nodes) as a command line option
+<code class="docutils literal notranslate"><span class="pre">--node-count</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az aks scale <span class="se">\</span>
+    --name &lt;YOUR-CLUSTER-NAME&gt; <span class="se">\</span>
+    --node-count &lt;NEW-SIZE&gt; <span class="se">\</span>
+    --resource-group &lt;YOUR-RESOURCE-GROUP&gt;
+</pre></div>
+</div>
+<p>To display the details of the cluster, use the command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az aks show --name &lt;YOUR-CLUSTER-NAME&gt; --resource-group &lt;YOUR-RESOURCE-GROUP&gt;
+</pre></div>
+</div>
+<p>It may take some time for the new cluster nodes to be ready.
+You can use <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">get</span> <span class="pre">node</span></code> to report the current <code class="docutils literal notranslate"><span class="pre">Ready/NotReady</span></code> status of all nodes in the cluster.</p>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="user-environment.html" title="previous page">Customizing User Environment</a>
+    <a class='right-next' id="next-link" href="user-storage.html" title="next page">Customizing User Storage</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

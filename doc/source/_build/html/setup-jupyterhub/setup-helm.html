@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Setting up Helm &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Setting up JupyterHub" href="setup-jupyterhub.html" />
+    <link rel="prev" title="Setup JupyterHub" href="index.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../customizing/index.html">Customization Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../administrator/index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+      
+      
+        
+          
+              <li class="active">
+                  <a href="">Setting up Helm</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="setup-jupyterhub.html">Setting up JupyterHub</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="turn-off.html">Tearing Everything Down</a>
+              </li>
+          
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#installation" class="nav-link">Installation</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#verify" class="nav-link">Verify</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#next-step" class="nav-link">Next Step</a>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="setting-up-helm">
+<span id="setup-helm"></span><h1>Setting up Helm<a class="headerlink" href="#setting-up-helm" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://helm.sh/">Helm</a>, the package manager for Kubernetes, is a useful tool
+for: installing, upgrading and managing applications on a Kubernetes cluster.
+Helm packages are called <em>charts</em>.
+We will be installing and managing JupyterHub on our Kubernetes cluster using a Helm chart.</p>
+<p>Charts are abstractions describing how to install packages onto a Kubernetes
+cluster. When a chart is deployed, it works as a templating engine to populate
+multiple <code class="docutils literal notranslate"><span class="pre">yaml</span></code> files for package dependencies with the required variables, and
+then runs <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">apply</span></code> to apply the configuration to the resource and install
+the package.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you previously installed Z2JH using Helm 2, it is worth noting that
+Helm 3 includes several major <strong>breaking changes</strong>. See the
+<a class="reference external" href="https://helm.sh/docs/faq/">Helm 3 FAQ</a> for more information.</p>
+<p>For <strong>migrating from Helm v2 to v3</strong>, checkout the official
+<a class="reference external" href="https://helm.sh/docs/topics/v2_v3_migration/">Helm guide</a>.</p>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>While several <a class="reference external" href="https://helm.sh/docs/intro/install/">methods to install Helm</a> exist, the
+simplest way to install Helm is to run Helm’s installer script in a terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 <span class="p">|</span> bash
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The minimum supported version of Helm in Z2JH is <code class="docutils literal notranslate"><span class="pre">3.2.0</span></code>.</p></li>
+<li><p>Helm 3 uses the same security mechanisms as other Kubernetes clients such as <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>.</p></li>
+</ul>
+</div>
+<div class="section" id="verify">
+<h2>Verify<a class="headerlink" href="#verify" title="Permalink to this headline">¶</a></h2>
+<p>You can verify that it is installed properly by running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm list
+</pre></div>
+</div>
+<p>You should see an empty list since no Helm charts have been installed:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>NAME    NAMESPACE       REVISION        UPDATED STATUS  CHART   APP VERSION
+</pre></div>
+</div>
+</div>
+<div class="section" id="next-step">
+<h2>Next Step<a class="headerlink" href="#next-step" title="Permalink to this headline">¶</a></h2>
+<p>Congratulations, Helm is now set up! Let’s continue with <a class="reference internal" href="setup-jupyterhub.html#setup-jupyterhub"><span class="std std-ref">Setting up JupyterHub</span></a>!</p>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">Setup JupyterHub</a>
+    <a class='right-next' id="next-link" href="setup-jupyterhub.html" title="next page">Setting up JupyterHub</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

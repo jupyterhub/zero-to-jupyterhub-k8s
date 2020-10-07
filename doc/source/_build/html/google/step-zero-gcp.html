@@ -1,0 +1,387 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kubernetes on Google Cloud (GKE) &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Kubernetes on Microsoft Azure Kubernetes Service (AKS)" href="../microsoft/step-zero-azure.html" />
+    <link rel="prev" title="Setup Kubernetes" href="../create-k8s-cluster.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item active">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../customizing/index.html">Customization Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../administrator/index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+        
+          
+              <li class="active">
+                  <a href="">Kubernetes on Google Cloud (GKE)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../microsoft/step-zero-azure.html">Kubernetes on Microsoft Azure Kubernetes Service (AKS)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../microsoft/step-zero-azure-autoscale.html">Kubernetes on Microsoft Azure Kubernetes Service (AKS) with Autoscaling</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../amazon/step-zero-aws.html">Kubernetes on Amazon Web Services (AWS)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../amazon/step-zero-aws-eks.html">Kubernetes on Amazon Web Services (AWS) with Elastic Container with Kubernetes (EKS)</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../redhat/step-zero-openshift.html">Kubernetes on Red Hat OpenShift</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../ibm/step-zero-ibm.html">Kubernetes on IBM Cloud</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../digital-ocean/step-zero-digital-ocean.html">Kubernetes on Digital Ocean</a>
+              </li>
+          
+        
+          
+              <li class="">
+                  <a href="../ovh/step-zero-ovh.html">Kubernetes on OVHcloud (OVH)</a>
+              </li>
+          
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="kubernetes-on-google-cloud-gke">
+<span id="google-cloud"></span><h1>Kubernetes on <a class="reference external" href="https://cloud.google.com/">Google Cloud</a> (GKE)<a class="headerlink" href="#kubernetes-on-google-cloud-gke" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://cloud.google.com/kubernetes-engine/">Google Kubernetes Engine</a>
+(GKE) is the simplest and most common way of setting
+up a Kubernetes Cluster. You may be able to receive <a class="reference external" href="https://cloud.google.com/free/">free credits</a> for trying it out (though note that a
+free account <a class="reference external" href="https://cloud.google.com/free/docs/gcp-free-tier#always-free-usage-limits">comes with limitations</a>).
+Either way, you will need to connect your credit card or other payment method to
+your google cloud account.</p>
+<ol class="arabic">
+<li><p>Go to <a class="reference external" href="https://console.cloud.google.com">console.cloud.google.com</a> and log in.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Consider <a class="reference external" href="https://cloud.google.com/billing/docs/how-to/budgets">setting a cloud budget</a>
+for your Google Cloud account in order to make sure you don’t accidentally
+spend more than you wish to.</p>
+</div>
+</li>
+<li><p>Go to and enable the <a class="reference external" href="https://console.cloud.google.com/apis/api/container.googleapis.com/overview">Kubernetes Engine API</a>.</p></li>
+<li><p>Choose a terminal.</p>
+<p>You can either to use a web based terminal or install and run the required
+command line interfaces on your own computer’s terminal. We recommend
+starting out by using the web based terminal. Choose one set of instructions
+below.</p>
+<ol class="loweralpha">
+<li><p><strong>Use a web based terminal:</strong></p>
+<p>Start <em>Google Cloud Shell</em> from <a class="reference external" href="https://console.cloud.google.com">console.cloud.google.com</a> by clicking the button shown below.
+You are now in control of a virtual machine with various tools
+preinstalled. If you save something in a user folder they will remain
+available to you if you return at a later stage. Additional documentation
+about Google Cloud shell is available <a class="reference external" href="https://cloud.google.com/shell/docs/">here</a></p>
+<img alt="../_images/start_interactive_cli.png" class="align-center" src="../_images/start_interactive_cli.png" />
+</li>
+<li><p><strong>Use your own computer’s terminal:</strong></p>
+<ol class="arabic">
+<li><p>Download and install the <code class="docutils literal notranslate"><span class="pre">gcloud</span></code> command line tool at its <a class="reference external" href="https://cloud.google.com/sdk/install">install
+page</a>. It will help you
+create and communicate with a Kubernetes cluster.</p></li>
+<li><p>Install <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> (reads <em>kube control</em>), it is a tool for controlling
+Kubernetes clusters in general. From your terminal, enter:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcloud components install kubectl
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>Create a managed Kubernetes cluster and a default node pool.</p>
+<p>Ask Google Cloud to create a managed Kubernetes cluster and a default <a class="reference external" href="https://cloud.google.com/kubernetes-engine/docs/concepts/node-pools">node
+pool</a>
+to get nodes from. <em>Nodes</em> represents hardware and a <em>node pool</em> will
+keep track of how much of a certain type of hardware that you would like.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcloud container clusters create <span class="se">\</span>
+  --machine-type n1-standard-2 <span class="se">\</span>
+  --num-nodes <span class="m">2</span> <span class="se">\</span>
+  --zone &lt;compute zone from the list linked below&gt; <span class="se">\</span>
+  --cluster-version latest <span class="se">\</span>
+  &lt;CLUSTERNAME&gt;
+</pre></div>
+</div>
+<ul>
+<li><p>Replace <code class="docutils literal notranslate"><span class="pre">&lt;CLUSTERNAME&gt;</span></code> with a name that can be used to refer to this cluster
+in the future.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--machine-type</span></code> specifies the amount of CPU and RAM in each node within
+this default node pool. There is a <a class="reference external" href="https://cloud.google.com/compute/docs/machine-types">variety of types</a> to choose from.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--num-nodes</span></code> specifies how many nodes to spin up. You can change this
+later through the cloud console or using the <code class="docutils literal notranslate"><span class="pre">gcloud</span></code> command line tool.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--zone</span></code> specifies the data center zone where your cluster will be created.
+You can pick something from <a class="reference external" href="https://cloud.google.com/compute/docs/regions-zones/#available">this list</a>
+that is not too far away from your users.</p></li>
+<li><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A region in GCP is a geographical region with at least three zones, where each zone is representing a datacenter with servers etc.</p>
+<ul class="simple">
+<li><p>A regional cluster creates pods across zones in a region(three by default), distributing Kubernetes resources across multiple zones in the region. This is different from the default cluster, which has all its resources within a single zone(as shown above).</p></li>
+<li><p>A regional cluster has Highly Available (HA) kubernetes api-servers, this allows jupyterhub which uses them to have no downtime during upgrades of kubernetes itself.</p></li>
+<li><p>They also increase control plane uptime to 99.95%.</p></li>
+<li><p>To avoid tripling the number of nodes while still having HA kubernetes, the <code class="docutils literal notranslate"><span class="pre">--node-locations</span></code> flag can be used to specify a single zone to use.</p></li>
+</ul>
+</div>
+</li>
+</ul>
+</li>
+<li><p>To test if your cluster is initialized, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl get node
+</pre></div>
+</div>
+<p>The response should list two running nodes (or however many nodes you
+set with <code class="docutils literal notranslate"><span class="pre">--num-nodes</span></code> above).</p>
+</li>
+<li><p>Give your account permissions to perform all administrative actions needed.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl create clusterrolebinding cluster-admin-binding <span class="se">\</span>
+  --clusterrole<span class="o">=</span>cluster-admin <span class="se">\</span>
+  --user<span class="o">=</span>&lt;GOOGLE-EMAIL-ACCOUNT&gt;
+</pre></div>
+</div>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">&lt;GOOGLE-EMAIL-ACCOUNT&gt;</span></code> with the exact email of the Google account
+you used to sign up for Google Cloud.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Did you enter your email correctly? If not, you can run <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">delete</span>
+<span class="pre">clusterrolebinding</span> <span class="pre">cluster-admin-binding</span></code> and do it again.</p>
+</div>
+</li>
+<li><p>[optional] Create a node pool for users</p></li>
+</ol>
+<blockquote>
+<div><p>This is an optional step, for those who want to separate
+user pods from “core” pods such as the Hub itself and others.
+See <a class="reference internal" href="../administrator/optimization.html#optimization"><span class="std std-ref">Optimizations</span></a> for details on using a dedicated user node pool.</p>
+<p>The nodes in this node pool are for the users only. The node pool has
+autoscaling enabled along with a lower and an upper scaling limit. This
+means that the amount of nodes is automatically adjusted along with the
+amount of users scheduled.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">n1-standard-2</span></code> machine type has 2 CPUs and 7.5 GB of RAM each of which
+about 0.2 CPU will be requested by system pods. It is a suitable choice for a
+free account that has a limit on a total of 8 CPU cores.</p>
+<p>Note that the node pool is <em>tainted</em>. Only user pods that are configured
+with a <em>toleration</em> for this taint can schedule on the node pool’s nodes.
+This is done in order to ensure the autoscaler will be able to scale down
+when the user pods have stopped.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcloud beta container node-pools create user-pool <span class="se">\</span>
+  --machine-type n1-standard-2 <span class="se">\</span>
+  --num-nodes <span class="m">0</span> <span class="se">\</span>
+  --enable-autoscaling <span class="se">\</span>
+  --min-nodes <span class="m">0</span> <span class="se">\</span>
+  --max-nodes <span class="m">3</span> <span class="se">\</span>
+  --node-labels hub.jupyter.org/node-purpose<span class="o">=</span>user <span class="se">\</span>
+  --node-taints hub.jupyter.org_dedicated<span class="o">=</span>user:NoSchedule <span class="se">\</span>
+  --zone us-central1-b <span class="se">\</span>
+  --cluster &lt;CLUSTERNAME&gt;
+</pre></div>
+</div>
+</div></blockquote>
+<p>Congrats. Now that you have your Kubernetes cluster running, it’s time to
+begin <a class="reference internal" href="../index.html#creating-your-jupyterhub"><span class="std std-ref">Setup JupyterHub</span></a>.</p>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+    <a class='left-prev' id="prev-link" href="../create-k8s-cluster.html" title="previous page">Setup Kubernetes</a>
+    <a class='right-next' id="next-link" href="../microsoft/step-zero-azure.html" title="next page">Kubernetes on Microsoft Azure Kubernetes Service (AKS)</a>
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

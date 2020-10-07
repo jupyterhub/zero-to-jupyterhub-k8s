@@ -1,0 +1,4 @@
+/* Added to avoid logo being too squeezed */
+.navbar-brand {
+  height: 4rem !important;
+}

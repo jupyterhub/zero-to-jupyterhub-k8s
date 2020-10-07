@@ -1,0 +1,337 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pre-requisites &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="../index.html">
+      <img src="../_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../administrator/index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="../reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#understanding-helm" class="nav-link">Understanding Helm</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#install-helm" class="nav-link">Install Helm</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#helm-3" class="nav-link">Helm 3</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#helm-2" class="nav-link">Helm 2</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#verify" class="nav-link">Verify</a>
+        </li>
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="pre-requisites">
+<span id="id1"></span><h1>Pre-requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">¶</a></h1>
+<p>Before you proceed with this guide please ensure that you have satisfied the pre-requisites
+for installing JupyterHub on your infrastructure.</p>
+<div class="section" id="understanding-helm">
+<h2>Understanding Helm<a class="headerlink" href="#understanding-helm" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://helm.sh/">Helm</a>, the package manager for Kubernetes, is a useful tool
+for: installing, upgrading and managing applications on a Kubernetes cluster.
+Helm packages are called <em>charts</em>.
+We will be installing and managing JupyterHub on our Kubernetes cluster using a Helm chart.</p>
+<p>Charts are abstractions describing how to install packages onto a Kubernetes
+cluster. When a chart is deployed, it works as a template engine to populate
+multiple <code class="docutils literal notranslate"><span class="pre">yaml</span></code> files for package dependencies with the required variables, and
+then runs <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">apply</span></code> to apply the configuration to the resource and install
+the package.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you previously installed Z2JH using Helm 2, it is worth noting that
+Helm 3 includes several major <strong>breaking changes</strong>. See the
+<a class="reference external" href="https://helm.sh/docs/faq/">Helm 3 FAQ</a> for more information.</p>
+<p>For <strong>migrating from Helm v2 to v3</strong>, checkout the official
+<a class="reference external" href="https://helm.sh/docs/topics/v2_v3_migration/">Helm guide</a>.</p>
+</div>
+</div>
+<div class="section" id="install-helm">
+<h2>Install Helm<a class="headerlink" href="#install-helm" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="helm-3">
+<h3>Helm 3<a class="headerlink" href="#helm-3" title="Permalink to this headline">¶</a></h3>
+<p>While several <a class="reference external" href="https://helm.sh/docs/intro/install/">methods to install Helm</a> exist, the
+simplest way to install Helm is to run Helm’s installer script in a terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 <span class="p">|</span> bash
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The minimum supported version of Helm in Z2JH is <code class="docutils literal notranslate"><span class="pre">3.2.0</span></code>.</p></li>
+<li><p>Helm 3 uses the same security mechanisms as other Kubernetes clients such as <code class="docutils literal notranslate"><span class="pre">kubectl</span></code>.</p></li>
+</ul>
+</div>
+<div class="section" id="helm-2">
+<h3>Helm 2<a class="headerlink" href="#helm-2" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Helm 2 is not supported anymore by Zero to JupyterHub and shouldn’t be used for testing new
+clusters. Helm 2 is deprecated since of November 2019, and
+<a class="reference external" href="https://helm.sh/blog/covid-19-extending-helm-v2-bug-fixes">will receive bugfixes until August 13, 2020</a>.</p>
+</div>
+<p>While several <a class="reference external" href="https://v2.helm.sh/docs/using_helm/#installing-helm">methods to install Helm</a> exists, the
+simplest way to install Helm is to run Helm’s installer script in a terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get <span class="p">|</span> bash
+</pre></div>
+</div>
+<p id="helm-rbac">After installing helm on your machine, initialize Helm on your Kubernetes
+cluster:</p>
+<ol class="arabic">
+<li><p>Set up a <a class="reference external" href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/">ServiceAccount</a>
+for use by <code class="docutils literal notranslate"><span class="pre">tiller</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl --namespace kube-system create serviceaccount tiller
+</pre></div>
+</div>
+</li>
+<li><p>Give the <code class="docutils literal notranslate"><span class="pre">ServiceAccount</span></code> full permissions to manage the cluster.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you know your kubernetes cluster does not have RBAC enabled, you <strong>must</strong> skip this step.
+Most users can ignore this note.</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount<span class="o">=</span>kube-system:tiller
+</pre></div>
+</div>
+<p>See <a class="reference external" href="../administrator/security.html#use-role-based-access-control-rbac">our RBAC documentation</a> for more information.</p>
+</li>
+<li><p>Initialize <code class="docutils literal notranslate"><span class="pre">helm</span></code> and <code class="docutils literal notranslate"><span class="pre">tiller</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm init --service-account tiller --history-max <span class="m">100</span> --wait
+</pre></div>
+</div>
+<p>This command only needs to run once per Kubernetes cluster, it will create a
+<code class="docutils literal notranslate"><span class="pre">tiller</span></code> deployment in the kube-system namespace and setup your local <code class="docutils literal notranslate"><span class="pre">helm</span></code>
+client.
+This command installs and configures the <code class="docutils literal notranslate"><span class="pre">tiller</span></code> part of Helm (the whole
+project, not the CLI) on the remote kubernetes cluster. Later when you want
+to deploy changes with <code class="docutils literal notranslate"><span class="pre">helm</span></code> (the local CLI), it will talk to <code class="docutils literal notranslate"><span class="pre">tiller</span></code>
+and tell it what to do. <code class="docutils literal notranslate"><span class="pre">tiller</span></code> then executes these instructions from
+within the cluster.
+We limit the history to 100 previous installs as very long histories slow
+down helm commands a lot.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you wish to install <code class="docutils literal notranslate"><span class="pre">helm</span></code> on another computer, you won’t need to setup
+<code class="docutils literal notranslate"><span class="pre">tiller</span></code> again but you still need to initialize <code class="docutils literal notranslate"><span class="pre">helm</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm init --client-only
+</pre></div>
+</div>
+</div>
+</li>
+</ol>
+<p><strong>Securing Helm2</strong></p>
+<p>Ensure that <code class="docutils literal notranslate"><span class="pre">tiller</span></code> is secure from access inside the cluster:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl patch deployment tiller-deploy --namespace<span class="o">=</span>kube-system --type<span class="o">=</span>json --patch<span class="o">=</span><span class="s1">&#39;[{&quot;op&quot;: &quot;add&quot;, &quot;path&quot;: &quot;/spec/template/spec/containers/0/command&quot;, &quot;value&quot;: [&quot;/tiller&quot;, &quot;--listen=localhost:44134&quot;]}]&#39;</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">tiller</span></code> s port is exposed in the cluster without authentication and if you probe
+this port directly (i.e. by bypassing <code class="docutils literal notranslate"><span class="pre">helm</span></code>) then <code class="docutils literal notranslate"><span class="pre">tiller</span></code> s permissions can be
+exploited. This step forces <code class="docutils literal notranslate"><span class="pre">tiller</span></code> to listen to commands from localhost (i.e.
+<code class="docutils literal notranslate"><span class="pre">helm</span></code>) <em>only</em> so that e.g. other pods inside the cluster cannot ask <code class="docutils literal notranslate"><span class="pre">tiller</span></code> to
+install a new chart granting them arbitrary, elevated RBAC privileges and exploit
+them. <a class="reference external" href="https://engineering.bitnami.com/articles/helm-security.html">More details here.</a></p>
+</div>
+</div>
+<div class="section" id="verify">
+<h2>Verify<a class="headerlink" href="#verify" title="Permalink to this headline">¶</a></h2>
+<p>You can verify that it is installed properly by running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm version
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm list
+</pre></div>
+</div>
+<p>You should see an empty list since no Helm charts have been installed:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>NAME    NAMESPACE       REVISION        UPDATED STATUS  CHART   APP VERSION
+</pre></div>
+</div>
+<p>Congratulations, Helm is now set up!</p>
+<ol class="arabic simple">
+<li><p>To get a deployment up with the default options, refer <span class="xref std std-ref">quick-install</span>!</p></li>
+<li><p>For a more customized guide, refer <span class="xref std std-ref">advanced-install</span>!</p></li>
+</ol>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

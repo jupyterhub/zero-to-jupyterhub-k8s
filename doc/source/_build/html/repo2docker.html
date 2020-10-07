@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Build a Docker image with repo2docker &#8212; Zero to JupyterHub with Kubernetes 0.0.1-set.by.chartpress documentation</title>
+    
+  <link rel="stylesheet" href="_static/css/index.d431a4ee1c1efae0e38bdfebc22debff.css">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.30270b6e4c972e43c488.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main">
+<div class="container-xl">
+
+    
+    <a class="navbar-brand" href="index.html">
+      <img src="_static/logo.png" class="logo" alt="logo">
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar-menu" class="col-lg-9 collapse navbar-collapse">
+      <ul id="navbar-main-elements" class="navbar-nav mr-auto">
+        
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="create-k8s-cluster.html">Setup Kubernetes</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="setup-jupyterhub/index.html">Setup JupyterHub</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="customizing/index.html">Customization Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="administrator/index.html">Administrator Guide</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="community/index.html">Community Resources</a>
+        </li>
+        
+        <li class="nav-item ">
+            <a class="nav-link" href="reference/index.html">Reference</a>
+        </li>
+        
+        
+      </ul>
+
+
+      
+
+      <ul class="navbar-nav">
+        
+        
+      </ul>
+    </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+          <div class="col-12 col-md-3 bd-sidebar">
+
+<form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+
+  <div class="bd-toc-item active">
+  
+
+  <ul class="nav bd-sidenav">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+
+</nav>
+          </div>
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+              
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+    </ul>
+</nav>
+
+
+              
+          </div>
+          
+
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="build-a-docker-image-with-repo2docker">
+<span id="r2d-custom-image"></span><h1>Build a Docker image with <code class="docutils literal notranslate"><span class="pre">repo2docker</span></code><a class="headerlink" href="#build-a-docker-image-with-repo2docker" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Docker images to be used this way must have the <code class="docutils literal notranslate"><span class="pre">jupyterhub</span></code> package of a
+matching version with the Helm chart. This documentation is for Helm chart
+0.0.1, and it uses JupyterHub version 1.1.0.</p>
+</div>
+<p>If you can’t find a pre-existing image that suits your needs, you can create
+your own image. An easy way to do this is with the package <a class="reference internal" href="reference/glossary.html#term-repo2docker"><span class="xref std std-term">repo2docker</span></a>.</p>
+<p><a class="reference external" href="https://github.com/jupyter/repo2docker">repo2docker</a> lets you quickly convert
+a Git repository into a Docker image that can be used as a base for your
+JupyterHub instance. Anything inside the Git repository will exist in a user’s
+environment when they access your JupyterHub.</p>
+<p><code class="docutils literal notranslate"><span class="pre">repo2docker</span></code> will attempt to figure out what should be pre-installed, and you
+can help it out by adding various configuration files to the repository. For
+example if you include a <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file in the root level of the
+repository, <code class="docutils literal notranslate"><span class="pre">repo2docker</span></code> will <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> the specified packages into the
+Docker image to be built.</p>
+<p>See <a class="reference external" href="https://repo2docker.readthedocs.io/en/latest/config_files.html">repo2docker’s documentation</a> for more
+details.</p>
+<p>Below we’ll cover how to use <code class="docutils literal notranslate"><span class="pre">repo2docker</span></code> to generate a Docker image and how
+to configure JupyterHub to build off of this image:</p>
+<ol class="arabic">
+<li><p><strong>Download and start Docker.</strong></p>
+<p>You can do this by <a class="reference external" href="https://docs.docker.com/get-docker/">downloading and installing Docker</a>. Once you’ve started
+Docker, it will show up as a tiny background application.</p>
+</li>
+<li><p><strong>Install repo2docker</strong> using <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install jupyter-repo2docker
+</pre></div>
+</div>
+<p>If that command fails due to insufficient permissions, try it with the
+command option, <code class="docutils literal notranslate"><span class="pre">user</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install --user jupyter-repo2docker
+</pre></div>
+</div>
+</li>
+<li><p><strong>Create (or find) a Git repository you want to use.</strong></p>
+<p>This repo should have all materials that you want your users to be able to
+use. You may want to include a <a class="reference external" href="https://pip.pypa.io/en/latest/user_guide/#requirements-files">pip</a> <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file to list
+packages, one per file line, to install such as when using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code>.
+Specify the versions explicitly so the image is fully reproducible. An
+example <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">jupyterhub</span><span class="o">==</span><span class="m">0</span>.9.4
+<span class="nv">numpy</span><span class="o">==</span><span class="m">1</span>.14.3
+<span class="nv">scipy</span><span class="o">==</span><span class="m">1</span>.1.0
+<span class="nv">matplotlib</span><span class="o">==</span><span class="m">2</span>.2.2
+</pre></div>
+</div>
+</li>
+<li><p><strong>Get credentials for a docker repository.</strong></p>
+<p>The image you will build for your JupyterHub must be made available by being
+published to some container registry. You could for example use <a class="reference external" href="https://hub.docker.com/">Docker Hub</a> or <a class="reference external" href="https://cloud.google.com/container-registry/">Google Container Registry</a>.</p>
+<p>In the next step, you need an image reference for you and others to find your
+image with.</p>
+<p>An image reference on Docker Hub:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;dockerhub-username&gt;/&lt;image-name&gt;:&lt;image-tag&gt;
+</pre></div>
+</div>
+</div></blockquote>
+<p>An image reference on Google Container Registry:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcr.io/&lt;cloud-project-name&gt;/&lt;image-name&gt;:&lt;image-tag&gt;
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul>
+<li><p>Your image name can be anything memorable.</p></li>
+<li><p>We recommend using the first 7 characters of the SHA in the Git
+commit as this improves reproducibility. You can get these in various
+ways, one of which is like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git ls-remote &lt;your-git-repository&gt; <span class="p">|</span> grep HEAD <span class="p">|</span> awk <span class="s1">&#39;{ print $1 }&#39;</span> <span class="p">|</span> cut -c -7
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+<ol class="arabic" start="4">
+<li><p><strong>Use repo2docker to build a Docker image.</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jupyter-repo2docker <span class="se">\</span>
+    --no-run <span class="se">\</span>
+    --user-name<span class="o">=</span>jovyan <span class="se">\</span>
+    --image<span class="o">=</span>&lt;your-image-reference&gt; <span class="se">\</span>
+    &lt;a-git-repository-url&gt;
+</pre></div>
+</div>
+<p>This tells <code class="docutils literal notranslate"><span class="pre">repo2docker</span></code> to fetch <code class="docutils literal notranslate"><span class="pre">master</span></code> of the Git repository, and
+uses heuristics to build a Docker image of it.</p>
+</li>
+<li><p><strong>Push the newly-built Docker image to your repository.</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker push &lt;your-image-reference&gt;
+</pre></div>
+</div>
+</li>
+<li><p><strong>Edit the JupyterHub configuration to build from this image.</strong>
+Edit <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> file to include these lines in it:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span>  <span class="nt">singleuser</span><span class="p">:</span>
+    <span class="nt">image</span><span class="p">:</span>
+      <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-image-reference&gt;</span>
+      <span class="nt">tag</span><span class="p">:</span> <span class="s">&quot;&lt;tag&gt;&quot;</span>
+
+<span class="l l-Scalar l-Scalar-Plain">If the tag is the first several characters of the SHA and they happen to</span>
+<span class="l l-Scalar l-Scalar-Plain">all be numerical, you *must* use quotes around the tag as above in order</span>
+<span class="l l-Scalar l-Scalar-Plain">for the YAML to be parsed correctly.</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Tell helm to update JupyterHub to use this configuration.</strong></p>
+<p>Use the standard method to <a class="reference internal" href="customizing/extending-jupyterhub.html#apply-config-changes"><span class="std std-ref">apply the changes</span></a> to the config.</p>
+</li>
+<li><p><strong>Restart your server if you are already logged in.</strong></p>
+<p>If you already have a running JupyterHub server, you’ll need to restart it
+from the JupyterHub control panel. Within JupyterLab look at the meny named
+“Hub”. New users won’t have to do this.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The contents of your GitHub repository might not show up if you have
+enabled <a class="reference internal" href="customizing/user-storage.html#user-storage"><span class="std std-ref">persistent storage</span></a>. Disable persistent
+storage if you want the Git repository contents to show up.</p>
+</div>
+</li>
+<li><p><strong>Enjoy your new computing environment!</strong></p>
+<p>You should now have a live computing environment built off of the Docker
+image we’ve created.</p>
+</li>
+</ol>
+</div>
+
+
+              </div>
+              
+              
+              <div class='prev-next-bottom'>
+                
+
+              </div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+
+    
+  <script src="_static/js/index.30270b6e4c972e43c488.js"></script>
+
+
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020, Project Jupyter Contributors.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
