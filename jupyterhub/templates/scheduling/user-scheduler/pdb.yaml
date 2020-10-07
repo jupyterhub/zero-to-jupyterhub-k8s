@@ -1,4 +1,4 @@
-{{- if .Values.scheduling.userScheduler.pdb.enabled -}}
+{{- if and .Values.scheduling.userScheduler.enabled .Values.scheduling.userScheduler.pdb.enabled -}}
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
