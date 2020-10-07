@@ -31,7 +31,7 @@ def setup(app):
 
 
 # -- Project information -----------------------------------------------------
-# ref: https://www.sphinx-doc.org/en/latest/usage/configuration.html#project-information
+# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'Zero to JupyterHub with Kubernetes'
 copyright = '{year}, Project Jupyter Contributors'.format(year=date.today().year)
@@ -47,14 +47,14 @@ version = chart['version'].split('-', 1)[0]
 release = chart['version']
 
 # Project specific variables
-# ref: https://www.sphinx-doc.org/en/latest/usage/configuration.html#confval-rst_epilog
+# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-rst_epilog
 rst_epilog = """
 .. |hub_version| replace:: {v}
 """.format(v=chart['appVersion'])
 
 
 # -- General configuration ---------------------------------------------------
-# ref: https://www.sphinx-doc.org/en/latest/usage/configuration.html#general-configuration
+# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 # Set the default role so we can use `foo` instead of ``foo``
 default_role = 'literal'
@@ -133,7 +133,7 @@ linkcheck_anchors_ignore = [
 
 
 # -- Options for HTML output -------------------------------------------------
-# ref: http://www.sphinx-doc.org/en/latest/usage/configuration.html#options-for-html-output
+# ref: http://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
@@ -167,14 +167,14 @@ html_static_path = ['_static']
 
 
 # -- Options for HTML help output ---------------------------------------------
-# ref: https://www.sphinx-doc.org/en/latest/usage/configuration.html#options-for-html-help-output
+# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-help-output
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'ZeroToJupyterhubDoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
-# ref: https://www.sphinx-doc.org/en/latest/usage/configuration.html#options-for-latex-output
+# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-latex-output
 
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
@@ -207,7 +207,7 @@ latex_documents = [
 
 
 # -- Options for manual page output ------------------------------------------
-# ref: https://www.sphinx-doc.org/en/latest/usage/configuration.html#options-for-manual-page-output
+# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-manual-page-output
 
 # One entry per manual page.
 man_pages = [
@@ -222,7 +222,7 @@ man_pages = [
 
 
 # -- Options for Texinfo output ----------------------------------------------
-# ref: https://www.sphinx-doc.org/en/latest/usage/configuration.html#options-for-texinfo-output
+# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-texinfo-output
 
 # Grouping the document tree into Texinfo files.
 texinfo_documents = [
@@ -239,7 +239,7 @@ texinfo_documents = [
 
 
 # -- Options for epub output -------------------------------------------------
-# ref: https://www.sphinx-doc.org/en/latest/usage/configuration.html#options-for-epub-output
+# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-epub-output
 
 # Bibliographic Dublin Core info.
 epub_title = project

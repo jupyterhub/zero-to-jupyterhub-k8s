@@ -1,5 +1,5 @@
 # Order matters:
-# - myst-parser depends on "sphinx>=2,<3"
+# - myst-parser depends on "sphinx>=2,<4"
 # - pydata-sphinx-theme depends on "sphinx"
 # - sphinx-copybutton depends on "sphinx>=1.8"
 #
