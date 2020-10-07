@@ -90,7 +90,7 @@ spec:
             - -c
             - echo "Pulling complete"
           resources:
-            {{- .Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- $.Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
         {{- end }}
         {{- end }}
         {{- end }}
