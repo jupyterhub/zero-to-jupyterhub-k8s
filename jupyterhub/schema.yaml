@@ -1375,6 +1375,18 @@ properties:
         properties:
           enabled:
             type: bool
+      pullProfileListImages:
+        type: bool
+        description: |
+          The singleuser.profileList configuration can let the user choose an
+          image through the selection of a profile. This option determines if
+          those images will be pulled, both by the hook and continuous pullers.
+
+          The reason to disable this, is that if you have for example 10 images
+          which start pulling in order from 1 to 10, a user that arrives and
+          wants to start a pod with image number 10 will need to wait for all
+          images to be pulled, and then it may be preferable to just let the
+          user arriving wait for a single image to be pulled on arrival.
       extraImages:
         type: object
         description: |

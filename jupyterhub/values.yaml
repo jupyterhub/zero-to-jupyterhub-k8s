@@ -375,6 +375,7 @@ prePuller:
     podSchedulingWaitDuration: 10
   continuous:
     enabled: true
+  pullProfileListImages: true
   extraImages: {}
   pause:
     image:
