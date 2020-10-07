@@ -14,3 +14,5 @@ tillerVersion: '>=2.11.0-0'
 maintainers:
   - name: Erik Sundell
     email: erik@sundellopensource.se
+  - name: Simon Li
+    url: https://github.com/manics/
