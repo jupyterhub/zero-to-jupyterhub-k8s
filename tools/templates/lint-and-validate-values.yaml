@@ -156,6 +156,16 @@ auth:
 
 
 singleuser:
+  profileList:
+    - display_name: "mock display name 1"
+      description: |
+        mock description 1
+      default: True
+    - display_name: "mock display name 2"
+      description: |
+        mock description 2
+      kubespawner_override:
+        image: XYZ:XYZ
   nodeSelector:
     mock-node-selector: mock
   extraTolerations:
