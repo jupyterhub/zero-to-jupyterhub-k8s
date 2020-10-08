@@ -4,47 +4,46 @@ properties:
   imagePullSecret:
     type: object
     description: |
-      Creates an image pull secret for you and makes the user pods utilize
-      it, allowing them to pull images from private image registries.
+      This is configuration to create a k8s Secret resource of `type:
+      kubernetes.io/dockerconfigjson`, with credentials to pull images from a
+      private image registry. If you opt to do so, it will be available for use
+      by all pods in their respective `spec.imagePullSecrets` alongside other
+      k8s Secrets defined in `imagePullSecrets` or the pod respective
+      `...image.pullSecrets` configuration.
 
-      Using this configuration option automates the following steps that
-      normally is required to pull from private image registries.
+      In other words, using this configuration option can automate both the
+      otherwise manual creation of a k8s Secret and the otherwise manual
+      configuration to reference this k8s Secret in all the pods of the Helm
+      chart.
 
       ```sh
-      # you won't need to run this manually...
-      kubectl create secret docker-registry singleuser-image-credentials \
+      # you won't need to create a k8s Secret manually...
+      kubectl create secret docker-registry image-registry-credentials \
         --docker-server=<REGISTRY> \
         --docker-username=<USERNAME> \
         --docker-email=<EMAIL> \
         --docker-password=<PASSWORD>
       ```
 
-      ```yaml
-      # you won't need to specify this manually...
-      spec:
-        imagePullSecrets:
-          - name: singleuser-image-credentials
-      ```
+      If you just want to let all Pods reference an existing secret, use the
+      `imagePullSecrets` configuration instead.
 
-      To learn the username and password fields to access a gcr.io registry
-      from a Kubernetes cluster not associated with the same google cloud
+      To learn the username and password fields to access a gcr.io registry from
+      a Kubernetes cluster not associated with the same google cloud
       credentials, look into [this
-      guide](http://docs.heptio.com/content/private-registries/pr-gcr.html)
-      and read the notes about the password.
+      guide](http://docs.heptio.com/content/private-registries/pr-gcr.html) and
+      read the notes about the password.
     properties:
       create:
         type: boolean
         description: |
-          Toggle the creation of a Kubernetes Secret with provided
-          credentials to access an image registry that will allow all of
-          this Helm chart's pod to make use of when they pull their
-          container images as the pods spec.imagePullSecrets will get
-          augmented with a reference to this Kubernetes Secret.
+          Toggle the creation of the k8s Secret with provided credentials to
+          access a private image registry.
       registry:
         type: string
         description: |
-          Name of the private registry you want to create a credential set
-          for. It will default to Docker Hub's image registry.
+          Name of the private registry you want to create a credential set for.
+          It will default to Docker Hub's image registry.
 
           Examples:
             - https://index.docker.io/v1/
@@ -54,8 +53,9 @@ properties:
       username:
         type: string
         description: |
-          Name of the user you want to use to connect to your private
-          registry. For external gcr.io, you will use the `_json_key`.
+          Name of the user you want to use to connect to your private registry.
+
+          For external gcr.io, you will use the `_json_key`.
 
           Examples:
             - alexmorreale
@@ -64,8 +64,7 @@ properties:
       password:
         type: string
         description: |
-          Password of the user you want to use to connect to your private
-          registry.
+          Password for the private image registry's user.
 
           Examples:
             - plaintextpassword
@@ -89,12 +88,15 @@ properties:
   imagePullSecrets:
     type: list
     description: |
-      Like a Kubernetes Pod's `spec.imagePullSecrets` configuration, but for
-      all the Helm chart's pods. List the Kubernetes Secrets by name that
-      contain credentials to access container image registries.
+      Chart wide configuration to _append_ k8s Secret references to all its
+      pod's `spec.imagePullSecrets` configuration.
 
-      This will not override or get overridden by pod specific
-      configuration, but instead augment the pod specific configuration.
+      This will not override or get overridden by pod specific configuration,
+      but instead augment the pod specific configuration.
+
+      You can use both the k8s native syntax, where each list element is like
+      `{"name": "my-secret-name"}`, or you can let list elements be strings
+      naming the secrets directly.
   hub:
     type: object
     properties:
