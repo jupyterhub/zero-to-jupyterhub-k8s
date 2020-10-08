@@ -26,7 +26,7 @@ DEPRECATION: singleuser.cloudMetadata.enabled is deprecated, instead use singleu
 {{- end }}
 
 
-{{- /* Warn about an attempt to configure HTTPS but not having enabled it. */ }}
+{{- /* Warn about an attempt to configure HTTPS but not having enabled it. */}}
 {{- if eq .Values.proxy.https.enabled false }}
 {{- if or (not (eq .Values.proxy.https.type "letsencrypt")) (not (eq .Values.proxy.https.letsencrypt.contactEmail "")) }}
 
