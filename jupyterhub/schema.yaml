@@ -473,6 +473,26 @@ properties:
           Configure the configurable-http-proxy (chp) pod managed by jupyterhub to route traffic
           both to itself and to user pods.
         properties:
+          extraCommandLineFlags:
+            type: list
+            description: |
+              A list of strings to be added as command line options when
+              starting
+              [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy#command-line-options)
+              that will be expanded with Helm's template function `tpl` which
+              can render Helm template logic inside curly braces (`{{ ... }}`).
+
+              ```yaml
+              proxy:
+                chp:
+                  extraCommandLineFlags:
+                    - "--auto-rewrite"
+                    - "--custom-header {{ .Values.myCustomStuff }}"
+              ```
+
+              Note that these will be appended last, and if you provide the same
+              flag twice, the last flag will be used, which mean you can
+              override the default flag values as well.
           extraEnv:
             type: object
             description: |

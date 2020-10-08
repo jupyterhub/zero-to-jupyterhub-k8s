@@ -76,6 +76,9 @@ spec:
             {{- if .Values.debug.enabled }}
             - --log-level=debug
             {{- end }}
+            {{- range .Values.proxy.chp.extraCommandLineFlags }}
+            - {{ tpl . $ }}
+            {{- end }}
           {{- if or $manualHTTPS $manualHTTPSwithsecret }}
           volumeMounts:
             - name: tls-secret

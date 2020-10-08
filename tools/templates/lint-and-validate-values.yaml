@@ -83,6 +83,9 @@ proxy:
       http:
       https:
   chp:
+    extraCommandLineFlags:
+      - "--auto-rewrite"
+      - "--mock-flag {{ .Values.proxy.chp.resources.requests.memory }}"
     resources:
       requests:
         cpu: 100m
