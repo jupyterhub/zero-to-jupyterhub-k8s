@@ -80,6 +80,20 @@ spec:
             - echo "Pulling complete"
           resources:
             {{- .Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+        {{- range $k, $container := .Values.singleuser.extraContainers }}
+        - name: image-pull-singleuser-extra-container-{{ $k }}
+          image: {{ $container.image }}
+          {{- with $container.imagePullPolicy }}
+          imagePullPolicy: {{ . }}
+          {{- end }}
+          command:
+            - /bin/sh
+            - -c
+            - echo "Pulling complete"
+          resources:
+            {{- $.Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+        {{- end }}
+        {{- if .Values.prePuller.pullProfileListImages }}
         {{- range $k, $container := .Values.singleuser.profileList }}
         {{- if $container.kubespawner_override }}
         {{- if $container.kubespawner_override.image }}
@@ -94,23 +108,11 @@ spec:
         {{- end }}
         {{- end }}
         {{- end }}
+        {{- end }}
         {{- range $k, $v := .Values.prePuller.extraImages }}
         - name: image-pull-{{ $k }}
           image: {{ $v.name }}:{{ $v.tag }}
           {{- with $v.pullPolicy }}
-          imagePullPolicy: {{ . }}
-          {{- end }}
-          command:
-            - /bin/sh
-            - -c
-            - echo "Pulling complete"
-          resources:
-            {{- $.Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
-        {{- end }}
-        {{- range $k, $container := .Values.singleuser.extraContainers }}
-        - name: image-pull-singleuser-extra-container-{{ $k }}
-          image: {{ $container.image }}
-          {{- with $container.imagePullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
           command:
