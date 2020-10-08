@@ -2,18 +2,17 @@
 # Helm template values will be made available there.
 custom: {}
 
-global:
-  # imagePullSecret is configuration to create a k8s Secret that Helm chart's pods
-  # can get credentials from to pull their images.
-  imagePullSecret:
-    create: false
-    registry: ''
-    username: ''
-    email: ''
-    password: ''
-  # imagePullSecrets is configuration to reference the k8s Secret resources the
-  # Helm chart's pods can get credentials from to pull their images.
-  imagePullSecrets: []
+# imagePullSecret is configuration to create a k8s Secret that Helm chart's pods
+# can get credentials from to pull their images.
+imagePullSecret:
+  create: false
+  registry: ''
+  username: ''
+  email: ''
+  password: ''
+# imagePullSecrets is configuration to reference the k8s Secret resources the
+# Helm chart's pods can get credentials from to pull their images.
+imagePullSecrets: []
 
 
 # hub relates to the hub pod, responsible for running JupyterHub, its configured

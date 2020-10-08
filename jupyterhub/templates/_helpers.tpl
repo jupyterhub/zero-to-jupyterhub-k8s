@@ -177,7 +177,7 @@ component: {{ include "jupyterhub.componentLabel" . }}
 {{- end }}
 
 {{- define "jupyterhub.dockerconfigjson.yaml" -}}
-{{- with .Values.global.imagePullSecret -}}
+{{- with .Values.imagePullSecret -}}
 {
   "auths": {
     {{ .registry | default "https://index.docker.io/v1/" | quote }}: {
@@ -195,12 +195,12 @@ component: {{ include "jupyterhub.componentLabel" . }}
 
 {{- /*
   jupyterhub.imagePullSecrets
-    Augments passed .pullSecrets with $.Values.global.imagePullSecrets
+    Augments passed .pullSecrets with $.Values.imagePullSecrets
 */}}
 {{- define "jupyterhub.imagePullSecrets" -}}
 {{- /* Populate $_.list with all relevant entries */}}
-{{- $_ := dict "list" (concat .image.pullSecrets .root.Values.global.imagePullSecrets | uniq) }}
-{{- if .root.Values.global.imagePullSecret.create }}
+{{- $_ := dict "list" (concat .image.pullSecrets .root.Values.imagePullSecrets | uniq) }}
+{{- if .root.Values.imagePullSecret.create }}
 {{- $__ := set $_ "list" (append $_.list "image-registry-credentials" | uniq) }}
 {{- end }}
 

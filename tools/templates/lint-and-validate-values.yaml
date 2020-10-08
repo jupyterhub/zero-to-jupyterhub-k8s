@@ -1,11 +1,10 @@
-global:
-  imagePullSecret:
-    create: true
-    registry: R
-    username: U
-    email: e@domain.com
-    password: P
-  imagePullSecrets: [a,b]
+imagePullSecret:
+  create: true
+  registry: R
+  username: U
+  email: e@domain.com
+  password: P
+imagePullSecrets: [a,b]
 
 hub:
   service:

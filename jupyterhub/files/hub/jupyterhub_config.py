@@ -163,13 +163,13 @@ if image:
 
     c.KubeSpawner.image = image
 
-# Combine global.imagePullSecret.create (single), global.imagePullSecrets
-# (list), and singleuser.image.pullSecrets (list).
+# Combine imagePullSecret.create (single), imagePullSecrets (list), and
+# singleuser.image.pullSecrets (list).
 image_pull_secrets = []
-if get_config('global.imagePullSecret.create') or get_config('global.imagePullSecret.enabled'):
+if get_config('imagePullSecret.create') or get_config('imagePullSecret.enabled'):
     image_pull_secrets.append('image-registry-credentials')
-if get_config('global.imagePullSecrets'):
-    image_pull_secrets.extend(get_config('global.imagePullSecrets'))
+if get_config('imagePullSecrets'):
+    image_pull_secrets.extend(get_config('imagePullSecrets'))
 if get_config('singleuser.image.pullSecrets'):
     image_pull_secrets.extend(get_config('singleuser.image.pullSecrets'))
 if image_pull_secrets:

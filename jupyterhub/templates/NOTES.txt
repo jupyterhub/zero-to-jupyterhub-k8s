@@ -64,13 +64,13 @@ directly instead.
 
 {{- if hasKey .Values.hub "imagePullSecret" }}
 {{- if .Values.hub.imagePullSecret.enabled }}
-{{ "HARD DEPRECATION: hub.imagePullSecret has renamed to global.imagePullSecret" | fail }}
+{{ "HARD DEPRECATION: hub.imagePullSecret has renamed to imagePullSecret" | fail }}
 {{- end }}
 {{- end }}
 
 
 {{- if hasKey .Values.singleuser "imagePullSecret" }}
 {{- if .Values.singleuser.imagePullSecret.enabled }}
-{{ "HARD DEPRECATION: singleuser.imagePullSecret has renamed to global.imagePullSecret" | fail }}
+{{ "HARD DEPRECATION: singleuser.imagePullSecret has renamed to imagePullSecret" | fail }}
 {{- end }}
 {{- end }}
