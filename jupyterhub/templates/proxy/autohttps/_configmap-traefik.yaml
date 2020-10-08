@@ -42,11 +42,11 @@ entryPoints:
   # - ACME HTTP-01 challenges
   # - Redirects to HTTPS
   http:
-    address: ':80'
+    address: ':8080'
   # Port 443, used for:
   # - TLS Termination Proxy, where HTTPS transitions to HTTP.
   https:
-    address: ':443'
+    address: ':8443'
     # Configure a high idle timeout for our websockets connections
     transport:
       respondingTimeouts:
