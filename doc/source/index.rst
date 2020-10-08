@@ -3,21 +3,23 @@ Zero to JupyterHub with Kubernetes
 
 `JupyterHub`_ allows users to interact with a computing environment through a
 webpage. As most devices have access to a web browser, JupyterHub makes it is
-easy to provide and standardize the computing environment of a group of people
+easy to provide and standardize the computing environment for a group of people
 (e.g., for a class of students or an analytics team).
 
-This project will help you set up your own JupyterHub on a cloud and leverage
-the clouds scalable nature to support large groups of users. Thanks to
+This project will help you set up your own JupyterHub on a cloud/on-prem k8s environment and leverage
+its scalable nature to support a large group of users. Thanks to
 :term:`Kubernetes`, we are not tied to a specific cloud provider.
 
-Note that this project is under active development so information and tools may
-change. *You can be a part of this change!* If you see anything that is incorrect
-or have any questions, feel free to reach out in the `gitter chat
-<https://gitter.im/jupyterhub/jupyterhub>`_ or create an issue at the `issues
-page`_. If you have tips or deployments that you would like to share, see
-:ref:`community-resources`.
+.. note::
 
-This documentation is for jupyterhub chart version |release|, which deploys JupyterHub |hub_version|.
+   This project is under active development so information and tools may
+   change. *You can be a part of this change!* If you see anything that is incorrect
+   or have any questions, feel free to reach out in the `gitter chat
+   <https://gitter.im/jupyterhub/jupyterhub>`_ or create an issue at the `issues
+   page`_. If you have tips or deployments that you would like to share, see
+   :ref:`resources-and-references`.
+
+This documentation is for JupyterHub chart version |release|, which deploys JupyterHub |hub_version|.
 
 This version of the chart requires kubernetes ≥1.11 and helm ≥2.11.
 
@@ -41,7 +43,7 @@ While doing this, you will gain valuable experience with:
 * **JupyterHub** to give users access to a Jupyter computing environment
 * **A terminal interface** on some operating system
 
-It's also possible you end up getting experienced with:
+It's also possible you end up getting some experience with:
 
 * **Docker** to build customized image for the users
 * **Domain registration** to make the hub available at https://your-domain-name.com
@@ -51,42 +53,34 @@ It's also possible you end up getting experienced with:
    For a more elaborate introduction to the tools and services that JupyterHub
    depends upon, see our :ref:`tools` page.
 
-
-
 .. _getting-to-zero:
 
-Setup a Kubernetes cluster
---------------------------
+Setup Infrastructure
+---------------------
 
 This section describes a Kubernetes cluster and outlines how to complete *Step Zero: your Kubernetes cluster* for
 different cloud providers and infrastructure.
+Since this project utilizes Helm as the package manager for Kubernetes deployments defined as charts,
+we will also cover how to set it up for your infrastructure.
 
 .. toctree::
-   :titlesonly:
-   :caption: Setup a Kubernetes cluster
+   :maxdepth: 2
 
-   create-k8s-cluster
+   infra/index
 
 .. _creating-your-jupyterhub:
 
 Setup JupyterHub
 ----------------
 
-This tutorial starts from *Step Zero: your Kubernetes cluster* and describes the
+This tutorial starts from *Step Zero: Your Kubernetes cluster* and describes the
 steps needed for you to create a complete initial JupyterHub deployment.
-This will use the JupyterHub Helm chart which provides sensible defaults for
-an initial deployment.
+Please ensure you have a working 
 
 .. toctree::
-   :maxdepth: 1
-   :caption: Setup JupyterHub
+   :maxdepth: 2
 
-   setup-jupyterhub/index
-
-.. _customization-guide:
-
-Customization Guide
--------------------
+   jupyterhub/index
 
 JupyterHub can be configured and customized to fit a variety of deployment
 requirements. If you would like to expand JupyterHub, customize its setup,
@@ -94,12 +88,6 @@ increase the computational resources available for users, or change
 authentication services, this guide will walk you through the steps.
 See the :ref:`helm-chart-configuration-reference` for a list of frequently
 used configurable helm chart fields.
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Customization Guide
-
-   customizing/index
 
 .. _administrator-guide:
 
@@ -112,14 +100,24 @@ cloud-based deployments and tips for maintaining your deployment.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Administrator Guide
 
    administrator/index
 
-.. _community-resources:
+.. _resources-and-references:
 
-Resources from the community
-----------------------------
+Resources
+-----------
+
+This section holds all the references and resources that helped make this project what it is today.
+
+.. toctree::
+   :maxdepth: 2
+
+   resources/index
+
+
+Community Resources
+********************
 
 This section gives the community a space to provide information on setting
 up, managing, and maintaining JupyterHub.
@@ -137,30 +135,12 @@ up, managing, and maintaining JupyterHub.
 
 We hope that you will use this section to share deployments with on a variety
 of infrastructure and for different use cases.
-There is also a :doc:`community maintained list <community/users-list>` of users of this
+There is also a :doc:`community maintained list <resources/community>` of users of this
 Guide and the JupyterHub Helm Chart.
 
-Please submit a pull request to add to this section. Thanks.
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Community section
-
-   community/index
-
-.. _reference:
-
-Reference
----------
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Reference
-
-   reference/index
 
 Institutional support
----------------------
+**********************
 
 This guide and the associated helm chart would not be possible without the
 amazing institutional support from the following
