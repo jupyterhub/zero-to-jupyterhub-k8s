@@ -18,7 +18,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
      Kubernetes cluster. To access this shell, go to `portal.azure.com <https://portal.azure.com>`_
      and click on the button below.
 
-     .. image:: ../_static/images/azure/cli_start.png
+     .. image:: /_static/images/azure/cli_start.png
         :align: center
 
     .. note::
