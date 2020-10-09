@@ -6,6 +6,7 @@ custom: {}
 # can get credentials from to pull their images.
 imagePullSecret:
   create: false
+  automaticReferenceInjection: true
   registry: ''
   username: ''
   email: ''

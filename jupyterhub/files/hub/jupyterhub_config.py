@@ -166,7 +166,9 @@ if image:
 # Combine imagePullSecret.create (single), imagePullSecrets (list), and
 # singleuser.image.pullSecrets (list).
 image_pull_secrets = []
-if get_config('imagePullSecret.create') or get_config('imagePullSecret.enabled'):
+if get_config("imagePullSecret.automaticReferenceInjection") and (
+    get_config("imagePullSecret.create") or get_config("imagePullSecret.enabled")
+):
     image_pull_secrets.append('image-registry-credentials')
 if get_config('imagePullSecrets'):
     image_pull_secrets.extend(get_config('imagePullSecrets'))

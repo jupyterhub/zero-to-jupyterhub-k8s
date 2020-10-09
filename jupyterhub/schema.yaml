@@ -39,6 +39,11 @@ properties:
         description: |
           Toggle the creation of the k8s Secret with provided credentials to
           access a private image registry.
+      automaticReferenceInjection:
+        type: boolean
+        description: |
+          Toggle the automatic reference injection of the created Secret to all
+          pods' `spec.imagePullSecrets` configuration.
       registry:
         type: string
         description: |
