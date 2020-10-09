@@ -5,7 +5,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"time"
 	"net/http"
+
+	"github.com/hashicorp/go-retryablehttp"
 )
 
 // Partial structure of a Kubernetes DaemonSet object. Note that we want to use
@@ -24,16 +27,22 @@ type DaemonSet struct {
 		DesiredNumberScheduled int `json:"desiredNumberScheduled"`
 		// The number of nodes that should be running the daemon pod and have one
 		// or more of the daemon pod running and ready.
-		NumberReady            int `json:"numberReady"`
+		NumberReady int `json:"numberReady"`
 	} `json:"status"`
 }
 
 // Return a *DaemonSet and the relevant state its in
 func getDaemonSet(transportPtr *http.Transport, server string, headers map[string]string, namespace string, daemonSet string) (*DaemonSet, error) {
-	client := &http.Client{Transport: transportPtr}
+	// Rather than die on startup if the first request fails, retry a few times with backoff before giving up
+	// This can happen if we're e.g. waiting for a service mesh to come up and is generally a good idea.
+	client := retryablehttp.NewClient()
+	client.RetryMax = 5
+	client.RetryWaitMin = time.Duration(5)*time.Second
+	client.HTTPClient.Transport = transportPtr
+
 	url := server + "/apis/apps/v1/namespaces/" + namespace + "/daemonsets/" + daemonSet
 
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := retryablehttp.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
 	}

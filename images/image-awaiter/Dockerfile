@@ -1,15 +1,17 @@
 # compile the code to an executable using an intermediary image
-FROM golang:1.9.2
+FROM golang:1
 
-COPY *.go /go/
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags '-w -s' -installsuffix cgo -a -o /go/image-awaiter /go/*.go
-
+RUN mkdir -p /build/
+COPY *.mod *.go *.sum /build/
+WORKDIR /build
+RUN go build
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags '-w -s' -installsuffix cgo -a -o out/image-awaiter
 
 
 # present the result within a slimmed image
 FROM scratch
 
-COPY --from=0 /go/image-awaiter /image-awaiter
+COPY --from=0 /build/out/image-awaiter /image-awaiter
 
 
 
