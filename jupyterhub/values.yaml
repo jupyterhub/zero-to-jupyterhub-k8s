@@ -402,12 +402,12 @@ prePuller:
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
     podSchedulingWaitDuration: 10
+    nodeSelector: {}
+    tolerations: []
   continuous:
     enabled: true
   pullProfileListImages: true
   extraImages: {}
-  nodeSelector: {}
-  tolerations: []
   pause:
     containerSecurityContext:
       runAsUser: 65534  # nobody user
