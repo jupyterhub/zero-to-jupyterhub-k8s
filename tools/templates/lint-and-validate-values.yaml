@@ -65,6 +65,17 @@ hub:
           - ipBlock:
               cidr: 0.0.0.0/0
   allowNamedServers: true
+  nodeSelector:
+    node-type: mock
+  tolerations:
+    - key: "mock-taint-to-tolerates-key"
+      operator: "Equal"
+      value: "mock-taint-to-tolerates-value"
+      effect: "NoSchedule"
+    - key: "mock-taint-to-tolerates-key"
+      operator: "Equal"
+      value: "mock-taint-to-tolerates-value"
+      effect: "NoExecute"
 
 
 rbac:
@@ -90,6 +101,17 @@ proxy:
       requests:
         cpu: 100m
         memory: 512Mi
+    nodeSelector:
+      node-type: mock
+    tolerations:
+      - key: "mock-taint-to-tolerates-key"
+        operator: "Equal"
+        value: "mock-taint-to-tolerates-value"
+        effect: "NoSchedule"
+      - key: "mock-taint-to-tolerates-key"
+        operator: "Equal"
+        value: "mock-taint-to-tolerates-value"
+        effect: "NoExecute"
   traefik:
     resources:
       requests:
@@ -101,6 +123,17 @@ proxy:
     extraEnv:
       - name: LEGO_CA_CERTIFICATES
         value: /etc/pebble/root-cert.pem
+    nodeSelector:
+      node-type: mock
+    tolerations:
+      - key: "mock-taint-to-tolerates-key"
+        operator: "Equal"
+        value: "mock-taint-to-tolerates-value"
+        effect: "NoSchedule"
+      - key: "mock-taint-to-tolerates-key"
+        operator: "Equal"
+        value: "mock-taint-to-tolerates-value"
+        effect: "NoExecute"
   secretSync:
     resources:
       requests:
@@ -294,6 +327,17 @@ scheduling:
     image:
       name: gcr.io/google_containers/kube-scheduler-amd64
       tag: v1.11.2
+    nodeSelector:
+      node-type: mock
+    tolerations:
+      - key: "mock-taint-to-tolerates-key"
+        operator: "Equal"
+        value: "mock-taint-to-tolerates-value"
+        effect: "NoSchedule"
+      - key: "mock-taint-to-tolerates-key"
+        operator: "Equal"
+        value: "mock-taint-to-tolerates-value"
+        effect: "NoExecute"
   podPriority:
     enabled: true
   userPlaceholder:
@@ -313,6 +357,17 @@ prePuller:
     enabled: true
     extraEnv:
       MOCK_ENV: mock
+    nodeSelector:
+      node-type: mock
+    tolerations:
+      - key: "mock-taint-to-tolerates-key"
+        operator: "Equal"
+        value: "mock-taint-to-tolerates-value"
+        effect: "NoSchedule"
+      - key: "mock-taint-to-tolerates-key"
+        operator: "Equal"
+        value: "mock-taint-to-tolerates-value"
+        effect: "NoExecute"
   continuous:
     enabled: true
   extraImages:

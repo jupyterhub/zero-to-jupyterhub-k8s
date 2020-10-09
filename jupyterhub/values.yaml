@@ -1,5 +1,12 @@
+# custom can contain anything you want to pass to the hub pod, as all passed
+# Helm template values will be made available there.
 custom: {}
 
+# hub relates to the hub pod, responsible for running JupyterHub, its configured
+# Authenticator class KubeSpawner, and its configured Proxy class
+# ConfigurableHTTPProxy. KubeSpawner creates the user pods, and
+# ConfigurableHTTPProxy speaks with the actual ConfigurableHTTPProxy server in
+# the proxy pod.
 hub:
   service:
     type: ClusterIP
@@ -13,6 +20,7 @@ hub:
   initContainers: []
   fsGid: 1000
   nodeSelector: {}
+  tolerations: []
   concurrentSpawnLimit: 64
   consecutiveFailureLimit: 5
   activeServerLimit:
@@ -105,6 +113,8 @@ rbac:
   enabled: true
 
 
+# proxy relates to the proxy pod, the proxy-public service, and the autohttps
+# pod and proxy-http service.
 proxy:
   secretToken: ''
   deploymentStrategy:
@@ -133,6 +143,7 @@ proxy:
     ##     Error: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
     ##     Error: UPGRADE FAILED: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
     rollingUpdate:
+  # service relates to the proxy-public service
   service:
     type: LoadBalancer
     labels: {}
@@ -142,6 +153,8 @@ proxy:
       https:
     loadBalancerIP:
     loadBalancerSourceRanges: []
+  # chp relates to the proxy pod, which is responsible for routing traffic based
+  # on dynamic configuration sent from JupyterHub to CHP's REST API.
   chp:
     containerSecurityContext:
       runAsUser: 65534  # nobody user
@@ -164,6 +177,10 @@ proxy:
         cpu: 200m
         memory: 512Mi
     extraEnv: {}
+    nodeSelector: {}
+    tolerations: []
+  # traefik relates to the autohttps pod, which is responsible for TLS
+  # termination when proxy.https.type=letsencrypt.
   traefik:
     containerSecurityContext:
       runAsUser: 65534  # nobody user
@@ -182,6 +199,8 @@ proxy:
     extraVolumeMounts: []
     extraStaticConfig: {}
     extraDynamicConfig: {}
+    nodeSelector: {}
+    tolerations: []
   secretSync:
     containerSecurityContext:
       runAsUser: 65534  # nobody user
@@ -192,7 +211,6 @@ proxy:
       tag: 'set-by-chartpress'
     resources: {}
   labels: {}
-  nodeSelector: {}
   pdb:
     enabled: true
     minAvailable: 1
@@ -221,6 +239,7 @@ proxy:
               cidr: 0.0.0.0/0
 
 
+# auth relates to the configuration of JupyterHub's Authenticator class.
 auth:
   type: dummy
   whitelist:
@@ -240,6 +259,8 @@ auth:
     cryptoKey:
 
 
+# singleuser relates to the configuration of KubeSpawner which runs in the hub
+# pod, and its spawning of user pods such as jupyter-myusername.
 singleuser:
   podNameTemplate:
   extraTolerations: []
@@ -330,6 +351,7 @@ singleuser:
   extraPodConfig: {}
 
 
+# scheduling relates to the user-scheduler pods and user-placeholder pods.
 scheduling:
   userScheduler:
     enabled: true
@@ -352,6 +374,7 @@ scheduling:
       name: k8s.gcr.io/kube-scheduler
       tag: v1.19.1
     nodeSelector: {}
+    tolerations: []
     pdb:
       enabled: true
       minAvailable: 1
@@ -379,6 +402,7 @@ scheduling:
       matchNodePurpose: prefer
 
 
+# prePuller relates to the hook|continuous-image-puller DaemonsSets
 prePuller:
   annotations: {}
   resources:
@@ -389,8 +413,10 @@ prePuller:
     runAsUser: 65534  # nobody user
     runAsGroup: 65534 # nobody group
     allowPrivilegeEscalation: false
+  # hook relates to the hook-image-awaiter Job and hook-image-puller DaemonSet
   hook:
     enabled: true
+    # image and the configuration below relates to the hook-image-awaiter Job
     image:
       name: jupyterhub/k8s-image-awaiter
       tag: 'set-by-chartpress'
@@ -399,6 +425,8 @@ prePuller:
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
     podSchedulingWaitDuration: 10
+    nodeSelector: {}
+    tolerations: []
   continuous:
     enabled: true
   pullProfileListImages: true

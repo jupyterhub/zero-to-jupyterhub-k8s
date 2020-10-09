@@ -30,7 +30,8 @@ spec:
       {{- if .Values.scheduling.podPriority.enabled }}
       priorityClassName: {{ .Release.Name }}-default-priority
       {{- end }}
-      nodeSelector: {{ toJson .Values.proxy.nodeSelector }}
+      nodeSelector: {{ toJson .Values.proxy.traefik.nodeSelector }}
+      tolerations: {{ toJson .Values.proxy.traefik.tolerations }}
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
       volumes:
         - name: certificates

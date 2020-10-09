@@ -32,6 +32,8 @@ spec:
       {{- if .Values.rbac.enabled }}
       serviceAccountName: hook-image-awaiter
       {{- end }}
+      tolerations: {{ toJson .Values.prePuller.hook.tolerations }}
+      nodeSelector: {{ toJson .Values.prePuller.hook.nodeSelector }}
       containers:
         - image: {{ .Values.prePuller.hook.image.name }}:{{ .Values.prePuller.hook.image.tag }}
           name: hook-image-awaiter

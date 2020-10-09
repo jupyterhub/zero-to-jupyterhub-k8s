@@ -463,6 +463,41 @@ properties:
 
           NOTE: if you choose to manage the secret yourself, you are in charge of ensuring the
           secret having the proper contents.
+      nodeSelector: &nodeSelector-spec
+        type:
+          - object
+        description: |
+          An object with key value pairs representing labels. K8s Nodes are
+          required to have match all these labels for this Pod to scheduled on
+          them.
+
+          ```yaml
+          disktype: ssd
+          nodetype: awesome
+          ```
+
+          See [the Kubernetes
+          documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+          for more details.
+      tolerations: &tolerations-spec
+        type:
+          - list
+        description: |
+          Tolerations allow a pod to be scheduled on nodes with taints. These
+          are additional tolerations other than the user pods and core pods
+          default ones `hub.jupyter.org/dedicated=user:NoSchedule` or
+          `hub.jupyter.org/dedicated=core:NoSchedule`. Note that a duplicate set
+          of tolerations exist where `/` is replaced with `_` as the Google
+          cloud does not support the character `/` yet in the toleration.
+
+          Pass this field an array of
+          [`Toleration`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#toleration-v1-core)
+          objects.
+
+          See the [Kubernetes
+          docs](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
+          for more info.
+
 
   proxy:
     type: object
@@ -531,6 +566,8 @@ properties:
 
               For more information, see the [Kubernetes EnvVar
               specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core).
+          nodeSelector: *nodeSelector-spec
+          tolerations: *tolerations-spec
       secretToken:
         type: string
         description: |
@@ -754,6 +791,8 @@ properties:
 
               For more information, see the [Kubernetes EnvVar
               specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core).
+          nodeSelector: *nodeSelector-spec
+          tolerations: *tolerations-spec
     required:
       - secretToken
   auth:
@@ -1037,22 +1076,8 @@ properties:
 
           For more information, see the [Kubernetes EnvVar
           specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core).
-      extraTolerations:
-        type: list
-        description: |
-          Tolerations allow a pod to be scheduled on nodes with taints. These
-          are additional tolerations other than the user pods and core pods
-          default ones `hub.jupyter.org/dedicated=user:NoSchedule` or
-          `hub.jupyter.org/dedicated=core:NoSchedule`. Note that a duplicate set
-          of tolerations exist where `/` is replaced with `_` as the Google
-          cloud does not support the character `/` yet in the toleration.
-
-          See the [Kubernetes docs](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
-          for more info.
-
-          Pass this field an array of
-          [`Toleration`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#toleration-v1-core)
-          objects.
+      nodeSelector: *nodeSelector-spec
+      extraTolerations: *tolerations-spec
       extraNodeAffinity:
         type: object
         description: |
@@ -1164,6 +1189,8 @@ properties:
                 type: integer
                 description: |
                   Minimum number of pods to be available during the voluntary disruptions.
+          nodeSelector: *nodeSelector-spec
+          tolerations: *tolerations-spec
       podPriority:
         type: object
         description: |
@@ -1382,7 +1409,8 @@ properties:
               represented by `-1`. This was the default behavior of version
               0.9.0 and earlier.
             type: int
-
+          nodeSelector: *nodeSelector-spec
+          tolerations: *tolerations-spec
       continuous:
         description: |
           See the [*optimization

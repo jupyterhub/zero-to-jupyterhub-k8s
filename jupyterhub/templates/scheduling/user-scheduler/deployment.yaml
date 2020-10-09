@@ -24,6 +24,7 @@ spec:
       priorityClassName: {{ .Release.Name }}-default-priority
       {{- end }}
       nodeSelector: {{ toJson .Values.scheduling.userScheduler.nodeSelector }}
+      tolerations: {{ toJson .Values.scheduling.userScheduler.tolerations }}
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
       volumes:
         - name: config
