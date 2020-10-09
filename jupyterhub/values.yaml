@@ -177,6 +177,8 @@ proxy:
         cpu: 200m
         memory: 512Mi
     extraEnv: {}
+    nodeSelector: {}
+    tolerations: []
   # traefik relates to the autohttps pod, which is responsible for TLS
   # termination when proxy.https.type=letsencrypt.
   traefik:
@@ -197,6 +199,8 @@ proxy:
     extraVolumeMounts: []
     extraStaticConfig: {}
     extraDynamicConfig: {}
+    nodeSelector: {}
+    tolerations: []
   secretSync:
     containerSecurityContext:
       runAsUser: 65534  # nobody user
@@ -207,8 +211,6 @@ proxy:
       tag: 'set-by-chartpress'
     resources: {}
   labels: {}
-  nodeSelector: {}
-  tolerations: []
   pdb:
     enabled: true
     minAvailable: 1
