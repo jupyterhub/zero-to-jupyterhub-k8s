@@ -4,7 +4,6 @@ FROM golang:1.15
 RUN mkdir -p /build/
 COPY *.mod *.go *.sum /build/
 WORKDIR /build
-RUN go build
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags '-w -s' -installsuffix cgo -a -o out/image-awaiter
 
 
