@@ -189,10 +189,12 @@ requires it. At this time, the lower priority pod will get preempted to make
 room for the high priority pod. This now evicted user-placeholder will now be
 able to signal to the CA that it needs to scale up.
 
-The user placeholders will have the same resources requests as the default user.
-This means that if you have three user placeholders running, real users will
-only need to wait for a scale up if more than three users arrive in an interval
-of time less than it takes to make a node ready for use.
+The user placeholders will have the same resources requests/limits as the Helm
+chart is configured under `singleuser.cpu` and `singleuser.memory`. This means
+that if you have three user placeholders running, real users will only need to
+wait for a scale up if _more than three users arrive in an interval of time less
+than it takes to make a node ready for use_, assuming these users didn't spawn
+with adjusted resource requests as specified in `singleuser.profileList`.
 
 To use three user placeholders for example, that can do their job thanks to pod
 priority, add the following configuration:
