@@ -56,7 +56,7 @@ It's also possible you end up getting some experience with:
 .. _getting-to-zero:
 
 Setup Infrastructure
----------------------
+--------------------
 
 This section describes a Kubernetes cluster and outlines how to complete *Step Zero: your Kubernetes cluster* for
 different cloud providers and infrastructure.

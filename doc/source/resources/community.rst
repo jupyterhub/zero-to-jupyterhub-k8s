@@ -1,5 +1,5 @@
 Community Resources
-====================
+===================
 
 This section gives the community a space to provide information on setting
 up, managing, and maintaining JupyterHub.
@@ -24,7 +24,7 @@ Please submit an `issue/pull request <https://github.com/jupyterhub/zero-to-jupy
 
 
 Tips and Snippets
-------------------
+-----------------
 
 This is a page to collect a few particularly useful patterns and snippets
 that help you interact with your Kubernetes cluster and JupyterHub.
