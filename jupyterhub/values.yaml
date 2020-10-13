@@ -366,6 +366,12 @@ scheduling:
           - name: PodTopologySpread
           - name: NodeResourcesBalancedAllocation
           - name: NodeResourcesLeastAllocated
+          # Disable plugins to be allowed to enable them again with a different
+          # weight and avoid an error.
+          - name: NodePreferAvoidPods
+          - name: NodeAffinity
+          - name: InterPodAffinity
+          - name: ImageLocality
         enabled:
           - name: NodePreferAvoidPods
             weight: 161051
