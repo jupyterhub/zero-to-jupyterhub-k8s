@@ -37,8 +37,8 @@ def request_data():
         "token": token,
         "hub_url": f'{hub_url.rstrip("/")}/hub/api',
         "headers": {"Authorization": f"token {token}"},
-        "test_timeout": 300,
-        "request_timeout": 60,
+        "test_timeout": 30,
+        "request_timeout": 25,
     }
 
 
