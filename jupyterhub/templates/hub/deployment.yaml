@@ -81,9 +81,10 @@ spec:
         - name: hub
           image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
           command:
-            - jupyterhub
-            - --config
-            - /etc/jupyterhub/jupyterhub_config.py
+            - {{ .Values.hub.command }}
+            {{- range .Values.hub.args }}
+            - {{ tpl . $ }}
+            {{- end }}
             {{- if .Values.debug.enabled }}
             - --debug
             {{- end }}

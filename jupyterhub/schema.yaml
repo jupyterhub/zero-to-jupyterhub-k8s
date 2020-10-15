@@ -4,6 +4,29 @@ properties:
   hub:
     type: object
     properties:
+      command:
+        type: string
+        description: |
+          The command to start jupyterhub, used in the deployment to set the
+          commandline, along with args and other flags set by the chart.
+      args:
+        type: list
+        description: |
+          A list of strings to be used as the command line arguments for JupyterHub
+          that will be expanded with Helm's template function `tpl` which
+          can render Helm template logic inside curly braces (`{{ ... }}`).
+
+          ```yaml
+          hub:
+            args:
+              - "--config"
+              - "/etc/jupyterhub/jupyterhub_config.py"
+          ```
+
+          Note that these replace the command line arguments provided by default,
+          but not those added by using other helm options.
+
+          The default args in values.yaml provides the typical behavior.
       cookieSecret:
         type:
           - string

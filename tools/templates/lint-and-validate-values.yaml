@@ -34,6 +34,10 @@ hub:
   initContainers:
     - name: mock-init-container-name
       image: mock-init-container-image
+  command: mock
+  args:
+    - "--mock-flag"
+    - "{{ .Values.hub.baseUrl }}"
   extraConfig:
     test: |-
       c.Spawner.cmd = 'mock'

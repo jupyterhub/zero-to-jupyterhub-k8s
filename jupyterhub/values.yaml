@@ -47,6 +47,10 @@ hub:
     password:
   labels: {}
   annotations: {}
+  command: jupyterhub
+  args:
+    - --config
+    - /etc/jupyterhub/jupyterhub_config.py
   extraConfig: {}
   extraConfigMap: {}
   extraEnv: {}
