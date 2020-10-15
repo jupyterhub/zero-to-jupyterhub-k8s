@@ -303,6 +303,10 @@ properties:
                 image: busybox:1.28
                 command: ['sh', '-c', 'command2']
           ```
+      enableConfigMap:
+        type: boolean
+        description: |
+          Whether the configmaps are created and used for the hub deployment.
       extraEnv:
         type: object
         description: |

@@ -47,6 +47,7 @@ hub:
     password:
   labels: {}
   annotations: {}
+  enableConfigMap: true
   extraConfig: {}
   extraConfigMap: {}
   extraEnv: {}

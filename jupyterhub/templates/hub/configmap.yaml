@@ -1,3 +1,4 @@
+{{- if .Values.hub.enableConfigMap }}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -8,3 +9,4 @@ data:
   {{- /* Glob files to allow them to be mounted by the hub pod */ -}}
   {{- /* key=filename: value=content */ -}}
   {{- (.Files.Glob "files/hub/*").AsConfig | nindent 2 }}
+{{- end }}
