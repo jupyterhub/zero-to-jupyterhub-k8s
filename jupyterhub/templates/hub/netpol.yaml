@@ -18,7 +18,9 @@ spec:
     - ports:
         - port: http
       from:
-        - podSelector:
+        - namespaceSelector:
+            matchLabels: {}   # allow the label below to be set on a pod in any namespace
+          podSelector:
             matchLabels:
               hub.jupyter.org/network-access-hub: "true"
 
