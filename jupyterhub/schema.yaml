@@ -173,8 +173,8 @@ properties:
               This Pod's final `imagePullSecrets` k8s specification will be a
               combination of:
 
-              1. This list of k8s Secrets, specific for this pod. 2. The list of
-              k8s Secrets, for use by all pods in the Helm chart,
+              1. This list of k8s Secrets, specific for this pod.
+              2. The list of k8s Secrets, for use by all pods in the Helm chart,
                  declared in this Helm charts configuration called
                  `imagePullSecrets`.
               3. A k8s Secret, for use by all pods in the Helm chart, if
