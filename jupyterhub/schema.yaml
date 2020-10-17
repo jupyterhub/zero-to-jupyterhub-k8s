@@ -170,6 +170,18 @@ properties:
               A list of references to existing Kubernetes Secrets with
               credentials to pull the image.
               
+              This Pod's final `imagePullSecrets` k8s specification will be a
+              combination of:
+
+              1. This list of k8s Secrets, specific for this pod. 2. The list of
+              k8s Secrets, for use by all pods in the Helm chart,
+                 declared in this Helm charts configuration called
+                 `imagePullSecrets`.
+              3. A k8s Secret, for use by all pods in the Helm chart, if
+                 conditionally created from image registry credentials provided
+                 under `imagePullSecret` if `imagePullSecret.create` is set to
+                 true.
+              
               ```yaml
               # example - k8s native syntax
               pullSecrets:
