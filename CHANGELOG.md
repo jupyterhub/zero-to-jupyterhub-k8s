@@ -11,6 +11,10 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 - Anyone relying on configuration in the `proxy.https` section are now
   explicitly required to set `proxy.https.enabled` to `true`.
 
+- Anyone using `hub.imagePullSecret` or `singleuser.imagePullSecret` should now
+  instead use the chart wide `imagePullSecret` with the same syntax which will
+  be helping all the JupyterHub pod's get images from a private image registry.
+
 - Predefined Kubernetes
   [NetworkPolicies](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
   are now created by default, explicitly describing allowed incoming (_ingress_)
