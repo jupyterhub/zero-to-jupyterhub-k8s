@@ -4,7 +4,7 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ## [0.10]
 
-### [0.10.0-beta.1]
+### [0.10.0-beta.1] (UNRELEASED)
 
 #### Breaking changes:
 
@@ -26,6 +26,28 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 - The Helm chart configuration `proxy.networkPolicy` has been removed,
   `proxy.chp.networkPolicy` (proxy pod) and `proxy.traefik.networkPolicy`
   (autohttps pod) must be used instead.
+
+- The
+  [NetworkPolicy](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
+  created for the Helm chart's proxy pod is now correctly blocking incoming
+  traffic to it from other pods unless they are from a namespace that is
+  labelled with `hub.jupyter.org/network-access-proxy-http: "true"` or from a
+  pod with that label. This means that if your incoming traffic doesn't directly
+  comes from the proxy-public service which is configured as `type:
+  LoadBalancer` but through some other pod in your k8s cluster, you must either
+  label the namespace or the pod with
+  `hub.jupyter.org/network-access-proxy-http: "true"`.
+
+  So if you for example have deployed the
+  [ingress-nginx](https://kubernetes.github.io/ingress-nginx) Helm chart to
+  proxy traffic towards the JupyterHub proxy, then you can configure that Helm
+  chart like this if this Helm chart's NetworkPolicies are created and enforced.
+
+  ```yaml
+  controller:
+    podLabels:
+      hub.jupyter.org/network-access-proxy-http: "true"
+  ```
 
 #### Enhancements made
 * Added proxy.chp.extraEnv and proxy.traefik.extraEnv configuration [#1784](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1784) ([@agrahamlincoln](https://github.com/agrahamlincoln))
