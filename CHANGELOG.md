@@ -49,6 +49,10 @@ Here you can find upgrade changes in between releases and upgrade instructions.
       hub.jupyter.org/network-access-proxy-http: "true"
   ```
 
+- The k8s ConfigMap `hub-config` k8s Secret `hub-secret` are now merged into
+  `hub-secret`, which will affect anyone who use the `hub.existingSecret`
+  option.
+
 #### Enhancements made
 * Added proxy.chp.extraEnv and proxy.traefik.extraEnv configuration [#1784](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1784) ([@agrahamlincoln](https://github.com/agrahamlincoln))
 * Remove memory / cpu limits for pre-puller [#1780](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1780) ([@yuvipanda](https://github.com/yuvipanda))
