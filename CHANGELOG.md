@@ -52,6 +52,9 @@ Here you can find upgrade changes in between releases and upgrade instructions.
       hub.jupyter.org/network-access-proxy-http: "true"
   ```
 
+- The Helm chart configuration `proxy.containerSecurityContext` is renamed to
+  `proxy.chp.containerSecurityContext`.
+
 - The k8s ConfigMap `hub-config` k8s Secret `hub-secret` are now merged into
   `hub-secret`, which will affect anyone who use the `hub.existingSecret`
   option.
