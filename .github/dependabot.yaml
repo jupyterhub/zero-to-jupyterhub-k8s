@@ -1,0 +1,11 @@
+version: 2
+updates:
+- package-ecosystem: pip
+  directory: "/images"
+  schedule:
+    interval: weekly
+  open-pull-requests-limit: 10
+  versioning-strategy: lockfile-only
+- package_manager: "docker"
+  directory: "/"
+  update_schedule: "weekly"
