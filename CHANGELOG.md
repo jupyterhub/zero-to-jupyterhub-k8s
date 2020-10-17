@@ -8,6 +8,9 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 #### Breaking changes:
 
+- Anyone relying on configuration in the `proxy.https` section are now
+  explicitly required to set `proxy.https.enabled` to `true`.
+
 - Predefined Kubernetes
   [NetworkPolicies](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
   are now created by default, explicitly describing allowed incoming (_ingress_)
