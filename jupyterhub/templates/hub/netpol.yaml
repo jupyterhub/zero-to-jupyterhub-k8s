@@ -33,14 +33,19 @@ spec:
     - ports:
         - port: http
       from:
+        # source 1 - labelled pods
+        - podSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-hub: "true"
+          namespaceSelector:
+            matchLabels: {}   # without this, the podSelector would only consider pods in the local namespace
+        # source 2 - pods in labelled namespaces
         - namespaceSelector:
-            matchLabels: {}   # allow the label below to be set on a pod in any namespace
-          podSelector:
             matchLabels:
               hub.jupyter.org/network-access-hub: "true"
 
     {{- with .Values.hub.networkPolicy.ingress }}
-    # default: nothing --> hub
+    # depends, but default is nothing --> hub
     {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
 
@@ -62,7 +67,7 @@ spec:
               {{- $_ := merge (dict "componentLabel" "singleuser-server") . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
 
-    # hub -> Kubernetes internal DNS
+    # hub --> Kubernetes internal DNS
     - ports:
         - protocol: UDP
           port: 53
@@ -70,7 +75,7 @@ spec:
           port: 53
 
     {{- with .Values.hub.networkPolicy.egress }}
-    # hub --> default: everything
+    # hub --> depends, but the default is everything
     {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
 {{- end }}

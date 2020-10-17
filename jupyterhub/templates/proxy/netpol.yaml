@@ -40,9 +40,14 @@ spec:
         - port: https
         {{- end }}
       from:
+        # source 1 - labelled pods
+        - podSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-proxy-http: "true"
+          namespaceSelector:
+            matchLabels: {}   # without this, the podSelector would only consider pods in the local namespace
+        # source 2 - pods in labelled namespaces
         - namespaceSelector:
-            matchLabels: {}   # allow the label below to be set on a pod in any namespace
-          podSelector:
             matchLabels:
               hub.jupyter.org/network-access-proxy-http: "true"
 
@@ -50,14 +55,19 @@ spec:
     - ports:
         - port: api
       from:
+        # source 1 - labelled pods
+        - podSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-proxy-api: "true"
+          namespaceSelector:
+            matchLabels: {}   # without this, the podSelector would only consider pods in the local namespace
+        # source 2 - pods in labelled namespaces
         - namespaceSelector:
-            matchLabels: {}   # allow the label below to be set on a pod in any namespace
-          podSelector:
             matchLabels:
               hub.jupyter.org/network-access-proxy-api: "true"
 
     {{- with .Values.proxy.networkPolicy.ingress}}
-    # default: nothing --> proxy
+    # depends, but default is nothing --> proxy
     {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
 
@@ -80,7 +90,7 @@ spec:
               {{- $_ := merge (dict "componentLabel" "singleuser-server") . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
 
-    # proxy -> Kubernetes internal DNS
+    # proxy --> Kubernetes internal DNS
     - ports:
       - protocol: UDP
         port: 53
@@ -88,7 +98,7 @@ spec:
         port: 53
 
     {{- with .Values.proxy.networkPolicy.egress }}
-    # proxy --> default: everything
+    # proxy --> depends, but the default is everything
     {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
 {{- end }}
