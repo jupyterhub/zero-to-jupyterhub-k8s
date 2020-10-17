@@ -201,7 +201,7 @@ component: {{ include "jupyterhub.componentLabel" . }}
 {{- /* Populate $_.list with all relevant entries */}}
 {{- $_ := dict "list" (concat .image.pullSecrets .root.Values.imagePullSecrets | uniq) }}
 {{- if and .root.Values.imagePullSecret.automaticReferenceInjection .root.Values.imagePullSecret.create }}
-{{- $__ := set $_ "list" (append $_.list "image-registry-credentials" | uniq) }}
+{{- $__ := set $_ "list" (append $_.list "image-pull-secret" | uniq) }}
 {{- end }}
 
 {{- /* Decide if something should be written */}}

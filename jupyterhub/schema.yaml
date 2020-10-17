@@ -18,7 +18,7 @@ properties:
 
       ```sh
       # you won't need to create a k8s Secret manually...
-      kubectl create secret docker-registry image-registry-credentials \
+      kubectl create secret docker-registry image-pull-secret \
         --docker-server=<REGISTRY> \
         --docker-username=<USERNAME> \
         --docker-email=<EMAIL> \
