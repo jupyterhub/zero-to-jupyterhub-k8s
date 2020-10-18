@@ -13,6 +13,3 @@ updates:
     - dependencies
   commit-message:
     prefix: "hub image: "
-- package_manager: "docker"
-  directory: "/"
-  update_schedule: "weekly"
