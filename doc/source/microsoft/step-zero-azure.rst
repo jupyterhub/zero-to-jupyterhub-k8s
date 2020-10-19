@@ -185,7 +185,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
 
 #. Create an AKS cluster.
 
-   .. info::
+   .. note::
 
       At this stage, you may wish to think about customising your deployment. The
       `Hub23 Deployment Guide <https://alan-turing-institute.github.io/hub23-deploy/>`_
