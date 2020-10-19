@@ -58,7 +58,7 @@ script:
   - await_autohttps_tls_cert_acquisition
 
   # Run tests
-  - pytest --verbose --exitfirst ./tests
+  - pytest --verbose --exitfirst ./tests || (full_namespace_report && exit 1)
 
 env:
   ## Global environment variables will act as defaults, jobs will override them
@@ -124,7 +124,7 @@ jobs:
         - await_autohttps_tls_cert_acquisition
 
         # Run tests
-        - pytest --verbose --exitfirst ./tests
+        - pytest --verbose --exitfirst ./tests || (full_namespace_report && exit 1)
 
     ## k3s versions:  https://github.com/rancher/k3s/releases
     - stage: test

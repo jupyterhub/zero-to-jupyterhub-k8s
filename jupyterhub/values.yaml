@@ -357,15 +357,32 @@ scheduling:
     enabled: true
     replicas: 2
     logLevel: 4
+    # plugins ref: https://kubernetes.io/docs/reference/scheduling/config/#scheduling-plugins-1
     plugins:
       score:
         disabled:
-          - name: ImageLocality
-          - name: NodeResourcesLeastAllocated
-          - name: NodeResourcesBalancedAllocation
           - name: SelectorSpread
+          - name: TaintToleration
+          - name: PodTopologySpread
+          - name: NodeResourcesBalancedAllocation
+          - name: NodeResourcesLeastAllocated
+          # Disable plugins to be allowed to enable them again with a different
+          # weight and avoid an error.
+          - name: NodePreferAvoidPods
+          - name: NodeAffinity
+          - name: InterPodAffinity
+          - name: ImageLocality
         enabled:
+          - name: NodePreferAvoidPods
+            weight: 161051
+          - name: NodeAffinity
+            weight: 14631
+          - name: InterPodAffinity
+            weight: 1331
           - name: NodeResourcesMostAllocated
+            weight: 121
+          - name: ImageLocality
+            weight: 11
     containerSecurityContext:
       runAsUser: 65534  # nobody user
       runAsGroup: 65534 # nobody group
