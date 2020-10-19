@@ -97,6 +97,7 @@ hub:
       - to:
           - ipBlock:
               cidr: 0.0.0.0/0
+    interNamespaceIngressForHTTPPort: deny
   allowNamedServers: false
   namedServerLimitPerUser:
   authenticatePrometheus:
@@ -256,6 +257,7 @@ proxy:
       - to:
           - ipBlock:
               cidr: 0.0.0.0/0
+    interNamespaceIngressForHTTPPort: requireEitherPodOrNamespaceLabel
 
 
 # auth relates to the configuration of JupyterHub's Authenticator class.
@@ -319,6 +321,7 @@ singleuser:
               cidr: 0.0.0.0/0
               except:
                 - 169.254.169.254/32
+    interNamespaceIngressForHTTPPort: deny
   events: true
   extraAnnotations: {}
   extraLabels:

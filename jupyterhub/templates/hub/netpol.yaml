@@ -33,16 +33,27 @@ spec:
     - ports:
         - port: http
       from:
+        {{- with .Values.hub.networkPolicy.interNamespaceIngressForHTTPPort }}
         # source 1 - labelled pods
         - podSelector:
             matchLabels:
               hub.jupyter.org/network-access-hub: "true"
+          {{- if eq . "requireEitherPodOrNamespaceLabel" }}
           namespaceSelector:
             matchLabels: {}   # without this, the podSelector would only consider pods in the local namespace
+          {{- else if eq . "requireBothPodAndNamespaceLabel" }}
+          namespaceSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-hub: "true"
+          {{- end }}
+
+        {{- if or (eq . "requireEitherPodOrNamespaceLabel") (eq . "requireNamespaceLabel") }}
         # source 2 - pods in labelled namespaces
         - namespaceSelector:
             matchLabels:
               hub.jupyter.org/network-access-hub: "true"
+        {{- end }}
+        {{- end }}
 
     {{- with .Values.hub.networkPolicy.ingress }}
     # depends, but default is nothing --> hub

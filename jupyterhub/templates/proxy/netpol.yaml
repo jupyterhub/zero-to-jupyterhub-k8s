@@ -40,31 +40,53 @@ spec:
         - port: https
         {{- end }}
       from:
+        {{- with .Values.proxy.networkPolicy.interNamespaceIngressForHTTPPort }}
         # source 1 - labelled pods
         - podSelector:
             matchLabels:
               hub.jupyter.org/network-access-proxy-http: "true"
+          {{- if eq . "requireEitherPodOrNamespaceLabel" }}
           namespaceSelector:
             matchLabels: {}   # without this, the podSelector would only consider pods in the local namespace
+          {{- else if eq . "requireBothPodAndNamespaceLabel" }}
+          namespaceSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-proxy-http: "true"
+          {{- end }}
+
+        {{- if or (eq . "requireEitherPodOrNamespaceLabel") (eq . "requireNamespaceLabel") }}
         # source 2 - pods in labelled namespaces
         - namespaceSelector:
             matchLabels:
               hub.jupyter.org/network-access-proxy-http: "true"
+        {{- end }}
+        {{- end }}
 
     # allowed pods (hub.jupyter.org/network-access-proxy-api) --> proxy (api port)
     - ports:
         - port: api
       from:
+        {{- with .Values.proxy.networkPolicy.interNamespaceIngressForAPIPort }}
         # source 1 - labelled pods
         - podSelector:
             matchLabels:
               hub.jupyter.org/network-access-proxy-api: "true"
+          {{- if eq . "requireEitherPodOrNamespaceLabel" }}
           namespaceSelector:
             matchLabels: {}   # without this, the podSelector would only consider pods in the local namespace
+          {{- else if eq . "requireBothPodAndNamespaceLabel" }}
+          namespaceSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-proxy-api: "true"
+          {{- end }}
+
+        {{- if or (eq . "requireEitherPodOrNamespaceLabel") (eq . "requireNamespaceLabel") }}
         # source 2 - pods in labelled namespaces
         - namespaceSelector:
             matchLabels:
               hub.jupyter.org/network-access-proxy-api: "true"
+        {{- end }}
+        {{- end }}
 
     {{- with .Values.proxy.networkPolicy.ingress}}
     # depends, but default is nothing --> proxy
