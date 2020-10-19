@@ -7,4 +7,7 @@ Resources
    :caption: Resources
 
    community
-   reference/index
+   reference
+   reference-docs
+   tools
+   glossary

@@ -14,5 +14,6 @@ used configurable helm chart fields.
    :maxdepth: 2
    :caption: Setup JupyterHub
 
-   quick-install
-   advanced-install
+   installation
+   customization
+   uninstall

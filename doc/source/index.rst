@@ -14,7 +14,8 @@ its scalable nature to support a large group of users. Thanks to
 
    This project is under active development so information and tools may
    change. *You can be a part of this change!* If you see anything that is incorrect
-   or have any questions, feel free to reach out in the `gitter chat
+   or have any questions, feel free to post on the community `Discourse forum
+   <https://discourse.jupyter.org/>`_ or reach out in the `Gitter chat
    <https://gitter.im/jupyterhub/jupyterhub>`_ or create an issue at the `issues
    page`_. If you have tips or deployments that you would like to share, see
    :ref:`resources-and-references`.
@@ -55,18 +56,18 @@ It's also possible you end up getting some experience with:
 
 .. _getting-to-zero:
 
-Setup Infrastructure
---------------------
+Setup Kubernetes
+----------------
 
-This section describes a Kubernetes cluster and outlines how to complete *Step Zero: your Kubernetes cluster* for
-different cloud providers and infrastructure.
-Since this project utilizes Helm as the package manager for Kubernetes deployments defined as charts,
-we will also cover how to set it up for your infrastructure.
+This section describes a Kubernetes cluster and outlines how to complete 
+*Step Zero: your Kubernetes cluster* for different cloud providers and infrastructure.
+Since this project utilizes Helm as the package manager for Kubernetes deployments
+defined as charts, we will also cover how to set it up for your infrastructure.
 
 .. toctree::
    :maxdepth: 2
 
-   infra/index
+   kubernetes/index
 
 .. _creating-your-jupyterhub:
 
@@ -75,7 +76,8 @@ Setup JupyterHub
 
 This tutorial starts from *Step Zero: Your Kubernetes cluster* and describes the
 steps needed for you to create a complete initial JupyterHub deployment.
-Please ensure you have a working 
+Please ensure you have a working installation of Kubernetes and Helm before 
+proceeding with this section.
 
 .. toctree::
    :maxdepth: 2

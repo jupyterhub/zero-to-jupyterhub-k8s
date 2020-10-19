@@ -81,7 +81,7 @@ source_suffix = ['.rst', '.md']
 # -- Generate the Helm chart configuration reference from a schema file ------
 
 # header
-with open('resources/reference/reference.txt', 'r') as f:
+with open('resources/reference.txt', 'r') as f:
     header_md = f.readlines()
 header_md = header_md[1:]
 header_md = [ln.strip('\n') for ln in header_md]
@@ -113,7 +113,7 @@ schema_md = parse_schema(data)
 
 # reference = header + schema
 reference_md = header_md + schema_md
-with open('resources/reference/reference.md', 'w') as f:
+with open('resources/reference.md', 'w') as f:
     f.write('\n'.join(reference_md))
 
 
