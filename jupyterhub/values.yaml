@@ -97,7 +97,7 @@ hub:
       - to:
           - ipBlock:
               cidr: 0.0.0.0/0
-    interNamespaceIngressForHTTPPort: deny
+    interNamespaceLabeledIngress: block
   allowNamedServers: false
   namedServerLimitPerUser:
   authenticatePrometheus:
@@ -192,6 +192,14 @@ proxy:
     extraEnv: {}
     nodeSelector: {}
     tolerations: []
+    networkPolicy:
+      enabled: true
+      ingress: []
+      egress:
+        - to:
+            - ipBlock:
+                cidr: 0.0.0.0/0
+      interNamespaceLabeledIngress: allow
   # traefik relates to the autohttps pod, which is responsible for TLS
   # termination when proxy.https.type=letsencrypt.
   traefik:
@@ -219,6 +227,14 @@ proxy:
     extraDynamicConfig: {}
     nodeSelector: {}
     tolerations: []
+    networkPolicy:
+      enabled: true
+      ingress: []
+      egress:
+        - to:
+            - ipBlock:
+                cidr: 0.0.0.0/0
+      interNamespaceLabeledIngress: allow
   secretSync:
     containerSecurityContext:
       runAsUser: 65534  # nobody user
@@ -250,14 +266,6 @@ proxy:
       key: tls.key
       crt: tls.crt
     hosts: []
-  networkPolicy:
-    enabled: true
-    ingress: []
-    egress:
-      - to:
-          - ipBlock:
-              cidr: 0.0.0.0/0
-    interNamespaceIngressForHTTPPort: requireEitherPodOrNamespaceLabel
 
 
 # auth relates to the configuration of JupyterHub's Authenticator class.
@@ -321,7 +329,7 @@ singleuser:
               cidr: 0.0.0.0/0
               except:
                 - 169.254.169.254/32
-    interNamespaceIngressForHTTPPort: deny
+    interNamespaceLabeledIngress: block
   events: true
   extraAnnotations: {}
   extraLabels:

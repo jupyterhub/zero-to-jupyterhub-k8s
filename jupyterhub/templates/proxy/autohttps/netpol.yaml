@@ -1,12 +1,10 @@
 {{- $HTTPS := .Values.proxy.https.enabled -}}
 {{- $autoHTTPS := and $HTTPS (and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
-{{- $manualHTTPS := and $HTTPS (eq .Values.proxy.https.type "manual") -}}
-{{- $manualHTTPSwithsecret := and $HTTPS (eq .Values.proxy.https.type "secret") -}}
-{{- if .Values.proxy.chp.networkPolicy.enabled -}}
+{{- if and $autoHTTPS .Values.proxy.traefik.networkPolicy.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: proxy
+  name: autohttps
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
@@ -36,15 +34,13 @@ spec:
     # allowed pods (hub.jupyter.org/network-access-proxy-http) --> proxy (http/https port)
     - ports:
         - port: http
-        {{- if or $manualHTTPS $manualHTTPSwithsecret }}
         - port: https
-        {{- end }}
       from:
         # source 1 - labeled pods
         - podSelector:
             matchLabels:
               hub.jupyter.org/network-access-proxy-http: "true"
-        {{- if eq .Values.proxy.chp.networkPolicy.interNamespaceLabeledIngress "allow" }}
+        {{- if eq .Values.proxy.traefik.networkPolicy.interNamespaceLabeledIngress "allow" }}
           namespaceSelector:
             matchLabels: {}   # without this, the podSelector would only consider pods in the local namespace
         # source 2 - pods in labeled namespaces
@@ -53,45 +49,19 @@ spec:
               hub.jupyter.org/network-access-proxy-http: "true"
         {{- end }}
 
-    # allowed pods (hub.jupyter.org/network-access-proxy-api) --> proxy (api port)
-    - ports:
-        - port: api
-      from:
-        # source 1 - labeled pods
-        - podSelector:
-            matchLabels:
-              hub.jupyter.org/network-access-proxy-api: "true"
-        {{- if eq .Values.proxy.chp.networkPolicy.interNamespaceLabeledIngress "allow" }}
-          namespaceSelector:
-            matchLabels: {}   # without this, the podSelector would only consider pods in the local namespace
-        # source 2 - pods in labeled namespaces
-        - namespaceSelector:
-            matchLabels:
-              hub.jupyter.org/network-access-proxy-api: "true"
-        {{- end }}
-
-    {{- with .Values.proxy.chp.networkPolicy.ingress}}
+    {{- with .Values.proxy.traefik.networkPolicy.ingress}}
     # depends, but default is nothing --> proxy
     {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
 
   egress:
-    # proxy --> hub
+    # hub --> proxy (http port)
     - ports:
-        - port: 8081
+        - port: 8000
       to:
         - podSelector:
             matchLabels:
-              {{- $_ := merge (dict "componentLabel" "hub") . }}
-              {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
-
-    # proxy --> singleuser-server
-    - ports:
-        - port: 8888
-      to:
-        - podSelector:
-            matchLabels:
-              {{- $_ := merge (dict "componentLabel" "singleuser-server") . }}
+              {{- $_ := merge (dict "componentLabel" "proxy") . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
 
     # proxy --> Kubernetes internal DNS
@@ -101,7 +71,7 @@ spec:
       - protocol: TCP
         port: 53
 
-    {{- with .Values.proxy.chp.networkPolicy.egress }}
+    {{- with .Values.proxy.traefik.networkPolicy.egress }}
     # proxy --> depends, but the default is everything
     {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
