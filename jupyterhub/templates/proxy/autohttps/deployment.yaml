@@ -42,6 +42,9 @@ spec:
         {{- with .Values.proxy.traefik.extraVolumes }}
         {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
+      {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.proxy.traefik.image) }}
+      imagePullSecrets: {{ . }}
+      {{- end }}
       initContainers:
         - name: load-acme
           image: "{{ .Values.proxy.secretSync.image.name }}:{{ .Values.proxy.secretSync.image.tag }}"

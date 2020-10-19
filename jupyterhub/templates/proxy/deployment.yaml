@@ -49,6 +49,9 @@ spec:
           secret:
             secretName: {{ .Values.proxy.https.secret.name }}
       {{- end }}
+      {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.proxy.chp.image) }}
+      imagePullSecrets: {{ . }}
+      {{- end }}
       containers:
         - name: chp
           image: {{ .Values.proxy.chp.image.name }}:{{ .Values.proxy.chp.image.tag }}

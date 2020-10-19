@@ -60,3 +60,17 @@ resources.
 DEPRECATION: hub.uid is deprecated in jupyterhub chart 0.9. Set the hub.containerSecurityContext.runAsUser value
 directly instead.
 {{- end }}
+
+
+{{- if hasKey .Values.hub "imagePullSecret" }}
+{{- if .Values.hub.imagePullSecret.enabled }}
+{{ "HARD DEPRECATION: hub.imagePullSecret has renamed to imagePullSecret" | fail }}
+{{- end }}
+{{- end }}
+
+
+{{- if hasKey .Values.singleuser "imagePullSecret" }}
+{{- if .Values.singleuser.imagePullSecret.enabled }}
+{{ "HARD DEPRECATION: singleuser.imagePullSecret has renamed to imagePullSecret" | fail }}
+{{- end }}
+{{- end }}

@@ -2,6 +2,20 @@
 # Helm template values will be made available there.
 custom: {}
 
+# imagePullSecret is configuration to create a k8s Secret that Helm chart's pods
+# can get credentials from to pull their images.
+imagePullSecret:
+  create: false
+  automaticReferenceInjection: true
+  registry: ''
+  username: ''
+  email: ''
+  password: ''
+# imagePullSecrets is configuration to reference the k8s Secret resources the
+# Helm chart's pods can get credentials from to pull their images.
+imagePullSecrets: []
+
+
 # hub relates to the hub pod, responsible for running JupyterHub, its configured
 # Authenticator class KubeSpawner, and its configured Proxy class
 # ConfigurableHTTPProxy. KubeSpawner creates the user pods, and
@@ -56,7 +70,8 @@ hub:
   image:
     name: jupyterhub/k8s-hub
     tag: 'set-by-chartpress'
-    pullSecrets:
+    pullPolicy: ''
+    pullSecrets: []
   resources:
     requests:
       cpu: 200m
@@ -66,12 +81,6 @@ hub:
     runAsGroup: 1000
     allowPrivilegeEscalation: false
   services: {}
-  imagePullSecret:
-    enabled: false
-    registry:
-    username:
-    email:
-    password:
   pdb:
     enabled: true
     minAvailable: 1
@@ -163,6 +172,8 @@ proxy:
     image:
       name: jupyterhub/configurable-http-proxy
       tag: 4.2.1
+      pullPolicy: ''
+      pullSecrets: []
     extraCommandLineFlags: []
     livenessProbe:
       enabled: true
@@ -189,6 +200,8 @@ proxy:
     image:
       name: traefik
       tag: v2.3 # ref: https://hub.docker.com/_/traefik?tab=tags
+      pullPolicy: ''
+      pullSecrets: []
     hsts:
       includeSubdomains: false
       preload: false
@@ -209,6 +222,8 @@ proxy:
     image:
       name: jupyterhub/k8s-secret-sync
       tag: 'set-by-chartpress'
+      pullPolicy: ''
+      pullSecrets: []
     resources: {}
   labels: {}
   pdb:
@@ -278,6 +293,8 @@ singleuser:
     image:
       name: jupyterhub/k8s-network-tools
       tag: 'set-by-chartpress'
+      pullPolicy: ''
+      pullSecrets: []
   cloudMetadata:
     # block set to true will append a privileged initContainer using the
     # iptables to block the sensitive metadata server at the provided ip.
@@ -327,15 +344,8 @@ singleuser:
   image:
     name: jupyterhub/k8s-singleuser-sample
     tag: 'set-by-chartpress'
-    pullPolicy: IfNotPresent
-    # pullSecrets:
-    #   - secretName
-  imagePullSecret:
-    enabled: false
-    registry:
-    username:
-    email:
-    password:
+    pullPolicy: ''
+    pullSecrets: []
   startTimeout: 300
   cpu:
     limit:
@@ -390,6 +400,8 @@ scheduling:
     image:
       name: k8s.gcr.io/kube-scheduler
       tag: v1.19.1
+      pullPolicy: ''
+      pullSecrets: []
     nodeSelector: {}
     tolerations: []
     pdb:
@@ -437,6 +449,8 @@ prePuller:
     image:
       name: jupyterhub/k8s-image-awaiter
       tag: 'set-by-chartpress'
+      pullPolicy: ''
+      pullSecrets: []
     containerSecurityContext:
       runAsUser: 65534  # nobody user
       runAsGroup: 65534 # nobody group
@@ -455,9 +469,9 @@ prePuller:
       allowPrivilegeEscalation: false
     image:
       name: k8s.gcr.io/pause
-      # Pick version from https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/pause?gcrImageListsize=30
-      tag: '3.2'
-
+      tag: '3.2' # https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/pause?gcrImageListsize=30
+      pullPolicy: ''
+      pullSecrets: []
 
 ingress:
   enabled: false
