@@ -200,6 +200,7 @@ proxy:
             - ipBlock:
                 cidr: 0.0.0.0/0
       interNamespaceLabeledIngress: allow
+      allowHttpIngressUnconditionally: true
   # traefik relates to the autohttps pod, which is responsible for TLS
   # termination when proxy.https.type=letsencrypt.
   traefik:
@@ -235,6 +236,7 @@ proxy:
             - ipBlock:
                 cidr: 0.0.0.0/0
       interNamespaceLabeledIngress: allow
+      allowHttpIngressUnconditionally: true
   secretSync:
     containerSecurityContext:
       runAsUser: 65534  # nobody user
