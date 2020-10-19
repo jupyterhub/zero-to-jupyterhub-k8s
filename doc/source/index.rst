@@ -59,10 +59,7 @@ It's also possible you end up getting some experience with:
 Setup Kubernetes
 ----------------
 
-This section describes a Kubernetes cluster and outlines how to complete 
-*Step Zero: your Kubernetes cluster* for different cloud providers and infrastructure.
-Since this project utilizes Helm as the package manager for Kubernetes deployments
-defined as charts, we will also cover how to set it up for your infrastructure.
+This section describes a how to setup a Kubernetes cluster on a selection of cloud providers and environments, as well as initialize Helm, a Kubernetes package manager, to work with it.
 
 .. toctree::
    :maxdepth: 2
