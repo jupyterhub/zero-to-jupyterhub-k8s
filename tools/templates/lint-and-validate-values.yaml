@@ -100,7 +100,7 @@ proxy:
     extraPorts:
     - name: ssh
       port: 22
-      targetPort: 22
+      targetPort: ssh
     type: LoadBalancer
     labels:
       MOCK_PROXY_ENV: mock
