@@ -65,7 +65,7 @@ spec:
       {{- end }}
     {{- with .Values.proxy.service.extraPublicPorts }}
     {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
-    {{- end}}
+    {{- end }}
   type: {{ .Values.proxy.service.type }}
   {{- with .Values.proxy.service.loadBalancerIP }}
   loadBalancerIP: {{ . }}
