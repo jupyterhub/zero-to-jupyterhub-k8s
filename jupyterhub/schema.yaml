@@ -662,7 +662,7 @@ properties:
                 type: integer
                 description: |
                   The HTTPS port the proxy-public service should be exposed on.
-          extraPublicPorts:
+          extraPorts:
             type: list
             description: |
               Extra ports the k8s Service should accept incoming traffic on,

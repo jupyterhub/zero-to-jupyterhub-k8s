@@ -96,7 +96,7 @@ rbac:
 proxy:
   secretToken: '0000000000000000000000000000000000000000000000000000000000000000'
   service:
-    extraPublicPorts:
+    extraPorts:
     - name: ssh
       port: 22
       targetPort: 22
