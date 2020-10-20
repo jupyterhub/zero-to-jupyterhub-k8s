@@ -655,6 +655,13 @@ properties:
                 type: integer
                 description: |
                   The HTTPS port the proxy-public service should be exposed on.
+          extraPublicPorts:
+            type: list
+            description: |
+              Extra ports to be exposed on the public service pointing to the proxy.
+
+              See [the Kubernetes documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#serviceport-v1-core)
+              for the structure of the items in this list.
           loadBalancerIP:
             type: string
             description: |
