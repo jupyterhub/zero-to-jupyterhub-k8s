@@ -72,7 +72,7 @@ spec:
               {{- $_ := merge (dict "componentLabel" "proxy") . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
 
-    # proxy --> Kubernetes internal DNS
+    # autohttps --> Kubernetes internal DNS
     - ports:
       - protocol: UDP
         port: 53
@@ -80,7 +80,7 @@ spec:
         port: 53
 
     {{- with .Values.proxy.traefik.networkPolicy.egress }}
-    # proxy --> depends, but the default is everything
+    # autohttps --> depends, but the default is everything
     {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
 {{- end }}
