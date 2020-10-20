@@ -160,6 +160,7 @@ proxy:
     nodePorts:
       http:
       https:
+    extraPorts: []
     loadBalancerIP:
     loadBalancerSourceRanges: []
   # chp relates to the proxy pod, which is responsible for routing traffic based

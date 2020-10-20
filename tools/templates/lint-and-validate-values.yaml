@@ -96,6 +96,10 @@ rbac:
 proxy:
   secretToken: '0000000000000000000000000000000000000000000000000000000000000000'
   service:
+    extraPorts:
+    - name: ssh
+      port: 22
+      targetPort: 22
     type: LoadBalancer
     labels:
       MOCK_PROXY_ENV: mock
