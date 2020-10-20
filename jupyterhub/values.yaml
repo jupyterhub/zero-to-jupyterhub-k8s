@@ -463,6 +463,7 @@ prePuller:
     runAsUser: 65534  # nobody user
     runAsGroup: 65534 # nobody group
     allowPrivilegeEscalation: false
+  extraTolerations: []
   # hook relates to the hook-image-awaiter Job and hook-image-puller DaemonSet
   hook:
     enabled: true
@@ -478,7 +479,6 @@ prePuller:
       allowPrivilegeEscalation: false
     podSchedulingWaitDuration: 10
     nodeSelector: {}
-    tolerations: []
   continuous:
     enabled: true
   pullProfileListImages: true

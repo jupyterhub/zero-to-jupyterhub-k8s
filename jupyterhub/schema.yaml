@@ -1406,6 +1406,7 @@ properties:
 
           They were made configurable as usage of ResourceQuota may require
           containers in the namespace to have explicit resources set.
+      extraTolerations: *tolerations-spec
       hook:
         description: |
           See the [*optimization
@@ -1433,7 +1434,6 @@ properties:
               0.9.0 and earlier.
             type: int
           nodeSelector: *nodeSelector-spec
-          tolerations: *tolerations-spec
       continuous:
         description: |
           See the [*optimization

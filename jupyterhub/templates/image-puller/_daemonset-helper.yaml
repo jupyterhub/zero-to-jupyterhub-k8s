@@ -48,6 +48,9 @@ spec:
       {{- end }}
       tolerations:
         {{- include "jupyterhub.userTolerations" . | nindent 8 }}
+        {{- if .Values.prePuller.extraTolerations  }}
+        {{- .Values.prePuller.extraTolerations  | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- end }}
       nodeSelector: {{ toJson .Values.singleuser.nodeSelector }}
       {{- if include "jupyterhub.userNodeAffinityRequired" . }}
       affinity:
