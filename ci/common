@@ -187,4 +187,12 @@ full_namespace_report () {
         '
     ) | xargs --max-args 1 --no-run-if-empty --max-lines \
     sh -c 'printf "\nPending user pod detected ($0)\n - Logs of deploy/user-scheduler:\n"; kubectl logs --all-containers deploy/user-scheduler'
+
+    echo ""
+    echo "Just while debugging intermittent issue, lets output the logs of the hub."
+    kubectl logs --all-containers deploy/hub
+
+    echo ""
+    echo "Just while debugging intermittent issue, lets output the logs of the proxy pod."
+    kubectl logs --all-containers deploy/proxy
 }
