@@ -63,7 +63,7 @@ spec:
     {{- end }}
 
   egress:
-    # hub --> proxy (http port)
+    # autohttps --> proxy (http port)
     - ports:
         - port: 8000
       to:
