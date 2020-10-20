@@ -48,7 +48,7 @@ spec:
         - podSelector:
             matchLabels:
               hub.jupyter.org/network-access-proxy-http: "true"
-        {{- if eq .Values.proxy.traefik.networkPolicy.interNamespaceLabeledIngress "allow" }}
+        {{- if eq .Values.proxy.traefik.networkPolicy.interNamespaceAccessLabels "accept" }}
           namespaceSelector:
             matchLabels: {}   # without this, the podSelector would only consider pods in the local namespace
         # source 2 - pods in labeled namespaces

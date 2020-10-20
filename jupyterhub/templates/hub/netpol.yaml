@@ -45,7 +45,7 @@ spec:
         - podSelector:
             matchLabels:
               hub.jupyter.org/network-access-hub: "true"
-        {{- if eq .Values.hub.networkPolicy.interNamespaceLabeledIngress "allow" }}
+        {{- if eq .Values.hub.networkPolicy.interNamespaceAccessLabels "accept" }}
           namespaceSelector:
             matchLabels: {}   # without this, the podSelector would only consider pods in the local namespace
         # source 2 - pods in labeled namespaces

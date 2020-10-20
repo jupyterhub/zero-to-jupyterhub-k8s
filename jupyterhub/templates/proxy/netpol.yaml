@@ -52,7 +52,7 @@ spec:
         - podSelector:
             matchLabels:
               hub.jupyter.org/network-access-proxy-http: "true"
-        {{- if eq .Values.proxy.chp.networkPolicy.interNamespaceLabeledIngress "allow" }}
+        {{- if eq .Values.proxy.chp.networkPolicy.interNamespaceAccessLabels "accept" }}
           namespaceSelector:
             matchLabels: {}   # without this, the podSelector would only consider pods in the local namespace
         # source 2 - pods in labeled namespaces
@@ -69,7 +69,7 @@ spec:
         - podSelector:
             matchLabels:
               hub.jupyter.org/network-access-proxy-api: "true"
-        {{- if eq .Values.proxy.chp.networkPolicy.interNamespaceLabeledIngress "allow" }}
+        {{- if eq .Values.proxy.chp.networkPolicy.interNamespaceAccessLabels "accept" }}
           namespaceSelector:
             matchLabels: {}   # without this, the podSelector would only consider pods in the local namespace
         # source 2 - pods in labeled namespaces
