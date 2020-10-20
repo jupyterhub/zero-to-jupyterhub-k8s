@@ -612,7 +612,14 @@ properties:
       service:
         type: object
         description: |
-          Object to configure the service the JupyterHub's proxy will be exposed on by the Kubernetes server.
+          Configuration of the k8s Service `proxy-public` which either will
+          point to the `autohttps` pod running Traefik for TLS termination, or
+          the `proxy` pod running ConfigurableHTTPProxy. Incoming traffic from
+          users on the internet should always go through this k8s Service.
+
+          When this service targets the `autohttps` pod which then routes to the
+          `proxy` pod, a k8s Service named `proxy-http` will be added targeting
+          the `proxy` pod and only accepting HTTP traffic on port 80.
         properties:
           type: 
             type: string
@@ -658,9 +665,12 @@ properties:
           extraPublicPorts:
             type: list
             description: |
-              Extra ports to be exposed on the public service pointing to the proxy.
+              Extra ports the k8s Service should accept incoming traffic on,
+              which will be redirected to either the `autohttps` pod (treafik)
+              or the `proxy` pod (chp).
 
-              See [the Kubernetes documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#serviceport-v1-core)
+              See [the Kubernetes
+              documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#serviceport-v1-core)
               for the structure of the items in this list.
           loadBalancerIP:
             type: string
