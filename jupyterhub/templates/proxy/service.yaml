@@ -63,7 +63,7 @@ spec:
       {{- with .Values.proxy.service.nodePorts.http }}
       nodePort: {{ . }}
       {{- end }}
-    {{- with .Values.proxy.extraPublicPorts }}
+    {{- with .Values.proxy.service.extraPublicPorts }}
     {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end}}
   type: {{ .Values.proxy.service.type }}
