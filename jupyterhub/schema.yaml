@@ -204,11 +204,15 @@ properties:
           ingress:
             type: list
             description: |
-              Additional ingress rules to add.
+              Additional ingress rules to add except those that is known to be needed by the respective pods in the Helm chart.
           egress:
             type: list
             description: |
-              Additional egress rules to add.
+              Additional egress rules to add except those that is known to be needed by  the respective pods in the Helm chart.
+
+              The default value of this egress is to allow all traffic, except for the `singleuser.networkPolicy.egress`, which is also limiting access to a metadata server that can be exploited.
+
+              If you want to restrict egress, you can override this permissive default to be an empty list.
           interNamespaceAccessLabels:
             type: string
             enum:
@@ -216,7 +220,7 @@ properties:
               - ignore
             description: |
               This configuration option determines if both namespaces and pods
-              in other namespaces that have specific access labels, should be
+              in other namespaces, that have specific access labels, should be
               accepted to allow ingress (set to `accept`), or, if the labels are
               to be ignored when applied outside the local namespace (set to
               `ignore`).
@@ -235,6 +239,9 @@ properties:
               what the origin of the request is. The default setting for
               `proxy.chp` and `proxy.traefik`'s networkPolicy configuration is
               `[http, https]`, while it is `[]` for other networkPolicies.
+              
+              Note that these port names or numbers targets a Pod's port name or
+              number, not a k8s Service's port name or number.
       db:
         type: object
         properties:
