@@ -200,7 +200,7 @@ proxy:
         - to:
             - ipBlock:
                 cidr: 0.0.0.0/0
-      interNamespaceAccessLabels: accept
+      interNamespaceAccessLabels: ignore
       allowedIngressPorts: [http, https]
   # traefik relates to the autohttps pod, which is responsible for TLS
   # termination when proxy.https.type=letsencrypt.
@@ -236,7 +236,7 @@ proxy:
         - to:
             - ipBlock:
                 cidr: 0.0.0.0/0
-      interNamespaceAccessLabels: accept
+      interNamespaceAccessLabels: ignore
       allowedIngressPorts: [http, https]
   secretSync:
     containerSecurityContext:
