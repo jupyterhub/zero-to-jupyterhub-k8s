@@ -195,4 +195,8 @@ full_namespace_report () {
     echo ""
     echo "Just while debugging intermittent issue, lets output the logs of the proxy pod."
     kubectl logs --all-containers deploy/proxy
+
+    echo ""
+    echo "Just while debugging intermittent issue, lets output the logs of the autohttps pod."
+    kubectl logs --all-containers deploy/autohttps
 }
