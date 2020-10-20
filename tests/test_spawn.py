@@ -214,16 +214,14 @@ def _wait_for_user_to_spawn(api_request, jupyter_user, timeout):
         r.raise_for_status()
         user_model = r.json()
 
-        # will be pending while starting,
-        # server will be set when ready
-        if "" not in user_model["servers"]:
-            # spawn failed!
-            print(user_model)
-            raise RuntimeError("Server never started!")
-
-        server_model = user_model["servers"][""]
-        if server_model["ready"]:
-            return server_model
+        # Note that JupyterHub has a concept of named servers, so the default
+        # server is named "", a blank string.
+        if "" in user_model["servers"]:
+            server_model = user_model["servers"][""]
+            if server_model["ready"]:
+                return server_model
+        else:
+            print("Awaiting server info to be part of user_model...")
 
         time.sleep(1)
     return False
