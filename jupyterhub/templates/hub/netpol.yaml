@@ -29,6 +29,14 @@ spec:
   # Read more at: https://kubernetes.io/docs/concepts/services-networking/network-policies/#behavior-of-to-and-from-selectors
   #
   ingress:
+    {{- with .Values.hub.networkPolicy.allowedIngressPorts }}
+    # allow incoming traffic to these ports independent of source
+    - ports:
+      {{- range $port := . }}
+      - port: {{ $port }}
+      {{- end }}
+    {{- end }}
+
     # allowed pods (hub.jupyter.org/network-access-hub) --> hub
     - ports:
         - port: http

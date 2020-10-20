@@ -31,12 +31,14 @@ spec:
   # Read more at: https://kubernetes.io/docs/concepts/services-networking/network-policies/#behavior-of-to-and-from-selectors
   #
   ingress:
-    {{- if .Values.proxy.traefik.networkPolicy.allowHttpIngressUnconditionally }}
-    # allow any incoming traffic to these ports
+    {{- with .Values.proxy.traefik.networkPolicy.allowedIngressPorts }}
+    # allow incoming traffic to these ports independent of source
     - ports:
-      - port: http
-      - port: https
-    {{- else }}
+      {{- range $port := . }}
+      - port: {{ $port }}
+      {{- end }}
+    {{- end }}
+
     # allowed pods (hub.jupyter.org/network-access-proxy-http) --> proxy (http/https port)
     - ports:
         - port: http
@@ -54,7 +56,6 @@ spec:
             matchLabels:
               hub.jupyter.org/network-access-proxy-http: "true"
         {{- end }}
-    {{- end }}
 
     {{- with .Values.proxy.traefik.networkPolicy.ingress}}
     # depends, but default is nothing --> proxy

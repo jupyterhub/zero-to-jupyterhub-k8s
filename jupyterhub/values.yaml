@@ -98,6 +98,7 @@ hub:
           - ipBlock:
               cidr: 0.0.0.0/0
     interNamespaceLabeledIngress: block
+    allowedIngressPorts: []
   allowNamedServers: false
   namedServerLimitPerUser:
   authenticatePrometheus:
@@ -200,7 +201,7 @@ proxy:
             - ipBlock:
                 cidr: 0.0.0.0/0
       interNamespaceLabeledIngress: allow
-      allowHttpIngressUnconditionally: true
+      allowedIngressPorts: [http, https]
   # traefik relates to the autohttps pod, which is responsible for TLS
   # termination when proxy.https.type=letsencrypt.
   traefik:
@@ -236,7 +237,7 @@ proxy:
             - ipBlock:
                 cidr: 0.0.0.0/0
       interNamespaceLabeledIngress: allow
-      allowHttpIngressUnconditionally: true
+      allowedIngressPorts: [http, https]
   secretSync:
     containerSecurityContext:
       runAsUser: 65534  # nobody user
@@ -332,6 +333,7 @@ singleuser:
               except:
                 - 169.254.169.254/32
     interNamespaceLabeledIngress: block
+    allowedIngressPorts: []
   events: true
   extraAnnotations: {}
   extraLabels:
