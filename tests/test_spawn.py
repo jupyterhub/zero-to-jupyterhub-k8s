@@ -166,11 +166,11 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
     r = api_request.post("/users/" + jupyter_user + "/server")
     assert r.status_code in (201, 202)
     try:
+        # check successfull spawn
         server_model = _wait_for_user_to_spawn(
             api_request, jupyter_user, request_data["test_timeout"]
         )
         assert server_model
-        print(server_model)
         pod_name = server_model["state"]["pod_name"]
 
         c = subprocess.run([
@@ -218,6 +218,7 @@ def _wait_for_user_to_spawn(api_request, jupyter_user, timeout):
         # server will be set when ready
         if "" not in user_model["servers"]:
             # spawn failed!
+            print(user_model)
             raise RuntimeError("Server never started!")
 
         server_model = user_model["servers"][""]
