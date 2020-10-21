@@ -799,6 +799,13 @@ properties:
         description: |
           Configure the traefik proxy used to terminate TLS when 'autohttps' is enabled
         properties:
+          labels:
+            type: object
+            description: |
+              Extra labels to add to the traefik pod.
+
+              See the [Kubernetes docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+              to learn more about labels.
           extraEnv:
             type: object
             description: |
