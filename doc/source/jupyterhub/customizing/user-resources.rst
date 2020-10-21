@@ -1,7 +1,7 @@
 .. _user-resources:
 
 Customizing User Resources
-==========================
+--------------------------
 
 .. note::
 
@@ -22,7 +22,7 @@ groups improves the user experience for all Hub users.
 
 
 Set user memory and CPU guarantees / limits
--------------------------------------------
+*******************************************
 
 Each user on your JupyterHub gets a slice of memory and CPU to use. There are
 two ways to specify how much users get to use: resource *guarantees* and
@@ -74,7 +74,7 @@ This would limit your users to a maximum of .5 of a CPU (so 1/2 of a CPU core), 
    Remember to :ref:`apply the change <apply-config-changes>` after changing your ``config.yaml`` file!
 
 Set user GPU guarantees / limits
---------------------------------
+********************************
 
 It is possible to allocate GPUs to your user. This is useful for heavier
 workloads, such as deep learning, that can take advantage of GPUs.
@@ -108,7 +108,7 @@ To check that your GPUs are schedulable by Kubernetes, you can run the following
        kubectl get nodes -o=custom-columns=NAME:.metadata.name,GPUs:.status.capacity.'nvidia\.com/gpu'
 
 Modifying user shared memory size
----------------------------------
+*********************************
 
 It is also beneficial to increase the shared memory (SHM) allocation on pods
 running workloads like deep learning. This is required for functions like
@@ -138,13 +138,13 @@ Some important notes regarding SHM allocation:
 - When the memory limit is exceeded, the pod will be evicted
 
 Modifying user storage type and size
-------------------------------------
+************************************
 
 See the :ref:`user-storage` for information on how to modify the type and
 size of storage that your users have access to.
 
 Expanding and contracting the size of your cluster
---------------------------------------------------
+**************************************************
 
 You can easily scale up or down your cluster's size to meet usage demand or to
 save cost when the cluster is not being used. This is particularly useful

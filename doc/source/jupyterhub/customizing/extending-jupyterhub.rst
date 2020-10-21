@@ -1,7 +1,7 @@
 .. _extending-jupyterhub:
 
 Customizing your Deployment
-===========================
+---------------------------
 
 The Helm chart used to install your JupyterHub deployment has a lot of options
 for you to tweak. For a semi-complete reference list of the options, see the
@@ -10,7 +10,7 @@ for you to tweak. For a semi-complete reference list of the options, see the
 .. _apply-config-changes:
 
 Applying configuration changes
-------------------------------
+******************************
 
 The general method to modify your Kubernetes deployment is to:
 

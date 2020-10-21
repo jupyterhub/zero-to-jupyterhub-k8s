@@ -1,7 +1,7 @@
 .. _customization-guide:
 
 Customization Guide
--------------------
+===================
 
 JupyterHub can be configured and customized to fit a variety of deployment
 requirements. If you would like to expand JupyterHub, customize its setup,
