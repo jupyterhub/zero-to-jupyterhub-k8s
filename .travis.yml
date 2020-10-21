@@ -53,7 +53,7 @@ install:
   - await_pebble  # jupyterhub's autohttps communicates with it as the ACME server
 script:
   # Install JupyterHub
-  - helm install jupyterhub ./jupyterhub --values dev-config.yaml --set proxy.traefik.image.tag=v2.3.0
+  - helm install jupyterhub ./jupyterhub --values dev-config.yaml --set proxy.traefik.image.tag=v2.3.1
   - await_jupyterhub
   - await_autohttps_tls_cert_acquisition
 
