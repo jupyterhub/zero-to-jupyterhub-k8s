@@ -190,8 +190,7 @@ If you prefer to use the Azure portal see the `Azure Kubernetes Service quicksta
       At this stage, you may wish to think about customising your deployment. The
       `Hub23 Deployment Guide <https://alan-turing-institute.github.io/hub23-deploy/>`_
       contains instructions for deploying a Kubernetes cluster to Azure with
-      `autoscaling <https://alan-turing-institute.github.io/hub23-deploy/deploy-autoscaling-k8s-cluster/>`_
-      and `multiple nodepools <https://alan-turing-institute.github.io/hub23-deploy/deploy-k8s-cluster-multiple-nodepools/>`_.
+      `autoscaling and multiple nodepools <https://alan-turing-institute.github.io/hub23-deploy/deploy-k8s/az-aks-create.html>`_.
       These instructions can be combined so that all nodepools can autoscale.
 
    The following command will request a Kubernetes cluster within the resource
