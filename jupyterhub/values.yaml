@@ -200,7 +200,10 @@ proxy:
       allowPrivilegeEscalation: false
     image:
       name: traefik
-      tag: v2.3.0 # ref: https://hub.docker.com/_/traefik?tab=tags
+      # tag for Traefik should be thoroughly tested before bumping, because it
+      # has been prone to have intermittency issues in the past. See for example
+      # https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1857.
+      tag: v2.3.2 # ref: https://hub.docker.com/_/traefik?tab=tags
       pullPolicy: ''
       pullSecrets: []
     hsts:
