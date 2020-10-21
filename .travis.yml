@@ -53,7 +53,8 @@ install:
   - await_pebble  # jupyterhub's autohttps communicates with it as the ACME server
 script:
   # Install JupyterHub
-  - helm install jupyterhub ./jupyterhub --values dev-config.yaml
+  - helm install jupyterhub ./jupyterhub --values dev-config.yaml \
+        --set proxy.traefik.image.tag=v2.3.2
   - await_jupyterhub
   - await_autohttps_tls_cert_acquisition
 
@@ -81,33 +82,6 @@ jobs:
 
   ## define individual jobs that can rely on defaults from above
   include:
-    - stage: test
-      name: chart:install-latest-then-upgrade
-      script:
-        ## NOTE: To use Pebble in Travis CI, we require the ability to mount a
-        ##       certificate on the autohttps pod, but we can't because that
-        ##       configuration ability was added after 0.9.0. Due to this
-        ##       autohttps is disabled here.
-        ##       The current dev-config.yaml require network policies to contain
-        ##       more pre-defined defaults to reach the DNS server not present
-        ##       in 0.9.0, and are due to this disabled.
-        - |
-            helm install jupyterhub jupyterhub/jupyterhub --values dev-config.yaml \
-                --set proxy.https.enabled=false \
-                --set hub.networkPolicy.enabled=false \
-                --set proxy.networkPolicy.enabled=false \
-                --set singleuser.networkPolicy.enabled=false \
-                --set proxy.traefik.image.tag=v2.3.2
-        - await_jupyterhub
-
-        # Upgrade JupyterHub to what's locally available
-        - helm upgrade jupyterhub ./jupyterhub --values dev-config.yaml
-        - await_jupyterhub
-        - await_autohttps_tls_cert_acquisition
-
-        # Run tests
-        - pytest --verbose --exitfirst ./tests || (full_namespace_report && exit 1)
-
     ## k3s versions:  https://github.com/rancher/k3s/releases
     - stage: test
       name: intermittency-test-01
