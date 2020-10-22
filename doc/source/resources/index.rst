@@ -1,11 +1,12 @@
 =========
-Reference
+Resources
 =========
 
 .. toctree::
-   :maxdepth: 1
-   :caption: Reference
+   :maxdepth: 2
+   :caption: Resources
 
+   community
    reference
    reference-docs
    tools

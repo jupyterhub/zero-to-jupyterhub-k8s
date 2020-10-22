@@ -39,7 +39,7 @@ your google cloud account.
       about Google Cloud shell is available `here
       <https://cloud.google.com/shell/docs/>`__
 
-      .. image:: ../_static/images/google/start_interactive_cli.png
+      .. image:: ../../_static/images/google/start_interactive_cli.png
          :align: center
 
    b. **Use your own computer's terminal:**

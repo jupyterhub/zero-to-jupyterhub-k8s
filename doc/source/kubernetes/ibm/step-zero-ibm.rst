@@ -34,12 +34,12 @@ Procedure:
      2. When configuring the new cluster, select the **Cluster type** and click **Create Cluster** to provision a Kubernetes cluster.
         2.1 In the case of a free cluster you will see something similar to:
 
-        .. image:: ../_static/images/ibm/create-free-kubernetes-cluster-ibm-cloud.png
+        .. image:: ../../_static/images/ibm/create-free-kubernetes-cluster-ibm-cloud.png
             :align: center
 
         2.2 In the case of a paid cluster you will see something similar to:
 
-        .. image:: ../_static/images/ibm/create-paid-kubernetes-cluster-ibm-cloud.png
+        .. image:: ../../_static/images/ibm/create-paid-kubernetes-cluster-ibm-cloud.png
             :align: center
 
      3. Check the status of your **Cluster** and **Worker Nodes** and wait for them to be **ready**.
@@ -72,7 +72,7 @@ Procedure:
            kubectl cluster-info
 
 
-        .. image:: ../_static/images/ibm/kubectl-cluster-info.png
+        .. image:: ../../_static/images/ibm/kubectl-cluster-info.png
          :align: center
 
 

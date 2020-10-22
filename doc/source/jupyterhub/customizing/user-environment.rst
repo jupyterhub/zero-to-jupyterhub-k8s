@@ -1,7 +1,7 @@
 .. _user-environment:
 
 Customizing User Environment
-============================
+----------------------------
 
 This page contains instructions for common ways to enhance the user experience.
 For a list of all the configurable Helm chart options, see the
@@ -25,7 +25,7 @@ To get started customizing the user environment, see the topics below.
 .. _existing-docker-image:
 
 Choose and use an existing Docker image
----------------------------------------
+***************************************
 
 Project Jupyter maintains the `jupyter/docker-stacks repository
 <https://github.com/jupyter/docker-stacks/>`_, which contains ready to use
@@ -85,7 +85,7 @@ image containing useful tools and libraries for datascience, complete these step
 .. _jupyterlab-by-default:
 
 Use JupyterLab by default
--------------------------
+*************************
 
 `JupyterLab <https://jupyterlab.readthedocs.io/en/stable/index.html>`_ is a new
 user interface for Jupyter about to replace the classic user interface (UI).
@@ -110,7 +110,7 @@ JupyterLab with the following config in your :term:`config.yaml`:
 .. _custom-docker-image:
 
 Customize an existing Docker image
-----------------------------------
+**********************************
 
 If you are missing something in the image that you would like all users to have,
 we recommend that you build a new image on top of an existing Docker image from
@@ -141,7 +141,7 @@ by the Helm chart.
 .. _set-env-vars:
 
 Set environment variables
--------------------------
+*************************
 
 One way to affect your user's environment is by setting :term:`environment
 variables`. While you can set them up in your Docker image if you build it
@@ -175,7 +175,7 @@ Python, for example, the following code reads an environment variable's value:
 .. _add-files-to-home:
 
 About user storage and adding files to it
------------------------------------------
+*****************************************
 
 It is important to understand the basics of how user storage is set up. By
 default, each user will get 10GB of space on a harddrive that will persist in
@@ -314,7 +314,7 @@ These environments are supposed to be used in notebooks, so a typical use case:
 .. _multiple-profiles:
 
 Using multiple profiles to let users select their environment
--------------------------------------------------------------
+*************************************************************
 
 You can create configurations for multiple user environments,
 and let users select from them once they log in to your JupyterHub. This

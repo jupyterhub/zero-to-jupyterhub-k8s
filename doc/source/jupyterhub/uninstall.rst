@@ -1,6 +1,6 @@
-.. _turn-off:
+.. _uninstall-jupyterhub:
 
-Tearing Everything Down
+Uninstalling JupyterHub
 =======================
 
 When you are done with your hub, you should delete it so you are no longer
@@ -18,7 +18,7 @@ Tearing down your JupyterHub entails:
    haven't been deleted (e.g., storage volumes in some cloud providers).
 
 For all cloud providers
------------------------
+***********************
 
 .. _delete-namespace:
 
@@ -49,7 +49,7 @@ before doing the cloud provider specific setup.
       kubectl delete namespace <YOUR-NAMESPACE>
 
 Google Cloud Platform
----------------------
+**********************
 
 1. Perform the steps in :ref:`delete-namespace`. These cloud provider agnostic
    steps will delete the Helm release and the Kubernetes namespace. This must be
@@ -83,7 +83,7 @@ Google Cloud Platform
    related to your JupyterHub cluster after you have deleted the cluster.
 
 Microsoft Azure AKS
--------------------
+*******************
 
 1. Perform the steps in :ref:`delete-namespace`. These cloud provider agnostic
    steps will delete the Helm release and the Kubernetes namespace. This must be
@@ -113,7 +113,7 @@ Microsoft Azure AKS
    related to your JupyterHub cluster after you have deleted the resource group.
 
 Amazon Web Services (AWS)
--------------------------
+*************************
 
 1. Perform the steps in :ref:`delete-namespace`. These cloud provider agnostic
    steps will delete the Helm release and the Kubernetes namespace. This must be

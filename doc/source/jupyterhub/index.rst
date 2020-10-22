@@ -1,5 +1,7 @@
-Customization Guide
--------------------
+.. _setup-jupyterhub:
+
+Setup JupyterHub
+-----------------
 
 JupyterHub can be configured and customized to fit a variety of deployment
 requirements. If you would like to expand JupyterHub, customize its setup,
@@ -10,10 +12,8 @@ used configurable helm chart fields.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Customization Guide
+   :caption: Setup JupyterHub
 
-   extending-jupyterhub
-   user-environment
-   user-resources
-   user-storage
-   user-management
+   installation
+   customization
+   uninstall
