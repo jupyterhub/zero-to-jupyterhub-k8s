@@ -1,6 +1,107 @@
 title: Config
 type: object
 properties:
+  imagePullSecret:
+    type: object
+    description: |
+      This is configuration to create a k8s Secret resource of `type:
+      kubernetes.io/dockerconfigjson`, with credentials to pull images from a
+      private image registry. If you opt to do so, it will be available for use
+      by all pods in their respective `spec.imagePullSecrets` alongside other
+      k8s Secrets defined in `imagePullSecrets` or the pod respective
+      `...image.pullSecrets` configuration.
+
+      In other words, using this configuration option can automate both the
+      otherwise manual creation of a k8s Secret and the otherwise manual
+      configuration to reference this k8s Secret in all the pods of the Helm
+      chart.
+
+      ```sh
+      # you won't need to create a k8s Secret manually...
+      kubectl create secret docker-registry image-pull-secret \
+        --docker-server=<REGISTRY> \
+        --docker-username=<USERNAME> \
+        --docker-email=<EMAIL> \
+        --docker-password=<PASSWORD>
+      ```
+
+      If you just want to let all Pods reference an existing secret, use the
+      `imagePullSecrets` configuration instead.
+
+      To learn the username and password fields to access a gcr.io registry from
+      a Kubernetes cluster not associated with the same google cloud
+      credentials, look into [this
+      guide](http://docs.heptio.com/content/private-registries/pr-gcr.html) and
+      read the notes about the password.
+    properties:
+      create:
+        type: boolean
+        description: |
+          Toggle the creation of the k8s Secret with provided credentials to
+          access a private image registry.
+      automaticReferenceInjection:
+        type: boolean
+        description: |
+          Toggle the automatic reference injection of the created Secret to all
+          pods' `spec.imagePullSecrets` configuration.
+      registry:
+        type: string
+        description: |
+          Name of the private registry you want to create a credential set for.
+          It will default to Docker Hub's image registry.
+
+          Examples:
+            - https://index.docker.io/v1/
+            - quay.io
+            - eu.gcr.io
+            - alexmorreale.privatereg.net
+      username:
+        type: string
+        description: |
+          Name of the user you want to use to connect to your private registry.
+
+          For external gcr.io, you will use the `_json_key`.
+
+          Examples:
+            - alexmorreale
+            - alex@pfc.com
+            - _json_key
+      password:
+        type: string
+        description: |
+          Password for the private image registry's user.
+
+          Examples:
+            - plaintextpassword
+            - abc123SECRETzyx098
+
+          For gcr.io registries the password will be a big JSON blob for a
+          Google cloud service account, it should look something like below.
+
+          ```yaml
+          password: |-
+            {
+              "type": "service_account",
+              "project_id": "jupyter-se",
+              "private_key_id": "f2ba09118a8d3123b3321bd9a7d6d0d9dc6fdb85",
+              ...
+            }
+          ```
+
+          Learn more in [this
+          guide](http://docs.heptio.com/content/private-registries/pr-gcr.html).
+  imagePullSecrets:
+    type: list
+    description: |
+      Chart wide configuration to _append_ k8s Secret references to all its
+      pod's `spec.imagePullSecrets` configuration.
+
+      This will not override or get overridden by pod specific configuration,
+      but instead augment the pod specific configuration.
+
+      You can use both the k8s native syntax, where each list element is like
+      `{"name": "my-secret-name"}`, or you can let list elements be strings
+      naming the secrets directly.
   hub:
     type: object
     properties:
@@ -27,142 +128,68 @@ properties:
           # to generate a value, run
           openssl rand -hex 32
           ```
-      imagePullPolicy:
-        type: string
-        enum:
-          - IfNotPresent
-          - Always
-          - Never
-        description: |
-          Set the imagePullPolicy on the hub pod.
-
-          See the [Kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
-          for more info on what the values mean.
-      imagePullSecret:
+      image: &image-spec
         type: object
         description: |
-          Creates an image pull secret for you and makes the hub pod utilize
-          it, allowing it to pull images from private image registries.
-          
-          Using this configuration option automates the following steps that
-          normally is required to pull from private image registries.
-          
-          ```sh
-          # you won't need to run this manually...
-          kubectl create secret docker-registry hub-image-credentials \
-            --docker-server=<REGISTRY> \
-            --docker-username=<USERNAME> \
-            --docker-email=<EMAIL> \
-            --docker-password=<PASSWORD>
-          ```
-
-          ```yaml
-          # you won't need to specify this manually...
-          spec:
-            imagePullSecrets:
-              - name: hub-image-credentials
-          ```
-
-          To learn the username and password fields to access a gcr.io registry
-          from a Kubernetes cluster not associated with the same google cloud
-          credentials, look into [this
-          guide](http://docs.heptio.com/content/private-registries/pr-gcr.html)
-          and read the notes about the password.
-        properties:
-          enabled:
-            type: boolean
-            description: |
-              Enable the creation of a Kubernetes Secret containing credentials
-              to access a image registry. By enabling this, the hub pod will also be configured
-              to use these credentials when it pulls its container image.
-          registry:
-            type: string
-            description: |
-              Name of the private registry you want to create a credential set
-              for. It will default to Docker Hub's image registry.
-
-              Examples:
-                - https://index.docker.io/v1/
-                - quay.io
-                - eu.gcr.io
-                - alexmorreale.privatereg.net
-          username:
-            type: string
-            description: |
-              Name of the user you want to use to connect to your private
-              registry. For external gcr.io, you will use the `_json_key`.
-
-              Examples:
-                - alexmorreale
-                - alex@pfc.com
-                - _json_key
-          password:
-            type: string
-            description: |
-              Password of the user you want to use to connect to your private
-              registry.
-
-              Examples:
-                - plaintextpassword
-                - abc123SECRETzyx098
-
-              For gcr.io registries the password will be a big JSON blob for a
-              Google cloud service account, it should look something like below.
-                            
-              ```yaml
-              password: |-
-                {
-                  "type": "service_account",
-                  "project_id": "jupyter-se",
-                  "private_key_id": "f2ba09118a8d3123b3321bd9a7d6d0d9dc6fdb85",
-                  ...
-                }
-              ```
-
-              Learn more in [this
-              guide](http://docs.heptio.com/content/private-registries/pr-gcr.html).
-      image:
-        type: object
-        description: |
-          Set custom image name / tag for the hub pod.
-
-          Use this to customize which hub image is used. Note that you must use a version of
-          the hub image that was bundled with this particular version of the helm-chart - using
-          other images might not work.
+          Set custom image name, tag, pullPolicy, or pullSecrets for the pod.
         properties:
           name:
             type: string
             description: |
-              Name of the image, without the tag.
+              The name of the image, without the tag.
 
               ```
-              # example names
-              yuvipanda/wikimedia-hub
-              gcr.io/my-project/my-hub
+              # example name
+              gcr.io/my-project/my-image
               ```
           tag:
             type: string
             description: |
-              The tag of the image to pull.
-              
-              This is the value after the `:` in your full image name.
+              The tag of the image to pull. This is the value following `:` in
+              complete image specifications.
 
               ```
               # example tags
               v1.11.1
               zhy270a
               ```
+          pullPolicy:
+            type: string
+            enum:
+              - IfNotPresent
+              - Always
+              - Never
+            description: |
+              Configures the Pod's `spec.imagePullPolicy`.
+
+              See the [Kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
+              for more info.
           pullSecrets:
             type: list
             description: |
-              Use an existing kubernetes secret to pull the custom image.
+              A list of references to existing Kubernetes Secrets with
+              credentials to pull the image.
+              
+              This Pod's final `imagePullSecrets` k8s specification will be a
+              combination of:
+
+              1. This list of k8s Secrets, specific for this pod.
+              2. The list of k8s Secrets, for use by all pods in the Helm chart,
+                 declared in this Helm charts configuration called
+                 `imagePullSecrets`.
+              3. A k8s Secret, for use by all pods in the Helm chart, if
+                 conditionally created from image registry credentials provided
+                 under `imagePullSecret` if `imagePullSecret.create` is set to
+                 true.
               
               ```yaml
-              # example existing pull secret.
-              singleuser:
-                image:
-                  pullSecrets:
-                    - gcr-pull
+              # example - k8s native syntax
+              pullSecrets:
+                - name: my-k8s-secret-with-image-registry-credentials
+              
+              # example - simplified syntax
+              pullSecrets:
+                - my-k8s-secret-with-image-registry-credentials
               ```
       db:
         type: object
@@ -463,6 +490,41 @@ properties:
 
           NOTE: if you choose to manage the secret yourself, you are in charge of ensuring the
           secret having the proper contents.
+      nodeSelector: &nodeSelector-spec
+        type:
+          - object
+        description: |
+          An object with key value pairs representing labels. K8s Nodes are
+          required to have match all these labels for this Pod to scheduled on
+          them.
+
+          ```yaml
+          disktype: ssd
+          nodetype: awesome
+          ```
+
+          See [the Kubernetes
+          documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+          for more details.
+      tolerations: &tolerations-spec
+        type:
+          - list
+        description: |
+          Tolerations allow a pod to be scheduled on nodes with taints. These
+          are additional tolerations other than the user pods and core pods
+          default ones `hub.jupyter.org/dedicated=user:NoSchedule` or
+          `hub.jupyter.org/dedicated=core:NoSchedule`. Note that a duplicate set
+          of tolerations exist where `/` is replaced with `_` as the Google
+          cloud does not support the character `/` yet in the toleration.
+
+          Pass this field an array of
+          [`Toleration`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#toleration-v1-core)
+          objects.
+
+          See the [Kubernetes
+          docs](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
+          for more info.
+
 
   proxy:
     type: object
@@ -473,6 +535,26 @@ properties:
           Configure the configurable-http-proxy (chp) pod managed by jupyterhub to route traffic
           both to itself and to user pods.
         properties:
+          extraCommandLineFlags:
+            type: list
+            description: |
+              A list of strings to be added as command line options when
+              starting
+              [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy#command-line-options)
+              that will be expanded with Helm's template function `tpl` which
+              can render Helm template logic inside curly braces (`{{ ... }}`).
+
+              ```yaml
+              proxy:
+                chp:
+                  extraCommandLineFlags:
+                    - "--auto-rewrite"
+                    - "--custom-header {{ .Values.myCustomStuff }}"
+              ```
+
+              Note that these will be appended last, and if you provide the same
+              flag twice, the last flag will be used, which mean you can
+              override the default flag values as well.
           extraEnv:
             type: object
             description: |
@@ -511,6 +593,8 @@ properties:
 
               For more information, see the [Kubernetes EnvVar
               specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core).
+          nodeSelector: *nodeSelector-spec
+          tolerations: *tolerations-spec
       secretToken:
         type: string
         description: |
@@ -528,7 +612,14 @@ properties:
       service:
         type: object
         description: |
-          Object to configure the service the JupyterHub's proxy will be exposed on by the Kubernetes server.
+          Configuration of the k8s Service `proxy-public` which either will
+          point to the `autohttps` pod running Traefik for TLS termination, or
+          the `proxy` pod running ConfigurableHTTPProxy. Incoming traffic from
+          users on the internet should always go through this k8s Service.
+
+          When this service targets the `autohttps` pod which then routes to the
+          `proxy` pod, a k8s Service named `proxy-http` will be added targeting
+          the `proxy` pod and only accepting HTTP traffic on port 80.
         properties:
           type: 
             type: string
@@ -571,6 +662,16 @@ properties:
                 type: integer
                 description: |
                   The HTTPS port the proxy-public service should be exposed on.
+          extraPorts:
+            type: list
+            description: |
+              Extra ports the k8s Service should accept incoming traffic on,
+              which will be redirected to either the `autohttps` pod (treafik)
+              or the `proxy` pod (chp).
+
+              See [the Kubernetes
+              documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#serviceport-v1-core)
+              for the structure of the items in this list.
           loadBalancerIP:
             type: string
             description: |
@@ -698,6 +799,13 @@ properties:
         description: |
           Configure the traefik proxy used to terminate TLS when 'autohttps' is enabled
         properties:
+          labels:
+            type: object
+            description: |
+              Extra labels to add to the traefik pod.
+
+              See the [Kubernetes docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+              to learn more about labels.
           extraEnv:
             type: object
             description: |
@@ -734,6 +842,8 @@ properties:
 
               For more information, see the [Kubernetes EnvVar
               specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core).
+          nodeSelector: *nodeSelector-spec
+          tolerations: *tolerations-spec
     required:
       - secretToken
   auth:
@@ -806,135 +916,7 @@ properties:
               - "null"
             description: |
               Note that this field is referred to as *requests* by the Kubernetes API.
-      imagePullSecret:
-        type: object
-        description: |
-          Creates an image pull secret for you and makes the user pods utilize
-          it, allowing them to pull images from private image registries.
-          
-          Using this configuration option automates the following steps that
-          normally is required to pull from private image registries.
-          
-          ```sh
-          # you won't need to run this manually...
-          kubectl create secret docker-registry singleuser-image-credentials \
-            --docker-server=<REGISTRY> \
-            --docker-username=<USERNAME> \
-            --docker-email=<EMAIL> \
-            --docker-password=<PASSWORD>
-          ```
-
-          ```yaml
-          # you won't need to specify this manually...
-          spec:
-            imagePullSecrets:
-              - name: singleuser-image-credentials
-          ```
-
-          To learn the username and password fields to access a gcr.io registry
-          from a Kubernetes cluster not associated with the same google cloud
-          credentials, look into [this
-          guide](http://docs.heptio.com/content/private-registries/pr-gcr.html)
-          and read the notes about the password.
-        properties:
-          enabled:
-            type: boolean
-            description: |
-              Enable the creation of a Kubernetes Secret containing credentials
-              to access a image registry. By enabling this, user pods and image
-              puller pods will also be configured to use these credentials when
-              they pull their container images.
-
-          registry:
-            type: string
-            description: |
-              Name of the private registry you want to create a credential set
-              for. It will default to Docker Hub's image registry.
-
-              Examples:
-                - https://index.docker.io/v1/
-                - quay.io
-                - eu.gcr.io
-                - alexmorreale.privatereg.net
-          username:
-            type: string
-            description: |
-              Name of the user you want to use to connect to your private
-              registry. For external gcr.io, you will use the `_json_key`.
-
-              Examples:
-                - alexmorreale
-                - alex@pfc.com
-                - _json_key
-          password:
-            type: string
-            description: |
-              Password of the user you want to use to connect to your private
-              registry.
-
-              Examples:
-                - plaintextpassword
-                - abc123SECRETzyx098
-
-              For gcr.io registries the password will be a big JSON blob for a
-              Google cloud service account, it should look something like below.
-                            
-              ```yaml
-              password: |-
-                {
-                  "type": "service_account",
-                  "project_id": "jupyter-se",
-                  "private_key_id": "f2ba09118a8d3123b3321bd9a7d6d0d9dc6fdb85",
-                  ...
-                }
-              ```
-
-              Learn more in [this
-              guide](http://docs.heptio.com/content/private-registries/pr-gcr.html).
-      image:
-        type: object
-        description: |
-          Set custom image name / tag used for spawned users.
-
-          This image is used to launch the pod for each user.
-        properties:
-          name:
-            type: string
-            description: |
-              Name of the image, without the tag.
-
-              Examples:
-                - yuvipanda/wikimedia-hub-user
-                - gcr.io/my-project/my-user-image
-          tag:
-            type: string
-            description: |
-              The tag of the image to use.
-
-              This is the value after the `:` in your full image name.
-          pullPolicy:
-            type: string
-            enum:
-              - IfNotPresent
-              - Always
-              - Never
-            description: |
-              Set the imagePullPolicy on the singleuser pods that are spun up by the hub.
-
-              See the [Kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
-              for more info.
-          pullSecrets:
-            type: list
-            description: |
-              Use an existing kubernetes secret to pull the custom image.
-              
-              ```yaml
-              # example existing pull secret
-              singleuser:
-                image:
-                  pullSecrets:
-                    - gcr-pull
-              ```
+      image: *image-spec
       initContainers:
         type: list
         description: |
@@ -1017,22 +999,8 @@ properties:
 
           For more information, see the [Kubernetes EnvVar
           specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core).
-      extraTolerations:
-        type: list
-        description: |
-          Tolerations allow a pod to be scheduled on nodes with taints. These
-          are additional tolerations other than the user pods and core pods
-          default ones `hub.jupyter.org/dedicated=user:NoSchedule` or
-          `hub.jupyter.org/dedicated=core:NoSchedule`. Note that a duplicate set
-          of tolerations exist where `/` is replaced with `_` as the Google
-          cloud does not support the character `/` yet in the toleration.
-
-          See the [Kubernetes docs](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
-          for more info.
-
-          Pass this field an array of
-          [`Toleration`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#toleration-v1-core)
-          objects.
+      nodeSelector: *nodeSelector-spec
+      extraTolerations: *tolerations-spec
       extraNodeAffinity:
         type: object
         description: |
@@ -1115,18 +1083,7 @@ properties:
             description: |
               You can have multiple schedulers to share the workload or improve
               availability on node failure.
-          image:
-            type: object
-            description: |
-              The image containing the [kube-scheduler
-              binary](https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/kube-scheduler-amd64).
-            properties:
-              name:
-                type: string
-              tag:
-                type:
-                  - string
-                  - "null"
+          image: *image-spec
           pdb:
             type: object
             description: |
@@ -1144,6 +1101,8 @@ properties:
                 type: integer
                 description: |
                   Minimum number of pods to be available during the voluntary disruptions.
+          nodeSelector: *nodeSelector-spec
+          tolerations: *tolerations-spec
       podPriority:
         type: object
         description: |
@@ -1362,7 +1321,8 @@ properties:
               represented by `-1`. This was the default behavior of version
               0.9.0 and earlier.
             type: int
-
+          nodeSelector: *nodeSelector-spec
+          tolerations: *tolerations-spec
       continuous:
         description: |
           See the [*optimization

@@ -35,7 +35,8 @@ spec:
       {{- if .Values.scheduling.podPriority.enabled }}
       priorityClassName: {{ .Release.Name }}-default-priority
       {{- end }}
-      nodeSelector: {{ toJson .Values.proxy.nodeSelector }}
+      nodeSelector: {{ toJson .Values.proxy.chp.nodeSelector }}
+      tolerations: {{ toJson .Values.proxy.chp.tolerations }}
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
       {{- if $manualHTTPS }}
       volumes:
@@ -47,6 +48,9 @@ spec:
         - name: tls-secret
           secret:
             secretName: {{ .Values.proxy.https.secret.name }}
+      {{- end }}
+      {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.proxy.chp.image) }}
+      imagePullSecrets: {{ . }}
       {{- end }}
       containers:
         - name: chp
@@ -76,6 +80,9 @@ spec:
             {{- if .Values.debug.enabled }}
             - --log-level=debug
             {{- end }}
+            {{- range .Values.proxy.chp.extraCommandLineFlags }}
+            - {{ tpl . $ }}
+            {{- end }}
           {{- if or $manualHTTPS $manualHTTPSwithsecret }}
           volumeMounts:
             - name: tls-secret
@@ -84,10 +91,6 @@ spec:
           {{- end }}
           resources:
             {{- .Values.proxy.chp.resources | toYaml | trimSuffix "\n" | nindent 12 }}
-          {{- with .Values.proxy.containerSecurityContext }}
-          securityContext:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
-          {{- end }}
           env:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
@@ -138,4 +141,8 @@ spec:
               port: http
               scheme: HTTP
               {{- end }}
+          {{- end }}
+          {{- with .Values.proxy.chp.containerSecurityContext }}
+          securityContext:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
           {{- end }}

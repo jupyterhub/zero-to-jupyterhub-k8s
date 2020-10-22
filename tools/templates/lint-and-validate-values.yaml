@@ -1,3 +1,12 @@
+imagePullSecret:
+  create: true
+  automaticReferenceInjection: true
+  registry: R
+  username: U
+  email: e@domain.com
+  password: P
+imagePullSecrets: [a,b]
+
 hub:
   service:
     type: ClusterIP
@@ -31,6 +40,8 @@ hub:
     mock: mock
   annotations:
     mock: mock
+  image:
+    pullSecrets: [c]
   initContainers:
     - name: mock-init-container-name
       image: mock-init-container-image
@@ -65,6 +76,17 @@ hub:
           - ipBlock:
               cidr: 0.0.0.0/0
   allowNamedServers: true
+  nodeSelector:
+    node-type: mock
+  tolerations:
+    - key: "mock-taint-to-tolerates-key"
+      operator: "Equal"
+      value: "mock-taint-to-tolerates-value"
+      effect: "NoSchedule"
+    - key: "mock-taint-to-tolerates-key"
+      operator: "Equal"
+      value: "mock-taint-to-tolerates-value"
+      effect: "NoExecute"
 
 
 rbac:
@@ -74,6 +96,10 @@ rbac:
 proxy:
   secretToken: '0000000000000000000000000000000000000000000000000000000000000000'
   service:
+    extraPorts:
+    - name: ssh
+      port: 22
+      targetPort: 22
     type: LoadBalancer
     labels:
       MOCK_PROXY_ENV: mock
@@ -83,11 +109,27 @@ proxy:
       http:
       https:
   chp:
+    extraCommandLineFlags:
+      - "--auto-rewrite"
+      - "--mock-flag {{ .Values.proxy.chp.resources.requests.memory }}"
     resources:
       requests:
         cpu: 100m
         memory: 512Mi
+    nodeSelector:
+      node-type: mock
+    tolerations:
+      - key: "mock-taint-to-tolerates-key"
+        operator: "Equal"
+        value: "mock-taint-to-tolerates-value"
+        effect: "NoSchedule"
+      - key: "mock-taint-to-tolerates-key"
+        operator: "Equal"
+        value: "mock-taint-to-tolerates-value"
+        effect: "NoExecute"
   traefik:
+    labels:
+      hub.jupyter.org/test-label: mock
     resources:
       requests:
         cpu: 200m
@@ -98,6 +140,17 @@ proxy:
     extraEnv:
       - name: LEGO_CA_CERTIFICATES
         value: /etc/pebble/root-cert.pem
+    nodeSelector:
+      node-type: mock
+    tolerations:
+      - key: "mock-taint-to-tolerates-key"
+        operator: "Equal"
+        value: "mock-taint-to-tolerates-value"
+        effect: "NoSchedule"
+      - key: "mock-taint-to-tolerates-key"
+        operator: "Equal"
+        value: "mock-taint-to-tolerates-value"
+        effect: "NoExecute"
   secretSync:
     resources:
       requests:
@@ -262,12 +315,6 @@ singleuser:
       pvcNameTemplate: claim-{username}{servername}
       volumeNameTemplate: volume-{username}{servername}
       storageAccessModes: [ReadWriteOnce]
-  imagePullSecret:
-    enabled: true
-    registry: R
-    username: U
-    email: e@domain.com
-    password: P
   startTimeout: 300
   cpu:
     guarantees: 1G
@@ -291,6 +338,17 @@ scheduling:
     image:
       name: gcr.io/google_containers/kube-scheduler-amd64
       tag: v1.11.2
+    nodeSelector:
+      node-type: mock
+    tolerations:
+      - key: "mock-taint-to-tolerates-key"
+        operator: "Equal"
+        value: "mock-taint-to-tolerates-value"
+        effect: "NoSchedule"
+      - key: "mock-taint-to-tolerates-key"
+        operator: "Equal"
+        value: "mock-taint-to-tolerates-value"
+        effect: "NoExecute"
   podPriority:
     enabled: true
   userPlaceholder:
@@ -310,6 +368,17 @@ prePuller:
     enabled: true
     extraEnv:
       MOCK_ENV: mock
+    nodeSelector:
+      node-type: mock
+    tolerations:
+      - key: "mock-taint-to-tolerates-key"
+        operator: "Equal"
+        value: "mock-taint-to-tolerates-value"
+        effect: "NoSchedule"
+      - key: "mock-taint-to-tolerates-key"
+        operator: "Equal"
+        value: "mock-taint-to-tolerates-value"
+        effect: "NoExecute"
   continuous:
     enabled: true
   extraImages:

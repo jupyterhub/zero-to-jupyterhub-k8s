@@ -24,11 +24,15 @@ spec:
       priorityClassName: {{ .Release.Name }}-default-priority
       {{- end }}
       nodeSelector: {{ toJson .Values.scheduling.userScheduler.nodeSelector }}
+      tolerations: {{ toJson .Values.scheduling.userScheduler.tolerations }}
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
       volumes:
         - name: config
           configMap:
             name: user-scheduler
+      {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.scheduling.userScheduler.image) }}
+      imagePullSecrets: {{ . }}
+      {{- end }}
       containers:
         - name: user-scheduler
           # NOTE: When the kube-scheduler 1.17+ binaries fail to find CSINode
@@ -40,6 +44,9 @@ spec:
           image: {{ .Values.scheduling.userScheduler.image.name }}:{{ .Values.scheduling.userScheduler.image.tag }}
           {{- else }}
           image: {{ .Values.scheduling.userScheduler.image.name }}:v1.16.15
+          {{- end }}
+          {{- with .Values.scheduling.userScheduler.image.pullPolicy }}
+          imagePullPolicy: {{ . }}
           {{- end }}
           command:
             - /usr/local/bin/kube-scheduler
@@ -72,4 +79,8 @@ spec:
               port: 10251
           resources:
             {{- .Values.scheduling.userScheduler.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- with .Values.scheduling.userScheduler.containerSecurityContext }}
+          securityContext:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
 {{- end }}

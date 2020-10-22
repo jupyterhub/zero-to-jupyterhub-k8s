@@ -58,20 +58,16 @@ spec:
       {{- end }}
       terminationGracePeriodSeconds: 0
       automountServiceAccountToken: false
-      {{- if or .Values.singleuser.imagePullSecret.enabled .Values.singleuser.image.pullSecrets }}
-      imagePullSecrets:
-        {{- if .Values.singleuser.imagePullSecret.enabled }}
-        - name: {{ if .hook -}} hook- {{- end -}} singleuser-image-credentials
-        {{ else }}
-        {{- range .Values.singleuser.image.pullSecrets }}
-        - name: {{ . }}
-        {{- end }}
-        {{ end }}
+      {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.singleuser.image) }}
+      imagePullSecrets: {{ . }}
       {{- end }}
       initContainers:
-        - name: image-pull-singleuser
-          image: {{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}
-          {{- with .Values.singleuser.image.pullPolicy }}
+        {{- /* --- Conditionally pull an image all user pods will use in an initContainer --- */}}
+        {{- $blockWithIptables := hasKey .Values.singleuser.cloudMetadata "enabled" | ternary (not .Values.singleuser.cloudMetadata.enabled) .Values.singleuser.cloudMetadata.blockWithIptables }}
+        {{- if $blockWithIptables }}
+        - name: image-pull-metadata-block
+          image: {{ .Values.singleuser.networkTools.image.name }}:{{ .Values.singleuser.networkTools.image.tag }}
+          {{- with .Values.singleuser.networkTools.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
           command:
@@ -80,19 +76,35 @@ spec:
             - echo "Pulling complete"
           resources:
             {{- .Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+        {{- end }}
+
+        {{- /* --- Pull default image --- */}}
+        - name: image-pull-singleuser
+          image: {{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}
+          command:
+            - /bin/sh
+            - -c
+            - echo "Pulling complete"
+          resources:
+            {{- .Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+
+        {{- /* --- Pull extra containers' images --- */}}
         {{- range $k, $container := .Values.singleuser.extraContainers }}
         - name: image-pull-singleuser-extra-container-{{ $k }}
           image: {{ $container.image }}
-          {{- with $container.imagePullPolicy }}
-          imagePullPolicy: {{ . }}
-          {{- end }}
           command:
             - /bin/sh
             - -c
             - echo "Pulling complete"
           resources:
             {{- $.Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- with $.Values.prePuller.containerSecurityContext }}
+          securityContext:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
         {{- end }}
+
+        {{- /* --- Conditionally pull profileList images --- */}}
         {{- if .Values.prePuller.pullProfileListImages }}
         {{- range $k, $container := .Values.singleuser.profileList }}
         {{- if $container.kubespawner_override }}
@@ -105,26 +117,37 @@ spec:
             - echo "Pulling complete"
           resources:
             {{- $.Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- with $.Values.prePuller.containerSecurityContext }}
+          securityContext:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- end }}
         {{- end }}
         {{- end }}
+
+        {{- /* --- Pull extra images --- */}}
         {{- range $k, $v := .Values.prePuller.extraImages }}
         - name: image-pull-{{ $k }}
           image: {{ $v.name }}:{{ $v.tag }}
-          {{- with $v.pullPolicy }}
-          imagePullPolicy: {{ . }}
-          {{- end }}
           command:
             - /bin/sh
             - -c
             - echo "Pulling complete"
           resources:
             {{- $.Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- with $.Values.prePuller.containerSecurityContext }}
+          securityContext:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
         {{- end }}
       containers:
         - name: pause
           image: {{ .Values.prePuller.pause.image.name }}:{{ .Values.prePuller.pause.image.tag }}
           resources:
             {{- .Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- with .Values.prePuller.pause.containerSecurityContext }}
+          securityContext:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
 {{- end }}

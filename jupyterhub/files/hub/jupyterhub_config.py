@@ -122,7 +122,7 @@ for trait, cfg_key in (
     ('pod_name_template', None),
     ('start_timeout', None),
     ('image_pull_policy', 'image.pullPolicy'),
-    ('image_pull_secrets', 'image.pullSecrets'),
+    # ('image_pull_secrets', 'image.pullSecrets'), # Managed manually below
     ('events_enabled', 'events'),
     ('extra_labels', None),
     ('extra_annotations', None),
@@ -163,8 +163,19 @@ if image:
 
     c.KubeSpawner.image = image
 
-if get_config('singleuser.imagePullSecret.enabled'):
-    c.KubeSpawner.image_pull_secrets = 'singleuser-image-credentials'
+# Combine imagePullSecret.create (single), imagePullSecrets (list), and
+# singleuser.image.pullSecrets (list).
+image_pull_secrets = []
+if get_config("imagePullSecret.automaticReferenceInjection") and (
+    get_config("imagePullSecret.create") or get_config("imagePullSecret.enabled")
+):
+    image_pull_secrets.append('image-pull-secret')
+if get_config('imagePullSecrets'):
+    image_pull_secrets.extend(get_config('imagePullSecrets'))
+if get_config('singleuser.image.pullSecrets'):
+    image_pull_secrets.extend(get_config('singleuser.image.pullSecrets'))
+if image_pull_secrets:
+    c.KubeSpawner.image_pull_secrets = image_pull_secrets
 
 # scheduling:
 if get_config('scheduling.userScheduler.enabled'):

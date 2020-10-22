@@ -58,13 +58,15 @@ script:
   - await_autohttps_tls_cert_acquisition
 
   # Run tests
-  - pytest --verbose --exitfirst ./tests
+  - pytest --verbose --exitfirst ./tests || (full_namespace_report && exit 1)
 
 env:
-  # Global environment variables will act as defaults, jobs will override them
+  ## Global environment variables will act as defaults, jobs will override them
+  ## k3s versions:  https://github.com/rancher/k3s/releases
+  ## helm versions: https://github.com/helm/helm/releases
   global:
-    - K3S_VERSION=v1.19.1+k3s1
-    - HELM_VERSION=v3.3.3
+    - K3S_VERSION=v1.19.3+k3s1
+    - HELM_VERSION=v3.3.4
 
 jobs:
   ## don't wait for the jobs that are allowed to fail to report success
@@ -77,23 +79,26 @@ jobs:
   fast_finish: true
 
   ## define individual jobs that can rely on defaults from above
-  ## k3s versions:  https://github.com/rancher/k3s/releases
-  ## helm versions: https://github.com/helm/helm/releases
   include:
     - stage: test
-      name: chart:k8s-1.19
-
-    - stage: test
-      name: chart:k8s-1.18
-      env: K3S_VERSION=v1.18.9+k3s1
-
-    - stage: test
-      name: chart:k8s-1.17
-      env: K3S_VERSION=v1.17.12+k3s1
-
-    - stage: test
-      name: chart:k8s-1.16
-      env: K3S_VERSION=v1.16.15+k3s1 k3s_disable_command=--no-deploy
+      name: chart:lint-and-validate
+      install:
+        - setup_helm
+        - setup_kubeval
+        - pip install yamllint
+      script:
+        # NOTE: Kubernetes resource validation can only be done against
+        #       Kubernetes versions with schemas available in:
+        #       https://github.com/instrumenta/kubernetes-json-schema
+        #
+        # NOTE: The "helm template" command will evaluate
+        #       .Capabilities.APIVersion.Has in templates based on a Kubernetes
+        #       version associated with the helm binary's version. Since we
+        #       render the templates with a specific helm version, we end up
+        #       rendering templates using a mocked k8s version unrelated to the
+        #       Kubernetes version we want to validate against. This issue has
+        #       made us not validate against versions lower than 1.14.
+        - tools/templates/lint-and-validate.py --kubernetes-versions 1.14.0,1.18.0
 
     - stage: test
       name: chart:install-latest-then-upgrade
@@ -119,27 +124,23 @@ jobs:
         - await_autohttps_tls_cert_acquisition
 
         # Run tests
-        - pytest --verbose --exitfirst ./tests
+        - pytest --verbose --exitfirst ./tests || (full_namespace_report && exit 1)
+
+    ## k3s versions:  https://github.com/rancher/k3s/releases
+    - stage: test
+      name: chart:k8s-1.19
 
     - stage: test
-      name: chart:lint-and-validate
-      install:
-        - setup_helm
-        - setup_kubeval
-        - pip install yamllint
-      script:
-        # NOTE: Kubernetes resource validation can only be done against
-        #       Kubernetes versions with schemas available in:
-        #       https://github.com/instrumenta/kubernetes-json-schema
-        #
-        # NOTE: The "helm template" command will evaluate
-        #       .Capabilities.APIVersion.Has in templates based on a Kubernetes
-        #       version associated with the helm binary's version. Since we
-        #       render the templates with a specific helm version, we end up
-        #       rendering templates using a mocked k8s version unrelated to the
-        #       Kubernetes version we want to validate against. This issue has
-        #       made us not validate against versions lower than 1.14.
-        - tools/templates/lint-and-validate.py --kubernetes-versions 1.14.0,1.18.0
+      name: chart:k8s-1.18
+      env: K3S_VERSION=v1.18.10+k3s1
+
+    - stage: test
+      name: chart:k8s-1.17
+      env: K3S_VERSION=v1.17.13+k3s1
+
+    - stage: test
+      name: chart:k8s-1.16
+      env: K3S_VERSION=v1.16.15+k3s1 k3s_disable_command=--no-deploy
 
     - stage: test
       name: docs:link-check

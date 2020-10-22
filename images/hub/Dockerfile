@@ -42,6 +42,7 @@ ARG JUPYTERHUB_VERSION=1.1.*
 
 RUN PYCURL_SSL_LIBRARY=openssl pip3 install --no-cache-dir \
          -r /tmp/requirements.txt \
+ && pip3 install --no-cache-dir \
          $(bash -c 'if [[ $JUPYTERHUB_VERSION == "git"* ]]; then \
             echo ${JUPYTERHUB_VERSION}; \
           else \

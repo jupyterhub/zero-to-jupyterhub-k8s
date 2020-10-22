@@ -1,5 +1,26 @@
+# custom can contain anything you want to pass to the hub pod, as all passed
+# Helm template values will be made available there.
 custom: {}
 
+# imagePullSecret is configuration to create a k8s Secret that Helm chart's pods
+# can get credentials from to pull their images.
+imagePullSecret:
+  create: false
+  automaticReferenceInjection: true
+  registry: ''
+  username: ''
+  email: ''
+  password: ''
+# imagePullSecrets is configuration to reference the k8s Secret resources the
+# Helm chart's pods can get credentials from to pull their images.
+imagePullSecrets: []
+
+
+# hub relates to the hub pod, responsible for running JupyterHub, its configured
+# Authenticator class KubeSpawner, and its configured Proxy class
+# ConfigurableHTTPProxy. KubeSpawner creates the user pods, and
+# ConfigurableHTTPProxy speaks with the actual ConfigurableHTTPProxy server in
+# the proxy pod.
 hub:
   service:
     type: ClusterIP
@@ -13,6 +34,7 @@ hub:
   initContainers: []
   fsGid: 1000
   nodeSelector: {}
+  tolerations: []
   concurrentSpawnLimit: 64
   consecutiveFailureLimit: 5
   activeServerLimit:
@@ -48,21 +70,17 @@ hub:
   image:
     name: jupyterhub/k8s-hub
     tag: 'set-by-chartpress'
-    pullSecrets:
+    pullPolicy: ''
+    pullSecrets: []
   resources:
     requests:
       cpu: 200m
       memory: 512Mi
   containerSecurityContext:
     runAsUser: 1000
+    runAsGroup: 1000
     allowPrivilegeEscalation: false
   services: {}
-  imagePullSecret:
-    enabled: false
-    registry:
-    username:
-    email:
-    password:
   pdb:
     enabled: true
     minAvailable: 1
@@ -104,6 +122,8 @@ rbac:
   enabled: true
 
 
+# proxy relates to the proxy pod, the proxy-public service, and the autohttps
+# pod and proxy-http service.
 proxy:
   secretToken: ''
   deploymentStrategy:
@@ -132,8 +152,7 @@ proxy:
     ##     Error: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
     ##     Error: UPGRADE FAILED: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
     rollingUpdate:
-  containerSecurityContext:
-    allowPrivilegeEscalation: false
+  # service relates to the proxy-public service
   service:
     type: LoadBalancer
     labels: {}
@@ -141,12 +160,22 @@ proxy:
     nodePorts:
       http:
       https:
+    extraPorts: []
     loadBalancerIP:
     loadBalancerSourceRanges: []
+  # chp relates to the proxy pod, which is responsible for routing traffic based
+  # on dynamic configuration sent from JupyterHub to CHP's REST API.
   chp:
+    containerSecurityContext:
+      runAsUser: 65534  # nobody user
+      runAsGroup: 65534 # nobody group
+      allowPrivilegeEscalation: false
     image:
       name: jupyterhub/configurable-http-proxy
       tag: 4.2.1
+      pullPolicy: ''
+      pullSecrets: []
+    extraCommandLineFlags: []
     livenessProbe:
       enabled: true
       initialDelaySeconds: 60
@@ -160,10 +189,23 @@ proxy:
         cpu: 200m
         memory: 512Mi
     extraEnv: {}
+    nodeSelector: {}
+    tolerations: []
+  # traefik relates to the autohttps pod, which is responsible for TLS
+  # termination when proxy.https.type=letsencrypt.
   traefik:
+    containerSecurityContext:
+      runAsUser: 65534  # nobody user
+      runAsGroup: 65534 # nobody group
+      allowPrivilegeEscalation: false
     image:
       name: traefik
-      tag: v2.3 # ref: https://hub.docker.com/_/traefik?tab=tags
+      # tag for Traefik should be thoroughly tested before bumping, because it
+      # has been prone to have intermittency issues in the past. See for example
+      # https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1857.
+      tag: v2.3.2 # ref: https://hub.docker.com/_/traefik?tab=tags
+      pullPolicy: ''
+      pullSecrets: []
     hsts:
       includeSubdomains: false
       preload: false
@@ -174,15 +216,20 @@ proxy:
     extraVolumeMounts: []
     extraStaticConfig: {}
     extraDynamicConfig: {}
-    containerSecurityContext:
-      allowPrivilegeEscalation: false
+    nodeSelector: {}
+    tolerations: []
   secretSync:
+    containerSecurityContext:
+      runAsUser: 65534  # nobody user
+      runAsGroup: 65534 # nobody group
+      allowPrivilegeEscalation: false
     image:
       name: jupyterhub/k8s-secret-sync
       tag: 'set-by-chartpress'
+      pullPolicy: ''
+      pullSecrets: []
     resources: {}
   labels: {}
-  nodeSelector: {}
   pdb:
     enabled: true
     minAvailable: 1
@@ -211,6 +258,7 @@ proxy:
               cidr: 0.0.0.0/0
 
 
+# auth relates to the configuration of JupyterHub's Authenticator class.
 auth:
   type: dummy
   whitelist:
@@ -230,6 +278,8 @@ auth:
     cryptoKey:
 
 
+# singleuser relates to the configuration of KubeSpawner which runs in the hub
+# pod, and its spawning of user pods such as jupyter-myusername.
 singleuser:
   podNameTemplate:
   extraTolerations: []
@@ -247,6 +297,8 @@ singleuser:
     image:
       name: jupyterhub/k8s-network-tools
       tag: 'set-by-chartpress'
+      pullPolicy: ''
+      pullSecrets: []
   cloudMetadata:
     # block set to true will append a privileged initContainer using the
     # iptables to block the sensitive metadata server at the provided ip.
@@ -296,15 +348,8 @@ singleuser:
   image:
     name: jupyterhub/k8s-singleuser-sample
     tag: 'set-by-chartpress'
-    pullPolicy: IfNotPresent
-    # pullSecrets:
-    #   - secretName
-  imagePullSecret:
-    enabled: false
-    registry:
-    username:
-    email:
-    password:
+    pullPolicy: ''
+    pullSecrets: []
   startTimeout: 300
   cpu:
     limit:
@@ -320,24 +365,49 @@ singleuser:
   extraPodConfig: {}
 
 
+# scheduling relates to the user-scheduler pods and user-placeholder pods.
 scheduling:
   userScheduler:
     enabled: true
     replicas: 2
     logLevel: 4
+    # plugins ref: https://kubernetes.io/docs/reference/scheduling/config/#scheduling-plugins-1
     plugins:
       score:
         disabled:
-          - name: ImageLocality
-          - name: NodeResourcesLeastAllocated
-          - name: NodeResourcesBalancedAllocation
           - name: SelectorSpread
+          - name: TaintToleration
+          - name: PodTopologySpread
+          - name: NodeResourcesBalancedAllocation
+          - name: NodeResourcesLeastAllocated
+          # Disable plugins to be allowed to enable them again with a different
+          # weight and avoid an error.
+          - name: NodePreferAvoidPods
+          - name: NodeAffinity
+          - name: InterPodAffinity
+          - name: ImageLocality
         enabled:
+          - name: NodePreferAvoidPods
+            weight: 161051
+          - name: NodeAffinity
+            weight: 14631
+          - name: InterPodAffinity
+            weight: 1331
           - name: NodeResourcesMostAllocated
+            weight: 121
+          - name: ImageLocality
+            weight: 11
+    containerSecurityContext:
+      runAsUser: 65534  # nobody user
+      runAsGroup: 65534 # nobody group
+      allowPrivilegeEscalation: false
     image:
       name: k8s.gcr.io/kube-scheduler
       tag: v1.19.1
+      pullPolicy: ''
+      pullSecrets: []
     nodeSelector: {}
+    tolerations: []
     pdb:
       enabled: true
       minAvailable: 1
@@ -353,6 +423,10 @@ scheduling:
   userPlaceholder:
     enabled: true
     replicas: 0
+    containerSecurityContext:
+      runAsUser: 65534  # nobody user
+      runAsGroup: 65534 # nobody group
+      allowPrivilegeEscalation: false
   corePods:
     nodeAffinity:
       matchNodePurpose: prefer
@@ -361,28 +435,47 @@ scheduling:
       matchNodePurpose: prefer
 
 
+# prePuller relates to the hook|continuous-image-puller DaemonsSets
 prePuller:
   annotations: {}
   resources:
     requests:
       cpu: 0
       memory: 0
+  containerSecurityContext:
+    runAsUser: 65534  # nobody user
+    runAsGroup: 65534 # nobody group
+    allowPrivilegeEscalation: false
+  # hook relates to the hook-image-awaiter Job and hook-image-puller DaemonSet
   hook:
     enabled: true
+    # image and the configuration below relates to the hook-image-awaiter Job
     image:
       name: jupyterhub/k8s-image-awaiter
       tag: 'set-by-chartpress'
+      pullPolicy: ''
+      pullSecrets: []
+    containerSecurityContext:
+      runAsUser: 65534  # nobody user
+      runAsGroup: 65534 # nobody group
+      allowPrivilegeEscalation: false
     podSchedulingWaitDuration: 10
+    nodeSelector: {}
+    tolerations: []
   continuous:
     enabled: true
   pullProfileListImages: true
   extraImages: {}
   pause:
+    containerSecurityContext:
+      runAsUser: 65534  # nobody user
+      runAsGroup: 65534 # nobody group
+      allowPrivilegeEscalation: false
     image:
       name: k8s.gcr.io/pause
-      # Pick version from https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/pause?gcrImageListsize=30
-      tag: '3.2'
-
+      tag: '3.2' # https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/pause?gcrImageListsize=30
+      pullPolicy: ''
+      pullSecrets: []
 
 ingress:
   enabled: false

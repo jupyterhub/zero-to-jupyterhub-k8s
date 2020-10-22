@@ -116,6 +116,7 @@ instance/
 # Sphinx documentation
 doc/build/
 doc/source/reference/reference.md
+doc/source/resources/reference.md
 
 # PyBuilder
 target/

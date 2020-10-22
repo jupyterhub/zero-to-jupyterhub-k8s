@@ -1,7 +1,9 @@
+# Chart.yaml v1 reference: https://v2.helm.sh/docs/developing_charts/#the-chart-yaml-file
+# Chart.yaml v2 reference: https://helm.sh/docs/topics/charts/#the-chartyaml-file
 apiVersion: v1
 name: jupyterhub
 version: 0.0.1-set.by.chartpress
-appVersion: 1.1.0
+appVersion: 1.2.0b1
 description: Multi-user Jupyter installation
 home: https://z2jh.jupyter.org
 sources:
@@ -9,3 +11,11 @@ sources:
 icon: https://jupyter.org/assets/hublogo.svg
 kubeVersion: '>=1.11.0-0'
 tillerVersion: '>=2.11.0-0'
+maintainers:
+  # Since it is a requirement of Artifact Hub to have specific maintainers
+  # listed, we have added some below, but in practice the entire JupyterHub team
+  # contributes to the maintenance of this Helm chart.
+  - name: Erik Sundell
+    email: erik@sundellopensource.se
+  - name: Simon Li
+    url: https://github.com/manics/

@@ -63,6 +63,9 @@ spec:
       {{- with .Values.proxy.service.nodePorts.http }}
       nodePort: {{ . }}
       {{- end }}
+    {{- with .Values.proxy.service.extraPorts }}
+    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- end }}
   type: {{ .Values.proxy.service.type }}
   {{- with .Values.proxy.service.loadBalancerIP }}
   loadBalancerIP: {{ . }}

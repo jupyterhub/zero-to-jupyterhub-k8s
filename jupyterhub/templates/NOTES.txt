@@ -19,14 +19,26 @@ Note that this is still an alpha release! If you have questions, feel free to
   2. Chat with us at https://gitter.im/jupyterhub/jupyterhub
   3. File issues at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
 
-{{- if hasKey .Values.singleuser.cloudMetadata "enabled" }}
 
-DEPRECATION: singleuser.cloudMetadata.enabled is deprecated, instead of singleuser.cloudMetadata.blockWithIptables
-
+{{- if hasKey .Values.singleuser.cloudMetadata "enabled" }}{{ println }}
+DEPRECATION: singleuser.cloudMetadata.enabled is deprecated, instead use singleuser.cloudMetadata.blockWithIptables with the inverted value.
 {{- end }}
 
-{{- if .Values.hub.extraConfigMap }}
 
+{{- /* Warn about an attempt to configure HTTPS but not having enabled it. */}}
+{{- if eq .Values.proxy.https.enabled false }}
+{{- if or (not (eq .Values.proxy.https.type "letsencrypt")) (not (eq .Values.proxy.https.letsencrypt.contactEmail "")) }}{{ println }}
+WARNING: Configuring proxy.https without setting proxy.https.enabled to true is no longer allowed.
+{{- end }}
+{{- end }}
+
+
+{{- if .Values.proxy.containerSecurityContext }}
+{{- fail "DEPRECATION: proxy.containerSecurityContext has been renamed to proxy.chp.containerSecurityContext" }}
+{{- end }}
+
+
+{{- if .Values.hub.extraConfigMap }}{{ println }}
 DEPRECATION: hub.extraConfigMap is deprecated in jupyterhub chart 0.8.
 Use top-level `custom` instead:
 
@@ -43,9 +55,22 @@ enable pod priority or stop using the user placeholders to avoid wasting cloud
 resources.
 {{- end }}
 
-{{- if hasKey .Values.hub "uid" }}
 
+{{- if hasKey .Values.hub "uid" }}{{ println }}
 DEPRECATION: hub.uid is deprecated in jupyterhub chart 0.9. Set the hub.containerSecurityContext.runAsUser value
 directly instead.
+{{- end }}
 
+
+{{- if hasKey .Values.hub "imagePullSecret" }}
+{{- if .Values.hub.imagePullSecret.enabled }}
+{{ "HARD DEPRECATION: hub.imagePullSecret has renamed to imagePullSecret" | fail }}
+{{- end }}
+{{- end }}
+
+
+{{- if hasKey .Values.singleuser "imagePullSecret" }}
+{{- if .Values.singleuser.imagePullSecret.enabled }}
+{{ "HARD DEPRECATION: singleuser.imagePullSecret has renamed to imagePullSecret" | fail }}
+{{- end }}
 {{- end }}
