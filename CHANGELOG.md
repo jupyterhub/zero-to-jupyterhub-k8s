@@ -23,9 +23,9 @@ Here you can find upgrade changes in between releases and upgrade instructions.
   documentation](https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/security.html#kubernetes-network-policies)
   for more details on this.
 
-- The Helm chart configuration `proxy.networkPolicy` has been deprecated, and
+- The Helm chart configuration `proxy.networkPolicy` has been removed,
   `proxy.chp.networkPolicy` (proxy pod) and `proxy.traefik.networkPolicy`
-  (autohttps pod) is recommended to use instead.
+  (autohttps pod) must be used instead.
 
 ## [0.9]
 

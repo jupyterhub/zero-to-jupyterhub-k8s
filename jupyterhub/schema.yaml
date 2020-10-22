@@ -240,7 +240,7 @@ properties:
               `proxy.chp` and `proxy.traefik`'s networkPolicy configuration is
               `[http, https]`, while it is `[]` for other networkPolicies.
               
-              Note that these port names or numbers targets a Pod's port name or
+              Note that these port names or numbers target a Pod's port name or
               number, not a k8s Service's port name or number.
       db:
         type: object
