@@ -45,6 +45,12 @@ hub:
   initContainers:
     - name: mock-init-container-name
       image: mock-init-container-image
+  command:
+    - tini
+  args:
+    - jupyterhub
+    - "--mock-flag"
+    - "{{ .Values.hub.baseUrl }}"
   extraConfig:
     test: |-
       c.Spawner.cmd = 'mock'

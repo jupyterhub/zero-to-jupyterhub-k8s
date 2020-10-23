@@ -73,7 +73,21 @@ spec:
         {{- end }}
         - name: hub
           image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
+          {{- with .Values.hub.command }}
           command:
+            {{- range . }}
+            - {{ tpl . $ }}
+            {{- end }}
+          {{- end }}
+          args:
+            {{- /* .Values.hub.args overrides everything the Helm chart otherside would set */}}
+            {{- if .Values.hub.args }}
+            {{- range .Values.hub.args }}
+            - {{ tpl . $ }}
+            {{- end }}
+
+            {{- /* .Values.hub.args didn't replace the default logic */}}
+            {{- else }}
             - jupyterhub
             - --config
             - /etc/jupyterhub/jupyterhub_config.py
@@ -98,6 +112,7 @@ spec:
             {{- /* .Values.hub.db.upgrade is nil */}}
             {{- if eq .Values.hub.db.type "sqlite-pvc" }}
             - --upgrade-db
+            {{- end }}
             {{- end }}
             {{- end }}
           volumeMounts:

@@ -105,6 +105,63 @@ properties:
   hub:
     type: object
     properties:
+      command:
+        type: list
+        description: |
+          A list of strings to be used to replace the JupyterHub image's
+          `ENTRYPOINT` entry. Note that in k8s lingo, the Dockerfile's
+          `ENTRYPOINT` is called `command`. The list of strings will be expanded
+          with Helm's template function `tpl` which can render Helm template
+          logic inside curly braces (`{{... }}`).
+
+          This could be useful to wrap the invocation of JupyterHub itself in
+          some custom way.
+
+          For more details, see the [Kubernetes
+          documentation](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#notes).
+      args:
+        type: list
+        description: |
+          A list of strings to be used to replace the JupyterHub image's `CMD`
+          entry as well as the Helm chart's default way to start JupyterHub.
+          Note that in k8s lingo, the Dockerfile's `CMD` is called `args`. The
+          list of strings will be expanded with Helm's template function `tpl`
+          which can render Helm template logic inside curly braces (`{{... }}`).
+
+          ```{warning}
+          By replacing the entire configuration file, which is mounted to
+          `/etc/jupyterhub/jupyterhub_config.py` by the Helm chart, instead of
+          appending to it with `hub.extraConfig`, you expose your deployment for
+          issues stemming from getting out of sync with the Helm chart's config
+          file.
+
+          These kind of issues will be significantly harder to debug and
+          diagnose, and can due to this could cause a lot of time expenditure
+          for both the community maintaining the Helm chart as well as yourself,
+          even if this wasn't the reason for the issue.
+          
+          Due to this, we ask that you do your _absolute best to avoid replacing
+          the default provided `jupyterhub_config.py` file. It can often be
+          possible. For example, if your goal is to have a dedicated .py file
+          for more extensive additions that you can syntax highlight and such
+          and feel limited by passing code in `hub.extraConfig` which is part of
+          a YAML file, you can use [this
+          trick](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1580#issuecomment-707776237)
+          instead.
+          ```
+
+          ```yaml
+          hub:
+            args:
+              - "jupyterhub"
+              - "--config"
+              - "/etc/jupyterhub/jupyterhub_config.py"
+              - "--debug"
+              - "--upgrade-db"
+          ```
+
+          For more details, see the [Kubernetes
+          documentation](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#notes).
       cookieSecret:
         type:
           - string

@@ -61,6 +61,8 @@ hub:
     password:
   labels: {}
   annotations: {}
+  command: []
+  args: []
   extraConfig: {}
   extraConfigMap: {}
   extraEnv: {}
