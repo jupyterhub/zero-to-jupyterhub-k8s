@@ -38,6 +38,11 @@ WARNING: Configuring proxy.https without setting proxy.https.enabled to true is 
 {{- end }}
 
 
+{{- if .Values.proxy.networkPolicy }}
+{{- fail "DEPRECATION: proxy.networkPolicy has been renamed to proxy.chp.networkPolicy" }}
+{{- end }}
+
+
 {{- if .Values.hub.extraConfigMap }}{{ println }}
 DEPRECATION: hub.extraConfigMap is deprecated in jupyterhub chart 0.8.
 Use top-level `custom` instead:

@@ -25,13 +25,13 @@ proxy:
     extraEnv:
       - name: LEGO_CA_CERTIFICATES
         value: /etc/pebble/root-cert.pem
-  networkPolicy:
-    egress: []  # overrides allowance of 0.0.0.0/0
   chp:
     resources:
       requests:
         memory: 0
         cpu: 0
+    networkPolicy:
+      egress: []  # overrides allowance of 0.0.0.0/0
 
 hub:
   cookieSecret: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc

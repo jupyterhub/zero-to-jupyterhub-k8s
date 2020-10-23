@@ -81,6 +81,8 @@ hub:
       - to:
           - ipBlock:
               cidr: 0.0.0.0/0
+    interNamespaceAccessLabels: ignore
+    allowedIngressPorts: []
   allowNamedServers: true
   nodeSelector:
     node-type: mock
@@ -105,7 +107,7 @@ proxy:
     extraPorts:
     - name: ssh
       port: 22
-      targetPort: 22
+      targetPort: ssh
     type: LoadBalancer
     labels:
       MOCK_PROXY_ENV: mock
@@ -133,6 +135,14 @@ proxy:
         operator: "Equal"
         value: "mock-taint-to-tolerates-value"
         effect: "NoExecute"
+    networkPolicy:
+      enabled: true
+      egress:
+        - to:
+            - ipBlock:
+                cidr: 0.0.0.0/0
+      interNamespaceAccessLabels: accept
+      allowedIngressPorts: [http, https]
   traefik:
     labels:
       hub.jupyter.org/test-label: mock
@@ -157,6 +167,14 @@ proxy:
         operator: "Equal"
         value: "mock-taint-to-tolerates-value"
         effect: "NoExecute"
+    networkPolicy:
+      enabled: true
+      egress:
+        - to:
+            - ipBlock:
+                cidr: 0.0.0.0/0
+      interNamespaceAccessLabels: accept
+      allowedIngressPorts: [http, https]
   secretSync:
     resources:
       requests:
@@ -185,12 +203,6 @@ proxy:
       key: 'mock-key'
       crt: 'mock-crt'
     hosts: [domain.com]
-  networkPolicy:
-    enabled: true
-    egress:
-      - to:
-          - ipBlock:
-              cidr: 0.0.0.0/0
 
 
 auth:
@@ -290,6 +302,8 @@ singleuser:
               cidr: 0.0.0.0/0
               except:
                 - 169.254.169.254/32
+    interNamespaceAccessLabels: ignore
+    allowedIngressPorts: []
   events: true
   extraLabels: {}
   extraEnv: {}

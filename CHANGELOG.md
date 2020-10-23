@@ -4,7 +4,7 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ## [0.10]
 
-### [0.10.0]
+### [0.10.0-beta.1] (UNRELEASED)
 
 #### Breaking changes:
 
@@ -16,16 +16,16 @@ Here you can find upgrade changes in between releases and upgrade instructions.
   known to be needed, with the exception of the user pods outgoing
   communication, where all outgoing communication is allowed by default.
   
-  Note that these network policies only influence network communication in a
+  Note that these NetworkPolicies only influence network communication in a
   Kubernetes cluster if a NetworkPolicy controller enforce them, such as Calico.
-
-  With network policies enabled, you may require additional configuration,
-  especially for deployments that include additional components that access
-  JupyterHub pods directly (i.e. not through the `proxy-public` service).
 
   See the [security
   documentation](https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/security.html#kubernetes-network-policies)
   for more details on this.
+
+- The Helm chart configuration `proxy.networkPolicy` has been removed,
+  `proxy.chp.networkPolicy` (proxy pod) and `proxy.traefik.networkPolicy`
+  (autohttps pod) must be used instead.
 
 ## [0.9]
 

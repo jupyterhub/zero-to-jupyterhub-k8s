@@ -1,15 +1,16 @@
-{{- if and .Values.singleuser.networkPolicy.enabled -}}
+{{- $HTTPS := .Values.proxy.https.enabled -}}
+{{- $autoHTTPS := and $HTTPS (and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
+{{- if and $autoHTTPS .Values.proxy.traefik.networkPolicy.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: singleuser
+  name: autohttps
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
   podSelector:
     matchLabels:
-      {{- $_ := merge (dict "componentLabel" "singleuser-server") . }}
-      {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}
+      {{- include "jupyterhub.matchLabels" . | nindent 6 }}
   policyTypes:
     - Ingress
     - Egress
@@ -30,7 +31,7 @@ spec:
   # Read more at: https://kubernetes.io/docs/concepts/services-networking/network-policies/#behavior-of-to-and-from-selectors
   #
   ingress:
-    {{- with .Values.singleuser.networkPolicy.allowedIngressPorts }}
+    {{- with .Values.proxy.traefik.networkPolicy.allowedIngressPorts }}
     # allow incoming traffic to these ports independent of source
     - ports:
       {{- range $port := . }}
@@ -38,47 +39,48 @@ spec:
       {{- end }}
     {{- end }}
 
-    # allowed pods (hub.jupyter.org/network-access-singleuser) --> singleuser-server
+    # allowed pods (hub.jupyter.org/network-access-proxy-http) --> proxy (http/https port)
     - ports:
-        - port: notebook-port
+        - port: http
+        - port: https
       from:
         # source 1 - labeled pods
         - podSelector:
             matchLabels:
-              hub.jupyter.org/network-access-singleuser: "true"
-        {{- if eq .Values.singleuser.networkPolicy.interNamespaceAccessLabels "accept" }}
+              hub.jupyter.org/network-access-proxy-http: "true"
+        {{- if eq .Values.proxy.traefik.networkPolicy.interNamespaceAccessLabels "accept" }}
           namespaceSelector:
             matchLabels: {}   # without this, the podSelector would only consider pods in the local namespace
         # source 2 - pods in labeled namespaces
         - namespaceSelector:
             matchLabels:
-              hub.jupyter.org/network-access-singleuser: "true"
+              hub.jupyter.org/network-access-proxy-http: "true"
         {{- end }}
 
-    {{- with .Values.singleuser.networkPolicy.ingress }}
-    # depends, but default is nothing --> singleuser-server
+    {{- with .Values.proxy.traefik.networkPolicy.ingress}}
+    # depends, but default is nothing --> proxy
     {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
 
   egress:
-    # singleuser-server --> hub
+    # autohttps --> proxy (http port)
     - ports:
-        - port: 8081
+        - port: 8000
       to:
         - podSelector:
             matchLabels:
-              {{- $_ := merge (dict "componentLabel" "hub") . }}
+              {{- $_ := merge (dict "componentLabel" "proxy") . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
 
-    # singleuser-server --> Kubernetes internal DNS
+    # autohttps --> Kubernetes internal DNS
     - ports:
-        - protocol: UDP
-          port: 53
-        - protocol: TCP
-          port: 53
+      - protocol: UDP
+        port: 53
+      - protocol: TCP
+        port: 53
 
-    {{- with .Values.singleuser.networkPolicy.egress }}
-    # singleuser-server --> depends, but the default is everything
+    {{- with .Values.proxy.traefik.networkPolicy.egress }}
+    # autohttps --> depends, but the default is everything
     {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
 {{- end }}

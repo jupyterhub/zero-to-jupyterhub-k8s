@@ -248,6 +248,57 @@ properties:
               pullSecrets:
                 - my-k8s-secret-with-image-registry-credentials
               ```
+      networkPolicy: &networkPolicy-spec
+        type: object
+        description: |
+          This configuration regards the creation and configuration of a k8s
+          _NetworkPolicy resource_.
+        properties:
+          enabled:
+            type: bool
+            description: |
+              Toggle the creation of the NetworkPolicy resource for this pod.
+          ingress:
+            type: list
+            description: |
+              Additional ingress rules to add except those that is known to be needed by the respective pods in the Helm chart.
+          egress:
+            type: list
+            description: |
+              Additional egress rules to add except those that is known to be needed by  the respective pods in the Helm chart.
+
+              The default value of this egress is to allow all traffic, except for the `singleuser.networkPolicy.egress`, which is also limiting access to a metadata server that can be exploited.
+
+              If you want to restrict egress, you can override this permissive default to be an empty list.
+          interNamespaceAccessLabels:
+            type: string
+            enum:
+              - accept
+              - ignore
+            description: |
+              This configuration option determines if both namespaces and pods
+              in other namespaces, that have specific access labels, should be
+              accepted to allow ingress (set to `accept`), or, if the labels are
+              to be ignored when applied outside the local namespace (set to
+              `ignore`).
+
+              The available access labels for respective NetworkPolicy resources
+              are:
+
+              - `hub.jupyter.org/network-access-hub: "true"` (hub)
+              - `hub.jupyter.org/network-access-proxy-http: "true"` (proxy.chp, proxy.traefik)
+              - `hub.jupyter.org/network-access-proxy-api: "true"` (proxy.chp)
+              - `hub.jupyter.org/network-access-singleuser: "true"` (singleuser)
+          allowedIngressPorts:
+            type: list
+            description: |
+              A rule to allow ingress on these ports will be added no matter
+              what the origin of the request is. The default setting for
+              `proxy.chp` and `proxy.traefik`'s networkPolicy configuration is
+              `[http, https]`, while it is `[]` for other networkPolicies.
+              
+              Note that these port names or numbers target a Pod's port name or
+              number, not a k8s Service's port name or number.
       db:
         type: object
         properties:
@@ -592,6 +643,7 @@ properties:
           Configure the configurable-http-proxy (chp) pod managed by jupyterhub to route traffic
           both to itself and to user pods.
         properties:
+          networkPolicy: *networkPolicy-spec
           extraCommandLineFlags:
             type: list
             description: |
@@ -863,6 +915,7 @@ properties:
 
               See the [Kubernetes docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
               to learn more about labels.
+          networkPolicy: *networkPolicy-spec
           extraEnv:
             type: object
             description: |
@@ -937,6 +990,7 @@ properties:
     description: |
       Options for customizing the environment that is provided to the users after they log in.
     properties:
+      networkPolicy: *networkPolicy-spec
       podNameTemplate:
         type: string
         description: |
