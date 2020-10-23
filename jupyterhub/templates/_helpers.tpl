@@ -147,6 +147,7 @@ heritage: {{ .heritageLabel | default .Release.Service }}
     Provides labels: component, app, release, (chart and heritage).
 */}}
 {{- define "jupyterhub.labels" -}}
+app.kubernetes.io/instance: {{ .Release.Name }}
 component: {{ include "jupyterhub.componentLabel" . }}
 {{ include "jupyterhub.commonLabels" . }}
 {{- end }}
