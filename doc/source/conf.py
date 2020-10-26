@@ -64,7 +64,8 @@ default_role = 'literal'
 # ones.
 extensions = ['sphinx.ext.mathjax',
               'sphinx_copybutton',
-              'myst_parser']
+              'myst_parser',
+              'sphinxext.rediraffe',]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -76,6 +77,63 @@ master_doc = 'index'
 
 # The suffix(es) of source filenames.
 source_suffix = ['.rst', '.md']
+
+# Rediraffe redirects to ensure proper redirection
+rediraffe_redirects = {
+    "customizing/user-management.html": "jupyterhub/customizing/user-management.html",
+    "customizing/user-storage.html": "jupyterhub/customizing/user-storage.html",
+    "customizing/user-resources.html": "jupyterhub/customizing/user-resources.html",
+    "customizing/user-environment.html": "jupyterhub/customizing/user-environment.html",
+    "customizing/extending-jupyterhub.html": "jupyterhub/customizing/extending-jupyterhub.html",
+    "reference/glossary.html": "resources/glossary.html",
+    "reference/tools.html": "resources/tools.html",
+    "reference/reference-docs.html": "resources/reference-docs.html",
+    "reference/reference.html": "resources/reference.html",
+    "community/additional-resources.html": "resources/community.html",
+    "community/users-list.html": "resources/community.html",
+    "community/tips.html": "resources/community.html",
+    "setup-jupyterhub/turn-off.html": "jupyterhub/uninstall.html",
+    "setup-jupyterhub/setup-jupyterhub.html": "jupyterhub/installation.html",
+    "setup-jupyterhub/setup-helm.html": "kubernetes/setup-helm.html",
+    "ovh/step-zero-ovh.html": "kubernetes/ovh/step-zero-ovh.html",
+    "digital-ocean/step-zero-digital-ocean.html": "kubernetes/digital-ocean/step-zero-digital-ocean.html",
+    "ibm/step-zero-ibm.html": "kubernetes/ibm/step-zero-ibm.html",
+    "redhat/step-zero-openshift.html": "kubernetes/redhat/step-zero-openshift.html",
+    "amazon/step-zero-aws-eks.html": "kubernetes/amazon/step-zero-aws-eks.html",
+    "amazon/step-zero-aws.html": "kubernetes/amazon/step-zero-aws.html",
+    "microsoft/step-zero-azure-autoscale.html": "kubernetes/microsoft/step-zero-azure-autoscale.html",
+    "microsoft/step-zero-azure.html": "kubernetes/microsoft/step-zero-azure.html",
+    "google/step-zero-gcp.html": "kubernetes/google/step-zero-gcp.html",
+    "create-k8s-cluster.html": "kubernetes/setup-kubernetes.html",
+    "turn-off.html": "jupyterhub/uninstall.html",
+    "setup-jupyterhub.html": "jupyterhub/index.html",
+    "setup-helm.html": "kubernetes/setup-helm.html",
+    "index-setup-jupyterhub.html": "jupyterhub/index.html",
+    "tools.html": "reference/tools.html",
+    "reference-docs.html": "reference/reference-docs.html",
+#    "index-reference.html": "reference.html",
+    "glossary.html": "reference/glossary.html",
+    "user-storage.html": "customizing/user-storage.html",
+    "user-resources.html": "customizing/user-resources.html",
+    "user-management.html": "customizing/user-management.html",
+    "user-environment.html": "customizing/user-environment.html",
+#    "index-customization-guide.html": "customization.html",
+    "extending-jupyterhub.html": "customizing/extending-jupyterhub.html",
+    "users-list.html": "community/users-list.html",
+    "tips.html": "community/tips.html",
+    "index-community-resources.html": "resources/community.html#links-to-community-project-resources",
+    "additional-resources.html": "resources/community.html",
+    "upgrading.html": "administrator/upgrading.html",
+    "troubleshooting.html": "administrator/troubleshooting.html",
+    "security.html": "administrator/security.html",
+    "optimization.html": "administrator/optimization.html",
+    "index-administrator-guide.html": "administrator/index.html",
+    "debug.html": "administrator/debug.html",
+    "cost.html": "administrator/cost.html",
+    "authentication.html": "administrator/authentication.html",
+    "architecture.html": "administrator/architecture.html",
+    "advanced.html": "administrator/advanced.html"
+}
 
 
 # -- Generate the Helm chart configuration reference from a schema file ------
