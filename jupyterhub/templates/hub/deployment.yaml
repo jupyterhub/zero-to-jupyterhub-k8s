@@ -42,11 +42,7 @@ spec:
             name: hub-config
         - name: secret
           secret:
-            {{- if .Values.hub.existingSecret }}
-            secretName: {{ .Values.hub.existingSecret }}
-            {{- else }}
-            secretName: hub-secret
-            {{- end }}
+            name: {{ .Values.hub.existingSecret | default "hub-secret" }}
         {{- if .Values.hub.extraVolumes }}
         {{- .Values.hub.extraVolumes | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
@@ -163,21 +159,13 @@ spec:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.hub.existingSecret }}
-                  name: {{ .Values.hub.existingSecret }}
-                  {{- else }}
-                  name: hub-secret
-                  {{- end }}
+                  secretName: {{ .Values.hub.existingSecret | default "hub-secret" }}
                   key: proxy.token
             {{- if .Values.auth.state.enabled }}
             - name: JUPYTERHUB_CRYPT_KEY
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.hub.existingSecret }}
-                  name: {{ .Values.hub.existingSecret }}
-                  {{- else }}
-                  name: hub-secret
-                  {{- end }}
+                  name: {{ .Values.hub.existingSecret | default "hub-secret" }}
                   key: auth.state.crypto-key
             {{- end }}
             {{- if .Values.hub.db.password }}
@@ -185,21 +173,13 @@ spec:
             - name: MYSQL_PWD
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.hub.existingSecret }}
-                  name: {{ .Values.hub.existingSecret }}
-                  {{- else }}
-                  name: hub-secret
-                  {{- end }}
+                  name: {{ .Values.hub.existingSecret | default "hub-secret" }}
                   key: hub.db.password
             {{- else if eq .Values.hub.db.type "postgres" }}
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.hub.existingSecret }}
-                  name: {{ .Values.hub.existingSecret }}
-                  {{- else }}
-                  name: hub-secret
-                  {{- end }}
+                  name: {{ .Values.hub.existingSecret | default "hub-secret" }}
                   key: hub.db.password
             {{- end }}
             {{- end }}
