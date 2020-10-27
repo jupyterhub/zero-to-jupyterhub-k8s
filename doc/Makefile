@@ -27,7 +27,7 @@ help:
 # - builds and rebuilds html on changes to source
 # - starts a livereload enabled webserver and opens up a browser
 devenv:
-	sphinx-autobuild -b html --open-browser --ignore "$(SOURCEDIR)/reference/reference.md" $(ALLSPHINXOPTS) "$(SOURCEDIR)" "$(BUILDDIR)/html"
+	sphinx-autobuild -b html --open-browser --ignore "*/reference.md" $(ALLSPHINXOPTS) "$(SOURCEDIR)" "$(BUILDDIR)/html"
 
 # For local development and CI:
 # - verifies that links are valid
