@@ -120,7 +120,7 @@ hub:
     periodSeconds: 2
     failureThreshold: 3
     timeoutSeconds: 1
-  # existingSecret: existing-secret
+  existingSecret:
 
 rbac:
   enabled: true
@@ -130,6 +130,7 @@ rbac:
 # pod and proxy-http service.
 proxy:
   secretToken: ''
+  annotations: {}
   deploymentStrategy:
     ## type: Recreate
     ## - JupyterHub's interaction with the CHP proxy becomes a lot more robust
@@ -380,6 +381,7 @@ singleuser:
   cmd: jupyterhub-singleuser
   defaultUrl:
   extraPodConfig: {}
+  profileList: []
 
 
 # scheduling relates to the user-scheduler pods and user-placeholder pods.
