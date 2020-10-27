@@ -19,7 +19,6 @@ oauthenticator
 
 # Authenticator optional dependencies
 mwoauth
-globus_sdk[jwt]
 
 ## Kubernetes spawner
 jupyterhub-kubespawner
