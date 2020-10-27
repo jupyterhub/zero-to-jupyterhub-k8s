@@ -4,7 +4,9 @@
 #    ./dependencies freeze --upgrade
 #
 
-# JupyterHub's version is defined in chartpress.yaml
+# JupyterHub is pinned in chartpress.yaml, but need to be pinned here as well to
+# so our generated requirements.txt get proper comments set on it.
+jupyterhub==1.2.0b1
 
 ## Authenticators
 jupyterhub-dummyauthenticator
@@ -19,6 +21,7 @@ oauthenticator
 
 # Authenticator optional dependencies
 mwoauth
+pyjwt
 
 ## Kubernetes spawner
 jupyterhub-kubespawner

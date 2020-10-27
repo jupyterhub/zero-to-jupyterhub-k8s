@@ -36,8 +36,8 @@ RUN adduser --disabled-password \
 RUN python3 -m pip install --upgrade --no-cache setuptools pip
 COPY requirements.txt /tmp/requirements.txt
 
-## NOTE: This is a default and be overridden by chartpress using the
-##       chartpress.yaml configuration
+# NOTE: This is a default and will be overridden by chartpress and the
+#       dependencies script using the chartpress.yaml configuration's buildArgs
 ARG JUPYTERHUB_VERSION=1.1.*
 
 RUN PYCURL_SSL_LIBRARY=openssl pip3 install --no-cache-dir \
