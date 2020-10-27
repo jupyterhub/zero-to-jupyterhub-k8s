@@ -42,7 +42,7 @@ spec:
             name: hub-config
         - name: secret
           secret:
-            name: {{ .Values.hub.existingSecret | default "hub-secret" }}
+            secretName: {{ .Values.hub.existingSecret | default "hub-secret" }}
         {{- if .Values.hub.extraVolumes }}
         {{- .Values.hub.extraVolumes | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
@@ -159,7 +159,7 @@ spec:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
-                  secretName: {{ .Values.hub.existingSecret | default "hub-secret" }}
+                  name: {{ .Values.hub.existingSecret | default "hub-secret" }}
                   key: proxy.token
             {{- if .Values.auth.state.enabled }}
             - name: JUPYTERHUB_CRYPT_KEY
