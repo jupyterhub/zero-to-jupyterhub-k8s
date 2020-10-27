@@ -3,6 +3,7 @@
 [![Documentation build status](https://img.shields.io/readthedocs/zero-to-jupyterhub?logo=read-the-docs)](https://zero-to-jupyterhub.readthedocs.io/en/latest/?badge=latest)
 [![TravisCI build status](https://img.shields.io/travis/jupyterhub/zero-to-jupyterhub-k8s/master?logo=travis)](https://travis-ci.org/jupyterhub/zero-to-jupyterhub-k8s)
 [![Latest stable release of the Helm chart](https://img.shields.io/badge/dynamic/json.svg?label=stable&url=https://jupyterhub.github.io/helm-chart/info.json&query=$.jupyterhub.stable&colorB=orange&logo=helm)](https://jupyterhub.github.io/helm-chart#jupyterhub)
+[![Latest pre-release of the Helm chart](https://img.shields.io/badge/dynamic/json.svg?label=pre&url=https://jupyterhub.github.io/helm-chart/info.json&query=$.jupyterhub.pre&colorB=orange&logo=helm)](https://jupyterhub.github.io/helm-chart#development-releases-jupyterhub)
 [![Latest development release of the Helm chart](https://img.shields.io/badge/dynamic/json.svg?label=dev&url=https://jupyterhub.github.io/helm-chart/info.json&query=$.jupyterhub.latest&colorB=orange&logo=helm)](https://jupyterhub.github.io/helm-chart#development-releases-jupyterhub)
 <br/>
 [![GitHub](https://img.shields.io/badge/issue_tracking-github-blue?logo=github)](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues)
