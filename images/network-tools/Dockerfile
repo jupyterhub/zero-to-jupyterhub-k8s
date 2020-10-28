@@ -1,3 +1,3 @@
-FROM alpine:3.6
+FROM alpine:3
 
 RUN apk add --no-cache iptables
