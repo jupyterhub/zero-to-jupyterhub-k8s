@@ -422,7 +422,7 @@ scheduling:
       allowPrivilegeEscalation: false
     image:
       name: k8s.gcr.io/kube-scheduler
-      tag: v1.19.1
+      tag: v1.19.2
       pullPolicy: ''
       pullSecrets: []
     nodeSelector: {}
