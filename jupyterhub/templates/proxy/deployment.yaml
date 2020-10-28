@@ -95,11 +95,7 @@ spec:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.hub.existingSecret }}
-                  name: {{ .Values.hub.existingSecret }}
-                  {{- else }}
-                  name: hub-secret
-                  {{- end }}
+                  name: {{ .Values.hub.existingSecret | default "hub-secret" }}
                   key: proxy.token
             {{- include "jupyterhub.extraEnv" .Values.proxy.chp.extraEnv | nindent 12 }}
           {{- with .Values.proxy.chp.image.pullPolicy }}
