@@ -32,7 +32,7 @@ spec:
       {{- if .Values.rbac.enabled }}
       serviceAccountName: hook-image-awaiter
       {{- end }}
-      tolerations: {{ toJson .Values.prePuller.extraTolerations }}
+      tolerations: {{ toJson .Values.prePuller.hook.tolerations }}
       nodeSelector: {{ toJson .Values.prePuller.hook.nodeSelector }}
       {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.prePuller.hook.image) }}
       imagePullSecrets: {{ . }}

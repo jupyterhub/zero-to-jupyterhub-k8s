@@ -1434,6 +1434,7 @@ properties:
               0.9.0 and earlier.
             type: int
           nodeSelector: *nodeSelector-spec
+          tolerations: *tolerations-spec
       continuous:
         description: |
           See the [*optimization
