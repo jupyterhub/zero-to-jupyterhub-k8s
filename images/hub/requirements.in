@@ -6,7 +6,7 @@
 
 # JupyterHub is pinned in chartpress.yaml, but need to be pinned here as well to
 # so our generated requirements.txt get proper comments set on it.
-jupyterhub==1.2.0b1
+jupyterhub==1.2.0
 
 ## Authenticators
 jupyterhub-dummyauthenticator
