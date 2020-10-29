@@ -154,8 +154,7 @@ proxy:
         cpu: 200m
         memory: 1Gi
     extraEnv:
-      - name: LEGO_CA_CERTIFICATES
-        value: /etc/pebble/root-cert.pem
+      LEGO_CA_CERTIFICATES: /etc/pebble/root-cert.pem
     nodeSelector:
       node-type: mock
     tolerations:
