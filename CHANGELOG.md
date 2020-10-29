@@ -6,7 +6,7 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ### [0.10.0] - 2020-10-29
 
-This release makes the deployment more robust, and enhance users ability to
+This release makes the deployment more robust, and enhances users ability to
 configure the Helm chart in general. Some defaults have been changed allowing
 the Helm chart to easier comply with PodSecurityPolicies by default.
 
@@ -55,21 +55,21 @@ the Helm chart to easier comply with PodSecurityPolicies by default.
 
 #### Release highlights
 
-- An ability to configure environment variables in pods with a k8s native syntax
+- **Environment variables in pods with K8S config**. An ability to configure environment variables in pods with a k8s native syntax
   has been added. This allows you to reference and mount a field in a k8s Secret
   as an environment variable for example. For more information, read [about
   extraEnv](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#singleuser-extraenv)
   in the configuration reference.
-- imagePullSecrets for all the pods in the Helm chart can now be configured
+- **Configure secrets for all pods via the helm chart**. imagePullSecrets for all the pods in the Helm chart can now be configured
   chart wide. See the configuration reference about
   [imagePullSecret](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#imagepullsecret)
   and
   [imagePullSecrets](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#imagepullsecrets)
   for more details.
-- Deploying the Helm chart in a cluster with a PodSecurityPolicy active is now
+- **Pod security is easier to use and configure**. Deploying the Helm chart in a cluster with a PodSecurityPolicy active is now
   easier, because the pods' containers now have `securityContext` set on them to
   run with relatively low permissions which are also configurable if needed.
-- The `autohttps` pod that is running to acquire TLS certificates if
+- **More reliable TLS certificates**. The `autohttps` pod that is running to acquire TLS certificates if
   `proxy.https.type=letsencrypt` is now more reliably acquiring certificates. If
   you currently have such issue, do `kubectl delete deploy/autohttps` and
   `kubectl delete secret proxy-public-tls-acme` and then deploy the Helm chart
