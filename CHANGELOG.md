@@ -10,48 +10,6 @@ This release makes the deployment more robust, and enhance users ability to
 configure the Helm chart in general. Some defaults have been changed allowing
 the Helm chart to easier comply with PodSecurityPolicies by default.
 
-_There are breaking changes part of this release, please consider them!_
-
-#### Notable dependencies updated
-
-Dependency | Version in previous release | Version in this release | Changelog link | Note
--|-|-|-|-
-[jupyterhub](https://github.com/jupyterhub/jupyterhub) | 1.1.0 | 1.2.0 | [Changelog](https://jupyterhub.readthedocs.io/en/stable/changelog.html) | Run in the `hub` pod
-[kubespawner](https://github.com/jupyterhub/kubespawner) | 0.11.1 | 0.14.1 | [Changelog](https://jupyterhub-kubespawner.readthedocs.io/en/latest/changelog.html) | Run in the `hub` pod
-[oauthenticator](https://github.com/jupyterhub/oauthenticator) | 0.11.0 | 0.12.0 | [Changelog](https://oauthenticator.readthedocs.io/en/latest/changelog.html) | Run in the `hub` pod
-[ldapauthenticator](https://github.com/jupyterhub/ldapauthenticator) | 1.3.0 | 1.3.2 | [Changelog](https://github.com/jupyterhub/ldapauthenticator/blob/master/CHANGELOG.md) | Run in the `hub` pod
-[ltiauthenticator](https://github.com/jupyterhub/ltiauthenticator) | 0.4.0 | 0.4.0 | [Changelog](https://github.com/jupyterhub/ltiauthenticator/blob/master/CHANGELOG.md) | Run in the `hub` pod
-[nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator) | 0.0.5 | 0.0.5 | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/master/CHANGELOG.md) | Run in the `hub` pod
-[jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler) | - | v1.0 | - | Run in the `hub` pod
-[configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy) | 4.2.1 | 4.2.2 | [Changelog](https://github.com/jupyterhub/configurable-http-proxy/blob/master/CHANGELOG.md) | Run in the `proxy` pod
-[traefik](https://github.com/traefik/traefik) | v2.1 | v2.3.2 | [Changelog](https://github.com/traefik/traefik/blob/master/CHANGELOG.md) | Run in the `autohttps` pod
-[kube-scheduler](https://github.com/kubernetes/kube-scheduler) | v1.13.12 | v1.19.2 | - | Run in the `user-scheduler` pod(s)
-
-For a detailed list of how Python dependencies have change in the `hub` Pod's
-Docker image, inspect the [images/hub/requirements.txt](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/images/hub/requirements.txt) file.
-
-#### Release highlights
-
-- An ability to configure environment variables in pods with a k8s native syntax
-  has been added. This allows you to reference and mount a field in a k8s Secret
-  as an environment variable for example. For more information, read [about
-  extraEnv](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#singleuser-extraenv)
-  in the configuration reference.
-- imagePullSecrets for all the pods in the Helm chart can now be configured
-  chart wide. See the configuration reference about
-  [imagePullSecret](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#imagepullsecret)
-  and
-  [imagePullSecrets](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#imagepullsecrets)
-  for more details.
-- Deploying the Helm chart in a cluster with a PodSecurityPolicy active is now
-  easier, because the pods' containers now have `securityContext` set on them to
-  run with relatively low permissions which are also configurable if needed.
-- The `autohttps` pod that is running to acquire TLS certificates if
-  `proxy.https.type=letsencrypt` is now more reliably acquiring certificates. If
-  you currently have such issue, do `kubectl delete deploy/autohttps` and
-  `kubectl delete secret proxy-public-tls-acme` and then deploy the Helm chart
-  again with `helm upgrade`.
-
 #### Breaking changes:
 
 - Anyone relying on configuration in the `proxy.https` section are now
@@ -94,6 +52,46 @@ Docker image, inspect the [images/hub/requirements.txt](https://github.com/jupyt
 - The k8s ConfigMap `hub-config` k8s Secret `hub-secret` are now merged into
   `hub-secret`, which will affect anyone who use the `hub.existingSecret`
   option.
+
+#### Release highlights
+
+- An ability to configure environment variables in pods with a k8s native syntax
+  has been added. This allows you to reference and mount a field in a k8s Secret
+  as an environment variable for example. For more information, read [about
+  extraEnv](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#singleuser-extraenv)
+  in the configuration reference.
+- imagePullSecrets for all the pods in the Helm chart can now be configured
+  chart wide. See the configuration reference about
+  [imagePullSecret](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#imagepullsecret)
+  and
+  [imagePullSecrets](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#imagepullsecrets)
+  for more details.
+- Deploying the Helm chart in a cluster with a PodSecurityPolicy active is now
+  easier, because the pods' containers now have `securityContext` set on them to
+  run with relatively low permissions which are also configurable if needed.
+- The `autohttps` pod that is running to acquire TLS certificates if
+  `proxy.https.type=letsencrypt` is now more reliably acquiring certificates. If
+  you currently have such issue, do `kubectl delete deploy/autohttps` and
+  `kubectl delete secret proxy-public-tls-acme` and then deploy the Helm chart
+  again with `helm upgrade`.
+
+#### Notable dependencies updated
+
+Dependency | Version in previous release | Version in this release | Changelog link | Note
+-|-|-|-|-
+[jupyterhub](https://github.com/jupyterhub/jupyterhub) | 1.1.0 | 1.2.0 | [Changelog](https://jupyterhub.readthedocs.io/en/stable/changelog.html) | Run in the `hub` pod
+[kubespawner](https://github.com/jupyterhub/kubespawner) | 0.11.1 | 0.14.1 | [Changelog](https://jupyterhub-kubespawner.readthedocs.io/en/latest/changelog.html) | Run in the `hub` pod
+[oauthenticator](https://github.com/jupyterhub/oauthenticator) | 0.11.0 | 0.12.0 | [Changelog](https://oauthenticator.readthedocs.io/en/latest/changelog.html) | Run in the `hub` pod
+[ldapauthenticator](https://github.com/jupyterhub/ldapauthenticator) | 1.3.0 | 1.3.2 | [Changelog](https://github.com/jupyterhub/ldapauthenticator/blob/master/CHANGELOG.md) | Run in the `hub` pod
+[ltiauthenticator](https://github.com/jupyterhub/ltiauthenticator) | 0.4.0 | 0.4.0 | [Changelog](https://github.com/jupyterhub/ltiauthenticator/blob/master/CHANGELOG.md) | Run in the `hub` pod
+[nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator) | 0.0.5 | 0.0.5 | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/master/CHANGELOG.md) | Run in the `hub` pod
+[jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler) | - | v1.0 | - | Run in the `hub` pod
+[configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy) | 4.2.1 | 4.2.2 | [Changelog](https://github.com/jupyterhub/configurable-http-proxy/blob/master/CHANGELOG.md) | Run in the `proxy` pod
+[traefik](https://github.com/traefik/traefik) | v2.1 | v2.3.2 | [Changelog](https://github.com/traefik/traefik/blob/master/CHANGELOG.md) | Run in the `autohttps` pod
+[kube-scheduler](https://github.com/kubernetes/kube-scheduler) | v1.13.12 | v1.19.2 | - | Run in the `user-scheduler` pod(s)
+
+For a detailed list of how Python dependencies have change in the `hub` Pod's
+Docker image, inspect the [images/hub/requirements.txt](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/images/hub/requirements.txt) file.
 
 #### Enhancements made
 
