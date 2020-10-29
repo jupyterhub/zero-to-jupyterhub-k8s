@@ -10,7 +10,7 @@ This issue will be used to coordinate the next release of the Helm chart accordi
 
 ## Look through dependencies
 
-The JupyterHub Helm chart relies on many dependent projects, and when we make a release it is good to be updated about their status and what version we decide to couple the Helm chart release with. Below are the more important depdencies. Put a check on those that reach a state good enough for a z2jh release to be cut.
+The JupyterHub Helm chart relies on many dependent projects, and when we make a release we should note major updates for these projects as well as the version that is specified in the Helm chart. Below are the more important dependencies. Put a check on those that reach a state good enough for a z2jh release to be cut.
 
 ### Dependent Python packages
 
