@@ -12,7 +12,7 @@ charts:
         valuesPath: hub.image
         buildArgs:
           # NOTE: Also bump the Chart.yaml's appVersion if this is bumped
-          JUPYTERHUB_VERSION: 1.2.0b1
+          JUPYTERHUB_VERSION: 1.2.0
       network-tools:
         valuesPath: singleuser.networkTools.image
       image-awaiter:
@@ -20,4 +20,4 @@ charts:
       singleuser-sample:
         valuesPath: singleuser.image
         buildArgs:
-          JUPYTERHUB_VERSION: 1.2.0b1
+          JUPYTERHUB_VERSION: 1.2.0
