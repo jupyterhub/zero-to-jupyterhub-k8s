@@ -4,6 +4,27 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ## [0.10]
 
+### [0.10.2] - 2020-10-30
+
+A bugfix release to add securityContext configuration on _all_ the containers in the image-puller pods, which can be needed when a k8s PodSecurityPolicy is forcing pods to startup as non-root users.
+
+Note that whoever need to comply with a strict PodSecurityPolicy will also need to `--set singleuser.cloudMetadata.blockWithIptables=false`, but should read [this documentation](https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/security.html#audit-cloud-metadata-server-access) before doing so.
+
+#### Bugs fixed
+
+* Add securityContext to all image-puller pods' containers [#1892](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1892) ([@consideRatio](https://github.com/consideRatio))
+
+#### Documentation improvements
+
+* Changelog for 0.10.1 [#1890](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1890) ([@consideRatio](https://github.com/consideRatio))
+
+#### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2020-10-30&to=2020-10-30&type=c))
+
+[@consideRatio](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2020-10-30..2020-10-30&type=Issues) | [@jatinder91](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajatinder91+updated%3A2020-10-30..2020-10-30&type=Issues)
+
+
 ### [0.10.1] - 2020-10-30
 
 A bugfix release simply updating JupyterHub to 1.2.1. JupyterHub 1.2.1 fixes a regression related to registered JupyterHub services using the `oauth_no_confirm` configuration.
@@ -21,6 +42,7 @@ A bugfix release simply updating JupyterHub to 1.2.1. JupyterHub 1.2.1 fixes a r
 ([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2020-10-29&to=2020-10-30&type=c))
 
 [@consideRatio](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2020-10-29..2020-10-30&type=Issues) | [@minrk](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aminrk+updated%3A2020-10-29..2020-10-30&type=Issues)
+
 
 ### [0.10.0] - 2020-10-29
 
