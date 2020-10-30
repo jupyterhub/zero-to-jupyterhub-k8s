@@ -4,6 +4,24 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ## [0.10]
 
+### [0.10.1] - 2020-10-30
+
+A bugfix release simply updating JupyterHub to 1.2.1. JupyterHub 1.2.1 fixes a regression related to registered JupyterHub services using the `oauth_no_confirm` configuration.
+
+#### Bugs fixed
+* Use JupyterHub 1.2.1 - fixes regression for external JH services' oauth_no_confirm config [#1889](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1889) ([@minrk](https://github.com/minrk))
+
+#### Maintenance and upkeep improvements
+* Fix CI that broke as assumptions changed about latest published version [#1887](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1887) ([@consideRatio](https://github.com/consideRatio))
+
+#### Documentation improvements
+* Update changelog for 0.10.0 release [#1886](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1886) ([@consideRatio](https://github.com/consideRatio))
+
+#### Contributors to this release
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2020-10-29&to=2020-10-30&type=c))
+
+[@consideRatio](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2020-10-29..2020-10-30&type=Issues) | [@minrk](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aminrk+updated%3A2020-10-29..2020-10-30&type=Issues)
+
 ### [0.10.0] - 2020-10-29
 
 This release makes the deployment more robust, and enhances users ability to
