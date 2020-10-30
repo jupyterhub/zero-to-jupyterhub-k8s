@@ -56,8 +56,15 @@ spec:
             #       passed.
             #
             # ref: https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/
+            #
+            # NOTE: --authentication-skip-lookup=true is used to avoid a
+            #       seemingly harmless error, if we need to not skip
+            #       "authentication lookup" in the future, see the linked issue.
+            #
+            # ref: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1894
             {{- if .Capabilities.APIVersions.Has "storage.k8s.io/v1/CSINode" }}
             - --config=/etc/user-scheduler/config.yaml
+            - --authentication-skip-lookup=true
             {{- else }}
             - --scheduler-name={{ .Release.Name }}-user-scheduler
             - --policy-config-file=/etc/user-scheduler/policy.cfg
