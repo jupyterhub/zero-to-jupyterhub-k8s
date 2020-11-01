@@ -1,0 +1,113 @@
+---
+name: Test
+
+on:
+  pull_request:
+  push:
+
+jobs:
+
+  lint_and_validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: manics/action-k3s-helm@v0.2.1
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
+      - name: Install dependencies
+        run: |
+          . ci/common
+          setup_kubeval
+          pip install yamllint
+      - name: Lint and validate
+        # NOTE: Kubernetes resource validation can only be done against
+        #       Kubernetes versions with schemas available in:
+        #       https://github.com/instrumenta/kubernetes-json-schema
+        #
+        # NOTE: The "helm template" command will evaluate
+        #       .Capabilities.APIVersion.Has in templates based on a Kubernetes
+        #       version associated with the helm binary's version. Since we
+        #       render the templates with a specific helm version, we end up
+        #       rendering templates using a mocked k8s version unrelated to the
+        #       Kubernetes version we want to validate against. This issue has
+        #       made us not validate against versions lower than 1.14.
+        run: tools/templates/lint-and-validate.py --kubernetes-versions 1.14.0,1.18.0
+
+  test_z2jh:
+    runs-on: ubuntu-latest
+    strategy:
+      # Keep running so we can see if other tests pass
+      fail-fast: false
+      matrix:
+        include:
+          - k3s-version: v1.19.3+k3s1
+            helm-version: v3.4.0
+            test: install
+          - k3s-version: v1.18.10+k3s1
+            helm-version: v3.3.4
+            test: install
+          - k3s-version: v1.17.13+k3s1
+            helm-version: v3.3.4
+            test: install
+          - k3s-version: v1.16.15+k3s1
+            helm-version: v3.3.4
+            test: install
+
+          - k3s-version: v1.19.3+k3s1
+            helm-version: v3.3.4
+            test: upgrade
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # chartpress requires the full history
+          fetch-depth: 0
+      - uses: manics/action-k3s-helm@v0.2.1
+        with:
+          k3s-version: ${{ matrix.k3s-version }}
+          helm-version: ${{ matrix.helm-version }}
+          metrics-enabled: false
+          traefik-enabled: false
+          docker-enabled: true
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
+      - name: Install and run chartpress
+        run: |
+          . ./ci/common
+          install_and_build
+      - name: Install latest JupyterHub version from Helm chart repo
+        if: matrix.test == 'upgrade'
+        run: |
+          . ./ci/common
+          helm install jupyterhub jupyterhub/jupyterhub --values dev-config.yaml
+          await_jupyterhub
+          await_autohttps_tls_cert_acquisition
+      - name: Install JupyterHub dev chart
+        run: |
+          . ./ci/common
+          helm upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml
+          await_jupyterhub
+          await_autohttps_tls_cert_acquisition
+      - name: Run tests
+        run: |
+          . ./ci/common
+          pytest --verbose --exitfirst ./tests || (full_namespace_report && exit 1)
+
+  docs_linkcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
+      - name: Install deps
+        run: pip install --no-cache-dir -r doc/doc-requirements.txt
+      - name: Build and run linkcheck
+        run: |
+          cd doc
+          make html SPHINXOPTS='-W --keep-going'
+          make linkcheck
+        # Allow job to pass even if linkcheck fails
+        continue-on-error: true

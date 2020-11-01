@@ -34,23 +34,6 @@ install:
   # Fix to avoid rebuilding images already built
   - remove_docker_mirror_on_travis
 
-  # Setup our k3s based Kubernetes cluster and use its kubectl as well
-  - setup_k3s
-  - setup_helm
-  - helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
-  - helm repo update
-
-  # Install a local ACME server
-  - helm install pebble jupyterhub/pebble --values dev-config-pebble.yaml
-
-  # Build our images if needed and update values.yaml with the tags
-  - pip3 install --no-cache-dir -r dev-requirements.txt
-  - chartpress
-
-  # Pre-install JupyterHub
-  - await_dns     # part of k3s, jupyterhub needs it while referencing https://pebble/dir
-  - await_calico  # installed with setup_k3s, enforces netpol
-  - await_pebble  # jupyterhub's autohttps communicates with it as the ACME server
 script:
   # Install JupyterHub
   - helm install jupyterhub ./jupyterhub --values dev-config.yaml
@@ -69,76 +52,8 @@ env:
     - HELM_VERSION=v3.3.4
 
 jobs:
-  ## don't wait for the jobs that are allowed to fail to report success
-  ##
-  ## ref: https://docs.travis-ci.com/user/customizing-the-build/#rows-that-are-allowed-to-fail
-  ## ref: https://docs.travis-ci.com/user/customizing-the-build/#fast-finishing
-  ##
-  allow_failures:
-    - name: docs:link-check
-  fast_finish: true
-
   ## define individual jobs that can rely on defaults from above
   include:
-    - stage: test
-      name: chart:lint-and-validate
-      install:
-        - setup_helm
-        - setup_kubeval
-        - pip install yamllint
-      script:
-        # NOTE: Kubernetes resource validation can only be done against
-        #       Kubernetes versions with schemas available in:
-        #       https://github.com/instrumenta/kubernetes-json-schema
-        #
-        # NOTE: The "helm template" command will evaluate
-        #       .Capabilities.APIVersion.Has in templates based on a Kubernetes
-        #       version associated with the helm binary's version. Since we
-        #       render the templates with a specific helm version, we end up
-        #       rendering templates using a mocked k8s version unrelated to the
-        #       Kubernetes version we want to validate against. This issue has
-        #       made us not validate against versions lower than 1.14.
-        - tools/templates/lint-and-validate.py --kubernetes-versions 1.14.0,1.18.0
-
-    - stage: test
-      name: chart:install-latest-then-upgrade
-      script:
-        # Install latest JupyterHub version from Helm chart repo
-        - helm install jupyterhub jupyterhub/jupyterhub --values dev-config.yaml
-        - await_jupyterhub
-        - await_autohttps_tls_cert_acquisition
-
-        # Upgrade to local Helm chart
-        - helm upgrade jupyterhub ./jupyterhub --values dev-config.yaml
-        - await_jupyterhub
-
-        # Run tests
-        - pytest --verbose --exitfirst ./tests || (full_namespace_report && exit 1)
-
-    ## k3s versions:  https://github.com/rancher/k3s/releases
-    - stage: test
-      name: chart:k8s-1.19
-
-    - stage: test
-      name: chart:k8s-1.18
-      env: K3S_VERSION=v1.18.10+k3s1
-
-    - stage: test
-      name: chart:k8s-1.17
-      env: K3S_VERSION=v1.17.13+k3s1
-
-    - stage: test
-      name: chart:k8s-1.16
-      env: K3S_VERSION=v1.16.15+k3s1 k3s_disable_command=--no-deploy
-
-    - stage: test
-      name: docs:link-check
-      install:
-        - pip install --no-cache-dir -r doc/doc-requirements.txt
-      script:
-        - cd doc
-        - make html SPHINXOPTS='-W --keep-going'
-        - make linkcheck
 
     - stage: publish
       name: publish:helm-chart
