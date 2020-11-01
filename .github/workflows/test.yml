@@ -36,6 +36,8 @@ jobs:
 
   test_z2jh:
     runs-on: ubuntu-latest
+    # If a job goes on for this long it's probably hung
+    timeout-minutes: 20
     strategy:
       # Keep running so we can see if other tests pass
       fail-fast: false
