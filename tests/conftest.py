@@ -51,7 +51,9 @@ def pebble_acme_ca_cert():
 
         requests.get(..., verify=<True|False|path_to_certificate>)
     """
-    response = requests.get("https://localhost:32444/roots/0", verify=False)
+    # 'localhost' may resolve to an ipv6 address which may not be supported on older K3S
+    # 127.0.0.1 is more reliable
+    response = requests.get("https://127.0.0.1:32444/roots/0", verify=False, timeout=10)
     if not response.ok:
         return True
 
