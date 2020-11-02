@@ -92,6 +92,12 @@ jobs:
           helm upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml
           await_jupyterhub
           await_autohttps_tls_cert_acquisition
+      - name: Wait 1 minute for everything to be ready
+        # TODO: find out exactly which resources are slow and wait for thoses
+        # So far errors have included:
+        # - some pods not being ready
+        # - network policies not being ready
+        run: sleep 1m
       - name: Run tests
         run: |
           . ./ci/common
