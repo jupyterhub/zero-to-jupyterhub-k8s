@@ -48,7 +48,7 @@ spec:
       {{- end }}
       tolerations:
         {{- include "jupyterhub.userTolerations" . | nindent 8 }}
-        {{- when .Values.prePuller.extraTolerations  }}
+        {{- with .Values.prePuller.extraTolerations  }}
         {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
       nodeSelector: {{ toJson .Values.singleuser.nodeSelector }}
