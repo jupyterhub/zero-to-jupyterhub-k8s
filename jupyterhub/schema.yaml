@@ -1406,6 +1406,7 @@ properties:
 
           They were made configurable as usage of ResourceQuota may require
           containers in the namespace to have explicit resources set.
+      extraTolerations: *tolerations-spec
       hook:
         description: |
           See the [*optimization
