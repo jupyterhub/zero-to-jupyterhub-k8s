@@ -1,6 +1,11 @@
 #!/bin/sh
 # Use https://www.shellcheck.net/ to reduce mistakes if you make changes to this file.
 
+setup_helm () {
+    echo "setup helm ${HELM_VERSION}"
+    curl -sf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
+}
+
 await_pebble() {
     kubectl rollout status --watch --timeout 300s deployment/pebble \
  && kubectl rollout status --watch --timeout 300s deployment/pebble-coredns \
@@ -58,8 +63,8 @@ await_autohttps_tls_cert_acquisition() {
 }
 
 setup_kubeval () {
-    echo "setup kubeval 0.15.0"
-    curl -sfL https://github.com/instrumenta/kubeval/releases/download/0.15.0/kubeval-linux-amd64.tar.gz | tar xz kubeval
+    echo "setup kubeval ${KUBEVAL_VERSION}"
+    curl -sfL https://github.com/instrumenta/kubeval/releases/download/${KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz | tar xz kubeval
     sudo mv kubeval /usr/local/bin/
 }
 

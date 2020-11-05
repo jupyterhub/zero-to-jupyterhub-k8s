@@ -11,14 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: manics/action-k3s-helm@v0.2.1
       - uses: actions/setup-python@v2
         with:
           python-version: '3.7'
       - name: Install dependencies
         run: |
           . ci/common
-          setup_kubeval
+          HELM_VERSION=v3.3.4 setup_helm
+          KUBEVAL_VERSION=0.15.0 setup_kubeval
           pip install yamllint
       - name: Lint and validate
         # NOTE: Kubernetes resource validation can only be done against
