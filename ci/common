@@ -107,7 +107,7 @@ full_namespace_report () {
     kubectl logs --all-containers deploy/autohttps
 }
 
-install_and_build () {
+install_and_run_chartpress_and_pebble () {
     helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
     helm repo update
     # Install a local ACME server

@@ -78,7 +78,7 @@ jobs:
       - name: Install and run chartpress
         run: |
           . ./ci/common
-          install_and_build
+          install_and_run_chartpress_and_pebble
       - name: Install latest JupyterHub version from Helm chart repo
         if: matrix.test == 'upgrade'
         run: |
