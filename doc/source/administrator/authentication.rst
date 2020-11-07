@@ -296,8 +296,8 @@ Authenticating with LDAP
 JupyterHub supports LDAP and Active Directory authentication.
 Read the `ldapauthenticator <https://github.com/jupyterhub/ldapauthenticator>`_
 documentation for a full explanation of the available parameters. The full mapping
-between parameters set in `values.yaml` and ldapauthenticator parameter names can be 
-found in `jupyterhub_config.py <https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/jupyterhub/files/hub/jupyterhub_config.py#L35>`_. 
+between parameters set in ``values.yaml`` and ``ldapauthenticator`` parameter names can be 
+found in `jupyterhub_config.py <https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/jupyterhub/files/hub/jupyterhub_config.py#L353>`_. 
 
 Example LDAP Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
