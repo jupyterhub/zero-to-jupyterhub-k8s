@@ -146,7 +146,7 @@ proxy:
   traefik:
     extraPorts:
     - name: ssh
-      containerPort: 22
+      containerPort: 8022
     labels:
       hub.jupyter.org/test-label: mock
     resources:
