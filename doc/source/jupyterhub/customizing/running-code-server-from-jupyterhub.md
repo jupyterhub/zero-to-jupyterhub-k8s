@@ -75,7 +75,7 @@ RUN yarn build:vscode
 RUN yarn release && yarn release:standalone && yarn package && mv release-packages /tmp/ && rm -r ./* && mv /tmp/release-packages/ .
 
 # Build the Code Server Notebook image
-FROM ubuntu:20.04
+FROM python:3.8
 
 RUN apt-get update && apt-get install -y \
     curl
@@ -97,6 +97,8 @@ RUN ARCH="$(dpkg --print-architecture)" && \
     chmod 4755 /usr/local/bin/fixuid && \
     mkdir -p /etc/fixuid && \
     printf "user: coder\ngroup: coder\n" > /etc/fixuid/config.yml
+
+RUN pip install jupyterhub==1.2.1 notebook==6.1.5
 
 # Run code-server on port 8888
 CMD ["code-server", \
@@ -221,6 +223,9 @@ Notebooks.
     proxy:
       secretToken: "$RAND_KEY"
 
+    debug:
+      enabled: true
+
     ingress:
       hosts:
       - minikube
@@ -237,22 +242,124 @@ Notebooks.
         pullPolicy: Never
 
     hub:
+      uid: 0
       image:
         name: ${HUB_IMAGE_NAME}
         tag: ${HUB_IMAGE_TAG}
         # Set this when using minikube and we've built using minikube's docker daemon
         # This will save us from having to push/pull to a docker remote
         pullPolicy: 'Never'
-      extraConfig: |
-        # set JH to use the TraefikTomlProxy
-        #from dss_jupyterhub_traefik import CustomTraefikTomlProxy
-        from jupyterhub_traefik_proxy import TraefikTomlProxy
-        # configure JupyterHub to use TraefikTomlProxy
-        c.JupyterHub.proxy_class = CustomTraefikTomlProxy
-        c.TraefikTomlProxy.traefik_api_url = "http://127.0.0.1:8099"
-        c.TraefikTomlProxy.traefik_api_username = "admin"
-        c.TraefikTomlProxy.traefik_api_password = "${RAND_KEY}"
-        # c.TraefikTomlProxy.traefik_log_level = "DEBUG"  # default is INFO
+      extraConfig:
+        traefikconfig: |
+          # override the hub port so we can point the k8s service at the traefik proxy
+          #hub_container_port = 8099
+          #c.JupyterHub.hub_bind_url = f'http://:{hub_container_port}'
+
+          """Wrapper class around TraefikTomlProxy."""
+          import json
+          from urllib.parse import unquote
+          from jupyterhub_traefik_proxy import TraefikTomlProxy, traefik_utils
+
+
+          def generate_rule_to_strip_prefix(routespec):
+              """Create a traefik proxy rule.
+
+              Copied from traefik_utils.generate_rule.
+
+              Patching the hardcoded traefik matcher PathPrefix to conditionally be a
+              PathPrefixStrip matcher to not forward the path prefix.
+              """
+              routespec = unquote(routespec)
+              matcher = "PathPrefixStrip:"  # Magic word
+              if routespec.startswith("/"):
+                  # Path-based route, e.g. /proxy/path/
+                  rule = matcher + routespec
+              else:
+                  # Host-based routing, e.g. host.tld/proxy/path/
+                  host, path_prefix = routespec.split("/", 1)
+                  path_prefix = "/" + path_prefix
+                  rule = "Host:" + host + ";" + matcher + path_prefix
+              return rule
+
+          class CustomTraefikTomlProxy(TraefikTomlProxy):
+              async def add_route(self, routespec, target, data):
+                  """Add a route to the proxy.
+
+                  **Subclasses must define this method**
+
+                  Args:
+                      routespec (str): A URL prefix ([host]/path/) for which this route will be matched,
+                          e.g. host.name/path/
+                      target (str): A full URL that will be the target of this route.
+                      data (dict): A JSONable dict that will be associated with this route, and will
+                          be returned when retrieving information about this route.
+
+                  Will raise an appropriate Exception (FIXME: find what?) if the route could
+                  not be added.
+
+                  The proxy implementation should also have a way to associate the fact that a
+                  route came from JupyterHub.
+                  """
+                  routespec = self.validate_routespec(routespec)
+                  backend_alias = traefik_utils.generate_alias(routespec, "backend")
+                  frontend_alias = traefik_utils.generate_alias(routespec, "frontend")
+                  ########################Custom Code#################################
+                  """Only want to strip prefixes for the spawned servers."""
+                  if data and data.get('hub'):  # if adding the hub route, act normal
+                      rule = traefik_utils.generate_rule(routespec)
+                  else:
+                      rule = generate_rule_to_strip_prefix(routespec)
+                  ####################################################################
+                  data = json.dumps(data)
+
+                  async with self.mutex:
+                      self.routes_cache["frontends"][frontend_alias] = {
+                          "backend": backend_alias,
+                          "passHostHeader": True,
+                          "routes": {"test": {"rule": rule, "data": data}},
+                      }
+
+                      self.routes_cache["backends"][backend_alias] = {
+                          "servers": {"server1": {"url": target, "weight": 1}}
+                      }
+                      traefik_utils.persist_routes(
+                          self.toml_dynamic_config_file, self.routes_cache
+                      )
+
+                  if self.should_start:
+                      try:
+                          # Check if traefik was launched
+                          pid = self.traefik_process.pid
+                      except AttributeError:
+                          self.log.error(
+                              "You cannot add routes if the proxy isn't running! Please start the proxy: proxy.start()"
+                          )
+                          raise
+                  await self._wait_for_route(routespec, provider="file")
+
+              async def start(self):
+                  """Start the proxy.
+
+                  Will be called during startup if should_start is True.
+
+                  **Subclasses must define this method**
+                  if the proxy is to be started by the Hub
+
+                  THIS IS A METHOD OVERRIDE TO PATCH POOR BEHAVIOR IN UPSTREAM.
+                  We SPECIFICALLY do not call super().start() because
+                  the parent class does NOT properly await for configs to be set
+                  before the proxy gets launched.
+                  """
+                  await self._setup_traefik_static_config()
+                  self._start_traefik()
+                  await self._wait_for_static_config(provider="file")
+
+          # configure JupyterHub to use TraefikTomlProxy
+          c.JupyterHub.proxy_class = CustomTraefikTomlProxy
+          c.TraefikTomlProxy.traefik_api_url = "http://127.0.0.1:8099"
+          c.TraefikTomlProxy.traefik_api_username = "admin"
+          c.TraefikTomlProxy.traefik_api_password = "${RAND_KEY}"
+          # c.TraefikTomlProxy.traefik_log_level = "DEBUG"  # default is INFO
 
     EOF
     ```
