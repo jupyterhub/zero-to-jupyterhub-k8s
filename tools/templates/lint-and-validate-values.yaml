@@ -144,6 +144,9 @@ proxy:
       interNamespaceAccessLabels: accept
       allowedIngressPorts: [http, https]
   traefik:
+    extraPorts:
+    - name: ssh
+      containerPort: 22
     labels:
       hub.jupyter.org/test-label: mock
     resources:

@@ -232,6 +232,7 @@ proxy:
     extraDynamicConfig: {}
     nodeSelector: {}
     tolerations: []
+    extraPorts: []
     networkPolicy:
       enabled: true
       ingress: []
