@@ -19,3 +19,4 @@ used configurable helm chart fields.
    customizing/user-resources
    customizing/user-storage
    customizing/user-management
+   customizing/running-code-server-from-jupyterhub
