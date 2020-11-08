@@ -84,6 +84,9 @@ spec:
               containerPort: 8080
             - name: https
               containerPort: 8443
+            {{- with .Values.proxy.traefik.extraPorts }}
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- end }}
           volumeMounts:
             - name: traefik-config
               mountPath: /etc/traefik

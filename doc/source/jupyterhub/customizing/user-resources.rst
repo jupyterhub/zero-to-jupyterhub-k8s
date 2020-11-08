@@ -20,6 +20,7 @@ resource requirements as well as beginning users with more basic resource
 needs. The ability to customize the Hub's resources to satisfy both user
 groups improves the user experience for all Hub users.
 
+.. _memory-cpu-limits:
 
 Set user memory and CPU guarantees / limits
 *******************************************

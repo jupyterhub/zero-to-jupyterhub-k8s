@@ -144,6 +144,9 @@ proxy:
       interNamespaceAccessLabels: accept
       allowedIngressPorts: [http, https]
   traefik:
+    extraPorts:
+    - name: ssh
+      containerPort: 8022
     labels:
       hub.jupyter.org/test-label: mock
     resources:
@@ -383,6 +386,15 @@ scheduling:
 
 
 prePuller:
+  extraTolerations:
+    - key: "mock-taint-to-tolerates-key"
+      operator: "Equal"
+      value: "mock-taint-to-tolerates-value"
+      effect: "NoSchedule"
+    - key: "mock-taint-to-tolerates-key"
+      operator: "Equal"
+      value: "mock-taint-to-tolerates-value"
+      effect: "NoExecute"
   hook:
     enabled: true
     extraEnv:
