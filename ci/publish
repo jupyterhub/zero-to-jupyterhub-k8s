@@ -14,8 +14,8 @@ if [[ $GITHUB_REF != refs/tags/* ]]; then
     # build the same tag twice. Using --extra-message, we help automation like
     # henchbot to submit update PRs to jupyterhub/mybinder.org-deploy.
     #
-    # ref: https://github.com/jupyterhub/chartpress#usage ref:
-    # https://github.com/henchbot/mybinder.org-upgrades
+    # ref: https://github.com/jupyterhub/chartpress#usage
+    # ref: https://github.com/henchbot/mybinder.org-upgrades
     #
     # NOTE: By crafting a smart commit message for the publication commit to
     #       jupyterhub/helm-chart, we can make GitHub help us mention the
@@ -29,8 +29,8 @@ if [[ $GITHUB_REF != refs/tags/* ]]; then
     #       we craft a commit message like jupyterhub/binderhub#123 or
     #       jupyterhub/binderhub@123abcd which will be understood as a reference
     #       by GitHub.
-    PR_OR_HASH=$(git log -1 --pretty=%B | head -n1 | sed 's/^.*\(#[0-9]*\).*/\1/' | sed 's/^\([0-9a-f]*\)-.*/@\1/')
-    EXTRA_MESSAGE="${TRAVIS_REPO_SLUG}${PR_OR_HASH}"
+    PR_OR_HASH=$(git log -1 --pretty=%h-%B | head -n1 | sed 's/^.*\(#[0-9]*\).*/\1/' | sed 's/^\([0-9a-f]*\)-.*/@\1/')
+    EXTRA_MESSAGE="${GITHUB_REPOSITORY}${PR_OR_HASH}"
     chartpress --push --publish-chart --long --extra-message "${EXTRA_MESSAGE}"
 else
     # Setting a tag explicitly enforces a rebuild if this tag had already been

@@ -56,6 +56,17 @@ jobs:
         run: |
           docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
 
+      - name: Configure a git user
+        # Having a user.email and user.name configured with git is required to
+        # make commits, which is something chartpress does when publishing.
+        # While Travis CI had a dummy user by default, GitHub Actions doesn't
+        # and require this explicitly setup.
+        run: |
+          git config --global user.email "github-actions@example.local"
+          git config --global user.name "GitHub Actions user"
+
       - name: Publish images and chart with chartpress
+        env:
+          GITHUB_REPOSITORY: "${{ github.repository }}"
         run: |
           ./ci/publish
