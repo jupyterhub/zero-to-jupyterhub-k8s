@@ -2,14 +2,15 @@
 Permissions to be used by the hook-image-awaiter job
 */}}
 {{- if .Values.prePuller.hook.enabled }}
-{{- if .Values.rbac.enabled }}
+{{- if .Values.rbac.create }}
 {{- /*
 This service account...
 */ -}}
+{{- if .Values.serviceAccounts.imagePuller.create -}}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: hook-image-awaiter
+  name: {{ template "imagePuller.serviceAccountName" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
     hub.jupyter.org/deletable: "true"
@@ -17,6 +18,7 @@ metadata:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
     "helm.sh/hook-weight": "0"
+{{- end }}
 ---
 {{- /*
 ... will be used by this role...
@@ -53,7 +55,7 @@ metadata:
     "helm.sh/hook-weight": "0"
 subjects:
   - kind: ServiceAccount
-    name: hook-image-awaiter
+    name: {{ template "imagePuller.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: Role

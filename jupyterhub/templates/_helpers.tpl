@@ -12,7 +12,7 @@
 
   When you ask a helper to render its content, one often forward the current
   scope to the helper in order to allow it to access .Release.Name,
-  .Values.rbac.enabled and similar values.
+  .Values.rbac.create and similar values.
 
   #### Example - Passing the current scope
   {{ include "jupyterhub.commonLabels" . }}
@@ -125,6 +125,32 @@
 {{- $name := print (.namePrefix | default "") (include "jupyterhub.componentLabel" .) (.nameSuffix | default "") -}}
 {{ printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
 {{- end }}
+
+{{/*
+Expand the name of the chart.
+*/}}
+{{- define "jupyterhub.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "jupyterhub.fullname" -}}
+{{- if .Values.fullnameOverride -}}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- if contains $name .Release.Name -}}
+{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
 
 
 {{- /*
@@ -306,3 +332,69 @@ limits:
 {{- end }}
 {{- end }} {{- /* end of: if . */}}
 {{- end }} {{- /* end of definition */}}
+
+{{/*
+Create the name of the hub service account to use
+*/}}
+{{- define "hub.serviceAccountName" -}}
+{{- if and .Values.serviceAccounts.create .Values.serviceAccounts.hub.create -}}
+    {{ default (include "jupyterhub.fullname" .) .Values.serviceAccounts.hub.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccounts.hub.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the imagePuller service account to use
+*/}}
+{{- define "imagePuller.serviceAccountName" -}}
+{{- if and .Values.serviceAccounts.create .Values.serviceAccounts.imagePuller.create -}}
+    {{ default (include "jupyterhub.fullname" .) .Values.serviceAccounts.imagePuller.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccounts.imagePuller.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the proxy service account to use
+*/}}
+{{- define "proxy.serviceAccountName" -}}
+{{- if and .Values.serviceAccounts.create .Values.serviceAccounts.proxy.create -}}
+    {{ default (include "jupyterhub.fullname" .) .Values.serviceAccounts.proxy.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccounts.proxy.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the autohttps service account to use
+*/}}
+{{- define "autohttps.serviceAccountName" -}}
+{{- if and .Values.serviceAccounts.create .Values.serviceAccounts.autohttps.create -}}
+    {{ default (include "jupyterhub.fullname" .) .Values.serviceAccounts.autohttps.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccounts.autohttps.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the userScheduler service account to use
+*/}}
+{{- define "userScheduler.serviceAccountName" -}}
+{{- if and .Values.serviceAccounts.create .Values.serviceAccounts.userScheduler.create -}}
+    {{ default (include "jupyterhub.fullname" .) .Values.serviceAccounts.userScheduler.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccounts.userScheduler.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the userPlaceholder service account to use
+*/}}
+{{- define "userPlaceholder.serviceAccountName" -}}
+{{- if and .Values.serviceAccounts.create .Values.serviceAccounts.userPlaceholder.create -}}
+    {{ default (include "jupyterhub.fullname" .) .Values.serviceAccounts.userPlaceholder.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccounts.userPlaceholder.name }}
+{{- end -}}
+{{- end -}}

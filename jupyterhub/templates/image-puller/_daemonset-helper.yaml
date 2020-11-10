@@ -61,6 +61,9 @@ spec:
       {{- end }}
       terminationGracePeriodSeconds: 0
       automountServiceAccountToken: false
+      {{- if .Values.rbac.create }}
+      serviceAccountName: {{ template "imagePuller.serviceAccountName" . }}
+      {{- end }}
       {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.singleuser.image) }}
       imagePullSecrets: {{ . }}
       {{- end }}

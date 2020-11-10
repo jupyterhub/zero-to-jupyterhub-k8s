@@ -1,9 +1,9 @@
 {{- if .Values.rbac.create -}}
-{{- if .Values.serviceAccounts.hub.create -}}
+{{- if .Values.serviceAccounts.userPlaceholder.create -}}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: {{ template "hub.serviceAccountName" . }}
+  name: {{ template "userPlaceholder.serviceAccountName" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 {{- end }}
@@ -11,7 +11,7 @@ metadata:
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: hub
+  name: user-placeholder
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 rules:
@@ -25,15 +25,15 @@ rules:
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: hub
+  name: user-placeholder
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "hub.serviceAccountName" . }}
+    name: {{ template "userPlaceholder.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: Role
-  name: hub
+  name: user-placeholder
   apiGroup: rbac.authorization.k8s.io
 {{- end }}

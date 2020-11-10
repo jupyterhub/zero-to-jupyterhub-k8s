@@ -35,6 +35,9 @@ spec:
       {{- if .Values.scheduling.podPriority.enabled }}
       priorityClassName: {{ .Release.Name }}-default-priority
       {{- end }}
+      {{- if .Values.rbac.create }}
+      serviceAccountName: {{ template "proxy.serviceAccountName" . }}
+      {{- end }}
       nodeSelector: {{ toJson .Values.proxy.chp.nodeSelector }}
       tolerations: {{ toJson .Values.proxy.chp.tolerations }}
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}

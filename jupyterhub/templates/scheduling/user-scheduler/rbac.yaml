@@ -1,11 +1,13 @@
 {{- if .Values.scheduling.userScheduler.enabled -}}
-{{- if .Values.rbac.enabled }}
+{{- if .Values.rbac.create }}
+{{- if .Values.serviceAccounts.userScheduler.create -}}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: user-scheduler
+  name: {{ template "userScheduler.serviceAccountName" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
+{{- end }}
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
@@ -199,7 +201,7 @@ metadata:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 subjects:
   - kind: ServiceAccount
-    name: user-scheduler
+    name: {{ template "userScheduler.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole

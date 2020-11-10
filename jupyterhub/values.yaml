@@ -123,8 +123,29 @@ hub:
   existingSecret:
 
 rbac:
-  enabled: true
+  # Specifies whether RBAC resources should be created
+  create: true
 
+# Individually set the service accounts for each deployable service
+serviceAccounts:
+  hub:
+    create: true
+    name:
+  imagePuller:
+    create: true
+    name:
+  proxy:
+    create: true
+    name:
+  autohttps:
+    create: true
+    name:
+  userScheduler:
+    create: true
+    name:
+  userPlaceholder:
+    create: true
+    name:
 
 # proxy relates to the proxy pod, the proxy-public service, and the autohttps
 # pod and proxy-http service.

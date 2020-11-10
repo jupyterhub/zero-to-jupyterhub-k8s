@@ -29,8 +29,8 @@ spec:
       {{- end }}
     spec:
       restartPolicy: Never
-      {{- if .Values.rbac.enabled }}
-      serviceAccountName: hook-image-awaiter
+      {{- if .Values.rbac.create }}
+      serviceAccountName: {{ template "imagePuller.serviceAccountName" . }}
       {{- end }}
       tolerations: {{ toJson .Values.prePuller.hook.tolerations }}
       nodeSelector: {{ toJson .Values.prePuller.hook.nodeSelector }}

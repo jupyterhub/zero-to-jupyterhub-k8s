@@ -1,6 +1,6 @@
 {{- $HTTPS := (and .Values.proxy.https.hosts .Values.proxy.https.enabled) }}
 {{- $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt")) }}
-{{- if (and $autoHTTPS .Values.rbac.enabled) -}}
+{{- if (and $autoHTTPS .Values.rbac.create) -}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -20,17 +20,19 @@ metadata:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 subjects:
 - kind: ServiceAccount
-  name: autohttps
-  apiGroup:
+  name: {{ template "autohttps.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
 roleRef:
   kind: Role
   name: autohttps
   apiGroup: rbac.authorization.k8s.io
 ---
+{{- if .Values.serviceAccounts.autohttps.create -}}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: autohttps
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
+{{- end }}
 {{- end }}

@@ -27,8 +27,8 @@ spec:
         # entrypoint of all network traffic.
         checksum/static-config: {{ include "jupyterhub.traefik.yaml" . | fromYaml | merge .Values.proxy.traefik.extraStaticConfig | toYaml | sha256sum }}
     spec:
-      {{- if .Values.rbac.enabled }}
-      serviceAccountName: autohttps
+      {{- if .Values.rbac.create }}
+      serviceAccountName: {{ template "autohttps.serviceAccountName" . }}
       {{- end }}
       {{- if .Values.scheduling.podPriority.enabled }}
       priorityClassName: {{ .Release.Name }}-default-priority

@@ -41,6 +41,9 @@ spec:
         {{- include "jupyterhub.userAffinity" . | nindent 8 }}
       {{- end }}
       terminationGracePeriodSeconds: 0
+      {{- if .Values.rbac.create }}
+      serviceAccountName: {{ template "userPlaceholder.serviceAccountName" . }}
+      {{- end }}
       automountServiceAccountToken: false
       containers:
         - name: pause
