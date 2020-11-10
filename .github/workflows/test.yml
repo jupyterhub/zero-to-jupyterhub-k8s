@@ -119,6 +119,7 @@ jobs:
           helm install jupyterhub jupyterhub/jupyterhub --values dev-config.yaml
           await_jupyterhub
           await_autohttps_tls_cert_acquisition
+          await_autohttps_tls_cert_save
 
       - name: Install JupyterHub dev chart
         run: |
@@ -127,17 +128,17 @@ jobs:
           await_jupyterhub
           await_autohttps_tls_cert_acquisition
 
-      - name: Wait 1 minute for everything to be ready
-        # TODO: find out exactly which resources are slow and wait for thoses
-        # So far errors have included:
-        # - some pods not being ready
-        # - network policies not being ready
-        run: sleep 1m
       - name: Run tests
         run: |
           . ./ci/common
           # If you have problems with the tests add '--capture=no' to show stdout
-          pytest --verbose --exitfirst ./tests || (full_namespace_report && exit 1)
+          pytest --verbose --exitfirst --color=yes ./tests
+
+      - name: Provide info on failures
+        if: failure()
+        run: |
+          . ./ci/common
+          full_namespace_report
 
 
   docs_linkcheck:
