@@ -24,19 +24,21 @@ defaults:
     shell: bash
 
 jobs:
-  lint_and_validate:
+  chart_lint_and_validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
           python-version: '3.7'
+
       - name: Install dependencies
         run: |
           . ci/common
           setup_helm
           KUBEVAL_VERSION=0.15.0 setup_kubeval
           pip install yamllint
+
       - name: Lint and validate
         # NOTE: Kubernetes resource validation can only be done against
         #       Kubernetes versions with schemas available in:
@@ -52,7 +54,7 @@ jobs:
         run: tools/templates/lint-and-validate.py --kubernetes-versions 1.14.0,1.18.0
 
 
-  run_tests:
+  chart_tests:
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -138,7 +140,7 @@ jobs:
           pytest --verbose --exitfirst ./tests || (full_namespace_report && exit 1)
 
 
-  verify_documentation_links_remain_valid:
+  docs_linkcheck:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
