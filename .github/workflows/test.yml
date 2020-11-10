@@ -131,7 +131,13 @@ jobs:
         run: |
           . ./ci/common
           # If you have problems with the tests add '--capture=no' to show stdout
-          pytest --verbose --exitfirst --color=yes ./tests || (full_namespace_report && exit 1)
+          pytest --verbose --exitfirst --color=yes ./tests
+
+      - name: Provide info on failures
+        if: failure()
+        run: |
+          . ./ci/common
+          full_namespace_report
 
 
   docs_linkcheck:
