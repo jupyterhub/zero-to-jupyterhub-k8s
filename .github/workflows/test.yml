@@ -24,7 +24,7 @@ defaults:
     shell: bash
 
 jobs:
-  Lint and validate:
+  lint_and_validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -34,7 +34,7 @@ jobs:
       - name: Install dependencies
         run: |
           . ci/common
-          HELM_VERSION=v3.3.4 setup_helm
+          setup_helm
           KUBEVAL_VERSION=0.15.0 setup_kubeval
           pip install yamllint
       - name: Lint and validate
@@ -52,7 +52,7 @@ jobs:
         run: tools/templates/lint-and-validate.py --kubernetes-versions 1.14.0,1.18.0
 
 
-  Run tests:
+  run_tests:
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -65,25 +65,17 @@ jobs:
         # gain meaning on how job steps use them.
         #
         # k3s-version: https://github.com/rancher/k3s/tags
-        #
-        # FIXME: Let's rely on the latest helm version by omitting this when we
-        #        can bump beyond manics/action-k3s-helm@v0.2.1 with such support.
         include:
           - k3s-version: v1.19.3+k3s2
-            helm-version: v3.4.0
             test: install
           - k3s-version: v1.18.10+k3s2
-            helm-version: v3.4.0
             test: install
           - k3s-version: v1.17.13+k3s2
-            helm-version: v3.4.0
             test: install
           - k3s-version: v1.16.15+k3s1
-            helm-version: v3.4.0
             test: install
 
           - k3s-version: v1.19.3+k3s1
-            helm-version: v3.4.0
             test: upgrade
 
     steps:
@@ -99,7 +91,10 @@ jobs:
       - uses: manics/action-k3s-helm@v0.2.1
         with:
           k3s-version: ${{ matrix.k3s-version }}
-          helm-version: ${{ matrix.helm-version }}
+          # FIXME: Let's rely on the latest helm version by omitting this when
+          #        we can bump beyond manics/action-k3s-helm@v0.2.1 that has
+          #        such support.
+          helm-version: v3.4.0
           metrics-enabled: false
           traefik-enabled: false
           docker-enabled: true
@@ -143,7 +138,7 @@ jobs:
           pytest --verbose --exitfirst ./tests || (full_namespace_report && exit 1)
 
 
-  Verify documentation links remain valid:
+  verify_documentation_links_remain_valid:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
