@@ -40,4 +40,4 @@ fi
 
 # Let us log the changes chartpress did, it should include replacements for
 # fields in values.yaml, such as what tag for various images we are using.
-git --no-pager diff
+git --no-pager diff --color
