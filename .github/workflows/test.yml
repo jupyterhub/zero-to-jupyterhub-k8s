@@ -63,22 +63,27 @@ jobs:
         # We run this job multiple times with different parameterization
         # specified below, these parameters have no meaning on their own and
         # gain meaning on how job steps use them.
+        #
+        # k3s-version: https://github.com/rancher/k3s/tags
+        #
+        # FIXME: Let's rely on the latest helm version by omitting this when we
+        #        can bump beyond manics/action-k3s-helm@v0.2.1 with such support.
         include:
-          - k3s-version: v1.19.3+k3s1
+          - k3s-version: v1.19.3+k3s2
             helm-version: v3.4.0
             test: install
-          - k3s-version: v1.18.10+k3s1
-            helm-version: v3.3.4
+          - k3s-version: v1.18.10+k3s2
+            helm-version: v3.4.0
             test: install
-          - k3s-version: v1.17.13+k3s1
-            helm-version: v3.3.4
+          - k3s-version: v1.17.13+k3s2
+            helm-version: v3.4.0
             test: install
           - k3s-version: v1.16.15+k3s1
-            helm-version: v3.3.4
+            helm-version: v3.4.0
             test: install
 
           - k3s-version: v1.19.3+k3s1
-            helm-version: v3.3.4
+            helm-version: v3.4.0
             test: upgrade
 
     steps:
