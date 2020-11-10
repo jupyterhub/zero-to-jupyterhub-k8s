@@ -1,13 +1,30 @@
----
-name: Test
+# This is a GitHub workflow defining a set of jobs with a set of steps.
+# ref: https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions
+#
+name: Run tests
 
+# Trigger the workflow's on all PRs but only on pushed tags or commits to
+# main/master branch to avoid PRs developed in a GitHub fork's dedicated branch
+# to trigger.
 on:
   pull_request:
   push:
+    branches: [main, master]
+    tags:
+
+defaults:
+  run:
+    # Declare bash be used by default in this workflow's "run" steps.
+    #
+    # NOTE: bash will by default run with:
+    #   --noprofile: Ignore ~/.profile etc.
+    #   --norc:      Ignore ~/.bashrc etc.
+    #   -e:          Exit directly on errors
+    #   -o pipefail: Don't mask errors from a command piped into another command
+    shell: bash
 
 jobs:
-
-  lint_and_validate:
+  Lint and validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -34,14 +51,18 @@ jobs:
         #       made us not validate against versions lower than 1.14.
         run: tools/templates/lint-and-validate.py --kubernetes-versions 1.14.0,1.18.0
 
-  test_z2jh:
+
+  Run tests:
     runs-on: ubuntu-latest
-    # If a job goes on for this long it's probably hung
     timeout-minutes: 20
+
     strategy:
-      # Keep running so we can see if other tests pass
+      # Keep running even if one variation of the job fail
       fail-fast: false
       matrix:
+        # We run this job multiple times with different parameterization
+        # specified below, these parameters have no meaning on their own and
+        # gain meaning on how job steps use them.
         include:
           - k3s-version: v1.19.3+k3s1
             helm-version: v3.4.0
@@ -65,6 +86,9 @@ jobs:
         with:
           # chartpress requires the full history
           fetch-depth: 0
+
+      # Starts a k8s cluster with NetworkPolicy enforcement and installs both
+      # kubectl and helm
       - uses: manics/action-k3s-helm@v0.2.1
         with:
           k3s-version: ${{ matrix.k3s-version }}
@@ -72,13 +96,18 @@ jobs:
           metrics-enabled: false
           traefik-enabled: false
           docker-enabled: true
+
+      # NOTE: actions/setup-python@v2 make use of a cache within the GitHub base
+      #       environment and setup in a fraction of a second.
       - uses: actions/setup-python@v2
         with:
-          python-version: '3.7'
+          python-version: '3.8'
+
       - name: Install and run chartpress
         run: |
           . ./ci/common
           install_and_run_chartpress_and_pebble
+
       - name: Install latest JupyterHub version from Helm chart repo
         if: matrix.test == 'upgrade'
         run: |
@@ -86,12 +115,14 @@ jobs:
           helm install jupyterhub jupyterhub/jupyterhub --values dev-config.yaml
           await_jupyterhub
           await_autohttps_tls_cert_acquisition
+
       - name: Install JupyterHub dev chart
         run: |
           . ./ci/common
           helm upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml
           await_jupyterhub
           await_autohttps_tls_cert_acquisition
+
       - name: Wait 1 minute for everything to be ready
         # TODO: find out exactly which resources are slow and wait for thoses
         # So far errors have included:
@@ -104,19 +135,27 @@ jobs:
           # If you have problems with the tests add '--capture=no' to show stdout
           pytest --verbose --exitfirst ./tests || (full_namespace_report && exit 1)
 
-  docs_linkcheck:
+
+  Verify documentation links remain valid:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: '3.7'
+          python-version: '3.8'
+
       - name: Install deps
         run: pip install --no-cache-dir -r doc/doc-requirements.txt
+
       - name: Build and run linkcheck
         run: |
           cd doc
           make html SPHINXOPTS='-W --keep-going'
           make linkcheck
-        # Allow job to pass even if linkcheck fails
+        # Make the job not fail if this step fail. The GitHub UI will due to
+        # this signal the job to be green even though it has failures though, so
+        # manual inspection is needed at the moment. A related ticket to improve
+        # this is open.
+        #
+        # ref: https://github.com/actions/toolkit/issues/399
         continue-on-error: true
