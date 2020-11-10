@@ -116,6 +116,9 @@ docker stop $(docker container list --all --quiet --filter "name=k8s_") | xargs 
 
 ### Linux, Mac, and possibly Windows: Kubernetes setup with k3d
 
+> __IMPORTANT:__ This setup assume k3d v1, because the k3d v3 doesn't support
+> the `--docker` flag. This is tracked in [this issue](https://github.com/rancher/k3d/issues/113).
+
 [k3d](https://github.com/rancher/k3d) encapsulates k3s in containers. It is less
 mature than [k3s](https://github.com/rancher/k3s) and will require locally built
 docker images to be pushed to a dedicated registry before they can be accessed
@@ -130,13 +133,10 @@ k3d create --publish 30443:30443 --publish 32444:32444 --wait 60 \
    --server-arg --no-deploy=metrics-server \
    --server-arg --no-deploy=traefik \
    --server-arg --no-deploy=local-storage \
-   --server-arg --disable-network-policy \
-   --server-arg --flannel-backend=none
+   --server-arg --disable-network-policy
 
 # For Linux/Mac:
 export KUBECONFIG="$(k3d get-kubeconfig --name='k3s-default')"
-. ci/common    # provides the setup_calico function
-setup_calico
 
 # For Windows:
 # These instructions aren't maintained, you need to figure it out yourself =/
@@ -237,8 +237,15 @@ needing to add entries to `/etc/hosts`.
 The test suite runs outside your Kubernetes cluster.
 
 ```shell
-pytest -vx ./tests
+pytest -vx -m "not netpol" ./tests
 ```
+
+Note that we disable NetworkPolicy enforcement tests. This is because k3s native
+NetworkPolicy enforcement have an
+[issue](https://github.com/rancher/k3s/issues/947) that makes our tests fail,
+and while we workaround this in the GitHub workflow tests by manually installing
+Calico (A k8s CNI that can enforce NetworkPolicy resources), we don't provide
+instructions for this here.
 
 # Debugging
 
@@ -266,6 +273,8 @@ But if for example Chrome presents `ERR_SSL_PROTOCOL_ERROR` or Firefox presents
 `SSL_ERROR_INTERNARROR_ALERT`, then the `autohttps` pod has probably failed to
 acquire a TLS certificate from the ACME server.
 
+Some relevant debugging steps are...
+
 ```shell
 # the certificate should be available here
 kubectl exec -it deploy/autohttps -c traefik -- cat /etc/acme/acme.json
@@ -277,14 +286,23 @@ kubectl logs deploy/autohttps -c traefik
 kubectl logs deploy/pebble -c pebble
 ```
 
-If the ACME client library used by Traefik in the autohttps pod attempted to
-acquire the certificate from our ACME server (Pebble) before the Kubernetes
-cluster's DNS server or Pebble and it's DNS server had started fully, it would
-fail to acquire a certificate. For this situation, a restart of the autohttps
-pod by `kubectl delete pod -l component=autohttps` will hopefully resolve the
-issue. To avoid this in our CI system, we run the `await_dns` and `await_pebble`
-scripts in `ci/common` before we install the JupyterHub Helm chart which will
-startup the autohttps pod.
+Relevant background understanding is that the `autohttps` is running Traefik,
+which in turn is running a ACME client library called Lego. Lego will ask the
+ACME server (Pebble) to challenge it as the owner of a domain following which
+the ACME server will attempt to send out a HTTP request to the domain. Only if
+this challenge request made to the domain leads to a response by the ACME client
+asking the ACME server for the challenge, the ACME server will provide the ACME
+client with a certificate.
+
+We use Pebble as a local ACME server to make it be able to send traffic to the
+ACME client in the `autohttps` pod without needing to have a publicly exposed IP
+that Let's Encrypt staging ACME server would be able to reach.
+
+The domain name we use is `local.jovyan.org` which is a dummy domain we have
+registered to map to 127.0.0.1. If Pebble would send out a challenge from its
+pod to that domain, it would route to itself which is a problem. So, we instead
+explicitly trick our development Kubernetes cluster's DNS server, which in our
+development setup is `coredns`.
 
 ## Hub restarts
 
