@@ -337,8 +337,8 @@ limits:
 Create the name of the hub service account to use
 */}}
 {{- define "hub.serviceAccountName" -}}
-{{- if and .Values.serviceAccounts.create .Values.serviceAccounts.hub.create -}}
-    {{ default (include "jupyterhub.fullname" .) .Values.serviceAccounts.hub.name }}
+{{- if .Values.serviceAccounts.hub.create -}}
+    {{ default (printf "%s-hub" (include "jupyterhub.fullname" .)) .Values.serviceAccounts.hub.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccounts.hub.name }}
 {{- end -}}
@@ -348,8 +348,8 @@ Create the name of the hub service account to use
 Create the name of the imagePuller service account to use
 */}}
 {{- define "imagePuller.serviceAccountName" -}}
-{{- if and .Values.serviceAccounts.create .Values.serviceAccounts.imagePuller.create -}}
-    {{ default (include "jupyterhub.fullname" .) .Values.serviceAccounts.imagePuller.name }}
+{{- if  .Values.serviceAccounts.imagePuller.create -}}
+    {{ default (printf "%s-image-puller" (include "jupyterhub.fullname" .)) .Values.serviceAccounts.imagePuller.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccounts.imagePuller.name }}
 {{- end -}}
@@ -359,8 +359,8 @@ Create the name of the imagePuller service account to use
 Create the name of the proxy service account to use
 */}}
 {{- define "proxy.serviceAccountName" -}}
-{{- if and .Values.serviceAccounts.create .Values.serviceAccounts.proxy.create -}}
-    {{ default (include "jupyterhub.fullname" .) .Values.serviceAccounts.proxy.name }}
+{{- if .Values.serviceAccounts.proxy.create -}}
+    {{ default (printf "%s-proxy" (include "jupyterhub.fullname" .)) .Values.serviceAccounts.proxy.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccounts.proxy.name }}
 {{- end -}}
@@ -370,8 +370,8 @@ Create the name of the proxy service account to use
 Create the name of the autohttps service account to use
 */}}
 {{- define "autohttps.serviceAccountName" -}}
-{{- if and .Values.serviceAccounts.create .Values.serviceAccounts.autohttps.create -}}
-    {{ default (include "jupyterhub.fullname" .) .Values.serviceAccounts.autohttps.name }}
+{{- if .Values.serviceAccounts.autohttps.create -}}
+    {{ default (printf "%s-autohttps" (include "jupyterhub.fullname" .)) .Values.serviceAccounts.autohttps.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccounts.autohttps.name }}
 {{- end -}}
@@ -381,8 +381,8 @@ Create the name of the autohttps service account to use
 Create the name of the userScheduler service account to use
 */}}
 {{- define "userScheduler.serviceAccountName" -}}
-{{- if and .Values.serviceAccounts.create .Values.serviceAccounts.userScheduler.create -}}
-    {{ default (include "jupyterhub.fullname" .) .Values.serviceAccounts.userScheduler.name }}
+{{- if .Values.serviceAccounts.userScheduler.create -}}
+    {{ default (printf "%s-user-scheduler" (include "jupyterhub.fullname" .)) .Values.serviceAccounts.userScheduler.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccounts.userScheduler.name }}
 {{- end -}}
@@ -392,8 +392,8 @@ Create the name of the userScheduler service account to use
 Create the name of the userPlaceholder service account to use
 */}}
 {{- define "userPlaceholder.serviceAccountName" -}}
-{{- if and .Values.serviceAccounts.create .Values.serviceAccounts.userPlaceholder.create -}}
-    {{ default (include "jupyterhub.fullname" .) .Values.serviceAccounts.userPlaceholder.name }}
+{{- if .Values.serviceAccounts.userPlaceholder.create -}}
+    {{ default (printf "%s-user-placeholder" (include "jupyterhub.fullname" .)) .Values.serviceAccounts.userPlaceholder.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccounts.userPlaceholder.name }}
 {{- end -}}

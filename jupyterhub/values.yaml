@@ -130,22 +130,22 @@ rbac:
 serviceAccounts:
   hub:
     create: true
-    name:
+    name: ""
   imagePuller:
     create: true
-    name:
+    name: ""
   proxy:
     create: true
-    name:
+    name: ""
   autohttps:
     create: true
-    name:
+    name: ""
   userScheduler:
     create: true
-    name:
+    name: ""
   userPlaceholder:
     create: true
-    name:
+    name: ""
 
 # proxy relates to the proxy pod, the proxy-public service, and the autohttps
 # pod and proxy-http service.
