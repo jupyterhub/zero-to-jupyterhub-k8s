@@ -55,4 +55,6 @@ spec:
           securityContext:
             {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
           {{- end }}
+          resources:
+            {{- .Values.prePuller.hook.resources | toYaml | trimSuffix "\n" | nindent 12 }}
 {{- end }}
