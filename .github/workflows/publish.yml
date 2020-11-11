@@ -39,7 +39,7 @@ jobs:
         with:
           python-version: '3.8'
 
-      - name: Install dependencies (chartpress, helm)
+      - name: Install chart publishing dependencies (chartpress, helm)
         run: |
           . ./ci/common
           setup_helm
