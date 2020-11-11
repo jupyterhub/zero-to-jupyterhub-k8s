@@ -483,6 +483,10 @@ prePuller:
     podSchedulingWaitDuration: 10
     nodeSelector: {}
     tolerations: []
+    resources:
+      requests:
+        cpu: 0
+        memory: 0
   continuous:
     enabled: true
   pullProfileListImages: true
