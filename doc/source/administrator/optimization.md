@@ -259,18 +259,19 @@ following:
 
 1. Setup a node pool (with autoscaling), a certain label, and a certain taint.
 
-    If you need help on how to do this, please refer to your cloud providers
-    documentation. A node pool may be called a node group.
+    If you need help on how to label and taint your nodes in a node pool (also
+    known as node group), please refer to your cloud providers documentation.
 
-    - The label: `hub.jupyter.org/node-purpose=user`
+    - The label: `hub.jupyter.org/node-purpose=user` or `hub.jupyter.org_node-purpose=user`
 
       **NOTE**: Cloud providers often have their own labels, separate from
-      kubernetes labels, but this label must be a kubernetes label.
+      kubernetes labels, but this label must be a Kubernetes label.
 
-    - The taint: `hub.jupyter.org/dedicated=user:NoSchedule`
+    - The taint: `hub.jupyter.org/dedicated=user:NoSchedule` or `hub.jupyter.org_dedicated=user:NoSchedule`
 
-      **NOTE**: You may need to replace `/` with `_` due cloud provider
-      limitations. Both taints are tolerated by the user pods.
+    Both `/` and `_` are supported by Kubernetes and this Helm chart, but cloud
+    providers may limit you to use `_`, so using `_` is the safer choice if you
+    don't know.
 
 2. Make user pods require to be scheduled on the node pool setup above
 
@@ -281,7 +282,8 @@ following:
     during a rolling update.
 
     The default setting is to make user pods *prefer* to be scheduled on nodes
-    with the `hub.jupyter.org/node-purpose=user` label, but you can also make it
+    with either the `hub.jupyter.org/node-purpose=user` or
+    `hub.jupyter.org_node-purpose=user` label, but you can also make it
     *required* using the configuration below.
 
     ```yaml

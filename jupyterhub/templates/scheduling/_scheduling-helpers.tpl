@@ -24,6 +24,10 @@
   - key: hub.jupyter.org/node-purpose
     operator: In
     values: [user]
+- matchExpressions:
+  - key: hub.jupyter.org_node-purpose
+    operator: In
+    values: [user]
 {{- end }}
 {{- if .Values.singleuser.extraNodeAffinity.required }}
 {{- .Values.singleuser.extraNodeAffinity.required | toYaml | trimSuffix "\n" | nindent 0 }}
@@ -36,6 +40,12 @@
   preference:
     matchExpressions:
       - key: hub.jupyter.org/node-purpose
+        operator: In
+        values: [user]
+- weight: 100
+  preference:
+    matchExpressions:
+      - key: hub.jupyter.org_node-purpose
         operator: In
         values: [user]
 {{- end }}
@@ -144,6 +154,10 @@ affinity:
           - key: hub.jupyter.org/node-purpose
             operator: In
             values: [core]
+        - matchExpressions:
+          - key: hub.jupyter.org_node-purpose
+            operator: In
+            values: [core]
     {{- end }}
     {{- if $prefer }}
     preferredDuringSchedulingIgnoredDuringExecution:
@@ -151,6 +165,12 @@ affinity:
         preference:
           matchExpressions:
             - key: hub.jupyter.org/node-purpose
+              operator: In
+              values: [core]
+      - weight: 100
+        preference:
+          matchExpressions:
+            - key: hub.jupyter.org_node-purpose
               operator: In
               values: [core]
     {{- end }}

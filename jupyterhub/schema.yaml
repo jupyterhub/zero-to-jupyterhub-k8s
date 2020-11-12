@@ -1322,9 +1322,10 @@ properties:
                   - require
                 description: |
                   Decide if core pods *ignore*, *prefer* or *require* to
-                  schedule on nodes with this label:
+                  schedule on nodes with one of these labels:
                   ```
                   hub.jupyter.org/node-purpose=core
+                  hub.jupyter.org_node-purpose=core
                   ```
       userPods:
         type: object
@@ -1346,9 +1347,10 @@ properties:
                   - require
                 description: |
                   Decide if user pods *ignore*, *prefer* or *require* to
-                  schedule on nodes with this label:
+                  schedule on nodes with one of these labels:
                   ```
                   hub.jupyter.org/node-purpose=user
+                  hub.jupyter.org_node-purpose=user
                   ```
   ingress:
     type: object

@@ -186,28 +186,29 @@ if get_config('scheduling.podPriority.enabled'):
 # add node-purpose affinity
 match_node_purpose = get_config('scheduling.userPods.nodeAffinity.matchNodePurpose')
 if match_node_purpose:
-    node_selector = dict(
-        matchExpressions=[
-            dict(
-                key="hub.jupyter.org/node-purpose",
-                operator="In",
-                values=["user"],
-            )
-        ],
-    )
-    if match_node_purpose == 'prefer':
-        c.KubeSpawner.node_affinity_preferred.append(
-            dict(
-                weight=100,
-                preference=node_selector,
-            ),
+    for label in ["hub.jupyter.org/node-purpose", "hub.jupyter.org_node-purpose"]:
+        node_selector = dict(
+            matchExpressions=[
+                dict(
+                    key=label,
+                    operator="In",
+                    values=["user"],
+                )
+            ],
         )
-    elif match_node_purpose == 'require':
-        c.KubeSpawner.node_affinity_required.append(node_selector)
-    elif match_node_purpose == 'ignore':
-        pass
-    else:
-        raise ValueError("Unrecognized value for matchNodePurpose: %r" % match_node_purpose)
+        if match_node_purpose == 'prefer':
+            c.KubeSpawner.node_affinity_preferred.append(
+                dict(
+                    weight=100,
+                    preference=node_selector,
+                ),
+            )
+        elif match_node_purpose == 'require':
+            c.KubeSpawner.node_affinity_required.append(node_selector)
+        elif match_node_purpose == 'ignore':
+            pass
+        else:
+            raise ValueError("Unrecognized value for matchNodePurpose: %r" % match_node_purpose)
 
 # add dedicated-node toleration
 for key in (
