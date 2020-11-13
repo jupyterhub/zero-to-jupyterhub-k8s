@@ -21,9 +21,11 @@ The general method to modify your Kubernetes deployment is to:
    .. code-block:: bash
 
       RELEASE=jhub
+      NAMESPACE=jhub
 
       helm upgrade --cleanup-on-fail \
 		$RELEASE jupyterhub/jupyterhub \
+        --namespace $NAMESPACE
         --version=0.8.2 \
         --values config.yaml
 
@@ -34,7 +36,9 @@ The general method to modify your Kubernetes deployment is to:
 
    .. code-block:: bash
 
-      kubectl get pod --namespace jhub
+      NAMESPACE=jhub
+
+      kubectl get pod --namespace $NAMESPACE
 
 For information about the many things you can customize with changes to your
 Helm chart through values provided to its templates through ``config.yaml``, see
