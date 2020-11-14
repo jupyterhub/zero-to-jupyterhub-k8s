@@ -59,7 +59,7 @@ def lint(yamllint_config, values, kubernetes_versions, output_dir, debug):
     print("### Linting started")
     print("### 1/4 - helm lint: lint helm templates")
     helm_lint_cmd = [
-        'helm', 'lint', '../../jupyterhub',
+        'helm', 'lint', '--strict', '../../jupyterhub',
         '--values', values,
     ]
     if debug:
