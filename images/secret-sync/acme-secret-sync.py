@@ -47,6 +47,7 @@ import time
 
 from kubernetes import client, config
 
+
 def update_secret(namespace, secret_name, labels, key, value):
     """
     Update a secret object's key with the value
@@ -62,8 +63,7 @@ def update_secret(namespace, secret_name, labels, key, value):
     except client.rest.ApiException as e:
         if e.status == 404:
             secret = client.V1Secret(
-                metadata=client.V1ObjectMeta(name=secret_name, labels=labels),
-                data={}
+                metadata=client.V1ObjectMeta(name=secret_name, labels=labels), data={}
             )
             resp = v1.create_namespaced_secret(namespace=namespace, body=secret)
             logging.info(f"Created secret {secret_name} since it does not exist")
@@ -77,6 +77,7 @@ def update_secret(namespace, secret_name, labels, key, value):
         secret.data[key] = base64.standard_b64encode(value).decode()
         v1.patch_namespaced_secret(namespace=namespace, name=secret_name, body=secret)
         logging.info(f"Updated secret {secret_name} with new value for key {key}")
+
 
 def get_secret_value(namespace, secret_name, key):
     try:
@@ -96,43 +97,34 @@ def get_secret_value(namespace, secret_name, key):
         return None
     return base64.standard_b64decode(secret.data[key])
 
+
 def setup_logging():
     """
     Set up root logger
     """
-    logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s", level=logging.INFO)
+    logging.basicConfig(
+        format="%(asctime)s %(levelname)s %(message)s", level=logging.INFO
+    )
+
 
 def main():
     argparser = argparse.ArgumentParser()
-    argparser.add_argument(
-        '--namespace',
-        help='Namespace the secret exists in'
-    )
+    argparser.add_argument("--namespace", help="Namespace the secret exists in")
+
+    argparser.add_argument("action", choices=["load", "watch-save"])
 
     argparser.add_argument(
-        'action',
-        choices=['load', 'watch-save']
+        "secret_name", help="Name of secret to sync with. Will be created if needed."
     )
 
-    argparser.add_argument(
-        'secret_name',
-        help="Name of secret to sync with. Will be created if needed."
-    )
+    argparser.add_argument("key", help="Key in secret object to sync file to")
+
+    argparser.add_argument("path", help="Path in filesystem to sync to")
 
     argparser.add_argument(
-        'key',
-        help="Key in secret object to sync file to"
-    )
-
-    argparser.add_argument(
-        'path',
-        help="Path in filesystem to sync to"
-    )
-
-    argparser.add_argument(
-        '--label',
+        "--label",
         help="Labels (of form key=value) to add to the k8s secret when it is created",
-        action="append"
+        action="append",
     )
 
     args = argparser.parse_args()
@@ -145,41 +137,50 @@ def main():
             with open("/var/run/secrets/kubernetes.io/serviceaccount/namespace") as f:
                 args.namespace = f.read().strip()
         except FileNotFoundError:
-            logging.error("Can not determine a namespace, must be explicitly set with --namespace")
+            logging.error(
+                "Can not determine a namespace, must be explicitly set with --namespace"
+            )
             sys.exit(1)
 
-    if args.action == 'load':
+    if args.action == "load":
         value = get_secret_value(args.namespace, args.secret_name, args.key)
         if value:
-            with open(args.path, 'wb') as f:
+            with open(args.path, "wb") as f:
                 f.write(value)
                 os.fchmod(f.fileno(), 0o600)
-    elif args.action == 'watch-save':
+    elif args.action == "watch-save":
         labels = {}
         for label in args.label:
-            l_splits = label.split('=', 1)
+            l_splits = label.split("=", 1)
             labels[l_splits[0]] = l_splits[1]
         # FIXME: use inotifiy
         while True:
             if not os.path.exists(args.path):
-                logging.warning(f'Watched file {args.path} not found')
+                logging.warning(f"Watched file {args.path} not found")
             else:
-                with open(args.path, 'rb') as f:
+                with open(args.path, "rb") as f:
                     file_content = f.read()
 
                 if not file_content:
-                    logging.info(f'Watched file {args.path} is currently empty')
+                    logging.info(f"Watched file {args.path} is currently empty")
                 else:
                     file_dict = json.loads(file_content)
 
                     for cert_resolver in file_dict.values():
                         if cert_resolver.get("Certificates"):
-                            update_secret(args.namespace, args.secret_name, labels, args.key, file_content)
+                            update_secret(
+                                args.namespace,
+                                args.secret_name,
+                                labels,
+                                args.key,
+                                file_content,
+                            )
                             break
                     else:
-                        logging.info(f'No certificate detected in {args.path}')
+                        logging.info(f"No certificate detected in {args.path}")
 
             time.sleep(30)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

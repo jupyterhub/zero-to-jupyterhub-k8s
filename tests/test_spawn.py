@@ -23,7 +23,7 @@ def test_api(api_request):
     Tests the hub api's root endpoint (/). The hub's version should be returned.
 
     A typical jupyterhub logging response to this test:
-        
+
         [I 2019-09-25 12:03:12.051 JupyterHub log:174] 200 GET /hub/api (test@127.0.0.1) 9.57ms
     """
 
@@ -31,7 +31,6 @@ def test_api(api_request):
     r = api_request.get("")
     assert r.status_code == 200
     assert r.json().get("version", "version-missing") == jupyterhub_version
-
 
 
 def test_api_info(api_request):
@@ -120,7 +119,9 @@ def test_hub_can_talk_to_proxy(api_request, request_data):
     assert r.status_code == 200, "Failed to get /proxy"
 
 
-def test_hub_api_request_user_spawn(api_request, jupyter_user, request_data, pebble_acme_ca_cert):
+def test_hub_api_request_user_spawn(
+    api_request, jupyter_user, request_data, pebble_acme_ca_cert
+):
     """
     Tests the hub api's /users/:user/server POST endpoint. A user pod should be
     created with environment variables defined in singleuser.extraEnv etc.
@@ -146,11 +147,20 @@ def test_hub_api_request_user_spawn(api_request, jupyter_user, request_data, peb
 
         # check user pod's extra environment variable
         pod_name = server_model["state"]["pod_name"]
-        c = subprocess.run([
-            "kubectl", "exec", pod_name, "--",
-            "sh", "-c", "if [ -z $TEST_ENV_FIELDREF_TO_NAMESPACE ]; then exit 1; fi",
-        ])
-        assert c.returncode == 0, f"singleuser.extraEnv didn't lead to a mounted environment variable!"
+        c = subprocess.run(
+            [
+                "kubectl",
+                "exec",
+                pod_name,
+                "--",
+                "sh",
+                "-c",
+                "if [ -z $TEST_ENV_FIELDREF_TO_NAMESPACE ]; then exit 1; fi",
+            ]
+        )
+        assert (
+            c.returncode == 0
+        ), f"singleuser.extraEnv didn't lead to a mounted environment variable!"
     finally:
         _delete_server(api_request, jupyter_user, request_data["test_timeout"])
 
@@ -162,7 +172,9 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
     internet locations.
     """
 
-    print("asking kubespawner to spawn a server for a test user to test network policies")
+    print(
+        "asking kubespawner to spawn a server for a test user to test network policies"
+    )
     r = api_request.post("/users/" + jupyter_user + "/server")
     assert r.status_code in (201, 202)
     try:
@@ -173,33 +185,73 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
         assert server_model
         pod_name = server_model["state"]["pod_name"]
 
-        c = subprocess.run([
-            "kubectl", "exec", pod_name, "--",
-            "nslookup", "hub",
-        ])
-        assert c.returncode == 0, "DNS issue: failed to resolve 'hub' from a singleuser-server"
+        c = subprocess.run(
+            [
+                "kubectl",
+                "exec",
+                pod_name,
+                "--",
+                "nslookup",
+                "hub",
+            ]
+        )
+        assert (
+            c.returncode == 0
+        ), "DNS issue: failed to resolve 'hub' from a singleuser-server"
 
-        c = subprocess.run([
-            "kubectl", "exec", pod_name, "--",
-            "nslookup", "jupyter.org",
-        ])
-        assert c.returncode == 0, "DNS issue: failed to resolve 'jupyter.org' from a singleuser-server"
+        c = subprocess.run(
+            [
+                "kubectl",
+                "exec",
+                pod_name,
+                "--",
+                "nslookup",
+                "jupyter.org",
+            ]
+        )
+        assert (
+            c.returncode == 0
+        ), "DNS issue: failed to resolve 'jupyter.org' from a singleuser-server"
 
         # Must match CIDR in singleuser.networkPolicy.egress.
         allowed_url = "http://jupyter.org"
         blocked_url = "http://mybinder.org"
 
-        c = subprocess.run([
-            "kubectl", "exec", pod_name, "--",
-            "wget", "--quiet", "--tries=3", "--timeout=3", allowed_url,
-        ])
-        assert c.returncode == 0, f"Network issue: access to '{blocked_url}' was supposed to be allowed"
+        c = subprocess.run(
+            [
+                "kubectl",
+                "exec",
+                pod_name,
+                "--",
+                "wget",
+                "--quiet",
+                "--tries=3",
+                "--timeout=3",
+                allowed_url,
+            ]
+        )
+        assert (
+            c.returncode == 0
+        ), f"Network issue: access to '{blocked_url}' was supposed to be allowed"
 
-        c = subprocess.run([
-            "kubectl", "exec", pod_name, "--",
-            "wget", "--quiet", "--server-response", "-O-", "--tries=3", "--timeout=3", blocked_url,
-        ])
-        assert c.returncode > 0, f"Network issue: access to '{blocked_url}' was supposed to be denied"
+        c = subprocess.run(
+            [
+                "kubectl",
+                "exec",
+                pod_name,
+                "--",
+                "wget",
+                "--quiet",
+                "--server-response",
+                "-O-",
+                "--tries=3",
+                "--timeout=3",
+                blocked_url,
+            ]
+        )
+        assert (
+            c.returncode > 0
+        ), f"Network issue: access to '{blocked_url}' was supposed to be denied"
 
     finally:
         _delete_server(api_request, jupyter_user, request_data["test_timeout"])
