@@ -8,8 +8,8 @@ setup_helm () {
 
 await_pebble() {
     kubectl rollout status --watch --timeout 300s deployment/pebble \
- && kubectl rollout status --watch --timeout 300s deployment/pebble-coredns \
- || {
+        && kubectl rollout status --watch --timeout 300s deployment/pebble-coredns \
+        || {
         echo "Startup of Pebble failed!"
         kubectl describe pod -l app.kubernetes.io/name=pebble
         kubectl logs deploy/pebble --all-containers # --prefix
@@ -21,13 +21,13 @@ await_pebble() {
 
 await_jupyterhub() {
     kubectl rollout status --watch --timeout 300s deployment/proxy \
- && kubectl rollout status --watch --timeout 300s deployment/hub \
- && (
+        && kubectl rollout status --watch --timeout 300s deployment/hub \
+        && (
         if kubectl get deploy/autohttps &> /dev/null; then
             kubectl rollout status --watch --timeout 300s deployment/autohttps || exit 1
         fi
     )\
- || {
+        || {
         echo "Startup of JupyterHub failed!"
         kubectl get all
         kubectl describe pod -l component=hub
@@ -43,8 +43,8 @@ await_jupyterhub() {
 await_autohttps_tls_cert_acquisition() {
     i=0; while [ $i -ne 60 ]; do
         kubectl logs deploy/autohttps -c traefik | grep "Adding certificate" \
-        && acquired_cert=true && break \
-        || acquired_cert=false && sleep 0.5 && i=$((i + 1))
+            && acquired_cert=true && break \
+            || acquired_cert=false && sleep 0.5 && i=$((i + 1))
     done
     if [ "$acquired_cert" != "true" ]; then
         echo "Certificate acquisition failed!"
@@ -65,8 +65,8 @@ await_autohttps_tls_cert_acquisition() {
 await_autohttps_tls_cert_save() {
     i=0; while [ $i -ne 60 ]; do
         kubectl logs deploy/autohttps -c secret-sync | grep "Created secret" \
-        && saved_cert=true && break \
-        || saved_cert=false && sleep 0.5 && i=$((i + 1))
+            && saved_cert=true && break \
+            || saved_cert=false && sleep 0.5 && i=$((i + 1))
     done
     if [ "$saved_cert" != "true" ]; then
         echo "Certificate acquisition failed!"
@@ -97,26 +97,26 @@ full_namespace_report () {
 
     # if any pod has any non-ready -> show its containers' logs
     kubectl get pods -o json \
-    | jq '
+        | jq '
         .items[]
         | select(
             any(.status.containerStatuses[]?; .ready == false)
         )
-        | .metadata.name' \
-    | xargs --max-args 1 --no-run-if-empty \
-    sh -c 'printf "\nPod with non-ready container detected\n - Logs of $0:\n"; kubectl logs --all-containers $0'
+    | .metadata.name' \
+        | xargs --max-args 1 --no-run-if-empty \
+        sh -c 'printf "\nPod with non-ready container detected\n - Logs of $0:\n"; kubectl logs --all-containers $0'
 
     # if any pods that should be scheduled by the user-scheduler are pending ->
     # show user-scheduler's logs
     (
         kubectl get pods -l "component in (user-placeholder,singleuser-server)" -o json \
-        | jq -r '
+            | jq -r '
             .items[]
             | select(.status.phase == "Pending")
             | .metadata.name
         '
     ) | xargs --max-args 1 --no-run-if-empty --max-lines \
-    sh -c 'printf "\nPending user pod detected ($0)\n - Logs of deploy/user-scheduler:\n"; kubectl logs --all-containers deploy/user-scheduler'
+        sh -c 'printf "\nPending user pod detected ($0)\n - Logs of deploy/user-scheduler:\n"; kubectl logs --all-containers deploy/user-scheduler'
 
     echo ""
     echo "Just while debugging intermittent issue, lets output the logs of the hub."
