@@ -3,14 +3,11 @@
 #
 name: Test
 
-# Trigger the workflow's on all PRs but only on pushed tags or commits to
-# main/master branch to avoid PRs developed in a GitHub fork's dedicated branch
-# to trigger.
+# Trigger the workflow's on all PRs and pushes so that other contributors can
+# run tests in their own forks.
 on:
   pull_request:
   push:
-    branches: ["main", "master"]
-    tags: ["**"]
   workflow_dispatch:
 
 defaults:
