@@ -26,3 +26,8 @@ repos:
         entry: chartpress --reset
         language: system
         pass_filenames: false
+
+# The hooks in this file are automatically installed by pre-commit, but shellcheck
+# must be manually installed so it is included in .pre-commit-shellcheck.yaml
+# instead. To run it:
+#   pre-commit run --config .pre-commit-shellcheck.yaml --all-files
