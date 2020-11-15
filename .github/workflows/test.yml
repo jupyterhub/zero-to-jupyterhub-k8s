@@ -30,6 +30,8 @@ jobs:
         with:
           python-version: '3.7'
 
+      - uses: pre-commit/action@v2.0.0
+
       - name: Install dependencies
         run: |
           . ci/common
