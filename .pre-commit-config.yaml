@@ -27,6 +27,12 @@ repos:
         language: system
         pass_filenames: false
 
+  # Check chart for possible issues
+  - repo: https://github.com/gruntwork-io/pre-commit
+    rev: v0.1.10
+    hooks:
+      - id: helmlint
+
 # The hooks in this file are automatically installed by pre-commit, but shellcheck
 # must be manually installed so it is included in .pre-commit-shellcheck.yaml
 # instead. To run it:
