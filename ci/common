@@ -1,5 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 # Use https://www.shellcheck.net/ to reduce mistakes if you make changes to this file.
+#
+# shellcheck disable=SC2015
+#   Note that A && B || C is not if-then-else. C may run when A is true.
+# shellcheck disable=SC2016
+#   Expressions don't expand in single quotes, use double quotes for that.
+# shellcheck disable=SC2086
+#   Double quote to prevent globbing and word splitting.
 
 setup_helm () {
     echo "setup helm ${HELM_VERSION}"
