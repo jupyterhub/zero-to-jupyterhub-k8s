@@ -4,6 +4,50 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ## [0.10]
 
+### [0.10.3] - 2020-11-16
+
+This release contain minor enhancements and bugfix in a dependency that could
+have resulted in unwanted hub pod restarts. Helm 2.16+ has been explicitly
+required, which it should had been already in 0.10.0.
+
+Please be aware that Helm 2 has reached its end of life and won't get any
+security patches any more. We aim to drop support of Helm 2 soon to be able to
+rely on Helm 3 features.
+
+#### Enhancements made
+
+* Configurable resource requests for hook-image-awaiter [#1906](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1906) ([@consideRatio](https://github.com/consideRatio))
+* Add use_lookup_dn_username parameter for LDAP [#1903](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1903) ([@JarnoRFB](https://github.com/JarnoRFB))
+* Allow exposing extra ports in autohttps/traefik deployment [#1901](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1901) ([@yuvipanda](https://github.com/yuvipanda))
+* prePuller.extraTolerations added for the image-puller daemonsets [#1883](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1883) ([@jerkern](https://github.com/jerkern))
+
+## Bugs fixed
+
+* hub image: kubernetes 12.0.1, nativeauth 0.0.6, tornado 6.1 [#1912](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1912) ([@consideRatio](https://github.com/consideRatio))
+
+#### Maintenance and upkeep improvements
+
+* hub image: kubernetes 12.0.1, nativeauth 0.0.6, tornado 6.1 [#1912](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1912) ([@consideRatio](https://github.com/consideRatio))
+* Require helm v2.16.0 explicitly and minor CI updates [#1911](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1911) ([@consideRatio](https://github.com/consideRatio))
+* CI: make upgrades more robust and skip 1m precautionary sleep [#1904](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1904) ([@consideRatio](https://github.com/consideRatio))
+* CI: publish with helpful commit message [#1898](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1898) ([@consideRatio](https://github.com/consideRatio))
+* Replace Travis with GitHub workflow [#1896](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1896) ([@manics](https://github.com/manics))
+* Avoid harmless error in user-scheduler [#1895](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1895) ([@consideRatio](https://github.com/consideRatio))
+* removal: contributors script [#1669](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1669) ([@consideRatio](https://github.com/consideRatio))
+
+#### Documentation improvements
+
+* Update jupyterhub extension documentation to specify namespace [#1909](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1909) ([@plant99](https://github.com/plant99))
+* DOCS: Adding note on limit to guarantee ratio [#1897](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1897) ([@choldgraf](https://github.com/choldgraf))
+* Changelog for 0.10.2 [#1893](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1893) ([@consideRatio](https://github.com/consideRatio))
+
+#### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2020-10-30&to=2020-11-15&type=c))
+
+[@betatim](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Abetatim+updated%3A2020-10-30..2020-11-15&type=Issues) | [@choldgraf](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Acholdgraf+updated%3A2020-10-30..2020-11-15&type=Issues) | [@consideRatio](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2020-10-30..2020-11-15&type=Issues) | [@JarnoRFB](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AJarnoRFB+updated%3A2020-10-30..2020-11-15&type=Issues) | [@jerkern](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajerkern+updated%3A2020-10-30..2020-11-15&type=Issues) | [@manics](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2020-10-30..2020-11-15&type=Issues) | [@minrk](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aminrk+updated%3A2020-10-30..2020-11-15&type=Issues) | [@plant99](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aplant99+updated%3A2020-10-30..2020-11-15&type=Issues) | [@tirumerla](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Atirumerla+updated%3A2020-10-30..2020-11-15&type=Issues) | [@yuvipanda](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ayuvipanda+updated%3A2020-10-30..2020-11-15&type=Issues)
+
+
 ### [0.10.2] - 2020-10-30
 
 A bugfix release to add securityContext configuration on _all_ the containers in the image-puller pods, which can be needed when a k8s PodSecurityPolicy is forcing pods to startup as non-root users.
