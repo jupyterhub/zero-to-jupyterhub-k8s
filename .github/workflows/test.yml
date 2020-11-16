@@ -9,8 +9,9 @@ name: Test
 on:
   pull_request:
   push:
-    branches: [main, master]
-    tags:
+    branches: ["main", "master"]
+    tags: ["**"]
+  workflow_dispatch:
 
 defaults:
   run:
@@ -54,7 +55,7 @@ jobs:
         run: tools/templates/lint-and-validate.py --kubernetes-versions 1.14.0,1.18.0
 
 
-  chart_tests:
+  chart_test:
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
