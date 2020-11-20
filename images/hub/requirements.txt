@@ -38,11 +38,11 @@ mako==1.1.3               # via alembic
 markupsafe==1.1.1         # via jinja2, mako
 mwoauth==0.3.7            # via -r requirements.in
 nullauthenticator==1.0.0  # via -r requirements.in
-oauthenticator==0.12.0    # via -r requirements.in
+oauthenticator==0.12.1    # via -r requirements.in
 oauthlib==3.1.0           # via jupyterhub, jupyterhub-ltiauthenticator, mwoauth, requests-oauthlib
 onetimepass==1.0.1        # via jupyterhub-nativeauthenticator
 pamela==1.0.0             # via jupyterhub
-prometheus-client==0.8.0  # via jupyterhub
+prometheus-client==0.9.0  # via jupyterhub
 psycopg2-binary==2.8.6    # via -r requirements.in
 py-spy==0.3.3             # via -r requirements.in
 pyasn1-modules==0.2.8     # via google-auth
