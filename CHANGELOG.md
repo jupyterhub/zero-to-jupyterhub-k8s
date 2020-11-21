@@ -4,6 +4,22 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ## [0.10]
 
+### [0.10.4] - 2020-11-21
+
+A patch release to patch a bug in the dependency oauthenticator that made users
+have their servers spawn before they had the chance to choose a server
+configuration if c.KubeSpawner.profile_list was configured.
+
+#### Bugs fixed
+
+* hub image: bump oauthenticator and prometheus-client [#1918](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1918) ([@consideRatio](https://github.com/consideRatio))
+
+#### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2020-11-16&to=2020-11-21&type=c))
+
+[@consideRatio](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2020-11-16..2020-11-21&type=Issues) | [@manics](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2020-11-16..2020-11-21&type=Issues)
+
 ### [0.10.3] - 2020-11-16
 
 This release contain minor enhancements and bugfix in a dependency that could
