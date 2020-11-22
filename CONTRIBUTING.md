@@ -247,6 +247,21 @@ and while we workaround this in the GitHub workflow tests by manually installing
 Calico (A k8s CNI that can enforce NetworkPolicy resources), we don't provide
 instructions for this here.
 
+# Formatting and linting
+
+[pre-commit](https://pre-commit.com/) is used to autoformat and lint files in this repository.
+
+To auto-format and lint [all configurations](./.pre-commit-config.yaml) run:
+
+```shell
+pre-commit run -a
+```
+
+and commit any changes.
+
+You can configure pre-commit to automatically run as a git hook, see the [pre-commit installation instructions](https://pre-commit.com/).
+
+
 # Debugging
 
 Various things can go wrong while working with the local development
