@@ -25,6 +25,7 @@ pyjwt
 
 ## Kubernetes spawner
 jupyterhub-kubespawner
+kubernetes==10.*  # temporary pinned for performance evaluation
 
 ## Other optional dependencies for additional features
 pymysql  # mysql
