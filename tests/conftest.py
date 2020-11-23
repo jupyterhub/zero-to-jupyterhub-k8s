@@ -11,15 +11,14 @@ from urllib.parse import urlparse
 import pytest
 import yaml
 
+
 def pytest_configure(config):
     """
     A pytest hook, see:
     https://docs.pytest.org/en/2.7.3/plugins.html#_pytest.hookspec.pytest_configure
     """
     # Ignore InsecureRequestWarning associated with https:// web requests
-    config.addinivalue_line(
-        "filterwarnings", "ignore:Unverified HTTPS request"
-    )
+    config.addinivalue_line("filterwarnings", "ignore:Unverified HTTPS request")
     # register our custom markers
     config.addinivalue_line(
         "markers", "netpol: mark test that require network policy enforcement"
@@ -75,19 +74,35 @@ class JupyterRequest(object):
 
     def delete(self, api, **kwargs):
         self._setup_kwargs(kwargs)
-        return requests.delete(self.request_data["hub_url"] + api, verify=self.pebble_acme_ca_cert, **kwargs)
+        return requests.delete(
+            self.request_data["hub_url"] + api,
+            verify=self.pebble_acme_ca_cert,
+            **kwargs,
+        )
 
     def get(self, api, **kwargs):
         self._setup_kwargs(kwargs)
-        return requests.get(self.request_data["hub_url"] + api, verify=self.pebble_acme_ca_cert, **kwargs)
+        return requests.get(
+            self.request_data["hub_url"] + api,
+            verify=self.pebble_acme_ca_cert,
+            **kwargs,
+        )
 
     def post(self, api, **kwargs):
         self._setup_kwargs(kwargs)
-        return requests.post(self.request_data["hub_url"] + api, verify=self.pebble_acme_ca_cert, **kwargs)
+        return requests.post(
+            self.request_data["hub_url"] + api,
+            verify=self.pebble_acme_ca_cert,
+            **kwargs,
+        )
 
     def put(self, api, **kwargs):
         self._setup_kwargs(kwargs)
-        return requests.put(self.request_data["hub_url"] + api, verify=self.pebble_acme_ca_cert, **kwargs)
+        return requests.put(
+            self.request_data["hub_url"] + api,
+            verify=self.pebble_acme_ca_cert,
+            **kwargs,
+        )
 
 
 @pytest.fixture(scope="function")

@@ -31,12 +31,12 @@ yaml = YAML()
 here = os.path.dirname(os.path.abspath(__file__))
 chartpress_yaml = os.path.join(here, os.pardir, os.pardir, "chartpress.yaml")
 values_yaml = os.path.join(here, os.pardir, os.pardir, "jupyterhub", "values.yaml")
-dependencies_image = 'hub-dependencies'
-pip_tools_version="5.*"
+dependencies_image = "hub-dependencies"
+pip_tools_version = "5.*"
 
 
 @lru_cache()
-def build_args(image_name='hub'):
+def build_args(image_name="hub"):
     """retrieve docker build arguments from chartpress.yaml config file
 
     Args:
@@ -46,9 +46,9 @@ def build_args(image_name='hub'):
     """
     with open(chartpress_yaml) as f:
         chartpress_config = yaml.load(f)
-    chart = chartpress_config['charts'][0]
-    image_config = chart['images'][image_name]
-    return image_config.get('buildArgs', {})
+    chart = chartpress_config["charts"][0]
+    image_config = chart["images"][image_name]
+    return image_config.get("buildArgs", {})
 
 
 def build_image():
@@ -78,17 +78,17 @@ def cli():
 
 @click.command()
 @click.option(
-    '--build/--no-build',
+    "--build/--no-build",
     help="add --no-build to skip building the dependencies image prior to upgrading",
     default=True,
 )
 @click.option(
-    '--upgrade/--no-upgrade',
+    "--upgrade/--no-upgrade",
     help="--upgrade to upgrade all dependencies within the range specified in requirements.in",
     default=False,
 )
 @click.option(
-    '--upgrade-package',
+    "--upgrade-package",
     help="specify individual packages to upgrade within the range specified in requirements.in",
     multiple=True,
 )
@@ -135,7 +135,7 @@ cli.add_command(freeze)
 
 
 @click.command()
-@click.option('--build/--no-build', default=True)
+@click.option("--build/--no-build", default=True)
 def outdated(build):
     """Check for outdated dependencies with pip.
 
@@ -164,13 +164,13 @@ def outdated(build):
     outdated = json.loads(outdated_json)
     have_outdated = False
     for pkg in outdated:
-        name = pkg['name']
+        name = pkg["name"]
         # ignore some common packages that aren't relevant to our requirements.txt
-        if name in {'pip', 'setuptools', 'wheel'}:
+        if name in {"pip", "setuptools", "wheel"}:
             continue
         have_outdated = True
-        version = pkg['version']
-        latest = pkg['latest_version']
+        version = pkg["version"]
+        latest = pkg["latest_version"]
         # TODO: parser requirements.in to check if latest is in-range?
         # If they are in-range, running freeze again is enough,
         # but if they are outside the range, requirements.in needs to be updated
@@ -197,5 +197,5 @@ def outdated(build):
 cli.add_command(outdated)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cli()

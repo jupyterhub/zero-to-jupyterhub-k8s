@@ -1,0 +1,10 @@
+repos:
+  - repo: https://github.com/ambv/black
+    rev: 20.8b1
+    hooks:
+      - id: black
+        args: [--target-version=py36]
+  - repo: https://github.com/lovesegfault/beautysh
+    rev: 6.0.1
+    hooks:
+      - id: beautysh

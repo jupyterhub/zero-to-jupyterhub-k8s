@@ -18,7 +18,7 @@ def _load_config():
     Memoized to only load once
     """
     cfg = {}
-    for source in ('config', 'secret'):
+    for source in ("config", "secret"):
         path = f"/etc/jupyterhub/{source}/values.yaml"
         if os.path.exists(path):
             print(f"Loading {path}")
@@ -57,7 +57,7 @@ def get_config(key, default=None):
     """
     value = _load_config()
     # resolve path in yaml
-    for level in key.split('.'):
+    for level in key.split("."):
         if not isinstance(value, dict):
             # a parent is a scalar or null,
             # can't resolve full path
