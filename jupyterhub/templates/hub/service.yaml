@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: hub
+  name: {{ include "jupyterhub.hub.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
   annotations:

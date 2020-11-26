@@ -9,7 +9,7 @@ This service account...
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: hook-image-awaiter
+  name: {{ include "jupyterhub.hook-image-awaiter.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
     hub.jupyter.org/deletable: "true"
@@ -24,7 +24,7 @@ metadata:
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: hook-image-awaiter
+  name: {{ include "jupyterhub.hook-image-awaiter.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
     hub.jupyter.org/deletable: "true"
@@ -43,7 +43,7 @@ rules:
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: hook-image-awaiter
+  name: {{ include "jupyterhub.hook-image-awaiter.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
     hub.jupyter.org/deletable: "true"
@@ -53,11 +53,11 @@ metadata:
     "helm.sh/hook-weight": "0"
 subjects:
   - kind: ServiceAccount
-    name: hook-image-awaiter
+    name: {{ include "jupyterhub.hook-image-awaiter.fullname" . }}
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: Role
-  name: hook-image-awaiter
+  name: {{ include "jupyterhub.hook-image-awaiter.fullname" . }}
   apiGroup: rbac.authorization.k8s.io
 {{- end }}
 {{- end }}

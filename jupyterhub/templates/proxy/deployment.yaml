@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: proxy
+  name: {{ include "jupyterhub.proxy.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
@@ -33,6 +33,7 @@ spec:
     spec:
       terminationGracePeriodSeconds: 60
       {{- if .Values.scheduling.podPriority.enabled }}
+      {{- /* # FIXME: unique name */}}
       priorityClassName: {{ .Release.Name }}-default-priority
       {{- end }}
       nodeSelector: {{ toJson .Values.proxy.chp.nodeSelector }}
@@ -42,7 +43,7 @@ spec:
       volumes:
         - name: tls-secret
           secret:
-            secretName: proxy-manual-tls
+            secretName: {{ include "jupyterhub.proxy-public-manual-tls.fullname" . }}
       {{- else if $manualHTTPSwithsecret }}
       volumes:
         - name: tls-secret
@@ -60,6 +61,7 @@ spec:
             - "--ip=::"
             - "--api-ip=::"
             - --api-port=8001
+            {{- /* # FIXME: unique name */}}
             - --default-target=http://hub:$(HUB_SERVICE_PORT)
             - --error-target=http://hub:$(HUB_SERVICE_PORT)/hub/error
             {{- if $manualHTTPS }}
@@ -95,7 +97,7 @@ spec:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.hub.existingSecret | default "hub-secret" }}
+                  name: {{ include "jupyterhub.hub-secret.fullname" . }}
                   key: proxy.token
             {{- include "jupyterhub.extraEnv" .Values.proxy.chp.extraEnv | nindent 12 }}
           {{- with .Values.proxy.chp.image.pullPolicy }}

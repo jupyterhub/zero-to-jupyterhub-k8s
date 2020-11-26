@@ -35,6 +35,7 @@ c.JupyterHub.spawner_class = "kubespawner.KubeSpawner"
 # Connect to a proxy running in a different pod. Note that *_SERVICE_*
 # environment variables are set by Kubernetes for Services
 c.ConfigurableHTTPProxy.api_url = (
+    # FIXME: unique name
     f"http://proxy-api:{os.environ['PROXY_API_SERVICE_PORT']}"
 )
 c.ConfigurableHTTPProxy.should_start = False
@@ -92,6 +93,7 @@ c.JupyterHub.hub_bind_url = f"http://:{hub_container_port}"
 # hub_connect_url is the URL for connecting to the hub for use by external
 # JupyterHub services such as the proxy. Note that *_SERVICE_* environment
 # variables are set by Kubernetes for Services.
+# FIXME: unique name
 c.JupyterHub.hub_connect_url = f"http://hub:{os.environ['HUB_SERVICE_PORT']}"
 
 # implement common labels
@@ -174,6 +176,7 @@ image_pull_secrets = []
 if get_config("imagePullSecret.automaticReferenceInjection") and (
     get_config("imagePullSecret.create") or get_config("imagePullSecret.enabled")
 ):
+    # FIXME: unique name
     image_pull_secrets.append("image-pull-secret")
 if get_config("imagePullSecrets"):
     image_pull_secrets.extend(get_config("imagePullSecrets"))
@@ -184,8 +187,10 @@ if image_pull_secrets:
 
 # scheduling:
 if get_config("scheduling.userScheduler.enabled"):
+    # FIXME: unique name
     c.KubeSpawner.scheduler_name = os.environ["HELM_RELEASE_NAME"] + "-user-scheduler"
 if get_config("scheduling.podPriority.enabled"):
+    # FIXME: unique name
     c.KubeSpawner.priority_class_name = (
         os.environ["HELM_RELEASE_NAME"] + "-default-priority"
     )
