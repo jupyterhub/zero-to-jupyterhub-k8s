@@ -23,7 +23,7 @@ defaults:
 
 jobs:
   chart_lint_and_validate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -55,7 +55,7 @@ jobs:
 
 
   chart_test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     timeout-minutes: 20
 
     strategy:
@@ -142,7 +142,7 @@ jobs:
 
 
   docs_linkcheck:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
