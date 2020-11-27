@@ -308,7 +308,8 @@ if auth_type == "google":
 elif auth_type == "github":
     c.JupyterHub.authenticator_class = "oauthenticator.github.GitHubOAuthenticator"
     for trait, cfg_key in common_oauth_traits + (
-        ("github_organization_whitelist", "orgWhitelist"),
+        ("allowed_organizations", "orgWhitelist"),  # deprecated
+        ("allowed_organizations", None),
     ):
         if cfg_key is None:
             cfg_key = camelCaseify(trait)
@@ -324,8 +325,10 @@ elif auth_type == "cilogon":
 elif auth_type == "gitlab":
     c.JupyterHub.authenticator_class = "oauthenticator.gitlab.GitLabOAuthenticator"
     for trait, cfg_key in common_oauth_traits + (
-        ("gitlab_group_whitelist", None),
-        ("gitlab_project_id_whitelist", None),
+        ("gitlab_group_whitelist", None),           # deprecated
+        ("allowed_gitlab_groups", None),
+        ("gitlab_project_id_whitelist", None),      # deprecated
+        ("allowed_project_ids", None),
         ("gitlab_url", None),
     ):
         if cfg_key is None:
@@ -428,7 +431,8 @@ set_config_if_not_none(c.Authenticator, "enable_auth_state", "auth.state.enabled
 # Enable admins to access user servers
 set_config_if_not_none(c.JupyterHub, "admin_access", "auth.admin.access")
 set_config_if_not_none(c.Authenticator, "admin_users", "auth.admin.users")
-set_config_if_not_none(c.Authenticator, "whitelist", "auth.whitelist.users")
+set_config_if_not_none(c.Authenticator, "allowed_users", "auth.whitelist.users")
+set_config_if_not_none(c.Authenticator, "allowed_users", "auth.allowedUsers")
 
 c.JupyterHub.services = []
 
