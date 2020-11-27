@@ -4,6 +4,27 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ## [0.10]
 
+### [0.10.5] - 2020-11-27
+
+This release bumps the JupyterHub version from 1.2.1 to 1.2.2. See [JupyterHub's
+changelog](https://jupyterhub.readthedocs.io/en/stable/changelog.html?highlight=changelog)
+for more information.
+
+## Bugs fixed
+
+* image: bump JupyterHub to 1.2.2 from 1.2.1 for bugfixes [#1924](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1924) ([@consideRatio](https://github.com/consideRatio))
+
+#### Maintenance and upkeep improvements
+
+* pre-commit autoformat: black and beautysh [#1920](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1920) ([@manics](https://github.com/manics))
+
+#### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2020-11-21&to=2020-11-27&type=c))
+
+[@consideRatio](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2020-11-21..2020-11-27&type=Issues) | [@manics](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2020-11-21..2020-11-27&type=Issues)
+
+
 ### [0.10.4] - 2020-11-21
 
 A patch release to patch a bug in the dependency oauthenticator that made users
