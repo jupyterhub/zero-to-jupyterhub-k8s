@@ -11,7 +11,7 @@ bcrypt==3.2.0             # via jupyterhub-firstuseauthenticator, jupyterhub-nat
 cachetools==4.1.1         # via google-auth
 certifi==2020.11.8        # via kubernetes, requests
 certipy==0.1.3            # via jupyterhub
-cffi==1.14.3              # via bcrypt, cryptography
+cffi==1.14.4              # via bcrypt, cryptography
 chardet==3.0.4            # via requests
 cryptography==3.2.1       # via pyopenssl
 entrypoints==0.3          # via jupyterhub
@@ -31,7 +31,7 @@ jupyterhub-ldapauthenticator==1.3.2  # via -r requirements.in
 jupyterhub-ltiauthenticator==0.4.0  # via -r requirements.in
 jupyterhub-nativeauthenticator==0.0.6  # via -r requirements.in
 jupyterhub-tmpauthenticator==0.6  # via -r requirements.in
-jupyterhub==1.2.1         # via -r requirements.in, jupyterhub-firstuseauthenticator, jupyterhub-kubespawner, jupyterhub-ldapauthenticator, jupyterhub-ltiauthenticator, jupyterhub-nativeauthenticator, nullauthenticator, oauthenticator
+jupyterhub==1.2.2         # via -r requirements.in, jupyterhub-firstuseauthenticator, jupyterhub-kubespawner, jupyterhub-ldapauthenticator, jupyterhub-ltiauthenticator, jupyterhub-nativeauthenticator, nullauthenticator, oauthenticator
 kubernetes==12.0.1        # via jupyterhub-kubespawner
 ldap3==2.8.1              # via jupyterhub-ldapauthenticator
 mako==1.1.3               # via alembic
