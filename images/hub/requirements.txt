@@ -38,7 +38,7 @@ mako==1.1.3               # via alembic
 markupsafe==1.1.1         # via jinja2, mako
 mwoauth==0.3.7            # via -r requirements.in
 nullauthenticator==1.0.0  # via -r requirements.in
-oauthenticator==0.12.1    # via -r requirements.in
+oauthenticator==0.12.2    # via -r requirements.in
 oauthlib==3.1.0           # via jupyterhub, jupyterhub-ltiauthenticator, mwoauth, requests-oauthlib
 onetimepass==1.0.1        # via jupyterhub-nativeauthenticator
 pamela==1.0.0             # via jupyterhub
