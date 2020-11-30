@@ -4,6 +4,28 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ## [0.10]
 
+### [0.10.7] - 2020-11-30
+
+This release contains the patched version of jupyterhub/oauthenticator which contained a security issue that the 0.10.6 release of this Helm chart worked around. See https://github.com/jupyterhub/oauthenticator/security/advisories/GHSA-384w-5v3f-q499 for more information.
+
+Please don't use versions 0.10.0 - 0.10.5 and upgrade to 0.10.6 or later. If any users have been authorized during usage of 0.10.0 - 0.10.5 who should not have been, they must be deleted via the API or admin interface, [per the documentation](https://jupyterhub.readthedocs.io/en/1.2.2/getting-started/authenticators-users-basics.html#add-or-remove-users-from-the-hub).
+
+#### Bugs fixed
+
+* bump oauthenticator to 0.12.2 [#1925](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1925) ([@minrk](https://github.com/minrk))
+
+#### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2020-11-27&to=2020-11-30&type=c))
+
+[@consideRatio](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2020-11-27..2020-11-30&type=Issues) | [@manics](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2020-11-27..2020-11-30&type=Issues) | [@minrk](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aminrk+updated%3A2020-11-27..2020-11-30&type=Issues) | [@naterush](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Anaterush+updated%3A2020-11-27..2020-11-30&type=Issues)
+
+### [0.10.6] - 2020-11-27
+
+This release is a security workaround for jupyterhub/oauthenticator described in https://github.com/jupyterhub/oauthenticator/security/advisories/GHSA-384w-5v3f-q499.
+
+Please don't use versions 0.10.0 - 0.10.5 and upgrade to 0.10.6 or later. If any users have been authorized during usage of 0.10.0 - 0.10.5 who should not have been, they must be deleted via the API or admin interface, [per the documentation](https://jupyterhub.readthedocs.io/en/1.2.2/getting-started/authenticators-users-basics.html#add-or-remove-users-from-the-hub).
+
 ### [0.10.5] - 2020-11-27
 
 This release bumps the JupyterHub version from 1.2.1 to 1.2.2. See [JupyterHub's
