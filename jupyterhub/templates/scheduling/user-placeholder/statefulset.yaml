@@ -31,8 +31,7 @@ spec:
       priorityClassName: {{ include "jupyterhub.user-placeholder.priority.fullname" . }}
       {{- end }}
       {{- if .Values.scheduling.userScheduler.enabled }}
-      {{- /* # FIXME: unique name */}}
-      schedulerName: {{ .Release.Name }}-user-scheduler
+      schedulerName: {{ include "jupyterhub.user-scheduler.ref.fullname" . }}
       {{- end }}
       tolerations:
         {{- include "jupyterhub.userTolerations" . | nindent 8 }}

@@ -55,14 +55,14 @@ spec:
       containers:
         - name: chp
           image: {{ .Values.proxy.chp.image.name }}:{{ .Values.proxy.chp.image.tag }}
+          {{- $hubNameAsEnv := include "jupyterhub.hub.fullname" . | upper | replace "-" "_" }}
           command:
             - configurable-http-proxy
             - "--ip=::"
             - "--api-ip=::"
             - --api-port=8001
-            {{- /* # FIXME: unique name */}}
-            - --default-target=http://hub:$(HUB_SERVICE_PORT)
-            - --error-target=http://hub:$(HUB_SERVICE_PORT)/hub/error
+            - --default-target=http://{{ include "jupyterhub.hub.fullname" . }}:$({{ $hubNameAsEnv }}_SERVICE_PORT)
+            - --error-target=http://{{ include "jupyterhub.hub.fullname" . }}:$({{ $hubNameAsEnv }}_SERVICE_PORT)/hub/error
             {{- if $manualHTTPS }}
             - --port=8443
             - --redirect-port=8000

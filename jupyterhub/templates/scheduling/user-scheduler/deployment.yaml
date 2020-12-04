@@ -66,8 +66,7 @@ spec:
             - --config=/etc/user-scheduler/config.yaml
             - --authentication-skip-lookup=true
             {{- else }}
-            {{- /* # FIXME: unique name */}}
-            - --scheduler-name={{ .Release.Name }}-user-scheduler
+            - --scheduler-name={{ include "jupyterhub.user-scheduler.ref.fullname" . }}
             - --policy-config-file=/etc/user-scheduler/policy.cfg
             - --lock-object-name={{ include "jupyterhub.user-scheduler-lock.fullname" . }}
             - --lock-object-namespace={{ .Release.Namespace }}

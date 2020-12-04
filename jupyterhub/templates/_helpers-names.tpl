@@ -147,3 +147,12 @@ jupyterhub
 {{ .Release.Name }}-user-placeholder-priority
 {{- end }}
 {{- end }}
+
+{{- /* user-scheduler ref - a cluster wide reference */}}
+{{- define "jupyterhub.user-scheduler.ref.fullname" -}}
+{{- if (include "jupyterhub.fullname.dash" .) }}
+{{- include "jupyterhub.user-scheduler.fullname" . }}
+{{- else -}}
+{{ .Release.Name }}-user-scheduler
+{{- end }}
+{{- end }}

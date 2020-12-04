@@ -2,7 +2,6 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  {{- /* # FIXME: unique name */}}
   name: {{ include "jupyterhub.singleuser.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
