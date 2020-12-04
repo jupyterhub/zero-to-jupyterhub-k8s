@@ -28,8 +28,7 @@ spec:
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
     spec:
       {{- if .Values.scheduling.podPriority.enabled }}
-      {{- /* # FIXME: unique name */}}
-      priorityClassName: {{ .Release.Name }}-user-placeholder-priority
+      priorityClassName: {{ include "jupyterhub.user-placeholder.priority.fullname" . }}
       {{- end }}
       {{- if .Values.scheduling.userScheduler.enabled }}
       {{- /* # FIXME: unique name */}}

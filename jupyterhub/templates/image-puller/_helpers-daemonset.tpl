@@ -48,8 +48,7 @@ spec:
         per node limit all k8s clusters have.
       */}}
       {{- if and (not .hook) .Values.scheduling.podPriority.enabled }}
-      {{- /* # FIXME: unique name */}}
-      priorityClassName: {{ .Release.Name }}-user-placeholder-priority
+      priorityClassName: {{ include "jupyterhub.user-placeholder.priority.fullname" . }}
       {{- end }}
       tolerations:
         {{- include "jupyterhub.userTolerations" . | nindent 8 }}

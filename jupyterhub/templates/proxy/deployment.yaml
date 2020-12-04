@@ -33,8 +33,7 @@ spec:
     spec:
       terminationGracePeriodSeconds: 60
       {{- if .Values.scheduling.podPriority.enabled }}
-      {{- /* # FIXME: unique name */}}
-      priorityClassName: {{ .Release.Name }}-default-priority
+      priorityClassName: {{ include "jupyterhub.priority.fullname" . }}
       {{- end }}
       nodeSelector: {{ toJson .Values.proxy.chp.nodeSelector }}
       tolerations: {{ toJson .Values.proxy.chp.tolerations }}

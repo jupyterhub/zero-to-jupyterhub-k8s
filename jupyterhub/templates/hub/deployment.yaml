@@ -31,8 +31,7 @@ spec:
         {{- end }}
     spec:
       {{- if .Values.scheduling.podPriority.enabled }}
-      {{- /* # FIXME: unique name */}}
-      priorityClassName: {{ .Release.Name }}-default-priority
+      priorityClassName: {{ include "jupyterhub.priority.fullname" . }}
       {{- end }}
       nodeSelector: {{ toJson .Values.hub.nodeSelector }}
       tolerations: {{ toJson .Values.hub.tolerations }}

@@ -21,8 +21,7 @@ spec:
       serviceAccountName: {{ include "jupyterhub.user-scheduler.fullname" . }}
       {{- end }}
       {{- if .Values.scheduling.podPriority.enabled }}
-      {{- /* # FIXME: unique name */}}
-      priorityClassName: {{ .Release.Name }}-default-priority
+      priorityClassName: {{ include "jupyterhub.priority.fullname" . }}
       {{- end }}
       nodeSelector: {{ toJson .Values.scheduling.userScheduler.nodeSelector }}
       tolerations: {{ toJson .Values.scheduling.userScheduler.tolerations }}

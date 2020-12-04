@@ -124,3 +124,26 @@ serve a purpose until everything would work when using it.
 jupyterhub
 {{- end }}
 {{- end }}
+
+
+{{- /*
+    Cluster wide resources
+*/}}
+
+{{- /* Priority */}}
+{{- define "jupyterhub.priority.fullname" -}}
+{{- if (include "jupyterhub.fullname.dash" .) }}
+{{- include "jupyterhub.fullname.dash" . }}
+{{- else -}}
+{{ .Release.Name }}-default-priority
+{{- end }}
+{{- end }}
+
+{{- /* user-placeholder Priority */}}
+{{- define "jupyterhub.user-placeholder.priority.fullname" -}}
+{{- if (include "jupyterhub.fullname.dash" .) }}
+{{- include "jupyterhub.user-placeholder.fullname" . }}
+{{- else -}}
+{{ .Release.Name }}-user-placeholder-priority
+{{- end }}
+{{- end }}
