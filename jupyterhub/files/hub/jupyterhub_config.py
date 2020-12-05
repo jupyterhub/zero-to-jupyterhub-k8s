@@ -325,9 +325,9 @@ elif auth_type == "cilogon":
 elif auth_type == "gitlab":
     c.JupyterHub.authenticator_class = "oauthenticator.gitlab.GitLabOAuthenticator"
     for trait, cfg_key in common_oauth_traits + (
-        ("gitlab_group_whitelist", None),           # deprecated
+        ("gitlab_group_whitelist", None),  # deprecated
         ("allowed_gitlab_groups", None),
-        ("gitlab_project_id_whitelist", None),      # deprecated
+        ("gitlab_project_id_whitelist", None),  # deprecated
         ("allowed_project_ids", None),
         ("gitlab_url", None),
     ):
