@@ -28,7 +28,7 @@ jupyterhub-hmacauthenticator==0.1  # via -r requirements.in
 jupyterhub-idle-culler==1.0  # via -r requirements.in
 jupyterhub-kubespawner==0.14.1  # via -r requirements.in
 jupyterhub-ldapauthenticator==1.3.2  # via -r requirements.in
-jupyterhub-ltiauthenticator==0.4.0  # via -r requirements.in
+jupyterhub-ltiauthenticator==1.0.0  # via -r requirements.in
 jupyterhub-nativeauthenticator==0.0.6  # via -r requirements.in
 jupyterhub-tmpauthenticator==0.6  # via -r requirements.in
 jupyterhub==1.2.2         # via -r requirements.in, jupyterhub-firstuseauthenticator, jupyterhub-kubespawner, jupyterhub-ldapauthenticator, jupyterhub-ltiauthenticator, jupyterhub-nativeauthenticator, nullauthenticator, oauthenticator
@@ -61,7 +61,6 @@ pyyaml==5.3.1             # via jupyterhub-kubespawner, kubernetes
 requests-oauthlib==1.3.0  # via kubernetes, mwoauth
 requests==2.25.0          # via jupyterhub, kubernetes, mwoauth, requests-oauthlib
 rsa==4.6                  # via google-auth
-ruamel.yaml.clib==0.2.2   # via ruamel.yaml
 ruamel.yaml==0.16.12      # via jupyter-telemetry
 six==1.15.0               # via bcrypt, cryptography, google-auth, jsonschema, kubernetes, mwoauth, onetimepass, pyopenssl, python-dateutil, websocket-client
 sqlalchemy==1.3.20        # via alembic, jupyterhub
