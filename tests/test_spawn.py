@@ -225,8 +225,9 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
                 "--",
                 "wget",
                 "--quiet",
-                "--tries=3",
+                "--tries=5",
                 "--timeout=3",
+                "--retry-connrefused",
                 allowed_url,
             ]
         )
@@ -244,8 +245,9 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
                 "--quiet",
                 "--server-response",
                 "-O-",
-                "--tries=3",
+                "--tries=5",
                 "--timeout=3",
+                "--retry-connrefused",
                 blocked_url,
             ]
         )
