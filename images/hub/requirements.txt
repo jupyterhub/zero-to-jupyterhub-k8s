@@ -9,7 +9,7 @@ async-generator==1.10     # via jupyterhub, jupyterhub-kubespawner
 attrs==20.3.0             # via jsonschema
 bcrypt==3.2.0             # via jupyterhub-firstuseauthenticator, jupyterhub-nativeauthenticator
 cachetools==4.1.1         # via google-auth
-certifi==2020.11.8        # via kubernetes, requests
+certifi==2020.12.5        # via kubernetes, requests
 certipy==0.1.3            # via jupyterhub
 cffi==1.14.4              # via bcrypt, cryptography
 chardet==3.0.4            # via requests
@@ -28,7 +28,7 @@ jupyterhub-hmacauthenticator==0.1  # via -r requirements.in
 jupyterhub-idle-culler==1.0  # via -r requirements.in
 jupyterhub-kubespawner==0.14.1  # via -r requirements.in
 jupyterhub-ldapauthenticator==1.3.2  # via -r requirements.in
-jupyterhub-ltiauthenticator==0.4.0  # via -r requirements.in
+jupyterhub-ltiauthenticator==1.0.0  # via -r requirements.in
 jupyterhub-nativeauthenticator==0.0.6  # via -r requirements.in
 jupyterhub-tmpauthenticator==0.6  # via -r requirements.in
 jupyterhub==1.2.2         # via -r requirements.in, jupyterhub-firstuseauthenticator, jupyterhub-kubespawner, jupyterhub-ldapauthenticator, jupyterhub-ltiauthenticator, jupyterhub-nativeauthenticator, nullauthenticator, oauthenticator
@@ -38,7 +38,7 @@ mako==1.1.3               # via alembic
 markupsafe==1.1.1         # via jinja2, mako
 mwoauth==0.3.7            # via -r requirements.in
 nullauthenticator==1.0.0  # via -r requirements.in
-oauthenticator==0.12.2    # via -r requirements.in
+oauthenticator==0.12.3    # via -r requirements.in
 oauthlib==3.1.0           # via jupyterhub, jupyterhub-ltiauthenticator, mwoauth, requests-oauthlib
 onetimepass==1.0.1        # via jupyterhub-nativeauthenticator
 pamela==1.0.0             # via jupyterhub
@@ -51,7 +51,7 @@ pycparser==2.20           # via cffi
 pycurl==7.43.0.6          # via -r requirements.in
 pyjwt==1.7.1              # via -r requirements.in, mwoauth
 pymysql==0.10.1           # via -r requirements.in
-pyopenssl==19.1.0         # via certipy
+pyopenssl==20.0.0         # via certipy
 pyrsistent==0.17.3        # via jsonschema
 python-dateutil==2.8.1    # via alembic, jupyterhub, jupyterhub-idle-culler, kubernetes
 python-editor==1.0.4      # via alembic
