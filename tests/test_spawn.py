@@ -233,7 +233,7 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
         )
         assert (
             c.returncode == 0
-        ), f"Network issue: access to '{blocked_url}' was supposed to be allowed"
+        ), f"Network issue: access to '{allowed_url}' was supposed to be allowed"
 
         c = subprocess.run(
             [
