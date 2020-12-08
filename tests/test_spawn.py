@@ -193,44 +193,7 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
                 "--",
                 "nslookup",
                 "hub",
-            ]
-        )
-        assert (
-            c.returncode == 0
-        ), "DNS issue: failed to resolve 'hub' from a singleuser-server"
-
-        c = subprocess.run(
-            [
-                "kubectl",
-                "exec",
-                pod_name,
-                "--",
-                "nslookup",
-                "jupyter.org",
-            ]
-        )
-        assert (
-            c.returncode == 0
-        ), "DNS issue: failed to resolve 'jupyter.org' from a singleuser-server"
-
-        # Must match CIDR in singleuser.networkPolicy.egress.
-        allowed_url = "http://jupyter.org"
-        blocked_url = "http://mybinder.org"
-        cmd_kubectl_exec_wget = [
-            "kubectl",
-            "exec",
-            pod_name,
-            "--",
-            "wget",
-            "--server-response",
-            "--output-document=/dev/null",
-            "--tries=5",
-            "--timeout=3",
-            "--retry-connrefused",
-        ]
-
-        c = subprocess.run(
-            cmd_kubectl_exec_wget + [allowed_url],
+            ],
             text=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -240,11 +203,75 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
             print("---")
             print(c.stdout)
             raise AssertionError(
-                f"Network issue: access to '{allowed_url}' was supposed to be allowed"
+                "DNS issue: failed to resolve 'hub' from a singleuser-server"
             )
 
         c = subprocess.run(
-            cmd_kubectl_exec_wget + [blocked_url],
+            [
+                "kubectl",
+                "exec",
+                pod_name,
+                "--",
+                "nslookup",
+                "jupyter.org",
+            ],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        if c.returncode != 0:
+            print(f"Return code: {c.returncode}")
+            print("---")
+            print(c.stdout)
+            raise AssertionError(
+                "DNS issue: failed to resolve 'jupyter.org' from a singleuser-server"
+            )
+
+        # These IPs are differentiated by the NetworkPolicy shaped by the
+        # dev-config.yaml's singleuser.networkPolicy.egress configuration. If
+        # these IPs change, you can use `nslookup jupyter.org` to get new IPs.
+        # Note that we have explicitly pinned these IPs and explicitly pass the
+        # Host header in the web-request in order to avoid test failures
+        # following additional IPs are added.
+        allowed_jupyter_org_ip = "104.28.8.110"
+        blocked_jupyter_org_ip = "104.28.9.110"
+        assert (
+            allowed_jupyter_org_ip in c.stdout
+        ), f"Did the jupyter.org update its associated IPs to no longer include {allowed_jupyter_org_ip}?"
+        assert (
+            blocked_jupyter_org_ip in c.stdout
+        ), f"Did the jupyter.org update its associated IPs to no longer include {blocked_jupyter_org_ip}?"
+
+        cmd_kubectl_exec_wget = [
+            "kubectl",
+            "exec",
+            pod_name,
+            "--",
+            "wget",
+            "--header='Host: jupyter.org'",
+            "--server-response",
+            "--output-document=/dev/null",
+            "--tries=5",
+            "--timeout=3",
+            "--retry-connrefused",
+        ]
+
+        c = subprocess.run(
+            cmd_kubectl_exec_wget + [allowed_jupyter_org_ip],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        if c.returncode != 0:
+            print(f"Return code: {c.returncode}")
+            print("---")
+            print(c.stdout)
+            raise AssertionError(
+                f"Network issue: access to '{allowed_jupyter_org_ip}' was supposed to be allowed"
+            )
+
+        c = subprocess.run(
+            cmd_kubectl_exec_wget + [blocked_jupyter_org_ip],
             text=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -254,7 +281,7 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
             print("---")
             print(c.stdout)
             raise AssertionError(
-                f"Network issue: access to '{blocked_url}' was supposed to be denied"
+                f"Network issue: access to '{blocked_jupyter_org_ip}' was supposed to be denied"
             )
 
     finally:

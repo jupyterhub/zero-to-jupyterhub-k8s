@@ -60,10 +60,12 @@ singleuser:
     # For testing purposes in test_singleuser_netpol
     egress:
       - to:
+        # jupyter.org has multiple IPs associated with it, among them are these
+        # two. We explicitly allow access to one, but leave out the the other.
         - ipBlock:
-            cidr: 104.28.9.110/32       # jupyter.org 1
-        - ipBlock:
-            cidr: 104.28.8.110/32       # jupyter.org 2
+            cidr: 104.28.8.110/32
+        # - ipBlock:
+        #     cidr: 104.28.9.110/32
   extraEnv:
     TEST_ENV_FIELDREF_TO_NAMESPACE:
       valueFrom:
