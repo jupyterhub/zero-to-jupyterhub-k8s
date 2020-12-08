@@ -225,15 +225,24 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
                 "--",
                 "wget",
                 "--quiet",
+                "--server-response",
+                "--output-document=/dev/null",
                 "--tries=5",
                 "--timeout=3",
                 "--retry-connrefused",
                 allowed_url,
-            ]
+            ],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
         )
-        assert (
-            c.returncode == 0
-        ), f"Network issue: access to '{allowed_url}' was supposed to be allowed"
+        if c.returncode != 0:
+            print(f"Return code: {c.returncode}")
+            print("---")
+            print(c.stdout)
+            raise AssertionError(
+                f"Network issue: access to '{allowed_url}' was supposed to be allowed"
+            )
 
         c = subprocess.run(
             [
@@ -244,16 +253,23 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
                 "wget",
                 "--quiet",
                 "--server-response",
-                "-O-",
+                "--output-document=/dev/null",
                 "--tries=5",
                 "--timeout=3",
                 "--retry-connrefused",
                 blocked_url,
-            ]
+            ],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
         )
-        assert (
-            c.returncode > 0
-        ), f"Network issue: access to '{blocked_url}' was supposed to be denied"
+        if c.returncode == 0:
+            print(f"Return code: {c.returncode}")
+            print("---")
+            print(c.stdout)
+            raise AssertionError(
+                f"Network issue: access to '{blocked_url}' was supposed to be denied"
+            )
 
     finally:
         _delete_server(api_request, jupyter_user, request_data["test_timeout"])
