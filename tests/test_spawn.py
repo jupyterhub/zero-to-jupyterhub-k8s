@@ -216,22 +216,21 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
         # Must match CIDR in singleuser.networkPolicy.egress.
         allowed_url = "http://jupyter.org"
         blocked_url = "http://mybinder.org"
+        cmd_kubectl_exec_wget = [
+            "kubectl",
+            "exec",
+            pod_name,
+            "--",
+            "wget",
+            "--server-response",
+            "--output-document=/dev/null",
+            "--tries=5",
+            "--timeout=3",
+            "--retry-connrefused",
+        ]
 
         c = subprocess.run(
-            [
-                "kubectl",
-                "exec",
-                pod_name,
-                "--",
-                "wget",
-                "--quiet",
-                "--server-response",
-                "--output-document=/dev/null",
-                "--tries=5",
-                "--timeout=3",
-                "--retry-connrefused",
-                allowed_url,
-            ],
+            cmd_kubectl_exec_wget + [allowed_url],
             text=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -245,20 +244,7 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
             )
 
         c = subprocess.run(
-            [
-                "kubectl",
-                "exec",
-                pod_name,
-                "--",
-                "wget",
-                "--quiet",
-                "--server-response",
-                "--output-document=/dev/null",
-                "--tries=5",
-                "--timeout=3",
-                "--retry-connrefused",
-                blocked_url,
-            ],
+            cmd_kubectl_exec_wget + [blocked_url],
             text=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
