@@ -230,17 +230,13 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
         # The IPs we test against are differentiated by the NetworkPolicy shaped
         # by the dev-config.yaml's singleuser.networkPolicy.egress
         # configuration. If these IPs change, you can use `nslookup jupyter.org`
-        # to get new IPs. Note that we have explicitly pinned these IPs and
-        # explicitly pass the Host header in the web-request in order to avoid
-        # test failures following additional IPs are added.
+        # to get new IPs but beware that this response may look different over
+        # time at least on our GitHub Action runners. Note that we have
+        # explicitly pinned these IPs and explicitly pass the Host header in the
+        # web-request in order to avoid test failures following additional IPs
+        # are added.
         allowed_jupyter_org_ip = "104.28.8.110"
         blocked_jupyter_org_ip = "104.28.9.110"
-        assert (
-            allowed_jupyter_org_ip in c.stdout
-        ), f"Did the jupyter.org update its associated IPs to no longer include {allowed_jupyter_org_ip}?"
-        assert (
-            blocked_jupyter_org_ip in c.stdout
-        ), f"Did the jupyter.org update its associated IPs to no longer include {blocked_jupyter_org_ip}?"
 
         cmd_kubectl_exec = ["kubectl", "exec", pod_name, "--"]
         cmd_python_exec = ["python", "-c"]
