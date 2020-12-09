@@ -193,11 +193,18 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
                 "--",
                 "nslookup",
                 "hub",
-            ]
+            ],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
         )
-        assert (
-            c.returncode == 0
-        ), "DNS issue: failed to resolve 'hub' from a singleuser-server"
+        if c.returncode != 0:
+            print(f"Return code: {c.returncode}")
+            print("---")
+            print(c.stdout)
+            raise AssertionError(
+                "DNS issue: failed to resolve 'hub' from a singleuser-server"
+            )
 
         c = subprocess.run(
             [
@@ -207,51 +214,73 @@ def test_singleuser_netpol(api_request, jupyter_user, request_data):
                 "--",
                 "nslookup",
                 "jupyter.org",
-            ]
+            ],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
         )
-        assert (
-            c.returncode == 0
-        ), "DNS issue: failed to resolve 'jupyter.org' from a singleuser-server"
+        if c.returncode != 0:
+            print(f"Return code: {c.returncode}")
+            print("---")
+            print(c.stdout)
+            raise AssertionError(
+                "DNS issue: failed to resolve 'jupyter.org' from a singleuser-server"
+            )
 
-        # Must match CIDR in singleuser.networkPolicy.egress.
-        allowed_url = "http://jupyter.org"
-        blocked_url = "http://mybinder.org"
+        # The IPs we test against are differentiated by the NetworkPolicy shaped
+        # by the dev-config.yaml's singleuser.networkPolicy.egress
+        # configuration. If these IPs change, you can use `nslookup jupyter.org`
+        # to get new IPs but beware that this response may look different over
+        # time at least on our GitHub Action runners. Note that we have
+        # explicitly pinned these IPs and explicitly pass the Host header in the
+        # web-request in order to avoid test failures following additional IPs
+        # are added.
+        allowed_jupyter_org_ip = "104.28.8.110"
+        blocked_jupyter_org_ip = "104.28.9.110"
 
+        cmd_kubectl_exec = ["kubectl", "exec", pod_name, "--"]
+        cmd_python_exec = ["python", "-c"]
+        cmd_python_code = "import socket; s = socket.socket(); s.settimeout(3); s.connect(('{ip}', 80)); s.close();"
+        cmd_check_allowed_ip = (
+            cmd_kubectl_exec
+            + cmd_python_exec
+            + [cmd_python_code.format(ip=allowed_jupyter_org_ip)]
+        )
+        cmd_check_blocked_ip = (
+            cmd_kubectl_exec
+            + cmd_python_exec
+            + [cmd_python_code.format(ip=blocked_jupyter_org_ip)]
+        )
+
+        # check allowed jupyter.org ip connectivity
         c = subprocess.run(
-            [
-                "kubectl",
-                "exec",
-                pod_name,
-                "--",
-                "wget",
-                "--quiet",
-                "--tries=3",
-                "--timeout=3",
-                allowed_url,
-            ]
+            cmd_check_allowed_ip,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
         )
-        assert (
-            c.returncode == 0
-        ), f"Network issue: access to '{blocked_url}' was supposed to be allowed"
+        if c.returncode != 0:
+            print(f"Return code: {c.returncode}")
+            print("---")
+            print(c.stdout)
+            raise AssertionError(
+                f"Network issue: access to '{allowed_jupyter_org_ip}' was supposed to be allowed"
+            )
 
+        # check blocked jupyter.org ip connectivity
         c = subprocess.run(
-            [
-                "kubectl",
-                "exec",
-                pod_name,
-                "--",
-                "wget",
-                "--quiet",
-                "--server-response",
-                "-O-",
-                "--tries=3",
-                "--timeout=3",
-                blocked_url,
-            ]
+            cmd_check_blocked_ip,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
         )
-        assert (
-            c.returncode > 0
-        ), f"Network issue: access to '{blocked_url}' was supposed to be denied"
+        if c.returncode == 0:
+            print(f"Return code: {c.returncode}")
+            print("---")
+            print(c.stdout)
+            raise AssertionError(
+                f"Network issue: access to '{blocked_jupyter_org_ip}' was supposed to be denied"
+            )
 
     finally:
         _delete_server(api_request, jupyter_user, request_data["test_timeout"])
