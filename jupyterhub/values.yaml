@@ -242,6 +242,9 @@ proxy:
                 cidr: 0.0.0.0/0
       interNamespaceAccessLabels: ignore
       allowedIngressPorts: [http, https]
+    pdb:
+      enabled: false
+      minAvailable: 1
   secretSync:
     containerSecurityContext:
       runAsUser: 65534  # nobody user

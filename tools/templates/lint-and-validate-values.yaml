@@ -177,6 +177,8 @@ proxy:
                 cidr: 0.0.0.0/0
       interNamespaceAccessLabels: accept
       allowedIngressPorts: [http, https]
+    pdb:
+      enabled: true
   secretSync:
     resources:
       requests:
