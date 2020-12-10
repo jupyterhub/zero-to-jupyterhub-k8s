@@ -143,6 +143,8 @@ proxy:
                 cidr: 0.0.0.0/0
       interNamespaceAccessLabels: accept
       allowedIngressPorts: [http, https]
+    pdb:
+      enabled: true
   traefik:
     extraPorts:
     - name: ssh
@@ -191,8 +193,6 @@ proxy:
     mock-proxy-label: mock
   nodeSelector:
     mock-proxy-node-selector: mock
-  pdb:
-    enabled: true
   https:
     enabled: true
     type: letsencrypt
