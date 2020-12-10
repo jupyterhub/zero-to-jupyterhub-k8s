@@ -73,8 +73,6 @@ hub:
     tests:
       apiToken: mocked-api-token
   imagePullPolicy: Always
-  pdb:
-    enabled: true
   networkPolicy:
     enabled: true
     egress:
@@ -143,8 +141,6 @@ proxy:
                 cidr: 0.0.0.0/0
       interNamespaceAccessLabels: accept
       allowedIngressPorts: [http, https]
-    pdb:
-      enabled: true
   traefik:
     extraPorts:
     - name: ssh
@@ -179,8 +175,6 @@ proxy:
                 cidr: 0.0.0.0/0
       interNamespaceAccessLabels: accept
       allowedIngressPorts: [http, https]
-    pdb:
-      enabled: true
   secretSync:
     resources:
       requests:

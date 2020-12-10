@@ -81,6 +81,6 @@ directly instead.
 {{- end }}
 
 
-{{- if hasKey .Values.proxy "pdb" }}
-{{ "HARD DEPRECATION: proxy.pdb has renamed to proxy.chp.pdb" | fail }}
+{{- if or (hasKey .Values.proxy "pdb") (hasKey .Values.hub "pdb") }}
+{{ "DEPRECATION: proxy.pdb and hub.pdb are no longer created as the pods didn't support being run with multiple replicas!" }}
 {{- end }}
