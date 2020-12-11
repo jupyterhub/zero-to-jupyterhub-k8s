@@ -89,8 +89,8 @@ jobs:
       # Starts a k8s cluster with NetworkPolicy enforcement and installs both
       # kubectl and helm
       #
-      # ref: https://github.com/manics/action-k3s-helm/
-      - uses: manics/action-k3s-helm@main
+      # ref: https://github.com/jupyterhub/action-k3s-helm/
+      - uses: jupyterhub/action-k3s-helm@main
         with:
           k3s-version: ${{ matrix.k3s-version }}
           helm-version: v3.4.1

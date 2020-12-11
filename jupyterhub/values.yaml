@@ -109,16 +109,22 @@ hub:
   templatePaths: []
   templateVars: {}
   livenessProbe:
+    # The livenessProbe's aim to give JupyterHub sufficient time to startup but
+    # be able to restart if it becomes unresponsive for ~5 min.
     enabled: false
-    initialDelaySeconds: 180
+    initialDelaySeconds: 300
     periodSeconds: 10
-    failureThreshold: 3
-    timeoutSeconds: 1
+    failureThreshold: 30
+    timeoutSeconds: 3
   readinessProbe:
+    # The readinessProbe's aim is to provide a successful startup indication,
+    # but following that never become unready before its livenessProbe fail and
+    # restarts it if needed. To become unready following startup serves no
+    # purpose as there are no other pod to fallback to in our non-HA deployment.
     enabled: true
     initialDelaySeconds: 0
     periodSeconds: 2
-    failureThreshold: 3
+    failureThreshold: 1000
     timeoutSeconds: 1
   existingSecret:
 
@@ -189,6 +195,7 @@ proxy:
       enabled: true
       initialDelaySeconds: 0
       periodSeconds: 2
+      failureThreshold: 1000
     resources:
       requests:
         cpu: 200m
