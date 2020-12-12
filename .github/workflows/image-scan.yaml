@@ -1,0 +1,67 @@
+# This is a GitHub workflow defining a set of jobs with a set of steps.
+# ref: https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions
+#
+name: Image scan
+
+on:
+  schedule:
+    # At 00:00 on Monday - https://crontab.guru
+    - cron: "0 0 * * 1"
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  trivy_image_scan:
+    runs-on: ubuntu-20.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image_ref: hub
+          - image_ref: secret-sync
+          - image_ref: network-tools
+          - image_ref: image-awaiter
+          - image_ref: singleuser-sample
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # chartpress requires the full history
+          fetch-depth: 0
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Install chartpress
+        run: |
+          pip install chartpress
+
+      # charpress --list-images output lines of name:tag format. We use it with
+      # a search string in matrix.image_ref to find the specific image to scan
+      # in this job.
+      - name: Identify image name:tag
+        id: image
+        run: |
+          IMAGE=$(
+              chartpress --list-images \
+            | grep ${{ matrix.image_ref }}:
+          )
+          IMAGE_NAME=$(echo $IMAGE | sed 's/\(.*\):.*/\1/')
+          IMAGE_TAG=$(echo $IMAGE | sed 's/.*:\(.*\)/\1/')
+          echo "::set-output name=name::$IMAGE_NAME"
+          echo "::set-output name=tag::$IMAGE_TAG"
+          echo "Image identified: $IMAGE_NAME:$IMAGE_TAG"
+
+      # Action reference: https://github.com/aquasecurity/trivy-action
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ steps.image.outputs.name }}:${{ steps.image.outputs.tag }}
+          format: table
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
