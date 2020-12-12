@@ -562,10 +562,24 @@ properties:
             type: object
             description: |
               Kubernetes annotations to apply to the hub service.
-      pdb:
+      pdb: &pdb-spec
         type: object
         description: |
-          Set the Pod Disruption Budget for the hub pod.
+          Configure a PodDisruptionBudget for this Deployment.
+
+          These are disabled by default for our deployments that doesn't support
+          being run in parallel with multiple replicas. Only the user-scheduler
+          currently support being run in parallel with multiple replicas. If
+          they are enabled for a Deployment with only one replica, they will
+          block `kubectl drain` of a node for example.
+
+          Note that if you aim to block scaling down a node with the
+          hub/proxy/autohttps pod that would cause disruptions of the
+          deployment, then you should instead annotate the pod's of the
+          Deployment [as described
+          here](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#what-types-of-pods-can-prevent-ca-from-removing-a-node).
+
+              "cluster-autoscaler.kubernetes.io/safe-to-evict": "false"
 
           See [the Kubernetes
           documentation](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/)
@@ -574,11 +588,13 @@ properties:
           enabled:
             type: boolean
             description: |
-              Whether PodDisruptionBudget is enabled for the hub pod.
+              Decides if a PodDisruptionBudget is created targeting the
+              Deployment's pods.
           minAvailable:
             type: integer
             description: |
-              Minimum number of pods to be available during the voluntary disruptions.
+              The minimum number of pods required to be available during
+              voluntary disruptions.
       existingSecret:
         type:
           - string
@@ -702,6 +718,7 @@ properties:
 
               For more information, see the [Kubernetes EnvVar
               specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core).
+          pdb: *pdb-spec
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
       secretToken:
@@ -886,23 +903,6 @@ properties:
               hosts:
                 - <your-domain-name>
               ```   
-      pdb:
-        type: object
-        description: |
-          Set the Pod Disruption Budget for the proxy pod.
-
-          See [the Kubernetes
-          documentation](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/)
-          for more details about disruptions.
-        properties:
-          enabled:
-            type: boolean
-            description: |
-              Whether PodDisruptionBudget is enabled for the proxy pod.
-          minAvailable:
-            type: integer
-            description: |
-              Minimum number of pods to be available during the voluntary disruptions.
       traefik:
         type: object
         description: |
@@ -952,6 +952,7 @@ properties:
 
               For more information, see the [Kubernetes EnvVar
               specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core).
+          pdb: *pdb-spec
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
     required:
@@ -1195,23 +1196,7 @@ properties:
               You can have multiple schedulers to share the workload or improve
               availability on node failure.
           image: *image-spec
-          pdb:
-            type: object
-            description: |
-              Set the Pod Disruption Budget for the user scheduler.
-
-              See [the Kubernetes
-              documentation](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/)
-              for more details about disruptions.
-            properties:
-              enabled:
-                type: boolean
-                description: |
-                  Whether PodDisruptionBudget is enabled for the user scheduler.
-              minAvailable:
-                type: integer
-                description: |
-                  Minimum number of pods to be available during the voluntary disruptions.
+          pdb: *pdb-spec
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
       podPriority:
