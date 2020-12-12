@@ -567,15 +567,15 @@ properties:
         description: |
           Configure a PodDisruptionBudget for this Deployment.
 
-          These are disabled by default for our deployments that doesn't support
+          These are disabled by default for our deployments that don't support
           being run in parallel with multiple replicas. Only the user-scheduler
-          currently support being run in parallel with multiple replicas. If
+          currently supports being run in parallel with multiple replicas. If
           they are enabled for a Deployment with only one replica, they will
           block `kubectl drain` of a node for example.
 
           Note that if you aim to block scaling down a node with the
           hub/proxy/autohttps pod that would cause disruptions of the
-          deployment, then you should instead annotate the pod's of the
+          deployment, then you should instead annotate the pods of the
           Deployment [as described
           here](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#what-types-of-pods-can-prevent-ca-from-removing-a-node).
 
