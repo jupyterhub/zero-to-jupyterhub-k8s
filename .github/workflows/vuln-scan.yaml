@@ -56,17 +56,14 @@ jobs:
               chartpress --list-images \
             | grep ${{ matrix.image_ref }}:
           )
-          IMAGE_NAME=$(echo $IMAGE | sed 's/\(.*\):.*/\1/')
-          IMAGE_TAG=$(echo $IMAGE | sed 's/.*:\(.*\)/\1/')
-          echo "::set-output name=name::$IMAGE_NAME"
-          echo "::set-output name=tag::$IMAGE_TAG"
-          echo "Image identified: $IMAGE_NAME:$IMAGE_TAG"
+          echo "::set-output name=image::$IMAGE"
+          echo "Image identified: $IMAGE"
 
       # Action reference: https://github.com/aquasecurity/trivy-action
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ steps.image.outputs.name }}:${{ steps.image.outputs.tag }}
+          image-ref: ${{ steps.image.outputs.image }}
           format: table
           exit-code: '1'
           ignore-unfixed: true
