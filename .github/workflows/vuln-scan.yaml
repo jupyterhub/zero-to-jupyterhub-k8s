@@ -1,0 +1,74 @@
+# This is a GitHub workflow defining a set of jobs with a set of steps.
+# ref: https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions
+#
+# This workflow use aquasecurity/trivy to scan the images we have published for
+# known vulnerabilities. If there are such that can be patched, we let this
+# workflow fail to signal that unless we make an exception, which we do for the
+# singleuser-sample image only.
+#
+name: Vuln. scan
+
+on:
+  schedule:
+    # At 00:00 - https://crontab.guru
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  trivy_image_scan:
+    runs-on: ubuntu-20.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image_ref: hub
+          - image_ref: secret-sync
+          - image_ref: network-tools
+          - image_ref: image-awaiter
+          - image_ref: singleuser-sample
+            accept_trivy_failure: true
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # chartpress requires the full history
+          fetch-depth: 0
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Install chartpress
+        run: |
+          pip install chartpress
+
+      # charpress --list-images output lines of name:tag format. We use it with
+      # a search string in matrix.image_ref to find the specific image to scan
+      # in this job.
+      - name: Identify image name:tag
+        id: image
+        run: |
+          IMAGE=$(
+              chartpress --list-images \
+            | grep ${{ matrix.image_ref }}:
+          )
+          echo "::set-output name=image::$IMAGE"
+          echo "Image identified: $IMAGE"
+
+      # Action reference: https://github.com/aquasecurity/trivy-action
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ steps.image.outputs.image }}
+          format: table
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+        # Make the job not fail if this step fails and we accept_trivy failure.
+        # If we continue-on-error, the GitHub UI signal the job to be green, but
+        # report a warning as an annotation about it.
+        continue-on-error: ${{ matrix.accept_trivy_failure == true }}
