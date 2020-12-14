@@ -20,6 +20,7 @@ defaults:
 
 jobs:
   trivy_image_scan:
+    if: github.repository == 'jupyterhub/zero-to-jupyterhub-k8s'
     runs-on: ubuntu-20.04
 
     strategy:
@@ -27,21 +28,32 @@ jobs:
       matrix:
         include:
           - image_ref: hub
+            image_dir: images/hub
+            accept_failure: false
           - image_ref: secret-sync
+            image_dir: images/secret-sync
+            accept_failure: false
           - image_ref: network-tools
+            image_dir: images/network-tools
+            accept_failure: false
           - image_ref: image-awaiter
+            image_dir: images/image-awaiter
+            accept_failure: false
           - image_ref: singleuser-sample
-            accept_trivy_failure: true
+            image_dir: images/singleuser-sample
+            accept_failure: true
 
     steps:
       - uses: actions/checkout@v2
         with:
           # chartpress requires the full history
           fetch-depth: 0
+      - name: Create ./tmp dir
+        run: |
+          mkdir ./tmp
       - uses: actions/setup-python@v2
         with:
           python-version: '3.8'
-
       - name: Install chartpress
         run: |
           pip install chartpress
@@ -52,23 +64,155 @@ jobs:
       - name: Identify image name:tag
         id: image
         run: |
-          IMAGE=$(
+          IMAGE_SPEC=$(
               chartpress --list-images \
             | grep ${{ matrix.image_ref }}:
           )
-          echo "::set-output name=image::$IMAGE"
-          echo "Image identified: $IMAGE"
+          echo "Identified image: $IMAGE_SPEC"
+
+          echo "::set-output name=spec::$IMAGE_SPEC"
+          echo "::set-output name=name::$(echo $IMAGE_SPEC | sed 's/\(.*\):.*/\1/')"
+          echo "::set-output name=tag::$(echo $IMAGE_SPEC | sed 's/.*:\(.*\)/\1/')"
 
       # Action reference: https://github.com/aquasecurity/trivy-action
-      - name: Run Trivy vulnerability scanner
+      - name: Scan latest published image
+        id: scan_1
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ steps.image.outputs.image }}
-          format: table
-          exit-code: '1'
+          image-ref: ${{ steps.image.outputs.spec }}
+          format: json  # ref: https://github.com/aquasecurity/trivy#save-the-results-as-json
+          output: tmp/scan_1.json
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
-        # Make the job not fail if this step fails and we accept_trivy failure.
-        # If we continue-on-error, the GitHub UI signal the job to be green, but
-        # report a warning as an annotation about it.
-        continue-on-error: ${{ matrix.accept_trivy_failure == true }}
+          exit-code: '1'
+        # Keep running the subsequent steps of the job, they are made to
+        # explicitly adjust based on this step's outcome.
+        continue-on-error: true
+
+      # Steps below is only executing if vulnerabilities have been detected.
+      # -----------------------------------------------------------------------
+
+      - name: Rebuild image
+        id: rebuild
+        if: steps.scan_1.outcome == 'failure'
+        run: |
+          docker build -t rebuilt-image images/${{ matrix.image_ref }}
+
+      - name: Scan rebuilt image
+        id: scan_2
+        if: steps.rebuild.outcome == 'success'
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: rebuilt-image
+          format: json  # ref: https://github.com/aquasecurity/trivy#save-the-results-as-json
+          output: tmp/scan_2.json
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
+      # Analyze the scan reports. If they differ, we want to proceed and create
+      # or update a PR. We use a hash from the final scan report as an
+      # indication to rebuild or not.
+      - name: Analyze scan reports
+        id: analyze
+        if: steps.rebuild.outcome == 'success'
+        run: |
+          json_to_misc() {
+              # Count vulnerabilities
+              VULNERABILITY_COUNT=$(cat tmp/scan_$1.json | jq -r '.[].Vulnerabilities | select(. != null) | length')
+              VULNERABILITY_COUNT=${VULNERABILITY_COUNT:-0}
+              echo "VULNERABILITY_COUNT_$1=$VULNERABILITY_COUNT" >> $GITHUB_ENV
+
+              # Construct a markdown summary
+              if [[ "$VULNERABILITY_COUNT" == "0" ]]; then
+                  echo "No vulnerabilities! :tada:" >> tmp/md_summary_$1.md
+              else
+                  echo "Target | Vuln. ID | Package Name | Installed v. | Fixed v." >> tmp/md_summary_$1.md
+                  echo "-|-|-|-|-" >> tmp/md_summary_$1.md
+                  cat tmp/scan_$1.json | jq -r '.[] | select(.Vulnerabilities != null) | .Type + " | " + (.Vulnerabilities[] | .VulnerabilityID + " | " + .PkgName + " | " + .InstalledVersion + " | " + .FixedVersion)' | sort >> tmp/md_summary_$1.md
+              fi
+
+              # Use hack to set a multiline string output
+              # ref: https://github.com/actions/toolkit/issues/403#issue-593398879
+              TMP=$(cat tmp/md_summary_$1.md)
+              TMP="${TMP//'%'/'%25'}"
+              TMP="${TMP//$'\n'/'%0A'}"
+              TMP="${TMP//$'\r'/'%0D'}"
+              echo "::set-output name=md_summary_$1::$TMP"
+
+              # Calculate a hash of the markdown summary
+              HASH=$(cat tmp/md_summary_$1.md | sha1sum)
+              HASH=${HASH:0:10}
+              export HASH_$1=$HASH
+              echo "::set-output name=hash_$1::$HASH"
+          }
+
+          json_to_misc 1
+          json_to_misc 2
+
+          # Did rebuilding the image change anything?
+          if [ "$HASH_1" == "$HASH_2" ]; then
+              echo "::set-output name=proceed::no"
+              echo "No vulnerabilities were patched by rebuilding the image - won't proceed!"
+          else
+              echo "::set-output name=proceed::yes"
+              echo "Vulnerabilities were patched by rebuilding the image - will proceed!"
+          fi
+
+      - name: Describe vulnerabilities
+        if: steps.rebuild.outcome == 'success'
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: rebuilt-image
+          format: table
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
+      - name: Decision to not proceed
+        if: steps.analyze.outputs.proceed == 'no'
+        run: |
+          echo "None of the $VULNERABILITY_COUNT_1 vulnerabilities got patched by rebuilding the image :("
+          exit 1
+        continue-on-error: ${{ matrix.accept_failure == true }}
+
+      # Steps below are executed if the analyze step decided to proceed.
+      # -----------------------------------------------------------------------
+
+      # ref: https://github.com/jacobtomlinson/gha-find-replace
+      - name: Update VULN_SCAN_HASH in Dockerfile
+        if: steps.analyze.outputs.proceed == 'yes'
+        uses: jacobtomlinson/gha-find-replace@0.1.2
+        with:
+          include: "${{ matrix.image_dir }}/Dockerfile"
+          find: "#.*VULN_SCAN_HASH=.*"
+          replace: "# VULN_SCAN_HASH=${{ steps.analyze.outputs.hash_2 }}"
+
+      # The create-pull-request action is smart enough to only create/update a
+      # PR if there is a change to anything not .gitignored. A change will be
+      # made only if the analyze steps outputted hash is changed.
+      #
+      # ref: https://github.com/peter-evans/create-pull-request
+      - name: Create or update a PR
+        if: steps.analyze.outputs.proceed == 'yes'
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: "${{ secrets.GITHUB_TOKEN }}"
+          reviewers: "consideratio"
+          branch: "vuln-scan-${{ matrix.image_ref }}"
+          title: "Vulnerability patch in ${{ matrix.image_ref }}"
+          body: |
+            A rebuild of `${{ steps.image.outputs.name }}` has been found to influence the detected vulnerabilities! This PR will trigger a rebuild because it has updated a comment in the Dockerfile.
+            
+            ## About
+            This scan for known vulnerabilities has been made by [aquasecurity/trivy](https://github.com/aquasecurity/trivy). Trivy was configured to filter the vulnerabilities with the following settings:
+            - severity:       `CRITICAL,HIGH`
+            - ignore-unfixed: `true`
+
+            ## Before
+            Before trying to rebuild the image, the following vulnerabilities was detected in `${{ steps.image.outputs.spec }}`.
+
+            ${{ steps.analyze.outputs.md_summary_1 }}
+
+            ## After
+            ${{ steps.analyze.outputs.md_summary_2 }}
+          commit-message: |
+            Patch known vulnerability in ${{ matrix.image_ref }}

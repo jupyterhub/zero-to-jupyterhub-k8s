@@ -1,5 +1,6 @@
 FROM ubuntu:20.04
 
+# VULN_SCAN_HASH=
 
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=C.UTF-8
@@ -38,7 +39,7 @@ COPY requirements.txt /tmp/requirements.txt
 
 # NOTE: This is a default and will be overridden by chartpress and the
 #       dependencies script using the chartpress.yaml configuration's buildArgs
-ARG JUPYTERHUB_VERSION=1.1.*
+ARG JUPYTERHUB_VERSION=1.2.2
 
 RUN PYCURL_SSL_LIBRARY=openssl pip3 install --no-cache-dir \
          -r /tmp/requirements.txt \

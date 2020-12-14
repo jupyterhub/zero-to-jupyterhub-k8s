@@ -1,6 +1,8 @@
 # compile the code to an executable using an intermediary image
 FROM golang:1.15
 
+# VULN_SCAN_HASH=
+
 RUN mkdir -p /build/
 COPY *.mod *.go *.sum /build/
 WORKDIR /build

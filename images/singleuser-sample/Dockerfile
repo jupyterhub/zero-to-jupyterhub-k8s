@@ -3,12 +3,14 @@ FROM jupyter/base-notebook:45bfe5a474fa
 #               https://github.com/jupyter/docker-stacks/blob/master/base-notebook/Dockerfile
 # Built from... Ubuntu 18.04
 
+# VULN_SCAN_HASH=
+
 # The jupyter/docker-stacks images contains jupyterhub, jupyterlab and the
 # jupyterlab-hub extension already.
 
 ## NOTE: This is a default and be overridden by chartpress using the
 ##       chartpress.yaml configuration
-ARG JUPYTERHUB_VERSION=1.1.*
+ARG JUPYTERHUB_VERSION=1.2.2
 
 # Example install of git and nbgitpuller.
 # NOTE: git is already available in the jupyter/minimal-notebook image.

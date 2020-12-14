@@ -4,6 +4,7 @@ bin/
 .vagrant/
 tools/github.sqlite
 ci/ephemeral*
+tmp/
 
 .vscode
 
