@@ -84,3 +84,7 @@ directly instead.
 {{- if hasKey .Values.proxy "pdb" }}
 {{ "HARD DEPRECATION: proxy.pdb has renamed to proxy.chp.pdb" | fail }}
 {{- end }}
+
+{{- if .Values.auth }}
+{{- print "\n\n" (include "jupyterhub.authDep.remapOldToNew" .) | fail }}
+{{- end }}
