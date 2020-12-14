@@ -1,6 +1,11 @@
 # This is a GitHub workflow defining a set of jobs with a set of steps.
 # ref: https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions
 #
+# This workflow use aquasecurity/trivy to scan the images we have published for
+# known vulnerabilities. If there are such that can be patched, we let this
+# workflow fail to signal that unless we make an exception, which we do for the
+# singleuser-sample image only.
+#
 name: Vuln. scan
 
 on:
@@ -26,6 +31,7 @@ jobs:
           - image_ref: network-tools
           - image_ref: image-awaiter
           - image_ref: singleuser-sample
+            accept_trivy_failure: true
 
     steps:
       - uses: actions/checkout@v2
@@ -65,3 +71,7 @@ jobs:
           exit-code: '1'
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
+        # Make the job not fail if this step fails and we accept_trivy failure.
+        # If we continue-on-error, the GitHub UI signal the job to be green, but
+        # report a warning as an annotation about it.
+        continue-on-error: ${{ matrix.accept_trivy_failure == true }}
