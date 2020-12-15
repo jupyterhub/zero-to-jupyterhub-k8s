@@ -29,6 +29,7 @@ jobs:
   # ref: https://hub.docker.com/orgs/jupyterhub
   #
   publish:
+    if: github.repository == 'jupyterhub/zero-to-jupyterhub-k8s'
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
