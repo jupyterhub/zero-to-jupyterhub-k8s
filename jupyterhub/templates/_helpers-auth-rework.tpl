@@ -76,16 +76,6 @@ mediawiki.indexUrl: MWOAuthenticator.index_url
 globus.clientId: GlobusOAuthenticator.client_id
 globus.clientSecret: GlobusOAuthenticator.client_secret
 globus.callbackUrl: GlobusOAuthenticator.oauth_callback_url
-#
-#   jupyterhub-hmacauthenticator > 0.1 is required for this.
-#
-#   A string value isn't accepted in 0.1, and raw bytes cannot
-#   be represented in YAML, so bytes.fromhex() needs to be
-#   applied unless we update jupyterhub-hmacauthenticator to do
-#   it for us.
-#
-#   ref: https://github.com/yuvipanda/jupyterhub-hmacauthenticator/pull/3
-#
 hmac.secretKey: HMACAuthenticator.secret_key
 dummy.password: DummyAuthenticator.password
 lti.consumers: LTIAuthenticator.consumers
