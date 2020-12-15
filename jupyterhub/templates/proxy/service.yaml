@@ -4,7 +4,7 @@
 {{- $manualHTTPSwithsecret := and $enabled (eq .Values.proxy.https.type "secret") -}}
 {{- $offloadHTTPS := and $enabled (eq .Values.proxy.https.type "offload") -}}
 {{- $valid := or $autoHTTPS (or $manualHTTPS (or $manualHTTPSwithsecret $offloadHTTPS)) -}}
-{{- $HTTPS := and $enabled $valid  -}}
+{{- $HTTPS := and $enabled $valid -}}
 apiVersion: v1
 kind: Service
 metadata:
