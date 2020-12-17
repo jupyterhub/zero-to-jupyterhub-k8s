@@ -1,15 +1,22 @@
 # dependabot.yml reference: https://docs.github.com/en/free-pro-team@latest/github/administering-a-repository/configuration-options-for-dependency-updates
 version: 2
 updates:
-# Automatically update python packages for the jupyterhub/k8s-hub image
-- package-ecosystem: pip
-  directory: "/images/hub"
-  schedule:
-    interval: daily
-  open-pull-requests-limit: 4
-  versioning-strategy: lockfile-only
-  labels:
-    - maintenance
-    - dependencies
-  commit-message:
-    prefix: "hub image: "
+  # Maintain Python dependencies for the jupyterhub/k8s-hub image
+  - package-ecosystem: pip
+    directory: "/images/hub"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 4
+    versioning-strategy: lockfile-only
+    labels:
+      - maintenance
+      - dependencies
+
+  # Maintain dependencies in our GitHub Workflows
+  - package-ecosystem: "github-actions"
+    directory: "/"  # This should be / rather than .github/workflows
+    schedule:
+      interval: daily
+    labels:
+      - maintenance
+      - dependencies
