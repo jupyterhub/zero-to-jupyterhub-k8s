@@ -10,14 +10,9 @@ charts:
         valuesPath: proxy.secretSync.image
       hub:
         valuesPath: hub.image
-        buildArgs:
-          # NOTE: Also bump the Chart.yaml's appVersion if this is bumped
-          JUPYTERHUB_VERSION: 1.2.2
       network-tools:
         valuesPath: singleuser.networkTools.image
       image-awaiter:
         valuesPath: prePuller.hook.image
       singleuser-sample:
         valuesPath: singleuser.image
-        buildArgs:
-          JUPYTERHUB_VERSION: 1.2.2
