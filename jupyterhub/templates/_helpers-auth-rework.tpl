@@ -152,7 +152,7 @@ ldap.dn.user.useLookupName: LDAPAuthenticator.use_lookup_dn_username
 
 {{- define "jupyterhub.authDep.remapOldToNew" -}}
     {{- $c := dict }}
-    {{- $result := dict "c" $c }}
+    {{- $result := (dict "hub" (dict "config" $c)) }}
     {{- /*
         Flattens the config in .Values.auth to a format of
         "keyX.keyY...": "value". Writes output to $c.
