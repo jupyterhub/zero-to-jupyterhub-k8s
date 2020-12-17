@@ -21,7 +21,7 @@ RUN apt-get update && \
       curl \
       dnsutils \
       && \
-    apt-get purge && apt-get clean
+    rm -rf /var/lib/apt/lists/*
 
 ARG NB_USER=jovyan
 ARG NB_UID=1000
