@@ -306,3 +306,39 @@ limits:
 {{- end }}
 {{- end }} {{- /* end of: if . */}}
 {{- end }} {{- /* end of definition */}}
+
+{{- /*
+  jupyterhub.digToJson:
+    This is a workaround to not having a function like dig available yet
+    as it was added to recently to the helper library called sprig used
+    by helm.
+
+    ref: http://masterminds.github.io/sprig/dicts.html
+    ref: https://github.com/Masterminds/sprig/pull/254
+*/}}
+{{- define "jupyterhub.digToJson" -}}
+    {{- $path := index . 0 }}
+    {{- $context := index . 1 }}
+    {{- $path_parts := splitList "." $path }}
+    {{- range $i, $p := $path_parts }}
+        {{- if eq (add 1 $i) (len $path_parts) }}
+            {{- index ($context | default dict) $p | toJson }}
+        {{- else }}
+            {{- $context = index ($context | default dict) $p }}
+        {{- end }}
+    {{- end }}
+{{- end }}
+
+{{- /*
+  jupyterhub.digToTrue:
+    This is a helper to translate digToJson to a truthy value.
+
+    Note that the "[]" equality check is a workaround of
+    https://github.com/helm/helm/issues/9153.
+*/}}
+{{- define "jupyterhub.digToTrue" -}}
+{{- $json_string := include "jupyterhub.digToJson" . }}
+{{- if and ($json_string | fromJson) (ne $json_string "[]") }}
+true
+{{- end }}
+{{- end }}
