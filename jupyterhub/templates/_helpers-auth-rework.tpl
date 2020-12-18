@@ -39,6 +39,7 @@ ldap: ldapauthenticator.LDAPAuthenticator
 {{- define "jupyterhub.authDep.remapOldToNew.map" }}
 scopes: OAuthenticator.scope
 state.enabled: Authenticator.enable_auth_state
+state.cryptoKey: CryptKeeper.keys
 admin.access: JupyterHub.admin_access
 admin.users: Authenticator.admin_users
 whitelist.users: Authenticator.allowed_users
@@ -139,12 +140,21 @@ ldap.dn.user.useLookupName: LDAPAuthenticator.use_lookup_dn_username
         {{- end }}
         {{- $_ := unset $c $key }}
         {{- $class_dot_new_key := include "jupyterhub.authDep.remapOldToNew.single" $key }}
+
+        {{- /* Manage unrecognized config */}}
         {{- if eq $class_dot_new_key "<no value>" }}
             {{- if not (hasKey $c "WarningUnrecognizedConfig") }}
                 {{- $_ := set $c "WarningUnrecognizedConfig" dict }}
             {{- end }}
             {{- $_ := set (index $c "WarningUnrecognizedConfig") $key $val }}
+
         {{- else }}
+            {{- /* Config value transformations if needed */}}
+            {{- if eq $key "state.cryptoKey" }}
+                {{- $val = list $val }}
+            {{- end }}
+
+            {{- /* De-flatten the "ClassName.config_name" like strings */}}
             {{- $class := splitList "." $class_dot_new_key | first }}
             {{- $new_key := splitList "." $class_dot_new_key | last }}
             {{- if not (hasKey $c $class) }}

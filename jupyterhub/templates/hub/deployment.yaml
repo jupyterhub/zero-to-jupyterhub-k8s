@@ -161,13 +161,6 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.hub.existingSecret | default "hub-secret" }}
                   key: proxy.token
-            {{- if .Values.auth.state.enabled }}
-            - name: JUPYTERHUB_CRYPT_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.hub.existingSecret | default "hub-secret" }}
-                  key: auth.state.crypto-key
-            {{- end }}
             {{- if .Values.hub.db.password }}
             {{- if eq .Values.hub.db.type "mysql" }}
             - name: MYSQL_PWD
