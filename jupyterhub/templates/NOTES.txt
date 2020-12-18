@@ -86,5 +86,5 @@ directly instead.
 {{- end }}
 
 {{- if .Values.auth }}
-{{- print "\n\n" (include "jupyterhub.authDep.remapOldToNew" .) | fail }}
+{{ include "jupyterhub.authDep.remapOldToNew" . | fail }}
 {{- end }}

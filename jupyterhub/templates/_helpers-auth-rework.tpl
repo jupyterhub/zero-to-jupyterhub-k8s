@@ -131,21 +131,26 @@ ldap.dn.user.useLookupName: LDAPAuthenticator.use_lookup_dn_username
     in a passed dict which is assumed to be empty.
 */}}
 {{- define "jupyterhub.authDep.remapOldToNew.mappable" -}}
-    {{- range $key, $val := . }}
-        {{- $_ := unset $ $key }}
+    {{- $c := index . 0 }}
+    {{- $censorHelp := index . 1 }}
+    {{- range $key, $val := $c }}
+        {{- if $censorHelp }}
+            {{- $val = "***" }}
+        {{- end }}
+        {{- $_ := unset $c $key }}
         {{- $class_dot_new_key := include "jupyterhub.authDep.remapOldToNew.single" $key }}
         {{- if eq $class_dot_new_key "<no value>" }}
-            {{- if not (hasKey $ "WarningUnrecognizedConfig") }}
-                {{- $_ := set $ "WarningUnrecognizedConfig" dict }}
+            {{- if not (hasKey $c "WarningUnrecognizedConfig") }}
+                {{- $_ := set $c "WarningUnrecognizedConfig" dict }}
             {{- end }}
-            {{- $_ := set (index $ "WarningUnrecognizedConfig") $key $val }}
+            {{- $_ := set (index $c "WarningUnrecognizedConfig") $key $val }}
         {{- else }}
             {{- $class := splitList "." $class_dot_new_key | first }}
             {{- $new_key := splitList "." $class_dot_new_key | last }}
-            {{- if not (hasKey $ $class) }}
-            {{- $_ := set $ $class dict }}
+            {{- if not (hasKey $c $class) }}
+            {{- $_ := set $c $class dict }}
             {{- end }}
-            {{- $_ := set (index $ $class) $new_key $val }}
+            {{- $_ := set (index $c $class) $new_key $val }}
         {{- end }}
     {{- end }}
 {{- end }}
@@ -157,14 +162,14 @@ ldap.dn.user.useLookupName: LDAPAuthenticator.use_lookup_dn_username
         Flattens the config in .Values.auth to a format of
         "keyX.keyY...": "value". Writes output to $c.
     */}}
-    {{- include "jupyterhub.flattenDict" (list $c (omit .Values.auth "type" "custom")) }}
+    {{- include "jupyterhub.flattenDict" (list $c (omit .Values.auth "type" "custom" "censorHelp")) }}
 
     {{- /*
         Transform the flattened config using a dictionary
         representing the old z2jh config, output the result
         in $c.
     */}}
-    {{- include "jupyterhub.authDep.remapOldToNew.mappable" $c }}
+    {{- include "jupyterhub.authDep.remapOldToNew.mappable" (list $c .Values.auth.censorHelp) }}
 
     {{- $class_key := .Values.auth.type }}  {{- /* github */}}
     {{- $class_long := "" }}                {{- /* oauthenticator.github.GitHubOAuthenticator */}}
@@ -172,12 +177,17 @@ ldap.dn.user.useLookupName: LDAPAuthenticator.use_lookup_dn_username
 
     {{- /* SET $class_long, $class_short */}}
     {{- if eq $class_key "custom" }}
-        {{- $class_long = .Values.auth.custom.className }}
+        {{- $class_long = .Values.auth.custom.className | default "custom.className wasn't configured!" }}
         {{- $class_short = $class_long | splitList "." | last }}
         {{- /* UPDATE c dict explicitly with auth.custom.config */}}
         {{- if .Values.auth.custom.config }}
-            {{- /* FIXME: this could contain sensitive content! */}}
-            {{- $_ := set $c $class_short .Values.auth.custom.config }}
+            {{- $custom_config := merge (dict) .Values.auth.custom.config }}
+            {{- if .Values.auth.censorHelp }}
+                {{- range $key, $val := $custom_config }}
+                    {{- $_ := set $custom_config $key "***" }}
+                {{- end }}
+            {{- end }}
+            {{- $_ := set $c $class_short $custom_config }}
         {{- end }}
     {{- else }}
         {{- $class_long = include "jupyterhub.authDep.classKeyToLong" $class_key }}
@@ -187,6 +197,17 @@ ldap.dn.user.useLookupName: LDAPAuthenticator.use_lookup_dn_username
     {{- /* UPDATE c dict authenticator_class */}}
     {{- $_ := merge $c (dict "JupyterHub" (dict "authenticator_class" $class_long)) }}
 
-    {{- /* RENDER result */}}
-    {{- $result | toYaml }}
+{{- /* Output a sensible error message */}}
+
+The JupyterHub Helm chart's auth config has been reworked and requires changes.
+
+The new way to configure authentication in chart version 0.11.0+ is printed
+below for your convinience. The values are censored by default to ensure no
+secrets are exposed, run helm upgrade with --set auth.censorHelp=false to
+disable censoring.
+
+{{ $result | toYaml }}
+
+For more details, please see the updated auth config documentation at:
+https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/authentication.html
 {{- end }}
