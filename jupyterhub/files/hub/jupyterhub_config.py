@@ -372,6 +372,11 @@ if get_config("debug.enabled", False):
     c.Spawner.debug = True
 
 
+# load hub.config values
+for section, sub_cfg in get_config("hub.config", {}).items():
+    c[section].update(sub_cfg)
+
+# execute hub.extraConfig string
 extra_config = get_config("hub.extraConfig", {})
 if isinstance(extra_config, str):
     from textwrap import indent, dedent
