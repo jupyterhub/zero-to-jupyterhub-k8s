@@ -91,6 +91,6 @@ directly instead.
 {{- end }}
 {{- end }}
 
-{{- if .Values.auth }}
+{{- if (omit (.Values.auth | default dict) "safeToShowValues") }}
 {{ include "jupyterhub.authDep.remapOldToNew" . | fail }}
 {{- end }}
