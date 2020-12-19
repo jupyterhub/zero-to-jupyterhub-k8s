@@ -22,6 +22,10 @@ imagePullSecrets: []
 # ConfigurableHTTPProxy speaks with the actual ConfigurableHTTPProxy server in
 # the proxy pod.
 hub:
+  config:
+    JupyterHub:
+      admin_access: true
+      authenticator_class: dummyauthenticator.DummyAuthenticator
   service:
     type: ClusterIP
     annotations: {}
@@ -283,27 +287,6 @@ proxy:
       key: tls.key
       crt: tls.crt
     hosts: []
-
-
-# auth relates to the configuration of JupyterHub's Authenticator class.
-auth:
-  censorHelp: true
-  type: dummy
-  whitelist:
-    users:
-  admin:
-    access: true
-    users:
-  dummy:
-    password:
-  ldap:
-    dn:
-      search: {}
-      user: {}
-    user: {}
-  state:
-    enabled: false
-    cryptoKey: apa
 
 
 # singleuser relates to the configuration of KubeSpawner which runs in the hub
