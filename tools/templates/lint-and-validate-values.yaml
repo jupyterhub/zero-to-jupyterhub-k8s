@@ -209,27 +209,6 @@ proxy:
     hosts: [domain.com]
 
 
-auth:
-  type: dummy
-  whitelist:
-    users:
-      - mock
-  admin:
-    access: true
-    users:
-      - mock
-  dummy:
-    password:
-  ldap:
-    dn:
-      search: {}
-      user: {}
-    user: {}
-  state:
-    enabled: true
-    cryptoKey: mock-crypto-key
-
-
 singleuser:
   profileList:
     - display_name: "mock display name 1"
