@@ -40,38 +40,16 @@ To enable GitHub authentication, add the following to your `config.yml`:
 
 .. code-block:: yaml
 
-   auth:
-     type: github
-     github:
-       clientId: "y0urg1thubc1ient1d"
-       clientSecret: "an0ther1ongs3cretstr1ng"
-       callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
+   hub:
+     config:
+       OAuthenticator:
+         client_id: your-client-id
+         client_secret: your-client-secret
+         oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
+       JupyterHub:
+         authenticator_class: oauthenticator.github.GitHubOAuthenticator
 
-Make sure that the `callbackUrl` matches the one you set in GitHub.
-
-Giving access to individual GitHub users
-++++++++++++++++++++++++++++++++++++++++
-The configuration above will allow *any* GitHub user to access your JupyterHub.
-You can restrict access to a white-list of GitHub users by adding the following
-to your configuration.
-
-.. code-block:: yaml
-
-   auth:
-     type: github
-     admin:
-       access: true
-       users:
-         - user1
-         # ...
-     whitelist:
-       users:
-         - user2
-         # ...
-
-In this case, `user1` will have *admin* access and `user2` will have regular
-access to your JupyterHub.
-
+Make sure that the `oauth_callback_url` matches the one you set in GitHub.
 
 Giving access to organizations on GitHub
 ++++++++++++++++++++++++++++++++++++++++
@@ -80,16 +58,16 @@ organizations. To do so, see the configuration below.
 
 .. code-block:: yaml
 
-   auth:
-     type: github
-     github:
-       # ...
-       orgWhitelist:
-         - "SomeOrgName"
-     scopes:
-       - "read:user"
+   hub:
+     config:
+       GitHubOAuthenticator:
+         allowed_organizations:
+           - my-github-organization
+       OAuthenticator:
+         scope:
+           - read:user
 
-``auth.scopes`` can take other values as described in the `GitHub Oauth scopes
+``scope`` can take other values as described in the `GitHub OAuth scopes
 documentation
 <https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/>`_
 but we recommend ``read:user`` as this requires no additional configuration by
@@ -105,7 +83,7 @@ information.
 
 .. note::
 
-   Changing ``auth.scopes`` will not change the scope for existing OAuth tokens, you must invalidate them.
+   Changing ``scope`` will not change the scope for existing OAuth tokens, you must invalidate them.
 
 
 Google
@@ -118,39 +96,41 @@ For more information on authenticating with Google oauth, see the :ref:`google_o
 
 .. code-block:: yaml
 
-   auth:
-     type: google
-     google:
-       clientId: "yourlongclientidstring.apps.googleusercontent.com"
-       clientSecret: "adifferentlongstring"
-       callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
-       hostedDomain:
-         - "youruniversity.edu"
-       loginService: "Your University"
+   hub:
+     config:
+       OAuthenticator:
+         client_id: your-client-id.apps.googleusercontent.com
+         client_secret: your-client-secret
+         oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
+       GoogleOAuthenticator:
+         hosted_domain:
+           - your-university.edu
+         login_service: Your university
+       JupyterHub:
+         authenticator_class: oauthenticator.GoogleOAuthenticator
 
 CILogon
 ^^^^^^^
 
 .. code-block:: yaml
 
-   auth:
-     type: cilogon
-     cilogon:
-       clientId: "y0urc1logonc1ient1d"
-       clientSecret: "an0ther1ongs3cretstr1ng"
-       callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
+   hub:
+     config:
+       OAuthenticator:
+         client_id: your-client-id
+         client_secret: your-client-secret
+         oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
+       JupyterHub:
+         authenticator_class: oauthenticator.CILogonOAuthenticator
 
-In order to overcome the `caveats <https://github.com/jupyterhub/oauthenticator/blob/master/oauthenticator/cilogon.py>`_ of implementing CILogon OAuthAuthenticator for JupyterHub,
-i.e. default username_claim of ePPN does not work for all providers, e.g. generic OAuth such as Google, Use c.CILogonOAuthenticator.username_claim = 'email' to use email instead of ePPN as the JupyterHub username:
-
-Add to your config.yaml file to :ref:`inject extra python based configuration that should be in jupyterhub_config.py <schema:hub.extraConfig>` as below:
+Based on `this caveat <https://github.com/jupyterhub/oauthenticator/blob/6f239bebecbb3fb0242de7f753ae1c93ed101340/oauthenticator/cilogon.py#L5-L14>`_, you may need to also set the following.
 
 .. code-block:: yaml
 
    hub:
-     extraConfig:
-       myAuthConfig: |
-         c.CILogonOAuthenticator.username_claim = 'email'
+     config:
+       CILogonOAuthenticator:
+         username_claim: email
 
 
 Globus
@@ -165,13 +145,16 @@ tape archive, public cloud, or your own laptop. Start a Globus app
 
 .. code-block:: yaml
 
-   auth:
-     type: globus
-     globus:
-       clientId: "y0urc1logonc1ient1d"
-       clientSecret: "an0ther1ongs3cretstr1ng"
-       callbackUrl: "https://<your_jupyterhub_host>/hub/oauth_callback"
-       identityProvider: "youruniversity.edu"
+   hub:
+     config:
+       OAuthenticator:
+         client_id: your-client-id
+         client_secret: your-client-secret
+         oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
+       GlobusOAuthenticator:
+         identity_provider: your-university.edu
+       JupyterHub:
+         authenticator_class: oauthenticator.globus.GlobusOAuthenticator
 
 
 Azure Active Directory
@@ -184,13 +167,16 @@ oauth provider is the tenant id.
 
 .. code-block:: yaml
 
-   auth:
-     type: azuread
-     azuread:
-       clientId: "your-aad-client-id"
-       clientSecret: "your-aad-client-secret"
-       tenantId: "your-aad-tenant-id"
-       callbackUrl: "https://<your_jupyterhub_host>/hub/oauth_callback"
+   hub:
+     config:
+       OAuthenticator:
+         client_id: your-aad-client-id
+         client_secret: your-aad-client-secret
+         oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
+       AzureAdOAuthenticator:
+         tenant_id: your-aad-tenant-id
+       JupyterHub:
+         authenticator_class: oauthenticator.azuread.AzureAdOAuthenticator
 
 
 OpenID Connect
@@ -211,23 +197,21 @@ and obtain the confidential client credentials.
 .. code-block:: yaml
 
    hub:
-     extraEnv:
-       OAUTH2_AUTHORIZE_URL: https://${host}/auth/realms/${realm}/protocol/openid-connect/auth
-       OAUTH2_TOKEN_URL: https://${host}/auth/realms/${realm}/protocol/openid-connect/token
-       OAUTH_CALLBACK_URL: https://<your_jupyterhub_host>/hub/oauth_callback
-   auth:
-     type: custom
-     custom:
-       className: oauthenticator.generic.GenericOAuthenticator
-       config:
-         login_service: "keycloak"
-         client_id: "y0urc1logonc1ient1d"
-         client_secret: "an0ther1ongs3cretstr1ng"
+     config:
+       OAuthenticator:
+         client_id: your-client-id
+         client_secret: your-client-secret
+         oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
+         authorize_url: https://${host}/auth/realms/${realm}/protocol/openid-connect/auth
          token_url: https://${host}/auth/realms/${realm}/protocol/openid-connect/token
          userdata_url: https://${host}/auth/realms/${realm}/protocol/openid-connect/userinfo
-         userdata_method: GET
-         userdata_params: {'state': 'state'}
+       GenericOAuthenticator:
+         login_service: keycloak
          username_key: preferred_username
+         userdata_params:
+           state: state
+       JupyterHub:
+         authenticator_class: oauthenticator.generic.GenericOAuthenticator
 
 Auth0
 ^^^^^
@@ -240,19 +224,23 @@ Note that without the scope defined, authenticating to JupyterHub after already 
 .. code-block:: yaml
 
     hub:
-      extraEnv:
-        AUTH0_SUBDOMAIN: 'prod-8ua-1yy9'
-      extraConfig:
-        myConfig.py: |
-          c.JupyterHub.authenticator_class = 'oauthenticator.auth0.Auth0OAuthenticator'
-          c.Auth0OAuthenticator.client_id = 'client-id-from-auth0-here'
-          c.Auth0OAuthenticator.client_secret = 'client-secret-from-auth0-here'
-          c.Auth0OAuthenticator.oauth_callback_url = 'https://<your_jupyterhub_host>/hub/oauth_callback'
-          c.Auth0OAuthenticator.scope = ['openid', 'email']
-          c.Authenticator.admin_users = {
-              'devops@example.com'
-          }
-          c.Authenticator.auto_login = True
+      config:
+        OAuthenticator:
+          client_id: client-id-from-auth0-here
+          client_secret: client-secret-from-auth0-here
+          oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
+          scope:
+            - openid
+            - email
+        Auth0OAuthenticator:
+          auth0_subdomain: prod-8ua-1yy9
+        Authenticator:
+          admin_users:
+            - devops@example.com
+          auto_login: true
+        JupyterHub:
+          authenticator_class: oauthenticator.auth0.Auth0OAuthenticator
+
 .. _google_oauth:
 
 Full Example of Google OAuth2
@@ -285,7 +273,7 @@ authenticate users to your JupyterHub using Google for authentication.
 6. Set "Authorized JavaScript origins" to be your hub's URL.
 
 7. Set "Authorized redirect URIs" to be your hub's URL followed by
-   "/hub/oauth_callback". For example, `http://{example.com}/hub/oauth_callback`.
+   "/hub/oauth_callback". For example, `https://your-jupyterhub-domain/hub/oauth_callback`.
 
 8. When you click "Create", the console will generate and display a Client ID
    and Client Secret. Save these values.
@@ -299,18 +287,22 @@ authenticate users to your JupyterHub using Google for authentication.
 
 .. code-block:: bash
 
-   auth:
-     type: google
-     google:
-       clientId: "yourlongclientidstring.apps.googleusercontent.com"
-       clientSecret: "adifferentlongstring"
-       callbackUrl: "http://<your_jupyterhub_host>/hub/oauth_callback"
-       hostedDomain: "youruniversity.edu"
-       loginService: "Your University"
+   hub:
+     config:
+       OAuthenticator:
+         client_id: your-client-id.apps.googleusercontent.com
+         client_secret: your-client-secret
+         oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
+       GoogleOAuthenticator:
+         hosted_domain:
+           - your-university.edu
+         login_service: Your university
+       JupyterHub:
+         authenticator_class: oauthenticator.GoogleOAuthenticator
 
-The ``callbackUrl`` key is set to the authorized redirect URI you specified
-earlier. Set ``hostedDomain`` to your institution's domain name. The value of
-``loginService`` is a descriptive term for your institution that reminds your
+The ``oauth_callback_url`` key is set to the authorized redirect URI you specified
+earlier. Set ``hosted_domain`` to your institution's domain name. The value of
+``login_service`` is a descriptive term for your institution that reminds your
 users which account they are using to login.
 
 
@@ -326,19 +318,18 @@ found in `jupyterhub_config.py <https://github.com/jupyterhub/zero-to-jupyterhub
 Example LDAP Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`auth.ldap.server.address` and `auth.ldap.dn.templates` are required. Other
-fields are optional.
+`server_address` and `bind_dn_template` are required. Other fields are optional.
 
 .. code-block:: yaml
 
-   auth:
-     type: ldap
-     ldap:
-       server:
-         address: ldap.EXAMPLE.org
-       dn:
-         templates:
-           - 'cn={username},ou=edir,ou=people,ou=EXAMPLE-UNIT,o=EXAMPLE'
+   hub:
+     config:
+       JupyterHub:
+         authenticator_class: ldapauthenticator.LDAPAuthenticator
+       LDAPAuthenticator:
+         bind_dn_template:
+           - cn={username},ou=edir,ou=people,ou=EXAMPLE-UNIT,o=EXAMPLE
+         server_address: ldap.EXAMPLE.org
 
 Example Active Directory Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -348,28 +339,26 @@ This example is equivalent to that given in the
 
 .. code-block:: yaml
 
-   auth:
-     type: ldap
-     ldap:
-       server:
-         address: ad.EXAMPLE.org
-       dn:
-         lookup: true
-         search:
-           filter: '({login_attr}={login})'
-           user: 'ldap_search_user_technical_account'
-           password: 'secret'
-         templates:
-           - 'uid={username},ou=people,dc=wikimedia,dc=org'
-           - 'uid={username},ou=developers,dc=wikimedia,dc=org'
-         user:
-           searchBase: 'ou=people,dc=wikimedia,dc=org'
-           escape: False
-           attribute: 'sAMAccountName'
-           dnAttribute: 'cn'
-       allowedGroups:
-         - 'cn=researcher,ou=groups,dc=wikimedia,dc=org'
-         - 'cn=operations,ou=groups,dc=wikimedia,dc=org'
+   hub:
+     config:
+       JupyterHub:
+         authenticator_class: ldapauthenticator.LDAPAuthenticator
+       LDAPAuthenticator:
+         allowed_groups:
+           - cn=researcher,ou=groups,dc=wikimedia,dc=org
+           - cn=operations,ou=groups,dc=wikimedia,dc=org
+         bind_dn_template:
+           - uid={username},ou=people,dc=wikimedia,dc=org
+           - uid={username},ou=developers,dc=wikimedia,dc=org
+         escape_userdn: false
+         lookup_dn: true
+         lookup_dn_search_filter: ({login_attr}={login})
+         lookup_dn_search_password: secret
+         lookup_dn_search_user: ldap_search_user_technical_account
+         lookup_dn_user_dn_attribute: cn
+         server_address: ad.EXAMPLE.org
+         user_attribute: sAMAccountName
+         user_search_base: ou=people,dc=wikimedia,dc=org
 
 Example Auth0 Configuration
 ---------------------------
@@ -379,26 +368,25 @@ Auth0 (even on free billing plan) allows you to leverage its OAuth flow. It is b
 .. code-block:: yaml
 
    hub:
-     extraEnv:
-       OAUTH_CALLBACK_URL: https://<HUB_DOMAIN>/hub/oauth_callback
-   auth:
-     type: custom
-     scopes: # that is essential to request certain scope, otherwise user profile call won't return anything
-       - "openid"
-       - "name"
-       - "profile"
-       - "email"
-     custom:
-       className: oauthenticator.generic.GenericOAuthenticator
-       config:
-         login_service: "My Auth0"
-         client_id: "<CLIENT_ID>"
-         client_secret: "<CLIENT_SECRET>"
-         authorize_url: https://<DOMAIN>.us.auth0.com/authorize
-         token_url: https://<DOMAIN>.us.auth0.com/oauth/token
-         userdata_url: https://<DOMAIN>.us.auth0.com/userinfo
-         userdata_method: GET
-         username_key: name # define the specific key to for username from JSON returned by `/userinfo`
+     config:
+       OAuthenticator:
+         client_id: your-client-id
+         client_secret: your-client-secret
+         oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
+         authorize_url: https://your-domain.us.auth0.com/authorize
+         token_url: https://your-domain.us.auth0.com/oauth/token
+         userdata_url: https://your-domain.us.auth0.com/userinfo
+         scope:
+           - openid
+           - name
+           - profile
+           - email
+       GenericOAuthenticator:
+         login_service: My Auth0
+         username_key: name
+       JupyterHub:
+         authenticator_class: oauthenticator.generic.GenericOAuthenticator
+
 
 
 
@@ -420,11 +408,12 @@ You can specify this list of usernames in your `config.yaml`:
 
 .. code-block:: yaml
 
-   auth:
-     whitelist:
-       users:
-         - user1
-         - user2
+   hub:
+     config:
+       Authenticator:
+         allowed_users:
+           - user1
+           - user2
 
 For example, here's the configuration to use a white list along with the Dummy Authenticator.
 By default, the Dummy Authenticator will accept any username if they provide the right password.
@@ -432,11 +421,13 @@ But combining it with a whitelist, users must input **both** an accepted usernam
 
 .. code-block:: yaml
 
-   auth:
-     type: dummy
-     dummy:
-       password: 'mypassword'
-     whitelist:
-       users:
-         - user1
-         - user2
+   hub:
+     config:
+       Authenticator:
+         allowed_users:
+           - user1
+           - user2
+       DummyAuthenticator:
+         password: mypassword
+       JupyterHub:
+         authenticator_class: dummyauthenticator.DummyAuthenticator
