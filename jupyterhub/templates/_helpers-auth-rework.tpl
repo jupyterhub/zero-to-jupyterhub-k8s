@@ -181,9 +181,9 @@ ldap.dn.user.useLookupName: LDAPAuthenticator.use_lookup_dn_username
     */}}
     {{- include "jupyterhub.authDep.remapOldToNew.mappable" (list $c .Values.auth.censorHelp) }}
 
-    {{- $class_key := .Values.auth.type }}  {{- /* github */}}
-    {{- $class_long := "" }}                {{- /* oauthenticator.github.GitHubOAuthenticator */}}
-    {{- $class_short := "" }}               {{- /* GitHubOAuthenticator */}}
+    {{- $class_key := .Values.auth.type | default "" }}  {{- /* github */}}
+    {{- $class_long := "" }}                             {{- /* oauthenticator.github.GitHubOAuthenticator */}}
+    {{- $class_short := "" }}                            {{- /* GitHubOAuthenticator */}}
 
     {{- /* SET $class_long, $class_short */}}
     {{- if eq $class_key "custom" }}
