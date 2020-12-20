@@ -201,7 +201,7 @@ The items in this list must be valid kubernetes
 ### Specifying suitable hub storage
 
 By default, the hub's sqlite-pvc setting will dynamically create a disk to store
-the sqlite database. It is possible to {ref}`configure other storage classes <schema:hub.db.type>`
+the sqlite database. It is possible to {ref}`configure other storage classes <schema_hub.db.type>`
 under hub.db.pvc, but make sure
 to choose one that the hub can write quickly and safely to. Slow or higher
 latency storage classes can cause hub operations to lag which may ultimately
