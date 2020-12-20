@@ -1,12 +1,66 @@
 (authentication)=
 
-# Authentication
+# Authentication and authorization
 
-Authentication allows you to control who has access to your JupyterHub
-deployment. There are many options available to you in controlling
-authentication, many of which are described below.
+Authentication is about identity, while _authorization_ is about access rights.
+In this section you will learn how to configure both. For example, you can
+configure to authenticate GitHub users and authorize those part of a specific
+GitHub organization.
 
-## Authenticating with OAuth2
+Before configuring this, you should have [setup HTTPS](https).
+
+## Useful understanding
+
+### Authenticator classes
+
+As JupyterHub can't know how to authenticate all kinds of users, it expose
+configuration to extend its capabilities to rely on a dedicated [_authenticator
+class_](https://jupyterhub.readthedocs.io/en/stable/reference/authenticators.html).
+Several such classes are already made available through [installed Python
+packages](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/images/hub/requirements.txt).
+
+### The Authenticator base class
+
+JupyterHub provides a base class,
+[`Authenticator`](https://github.com/jupyterhub/jupyterhub/blob/master/jupyterhub/auth.py),
+that all other authenticator classes are supposed to derive from. By configuring
+this base class, we influence the behavior of the derived class as well.
+
+### The configuration system
+
+We configure the JupyterHub to use our chosen authenticator class and the
+authenticator class in question through this Helm chart's
+[`hub.config`](schema_hub.config) configuration.
+
+## Configuring authorization
+
+Some authenticator classes contain dedicated authorization logic, but that
+doesn't stop you from using the common base class authorization logic.
+
+```yaml
+hub:
+  config:
+    Authenticator:
+      admin_users:
+        - user1
+        - user2
+      allowed_users:
+        - user3
+        - user4
+    # ...
+    DummyAuthenticator:
+      password: a-shared-secret-password
+    JupyterHub:
+      authenticator_class: dummyauthenticator.DummyAuthenticator
+```
+
+```{note}
+Please refer to [JupyterHub's own documentation](https://jupyterhub.readthedocs.io/en/latest/getting-started/authenticators-users-basics.html) for more details.
+```
+
+## Configuring authenticator classes
+
+### OAuth2 based authentication
 
 JupyterHub's
 [oauthenticator](https://github.com/jupyterhub/oauthenticator) has
@@ -22,7 +76,7 @@ Here are example configurations for common authentication services. Note
 that in each case, you need to get the authentication credential
 information before you can configure the helm chart for authentication.
 
-### GitHub
+#### GitHub
 
 GitHub is the largest hosting service for git repositories. It is free
 to create an account at GitHub, and relatively straightforward to set up
@@ -54,7 +108,7 @@ hub:
 Make sure that the `oauth_callback_url` matches the one
 you set in GitHub.
 
-#### Giving access to organizations on GitHub
+##### Giving access to organizations on GitHub
 
 You can also restrict access to all of the members of one or more GitHub
 organizations. To do so, see the configuration below.
@@ -86,7 +140,7 @@ Changing `scope` will not change the scope for existing OAuth tokens,
 you must invalidate them.
 ```
 
-### Google
+#### Google
 
 Google authentication is used by many universities (it is part of the
 "G Suite"). Note that using Google authentication requires your Hub to
@@ -107,7 +161,7 @@ hub:
       authenticator_class: oauthenticator.GoogleOAuthenticator
 ```
 
-### CILogon
+#### CILogon
 
 ```yaml
 hub:
@@ -131,7 +185,7 @@ hub:
       username_claim: email
 ```
 
-### Globus
+#### Globus
 
 Globus Auth is a foundational identity and access management platform
 service designed to address unique needs of the science and engineering
@@ -153,7 +207,7 @@ hub:
       authenticator_class: oauthenticator.globus.GlobusOAuthenticator
 ```
 
-### Azure Active Directory
+#### Azure Active Directory
 
 Azure Active Directory
 \<<https://docs.microsoft.com/en-us/azure/active-directory/>>`_ is an
@@ -173,7 +227,7 @@ hub:
       authenticator_class: oauthenticator.azuread.AzureAdOAuthenticator
 ```
 
-### OpenID Connect
+#### OpenID Connect
 
 [OpenID Connect](https://openid.net/connect) is an identity layer on top
 of the OAuth 2.0 protocol, implemented by [various servers and
@@ -209,7 +263,7 @@ hub:
       authenticator_class: oauthenticator.generic.GenericOAuthenticator
 ```
 
-### Auth0
+#### Auth0
 
 Auth0 is a popular commercial provider of identity management. The
 JupyterHub helm chart does not include support for Auth0 by default. To
@@ -238,17 +292,12 @@ hub:
       authenticator_class: oauthenticator.auth0.Auth0OAuthenticator
 ```
 
-### Full Example of Google OAuth2
+#### Full Example of Google OAuth2
 
 If your institution is a [G Suite customer](https://gsuite.google.com)
 that integrates with Google services such as Gmail, Calendar, and Drive,
 you can authenticate users to your JupyterHub using Google for
 authentication.
-
-```{note}
-Google requires that you specify a fully qualified domain name for your
-hub rather than an IP address.
-```
 
 1.  Log in to the [Google API
     Console](https://console.developers.google.com).
@@ -295,7 +344,7 @@ name. The value of `login_service` is a descriptive term for your
 institution that reminds your users which account they are using to
 login.
 
-### Authenticating with LDAP
+#### Authenticating with LDAP
 
 JupyterHub supports LDAP and Active Directory authentication. Read the
 [ldapauthenticator](https://github.com/jupyterhub/ldapauthenticator)
@@ -304,7 +353,7 @@ full mapping between parameters set in `values.yaml` and
 `ldapauthenticator` parameter names can be found in
 [jupyterhub_config.py](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/jupyterhub/files/hub/jupyterhub_config.py#L353).
 
-### Example LDAP Configuration
+#### Example LDAP Configuration
 
 `server_address` and `bind_dn_template` are
 required. Other fields are optional.
@@ -320,7 +369,7 @@ hub:
       server_address: ldap.EXAMPLE.org
 ```
 
-### Example Active Directory Configuration
+#### Example Active Directory Configuration
 
 This example is equivalent to that given in the [ldapauthenticator
 README](https://github.com/jupyterhub/ldapauthenticator/blob/master/README.md).
@@ -348,7 +397,7 @@ hub:
       user_search_base: ou=people,dc=wikimedia,dc=org
 ```
 
-### Example Auth0 Configuration
+#### Example Auth0 Configuration
 
 Auth0 (even on free billing plan) allows you to leverage its OAuth flow.
 It is based on OpenID Connect implementation, but extends it. Assuming
@@ -375,48 +424,4 @@ hub:
       username_key: name
     JupyterHub:
       authenticator_class: oauthenticator.generic.GenericOAuthenticator
-```
-
-## Adding a Whitelist
-
-JupyterHub can be configured to only allow a specified
-[whitelist](https://jupyterhub.readthedocs.io/en/latest/getting-started/authenticators-users-basics.html#create-a-set-of-allowed-users)
-of users to login. This is especially useful if you are using an
-authenticator with an authentication service open to the general public,
-such as GitHub or Google.
-
-```{note}
-A whitelist must be used **along with another authenticator**. It simply
-restricts the usernames that are allowed for your JupyterHub, but is not
-an authenticator by itself.
-```
-
-You can specify this list of usernames in your `config.yaml`:
-
-```yaml
-hub:
-  config:
-    Authenticator:
-      allowed_users:
-        - user1
-        - user2
-```
-
-For example, here's the configuration to use a white list along with
-the Dummy Authenticator. By default, the Dummy Authenticator will accept
-any username if they provide the right password. But combining it with a
-whitelist, users must input **both** an accepted username *and*
-password.
-
-```yaml
-hub:
-  config:
-    Authenticator:
-      allowed_users:
-        - user1
-        - user2
-    DummyAuthenticator:
-      password: mypassword
-    JupyterHub:
-      authenticator_class: dummyauthenticator.DummyAuthenticator
 ```

@@ -1,3 +1,5 @@
+(security)=
+
 # Security
 
 The information in this document focuses primarily on cloud based deployments. For on-premise deployments, additional security work that is specific to your installation method would also be required. Note that your specific installation's security needs might be more or less stringent than what we can offer you here.
