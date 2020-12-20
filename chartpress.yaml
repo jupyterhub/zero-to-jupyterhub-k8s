@@ -10,19 +10,41 @@
 #
 charts:
   - name: jupyterhub
+    # Dev: imagePrefix can be useful to override if you want to trial something
+    #      locally developed in a remote k8s cluster.
     imagePrefix: jupyterhub/k8s-
     repo:
       git: jupyterhub/helm-chart
       published: https://jupyterhub.github.io/helm-chart
 
     images:
-      secret-sync:
-        valuesPath: proxy.secretSync.image
+      # hub, the container where JupyterHub, KubeSpawner, and the configured
+      # Authenticator are running.
       hub:
         valuesPath: hub.image
+        # Dev: buildArgs can help you try the Helm chart against unreleased
+        #      versions of JupyterHub or KubeSpawner.
+        # buildArgs:
+        #   PIP_OVERRIDES: "jupyterhub==1.3.0 git+https://github.com/your-username-here/kubespawner.git"
+
+      # secret-sync, a sidecar container running in the autohttps pod to next to
+      # Traefik meant to sync a TLS certificate with a k8s Secret.
+      secret-sync:
+        valuesPath: proxy.secretSync.image
+
+      # network-tools, an initContainer with iptables installed starting on user
+      # pods to block access to the so called "cloud metadata server" for
+      # security reasons.
       network-tools:
         valuesPath: singleuser.networkTools.image
+
+      # image-awaiter, the only container inside the image-awaiter-job Pod
+      # starting as part of `helm upgrade` in order to check that images have
+      # been pulled by the hook-image-puller before helm starts doing additional
+      # changes as part of the upgrade.
       image-awaiter:
         valuesPath: prePuller.hook.image
+
+      # singleuser-sample, a primitive user container to start with.
       singleuser-sample:
         valuesPath: singleuser.image
