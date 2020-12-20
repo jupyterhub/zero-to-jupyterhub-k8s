@@ -516,3 +516,5 @@ cull:
 
 debug:
   enabled: false
+
+global: {}

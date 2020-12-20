@@ -172,14 +172,14 @@ ldap.dn.user.useLookupName: LDAPAuthenticator.use_lookup_dn_username
         Flattens the config in .Values.auth to a format of
         "keyX.keyY...": "value". Writes output to $c.
     */}}
-    {{- include "jupyterhub.flattenDict" (list $c (omit .Values.auth "type" "custom" "safeToShowValues")) }}
+    {{- include "jupyterhub.flattenDict" (list $c (omit .Values.auth "type" "custom")) }}
 
     {{- /*
         Transform the flattened config using a dictionary
         representing the old z2jh config, output the result
         in $c.
     */}}
-    {{- include "jupyterhub.authDep.remapOldToNew.mappable" (list $c .Values.auth.safeToShowValues) }}
+    {{- include "jupyterhub.authDep.remapOldToNew.mappable" (list $c .Values.global.safeToShowValues) }}
 
     {{- $class_key := .Values.auth.type | default "" }}  {{- /* github */}}
     {{- $class_long := "" }}                             {{- /* oauthenticator.github.GitHubOAuthenticator */}}
@@ -192,7 +192,7 @@ ldap.dn.user.useLookupName: LDAPAuthenticator.use_lookup_dn_username
         {{- /* UPDATE c dict explicitly with auth.custom.config */}}
         {{- if .Values.auth.custom.config }}
             {{- $custom_config := merge (dict) .Values.auth.custom.config }}
-            {{- if not .Values.auth.safeToShowValues }}
+            {{- if not .Values.global.safeToShowValues }}
                 {{- range $key, $val := $custom_config }}
                     {{- $_ := set $custom_config $key "***" }}
                 {{- end }}
@@ -213,8 +213,8 @@ The JupyterHub Helm chart's auth config has been reworked and requires changes.
 
 The new way to configure authentication in chart version 0.11.0+ is printed
 below for your convinience. The values are not shown by default to ensure no
-secrets are exposed, run helm upgrade with --set auth.safeToShowValues=true to
-show them.
+secrets are exposed, run helm upgrade with --set global.safeToShowValues=true
+to show them.
 
 {{ $result | toYaml }}
 
