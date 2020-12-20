@@ -1,3 +1,13 @@
+# This is the configuration for chartpress, a CLI for Helm chart management.
+#
+# chartpress is used to:
+# - Build images
+# - Update Chart.yaml (version) and values.yaml (image tags)
+# - Package and publish Helm charts to a GitHub based Helm chart repository
+#
+# For more information, see the projects README.md file:
+# https://github.com/jupyterhub/chartpress
+#
 charts:
   - name: jupyterhub
     imagePrefix: jupyterhub/k8s-
