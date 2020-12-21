@@ -227,6 +227,7 @@ earlier. Set `hosted_domain` to your institution's domain name. The value of
 users which account they are using to login.
 
 #### CILogon
+Please see CyberInfrastructure Logon's [website](https://www.cilogon.org) for more information about what kind of identity is managed by CILogon.
 
 ```yaml
 hub:
