@@ -32,7 +32,14 @@ We configure JupyterHub to use our chosen authenticator class and the
 authenticator class in question through this Helm chart's
 [`hub.config`](schema_hub.config) configuration.
 
-## Configuring authorization
+## General configuration
+
+As all authenticators classes rely on the `Authenticator` base class, there are
+some configuration common to all. For the latest information about the
+Authenticator base class, please see the official [configuration
+reference](https://jupyterhub.readthedocs.io/en/latest/api/auth.html).
+
+### [allowed_users](https://jupyterhub.readthedocs.io/en/latest/api/auth.html#jupyterhub.auth.Authenticator.allowed_users) / [admin_users](https://jupyterhub.readthedocs.io/en/latest/api/auth.html#jupyterhub.auth.LocalAuthenticator.admin_users)
 
 Some authenticator classes contain dedicated authorization logic, but that
 doesn't stop you from using the common base class authorization logic.
@@ -54,45 +61,77 @@ hub:
       authenticator_class: dummyauthenticator.DummyAuthenticator
 ```
 
-```{note}
-Please refer to [JupyterHub's own documentation](https://jupyterhub.readthedocs.io/en/latest/getting-started/authenticators-users-basics.html) for more details.
+### [auto_login](https://jupyterhub.readthedocs.io/en/latest/api/auth.html#jupyterhub.auth.Authenticator.auto_login)
+
+If you have configured authentication with GitHub for example, the page
+`/hub/login` will feature a single orange button that users are to press to
+login. If you want to bypass this screen and redirect users directly, you can
+set `auto_login` to `true`.
+
+```yaml
+hub:
+  config:
+    Authenticator:
+      auto_login: true
+```
+
+### [enable_auth_state](https://jupyterhub.readthedocs.io/en/latest/api/auth.html#jupyterhub.auth.Authenticator.enable_auth_state)
+
+If you want JupyterHub to persist often sensitive information received as part
+of logging in, you need to enable it and provide one or more keys for encryption
+and decryption.
+
+The recommended way of doing so for this Helm chart is to configure CryptKeeper
+with keys rather than setting an environment variable.
+
+For more information, see [JupyterHub's own
+documentation](https://jupyterhub.readthedocs.io/en/latest/reference/authenticators.html#authentication-state)
+about authentication state.
+
+```yaml
+hub:
+  config:
+    Authenticator:
+      enable_auth_state: true
+    CryptKeeper:
+      keys:
+        - 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 ```
 
 ## Configuring authenticator classes
 
+Below we provide some example configurations of various commonly used
+authentication classes. We encourage you to inspect the authentication class own documentation
+
 ### OAuth2 based authentication
 
-JupyterHub's
-[oauthenticator](https://github.com/jupyterhub/oauthenticator) has
-support for enabling your users to authenticate via a third-party OAuth
-provider, including GitHub, Google, and CILogon.
+JupyterHub's [oauthenticator](https://github.com/jupyterhub/oauthenticator) has
+support for enabling your users to authenticate via a third-party OAuth2
+provider, including GitHub, Google, and CILogon. All of these will require an
+OAuth2 _client id_ and _client secret_.
 
-Follow the service-specific instructions linked on the [oauthenticator
-repository](https://oauthenticator.readthedocs.io/en/stable/) to generate
-your JupyterHub instance's OAuth2 client ID and client secret. Then
-declare the values in the helm chart (`config.yaml`).
+To acquire a client id and client secret, follow the service-specific
+instructions linked in [oauthenticator's
+documentation](https://oauthenticator.readthedocs.io/en/stable/). We will then
+make use of them in our `config.yaml`.
 
-Here are example configurations for common authentication services. Note
-that in each case, you need to get the client ID and secret
-before you can configure the helm chart for authentication.
+Below are a few example configurations for authentication classes part of the
+oauthenticator project.
 
 #### GitHub
 
-GitHub is the largest hosting service for git repositories. It is free
-to create an account at GitHub, and relatively straightforward to set up
-OAuth credentials so that users can authenticate with their GitHub
-username/password.
+GitHub is the largest hosting service for git repositories. It is free to create
+an account at GitHub, and relatively straightforward to set up OAuth credentials
+so that users can authenticate with their GitHub username/password.
 
 To create OAuth credentials on GitHub, follow these steps:
 
 -   Click your profile picture -> settings -> developer settings
--   Make sure you're on the "OAuth Apps" tab, then click "New OAuth
-    App"
+-   Make sure you're on the "OAuth Apps" tab, then click "New OAuth App"
 -   Fill out the forms (you'll need your hub address) and generate your
     ID/Secret.
 
-To enable GitHub authentication, add the following to your
-`config.yml`:
+To enable GitHub authentication, add the following to your `config.yml`:
 
 ```yaml
 hub:
@@ -105,13 +144,10 @@ hub:
       authenticator_class: oauthenticator.github.GitHubOAuthenticator
 ```
 
-Make sure that the `oauth_callback_url` matches the one
-you set in GitHub.
+Make sure that the `oauth_callback_url` matches the one you set in GitHub.
 
-##### Giving access to organizations on GitHub
-
-You can also restrict access to all of the members of one or more GitHub
-organizations. To do so, see the configuration below.
+To restrict access to the members of one or more GitHub organizations, amend
+your previous configuration with these parts.
 
 ```yaml
 hub:
@@ -126,14 +162,14 @@ hub:
 
 `scope` can take other values as described in the [GitHub OAuth scopes
 documentation](https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/)
-but we recommend `read:user` as this requires no additional
-configuration by GitHub organisations and users. For example, omitting
-the scope means members of an organisation must [set their membership to
+but we recommend `read:user` as this requires no additional configuration by
+GitHub organisations and users. For example, omitting the scope means members of
+an organisation must [set their membership to
 Public](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/publicizing-or-hiding-organization-membership)
 to login, whereas setting it to `read:org` may require approval of the
 application by a GitHub organisation admin. Please see [this
-issue](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/687)
-for further information.
+issue](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/687) for
+further information.
 
 ```{note}
 Changing `scope` will not change the scope for existing OAuth tokens,
@@ -142,9 +178,33 @@ you must invalidate them.
 
 #### Google
 
-Google authentication is used by many universities (it is part of the
-"G Suite"). Note that using Google authentication requires your Hub to
-have a domain name (it cannot **only** be accessible via an IP address).
+Google authentication is used by many universities (it is part of "G Suite").
+
+If your institution is a [G Suite customer](https://gsuite.google.com) that
+integrates with Google services such as Gmail, Calendar, and Drive, you can
+authenticate users to your JupyterHub using Google for authentication.
+
+1.  Log in to the [Google API Console](https://console.developers.google.com).
+2.  Select a project > Create a project... and set 'Project name'. This is a
+    short term that is only displayed in the console. If you have already
+    created a project you may skip this step.
+3.  Type "Credentials" in the search field at the top and click to access the
+    Credentials API.
+4.  Click "Create credentials", then "OAuth client ID". Choose "Application
+    type" > "Web application".
+5.  Enter a name for your JupyterHub instance. You can give it a descriptive
+    name or set it to be the hub's hostname.
+6.  Set "Authorized JavaScript origins" to be your hub's URL.
+7.  Set "Authorized redirect URIs" to be your hub's URL followed by
+    `/hub/oauth_callback`. For example,
+    `https://your-jupyterhub-domain/hub/oauth_callback`.
+8.  When you click "Create", the console will generate and display a Client ID
+    and Client Secret. Save these values.
+9.  Type "consent screen" in the search field at the top and click to access the
+    OAuth consent screen. Here you will customize what your users see when they
+    login to your JupyterHub instance for the first time. Click Save when you
+    are done.
+10. Update your Helm chart's configuration (`config.yaml`) to look like this.
 
 ```yaml
 hub:
@@ -160,6 +220,11 @@ hub:
     JupyterHub:
       authenticator_class: oauthenticator.google.GoogleOAuthenticator
 ```
+
+The `oauth_callback_url` key is set to the authorized redirect URI you specified
+earlier. Set `hosted_domain` to your institution's domain name. The value of
+`login_service` is a descriptive term for your institution that reminds your
+users which account they are using to login.
 
 #### CILogon
 
@@ -209,40 +274,9 @@ hub:
 
 #### Azure Active Directory
 
-Azure Active Directory
-\<<https://docs.microsoft.com/en-us/azure/active-directory/>>`_ is an
-identity provider from Microsoft Azure. The main additional option to
-configure for Azure AD from any other oauth provider is the tenant id.
-
-```yaml
-hub:
-  config:
-    OAuthenticator:
-      client_id: your-aad-client-id
-      client_secret: your-aad-client-secret
-      oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
-    AzureAdOAuthenticator:
-      tenant_id: your-aad-tenant-id
-    JupyterHub:
-      authenticator_class: oauthenticator.azuread.AzureAdOAuthenticator
-```
-
-#### OpenID Connect
-
-[OpenID Connect](https://openid.net/connect) is an identity layer on top
-of the OAuth 2.0 protocol, implemented by [various servers and
-services](https://openid.net/developers/certified/#OPServices). While
-OpenID Connect endpoint discovery is not supported by oauthentiator, you
-can still configure JupyterHub to authenticate with OpenID Connect
-providers by specifying all endpoints in GenericOAuthenticator. By
-setting `login_service` you can customize the label on the
-login button.
-
-Here's an example for authenticating against
-[keycloak](https://www.keycloak.org/docs/latest/securing_apps/index.html#endpoints),
-after you [configure an OIDC
-Client](https://www.keycloak.org/docs/latest/server_admin/index.html#oidc-clients)
-and obtain the confidential client credentials.
+[Azure Active Directory](https://docs.microsoft.com/en-us/azure/active-directory/)
+ is an identity provider from Microsoft Azure. Apart from needing a OAuth2
+ _client id_ and _client secret_, you will also need a _tenant id_.
 
 ```yaml
 hub:
@@ -251,26 +285,15 @@ hub:
       client_id: your-client-id
       client_secret: your-client-secret
       oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
-      authorize_url: https://${host}/auth/realms/${realm}/protocol/openid-connect/auth
-      token_url: https://${host}/auth/realms/${realm}/protocol/openid-connect/token
-      userdata_url: https://${host}/auth/realms/${realm}/protocol/openid-connect/userinfo
-    GenericOAuthenticator:
-      login_service: keycloak
-      username_key: preferred_username
-      userdata_params:
-        state: state
+    AzureAdOAuthenticator:
+      tenant_id: your-tenant-id
     JupyterHub:
-      authenticator_class: oauthenticator.generic.GenericOAuthenticator
+      authenticator_class: oauthenticator.azuread.AzureAdOAuthenticator
 ```
 
 #### Auth0
 
-Auth0 is a popular commercial provider of identity management. The
-JupyterHub helm chart does not include support for Auth0 by default. To
-use Auth0, `extraEnv` and `extraConfig` must be configured as follows:
-
-Note that without the scopes defined, authenticating to JupyterHub after
-already being logged in to Auth0 will fail.
+[Auth0](https://auth0.com/) is a commercial provider of identity management.
 
 ```yaml
 hub:
@@ -291,72 +314,77 @@ hub:
     JupyterHub:
       authenticator_class: oauthenticator.auth0.Auth0OAuthenticator
 ```
+#### GenericOAuthenticator - OpenID Connect
 
-#### Full Example of Google OAuth2
+[OpenID Connect](https://openid.net/connect) is an identity layer on top of the
+OAuth 2.0 protocol, implemented by [various servers and
+services](https://openid.net/developers/certified/#OPServices). While OpenID
+Connect endpoint discovery is not supported by oauthentiator, you can still
+configure JupyterHub to authenticate with OpenID Connect providers by specifying
+all endpoints in GenericOAuthenticator.
 
-If your institution is a [G Suite customer](https://gsuite.google.com)
-that integrates with Google services such as Gmail, Calendar, and Drive,
-you can authenticate users to your JupyterHub using Google for
-authentication.
+##### Auth0
 
-1.  Log in to the [Google API
-    Console](https://console.developers.google.com).
-2.  Select a project > Create a project\... and set 'Project name'.
-    This is a short term that is only displayed in the console. If you
-    have already created a project you may skip this step.
-3.  Type "Credentials" in the search field at the top and click to
-    access the Credentials API.
-4.  Click "Create credentials", then "OAuth client ID". Choose
-    "Application type" > "Web application".
-5.  Enter a name for your JupyterHub instance. You can give it a
-    descriptive name or set it to be the hub's hostname.
-6.  Set "Authorized JavaScript origins" to be your hub's URL.
-7.  Set "Authorized redirect URIs" to be your hub's URL followed by
-    `/hub/oauth_callback`. For example,
-    `https://your-jupyterhub-domain/hub/oauth_callback`.
-8.  When you click "Create", the console will generate and display a
-    Client ID and Client Secret. Save these values.
-9.  Type "consent screen" in the search field at the top and click to
-    access the OAuth consent screen. Here you will customize what your
-    users see when they login to your JupyterHub instance for the first
-    time. Click Save when you are done.
-10. In your helm chart, create a stanza that contains these OAuth
-    fields:
+Below is an example on how you can configure the GenericOAuthenticator to
+authenticate against Auth0.
 
 ```yaml
 hub:
   config:
     OAuthenticator:
-      client_id: your-client-id.apps.googleusercontent.com
+      client_id: your-client-id
       client_secret: your-client-secret
       oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
-    GoogleOAuthenticator:
-      hosted_domain:
-        - your-university.edu
-      login_service: Your university
+      authorize_url: https://your-domain.us.auth0.com/authorize
+      token_url: https://your-domain.us.auth0.com/oauth/token
+      userdata_url: https://your-domain.us.auth0.com/userinfo
+      scope:
+        - openid
+        - name
+        - profile
+        - email
+    GenericOAuthenticator:
+      username_key: name
     JupyterHub:
-      authenticator_class: oauthenticator.google.GoogleOAuthenticator
+      authenticator_class: oauthenticator.generic.GenericOAuthenticator
 ```
 
-The `oauth_callback_url` key is set to the authorized redirect URI you
-specified earlier. Set `hosted_domain` to your institution's domain
-name. The value of `login_service` is a descriptive term for your
-institution that reminds your users which account they are using to
-login.
+##### KeyCloak
 
-#### Authenticating with LDAP
+[KeyCloak](https://www.keycloak.org) is an open source based provider of
+identity management that you can self host. Below is an example on how you can
+configure the GenericOAuthenticator to authenticate against a KeyCloak server.
+
+For this setup, it is assumed you have a KeyCloak server and have configured
+[configured an OIDC Client](https://www.keycloak.org/docs/latest/server_admin/index.html#oidc-clients).
+
+```yaml
+hub:
+  config:
+    OAuthenticator:
+      client_id: your-client-id
+      client_secret: your-client-secret
+      oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
+      authorize_url: https://${host}/auth/realms/${realm}/protocol/openid-connect/auth
+      token_url: https://${host}/auth/realms/${realm}/protocol/openid-connect/token
+      userdata_url: https://${host}/auth/realms/${realm}/protocol/openid-connect/userinfo
+    GenericOAuthenticator:
+      login_service: keycloak
+      username_key: preferred_username
+      userdata_params:
+        state: state
+    JupyterHub:
+      authenticator_class: oauthenticator.generic.GenericOAuthenticator
+```
+
+### LDAP and Active Directory
 
 JupyterHub supports LDAP and Active Directory authentication. Read the
 [ldapauthenticator](https://github.com/jupyterhub/ldapauthenticator)
-documentation for a full explanation of the available parameters. The
-full mapping between parameters set in `values.yaml` and
-`ldapauthenticator` parameter names can be found in
-[jupyterhub_config.py](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/jupyterhub/files/hub/jupyterhub_config.py#L353).
+documentation for a full explanation of the available parameters.
 
-#### Example LDAP Configuration
-
-`server_address` and `bind_dn_template` are
-required. Other fields are optional.
+Only `server_address` and `bind_dn_template` are required, so a minimal
+configuration would look like this.
 
 ```yaml
 hub:
@@ -369,10 +397,8 @@ hub:
       server_address: ldap.EXAMPLE.org
 ```
 
-#### Example Active Directory Configuration
-
-This example is equivalent to that given in the [ldapauthenticator
-README](https://github.com/jupyterhub/ldapauthenticator/blob/master/README.md).
+Another example is provided below, equivalent to that given in the
+[ldapauthenticator README](https://github.com/jupyterhub/ldapauthenticator/blob/master/README.md).
 
 ```yaml
 hub:
@@ -395,33 +421,4 @@ hub:
       server_address: ad.EXAMPLE.org
       user_attribute: sAMAccountName
       user_search_base: ou=people,dc=wikimedia,dc=org
-```
-
-#### Example Auth0 Configuration
-
-Auth0 (even on free billing plan) allows you to leverage its OAuth flow.
-It is based on OpenID Connect implementation, but extends it. Assuming
-the application is already created and you fetched Client Id, Client
-Secret and Auth0 authorization domain.
-
-```yaml
-hub:
-  config:
-    OAuthenticator:
-      client_id: your-client-id
-      client_secret: your-client-secret
-      oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
-      authorize_url: https://your-domain.us.auth0.com/authorize
-      token_url: https://your-domain.us.auth0.com/oauth/token
-      userdata_url: https://your-domain.us.auth0.com/userinfo
-      scope:
-        - openid
-        - name
-        - profile
-        - email
-    GenericOAuthenticator:
-      login_service: My Auth0
-      username_key: name
-    JupyterHub:
-      authenticator_class: oauthenticator.generic.GenericOAuthenticator
 ```
