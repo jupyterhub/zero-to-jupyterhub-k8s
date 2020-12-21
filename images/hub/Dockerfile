@@ -21,7 +21,7 @@ RUN apt-get update && \
       curl \
       dnsutils \
       && \
-    apt-get purge && apt-get clean
+    rm -rf /var/lib/apt/lists/*
 
 ARG NB_USER=jovyan
 ARG NB_UID=1000
@@ -34,21 +34,20 @@ RUN adduser --disabled-password \
     --force-badname \
     ${NB_USER}
 
-RUN python3 -m pip install --upgrade --no-cache setuptools pip
 COPY requirements.txt /tmp/requirements.txt
+RUN pip3 install --upgrade --no-cache-dir \
+        setuptools \
+        pip
+RUN PYCURL_SSL_LIBRARY=openssl \
+    pip install --no-cache-dir \
+        -r /tmp/requirements.txt
 
-# NOTE: This is a default and will be overridden by chartpress and the
-#       dependencies script using the chartpress.yaml configuration's buildArgs
-ARG JUPYTERHUB_VERSION=1.2.2
-
-RUN PYCURL_SSL_LIBRARY=openssl pip3 install --no-cache-dir \
-         -r /tmp/requirements.txt \
- && pip3 install --no-cache-dir \
-         $(bash -c 'if [[ $JUPYTERHUB_VERSION == "git"* ]]; then \
-            echo ${JUPYTERHUB_VERSION}; \
-          else \
-            echo jupyterhub==${JUPYTERHUB_VERSION}; \
-          fi')
+# Support overriding a package or two through passed docker --build-args.
+# ARG PIP_OVERRIDES="jupyterhub==1.3.0 git+https://github.com/consideratio/kubespawner.git"
+ARG PIP_OVERRIDES=
+RUN if [[ -n "$PIP_OVERRIDES" ]]; then \
+        pip install --no-cache-dir $PIP_OVERRIDES; \
+    fi
 
 WORKDIR /srv/jupyterhub
 

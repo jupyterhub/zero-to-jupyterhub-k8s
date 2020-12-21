@@ -8,10 +8,6 @@ FROM jupyter/base-notebook:45bfe5a474fa
 # The jupyter/docker-stacks images contains jupyterhub, jupyterlab and the
 # jupyterlab-hub extension already.
 
-## NOTE: This is a default and be overridden by chartpress using the
-##       chartpress.yaml configuration
-ARG JUPYTERHUB_VERSION=1.2.2
-
 # Example install of git and nbgitpuller.
 # NOTE: git is already available in the jupyter/minimal-notebook image.
 USER root
@@ -22,13 +18,17 @@ RUN apt-get update && apt-get install --yes --no-install-recommends \
  && rm -rf /var/lib/apt/lists/*
 USER $NB_USER
 
-RUN python -m pip install nbgitpuller \
-    $(bash -c 'if [[ $JUPYTERHUB_VERSION == "git"* ]]; then \
-       echo ${JUPYTERHUB_VERSION}; \
-     else \
-       echo jupyterhub==${JUPYTERHUB_VERSION}; \
-     fi') && \
-    jupyter serverextension enable --py nbgitpuller --sys-prefix
+RUN python -m pip install --no-cache-dir \
+        nbgitpuller
+
+# Support overriding a package or two through passed docker --build-args.
+# ARG PIP_OVERRIDES="jupyterhub==1.3.0"
+ARG PIP_OVERRIDES=
+RUN if [[ -n "$PIP_OVERRIDES" ]]; then \
+        pip install --no-cache-dir $PIP_OVERRIDES; \
+    fi
+
+RUN jupyter serverextension enable --py nbgitpuller --sys-prefix
 
 # Uncomment the line below to make nbgitpuller default to start up in JupyterLab
 #ENV NBGITPULLER_APP=lab

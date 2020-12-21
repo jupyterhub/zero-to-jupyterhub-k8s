@@ -1,12 +1,11 @@
-# This file can automatically be used to update requirements.txt with pinned
-# versions by running:
+# This file is automatically maintained by Dependabot, as configured in
+# .github/dependabot.yaml. It can also be updated by...
 #
 #    ./dependencies freeze --upgrade
 #
 
-# JupyterHub is pinned in chartpress.yaml, but need to be pinned here as well to
-# so our generated requirements.txt get proper comments set on it.
-jupyterhub==1.2.2
+# JupyterHub itself
+jupyterhub
 
 ## Authenticators
 jupyterhub-dummyauthenticator
