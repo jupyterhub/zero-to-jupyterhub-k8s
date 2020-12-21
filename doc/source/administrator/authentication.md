@@ -68,7 +68,7 @@ support for enabling your users to authenticate via a third-party OAuth
 provider, including GitHub, Google, and CILogon.
 
 Follow the service-specific instructions linked on the [oauthenticator
-repository](https://github.com/jupyterhub/oauthenticator) to generate
+repository](https://oauthenticator.readthedocs.io/en/stable/) to generate
 your JupyterHub instance's OAuth2 client ID and client secret. Then
 declare the values in the helm chart (`config.yaml`).
 
