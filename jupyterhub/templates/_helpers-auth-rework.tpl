@@ -15,9 +15,9 @@
 */}}
 
 {{- define "jupyterhub.authDep.classKeyToLong.map" }}
-google: oauthenticator.GoogleOAuthenticator
+google: oauthenticator.google.GoogleOAuthenticator
 github: oauthenticator.github.GitHubOAuthenticator
-cilogon: oauthenticator.CILogonOAuthenticator
+cilogon: oauthenticator.cilogon.CILogonOAuthenticator
 gitlab: oauthenticator.gitlab.GitLabOAuthenticator
 azuread: oauthenticator.azuread.AzureAdOAuthenticator
 mediawiki: oauthenticator.mediawiki.MWOAuthenticator

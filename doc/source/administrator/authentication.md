@@ -158,7 +158,7 @@ hub:
         - your-university.edu
       login_service: Your university
     JupyterHub:
-      authenticator_class: oauthenticator.GoogleOAuthenticator
+      authenticator_class: oauthenticator.google.GoogleOAuthenticator
 ```
 
 #### CILogon
@@ -171,7 +171,7 @@ hub:
       client_secret: your-client-secret
       oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
     JupyterHub:
-      authenticator_class: oauthenticator.CILogonOAuthenticator
+      authenticator_class: oauthenticator.cilogon.CILogonOAuthenticator
 ```
 
 Based on [this
@@ -335,7 +335,7 @@ hub:
         - your-university.edu
       login_service: Your university
     JupyterHub:
-      authenticator_class: oauthenticator.GoogleOAuthenticator
+      authenticator_class: oauthenticator.google.GoogleOAuthenticator
 ```
 
 The `oauth_callback_url` key is set to the authorized redirect URI you
