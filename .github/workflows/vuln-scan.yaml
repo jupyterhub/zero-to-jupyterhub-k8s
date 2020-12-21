@@ -118,8 +118,7 @@ jobs:
         run: |
           json_to_misc() {
               # Count vulnerabilities
-              VULNERABILITY_COUNT=$(cat tmp/scan_$1.json | jq -r '.[].Vulnerabilities | select(. != null) | length')
-              VULNERABILITY_COUNT=${VULNERABILITY_COUNT:-0}
+              VULNERABILITY_COUNT="$(cat tmp/scan_$1.json | jq -r '[.[].Vulnerabilities | select(type == "array") | add] | select(. != null) | length')"
               echo "VULNERABILITY_COUNT_$1=$VULNERABILITY_COUNT" >> $GITHUB_ENV
 
               # Construct a markdown summary
