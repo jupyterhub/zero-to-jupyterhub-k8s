@@ -2,10 +2,10 @@
 
 # Authentication and authorization
 
-Authentication is about identity, while _authorization_ is about access rights.
-In this section you will learn how to configure both. For example, you can
-configure to authenticate GitHub users and authorize those part of a specific
-GitHub organization.
+Authentication is about identity, while _authorization_ is about permissions. In
+this section you will learn how to configure both. As an example, you can
+configure authentication using GitHub accounts and restrict what users are
+authorized based on membership of a GitHub organization.
 
 Before configuring this, you should have [setup HTTPS](https).
 
