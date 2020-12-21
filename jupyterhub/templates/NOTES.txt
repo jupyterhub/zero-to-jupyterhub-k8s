@@ -79,3 +79,8 @@ directly instead.
 {{ "HARD DEPRECATION: singleuser.imagePullSecret has renamed to imagePullSecret" | fail }}
 {{- end }}
 {{- end }}
+
+
+{{- if hasKey .Values.proxy "pdb" }}
+{{ "HARD DEPRECATION: proxy.pdb has renamed to proxy.chp.pdb" | fail }}
+{{- end }}
