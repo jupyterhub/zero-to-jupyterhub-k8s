@@ -18,8 +18,9 @@ RUN apt-get update && apt-get install --yes --no-install-recommends \
  && rm -rf /var/lib/apt/lists/*
 USER $NB_USER
 
+COPY requirements.txt /tmp/requirements.txt
 RUN python -m pip install --no-cache-dir \
-        nbgitpuller
+    -r /tmp/requirements.txt
 
 # Support overriding a package or two through passed docker --build-args.
 # ARG PIP_OVERRIDES="jupyterhub==1.3.0"

@@ -4,9 +4,19 @@ updates:
   # Maintain Python dependencies for the jupyterhub/k8s-hub image
   - package-ecosystem: pip
     directory: "/images/hub"
-    schedule:
+    schedule: &schedule
       interval: daily
-    open-pull-requests-limit: 4
+      time: "00:00"
+      timezone: "Etc/UTC"
+    versioning-strategy: lockfile-only
+    labels:
+      - maintenance
+      - dependencies
+
+  # Maintain Python dependencies for the jupyterhub/k8s-singleuser-sample image
+  - package-ecosystem: pip
+    directory: "/images/singleuser-sample"
+    schedule: *schedule
     versioning-strategy: lockfile-only
     labels:
       - maintenance
@@ -15,8 +25,7 @@ updates:
   # Maintain dependencies in our GitHub Workflows
   - package-ecosystem: "github-actions"
     directory: "/"  # This should be / rather than .github/workflows
-    schedule:
-      interval: daily
+    schedule: *schedule
     labels:
       - maintenance
       - dependencies
