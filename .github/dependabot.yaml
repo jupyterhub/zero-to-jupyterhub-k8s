@@ -1,10 +1,11 @@
 # dependabot.yml reference: https://docs.github.com/en/free-pro-team@latest/github/administering-a-repository/configuration-options-for-dependency-updates
+#
 version: 2
 updates:
   # Maintain Python dependencies for the jupyterhub/k8s-hub image
   - package-ecosystem: pip
     directory: "/images/hub"
-    schedule: &schedule
+    schedule:
       interval: daily
       time: "00:00"
       timezone: "Etc/UTC"
@@ -16,7 +17,10 @@ updates:
   # Maintain Python dependencies for the jupyterhub/k8s-singleuser-sample image
   - package-ecosystem: pip
     directory: "/images/singleuser-sample"
-    schedule: *schedule
+    schedule:
+      interval: daily
+      time: "05:00"
+      timezone: "Etc/UTC"
     versioning-strategy: lockfile-only
     labels:
       - maintenance
@@ -25,7 +29,10 @@ updates:
   # Maintain dependencies in our GitHub Workflows
   - package-ecosystem: "github-actions"
     directory: "/"  # This should be / rather than .github/workflows
-    schedule: *schedule
+    schedule:
+      interval: daily
+      time: "05:00"
+      timezone: "Etc/UTC"
     labels:
       - maintenance
       - dependencies
