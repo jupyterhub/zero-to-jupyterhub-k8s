@@ -13,6 +13,15 @@ updates:
       - maintenance
       - dependencies
 
+  # Maintain Python dependencies for the jupyterhub/k8s-singleuser-sample image
+  - package-ecosystem: pip
+    directory: "/images/singleuser-sample"
+    schedule: *schedule
+    versioning-strategy: lockfile-only
+    labels:
+      - maintenance
+      - dependencies
+
   # Maintain dependencies in our GitHub Workflows
   - package-ecosystem: "github-actions"
     directory: "/"  # This should be / rather than .github/workflows
