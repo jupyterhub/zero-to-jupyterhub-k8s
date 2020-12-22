@@ -31,7 +31,7 @@ jupyterhub-ldapauthenticator==1.3.2  # via -r requirements.in
 jupyterhub-ltiauthenticator==1.0.0  # via -r requirements.in
 jupyterhub-nativeauthenticator==0.0.6  # via -r requirements.in
 jupyterhub-tmpauthenticator==0.6  # via -r requirements.in
-jupyterhub==1.2.2         # via -r requirements.in, jupyterhub-firstuseauthenticator, jupyterhub-kubespawner, jupyterhub-ldapauthenticator, jupyterhub-ltiauthenticator, jupyterhub-nativeauthenticator, nullauthenticator, oauthenticator
+jupyterhub==1.3.0         # via -r requirements.in, jupyterhub-firstuseauthenticator, jupyterhub-kubespawner, jupyterhub-ldapauthenticator, jupyterhub-ltiauthenticator, jupyterhub-nativeauthenticator, nullauthenticator, oauthenticator
 kubernetes==12.0.1        # via jupyterhub-kubespawner
 ldap3==2.8.1              # via jupyterhub-ldapauthenticator
 mako==1.1.3               # via alembic
