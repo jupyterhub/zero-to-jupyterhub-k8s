@@ -8,7 +8,6 @@ updates:
       interval: daily
       time: "05:00"
       timezone: "Etc/UTC"
-    open-pull-requests-limit: 4
     versioning-strategy: lockfile-only
     labels:
       - maintenance
