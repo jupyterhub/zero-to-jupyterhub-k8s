@@ -1,0 +1,5 @@
+# This file is automatically maintained by Dependabot, as configured in
+# .github/dependabot.yaml.
+
+jupyterhub==1.2.2
+nbgitpuller==0.9.0
