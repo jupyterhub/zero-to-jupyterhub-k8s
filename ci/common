@@ -88,6 +88,8 @@ setup_kubeval () {
 }
 
 full_namespace_report () {
+    printf "\n---------- FULL NAMESPACE REPORT ----------\n\n"
+    printf "\n---------- kubectl get ----------\n\n"
     # list config (secret,configmap)
     kubectl get secret,cm
     # list networking (service,ingress)
@@ -95,6 +97,7 @@ full_namespace_report () {
     # list workloads (deployment,statefulset,daemonset,pod)
     kubectl get deploy,sts,ds,pod
 
+    printf "\n---------- kubectl describe and logs, of non-ready pods ----------\n\n"
     # if any pod has any non-ready -> show its containers' logs
     kubectl get pods -o json \
         | jq '
@@ -104,7 +107,7 @@ full_namespace_report () {
         )
     | .metadata.name' \
         | xargs --max-args 1 --no-run-if-empty \
-        sh -c 'printf "\nPod with non-ready container detected\n - Logs of $0:\n"; kubectl logs --all-containers $0 || true'
+        sh -c 'printf "\n----- kubectl describe pod/$0 -----\n\n"; kubectl describe pod/$0; printf "\n----- kubectl logs --all-containers pod/$0 -----\n\n"; kubectl logs --all-containers pod/$0 || true'
 
     # if any pods that should be scheduled by the user-scheduler are pending ->
     # show user-scheduler's logs
@@ -116,14 +119,13 @@ full_namespace_report () {
             | .metadata.name
         '
     ) | xargs --max-args 1 --no-run-if-empty --max-lines \
-        sh -c 'printf "\nPending user pod detected ($0)\n - Logs of deploy/user-scheduler:\n"; kubectl logs --all-containers deploy/user-scheduler || true'
+        sh -c 'printf "\n---------- Pending user pod detected ($0) ----------\n\n----- kubectl logs deploy/user-scheduler -----\n\n"; kubectl logs --all-containers deploy/user-scheduler || true'
 
-    echo ""
-    echo "Just while debugging intermittent issue, lets output the logs of the hub."
+    printf "\n---------- kubectl logs of important pods ----------\n\n"
+    printf "\n----- kubectl logs hub -----\n\n"
     kubectl logs --all-containers deploy/hub || true
 
-    echo ""
-    echo "Just while debugging intermittent issue, lets output the logs of the proxy pod."
+    printf "\n----- kubectl logs proxy -----\n\n"
     kubectl logs --all-containers deploy/proxy || true
 }
 
