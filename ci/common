@@ -104,7 +104,7 @@ full_namespace_report () {
         )
     | .metadata.name' \
         | xargs --max-args 1 --no-run-if-empty \
-        sh -c 'printf "\nPod with non-ready container detected\n - Logs of $0:\n"; kubectl logs --all-containers $0'
+        sh -c 'printf "\nPod with non-ready container detected\n - Logs of $0:\n"; kubectl logs --all-containers $0 || true'
 
     # if any pods that should be scheduled by the user-scheduler are pending ->
     # show user-scheduler's logs
@@ -116,15 +116,15 @@ full_namespace_report () {
             | .metadata.name
         '
     ) | xargs --max-args 1 --no-run-if-empty --max-lines \
-        sh -c 'printf "\nPending user pod detected ($0)\n - Logs of deploy/user-scheduler:\n"; kubectl logs --all-containers deploy/user-scheduler'
+        sh -c 'printf "\nPending user pod detected ($0)\n - Logs of deploy/user-scheduler:\n"; kubectl logs --all-containers deploy/user-scheduler || true'
 
     echo ""
     echo "Just while debugging intermittent issue, lets output the logs of the hub."
-    kubectl logs --all-containers deploy/hub
+    kubectl logs --all-containers deploy/hub || true
 
     echo ""
     echo "Just while debugging intermittent issue, lets output the logs of the proxy pod."
-    kubectl logs --all-containers deploy/proxy
+    kubectl logs --all-containers deploy/proxy || true
 }
 
 install_and_run_chartpress_and_pebble () {
