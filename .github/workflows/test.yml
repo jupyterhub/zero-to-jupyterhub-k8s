@@ -133,7 +133,7 @@ jobs:
         run: |
           . ./ci/common
           # If you have problems with the tests add '--capture=no' to show stdout
-          pytest --verbose --exitfirst --color=yes ./tests
+          pytest --verbose --maxfail=2 --color=yes ./tests
 
       - name: Provide info on failures
         if: failure()
