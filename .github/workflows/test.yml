@@ -8,6 +8,8 @@ name: Test
 on:
   pull_request:
   push:
+    branches-ignore:
+      - "dependabot/**"
   workflow_dispatch:
 
 defaults:
