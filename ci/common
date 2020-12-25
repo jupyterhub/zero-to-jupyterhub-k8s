@@ -88,16 +88,38 @@ setup_kubeval () {
 }
 
 full_namespace_report () {
-    printf "\n---------- FULL NAMESPACE REPORT ----------\n\n"
-    printf "\n---------- kubectl get ----------\n\n"
+    # Purpose:
+    # - To chart agnostically print relevant information of the resources in a
+    #   namespace.
+    #
+    # Arguments:
+    # - Accepts a sequence of arguments such as "deploy/hub" "deploy/proxy". It
+    #   will do `kubectl logs --all-containers <arg>` on them.
+
+    # printf formatting: a bold bold colored topic with a divider.
+    yellow=33
+    red=31
+    divider='--------------------------------------------------------------------------------'
+    # GitHub Workflows resets formatting after \n, so its reapplied.
+    export format="\n\033[${yellow};1m%s\n\033[${yellow};1m${divider}\033[0m\n"
+    export format_error="\n\033[${red};1m%s\n\033[${red};1m${divider}\033[0m\n"
+
+    printf "$format" "# Full namespace report"
+    printf "$format" "## Resource overview"
+    # list workloads (deployment,statefulset,daemonset,pod)
+    printf "$format" "### \$ kubectl get deploy,sts,ds,pod"
+    kubectl get deploy,sts,ds,pod
     # list config (secret,configmap)
+    printf "$format" "### \$ kubectl get secret,cm"
     kubectl get secret,cm
     # list networking (service,ingress)
-    kubectl get svc,ing
-    # list workloads (deployment,statefulset,daemonset,pod)
-    kubectl get deploy,sts,ds,pod
+    printf "$format" "### \$ kubectl get svc,ing,netpol"
+    kubectl get svc,ing,netpol
+    # list rbac (sa,role,rolebinding)
+    printf "$format" "### \$ kubectl get sa,role,rolebinding"
+    kubectl get sa,role,rolebinding
 
-    printf "\n---------- kubectl describe and logs, of non-ready pods ----------\n\n"
+    printf "$format" "## Non-ready pods: description and logs"
     # if any pod has any non-ready -> show its containers' logs
     kubectl get pods -o json \
         | jq '
@@ -107,7 +129,12 @@ full_namespace_report () {
         )
     | .metadata.name' \
         | xargs --max-args 1 --no-run-if-empty \
-        sh -c 'printf "\n----- kubectl describe pod/$0 -----\n\n"; kubectl describe pod/$0; printf "\n----- kubectl logs --all-containers pod/$0 -----\n\n"; kubectl logs --all-containers pod/$0 || true'
+        sh -c '
+            printf "$format_error" "### \$ kubectl describe pod/$0";
+            kubectl describe pod/$0;
+            printf "$format_error" "### \$ kubectl logs --all-containers pod/$0";
+            kubectl logs --all-containers pod/$0 || true;
+    '
 
     # if any pods that should be scheduled by the user-scheduler are pending ->
     # show user-scheduler's logs
@@ -119,14 +146,20 @@ full_namespace_report () {
             | .metadata.name
         '
     ) | xargs --max-args 1 --no-run-if-empty --max-lines \
-        sh -c 'printf "\n---------- Pending user pod detected ($0) ----------\n\n----- kubectl logs deploy/user-scheduler -----\n\n"; kubectl logs --all-containers deploy/user-scheduler || true'
+        sh -c '
+            printf "$format_error" "### \$ kubectl logs deploy/user-scheduler (pod/$0 was pending)";
+            kubectl logs --all-containers deploy/user-scheduler || true;
+    '
 
-    printf "\n---------- kubectl logs of important pods ----------\n\n"
-    printf "\n----- kubectl logs hub -----\n\n"
-    kubectl logs --all-containers deploy/hub || true
-
-    printf "\n----- kubectl logs proxy -----\n\n"
-    kubectl logs --all-containers deploy/proxy || true
+    # show container logs of all important workloads passed to the function,
+    # "deploy/hub" and "deploy/proxy" for example.
+    if [ "$#" -gt 0 ]; then
+        printf "$format" "## Important workloads: logs"
+    fi
+    for var in "$@"; do
+        printf "$format" "### \$ kubectl logs --all-containers $var"
+        kubectl logs --all-containers $var || true
+    done
 }
 
 install_and_run_chartpress_and_pebble () {
