@@ -8,7 +8,7 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 This release contains the patched version of jupyterhub/oauthenticator which contained a security issue that the 0.10.6 release of this Helm chart worked around. See https://github.com/jupyterhub/oauthenticator/security/advisories/GHSA-384w-5v3f-q499 for more information.
 
-Please don't use versions 0.10.0 - 0.10.5 and upgrade to 0.10.6 or later. If any users have been authorized during usage of 0.10.0 - 0.10.5 who should not have been, they must be deleted via the API or admin interface, [per the documentation](https://jupyterhub.readthedocs.io/en/1.2.2/getting-started/authenticators-users-basics.html#add-or-remove-users-from-the-hub).
+Please don't use versions 0.10.0 - 0.10.5 and upgrade to 0.10.6 or later. If you are using OAuthenticator, please check your list of users and [delete any unauthorized users who may have logged in since your upgrade to 0.10.0 - 10.10.5](https://jupyterhub.readthedocs.io/en/1.2.2/getting-started/authenticators-users-basics.html#add-or-remove-users-from-the-hub). 
 
 #### Bugs fixed
 
