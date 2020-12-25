@@ -1,8 +1,7 @@
-# Configuration file for the Sphinx documentation builder.
+# Configuration file for Sphinx to build our documentation to HTML.
 #
-# This file only contains a selection of the most common options. For a full
-# list see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
+# Configuration reference: https://www.sphinx-doc.org/en/master/usage/configuration.html
+#
 
 # -- Path setup --------------------------------------------------------------
 
@@ -17,7 +16,9 @@
 
 # -- Project specific imports ------------------------------------------------
 
-from datetime import date
+import datetime
+import os
+import subprocess
 
 import yaml
 
@@ -34,25 +35,32 @@ def setup(app):
 # ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "Zero to JupyterHub with Kubernetes"
-copyright = "{year}, Project Jupyter Contributors".format(year=date.today().year)
+copyright = f"{datetime.date.today().year}, Project Jupyter Contributors"
 author = "Project Jupyter Contributors"
 
-# The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
+# Below we dynamically set variables we can reference from the documentation
+# with |variable_name| by using the rst_epilog configuration option.
 #
+# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-rst_epilog
+
+# FIXME: Stop relying on chartpress to modify Chart.yaml (and values.yaml) by
+#        creating a new feature of chartpress that allows us to directly acquire
+#        the dynamically set chart version from Chart.yaml. This would be
+#        similar to the --list-images feature of chartpress.
+subprocess.run(["chartpress", "--skip-build"], cwd=os.path.abspath("../.."))
 with open("../../jupyterhub/Chart.yaml") as f:
     chart = yaml.safe_load(f)
-version = chart["version"].split("-", 1)[0]
-release = chart["version"]
+subprocess.run(["chartpress", "--reset"], cwd=os.path.abspath("../.."))
 
-# Project specific variables
-# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-rst_epilog
-rst_epilog = """
-.. |hub_version| replace:: {v}
-""".format(
-    v=chart["appVersion"]
-)
+chart_version = chart["version"]
+jupyterhub_version = chart["appVersion"]
+kube_version = chart["kubeVersion"].split("-", 1)[0]
+
+rst_epilog = f"""
+.. |chart_version| replace:: {chart_version}
+.. |jupyterhub_version| replace:: {jupyterhub_version}
+.. |kube_version| replace:: {kube_version}
+"""
 
 
 # -- General configuration ---------------------------------------------------

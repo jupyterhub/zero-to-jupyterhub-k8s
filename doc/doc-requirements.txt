@@ -8,6 +8,7 @@
 # first. This is only relevant if sphinx==1.* is already installed in the
 # environment, which it is on ReadTheDocs.
 #
+chartpress
 myst-parser
 pydata-sphinx-theme
 pyyaml

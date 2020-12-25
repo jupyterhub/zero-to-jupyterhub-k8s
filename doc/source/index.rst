@@ -20,9 +20,11 @@ its scalable nature to support a large group of users. Thanks to
    page`_. If you have tips or deployments that you would like to share, see
    :ref:`resources-and-references`.
 
-This documentation is for JupyterHub chart version |release|, which deploys JupyterHub |hub_version|.
+This documentation is for Helm chart version |chart_version|, which deploys
+JupyterHub version |jupyterhub_version|.
 
-This version of the chart requires kubernetes ≥1.11 and helm ≥2.11.
+This version of the chart requires Kubernetes version |kube_version| and Helm
+>=2.16.
 
 .. note::
 
