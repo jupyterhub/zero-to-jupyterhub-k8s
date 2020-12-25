@@ -135,11 +135,11 @@ jobs:
           # If you have problems with the tests add '--capture=no' to show stdout
           pytest --verbose --maxfail=2 --color=yes ./tests
 
-      - name: Provide info on failures
-        if: failure()
+      - name: Full namespace report
+        if: always()
         run: |
           . ./ci/common
-          full_namespace_report
+          full_namespace_report "deploy/hub" "deploy/proxy"
 
 
   docs_linkcheck:
