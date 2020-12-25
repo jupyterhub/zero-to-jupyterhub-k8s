@@ -112,54 +112,59 @@ full_namespace_report () {
     # list config (secret,configmap)
     printf "$format" "### \$ kubectl get secret,cm"
     kubectl get secret,cm
-    # list networking (service,ingress)
+    # list networking (service,ingress,networkpolicy)
     printf "$format" "### \$ kubectl get svc,ing,netpol"
     kubectl get svc,ing,netpol
-    # list rbac (sa,role,rolebinding)
+    # list rbac (serviceaccount,role,rolebinding)
     printf "$format" "### \$ kubectl get sa,role,rolebinding"
     kubectl get sa,role,rolebinding
 
-    printf "$format" "## Non-ready pods: description and logs"
     # if any pod has any non-ready -> show its containers' logs
-    kubectl get pods -o json \
-        | jq '
-        .items[]
-        | select(
-            any(.status.containerStatuses[]?; .ready == false)
-        )
-    | .metadata.name' \
-        | xargs --max-args 1 --no-run-if-empty \
-        sh -c '
-            printf "$format_error" "### \$ kubectl describe pod/$0";
-            kubectl describe pod/$0;
-            printf "$format_error" "### \$ kubectl logs --all-containers pod/$0";
-            kubectl logs --all-containers pod/$0 || true;
-    '
+    NON_READY_PODS=$(
+        kubectl get pods -o json \
+            | jq -r '
+                .items[]
+                | select(
+                    any(.status.containerStatuses[]?; .ready == false)
+                )
+                | .metadata.name
+        '
+    )
+    if [ -n "$NON_READY_PODS" ]; then
+        printf "$format_error" "## Non-ready pods detected!"
+        for var in $NON_READY_PODS; do
+            printf "$format_error" "### \$ kubectl describe pod/$var"
+            kubectl describe pod/$var
+            printf "$format_error" "### \$ kubectl logs --all-containers pod/$var"
+            kubectl logs --all-containers pod/$var || true
+        done
+    fi
 
     # if any pods that should be scheduled by the user-scheduler are pending ->
     # show user-scheduler's logs
-    (
+    PENDING_USER_PODS=$(
         kubectl get pods -l "component in (user-placeholder,singleuser-server)" -o json \
             | jq -r '
-            .items[]
-            | select(.status.phase == "Pending")
-            | .metadata.name
+                .items[]
+                | select(.status.phase == "Pending")
+                | .metadata.name
         '
-    ) | xargs --max-args 1 --no-run-if-empty --max-lines \
-        sh -c '
-            printf "$format_error" "### \$ kubectl logs deploy/user-scheduler (pod/$0 was pending)";
-            kubectl logs --all-containers deploy/user-scheduler || true;
-    '
+    )
+    if [ -n "$PENDING_USER_PODS" ]; then
+        printf "$format_error" "## Pending pods detected!"
+        printf "$format_error" "### \$ kubectl logs deploy/user-scheduler"
+        kubectl logs --all-containers deploy/user-scheduler || true
+    fi
 
     # show container logs of all important workloads passed to the function,
     # "deploy/hub" and "deploy/proxy" for example.
     if [ "$#" -gt 0 ]; then
-        printf "$format" "## Important workloads: logs"
+        printf "$format" "## Important workload's logs"
+        for var in "$@"; do
+            printf "$format" "### \$ kubectl logs --all-containers $var"
+            kubectl logs --all-containers $var || true
+        done
     fi
-    for var in "$@"; do
-        printf "$format" "### \$ kubectl logs --all-containers $var"
-        kubectl logs --all-containers $var || true
-    done
 }
 
 install_and_run_chartpress_and_pebble () {
