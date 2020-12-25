@@ -108,58 +108,60 @@ properties:
       config:
         type: object
         description: |
-          This is a way to configure
-          [_traitlets_](https://traitlets.readthedocs.io/en/stable/) by passing
-          values as represented by YAML. If you need Python code to execute in
-          order to decide what values to set, you need to use
-          [`hub.extraConfig`](schema_hub.extraConfig) instead.
+          JupyterHub and its components (authenticators, spawners, etc), are
+          Python classes that expose its configuration through
+          [_traitlets_](https://traitlets.readthedocs.io/en/stable/). With this
+          Helm chart configuration (`hub.config`), you can directly configure
+          the Python classes through _static_ YAML values. To _dynamically_ set
+          values, you need to use [`hub.extraConfig`](schema_hub.extraConfig)
+          instead.
 
-          ```{admonition} Usage currently indented only for auth config
+          ```{admonition} Currently intended only for auth config
           :class: warning
           This config _currently_ (0.11.0) only influence the software in the
-          `hub` Pod, but some config such as [`hub.baseUrl`](schema_hub.baseUrl)
-          needs to influence both the software in the `hub` Pod and how we
-          render Helm templates.
+          `hub` Pod, but some Helm chart config options such as
+          [`hub.baseUrl`](schema_hub.baseUrl) is used to set
+          `JupyterHub.base_url` in the `hub` Pod _and_ influence how other Helm
+          templates are rendered.
 
-          As we have not yet mapped out potential configuration conflicts except
-          for the authentication related configuration options, please accept
-          that using it for something else at this point can lead to issues.
+          As we have not yet mapped out all the potential configuration
+          conflicts except for the authentication related configuration options,
+          please accept that using it for something else at this point can lead
+          to issues.
           ```
 
-          Below is an example where JupyterHub is configured to rely on the
-          DummyAuthenticator for Authentication using a shared password, and how
-          to make the DummyAuthenticators base class authorize a few admins and
-          normal users.
+          __Example__
+
+          If you inspect documentation or some `jupyterhub_config.py` to contain
+          the following section:
+
+          ```python
+          c.JupyterHub.admin_access = true
+          c.JupyterHub.admin_users = ["jovyan1", "jovyan2"]
+          ```
+
+          Then, you would be able to represent it with this configuration like:
 
           ```yaml
           hub:
             config:
               JupyterHub:
-                authenticator_class: dummyauthenticator.DummyAuthenticator
-              DummyAuthenticator:
-                password: a-shared-secret-password
-              Authenticator:
+                admin_access: true
                 admin_users:
-                  - user1
-                  - user2
-                allowed_users:
-                  - user3
-                  - user4
+                  - jovyan1
+                  - jovyan2
           ```
 
-          ```{admonition} About data types
-          The YAML you declare will be loaded and represented as Python data
-          types, which in turn will update traitlet based config.
+          ```{admonition} YAML limitations
+          :class: tip
+          You can't represent Python `Bytes` or `Set` objects in YAML directly.
+          ```
 
-          Sometimes this becomes a limitation, for example if you want to set a
-          Bytes based configuration which YAML can't represent. This can be
-          worked around by accepting an encoded string instead as in [this
-          PR](https://github.com/yuvipanda/jupyterhub-hmacauthenticator/pull/3).
-
-          Sometimes this just increase the complexity, for example when we set
-          `Authenticator.admin_users` above. We pass it a YAML _sequence_, get a
-          Python _list_, which thankfully is allowed to create a Traitlet
-          [_Set_](https://traitlets.readthedocs.io/en/stable/trait_types.html#traitlets.Set).
+          ```{admonition} Helm value merging
+          :class: tip
+          `helm` merges a Helm chart's default values with values passed with
+          the `--values` or `-f` flag. During merging, lists are replaced while
+          dictionaries are updated.
           ```
       command:
         type: list

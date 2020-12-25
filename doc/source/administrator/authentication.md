@@ -13,13 +13,12 @@ Before configuring this, you should have [setup HTTPS](https).
 
 ### Authenticator classes
 
-As JupyterHub can't know how to authenticate all kinds of users, it expose
-configuration to extend its capabilities to rely on a dedicated [_authenticator
-class_](https://jupyterhub.readthedocs.io/en/stable/reference/authenticators.html).
-Several such classes are already made available through [installed Python
+JupyterHub are by itself unable to authenticate any kind of identity, but
+instead relies on _one_ chosen [_authenticator
+class_](https://jupyterhub.readthedocs.io/en/stable/reference/authenticators.html)
+to do it. Several such classes are already made available through [installed
+Python
 packages](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/images/hub/requirements.txt).
-
-### The Authenticator base class
 
 JupyterHub provides a base class,
 [`Authenticator`](https://github.com/jupyterhub/jupyterhub/blob/master/jupyterhub/auth.py),
@@ -29,20 +28,21 @@ this base class, we influence the behavior of the derived class as well.
 ### The configuration system
 
 We configure JupyterHub to use our chosen authenticator class and the
-authenticator class in question through this Helm chart's
+authenticator class itself through this Helm chart's
 [`hub.config`](schema_hub.config) configuration.
 
 ## General configuration
 
-As all authenticators classes rely on the `Authenticator` base class, there are
-some configuration common to all. For the latest information about the
-Authenticator base class, please see the official [configuration
-reference](https://jupyterhub.readthedocs.io/en/latest/api/auth.html).
+As all authenticators classes derive from the `Authenticator` base class, they
+share some configuration options. Below are some common configuration options,
+but please refer to the official [configuration
+reference](https://jupyterhub.readthedocs.io/en/latest/api/auth.html) for more
+details.
 
 ### [allowed_users](https://jupyterhub.readthedocs.io/en/latest/api/auth.html#jupyterhub.auth.Authenticator.allowed_users) / [admin_users](https://jupyterhub.readthedocs.io/en/latest/api/auth.html#jupyterhub.auth.LocalAuthenticator.admin_users)
 
-Some authenticator classes contain dedicated authorization logic, but that
-doesn't stop you from using the common base class authorization logic.
+Some authenticator classes may have dedicated logic in addition this this to
+authorize users.
 
 ```yaml
 hub:
@@ -81,7 +81,8 @@ If you want JupyterHub to persist often sensitive information received as part
 of logging in, you need to enable it and provide one or more keys for encryption
 and decryption.
 
-The recommended way of doing so for this Helm chart is to configure CryptKeeper
+The recommended way of doing so for this Helm chart is to configure
+[CryptKeeper](https://github.com/jupyterhub/jupyterhub/blob/master/jupyterhub/crypto.py)
 with keys rather than setting an environment variable.
 
 For more information, see [JupyterHub's own
@@ -100,23 +101,20 @@ hub:
 
 ## Configuring authenticator classes
 
-Below we provide some example configurations of various commonly used
-authentication classes. We encourage you to inspect the authentication class own documentation
+Below we provide a few configuration examples of commonly used authentication
+classes. For more details about them, please see the authentication class' own
+documentation.
 
 ### OAuth2 based authentication
 
 JupyterHub's [oauthenticator](https://github.com/jupyterhub/oauthenticator) has
 support for enabling your users to authenticate via a third-party OAuth2
-provider, including GitHub, Google, and CILogon. All of these will require an
-OAuth2 _client id_ and _client secret_.
+_identity provider_ such as GitHub, Google, and CILogon. All of these will
+require an OAuth2 _client id_ and _client secret_.
 
-To acquire a client id and client secret, follow the service-specific
-instructions linked in [oauthenticator's
-documentation](https://oauthenticator.readthedocs.io/en/stable/). We will then
-make use of them in our `config.yaml`.
-
-Below are a few example configurations for authentication classes part of the
-oauthenticator project.
+For details on how to acquire a client id and client secret, please refer to
+[oauthenticator's
+documentation](https://oauthenticator.readthedocs.io/en/stable/getting-started.html).
 
 #### GitHub
 
@@ -131,7 +129,8 @@ To create OAuth credentials on GitHub, follow these steps:
 -   Fill out the forms (you'll need your hub address) and generate your
     ID/Secret.
 
-To enable GitHub authentication, add the following to your `config.yml`:
+To enable GitHub authentication, your `config.yaml` should contain the following
+configuration:
 
 ```yaml
 hub:
@@ -160,20 +159,10 @@ hub:
         - read:user
 ```
 
-`scope` can take other values as described in the [GitHub OAuth scopes
-documentation](https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/)
-but we recommend `read:user` as this requires no additional configuration by
-GitHub organisations and users. For example, omitting the scope means members of
-an organisation must [set their membership to
-Public](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/publicizing-or-hiding-organization-membership)
-to login, whereas setting it to `read:org` may require approval of the
-application by a GitHub organisation admin. Please see [this
-issue](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/687) for
-further information.
+```{admonition} Alternative scopes
+While you can set other scopes than `read:user` as described in [GitHub OAuth scopes documentation](https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/), we recommend `read:user`.
 
-```{note}
-Changing `scope` will not change the scope for existing OAuth tokens,
-you must invalidate them.
+With `read:user`, the user will be requested to permit JupyterHub to read their profile data. The benefit of this choice is that it won't require configuration by the GitHub organizations' admins by by its members.
 ```
 
 #### Google
@@ -227,7 +216,9 @@ earlier. Set `hosted_domain` to your institution's domain name. The value of
 users which account they are using to login.
 
 #### CILogon
-Please see CyberInfrastructure Logon's [website](https://www.cilogon.org) for more information about what kind of identity is managed by CILogon.
+
+Please see CyberInfrastructure Logon's [website](https://www.cilogon.org) for
+more information about what kind of identity is managed by CILogon.
 
 ```yaml
 hub:
@@ -322,7 +313,7 @@ OAuth 2.0 protocol, implemented by [various servers and
 services](https://openid.net/developers/certified/#OPServices). While OpenID
 Connect endpoint discovery is not supported by oauthentiator, you can still
 configure JupyterHub to authenticate with OpenID Connect providers by specifying
-all endpoints in GenericOAuthenticator.
+all endpoints in the GenericOAuthenticator class.
 
 ##### Auth0
 
@@ -353,11 +344,12 @@ hub:
 ##### KeyCloak
 
 [KeyCloak](https://www.keycloak.org) is an open source based provider of
-identity management that you can self host. Below is an example on how you can
-configure the GenericOAuthenticator to authenticate against a KeyCloak server.
+identity management that you can host yourself. Below is an example on how you
+can configure the GenericOAuthenticator class to authenticate against a KeyCloak
+server.
 
-For this setup, it is assumed you have a KeyCloak server and have configured
-[configured an OIDC Client](https://www.keycloak.org/docs/latest/server_admin/index.html#oidc-clients).
+To configure an OpenID Connect client, see [KeyCloak's own
+documentation](https://www.keycloak.org/docs/latest/server_admin/index.html#oidc-clients).
 
 ```yaml
 hub:
@@ -398,7 +390,7 @@ hub:
       server_address: ldap.EXAMPLE.org
 ```
 
-Another example is provided below, equivalent to that given in the
+Another example is provided below, equivalent to the example given in the
 [ldapauthenticator README](https://github.com/jupyterhub/ldapauthenticator/blob/master/README.md).
 
 ```yaml
