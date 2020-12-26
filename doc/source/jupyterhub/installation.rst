@@ -91,7 +91,7 @@ Install JupyterHub
         --install $RELEASE jupyterhub/jupyterhub \
         --namespace $NAMESPACE \
         --create-namespace \
-        --version=|chart_version| \
+        --version=0.10.6 \
         --values config.yaml
 
    where:
