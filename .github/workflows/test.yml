@@ -32,14 +32,14 @@ jobs:
         with:
           python-version: '3.7'
 
-      - uses: pre-commit/action@v2.0.0
-
       - name: Install dependencies
         run: |
           . ci/common
           setup_helm
           KUBEVAL_VERSION=0.15.0 setup_kubeval
-          pip install yamllint
+          pip install chartpress yamllint
+
+      - uses: pre-commit/action@v2.0.0
 
       - name: Lint and validate
         # NOTE: Kubernetes resource validation can only be done against
