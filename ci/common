@@ -122,8 +122,8 @@ full_namespace_report () {
     printf "$format" "### \$ kubectl get sa,role,rolebinding"
     kubectl get sa,role,rolebinding
 
-    # Check if any container of any pod never reached a ready status.
-    PODS_WITH_NEVER_READY_CONTAINER=$(
+    # Check if any container of any pod has a non ready status
+    PODS_WITH_NON_READY_CONTAINER=$(
         kubectl get pods -o json \
             | jq -r '
                 .items[]
@@ -135,16 +135,17 @@ full_namespace_report () {
                 | .metadata.name
         '
     )
-    if [ -n "$PODS_WITH_NEVER_READY_CONTAINER" ]; then
-        printf "$format_error" "## Pods with container(s) that never became ready!"
-        echo "$PODS_WITH_NEVER_READY_CONTAINER" | xargs --max-args=1 echo -
+    if [ -n "$PODS_WITH_NON_READY_CONTAINER" ]; then
+        printf "$format_error" "## Pods with non-ready container(s) detected!"
+        echo "$PODS_WITH_NON_READY_CONTAINER" | xargs --max-args=1 echo -
 
-        for var in $PODS_WITH_NEVER_READY_CONTAINER; do
+        for var in $PODS_WITH_NON_READY_CONTAINER; do
             printf "$format_error" "### \$ kubectl describe pod/$var"
             kubectl describe pod/$var
             printf "$format_error" "### \$ kubectl logs --all-containers pod/$var"
-            kubectl logs --all-containers pod/$var || true
+            kubectl logs --all-containers pod/$var || echo  # a newline on failure for consistency with non-failure
         done
+
     fi
 
     # Check if any container of any pod has a restartCount > 0. Then, we inspect
@@ -192,7 +193,7 @@ full_namespace_report () {
         echo "$PENDING_USER_PODS" | xargs --max-args=1 echo -
 
         printf "$format_error" "### \$ kubectl logs --all-containers deploy/user-scheduler"
-        kubectl logs --all-containers deploy/user-scheduler || true
+        kubectl logs --all-containers deploy/user-scheduler || echo  # a newline on failure for consistency with non-failure
     fi
 
     # show container logs of all important workloads passed to the function,
@@ -203,7 +204,7 @@ full_namespace_report () {
 
         for var in "$@"; do
             printf "$format" "### \$ kubectl logs --all-containers $var"
-            kubectl logs --all-containers $var || true
+            kubectl logs --all-containers $var || echo  # a newline on failure for consistency with non-failure
         done
     fi
 }
