@@ -119,7 +119,10 @@ full_namespace_report () {
     printf "$format" "### \$ kubectl get sa,role,rolebinding"
     kubectl get sa,role,rolebinding
 
-    # if any pod has any non-ready -> show its containers' logs
+    # if any pod container has failed to become Ready -> show the pod's
+    # containers' logs
+    #
+    # ContainerStatus ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#containerstatus-v1-core
     NON_READY_PODS=$(
         kubectl get pods -o json \
             | jq -r '
@@ -139,6 +142,11 @@ full_namespace_report () {
             kubectl logs --all-containers pod/$var || true
         done
     fi
+
+    # FIXME: check --previous of pods with restartCount, but know that when
+    #        using --previous we should also use --follow --ignore-errors so we
+    #        don't fail just because one of the containers doesn't have logs to
+    #        report as it may not have restarted.
 
     # if any pods that should be scheduled by the user-scheduler are pending ->
     # show user-scheduler's logs
