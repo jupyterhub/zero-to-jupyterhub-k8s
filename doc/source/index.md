@@ -1,5 +1,4 @@
-Zero to JupyterHub with Kubernetes
-==================================
+# Zero to JupyterHub with Kubernetes
 
 [JupyterHub](https://github.com/jupyterhub/jupyterhub) allows users to
 interact with a computing environment through a webpage. As most devices
@@ -44,8 +43,7 @@ until August 13,
 the Helm references in this documentation are Helm v3.
 :::
 
-What To Expect {#about-guide}
---------------
+## What To Expect
 
 This guide will help you deploy and customize your own JupyterHub on a
 cloud. While doing this, you will gain valuable experience with:
@@ -75,8 +73,7 @@ JupyterHub depends upon, see our `tools`{.interpreted-text role="ref"}
 page.
 :::
 
-Setup Kubernetes {#getting-to-zero}
-----------------
+## Setup Kubernetes
 
 This section describes a how to setup a Kubernetes cluster on a
 selection of cloud providers and environments, as well as initialize
@@ -86,8 +83,7 @@ Helm, a Kubernetes package manager, to work with it.
 kubernetes/index
 :::
 
-Setup JupyterHub {#creating-your-jupyterhub}
-----------------
+## Setup JupyterHub
 
 This tutorial starts from *Step Zero: Your Kubernetes cluster* and
 describes the steps needed for you to create a complete initial
@@ -106,8 +102,7 @@ through the steps. See the
 `helm-chart-configuration-reference`{.interpreted-text role="ref"} for a
 list of frequently used configurable helm chart fields.
 
-Administrator Guide
--------------------
+## Administrator Guide
 
 This section provides information on managing and maintaining a staging
 or production deployment of JupyterHub. It has considerations for
@@ -118,8 +113,7 @@ deployment.
 administrator/index
 :::
 
-Resources {#resources-and-references}
----------
+## Resources
 
 This section holds all the references and resources that helped make
 this project what it is today.
