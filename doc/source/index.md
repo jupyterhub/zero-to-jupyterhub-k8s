@@ -124,9 +124,8 @@ community members to share their collective Kubernetes knowledge and
 JupyterHub experiences.
 ```
 
-```{admonition} Note
-**Contributing to Z2JH**. If you would like to help improve the Zero to
-JupyterHub guide, please see the [issues
+```{admonition} Contributing
+If you would like to help improve this guide or Helm chart, please see the [issues
 page](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues) as
 well as the [contributor
 guide](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CONTRIBUTING.md).
