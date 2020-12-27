@@ -137,19 +137,20 @@ full_namespace_report () {
     )
     if [ -n "$PODS_WITH_NEVER_READY_CONTAINER" ]; then
         printf "$format_error" "## Pods with container(s) that never became ready!"
-        echo "$PODS_WITH_NEVER_READY_CONTAINER" | xargs --max-args=1 echo - $1
+        echo "$PODS_WITH_NEVER_READY_CONTAINER" | xargs --max-args=1 echo -
 
         for var in $PODS_WITH_NEVER_READY_CONTAINER; do
             printf "$format_error" "### \$ kubectl describe pod/$var"
             kubectl describe pod/$var
-            printf "$format_error" "### \$ kubectl logs --all-containers --follow --ignore-errors pod/$var"
-            kubectl logs --all-containers --follow --ignore-errors pod/$var
+            printf "$format_error" "### \$ kubectl logs --all-containers pod/$var"
+            kubectl logs --all-containers pod/$var || true
         done
     fi
 
     # Check if any container of any pod has a restartCount > 0. Then, we inspect
     # their logs with --previous. We also add --follow and --ignore-errors in
-    # order to ensure we get the information from all containers.
+    # order to ensure we get the information from all containers, and combined
+    # with --previous it will exit and not get stuck.
     #
     # ref: https://github.com/kubernetes/kubernetes/issues/97530
     PODS_WITH_RESTARTED_CONTAINERS=$(
@@ -166,7 +167,7 @@ full_namespace_report () {
     )
     if [ -n "$PODS_WITH_RESTARTED_CONTAINERS" ]; then
         printf "$format_error" "## Pods with restarted containers detected!"
-        echo "$PODS_WITH_RESTARTED_CONTAINERS" | xargs --max-args=1 echo - $1
+        echo "$PODS_WITH_RESTARTED_CONTAINERS" | xargs --max-args=1 echo -
 
         for var in $PODS_WITH_RESTARTED_CONTAINERS; do
             printf "$format_error" "### \$ kubectl describe pod/$var"
@@ -188,21 +189,21 @@ full_namespace_report () {
     )
     if [ -n "$PENDING_USER_PODS" ]; then
         printf "$format_error" "## Pending pods detected!"
-        echo "$PENDING_USER_PODS" | xargs --max-args=1 echo - $1
+        echo "$PENDING_USER_PODS" | xargs --max-args=1 echo -
 
-        printf "$format_error" "### \$ kubectl logs --all-containers --follow --ignore-errors deploy/user-scheduler"
-        kubectl logs --all-containers --follow --ignore-errors deploy/user-scheduler
+        printf "$format_error" "### \$ kubectl logs --all-containers deploy/user-scheduler"
+        kubectl logs --all-containers deploy/user-scheduler || true
     fi
 
     # show container logs of all important workloads passed to the function,
     # "deploy/hub" and "deploy/proxy" for example.
     if [ "$#" -gt 0 ]; then
         printf "$format" "## Important workload's logs"
-        echo "$@" | xargs --max-args=1 echo - $1
+        echo "$@" | xargs --max-args=1 echo -
 
         for var in "$@"; do
-            printf "$format" "### \$ kubectl logs --all-containers --follow --ignore-errors $var"
-            kubectl logs --all-containers --all-containers --follow --ignore-errors $var
+            printf "$format" "### \$ kubectl logs --all-containers $var"
+            kubectl logs --all-containers $var || true
         done
     fi
 }
