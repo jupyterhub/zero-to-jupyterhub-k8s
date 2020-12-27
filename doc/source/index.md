@@ -67,9 +67,10 @@ This section describes a how to setup a Kubernetes cluster on a
 selection of cloud providers and environments, as well as initialize
 Helm, a Kubernetes package manager, to work with it.
 
-::: {.toctree maxdepth="2"}
+```{toctree}
+:maxdepth: 2
 kubernetes/index
-:::
+```
 
 ## Setup JupyterHub
 
@@ -78,9 +79,10 @@ describes the steps needed for you to create a complete initial
 JupyterHub deployment. Please ensure you have a working installation of
 Kubernetes and Helm before proceeding with this section.
 
-::: {.toctree maxdepth="2"}
+```{toctree}
+:maxdepth: 2
 jupyterhub/index
-:::
+```
 
 JupyterHub can be configured and customized to fit a variety of
 deployment requirements. If you would like to expand JupyterHub,
@@ -97,18 +99,20 @@ or production deployment of JupyterHub. It has considerations for
 managing cloud-based deployments and tips for maintaining your
 deployment.
 
-::: {.toctree maxdepth="2"}
+```{toctree}
+:maxdepth: 2
 administrator/index
-:::
+```
 
 ## Resources
 
 This section holds all the references and resources that helped make
 this project what it is today.
 
-::: {.toctree maxdepth="2"}
+```{toctree}
+:maxdepth: 2
 resources/index
-:::
+```
 
 ### Community Resources
 
