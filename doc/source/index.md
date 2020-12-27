@@ -11,11 +11,7 @@ k8s environment and leverage its scalable nature to support a large
 group of users. Thanks to `Kubernetes`{.interpreted-text role="term"},
 we are not tied to a specific cloud provider.
 
-::: {.note}
-::: {.title}
-Note
-:::
-
+```{admonition} Note
 This project is under active development so information and tools may
 change. *You can be a part of this change!* If you see anything that is
 incorrect or have any questions, feel free to post on the community
@@ -25,23 +21,19 @@ issue at the [issues
 page](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues). If
 you have tips or deployments that you would like to share, see
 `resources-and-references`{.interpreted-text role="ref"}.
-:::
+```
 
 This documentation is for Helm chart version , which deploys JupyterHub
 version .
 
 This version of the chart requires Kubernetes version and Helm \>=2.16.
 
-::: {.note}
-::: {.title}
-Note
-:::
-
+```{admonition} Note
 Helm 2 is deprecated since of November 2019, and [will receive bugfixes
 until August 13,
 2020](https://helm.sh/blog/covid-19-extending-helm-v2-bug-fixes). So,
 the Helm references in this documentation are Helm v3.
-:::
+```
 
 ## What To Expect
 
@@ -63,15 +55,11 @@ It\'s also possible you end up getting some experience with:
 -   **Domain registration** to make the hub available at
     <https://your-domain-name.com>
 
-::: {.note}
-::: {.title}
-Note
-:::
-
+```{admonition} Note
 For a more elaborate introduction to the tools and services that
 JupyterHub depends upon, see our `tools`{.interpreted-text role="ref"}
 page.
-:::
+```
 
 ## Setup Kubernetes
 
@@ -127,28 +115,20 @@ resources/index
 This section gives the community a space to provide information on
 setting up, managing, and maintaining JupyterHub.
 
-::: {.important}
-::: {.title}
-Important
-:::
-
+```{admonition} Note
 We recognize that Kubernetes has many deployment options. As a project
 team with limited resources to provide end user support, we rely on
 community members to share their collective Kubernetes knowledge and
 JupyterHub experiences.
-:::
+```
 
-::: {.note}
-::: {.title}
-Note
-:::
-
+```{admonition} Note
 **Contributing to Z2JH**. If you would like to help improve the Zero to
 JupyterHub guide, please see the [issues
 page](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues) as
 well as the [contributor
 guide](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CONTRIBUTING.md).
-:::
+```
 
 We hope that you will use this section to share deployments with on a
 variety of infrastructure and for different use cases. There is also a
