@@ -95,6 +95,9 @@ full_namespace_report () {
     # Arguments:
     # - Accepts a sequence of arguments such as "deploy/hub" "deploy/proxy". It
     #   will do `kubectl logs --all-containers <arg>` on them.
+    #
+    # Relevant references:
+    # - ContainerStatus ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#containerstatus-v1-core
 
     # printf formatting: a bold bold colored topic with a divider.
     yellow=33
@@ -119,34 +122,55 @@ full_namespace_report () {
     printf "$format" "### \$ kubectl get sa,role,rolebinding"
     kubectl get sa,role,rolebinding
 
-    # if any pod container has failed to become Ready -> show the pod's
-    # containers' logs
-    #
-    # ContainerStatus ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#containerstatus-v1-core
-    NON_READY_PODS=$(
+    # Check if any container of any pod never reached a ready status.
+    PODS_WITH_NEVER_READY_CONTAINER=$(
         kubectl get pods -o json \
             | jq -r '
                 .items[]
                 | select(
+                    any(.status.initContainerStatuses[]?; .ready == false)
+                    or
                     any(.status.containerStatuses[]?; .ready == false)
                 )
                 | .metadata.name
         '
     )
-    if [ -n "$NON_READY_PODS" ]; then
-        printf "$format_error" "## Non-ready pods detected!"
-        for var in $NON_READY_PODS; do
+    if [ -n "$PODS_WITH_NEVER_READY_CONTAINER" ]; then
+        printf "$format_error" "## Pods with container(s) that never became ready!"
+        for var in $PODS_WITH_NEVER_READY_CONTAINER; do
             printf "$format_error" "### \$ kubectl describe pod/$var"
             kubectl describe pod/$var
-            printf "$format_error" "### \$ kubectl logs --all-containers pod/$var"
-            kubectl logs --all-containers pod/$var || true
+            printf "$format_error" "### \$ kubectl logs --all-containers --follow --ignore-errors pod/$var"
+            kubectl logs --all-containers --follow --ignore-errors pod/$var
         done
     fi
 
-    # FIXME: check --previous of pods with restartCount, but know that when
-    #        using --previous we should also use --follow --ignore-errors so we
-    #        don't fail just because one of the containers doesn't have logs to
-    #        report as it may not have restarted.
+    # Check if any container of any pod has a restartCount > 0. Then, we inspect
+    # their logs with --previous. We also add --follow and --ignore-errors in
+    # order to ensure we get the information from all containers.
+    #
+    # ref: https://github.com/kubernetes/kubernetes/issues/97530
+    PODS_WITH_RESTARTED_CONTAINERS=$(
+        kubectl get pods -o json \
+            | jq -r '
+                .items[]
+                | select(
+                    any(.status.initContainerStatuses[]?; .restartCount > 0)
+                    or
+                    any(.status.containerStatuses[]?; .restartCount > 0)
+                )
+                | .metadata.name
+        '
+    )
+    if [ -n "$PODS_WITH_RESTARTED_CONTAINERS" ]; then
+        printf "$format_error" "## Pods with restarted containers detected!"
+        for var in $PODS_WITH_RESTARTED_CONTAINERS; do
+            printf "$format_error" "### \$ kubectl describe pod/$var"
+            kubectl describe pod/$var
+            printf "$format_error" "### \$ kubectl logs --previous --all-containers --follow --ignore-errors pod/$var"
+            kubectl logs --previous --all-containers --follow --ignore-errors pod/$var
+        done
+    fi
 
     # if any pods that should be scheduled by the user-scheduler are pending ->
     # show user-scheduler's logs
@@ -160,8 +184,8 @@ full_namespace_report () {
     )
     if [ -n "$PENDING_USER_PODS" ]; then
         printf "$format_error" "## Pending pods detected!"
-        printf "$format_error" "### \$ kubectl logs deploy/user-scheduler"
-        kubectl logs --all-containers deploy/user-scheduler || true
+        printf "$format_error" "### \$ kubectl logs --all-containers --follow --ignore-errors deploy/user-scheduler"
+        kubectl logs --all-containers --follow --ignore-errors deploy/user-scheduler
     fi
 
     # show container logs of all important workloads passed to the function,
@@ -169,8 +193,8 @@ full_namespace_report () {
     if [ "$#" -gt 0 ]; then
         printf "$format" "## Important workload's logs"
         for var in "$@"; do
-            printf "$format" "### \$ kubectl logs --all-containers $var"
-            kubectl logs --all-containers $var || true
+            printf "$format" "### \$ kubectl logs --all-containers --follow --ignore-errors $var"
+            kubectl logs --all-containers --all-containers --follow --ignore-errors $var
         done
     fi
 }
