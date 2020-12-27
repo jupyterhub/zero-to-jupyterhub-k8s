@@ -1,3 +1,5 @@
+.. _community-resources:
+
 Community Resources
 ===================
 

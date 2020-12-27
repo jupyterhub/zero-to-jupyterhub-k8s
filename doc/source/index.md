@@ -8,7 +8,7 @@ class of students or an analytics team).
 
 This project will help you set up your own JupyterHub on a cloud/on-prem
 k8s environment and leverage its scalable nature to support a large
-group of users. Thanks to `Kubernetes`{.interpreted-text role="term"},
+group of users. Thanks to {term}`Kubernetes`,
 we are not tied to a specific cloud provider.
 
 ```{admonition} Note
@@ -19,8 +19,8 @@ incorrect or have any questions, feel free to post on the community
 [Gitter chat](https://gitter.im/jupyterhub/jupyterhub) or create an
 issue at the [issues
 page](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues). If
-you have tips or deployments that you would like to share, see
-`resources-and-references`{.interpreted-text role="ref"}.
+you have tips or deployments that you would like to share, see the
+[Community Resources section](community-resources).
 ```
 
 This documentation is for Helm chart version , which deploys JupyterHub
@@ -57,8 +57,7 @@ It\'s also possible you end up getting some experience with:
 
 ```{admonition} Note
 For a more elaborate introduction to the tools and services that
-JupyterHub depends upon, see our `tools`{.interpreted-text role="ref"}
-page.
+JupyterHub depends upon, see our [page about that](tools).
 ```
 
 ## Setup Kubernetes
@@ -88,8 +87,7 @@ JupyterHub can be configured and customized to fit a variety of
 deployment requirements. If you would like to expand JupyterHub,
 customize its setup, increase the computational resources available for
 users, or change authentication services, this guide will walk you
-through the steps. See the
-`helm-chart-configuration-reference`{.interpreted-text role="ref"} for a
+through the steps. See the [](helm-chart-configuration-reference) for a
 list of frequently used configurable helm chart fields.
 
 ## Administrator Guide
@@ -136,8 +134,7 @@ guide](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CONTRIBU
 
 We hope that you will use this section to share deployments with on a
 variety of infrastructure and for different use cases. There is also a
-`community maintained list <resources/community>`{.interpreted-text
-role="doc"} of users of this Guide and the JupyterHub Helm Chart.
+[community maintained list](community-resources) of users of this Guide and the JupyterHub Helm Chart.
 
 ### Institutional support
 
