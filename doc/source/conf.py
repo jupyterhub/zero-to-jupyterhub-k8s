@@ -81,6 +81,12 @@ kube_version = chart["kubeVersion"].split("-", 1)[0]
 # etc. Reference them using |variable_name|.
 #
 # rst_epilog ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-rst_epilog
+#
+# FIXME: We can't substitute something for an entire link, because it is
+#        considered illegal for security reasons presumably. But, only for
+#        rst_epilog, not for myst_substitutions. PS: security wise, I think the
+#        difference is okay because myst_substitutions is entirely defined in
+#        conf.py.
 rst_epilog = f"""
 .. |latest_tag| replace:: {latest_tag}
 .. |chart_version| replace:: {chart_version}
