@@ -95,6 +95,9 @@ full_namespace_report () {
     # Arguments:
     # - Accepts a sequence of arguments such as "deploy/hub" "deploy/proxy". It
     #   will do `kubectl logs --all-containers <arg>` on them.
+    #
+    # Relevant references:
+    # - ContainerStatus ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#containerstatus-v1-core
 
     # printf formatting: a bold bold colored topic with a divider.
     yellow=33
@@ -119,24 +122,59 @@ full_namespace_report () {
     printf "$format" "### \$ kubectl get sa,role,rolebinding"
     kubectl get sa,role,rolebinding
 
-    # if any pod has any non-ready -> show its containers' logs
-    NON_READY_PODS=$(
+    # Check if any container of any pod has a non ready status
+    PODS_WITH_NON_READY_CONTAINER=$(
         kubectl get pods -o json \
             | jq -r '
                 .items[]
                 | select(
+                    any(.status.initContainerStatuses[]?; .ready == false)
+                    or
                     any(.status.containerStatuses[]?; .ready == false)
                 )
                 | .metadata.name
         '
     )
-    if [ -n "$NON_READY_PODS" ]; then
-        printf "$format_error" "## Non-ready pods detected!"
-        for var in $NON_READY_PODS; do
+    if [ -n "$PODS_WITH_NON_READY_CONTAINER" ]; then
+        printf "$format_error" "## Pods with non-ready container(s) detected!"
+        echo "$PODS_WITH_NON_READY_CONTAINER" | xargs --max-args=1 echo -
+
+        for var in $PODS_WITH_NON_READY_CONTAINER; do
             printf "$format_error" "### \$ kubectl describe pod/$var"
             kubectl describe pod/$var
             printf "$format_error" "### \$ kubectl logs --all-containers pod/$var"
-            kubectl logs --all-containers pod/$var || true
+            kubectl logs --all-containers pod/$var || echo  # a newline on failure for consistency with non-failure
+        done
+
+    fi
+
+    # Check if any container of any pod has a restartCount > 0. Then, we inspect
+    # their logs with --previous. We also add --follow and --ignore-errors in
+    # order to ensure we get the information from all containers, and combined
+    # with --previous it will exit and not get stuck.
+    #
+    # ref: https://github.com/kubernetes/kubernetes/issues/97530
+    PODS_WITH_RESTARTED_CONTAINERS=$(
+        kubectl get pods -o json \
+            | jq -r '
+                .items[]
+                | select(
+                    any(.status.initContainerStatuses[]?; .restartCount > 0)
+                    or
+                    any(.status.containerStatuses[]?; .restartCount > 0)
+                )
+                | .metadata.name
+        '
+    )
+    if [ -n "$PODS_WITH_RESTARTED_CONTAINERS" ]; then
+        printf "$format_error" "## Pods with restarted containers detected!"
+        echo "$PODS_WITH_RESTARTED_CONTAINERS" | xargs --max-args=1 echo -
+
+        for var in $PODS_WITH_RESTARTED_CONTAINERS; do
+            printf "$format_error" "### \$ kubectl describe pod/$var"
+            kubectl describe pod/$var
+            printf "$format_error" "### \$ kubectl logs --previous --all-containers --follow --ignore-errors pod/$var"
+            kubectl logs --previous --all-containers --follow --ignore-errors pod/$var
         done
     fi
 
@@ -152,17 +190,21 @@ full_namespace_report () {
     )
     if [ -n "$PENDING_USER_PODS" ]; then
         printf "$format_error" "## Pending pods detected!"
-        printf "$format_error" "### \$ kubectl logs deploy/user-scheduler"
-        kubectl logs --all-containers deploy/user-scheduler || true
+        echo "$PENDING_USER_PODS" | xargs --max-args=1 echo -
+
+        printf "$format_error" "### \$ kubectl logs --all-containers deploy/user-scheduler"
+        kubectl logs --all-containers deploy/user-scheduler || echo  # a newline on failure for consistency with non-failure
     fi
 
     # show container logs of all important workloads passed to the function,
     # "deploy/hub" and "deploy/proxy" for example.
     if [ "$#" -gt 0 ]; then
         printf "$format" "## Important workload's logs"
+        echo "$@" | xargs --max-args=1 echo -
+
         for var in "$@"; do
             printf "$format" "### \$ kubectl logs --all-containers $var"
-            kubectl logs --all-containers $var || true
+            kubectl logs --all-containers $var || echo  # a newline on failure for consistency with non-failure
         done
     fi
 }
