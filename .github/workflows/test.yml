@@ -69,19 +69,20 @@ jobs:
         # gain meaning on how job steps use them.
         #
         # k3s-version: https://github.com/rancher/k3s/tags
+        # k3s-channel: https://update.k3s.io/v1-release/channels
         include:
-          - k3s-version: v1.20.0+k3s2
+          - k3s-channel: latest   # v1.20 as of 2020-12-31
             test: install
-          - k3s-version: v1.19.5+k3s1
+          - k3s-channel: v1.19
             test: install
-          - k3s-version: v1.18.13+k3s1
+          - k3s-channel: v1.18
             test: install
-          - k3s-version: v1.17.15+k3s1
+          - k3s-channel: v1.17
             test: install
-          - k3s-version: v1.16.15+k3s1
+          - k3s-channel: v1.16
             test: install
 
-          - k3s-version: v1.19.5+k3s1
+          - k3s-channel: stable   # v1.19 as of 2020-12-31
             test: upgrade
 
     steps:
@@ -94,9 +95,9 @@ jobs:
       # kubectl and helm
       #
       # ref: https://github.com/jupyterhub/action-k3s-helm/
-      - uses: jupyterhub/action-k3s-helm@main
+      - uses: jupyterhub/action-k3s-helm@v1
         with:
-          k3s-version: ${{ matrix.k3s-version }}
+          k3s-channel: ${{ matrix.k3s-channel }}
           helm-version: v3.4.2
           metrics-enabled: false
           traefik-enabled: false
