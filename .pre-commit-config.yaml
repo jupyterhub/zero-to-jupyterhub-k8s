@@ -1,10 +1,28 @@
+# pre-commit is a tool to automatically do tasks before committing.
+#
+# Config reference: https://pre-commit.com/#pre-commit-configyaml---top-level
+#
 repos:
+  # Python code formatting
   - repo: https://github.com/ambv/black
     rev: 20.8b1
     hooks:
       - id: black
         args: [--target-version=py36]
+
+  # Shell script code formatting
   - repo: https://github.com/lovesegfault/beautysh
     rev: 6.0.1
     hooks:
       - id: beautysh
+
+  # Reset changes by chartpress
+  - repo: local
+    hooks:
+      - id: chartpress
+        name: chartpress --reset
+        files: jupyterhub/Chart.yaml|jupyterhub/values.yaml
+        description: Run `chartpress --reset` to clean up helm charts before committing.
+        entry: chartpress --reset
+        language: system
+        pass_filenames: false
