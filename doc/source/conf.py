@@ -1,8 +1,7 @@
-# Configuration file for the Sphinx documentation builder.
+# Configuration file for Sphinx to build our documentation to HTML.
 #
-# This file only contains a selection of the most common options. For a full
-# list see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
+# Configuration reference: https://www.sphinx-doc.org/en/master/usage/configuration.html
+#
 
 # -- Path setup --------------------------------------------------------------
 
@@ -17,7 +16,10 @@
 
 # -- Project specific imports ------------------------------------------------
 
-from datetime import date
+import datetime
+import os
+import re
+import subprocess
 
 import yaml
 
@@ -30,32 +32,100 @@ def setup(app):
     app.add_css_file("custom.css")
 
 
+# -- Referencable variables --------------------------------------------------
+
+
+def _get_latest_tag():
+    """Get the latest tag on a commit in branch or return None."""
+    try:
+        # If the git command output is my-tag-14-g0aed65e,
+        # then the return value will become my-tag.
+        return (
+            subprocess.check_output(["git", "describe", "--tags", "--long"])
+            .decode("utf-8")
+            .strip()
+            .rsplit("-", maxsplit=2)[0]
+        )
+    except subprocess.CalledProcessError:
+        return None
+
+
+def _get_git_ref_from_chartpress_based_version(version):
+    """
+    Get a git ref from a chartpress set version of format like
+    1.2.3-beta.1.n123.h1234567, 1.2.3-n123.h1234567, or 1.2.3.
+    """
+    tag_hash_split = re.split("[\.|-]n\d\d\d\.h", version)
+    if len(tag_hash_split) == 2:
+        return tag_hash_split[1]
+    else:
+        return tag_hash_split[0]
+
+
+# FIXME: Stop relying on chartpress to modify Chart.yaml (and values.yaml) by
+#        creating a new feature of chartpress that allows us to directly acquire
+#        the dynamically set chart version from Chart.yaml. This would be
+#        similar to the --list-images feature of chartpress.
+subprocess.run(["chartpress", "--skip-build"], cwd=os.path.abspath("../.."))
+with open("../../jupyterhub/Chart.yaml") as f:
+    chart = yaml.safe_load(f)
+subprocess.run(["chartpress", "--reset"], cwd=os.path.abspath("../.."))
+
+latest_tag = _get_latest_tag()
+chart_version = chart["version"]
+chart_version_git_ref = _get_git_ref_from_chartpress_based_version(chart_version)
+jupyterhub_version = chart["appVersion"]
+kube_version = chart["kubeVersion"].split("-", 1)[0]
+
+# These substitution variables only work in rst contexts, and not within links
+# etc. Reference them using |variable_name|.
+#
+# rst_epilog ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-rst_epilog
+#
+# FIXME: We can't substitute something for an entire link, because it is
+#        considered illegal for security reasons presumably. But, only for
+#        rst_epilog, not for myst_substitutions. PS: security wise, I think the
+#        difference is okay because myst_substitutions is entirely defined in
+#        conf.py.
+rst_epilog = f"""
+.. |latest_tag| replace:: {latest_tag}
+.. |chart_version| replace:: {chart_version}
+.. |chart_version_git_ref| replace:: {chart_version_git_ref}
+.. |jupyterhub_version| replace:: {jupyterhub_version}
+.. |kube_version| replace:: {kube_version}
+"""
+
+# These substitution variables only work in markdown contexts, and does not work
+# within links etc. Reference using {{ variable_name }}
+#
+# myst_substitutions ref: https://myst-parser.readthedocs.io/en/latest/using/syntax-optional.html#substitutions-with-jinja2
+myst_substitutions = {
+    "latest_tag": latest_tag,
+    "chart_version": chart_version,
+    "chart_version_git_ref": chart_version_git_ref,
+    "jupyterhub_version": jupyterhub_version,
+    "kube_version": kube_version,
+    "requirements": f"[hub/images/requirements.txt](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/{chart_version_git_ref}/images/hub/requirements.txt)",
+}
+
+
+# -- General MyST configuration -----------------------------------------------------
+
+# myst_enable_extensions ref: https://myst-parser.readthedocs.io/en/latest/using/syntax-optional.html
+myst_enable_extensions = [
+    "substitution",
+]
+
+
 # -- Project information -----------------------------------------------------
 # ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "Zero to JupyterHub with Kubernetes"
-copyright = "{year}, Project Jupyter Contributors".format(year=date.today().year)
+copyright = f"{datetime.date.today().year}, Project Jupyter Contributors"
 author = "Project Jupyter Contributors"
 
-# The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
-#
-with open("../../jupyterhub/Chart.yaml") as f:
-    chart = yaml.safe_load(f)
-version = chart["version"].split("-", 1)[0]
-release = chart["version"]
 
-# Project specific variables
-# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-rst_epilog
-rst_epilog = """
-.. |hub_version| replace:: {v}
-""".format(
-    v=chart["appVersion"]
-)
-
-
-# -- General configuration ---------------------------------------------------
+# -- General Sphinx configuration ---------------------------------------------------
 # ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 # Set the default role so we can use `foo` instead of ``foo``

@@ -11,7 +11,7 @@ Build a Docker image with ``repo2docker``
 
    Docker images to be used this way must have the ``jupyterhub`` package of a
    matching version with the Helm chart. This documentation is for Helm chart
-   |version|, and it uses JupyterHub version |hub_version|.
+   |version|, and it uses JupyterHub version |jupyterhub_version|.
 
 If you can't find a pre-existing image that suits your needs, you can create
 your own image. An easy way to do this is with the package :term:`repo2docker`.
