@@ -28,19 +28,14 @@ jobs:
       matrix:
         include:
           - image_ref: hub
-            image_dir: images/hub
             accept_failure: false
           - image_ref: secret-sync
-            image_dir: images/secret-sync
             accept_failure: false
           - image_ref: network-tools
-            image_dir: images/network-tools
             accept_failure: false
           - image_ref: image-awaiter
-            image_dir: images/image-awaiter
             accept_failure: false
           - image_ref: singleuser-sample
-            image_dir: images/singleuser-sample
             accept_failure: true
 
     steps:
@@ -181,7 +176,7 @@ jobs:
         if: steps.analyze.outputs.proceed == 'yes'
         uses: jacobtomlinson/gha-find-replace@0.1.2
         with:
-          include: "${{ matrix.image_dir }}/Dockerfile"
+          include: "images/${{ matrix.image_ref }}/Dockerfile"
           find: "#.*VULN_SCAN_HASH=.*"
           replace: "# VULN_SCAN_HASH=${{ steps.analyze.outputs.hash_2 }}"
 
