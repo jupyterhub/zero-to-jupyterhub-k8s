@@ -1,13 +1,22 @@
 # This is a GitHub workflow defining a set of jobs with a set of steps.
 # ref: https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions
 #
-name: Test
+name: Test chart
 
 # Trigger the workflow's on all PRs and pushes so that other contributors can
-# run tests in their own forks.
+# run tests in their own forks. Avoid triggering these tests on changes to
+# documentation only changes.
 on:
   pull_request:
+    paths-ignore:
+      - "doc/**"
+      - "**/test-docs.yaml"
+      - "**.md"
   push:
+    paths-ignore:
+      - "doc/**"
+      - "**/test-docs.yaml"
+      - "**.md"
     branches-ignore:
       - "dependabot/**"
   workflow_dispatch:
@@ -24,7 +33,7 @@ defaults:
     shell: bash
 
 jobs:
-  chart_lint_and_validate:
+  lint_and_validate:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
@@ -56,7 +65,7 @@ jobs:
         run: tools/templates/lint-and-validate.py --kubernetes-versions 1.14.0,1.18.0
 
 
-  chart_test:
+  test:
     runs-on: ubuntu-20.04
     timeout-minutes: 20
 
@@ -141,28 +150,3 @@ jobs:
         run: |
           . ./ci/common
           full_namespace_report "deploy/hub" "deploy/proxy"
-
-
-  docs_linkcheck:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'
-
-      - name: Install deps
-        run: pip install --no-cache-dir -r doc/doc-requirements.txt
-
-      - name: Build and run linkcheck
-        run: |
-          cd doc
-          make html SPHINXOPTS='-W --keep-going'
-          make linkcheck
-        # Make the job not fail if this step fail. The GitHub UI will due to
-        # this signal the job to be green even though it has failures though, so
-        # manual inspection is needed at the moment. A related ticket to improve
-        # this is open.
-        #
-        # ref: https://github.com/actions/toolkit/issues/399
-        continue-on-error: true
