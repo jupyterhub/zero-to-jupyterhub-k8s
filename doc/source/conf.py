@@ -247,6 +247,8 @@ linkcheck_ignore = [
     "https://your-domain-name.com",  # example
     "https://kubernetes.io/docs/tutorials/kubernetes-basics/",  # works
     "https://cloud.ibm.com/kubernetes/catalog/create",  # works
+    "https://portal.azure.com",  # sign-in redirect noise
+    "https://console.cloud.google.com",  # sign-in redirect noise
 ]
 linkcheck_anchors_ignore = [
     "/#!",

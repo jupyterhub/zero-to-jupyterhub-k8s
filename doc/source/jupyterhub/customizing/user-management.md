@@ -3,6 +3,7 @@
 This section describes management of users and their
 permissions on JupyterHub.
 
+(culling-user-pods)=
 ## Culling user pods
 JupyterHub will automatically delete any user pods that have no activity
 for a period of time. This helps free up computational resources and keeps

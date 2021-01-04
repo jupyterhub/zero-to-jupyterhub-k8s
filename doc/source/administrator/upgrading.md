@@ -97,31 +97,6 @@ will be performed automatically when you do a `helm upgrade`.
 5. Remove the lines added in step 3, and do another [`helm upgrade`](#upgrade-command).
 
 
-### [Role based access control](/security.html#use-role-based-access-control-rbac)
-
-[RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) is the user security model
-in Kubernetes that gives applications only as much access they need to the kubernetes
-API and not more. Prior to this, applications were all running with the equivalent
-of root on your Kubernetes cluster. This release adds appropriate roles for the
-various components of JupyterHub, for much better ability to secure clusters.
-
-RBAC is turned on by default. But, if your cluster is older than 1.8, or you have RBAC
-enforcement turned off, you might want to explicitly disable it. You can do so by adding
-the following snippet to your `config.yaml`:
-
-```yaml
-rbac:
-  enabled: false
-```
-
-This is especially true if you get an error like:
-
-```
-Error: the server rejected our request for an unknown reason (get clusterrolebindings.rbac.authorization.k8s.io)
-```
-
-when doing the upgrade!
-
 ### Custom Docker Images: JupyterHub version match
 
 If you are using a custom built image, make sure that the version of the

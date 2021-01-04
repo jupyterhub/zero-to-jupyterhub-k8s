@@ -123,7 +123,7 @@ service that you want to run, which makes things easier to manage and
 keeps things more stable.
 
 For more information about pods, see the
-[Kubernetes documentation about pods](https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/).
+[Kubernetes documentation about pods](https://kubernetes.io/docs/concepts/workloads/pods/).
 
 ### Deployments
 

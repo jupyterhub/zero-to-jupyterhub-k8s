@@ -20,7 +20,7 @@ matching version with the Helm chart. This documentation is for Helm chart
 If you can't find a pre-existing image that suits your needs, you can create
 your own image. An easy way to do this is with the package {term}`repo2docker`.
 
-[repo2docker](https://github.com/jupyter/repo2docker) lets you quickly convert
+[repo2docker](https://github.com/jupyterhub/repo2docker) lets you quickly convert
 a Git repository into a Docker image that can be used as a base for your
 JupyterHub instance. Anything inside the Git repository will exist in a user’s
 environment when they access your JupyterHub.

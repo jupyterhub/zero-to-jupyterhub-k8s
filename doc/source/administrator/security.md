@@ -13,6 +13,7 @@ model itself, please report it to [security@ipython.org](mailto:security@ipython
 If you prefer to encrypt your security reports, you can use
 [this PGP public key](https://ipython.org/ipython-doc/2/_downloads/ipython_security.asc).
 
+(https)=
 ## HTTPS
 
 This section describes how to enable HTTPS on your JupyterHub. The easiest way to do so is by using [Let's Encrypt](https://letsencrypt.org/), though we'll also cover how to set up your own HTTPS credentials. For more information
@@ -28,6 +29,7 @@ on HTTPS security see the certificates section of [this blog post](https://blog.
 
    It is important that you wait - prematurely going to the next step might cause problems!
 
+(setup-automatic-https)=
 ### Set up automatic HTTPS
 
 JupyterHub uses [Let's Encrypt](https://letsencrypt.org/) to automatically create
@@ -68,6 +70,7 @@ The IP can be provided like:
 More info about this can be found on the [Configuration Reference](helm-chart-configuration-reference) page.
 ***
 
+(setup-manual-https)=
 ### Set up manual HTTPS
 
 If you have your own HTTPS certificates & want to use those instead of the automatically provisioned Let's Encrypt ones, that's also possible. Note that this is considered an advanced option, so we recommend not doing it unless you have good reasons.
@@ -182,6 +185,7 @@ In older clusters, you might have to do:
 kubectl --namespace=kube-system delete rc kubernetes-dashboard
 ```
 
+(rbac)=
 ## Use Role Based Access Control (RBAC)
 
 Kubernetes supports, and often requires, using [Role Based Access Control (RBAC)](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)

@@ -97,7 +97,7 @@ Additions to the glossary are welcomed. Please add in alphabetical order.
       there is always X running pods of a kind.
 
       See the `Kubernetes documentation
-      <https://kubernetes.io/docs/concepts/workloads/pods/pod/>`__ for more
+      <https://kubernetes.io/docs/concepts/workloads/pods/>`__ for more
       information.
 
    Kubernetes resource
@@ -118,7 +118,7 @@ Additions to the glossary are welcomed. Please add in alphabetical order.
       With cluster autoscaling, a node pool can grow and shrink based on demand
       allowing you to save computational resources.
 
-   `repo2docker <https://github.com/jupyter/repo2docker>`_
+   `repo2docker <https://github.com/jupyterhub/repo2docker>`_
       A tool which lets you quickly convert a Git repository into a
       :term:`Docker image`.
 

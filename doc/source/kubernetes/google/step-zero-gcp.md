@@ -38,7 +38,7 @@ your google cloud account.
    2. **Use your own computer's terminal:**
 
       1. Download and install the `gcloud` command line tool at its [install
-         page](https://cloud.google.com/sdk/install). It will help you
+         page](https://cloud.google.com/sdk/docs/install). It will help you
          create and communicate with a Kubernetes cluster.
       2. Install `kubectl` (reads *kube control*), it is a tool for controlling
          Kubernetes clusters in general. From your terminal, enter:
