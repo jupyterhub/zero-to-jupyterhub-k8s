@@ -160,7 +160,7 @@ hub:
 ```
 
 ```{admonition} Alternative scopes
-While you can set other scopes than `read:user` as described in [GitHub OAuth scopes documentation](https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/), we recommend `read:user`.
+While you can set other scopes than `read:user` as described in [GitHub OAuth scopes documentation](https://docs.github.com/en/free-pro-team@latest/developers/apps/scopes-for-oauth-apps), we recommend `read:user`.
 
 With `read:user`, the user will be requested to permit JupyterHub to read their profile data. The benefit of this choice is that it won't require configuration by the GitHub organizations' admins by by its members.
 ```
