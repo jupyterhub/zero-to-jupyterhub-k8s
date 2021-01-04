@@ -63,4 +63,4 @@ If you prefer to use the Digital Ocean portal see the [Digital Ocean Get Started
    few moments.
 
 Congrats. Now that you have your Kubernetes cluster running, it's time to
-begin {ref}`creating-your-jupyterhub`.
+begin {ref}`setup-helm`.

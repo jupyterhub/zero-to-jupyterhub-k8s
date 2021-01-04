@@ -69,7 +69,7 @@ Procedure:
       :align: center
       ```
 
-Hooray! You have your Kubernetes cluster running; it's time to begin {ref}`creating-your-jupyterhub`.
+Hooray! You have your Kubernetes cluster running; it's time to begin {ref}`setup-helm`.
 
 More info and readings: 
 - <https://cloud.ibm.com/docs/tutorials?topic=solution-tutorials-scalable-webapp-kubernetes>

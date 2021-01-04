@@ -46,4 +46,4 @@ and how to access the cluster using the command line with `kubectl`.
    ```
 
 Congrats! Now that you have your Kubernetes cluster running, it's time to
-begin {ref}`creating-your-jupyterhub`.
+begin {ref}`setup-helm`.

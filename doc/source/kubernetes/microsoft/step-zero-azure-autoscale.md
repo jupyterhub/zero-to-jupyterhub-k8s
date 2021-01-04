@@ -343,6 +343,6 @@ RBAC is enabled by default when using the command line tools.
 ```
 
 Congrats. Now that you have your Kubernetes cluster running, it's time to
-begin {ref}`creating-your-jupyterhub`.
+begin {ref}`setup-helm`.
 
 [azure resource group]: https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#resource-groups

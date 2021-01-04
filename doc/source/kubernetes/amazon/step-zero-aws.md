@@ -287,4 +287,4 @@ A shared volume is supposed to be mounted to multiple user pods, so we cannot us
 2. {ref}`user-storage`
 
 Congrats. Now that you have your Kubernetes cluster running, it's time to
-begin {ref}`creating-your-jupyterhub`.
+begin {ref}`setup-helm`.
