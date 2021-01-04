@@ -819,7 +819,7 @@ properties:
         type: object
         description: |
           Object for customizing the settings for HTTPS used by the JupyterHub's proxy.
-          For more information on configuring HTTPS for your JupyterHub, see the [HTTPS section in our security guide](/administrator/security.html#https)
+          For more information on configuring HTTPS for your JupyterHub, see the [HTTPS section in our security guide](https)
         properties:
           enabled:
             type: boolean
@@ -842,13 +842,13 @@ properties:
               contactEmail:
                 type: string
                 description: |
-                  The contact email to be used for automatically provisioned HTTPS certificates by Let's Encrypt. For more information see [Set up automatic HTTPS](/administrator/security.html#set-up-automatic-https).
+                  The contact email to be used for automatically provisioned HTTPS certificates by Let's Encrypt. For more information see [Set up automatic HTTPS](setup-automatic-https).
                   Required for automatic HTTPS.
           manual:
             type: object
             description: |
               Object for providing own certificates for manual HTTPS configuration. To be provided when setting `https.type` to `manual`.
-              See [Set up manual HTTPS](/administrator/security.html#set-up-manual-https)
+              See [Set up manual HTTPS](setup-manual-https)
             properties:
               key:
                 type: string
@@ -897,7 +897,7 @@ properties:
             type: list
             description: |
               You domain in list form.
-              Required for automatic HTTPS. See [Set up automatic HTTPS](/administrator/security.html#set-up-automatic-https).
+              Required for automatic HTTPS. See [Set up automatic HTTPS](setup-automatic-https).
               To be provided like:
               ```
               hosts:
@@ -967,7 +967,7 @@ properties:
             type: boolean
             description: |
               Enable persisting auth_state (if available).
-              See: [the documentation on authenticators](http://jupyterhub.readthedocs.io/en/latest/api/auth.html)
+              See: [the documentation on authenticators](https://jupyterhub.readthedocs.io/en/latest/api/auth.html)
           cryptoKey:
             type:
               - string
@@ -1344,7 +1344,7 @@ properties:
           Enable the creation of a Kubernetes Ingress to proxy-public service.
 
           See [Advanced Topics — Zero to JupyterHub with Kubernetes
-          0.7.0 documentation](/administrator/advanced.html#ingress)
+          0.7.0 documentation](ingress)
           for more details.
       annotations:
         type: object
@@ -1395,7 +1395,7 @@ properties:
       hook:
         description: |
           See the [*optimization
-          section*](/administrator/optimization.html#pulling-images-before-users-arrive)
+          section*](pulling-images-before-users-arrive)
           for more details.
         type: object
         properties:
@@ -1423,7 +1423,7 @@ properties:
       continuous:
         description: |
           See the [*optimization
-          section*](/administrator/optimization.html#pulling-images-before-users-arrive)
+          section*](pulling-images-before-users-arrive)
           for more details.
 
           **NOTE**: If used with a Cluster Autoscaler (an autoscaling node
@@ -1447,9 +1447,8 @@ properties:
       extraImages:
         type: object
         description: |
-          See the [*optimization
-          section*](/administrator/optimization.html#the-images-that-will-be-pulled)
-          for more details.
+          See the [*optimization section*](images-that-will-be-pulled) for more
+          details.
 
           ```yaml
           prePuller:

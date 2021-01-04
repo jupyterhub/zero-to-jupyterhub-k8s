@@ -25,7 +25,7 @@ you have tips or deployments that you would like to share, see the
 
 This documentation is for Helm chart version {{chart_version}} that deploys
 JupyterHub version {{jupyterhub_version}} and other other components versioned
-in {{requirements}}. The Helm chart requires Kubernetes version {{kube_version}}
+in {{requirements}}. The Helm chart requires Kubernetes version >={{kube_version}}
 and Helm >=2.16.
 
 ```{admonition} Note

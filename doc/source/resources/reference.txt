@@ -1,4 +1,9 @@
 DO NOT EDIT THIS LINE. This file is used in `conf.py to generate schema.md`. Edit below and changes will propagate to the build.
+---
+orphan: true
+
+---
+
 (helm-chart-configuration-reference)=
 # Configuration Reference
 

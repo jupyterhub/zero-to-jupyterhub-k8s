@@ -56,6 +56,7 @@ singleuser:
     guarantee: 512M
 ```
 
+(pulling-images-before-users-arrive)=
 ## Pulling images before users arrive
 
 If a user pod is scheduled on a node requesting a Docker image that isn't
@@ -119,6 +120,7 @@ situations:
     added, but at that point users are already waiting. To scale up nodes ahead
     of time we can use [user-placeholders](#scaling-up-in-time-user-placeholders).
 
+(images-that-will-be-pulled)=
 ### The images that will be pulled
 
 The hook-image-puller and the continuous-image-puller has various sources
@@ -233,7 +235,7 @@ and some JupyterHub pods (without a permissive
 Consider for example that many users arrive to your JupyterHub during the
 daytime. New nodes are added by the CA. Some system pod ends up on the new nodes
 along with the user pods for some reason. At night when the
-[*culler*](/customizing/user-management.html#culling-user-pods) has removed many inactive
+[*culler*](culling-user-pods) has removed many inactive
 pods from some nodes. They are now free from user pods but there is still a
 single system pod stopping the CA from removing the node.
 
@@ -334,7 +336,7 @@ scheduling:
 
 **NOTE**: For the user scheduler to work well, you need old user pods to shut
 down at some point. Make sure to properly configure the
-[*culler*](user-management.html#culling-user-pods).
+[*culler*](culling-user-pods).
 
 ## Balancing "guaranteed" vs "maximum" memory and CPU
 

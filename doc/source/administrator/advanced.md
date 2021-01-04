@@ -10,6 +10,7 @@ Most people setting up JupyterHubs on popular public clouds should not have
 to use any of this information, but these topics are essential for more complex
 installations.
 
+(ingress)=
 ## Ingress
 
 If you are using a Kubernetes Cluster that does not provide public IPs for

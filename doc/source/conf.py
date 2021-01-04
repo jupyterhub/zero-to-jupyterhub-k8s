@@ -75,25 +75,10 @@ latest_tag = _get_latest_tag()
 chart_version = chart["version"]
 chart_version_git_ref = _get_git_ref_from_chartpress_based_version(chart_version)
 jupyterhub_version = chart["appVersion"]
-kube_version = chart["kubeVersion"].split("-", 1)[0]
-
-# These substitution variables only work in rst contexts, and not within links
-# etc. Reference them using |variable_name|.
-#
-# rst_epilog ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-rst_epilog
-#
-# FIXME: We can't substitute something for an entire link, because it is
-#        considered illegal for security reasons presumably. But, only for
-#        rst_epilog, not for myst_substitutions. PS: security wise, I think the
-#        difference is okay because myst_substitutions is entirely defined in
-#        conf.py.
-rst_epilog = f"""
-.. |latest_tag| replace:: {latest_tag}
-.. |chart_version| replace:: {chart_version}
-.. |chart_version_git_ref| replace:: {chart_version_git_ref}
-.. |jupyterhub_version| replace:: {jupyterhub_version}
-.. |kube_version| replace:: {kube_version}
-"""
+# FIXME: kubeVersion contain >=, but by having > in the string we substitute we
+#        run into this issue:
+#        https://github.com/executablebooks/MyST-Parser/issues/282
+kube_version = chart["kubeVersion"].split("-", 1)[0][2:]
 
 # These substitution variables only work in markdown contexts, and does not work
 # within links etc. Reference using {{ variable_name }}
@@ -150,7 +135,7 @@ exclude_patterns = []
 master_doc = "index"
 
 # The suffix(es) of source filenames.
-source_suffix = [".rst", ".md"]
+source_suffix = [".md", ".rst"]
 
 # Rediraffe redirects to ensure proper redirection
 rediraffe_redirects = {
@@ -262,6 +247,8 @@ linkcheck_ignore = [
     "https://your-domain-name.com",  # example
     "https://kubernetes.io/docs/tutorials/kubernetes-basics/",  # works
     "https://cloud.ibm.com/kubernetes/catalog/create",  # works
+    "https://portal.azure.com",  # sign-in redirect noise
+    "https://console.cloud.google.com",  # sign-in redirect noise
 ]
 linkcheck_anchors_ignore = [
     "/#!",
