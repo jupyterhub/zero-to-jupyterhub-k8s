@@ -150,7 +150,7 @@ exclude_patterns = []
 master_doc = "index"
 
 # The suffix(es) of source filenames.
-source_suffix = [".rst", ".md"]
+source_suffix = [".md", ".rst"]
 
 # Rediraffe redirects to ensure proper redirection
 rediraffe_redirects = {
