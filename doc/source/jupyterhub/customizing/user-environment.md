@@ -23,14 +23,14 @@ To get started customizing the user environment, see the topics below.
 
 ## Choose and use an existing Docker image
 
-Project Jupyter maintains the [jupyter/docker-stacks repository](<https://github.com/jupyter/docker-stacks/>), which contains ready to use
+Project Jupyter maintains the [jupyter/docker-stacks repository](https://github.com/jupyter/docker-stacks/), which contains ready to use
 Docker images. Each image includes a set of commonly used science and data
 science libraries and tools. They also provide excellent documentation on [how
-to choose a suitable image](<https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html>).
+to choose a suitable image](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html).
 
 If you wish to use another image from jupyter/docker-stacks than the
-[base-notebook](<https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-base-notebook>)
-used by default, such as the [datascience-notebook](<https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-datascience-notebook>)
+[base-notebook](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-base-notebook)
+used by default, such as the [datascience-notebook](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-datascience-notebook)
 image containing useful tools and libraries for datascience, complete these steps:
 
 1. Modify your `config.yaml` file to specify the image. For example:
@@ -73,7 +73,7 @@ see {ref}`multiple-profiles`.
 
 ## Use JupyterLab by default
 
-[JupyterLab](<https://jupyterlab.readthedocs.io/en/stable/index.html>) is a new
+[JupyterLab](https://jupyterlab.readthedocs.io/en/stable/index.html) is a new
 user interface for Jupyter about to replace the classic user interface (UI).
 While users already can interchange `/tree` and `/lab` in the URL to switch between
 the classic UI and JupyterLab, they will default to use the classic UI.
@@ -88,7 +88,7 @@ singleuser:
 
 ```{note}
 You need the `jupyterlab` package (installable via `pip` or `conda`)
-for this to work. All images in the [jupyter/docker-stacks repository](<https://github.com/jupyter/docker-stacks/>) come pre-installed with it.
+for this to work. All images in the [jupyter/docker-stacks repository](https://github.com/jupyter/docker-stacks/) come pre-installed with it.
 ```
 
 (custom-docker-image)=
@@ -220,7 +220,7 @@ your user folders with a git repository.
 
 ### Using `nbgitpuller` to synchronize a folder
 
-We recommend using the tool [nbgitpuller](<https://github.com/jupyterhub/nbgitpuller>) to synchronize a folder
+We recommend using the tool [nbgitpuller](https://github.com/jupyterhub/nbgitpuller) to synchronize a folder
 in your user's filesystem with a `git` repository whenever a user
 starts their server.  This synchronization can also be triggered by
 letting a user visit a link like
@@ -228,7 +228,7 @@ letting a user visit a link like
 (e.g., as alternative start url).
 
 To use `nbgitpuller`, first make sure that you [install it in your Docker
-image](<https://github.com/jupyterhub/nbgitpuller#installation>). Once this is done,
+image](https://github.com/jupyterhub/nbgitpuller#installation). Once this is done,
 you'll have access to the `nbgitpuller` CLI from within JupyterHub. You can
 run it with a `postStart` hook with the following configuration
 
@@ -242,13 +242,13 @@ singleuser:
 
 This will synchronize the master branch of the repository to a folder called
 `$HOME/materials-fa` each time a user logs in. See [the nbgitpuller
-documentation](<https://github.com/jupyterhub/nbgitpuller>) for more information on
+documentation](https://github.com/jupyterhub/nbgitpuller) for more information on
 using this tool.
 
 ```{warning}
 `nbgitpuller` will attempt to automatically resolve merge conflicts if your
 user's repository has changed since the last sync. You should familiarize
-yourself with the [nbgitpuller merging behavior](<https://github.com/jupyterhub/nbgitpuller#merging-behavior>) prior to using the
+yourself with the [nbgitpuller merging behavior](https://github.com/jupyterhub/nbgitpuller#merging-behavior) prior to using the
 tool in production.
 ```
 
@@ -292,7 +292,7 @@ of configuration options that override your JupyterHub's default configuration
 Docker images, to select the hardware on which they want their jobs to run,
 or to configure default interfaces such as Jupyter Lab vs. RStudio.
 
-Each configuration is a set of options for [Kubespawner](<https://github.com/jupyterhub/kubespawner>),
+Each configuration is a set of options for [Kubespawner](https://github.com/jupyterhub/kubespawner),
 which defines how Kubernetes should launch a new user server pod. Any
 configuration options passed to the `profileList` configuration will
 overwrite the defaults in Kubespawner (or any configuration you've
@@ -355,15 +355,15 @@ This allows users to select from three profiles, each with their own
 environment (defined by each Docker image in the configuration above).
 
 The "Learning Data Science" environment in the above example overrides the postStart lifecycle hook. Note that when
-using `kubespawner_override` the values must be in the format that comply with the [KubeSpawner configuration](<https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html>).
+using `kubespawner_override` the values must be in the format that comply with the [KubeSpawner configuration](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html).
 For instance, when overriding the lifecycle
 hooks in `kubespawner_override`, the configuration is for `lifecycle_hooks` (snake_case) rather than `lifecycleHooks` (camelCase) which is
 how it is used directly under the `singleuser` configuration section.
-[A further explanation for this can be found in this github issue.](<https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1242#issuecomment-484895216>)
+[A further explanation for this can be found in this github issue.](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1242#issuecomment-484895216)
 
 ```{note}
 You can also **control the HTML used for the profile selection page** by
 using the Kubespawner `profile_form_template` configuration. See the
-[Kubespawner configuration reference](<https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html>)
+[Kubespawner configuration reference](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html)
 for more information.
 ```

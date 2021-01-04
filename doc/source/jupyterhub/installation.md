@@ -9,7 +9,7 @@ and related {term}`Kubernetes resources <Kubernetes resource>` using a
 
 ## Prepare configuration file
 
-In this step we will prepare a [YAML](<https://en.wikipedia.org/wiki/YAML>)
+In this step we will prepare a [YAML](https://en.wikipedia.org/wiki/YAML)
 configuration file that we will refer to as `config.yaml`. It will contain the multiple
 {term}`Helm values` to be provided to a JupyterHub {term}`Helm chart` developed
 specifically together with this guide.
@@ -28,7 +28,7 @@ config file will provide the values to be used by our Helm chart.
 
    ```
 2. Create and start editing a file called `config.yaml`. In the code snippet
-   below we start the widely available [nano editor](<https://en.wikipedia.org/wiki/GNU_nano>), but any editor will do.
+   below we start the widely available [nano editor](https://en.wikipedia.org/wiki/GNU_nano), but any editor will do.
 
    ```
    nano config.yaml
@@ -53,7 +53,7 @@ security issue.
 
 ## Install JupyterHub
 
-1. Make Helm aware of the [JupyterHub Helm chart repository](<https://jupyterhub.github.io/helm-chart/>) so you can install the
+1. Make Helm aware of the [JupyterHub Helm chart repository](https://jupyterhub.github.io/helm-chart/) so you can install the
    JupyterHub chart from it without having to use a long URL name.
 
    ```
@@ -89,12 +89,12 @@ security issue.
 
    where:
 
-   - `RELEASE` refers to a [Helm release name](<https://helm.sh/docs/glossary/#release>), an identifier used to
+   - `RELEASE` refers to a [Helm release name](https://helm.sh/docs/glossary/#release), an identifier used to
      differentiate chart installations. You need it when you are changing or
      deleting the configuration of this chart installation. If your Kubernetes
      cluster will contain multiple JupyterHubs make sure to differentiate them.
      You can list your Helm releases with `helm list`.
-   - `NAMESPACE` refers to a [Kubernetes namespace](<https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/>),
+   - `NAMESPACE` refers to a [Kubernetes namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/),
      an identifier used to group Kubernetes resources, in this case all
      Kubernetes resources associated with the JupyterHub chart. You'll need the
      namespace identifier for performing any commands with `kubectl`.
@@ -118,7 +118,7 @@ security issue.
      Helm chart is paired with a specific version of JupyterHub. E.g.,
      `0.7.0` of the Helm chart runs JupyterHub `0.9.2`.
      For a list of which JupyterHub version is installed in each version
-     of the Z2JH Helm Chart, see the [Helm Chart repository](<https://github.com/jupyterhub/helm-chart#release-notes>).
+     of the Z2JH Helm Chart, see the [Helm Chart repository](https://github.com/jupyterhub/helm-chart#release-notes).
 3. While Step 2 is running, you can see the pods being created by entering in
    a different terminal:
 
@@ -126,7 +126,7 @@ security issue.
    kubectl get pod --namespace jhub
    ```
 
-   To remain sane we recommend that you [enable autocompletion for kubectl](<https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion>)
+   To remain sane we recommend that you [enable autocompletion for kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion)
    and set a default value for the `--namespace` flag:
 
    ```
@@ -140,7 +140,7 @@ security issue.
    proxy-7cb9bc4cc-9bdlp   1/1       Running   0          37s
    ```
 5. Find the IP we can use to access the JupyterHub. Run the following command
-   until the `EXTERNAL-IP` of the `proxy-public` [service](<https://kubernetes.io/docs/concepts/services-networking/service/>) is
+   until the `EXTERNAL-IP` of the `proxy-public` [service](https://kubernetes.io/docs/concepts/services-networking/service/) is
    available like in the example output.
 
    ```

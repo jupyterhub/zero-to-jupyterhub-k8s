@@ -2,18 +2,18 @@
 
 # Kubernetes on Microsoft Azure Kubernetes Service (AKS)
 
-You can create a Kubernetes cluster [either through the Azure portal website, or using the Azure command line tools](<https://docs.microsoft.com/en-us/azure/aks/>).
+You can create a Kubernetes cluster [either through the Azure portal website, or using the Azure command line tools](https://docs.microsoft.com/en-us/azure/aks/).
 
 This page describes the commands required to setup a Kubernetes cluster using the command line.
-If you prefer to use the Azure portal see the [Azure Kubernetes Service quickstart](<https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough-portal>).
+If you prefer to use the Azure portal see the [Azure Kubernetes Service quickstart](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough-portal).
 
 1. Prepare your Azure shell environment. You have two options, one is to use
    the Azure interactive shell, the other is to install the Azure command-line
    tools locally. Instructions for each are below.
 
-   * **Using the Azure interactive shell**. The [Azure Portal](<https://portal.azure.com>)
+   * **Using the Azure interactive shell**. The [Azure Portal](https://portal.azure.com)
      contains an interactive shell that you can use to communicate with your
-     Kubernetes cluster. To access this shell, go to [portal.azure.com](<https://portal.azure.com>)
+     Kubernetes cluster. To access this shell, go to [portal.azure.com](https://portal.azure.com)
      and click on the button below.
 
      ```{image} ../../_static/images/azure/cli_start.png
@@ -30,7 +30,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    * **Install command-line tools locally**. You can access the Azure CLI via
      a package that you can install locally.
 
-     To do so, first follow the [installation instructions](<https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest>) in the
+     To do so, first follow the [installation instructions](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) in the
      Azure documentation. Then run the following command to connect your local
      CLI with your account:
 
@@ -75,12 +75,12 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
      `<RESOURCE-GROUP-NAME>` of `ucb_2018sp_data100_hub`.
    * `--location` specifies the location of the data center you want your resource to be in.
      In this case, we used the `centralus` location. For other options, see the
-     [Azure list of locations that support AKS](<https://docs.microsoft.com/en-us/azure/aks/quotas-skus-regions#region-availability>).
+     [Azure list of locations that support AKS](https://docs.microsoft.com/en-us/azure/aks/quotas-skus-regions#region-availability).
    * `--output table` specifies that the output should be in human readable
      format, rather than the default JSON output. We shall use this with most
      commands when executing them by hand.
 
-   Consider [setting a cloud budget](<https://docs.microsoft.com/en-us/partner-center/set-an-azure-spending-budget-for-your-customers>)
+   Consider [setting a cloud budget](https://docs.microsoft.com/en-us/partner-center/set-an-azure-spending-budget-for-your-customers)
    for your Azure account in order to make sure you don't accidentally
    spend more than you wish to.
 4. Choose a cluster name.
@@ -115,9 +115,9 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    Kubernetes does not by default come with a controller that enforces `networkpolicy` resources.
    `networkpolicy` resources are important as they define how Kubernetes pods can securely communicate with one another and the outside sources, for example, the internet.
 
-   To enable this in Azure, we must first create a [Virtual Network](<https://docs.microsoft.com/en-gb/azure/virtual-network/virtual-networks-overview>) with Azure's own network policies enabled.
+   To enable this in Azure, we must first create a [Virtual Network](https://docs.microsoft.com/en-gb/azure/virtual-network/virtual-networks-overview) with Azure's own network policies enabled.
 
-   This section of the documentation is following the Microsoft Azure tutorial on [creating an AKS cluster and enabling network policy](<https://docs.microsoft.com/en-us/azure/aks/use-network-policies#create-an-aks-cluster-and-enable-network-policy>), which includes information on using [Calico](<https://docs.projectcalico.org>) network policies.
+   This section of the documentation is following the Microsoft Azure tutorial on [creating an AKS cluster and enabling network policy](https://docs.microsoft.com/en-us/azure/aks/use-network-policies#create-an-aks-cluster-and-enable-network-policy), which includes information on using [Calico](https://docs.projectcalico.org) network policies.
 
    ```
    az network vnet create \
@@ -134,7 +134,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    * `--name` is the name you want to assign to your virtual network, for example, `hub-vnet`
    * `--address-prefixes` are the IP address prefixes for your virtual network
    * `--subnet-name` is your desired name for your subnet, for example, `hub-subnet`
-   * `--subnet-prefixes` are the IP address prefixes in [CIDR format](<https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing>) for the subnet
+   * `--subnet-prefixes` are the IP address prefixes in [CIDR format](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) for the subnet
 
    We will now retrieve the application IDs of the VNet and subnet we just created and save them to bash variables.
 
@@ -152,7 +152,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
       --output tsv)
    ```
 
-   We will create an Azure Active Directory (Azure AD) [service principal](<https://docs.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals>) for use with the cluster, and assign the [Contributor role](<https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#contributor>) for use with the VNet.
+   We will create an Azure Active Directory (Azure AD) [service principal](https://docs.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals) for use with the cluster, and assign the [Contributor role](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#contributor) for use with the VNet.
    Make sure `SERVICE-PRINCIPAL-NAME` is something recognisable, for example, `binderhub-sp`.
 
    ```
@@ -172,9 +172,9 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 7. Create an AKS cluster.
 
    At this stage, you may wish to think about customising your deployment. The
-   [Hub23 Deployment Guide](<https://alan-turing-institute.github.io/hub23-deploy/>)
+   [Hub23 Deployment Guide](https://alan-turing-institute.github.io/hub23-deploy/)
    contains instructions for deploying a Kubernetes cluster to Azure with
-   [autoscaling and multiple nodepools](<https://alan-turing-institute.github.io/hub23-deploy/deploy-k8s/az-aks-create.html>).
+   [autoscaling and multiple nodepools](https://alan-turing-institute.github.io/hub23-deploy/deploy-k8s/az-aks-create.html).
    These instructions can be combined so that all nodepools can autoscale.
 
    The following command will request a Kubernetes cluster within the resource
@@ -206,12 +206,12 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    * `--node-count` is the number of nodes you want in your Kubernetes cluster
    * `--node-vm-size` is the size of the nodes you want to use, which varies based on
      what you are using your cluster for and how much RAM/CPU each of your users need.
-     There is a [list of all possible node sizes](<https://docs.microsoft.com/en-us/azure/cloud-services/cloud-services-sizes-specs>)
+     There is a [list of all possible node sizes](https://docs.microsoft.com/en-us/azure/cloud-services/cloud-services-sizes-specs)
      for you to choose from, but not all might be available in your location.
      If you get an error whilst creating the cluster you can try changing either the region or the node size.
    * `--service-principal` is the application ID of the service principal we created
    * `--client-secret` is the password for the service principal we created
-   * `--dns-service-ip` is an IP address assigned to the [Kubernetes DNS service](<https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/>)
+   * `--dns-service-ip` is an IP address assigned to the [Kubernetes DNS service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/)
    * `--docker-bridge-address` is a specific IP address and netmask for the Docker bridge, using standard CIDR notation
    * `--network-plugin` is the Kubernetes network plugin to use. In this example, we have used Azure's own implementation.
    * `--network-policy` is the Kubernetes network policy to use. In this example, we have used Azure's own implementation.
@@ -220,7 +220,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    * This command will install the default version of Kubernetes. You can pass `--kubernetes-version` to install a different version.
 
    This should take a few minutes and provide you with a working Kubernetes cluster!
-8. If you're using the Azure CLI locally, install [kubectl](<https://kubernetes.io/docs/reference/kubectl/overview/>), a tool
+8. If you're using the Azure CLI locally, install [kubectl](https://kubernetes.io/docs/reference/kubectl/overview/), a tool
    for accessing the Kubernetes API from the commandline:
 
    ```

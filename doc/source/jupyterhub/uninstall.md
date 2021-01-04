@@ -60,7 +60,7 @@ before doing the cloud provider specific setup.
    gcloud container clusters delete <CLUSTER-NAME> --zone=<CLUSTER-ZONE>
    ```
 3. Double check to make sure all the resources are now deleted, since anything you
-   have not deleted will cost you money! You can check the [web console](<https://console.cloud.google.com>)
+   have not deleted will cost you money! You can check the [web console](https://console.cloud.google.com)
    (make sure you are in the right project and account) to verify that everything
    has been deleted.
 
@@ -95,7 +95,7 @@ before doing the cloud provider specific setup.
    Be careful to delete the correct Resource Group, as doing so will irreversibly
    delete all resources within the group!
 3. Double check to make sure all the resources are now deleted, since anything you
-   have not deleted will cost you money! You can check the [web portal](<https://portal.azure.com>)
+   have not deleted will cost you money! You can check the [web portal](https://portal.azure.com)
    (check the "Resource Groups" page) to verify that everything has been deleted.
 
    These might take several minutes to clear up, but they shouldn't have anything

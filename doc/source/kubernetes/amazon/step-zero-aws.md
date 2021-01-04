@@ -124,7 +124,7 @@ template you will use to setup and shape your cluster.
       If you are using a public topology make sure your ssh keys are strong and you keep sshd up to date on your cluster's nodes.
     ```
 
-    Consider [setting a cloud budget](<https://aws.amazon.com/aws-cost-management/aws-budgets/>)
+    Consider [setting a cloud budget](https://aws.amazon.com/aws-cost-management/aws-budgets/)
     for your AWS account in order to make sure you don't accidentally
     spend more than you wish to.
 12. Wait for the cluster to start-up
@@ -152,7 +152,7 @@ template you will use to setup and shape your cluster.
 
     You should see a list of two nodes, each beginning with `ip`.
 
-    If you want to use kubectl and helm locally (necessary for step #3 in [Setting up Helm](<setup-helm#initialization>)):
+    If you want to use kubectl and helm locally (necessary for step #3 in [Setting up Helm](setup-helm#initialization)):
 
     * run the following on CI host: `kops export kubecfg`
     * copy the contents of `~/.kube/config` to the same place on your local system
@@ -195,7 +195,7 @@ template you will use to setup and shape your cluster.
     kubectl apply -f storageclass.yml
     ```
 
-    This enables [dynamic provisioning](<https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic>) of
+    This enables [dynamic provisioning](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic) of
     disks, allowing us to automatically assign a disk per user when they log
     in to JupyterHub.
 

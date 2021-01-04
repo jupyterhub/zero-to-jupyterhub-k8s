@@ -10,10 +10,10 @@ orphan: true
 ```{warning}
 Helm 2 is not supported anymore by Zero to JupyterHub and shouldn't be used for testing new
 clusters. Helm 2 is deprecated since of November 2019, and
-[will receive bugfixes until August 13, 2020](<https://helm.sh/blog/covid-19-extending-helm-v2-bug-fixes>).
+[will receive bugfixes until August 13, 2020](https://helm.sh/blog/covid-19-extending-helm-v2-bug-fixes).
 ```
 
-[Helm](<https://helm.sh/>), the package manager for Kubernetes, is a useful tool
+[Helm](https://helm.sh/), the package manager for Kubernetes, is a useful tool
 for: installing, upgrading and managing applications on a Kubernetes cluster.
 Helm packages are called *charts*.
 We will be installing and managing JupyterHub on
@@ -40,7 +40,7 @@ supported, but {doc}`preliminary instructions are available for testing
 
 ## Installation
 
-While several [methods to install Helm](<https://v2.helm.sh/docs/using_helm/#installing-helm>) exists, the
+While several [methods to install Helm](https://v2.helm.sh/docs/using_helm/#installing-helm) exists, the
 simplest way to install Helm is to run Helm's installer script in a terminal:
 
 ```
@@ -54,7 +54,7 @@ curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
 After installing helm on your machine, initialize Helm on your Kubernetes
 cluster:
 
-1. Set up a [ServiceAccount](<https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/>)
+1. Set up a [ServiceAccount](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/)
    for use by `tiller`.
 
    ```
@@ -69,7 +69,7 @@ cluster:
    kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
    ```
 
-   See [our RBAC documentation](<../administrator/security.html#use-role-based-access-control-rbac>) for more information.
+   See [our RBAC documentation](../administrator/security.html#use-role-based-access-control-rbac) for more information.
 3. Initialize `helm` and `tiller`.
 
    ```
@@ -107,7 +107,7 @@ this port directly (i.e. by bypassing `helm`) then `tiller` s permissions can be
 exploited. This step forces `tiller` to listen to commands from localhost (i.e.
 `helm`) *only* so that e.g. other pods inside the cluster cannot ask `tiller` to
 install a new chart granting them arbitrary, elevated RBAC privileges and exploit
-them. [More details here.](<https://engineering.bitnami.com/articles/helm-security.html>)
+them. [More details here.](https://engineering.bitnami.com/articles/helm-security.html)
 
 ## Verify
 

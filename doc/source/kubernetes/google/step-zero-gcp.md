@@ -1,22 +1,22 @@
 (google-cloud)=
 
-# Kubernetes on [Google Cloud](<https://cloud.google.com/>) (GKE)
+# Kubernetes on [Google Cloud](https://cloud.google.com/) (GKE)
 
-[Google Kubernetes Engine](<https://cloud.google.com/kubernetes-engine/>)
+[Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine/)
 (GKE) is the simplest and most common way of setting
-up a Kubernetes Cluster. You may be able to receive [free credits](<https://cloud.google.com/free/>) for trying it out (though note that a
-free account [comes with limitations](<https://cloud.google.com/free/docs/gcp-free-tier#free-tier-usage-limits>)).
+up a Kubernetes Cluster. You may be able to receive [free credits](https://cloud.google.com/free/) for trying it out (though note that a
+free account [comes with limitations](https://cloud.google.com/free/docs/gcp-free-tier#free-tier-usage-limits)).
 Either way, you will need to connect your credit card or other payment method to
 your google cloud account.
 
-1. Go to [console.cloud.google.com](<https://console.cloud.google.com>) and log in.
+1. Go to [console.cloud.google.com](https://console.cloud.google.com) and log in.
 
    ```{note}
-   Consider [setting a cloud budget](<https://cloud.google.com/billing/docs/how-to/budgets>)
+   Consider [setting a cloud budget](https://cloud.google.com/billing/docs/how-to/budgets)
    for your Google Cloud account in order to make sure you don't accidentally
    spend more than you wish to.
    ```
-2. Go to and enable the [Kubernetes Engine API](<https://console.cloud.google.com/apis/api/container.googleapis.com/overview>).
+2. Go to and enable the [Kubernetes Engine API](https://console.cloud.google.com/apis/api/container.googleapis.com/overview).
 3. Choose a terminal.
 
    You can either to use a web based terminal or install and run the required
@@ -26,11 +26,11 @@ your google cloud account.
 
    1. **Use a web based terminal:**
 
-      Start *Google Cloud Shell* from [console.cloud.google.com](<https://console.cloud.google.com>) by clicking the button shown below.
+      Start *Google Cloud Shell* from [console.cloud.google.com](https://console.cloud.google.com) by clicking the button shown below.
       You are now in control of a virtual machine with various tools
       preinstalled. If you save something in a user folder they will remain
       available to you if you return at a later stage. Additional documentation
-      about Google Cloud shell is available [here](<https://cloud.google.com/shell/docs/>)
+      about Google Cloud shell is available [here](https://cloud.google.com/shell/docs/)
 
       ```{image} ../../_static/images/google/start_interactive_cli.png
       :align: center
@@ -38,7 +38,7 @@ your google cloud account.
    2. **Use your own computer's terminal:**
 
       1. Download and install the `gcloud` command line tool at its [install
-         page](<https://cloud.google.com/sdk/install>). It will help you
+         page](https://cloud.google.com/sdk/install). It will help you
          create and communicate with a Kubernetes cluster.
       2. Install `kubectl` (reads *kube control*), it is a tool for controlling
          Kubernetes clusters in general. From your terminal, enter:
@@ -49,7 +49,7 @@ your google cloud account.
 4. Create a managed Kubernetes cluster and a default node pool.
 
    Ask Google Cloud to create a managed Kubernetes cluster and a default [node
-   pool](<https://cloud.google.com/kubernetes-engine/docs/concepts/node-pools>)
+   pool](https://cloud.google.com/kubernetes-engine/docs/concepts/node-pools)
    to get nodes from. *Nodes* represents hardware and a *node pool* will
    keep track of how much of a certain type of hardware that you would like.
 
@@ -65,11 +65,11 @@ your google cloud account.
    * Replace `<CLUSTERNAME>` with a name that can be used to refer to this cluster
      in the future.
    * `--machine-type` specifies the amount of CPU and RAM in each node within
-     this default node pool. There is a [variety of types](<https://cloud.google.com/compute/docs/machine-types>) to choose from.
+     this default node pool. There is a [variety of types](https://cloud.google.com/compute/docs/machine-types) to choose from.
    * `--num-nodes` specifies how many nodes to spin up. You can change this
      later through the cloud console or using the `gcloud` command line tool.
    * `--zone` specifies the data center zone where your cluster will be created.
-     You can pick something from [this list](<https://cloud.google.com/compute/docs/regions-zones/#available>)
+     You can pick something from [this list](https://cloud.google.com/compute/docs/regions-zones/#available)
      that is not too far away from your users.
    * A region in GCP is a geographical region with at least three zones, where each zone is representing a datacenter with servers etc.
      * A regional cluster creates pods across zones in a region(three by default), distributing Kubernetes resources across multiple zones in the region. This is different from the default cluster, which has all its resources within a single zone(as shown above).

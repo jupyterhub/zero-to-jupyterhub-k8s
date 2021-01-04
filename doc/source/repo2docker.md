@@ -31,7 +31,7 @@ example if you include a `requirements.txt` file in the root level of the
 repository, `repo2docker` will `pip install` the specified packages into the
 Docker image to be built.
 
-See [repo2docker's documentation](<https://repo2docker.readthedocs.io/en/latest/config_files.html>) for more
+See [repo2docker's documentation](https://repo2docker.readthedocs.io/en/latest/config_files.html) for more
 details.
 
 Below we’ll cover how to use `repo2docker` to generate a Docker image and how
@@ -70,7 +70,7 @@ to configure JupyterHub to build off of this image:
 4. **Get credentials for a docker repository.**
 
    The image you will build for your JupyterHub must be made available by being
-   published to some container registry. You could for example use [Docker Hub](<https://hub.docker.com/>) or [Google Container Registry](<https://cloud.google.com/container-registry/>).
+   published to some container registry. You could for example use [Docker Hub](https://hub.docker.com/) or [Google Container Registry](https://cloud.google.com/container-registry/).
 
    In the next step, you need an image reference for you and others to find your
    image with.

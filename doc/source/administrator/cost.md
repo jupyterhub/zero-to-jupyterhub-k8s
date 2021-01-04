@@ -17,9 +17,9 @@ on providers selected and your use cases.
 
 Below are several links to cost estimators for cloud providers:
 
-* [Google Cloud Platform cost calculator](<https://cloud.google.com/products/calculator/>)
-* [Amazon AWS cost calculator](<https://calculator.s3.amazonaws.com/index.html>)
-* [Microsoft Azure cost claculator](<https://azure.microsoft.com/en-us/pricing/calculator/>)
+* [Google Cloud Platform cost calculator](https://cloud.google.com/products/calculator/)
+* [Amazon AWS cost calculator](https://calculator.s3.amazonaws.com/index.html)
+* [Microsoft Azure cost claculator](https://azure.microsoft.com/en-us/pricing/calculator/)
 
 ## Factors influencing costs
 
@@ -43,7 +43,7 @@ This requires significantly fewer storage resources, and also results in faster
 load times.
 
 For an indicator of how costs scale with computational resources, see the
-[Google Cloud pricing page](<https://cloud.google.com/compute/all-pricing>).
+[Google Cloud pricing page](https://cloud.google.com/compute/all-pricing).
 
 ### Users
 

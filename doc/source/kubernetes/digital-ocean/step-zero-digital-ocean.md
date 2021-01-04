@@ -2,16 +2,16 @@
 
 # Kubernetes on Digital Ocean
 
-You can create a Kubernetes cluster [either through the Digital Ocean website, or using the Digital Ocean command line tools](<https://www.digitalocean.com/>).
+You can create a Kubernetes cluster [either through the Digital Ocean website, or using the Digital Ocean command line tools](https://www.digitalocean.com/).
 
 This page describes the commands required to setup a Kubernetes cluster using the command line.
-If you prefer to use the Digital Ocean portal see the [Digital Ocean Get Started](<https://www.digitalocean.com/products/kubernetes>).
+If you prefer to use the Digital Ocean portal see the [Digital Ocean Get Started](https://www.digitalocean.com/products/kubernetes).
 
 1. Prepare your Digital Ocean shell environment.
 
    1. **Install command-line tools locally**. You'll need at least v1.13.0.
 
-   You can either follow the [installation instructions](<https://github.com/digitalocean/doctl/blob/master/README.md>) or use the commands below:
+   You can either follow the [installation instructions](https://github.com/digitalocean/doctl/blob/master/README.md) or use the commands below:
    
    ```
    wget https://github.com/digitalocean/doctl/releases/download/v1.13.0/doctl-1.13.0-linux-amd64.tar.gz

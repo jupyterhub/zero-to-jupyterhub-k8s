@@ -1,15 +1,15 @@
 (ovh)=
 
-# Kubernetes on [OVHcloud](<https://ovh.com/>) (OVH)
+# Kubernetes on [OVHcloud](https://ovh.com/) (OVH)
 
-[OVHcloud](<https://ovh.com/>) is a leader in the hosted private cloud services space in Europe.
+[OVHcloud](https://ovh.com/) is a leader in the hosted private cloud services space in Europe.
 
 They offer a managed Kubernetes service as well as a managed private registry for Docker images.
 
 This page describes how to create a Kubernetes cluster using the OVH Control Panel,
 and how to access the cluster using the command line with `kubectl`.
 
-1. Log in to the [OVH Control Panel](<https://www.ovh.com/auth/>).
+1. Log in to the [OVH Control Panel](https://www.ovh.com/auth/).
 
    ```{note}
    You first need to create an OVH account if you don't have one already.
@@ -60,7 +60,7 @@ and how to access the cluster using the command line with `kubectl`.
    set with `--num-nodes` above).
 
    ```{note}
-   Check out the [Kubernetes Documentation](<https://kubernetes.io/docs/tasks/tools/install-kubectl>)
+   Check out the [Kubernetes Documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl)
    to install `kubectl`.
    ```
 

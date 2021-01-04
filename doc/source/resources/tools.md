@@ -23,13 +23,13 @@ They provide the following things:
 - Creating, resizing, and deleting clusters
 
 Some of these organizations are companies
-(e.g., [Google](<https://cloud.google.com/>)), though JupyterHub
+(e.g., [Google](https://cloud.google.com/)), though JupyterHub
 will work fine with university clusters or custom cluster deployments as well.
 For these materials, any cluster with Kubernetes installed will work
 with JupyterHub.
 
 More information about setting up accounts services with cloud providers
-can be found [here](<create-k8s-cluster>).
+can be found [here](create-k8s-cluster).
 
 ## Container Technology
 
@@ -78,7 +78,7 @@ Docker containers or communicate via the internet.
 
 ## Kubernetes
 
-[Kubernetes](<https://kubernetes.io/>) is a service that runs on cloud
+[Kubernetes](https://kubernetes.io/) is a service that runs on cloud
 infrastructures. It provides a single point of contact with the machinery
 of your cluster deployment, and allows a user to specify the computational
 requirements that they need (e.g., how many machines, how many CPUs
@@ -123,7 +123,7 @@ service that you want to run, which makes things easier to manage and
 keeps things more stable.
 
 For more information about pods, see the
-[Kubernetes documentation about pods](<https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/>).
+[Kubernetes documentation about pods](https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/).
 
 ### Deployments
 
@@ -141,7 +141,7 @@ the current state vs. the specification of the deployment, Kubernetes will
 attempt to make changes until the current state matches the specification.
 
 For more information about deployments, see the
-[Kubernetes documentation about deployment](<https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>).
+[Kubernetes documentation about deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/).
 
 ```{note}
 Users don't generally "create" deployments directly, they are
@@ -160,17 +160,17 @@ track of all these changes on the backend, and provides a single address
 to manage your deployment.
 
 For more information about services, see the
-[Kubernetes documentation about services](<https://kubernetes.io/docs/concepts/services-networking/service/>).
+[Kubernetes documentation about services](https://kubernetes.io/docs/concepts/services-networking/service/).
 
 ### Namespace
 
-Finally, a [namespace](<https://kubernetes.io/docs/tasks/administer-cluster/namespaces/>)
+Finally, a [namespace](https://kubernetes.io/docs/tasks/administer-cluster/namespaces/)
 defines a collection of objects in Kubernetes. It
 is generally the most "high-level" of the groups we've discussed thus far.
 For example, a namespace could be a single class running with JupyterHub.
 
 For more information about namespaces, see the
-[Kubernetes documentation on namespaces](<https://kubernetes.io/docs/tasks/administer-cluster/namespaces/>).
+[Kubernetes documentation on namespaces](https://kubernetes.io/docs/tasks/administer-cluster/namespaces/).
 
 ### Persistent Volume Claim
 
@@ -182,11 +182,11 @@ on it. Persistent Volume Claims help deal with this problem by knowing
 how to convert files between disk types (e.g., AWS vs. Google disks).
 
 For more information on Persistent Volume Claims, see the
-[Kubernetes documentation on persistent volumes](<https://kubernetes.io/docs/concepts/storage/persistent-volumes/>).
+[Kubernetes documentation on persistent volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/).
 
 ## Helm
 
-[Helm](<https://helm.sh/>) is a way of specifying Kubernetes objects
+[Helm](https://helm.sh/) is a way of specifying Kubernetes objects
 with a standard template.
 
 ### Charts
@@ -206,7 +206,7 @@ begin deploying the objects above into that namespace.
 
 Charts have both names and versions, which means that you can easily
 update them and build off of them. There are
-[community maintained charts](<https://github.com/helm/charts/tree/master/stable>)
+[community maintained charts](https://github.com/helm/charts/tree/master/stable)
 available, and we use a chart to install and upgrade JupyterHub in
 this guide. In our case, the helm chart is a file called `config.yaml`.
 
