@@ -163,6 +163,12 @@ properties:
           the `--values` or `-f` flag. During merging, lists are replaced while
           dictionaries are updated.
           ```
+      baseUrl:
+        type: string
+        description: |
+          This is the equivalent of c.JupyterHub.base_url, but it is also needed
+          by the Helm chart in general. So, instead of setting
+          c.JupyterHub.base_url, use this configuration.
       command:
         type: list
         description: |
