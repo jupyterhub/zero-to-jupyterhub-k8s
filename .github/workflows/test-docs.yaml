@@ -42,8 +42,14 @@ jobs:
       - name: Build and run linkcheck
         run: |
           cd doc
-          make html SPHINXOPTS='-W --keep-going --color'
-          make linkcheck SPHINXOPTS='--color'
+          echo ---
+          echo Running: make html
+          echo ---
+          make html SPHINXOPTS='--color'
+          echo ---
+          echo Running: make linkcheck -W --keep-going
+          echo ---
+          make linkcheck SPHINXOPTS='--color -W --keep-going'
         # Make the job not fail if this step fail. The GitHub UI will due to
         # this signal the job to be green even though it has failures though, so
         # manual inspection is needed at the moment. A related ticket to improve
