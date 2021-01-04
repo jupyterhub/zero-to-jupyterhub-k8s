@@ -39,16 +39,9 @@ jobs:
       - name: Install deps
         run: pip install --no-cache-dir -r doc/doc-requirements.txt
 
-      - name: Build and run linkcheck
+      - name: make linkcheck
         run: |
           cd doc
-          echo ---
-          echo Running: make html
-          echo ---
-          make html SPHINXOPTS='--color'
-          echo ---
-          echo Running: make linkcheck -W --keep-going
-          echo ---
           make linkcheck SPHINXOPTS='--color -W --keep-going'
         # Make the job not fail if this step fail. The GitHub UI will due to
         # this signal the job to be green even though it has failures though, so
