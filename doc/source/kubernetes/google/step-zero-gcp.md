@@ -31,6 +31,10 @@ your google cloud account.
       preinstalled. If you save something in a user folder they will remain
       available to you if you return at a later stage. Additional documentation
       about Google Cloud shell is available [here](<https://cloud.google.com/shell/docs/>)
+
+      ```{image} ../../_static/images/google/start_interactive_cli.png
+      :align: center
+      ```
    2. **Use your own computer's terminal:**
 
       1. Download and install the `gcloud` command line tool at its [install

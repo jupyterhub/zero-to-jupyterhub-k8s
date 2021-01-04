@@ -15,14 +15,33 @@ and how to access the cluster using the command line with `kubectl`.
    You first need to create an OVH account if you don't have one already.
    ```
 2. Click on the **Public Cloud** tab in the navigation bar.
+   ```{image} ../../_static/images/ovh/public-cloud.png
+   :alt: Public Cloud entry in the navigation bar
+   ```
 3. If you don't have an OVH Stack, you can create one by clicking on the following button:
+   ```{image} ../../_static/images/ovh/create-ovh-stack.png
+   :alt: Button to create an OVH stack
+   ```
 4. Select a name for the project
 5. If you don't have a payment method yet, select one and click on "Create my project":
+   ```{image} ../../_static/images/ovh/payment.png
+   :alt: Select a payment method
+   ```
 6. Using the **Public Cloud interface**, click on **Managed Kubernetes Service** and
    then **Create a Kubernetes cluster**:
+   ```{image} ../../_static/images/ovh/create-cluster-button.png
+   :alt: Create a new Kubernetes cluster
+   ```
 7. Select a **Location**, **1.15** as the Kubernetes version and a **name** for the cluster:
+   ```{image} ../../_static/images/ovh/create-cluster-options.png
+   :alt: Create a new Kubernetes cluster - Options
+   ```
 8. Click on **Send**
 9. Once the cluster is ready, click on **Nodes** to add 2 nodes:
+
+   ```{image} ../../_static/images/ovh/add-nodes.png
+   :alt: Add nodes to the cluster
+   ```
 
    You can start with the **b2-7** flavor, or choosing a different flavor based
    on your requirements.
