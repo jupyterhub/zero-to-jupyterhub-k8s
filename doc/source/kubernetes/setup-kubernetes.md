@@ -9,7 +9,7 @@ a Kubernetes cluster on various cloud providers and on other infrastructure.
 Choose one option and proceed.
 
 ```{toctree}
-:titlesonly: None
+:titlesonly:
 
 google/step-zero-gcp
 microsoft/step-zero-azure
