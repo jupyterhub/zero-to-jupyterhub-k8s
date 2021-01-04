@@ -44,7 +44,7 @@ goto end
 
 
 :linkcheck
-%SPHINXBUILD% -b linkcheck %ALLSPHINXOPTS% "%SOURCEDIR%" "%BUILDDIR%/linkcheck"
+%SPHINXBUILD% -b linkcheck --color %ALLSPHINXOPTS% "%SOURCEDIR%" "%BUILDDIR%/linkcheck"
 echo.
 echo.Link check complete; look for any errors in the above output 
 echo.or in "%BUILDDIR%/linkcheck/output.txt".
