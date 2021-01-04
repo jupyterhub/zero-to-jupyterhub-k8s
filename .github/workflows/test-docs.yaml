@@ -27,6 +27,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+        with:
+          # chartpress is used by doc/conf.py, part of doc/doc-requirements.txt,
+          # and requires information about the latest tagged commit, which
+          # requires the git history.
+          fetch-depth: 0
       - uses: actions/setup-python@v2
         with:
           python-version: '3.8'
@@ -34,15 +39,7 @@ jobs:
       - name: Install deps
         run: pip install --no-cache-dir -r doc/doc-requirements.txt
 
-      - name: Build and run linkcheck
+      - name: make linkcheck
         run: |
           cd doc
-          make html SPHINXOPTS='-W --keep-going'
-          make linkcheck
-        # Make the job not fail if this step fail. The GitHub UI will due to
-        # this signal the job to be green even though it has failures though, so
-        # manual inspection is needed at the moment. A related ticket to improve
-        # this is open.
-        #
-        # ref: https://github.com/actions/toolkit/issues/399
-        continue-on-error: true
+          make linkcheck SPHINXOPTS='--color -W --keep-going'
