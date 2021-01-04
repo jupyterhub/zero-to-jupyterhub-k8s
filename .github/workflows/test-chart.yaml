@@ -12,11 +12,13 @@ on:
       - "doc/**"
       - "**/test-docs.yaml"
       - "**.md"
+      - "**/schema.yaml"
   push:
     paths-ignore:
       - "doc/**"
       - "**/test-docs.yaml"
       - "**.md"
+      - "**/schema.yaml"
     branches-ignore:
       - "dependabot/**"
   workflow_dispatch:

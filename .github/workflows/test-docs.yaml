@@ -9,10 +9,12 @@ on:
   pull_request:
     paths:
       - "doc/**"
+      - "**/schema.yaml"
       - "**/test-docs.yaml"
   push:
     paths:
       - "doc/**"
+      - "**/schema.yaml"
       - "**/test-docs.yaml"
     branches-ignore:
       - "dependabot/**"
