@@ -1,16 +1,18 @@
-.. _glossary:
+(glossary)=
 
-Glossary
-========
+# Glossary
 
 A partial glossary of terms used in this guide. For more complete descriptions
-of the components in JupyterHub, see :ref:`tools`. Here we try to keep the
+of the components in JupyterHub, see {ref}`tools`. Here we try to keep the
 definition as succinct and relevant as possible, and provide links to learn more
 details.
 
-.. Additions to the glossary are welcomed. Please add in alphabetical order.
+<!---
+Additions to the glossary are welcomed. Please add in alphabetical order.
+-->
 
-.. glossary::
+```{eval-rst}
+.. glossary:: 
 
    `admin user <https://jupyterhub.readthedocs.io/en/stable/getting-started/authenticators-users-basics.html?highlight=admin>`_
       A user who can access the JupyterHub admin panel. They can start/stop user
@@ -20,7 +22,7 @@ details.
       The way in which users are authenticated to log into JupyterHub. There
       are many authenticators available, like GitHub, Google, MediaWiki,
       Dummy (anyone can log in), etc.
-   
+
    `config.yaml`
       The :term:`Helm charts <Helm chart>` templates are rendered with these
       :term:`Helm values` as input. The file is written in the `YAML
@@ -77,7 +79,7 @@ details.
       For our purposes, you can think of Kubernetes as a way to speak to a cloud
       and describe what you would like it to do, in a manner that isn't specific
       for that cloud.
-      
+
       - `The Illustrated Children's Guide to Kubernetes <https://www.youtube.com/watch?v=4ht22ReBjno>`_
       - `The official "What is Kubernetes?" text <https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/>`_
 
@@ -97,7 +99,7 @@ details.
       See the `Kubernetes documentation
       <https://kubernetes.io/docs/concepts/workloads/pods/pod/>`__ for more
       information.
-   
+
    Kubernetes resource
       A Kubernetes resource can for example be a `Deployment
       <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_,
@@ -125,3 +127,4 @@ details.
       JupyterHub. They are each responsible for one user. This Helm chart relies
       on `KubeSpawner
       <https://jupyterhub-kubespawner.readthedocs.io/en/latest/overview.html>`_.
+```
