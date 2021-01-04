@@ -14,7 +14,7 @@ This is a backup of the repo2docker instructions from user-environment.rst
 ```{note}
 Docker images to be used this way must have the `jupyterhub` package of a
 matching version with the Helm chart. This documentation is for Helm chart
-{{version}}, and it uses JupyterHub version {{jupyterhub_version}}.
+{{chart_version}}, and it uses JupyterHub version {{jupyterhub_version}}.
 ```
 
 If you can't find a pre-existing image that suits your needs, you can create
