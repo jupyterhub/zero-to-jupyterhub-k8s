@@ -1,7 +1,7 @@
 # Zero to JupyterHub with Kubernetes
 
 [![Documentation build status](https://img.shields.io/readthedocs/zero-to-jupyterhub?logo=read-the-docs)](https://zero-to-jupyterhub.readthedocs.io/en/latest/?badge=latest)
-[![GitHub Workflow Status - Test](https://img.shields.io/github/workflow/status/jupyterhub/zero-to-jupyterhub-k8s/Test?logo=github&label=tests)](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/actions)
+[![GitHub Workflow Status - Test](https://img.shields.io/github/workflow/status/jupyterhub/zero-to-jupyterhub-k8s/Test%20chart?logo=github&label=tests)](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/actions)
 [![GitHub Workflow Status - Vuln. scan](https://img.shields.io/github/workflow/status/jupyterhub/zero-to-jupyterhub-k8s/Vuln.%20scan?logo=github&label=Vuln.%20scan)](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/actions)
 [![Latest stable release of the Helm chart](https://img.shields.io/badge/dynamic/json.svg?label=stable&url=https://jupyterhub.github.io/helm-chart/info.json&query=$.jupyterhub.stable&colorB=orange&logo=helm)](https://jupyterhub.github.io/helm-chart#jupyterhub)
 [![Latest pre-release of the Helm chart](https://img.shields.io/badge/dynamic/json.svg?label=pre&url=https://jupyterhub.github.io/helm-chart/info.json&query=$.jupyterhub.pre&colorB=orange&logo=helm)](https://jupyterhub.github.io/helm-chart#development-releases-jupyterhub)
