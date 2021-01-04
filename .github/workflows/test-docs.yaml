@@ -27,6 +27,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+        with:
+          # chartpress is used by doc/conf.py, part of doc/doc-requirements.txt,
+          # and requires information about the latest tagged commit, which
+          # requires the git history.
+          fetch-depth: 0
       - uses: actions/setup-python@v2
         with:
           python-version: '3.8'
