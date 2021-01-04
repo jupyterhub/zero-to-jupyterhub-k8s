@@ -10,14 +10,14 @@ BUILDDIR      = build
 
 # Put it first so that "make" without argument is like "make help".
 help:
-	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS)
 
 .PHONY: help Makefile
 
 # Catch-all target: route all unknown targets to Sphinx using the new
-# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
+# "make mode" option.
 %: Makefile
-	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS)
 
 
 # Manually added commands
@@ -27,12 +27,12 @@ help:
 # - builds and rebuilds html on changes to source
 # - starts a livereload enabled webserver and opens up a browser
 devenv:
-	sphinx-autobuild -b html --open-browser --ignore "*/reference.md" $(ALLSPHINXOPTS) "$(SOURCEDIR)" "$(BUILDDIR)/html"
+	sphinx-autobuild -b html --open-browser --ignore "*/reference.md" "$(SOURCEDIR)" "$(BUILDDIR)/html" $(SPHINXOPTS)
 
 # For local development and CI:
 # - verifies that links are valid
 linkcheck:
-	$(SPHINXBUILD) -b linkcheck --color $(ALLSPHINXOPTS) "$(SOURCEDIR)" "$(BUILDDIR)/linkcheck"
+	$(SPHINXBUILD) -b linkcheck "$(SOURCEDIR)" "$(BUILDDIR)/linkcheck" $(SPHINXOPTS)
 	@echo
 	@echo "Link check complete; look for any errors in the above output " \
 	      "or in $(BUILDDIR)/linkcheck/output.txt."
