@@ -75,7 +75,10 @@ latest_tag = _get_latest_tag()
 chart_version = chart["version"]
 chart_version_git_ref = _get_git_ref_from_chartpress_based_version(chart_version)
 jupyterhub_version = chart["appVersion"]
-kube_version = chart["kubeVersion"].split("-", 1)[0]
+# FIXME: kubeVersion contain >=, but by having > in the string we substitute we
+#        run into this issue:
+#        https://github.com/executablebooks/MyST-Parser/issues/282
+kube_version = chart["kubeVersion"].split("-", 1)[0][2:]
 
 # These substitution variables only work in markdown contexts, and does not work
 # within links etc. Reference using {{ variable_name }}
