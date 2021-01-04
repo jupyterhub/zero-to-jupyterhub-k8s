@@ -10,7 +10,7 @@ and related {term}`Kubernetes resources <Kubernetes resource>` using a
 ## Prepare configuration file
 
 In this step we will prepare a [YAML](<https://en.wikipedia.org/wiki/YAML>)
-configuration file that we will refer to as {}`config.yaml`. It will contain the multiple
+configuration file that we will refer to as `config.yaml`. It will contain the multiple
 {term}`Helm values` to be provided to a JupyterHub {term}`Helm chart` developed
 specifically together with this guide.
 
@@ -161,7 +161,7 @@ security issue.
    kubectl describe service proxy-public --namespace jhub
    ```
 
-7. To use JupyterHub, enter the external IP for the {}`proxy-public` service in
+7. To use JupyterHub, enter the external IP for the `proxy-public` service in
    to a browser. JupyterHub is running with a default *dummy* authenticator so
    entering any username and password combination will let you enter the hub.
 

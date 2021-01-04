@@ -160,7 +160,7 @@ It is important to understand the basics of how user storage is set up. By
 default, each user will get 10GB of space on a harddrive that will persist in
 between restarts of their server. This harddrive will be mounted to their home
 directory. In practice this means that everything a user writes to the home
-directory ({}`/home/jovyan`) will remain, and everything else will be reset in
+directory (`/home/jovyan`) will remain, and everything else will be reset in
 between server restarts.
 
 A server can be shut down by *culling*. By default, JupyterHub's culling service
@@ -195,8 +195,8 @@ in users seeing those files in their home directory. You can use commands like
 `wget` to place files where you like.
 
 A simple way to populate the notebook user's home directory is to add the
-required files to the container's {}`/tmp` directory and then copy them to
-{}`/home/jovyan` using a `postStart` hook. This example shows the use of
+required files to the container's `/tmp` directory and then copy them to
+`/home/jovyan` using a `postStart` hook. This example shows the use of
 multiple commands.
 
 ```yaml
@@ -294,7 +294,7 @@ or to configure default interfaces such as Jupyter Lab vs. RStudio.
 
 Each configuration is a set of options for [Kubespawner](<https://github.com/jupyterhub/kubespawner>),
 which defines how Kubernetes should launch a new user server pod. Any
-configuration options passed to the {}`profileList` configuration will
+configuration options passed to the `profileList` configuration will
 overwrite the defaults in Kubespawner (or any configuration you've
 added elsewhere in your helm chart).
 
