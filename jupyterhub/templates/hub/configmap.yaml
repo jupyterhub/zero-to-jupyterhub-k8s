@@ -8,3 +8,14 @@ data:
   {{- /* Glob files to allow them to be mounted by the hub pod */ -}}
   {{- /* key=filename: value=content */ -}}
   {{- (.Files.Glob "files/hub/*").AsConfig | nindent 2 }}
+
+  {{- /*
+    The name templates from _helpers-names.tpl are made available both as a
+    single YAML blob and as separate key-value pairs for direct reference.
+
+    Their purpose is to help containers be able to reference dynamically
+    determined resource names.
+  */}}
+  name-templates: |
+    {{- include "jupyterhub.name-templates" . | fromYaml | toYaml | nindent 4 }}
+  {{- include "jupyterhub.name-templates" . | nindent 2 }}

@@ -156,3 +156,35 @@ jupyterhub
 {{ .Release.Name }}-user-scheduler
 {{- end }}
 {{- end }}
+
+{{- /*
+    name-templates - a template rendering all name templates so its easy to
+    emit them to a configmap.
+
+    IMPORTANT: Ensure 1:1 mapping of references
+*/}}
+{{- define "jupyterhub.name-templates" -}}
+fullname: {{ include "jupyterhub.fullname" . | quote }}
+hub: {{ include "jupyterhub.hub.fullname" . | quote }}
+hub-secret: {{ include "jupyterhub.hub-secret.fullname" . | quote }}
+hub-db-dir: {{ include "jupyterhub.hub-db-dir.fullname" . | quote }}
+proxy: {{ include "jupyterhub.proxy.fullname" . | quote }}
+proxy-api: {{ include "jupyterhub.proxy-api.fullname" . | quote }}
+proxy-http: {{ include "jupyterhub.proxy-http.fullname" . | quote }}
+proxy-public: {{ include "jupyterhub.proxy-public.fullname" . | quote }}
+proxy-public-tls: {{ include "jupyterhub.proxy-public-tls.fullname" . | quote }}
+proxy-public-manual-tls: {{ include "jupyterhub.proxy-public-manual-tls.fullname" . | quote }}
+autohttps: {{ include "jupyterhub.autohttps.fullname" . | quote }}
+user-scheduler: {{ include "jupyterhub.user-scheduler.fullname" . | quote }}
+user-scheduler-lock: {{ include "jupyterhub.user-scheduler-lock.fullname" . | quote }}
+user-placeholder: {{ include "jupyterhub.user-placeholder.fullname" . | quote }}
+hook-image-awaiter: {{ include "jupyterhub.hook-image-awaiter.fullname" . | quote }}
+hook-image-puller: {{ include "jupyterhub.hook-image-puller.fullname" . | quote }}
+continuous-image-puller: {{ include "jupyterhub.continuous-image-puller.fullname" . | quote }}
+singleuser: {{ include "jupyterhub.singleuser.fullname" . | quote }}
+image-pull-secret: {{ include "jupyterhub.image-pull-secret.fullname" . | quote }}
+ingress: {{ include "jupyterhub.ingress.fullname" . | quote }}
+priority: {{ include "jupyterhub.priority.fullname" . | quote }}
+user-placeholder-priority: {{ include "jupyterhub.user-placeholder-priority.fullname" . | quote }}
+user-scheduler-ref: {{ include "jupyterhub.user-scheduler-ref.fullname" . | quote }}
+{{- end }}
