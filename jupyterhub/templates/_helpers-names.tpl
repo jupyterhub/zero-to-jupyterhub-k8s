@@ -9,6 +9,33 @@ There are five modes to name resources:
     4. independent:  release-(nameOverride-)component   fullnameOverride: null, nameOverride: str   (omitted if contained in release)
     5. independent:  release-(chart-)component          fullnameOverride: null, nameOverride: null  (omitted if contained in release)
 
+
+With such dynamic naming, referencing them is a bit complicated. With dynamic
+names, we cannot use hardcoded strings. So, how do we reference them?
+
+From templates...
+
+    Rely on the named templates below, so instead of referencing "hub" as a name,
+    reference the named template "jupyterhub.hub.fullname" passing the . scope.
+
+    FIXME:
+
+        For this to work for a chart that depends on this chart, we must
+        be able to traverse the .Values to this chart's values. If for
+        example the daskhub chart depends on this and reference the
+        named template "jupyterhub.proxy-public.fullname"
+        .Values.fullnameOverride will be used instead of the desired
+        ".Values.jupyterhub.fullnameOverride".
+
+        One workaround is to make our name template translate
+        .Values.jupyterhub.X to .Values.X, but this is a hack as daskhub
+        may use an alias etc...
+
+From containers...
+
+    Rely on the hub ConfigMap which both has a blob of YAML and individual
+    key/value pairs.
+
 */}}
 
 {{- /* The chart's resources' name prefix */}}
