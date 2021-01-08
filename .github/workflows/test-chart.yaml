@@ -123,16 +123,30 @@ jobs:
           . ./ci/common
           install_and_run_chartpress_and_pebble
 
-      - name: Install latest JupyterHub version from Helm chart repo
+      - name: Install latest released chart
         if: matrix.test == 'upgrade'
         run: |
           . ./ci/common
           helm install jupyterhub jupyterhub/jupyterhub --values dev-config.yaml
+
+          echo ""
+          echo "Installing Helm diff plugin while k8s resources are initializing"
+          helm plugin install https://github.com/databus23/helm-diff
+
+      - name: Helm diff latest released chart with current
+        if: matrix.test == 'upgrade'
+        run: |
+          helm diff upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml
+
+      - name: Await latest released chart
+        if: matrix.test == 'upgrade'
+        run: |
+          . ./ci/common
           await_jupyterhub
           await_autohttps_tls_cert_acquisition
           await_autohttps_tls_cert_save
 
-      - name: Install JupyterHub dev chart
+      - name: Upgrade latest released chart to current
         run: |
           . ./ci/common
           helm upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml
