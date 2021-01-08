@@ -50,7 +50,7 @@ pyasn1==0.4.8             # via ldap3, pyasn1-modules, rsa
 pycparser==2.20           # via cffi
 pycurl==7.43.0.6          # via -r requirements.in
 pyjwt==1.7.1              # via -r requirements.in, mwoauth
-pymysql==0.10.1           # via -r requirements.in
+pymysql==1.0.0            # via -r requirements.in
 pyopenssl==20.0.0         # via certipy
 pyrsistent==0.17.3        # via jsonschema
 python-dateutil==2.8.1    # via alembic, jupyterhub, jupyterhub-idle-culler, kubernetes
