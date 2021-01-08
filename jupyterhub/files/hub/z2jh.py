@@ -12,29 +12,39 @@ import yaml
 # memoize so we only load config once
 @lru_cache()
 def _load_config():
-    """Load and merge mounted configuration from disk into a single dictionary
+    """Load Helm chart configuration passed through a mounted ConfigMap."""
 
-    Memoized to only load once
-    """
-    cfg = {}
-    for source in ("config/named-templates.yaml", "secret/values.yaml"):
-        path = f"/etc/jupyterhub/{source}"
-        if os.path.exists(path):
-            print(f"Loading {path}")
-            with open(path) as f:
-                values = yaml.safe_load(f)
-            cfg = _merge_dictionaries(cfg, values)
-        else:
-            print(f"No config at {path}")
-    return cfg
+    path = f"/etc/jupyterhub/secret/values.yaml"
+    if os.path.exists(path):
+        print(f"Loading {path}")
+        with open(path) as f:
+            return yaml.safe_load(f)
+    else:
+        raise Exception(f"{path} not found!")
+
+
+@lru_cache()
+def _load_name_templates():
+    """Load dynamically determined k8s resource names so we can reference them
+    from within the container."""
+
+    path = f"/etc/jupyterhub/config/name-templates.yaml"
+    if os.path.exists(path):
+        print(f"Loading {path}")
+        with open(path) as f:
+            return yaml.safe_load(f)
+    else:
+        raise Exception(f"{path} not found!")
 
 
 def get_name(name):
-    return _load_config()[name]
+    return _load_name_templates()[name]
 
 
 def get_name_env(name, suffix=""):
-    return _load_config()[name].upper().replace("-", "_") + suffix
+    env_key = _load_name_templates()[name] + suffix
+    env_key = env_key.upper().replace("-", "_")
+    return os.environ[env_key]
 
 
 def _merge_dictionaries(a, b):

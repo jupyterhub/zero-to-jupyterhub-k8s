@@ -16,6 +16,6 @@ data:
     Their purpose is to help containers be able to reference dynamically
     determined resource names.
   */}}
-  name-templates: |
-    {{- include "jupyterhub.name-templates" . | fromYaml | toYaml | nindent 4 }}
+  name-templates.yaml: |
+    {{- include "jupyterhub.name-templates" . | nindent 4 }}
   {{- include "jupyterhub.name-templates" . | nindent 2 }}

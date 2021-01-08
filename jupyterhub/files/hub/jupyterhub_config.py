@@ -186,7 +186,7 @@ if image_pull_secrets:
 
 # scheduling:
 if get_config("scheduling.userScheduler.enabled"):
-    c.KubeSpawner.scheduler_name = get_name("user-scheduler")
+    c.KubeSpawner.scheduler_name = get_name("user-scheduler-ref")
 if get_config("scheduling.podPriority.enabled"):
     c.KubeSpawner.priority_class_name = get_name("priority")
 
