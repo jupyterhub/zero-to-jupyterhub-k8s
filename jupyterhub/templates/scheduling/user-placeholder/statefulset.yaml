@@ -28,10 +28,10 @@ spec:
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
     spec:
       {{- if .Values.scheduling.podPriority.enabled }}
-      priorityClassName: {{ include "jupyterhub.user-placeholder.priority.fullname" . }}
+      priorityClassName: {{ include "jupyterhub.user-placeholder-priority.fullname" . }}
       {{- end }}
       {{- if .Values.scheduling.userScheduler.enabled }}
-      schedulerName: {{ include "jupyterhub.user-scheduler.ref.fullname" . }}
+      schedulerName: {{ include "jupyterhub.user-scheduler-ref.fullname" . }}
       {{- end }}
       tolerations:
         {{- include "jupyterhub.userTolerations" . | nindent 8 }}

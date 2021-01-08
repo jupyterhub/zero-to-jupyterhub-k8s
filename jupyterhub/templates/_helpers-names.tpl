@@ -140,7 +140,7 @@ jupyterhub
 {{- end }}
 
 {{- /* user-placeholder Priority */}}
-{{- define "jupyterhub.user-placeholder.priority.fullname" -}}
+{{- define "jupyterhub.user-placeholder-priority.fullname" -}}
 {{- if (include "jupyterhub.fullname.dash" .) }}
 {{- include "jupyterhub.user-placeholder.fullname" . }}
 {{- else -}}
@@ -149,7 +149,7 @@ jupyterhub
 {{- end }}
 
 {{- /* user-scheduler ref - a cluster wide reference */}}
-{{- define "jupyterhub.user-scheduler.ref.fullname" -}}
+{{- define "jupyterhub.user-scheduler-ref.fullname" -}}
 {{- if (include "jupyterhub.fullname.dash" .) }}
 {{- include "jupyterhub.user-scheduler.fullname" . }}
 {{- else -}}

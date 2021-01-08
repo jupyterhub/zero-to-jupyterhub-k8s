@@ -15,7 +15,7 @@ data:
       resourceName: {{ include "jupyterhub.user-scheduler-lock.fullname" . }}
       resourceNamespace: {{ .Release.Namespace }}
     profiles:
-      - schedulerName: {{ include "jupyterhub.user-scheduler.ref.fullname" . }}
+      - schedulerName: {{ include "jupyterhub.user-scheduler-ref.fullname" . }}
         plugins:
           {{- .Values.scheduling.userScheduler.plugins | toYaml | trimSuffix "\n" | nindent 10 }}
 
