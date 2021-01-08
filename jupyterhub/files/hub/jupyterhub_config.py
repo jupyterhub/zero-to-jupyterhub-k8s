@@ -12,7 +12,7 @@ from jupyterhub.utils import url_path_join
 configuration_directory = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, configuration_directory)
 
-from z2jh import get_config, set_config_if_not_none
+from z2jh import get_config, set_config_if_not_none, get_name, get_name_env
 
 
 def camelCaseify(s):
@@ -35,8 +35,7 @@ c.JupyterHub.spawner_class = "kubespawner.KubeSpawner"
 # Connect to a proxy running in a different pod. Note that *_SERVICE_*
 # environment variables are set by Kubernetes for Services
 c.ConfigurableHTTPProxy.api_url = (
-    # FIXME: unique name
-    f"http://proxy-api:{os.environ['PROXY_API_SERVICE_PORT']}"
+    f'http://{get_name("proxy-api")}:{get_name_env("proxy-api", "_SERVICE_PORT")}'
 )
 c.ConfigurableHTTPProxy.should_start = False
 
@@ -93,8 +92,9 @@ c.JupyterHub.hub_bind_url = f"http://:{hub_container_port}"
 # hub_connect_url is the URL for connecting to the hub for use by external
 # JupyterHub services such as the proxy. Note that *_SERVICE_* environment
 # variables are set by Kubernetes for Services.
-# FIXME: unique name
-c.JupyterHub.hub_connect_url = f"http://hub:{os.environ['HUB_SERVICE_PORT']}"
+c.JupyterHub.hub_connect_url = (
+    f'http://{get_name("hub")}:{get_name_env("hub", "_SERVICE_PORT")}'
+)
 
 # implement common labels
 # this duplicates the jupyterhub.commonLabels helper
@@ -176,8 +176,7 @@ image_pull_secrets = []
 if get_config("imagePullSecret.automaticReferenceInjection") and (
     get_config("imagePullSecret.create") or get_config("imagePullSecret.enabled")
 ):
-    # FIXME: unique name
-    image_pull_secrets.append("image-pull-secret")
+    image_pull_secrets.append(get_name("image-pull-secret"))
 if get_config("imagePullSecrets"):
     image_pull_secrets.extend(get_config("imagePullSecrets"))
 if get_config("singleuser.image.pullSecrets"):
@@ -187,13 +186,9 @@ if image_pull_secrets:
 
 # scheduling:
 if get_config("scheduling.userScheduler.enabled"):
-    # FIXME: unique name
-    c.KubeSpawner.scheduler_name = os.environ["HELM_RELEASE_NAME"] + "-user-scheduler"
+    c.KubeSpawner.scheduler_name = get_name("user-scheduler")
 if get_config("scheduling.podPriority.enabled"):
-    # FIXME: unique name
-    c.KubeSpawner.priority_class_name = (
-        os.environ["HELM_RELEASE_NAME"] + "-default-priority"
-    )
+    c.KubeSpawner.priority_class_name = get_name("priority")
 
 # add node-purpose affinity
 match_node_purpose = get_config("scheduling.userPods.nodeAffinity.matchNodePurpose")

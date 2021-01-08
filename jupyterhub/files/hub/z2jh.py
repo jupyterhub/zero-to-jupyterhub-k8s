@@ -9,17 +9,16 @@ import os
 
 import yaml
 
-
 # memoize so we only load config once
 @lru_cache()
 def _load_config():
-    """Load configuration from disk
+    """Load and merge mounted configuration from disk into a single dictionary
 
     Memoized to only load once
     """
     cfg = {}
-    for source in ("config", "secret"):
-        path = f"/etc/jupyterhub/{source}/values.yaml"
+    for source in ("config/named-templates.yaml", "secret/values.yaml"):
+        path = f"/etc/jupyterhub/{source}"
         if os.path.exists(path):
             print(f"Loading {path}")
             with open(path) as f:
@@ -28,6 +27,14 @@ def _load_config():
         else:
             print(f"No config at {path}")
     return cfg
+
+
+def get_name(name):
+    return _load_config()[name]
+
+
+def get_name_env(name, suffix=""):
+    return _load_config()[name].upper().replace("-", "_") + suffix
 
 
 def _merge_dictionaries(a, b):
