@@ -1,14 +1,26 @@
-{{- /* FIXME:
-This named template is introduced byt not yet activated to
-serve a purpose until everything would work when using it.
+{{- /*
+
+There are five modes to name resources:
+
+    1. namespaced:   component                          fullnameOverride: "",   nameOverride: ?
+       cluster wide: release-component
+    2. independent:  fullnameOverride-component         fullnameOverride: str,  nameOverride: ?
+    3. independent:  release-component                  fullnameOverride: null, nameOverride: ""
+    4. independent:  release-(nameOverride-)component   fullnameOverride: null, nameOverride: str   (omitted if contained in release)
+    5. independent:  release-(chart-)component          fullnameOverride: null, nameOverride: null  (omitted if contained in release)
+
 */}}
+
 {{- /* The chart's resources' name prefix */}}
 {{- define "jupyterhub.fullname" -}}
-{{- if not "FORCEFULLY DISABLED" }}
-{{- if .Values.fullnameOverride }}
+{{- if eq (typeOf .Values.fullnameOverride) "string" }}
 {{- .Values.fullnameOverride }}
 {{- else }}
+{{- $name := .Values.nameOverride | default .Chart.Name }}
+{{- if contains $name .Release.Name }}
 {{- .Release.Name }}
+{{- else }}
+{{- .Release.Name }}-{{ $name }}
 {{- end }}
 {{- end }}
 {{- end }}
