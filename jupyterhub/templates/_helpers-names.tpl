@@ -1,6 +1,7 @@
 {{- /*
 
-There are five modes to name resources:
+There are five modes to name resources, for more details see schema.yaml or the
+rendered configuration reference under fullnameOverride / nameOverride.
 
     1. namespaced:   component                          fullnameOverride: "",   nameOverride: ?
        cluster wide: release-component
@@ -9,27 +10,14 @@ There are five modes to name resources:
     4. independent:  release-(nameOverride-)component   fullnameOverride: null, nameOverride: str   (omitted if contained in release)
     5. independent:  release-(chart-)component          fullnameOverride: null, nameOverride: null  (omitted if contained in release)
 
-
 With such dynamic naming, referencing them is a bit complicated. With dynamic
-names, we cannot use hardcoded strings. So, how do we reference them?
+names, we cannot use hardcoded strings. So, how do we reference them from this
+chart and parent charts depending on this chart?
 
 From templates...
 
     Rely on the named templates below, so instead of referencing "hub" as a name,
     reference the named template "jupyterhub.hub.fullname" passing the . scope.
-
-    FIXME:
-
-        For this to work for a chart that depends on this chart, we must
-        be able to traverse the .Values to this chart's values. If for
-        example the daskhub chart depends on this and reference the
-        named template "jupyterhub.proxy-public.fullname"
-        .Values.fullnameOverride will be used instead of the desired
-        ".Values.jupyterhub.fullnameOverride".
-
-        One workaround is to make our name template translate
-        .Values.jupyterhub.X to .Values.X, but this is a hack as daskhub
-        may use an alias etc...
 
 From containers...
 
@@ -40,10 +28,28 @@ From containers...
 
 {{- /* The chart's resources' name prefix */}}
 {{- define "jupyterhub.fullname" -}}
-{{- if eq (typeOf .Values.fullnameOverride) "string" }}
-{{- .Values.fullnameOverride }}
+{{- /*
+    A hack to avoid issues from invoking this from a parent Helm chart.
+
+    Caveats and notes:
+        1. While parent charts can, their parents chart can't reference these
+        2. The parent chart must not use an alias for this chart
+        3. There is no failsafe workaround to above due to
+           https://github.com/helm/helm/issues/9214.
+        4. Note that .Chart is of type *chart.Metadata needs to be casted to a
+           normal dict by doing "toYaml | fromYaml" for normal dict inspection.
+*/}}
+{{- $fullname_override := .Values.fullnameOverride }}
+{{- $name_override := .Values.fullnameOverride }}
+{{- if ne .Chart.Name "jupyterhub" }}
+{{- $fullname_override = .Values.jupyterhub.fullnameOverride }}
+{{- $name_override = .Values.jupyterhub.fullnameOverride }}
+{{- end }}
+
+{{- if eq (typeOf $fullname_override) "string" }}
+{{- $fullname_override }}
 {{- else }}
-{{- $name := .Values.nameOverride | default .Chart.Name }}
+{{- $name := $name_override | default .Chart.Name }}
 {{- if contains $name .Release.Name }}
 {{- .Release.Name }}
 {{- else }}
@@ -68,8 +74,13 @@ From containers...
 
 {{- /* hub-secret Secret */}}
 {{- define "jupyterhub.hub-secret.fullname" -}}
-{{- if .Values.hub.existingSecret }}
-{{- .Values.hub.existingSecret }}
+{{- /* A hack to avoid issues from invoking this from a parent Helm chart. */}}
+{{- $existing_secret := .Values.hub.existingSecret }}
+{{- if ne .Chart.Name "jupyterhub" }}
+{{- $existing_secret = .Values.jupyterhub.hub.existingSecret }}
+{{- end }}
+{{- if $existing_secret }}
+{{- $existing_secret }}
 {{- else }}
 {{- include "jupyterhub.hub.fullname" . }}-secret
 {{- end }}
