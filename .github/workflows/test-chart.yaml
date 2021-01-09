@@ -80,7 +80,7 @@ jobs:
         # k3s-version: https://github.com/rancher/k3s/tags
         # k3s-channel: https://update.k3s.io/v1-release/channels
         include:
-          - k3s-channel: latest   # v1.20 as of 2020-12-31
+          - k3s-channel: v1.20
             test: install
           - k3s-channel: v1.19
             test: install
@@ -91,8 +91,23 @@ jobs:
           - k3s-channel: v1.16
             test: install
 
-          - k3s-channel: stable   # v1.19 as of 2020-12-31
+          # We run two upgrade tests where we first install an already released
+          # Helm chart version and then upgrades to the version we are now
+          # testing. We test upgrading from the latest stable version (like
+          # 1.2.3), and one from the latest dev version (like
+          # 1.2.3-n012.h1234abc).
+          #
+          # It can be very useful to see the "Helm diff" step's output from the
+          # latest dev version.
+          #
+          # The upgrade-from input should match the version information from
+          # https://jupyterhub.github.io/helm-chart/info.json
+          - k3s-channel: v1.19
             test: upgrade
+            upgrade-from: stable
+          - k3s-channel: v1.19
+            test: upgrade
+            upgrade-from: dev
 
     steps:
       - uses: actions/checkout@v2
@@ -123,16 +138,34 @@ jobs:
           . ./ci/common
           install_and_run_chartpress_and_pebble
 
-      - name: Install latest JupyterHub version from Helm chart repo
+      - name: "Install ${{ matrix.upgrade-from }} chart"
         if: matrix.test == 'upgrade'
         run: |
           . ./ci/common
-          helm install jupyterhub jupyterhub/jupyterhub --values dev-config.yaml
+          UPGRADE_FROM_VERSION=$(curl -sS https://jupyterhub.github.io/helm-chart/info.json | jq -er '.jupyterhub.${{ matrix.upgrade-from }}')
+
+          echo ""
+          echo "Installing already released jupyterhub version $UPGRADE_FROM_VERSION"
+          helm install jupyterhub jupyterhub/jupyterhub --values dev-config.yaml --version=$UPGRADE_FROM_VERSION
+
+          echo ""
+          echo "Installing Helm diff plugin while k8s resources are initializing"
+          helm plugin install https://github.com/databus23/helm-diff
+
+      - name: "Helm diff ${{ matrix.upgrade-from }} chart with current chart"
+        if: matrix.test == 'upgrade'
+        run: |
+          helm diff upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml
+
+      - name: "Await ${{ matrix.upgrade-from }} chart"
+        if: matrix.test == 'upgrade'
+        run: |
+          . ./ci/common
           await_jupyterhub
           await_autohttps_tls_cert_acquisition
           await_autohttps_tls_cert_save
 
-      - name: Install JupyterHub dev chart
+      - name: "Upgrade ${{ matrix.upgrade-from }} chart to current chart"
         run: |
           . ./ci/common
           helm upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml
