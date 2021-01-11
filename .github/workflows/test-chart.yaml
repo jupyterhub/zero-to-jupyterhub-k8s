@@ -178,8 +178,9 @@ jobs:
           # If you have problems with the tests add '--capture=no' to show stdout
           pytest --verbose --maxfail=2 --color=yes ./tests
 
-      - name: Full namespace report
+      # ref: https://github.com/jupyterhub/action-k8s-namespace-report
+      - name: Kubernetes namespace report
+        uses: jupyterhub/action-k8s-namespace-report@v1
         if: always()
-        run: |
-          . ./ci/common
-          full_namespace_report "deploy/hub" "deploy/proxy"
+        with:
+          important-workloads: deploy/hub deploy/proxy
