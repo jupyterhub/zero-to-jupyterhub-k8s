@@ -62,6 +62,12 @@ hub:
       authenticator_class: dummyauthenticator.DummyAuthenticator
 ```
 
+In the above configuration, we have configured three things:
+
+1. JupyterHub is instructed to use the dummy authenticator to login (only appropriate for testing purposes),
+2. anyone will be able to login with username `user1-4` and the password `a-shared-secret-password`
+3. `user1` and `user2` will have admin permissions, while `user3` and `user4` will be regular users.
+
 ### [auto_login](https://jupyterhub.readthedocs.io/en/latest/api/auth.html#jupyterhub.auth.Authenticator.auto_login)
 
 If you have configured authentication with GitHub for example, the page
