@@ -212,7 +212,7 @@ ldap.dn.user.useLookupName: LDAPAuthenticator.use_lookup_dn_username
 The JupyterHub Helm chart's auth config has been reworked and requires changes.
 
 The new way to configure authentication in chart version 0.11.0+ is printed
-below for your convinience. The values are not shown by default to ensure no
+below for your convenience. The values are not shown by default to ensure no
 secrets are exposed, run helm upgrade with --set global.safeToShowValues=true
 to show them.
 

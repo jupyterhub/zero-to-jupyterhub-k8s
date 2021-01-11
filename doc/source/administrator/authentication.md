@@ -33,7 +33,7 @@ authenticator class itself through this Helm chart's
 
 ## General configuration
 
-As all authenticators classes derive from the `Authenticator` base class, they
+As all authenticator classes derive from the `Authenticator` base class, they
 share some configuration options. Below are some common configuration options,
 but please refer to the official [configuration
 reference](https://jupyterhub.readthedocs.io/en/latest/api/auth.html) for more
@@ -65,7 +65,7 @@ hub:
 
 If you have configured authentication with GitHub for example, the page
 `/hub/login` will feature a single orange button that users are to press to
-login. If you want to bypass this screen and redirect users directly, you can
+login. If you want to bypass this screen and send users directly to GitHub login, you can
 set `auto_login` to `true`.
 
 ```yaml
