@@ -13,10 +13,11 @@ Before configuring this, you should have [setup HTTPS](https).
 
 ### Authenticator classes
 
-JupyterHub are by itself unable to authenticate any kind of identity, but
-instead relies on _one_ chosen [_authenticator
-class_](https://jupyterhub.readthedocs.io/en/stable/reference/authenticators.html)
-to do it. Several such classes are already made available through [installed
+JupyterHub by default ships with only one source of authentication:
+PAM, the underlying unix authentication of the host system.
+To use other sources of authentication, choose _one_ [_authenticator
+class_](https://jupyterhub.readthedocs.io/en/stable/reference/authenticators.html) to use.
+Several such classes are already available in the hub image through [installed
 Python
 packages](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/images/hub/requirements.txt).
 
