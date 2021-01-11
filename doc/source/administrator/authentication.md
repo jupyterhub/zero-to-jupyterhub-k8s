@@ -59,7 +59,7 @@ hub:
     DummyAuthenticator:
       password: a-shared-secret-password
     JupyterHub:
-      authenticator_class: dummyauthenticator.DummyAuthenticator
+      authenticator_class: dummy
 ```
 
 In the above configuration, we have configured three things:
@@ -142,12 +142,12 @@ configuration:
 ```yaml
 hub:
   config:
-    OAuthenticator:
+    GitHubOAuthenticator:
       client_id: your-client-id
       client_secret: your-client-secret
       oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
     JupyterHub:
-      authenticator_class: oauthenticator.github.GitHubOAuthenticator
+      authenticator_class: github
 ```
 
 Make sure that the `oauth_callback_url` matches the one you set in GitHub.
@@ -161,7 +161,6 @@ hub:
     GitHubOAuthenticator:
       allowed_organizations:
         - my-github-organization
-    OAuthenticator:
       scope:
         - read:user
 ```
@@ -205,16 +204,15 @@ authenticate users to your JupyterHub using Google for authentication.
 ```yaml
 hub:
   config:
-    OAuthenticator:
+    GoogleOAuthenticator:
       client_id: your-client-id.apps.googleusercontent.com
       client_secret: your-client-secret
       oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
-    GoogleOAuthenticator:
       hosted_domain:
         - your-university.edu
       login_service: Your university
     JupyterHub:
-      authenticator_class: oauthenticator.google.GoogleOAuthenticator
+      authenticator_class: google
 ```
 
 The `oauth_callback_url` key is set to the authorized redirect URI you specified
@@ -229,13 +227,13 @@ more information about what kind of identity is managed by CILogon.
 
 ```yaml
 hub:
-  config:
-    OAuthenticator:
+  CILogonOAuthenticator:
+    CiOAuthenticator:
       client_id: your-client-id
       client_secret: your-client-secret
       oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
     JupyterHub:
-      authenticator_class: oauthenticator.cilogon.CILogonOAuthenticator
+      authenticator_class: cilogon
 ```
 
 Based on [this
@@ -261,14 +259,13 @@ laptop. Start a Globus app [here](https://developers.globus.org/)!
 ```yaml
 hub:
   config:
-    OAuthenticator:
+    GlobusOAuthenticator:
       client_id: your-client-id
       client_secret: your-client-secret
       oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
-    GlobusOAuthenticator:
       identity_provider: your-university.edu
     JupyterHub:
-      authenticator_class: oauthenticator.globus.GlobusOAuthenticator
+      authenticator_class: globus
 ```
 
 #### Azure Active Directory
@@ -280,14 +277,13 @@ hub:
 ```yaml
 hub:
   config:
-    OAuthenticator:
+    AzureAdOAuthenticator:
       client_id: your-client-id
       client_secret: your-client-secret
       oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
-    AzureAdOAuthenticator:
       tenant_id: your-tenant-id
     JupyterHub:
-      authenticator_class: oauthenticator.azuread.AzureAdOAuthenticator
+      authenticator_class: azuread
 ```
 
 #### Auth0
@@ -297,21 +293,20 @@ hub:
 ```yaml
 hub:
   config:
-    OAuthenticator:
+    Auth0OAuthenticator:
       client_id: client-id-from-auth0-here
       client_secret: client-secret-from-auth0-here
       oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
       scope:
         - openid
         - email
-    Auth0OAuthenticator:
       auth0_subdomain: prod-8ua-1yy9
     Authenticator:
       admin_users:
         - devops@example.com
       auto_login: true
     JupyterHub:
-      authenticator_class: oauthenticator.auth0.Auth0OAuthenticator
+      authenticator_class: auth0
 ```
 #### GenericOAuthenticator - OpenID Connect
 
@@ -330,7 +325,7 @@ authenticate against Auth0.
 ```yaml
 hub:
   config:
-    OAuthenticator:
+    GenericOAuthenticator:
       client_id: your-client-id
       client_secret: your-client-secret
       oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
@@ -342,10 +337,9 @@ hub:
         - name
         - profile
         - email
-    GenericOAuthenticator:
       username_key: name
     JupyterHub:
-      authenticator_class: oauthenticator.generic.GenericOAuthenticator
+      authenticator_class: generic-oauth
 ```
 
 ##### KeyCloak
@@ -361,20 +355,19 @@ documentation](https://www.keycloak.org/docs/latest/server_admin/index.html#oidc
 ```yaml
 hub:
   config:
-    OAuthenticator:
+    GenericOAuthenticator:
       client_id: your-client-id
       client_secret: your-client-secret
       oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
       authorize_url: https://${host}/auth/realms/${realm}/protocol/openid-connect/auth
       token_url: https://${host}/auth/realms/${realm}/protocol/openid-connect/token
       userdata_url: https://${host}/auth/realms/${realm}/protocol/openid-connect/userinfo
-    GenericOAuthenticator:
       login_service: keycloak
       username_key: preferred_username
       userdata_params:
         state: state
     JupyterHub:
-      authenticator_class: oauthenticator.generic.GenericOAuthenticator
+      authenticator_class: generic-oauth
 ```
 
 ### LDAP and Active Directory

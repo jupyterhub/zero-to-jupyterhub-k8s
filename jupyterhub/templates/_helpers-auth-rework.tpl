@@ -15,15 +15,15 @@
 */}}
 
 {{- define "jupyterhub.authDep.classKeyToLong.map" }}
-google: oauthenticator.google.GoogleOAuthenticator
-github: oauthenticator.github.GitHubOAuthenticator
-cilogon: oauthenticator.cilogon.CILogonOAuthenticator
-gitlab: oauthenticator.gitlab.GitLabOAuthenticator
-azuread: oauthenticator.azuread.AzureAdOAuthenticator
-mediawiki: oauthenticator.mediawiki.MWOAuthenticator
-globus: oauthenticator.globus.GlobusOAuthenticator
+google: google
+github: github
+cilogon: cilogon
+gitlab: gitlab
+azuread: azuread
+mediawiki: mediawiki
+globus: globus
 hmac: hmacauthenticator.HMACAuthenticator
-dummy: dummyauthenticator.DummyAuthenticator
+dummy: dummy
 tmp: tmpauthenticator.TmpAuthenticator
 lti: ltiauthenticator.LTIAuthenticator
 ldap: ldapauthenticator.LDAPAuthenticator
@@ -35,7 +35,6 @@ ldap: ldapauthenticator.LDAPAuthenticator
     {{- index $map . }}
 {{- end }}
 
-{{- /* FIXME: we need to consider each of these and censor the secret stuff before rendering */}}
 {{- define "jupyterhub.authDep.remapOldToNew.map" }}
 scopes: OAuthenticator.scope
 state.enabled: Authenticator.enable_auth_state
@@ -44,39 +43,39 @@ admin.access: JupyterHub.admin_access
 admin.users: Authenticator.admin_users
 whitelist.users: Authenticator.allowed_users
 allowedUsers: Authenticator.allowed_users
-google.clientId: OAuthenticator.client_id
-google.clientSecret: OAuthenticator.client_secret
-google.callbackUrl: OAuthenticator.oauth_callback_url
+google.clientId: GoogleOAuthenticator.client_id
+google.clientSecret: GoogleOAuthenticator.client_secret
+google.callbackUrl: GoogleOAuthenticator.oauth_callback_url
 google.hostedDomain: GoogleOAuthenticator.hosted_domain
 google.loginService: GoogleOAuthenticator.login_service
-github.clientId: OAuthenticator.client_id
-github.clientSecret: OAuthenticator.client_secret
-github.callbackUrl: OAuthenticator.oauth_callback_url
+github.clientId: GitHubOAuthenticator.client_id
+github.clientSecret: GitHubOAuthenticator.client_secret
+github.callbackUrl: GitHubOAuthenticator.oauth_callback_url
 github.orgWhitelist: GitHubOAuthenticator.allowed_organizations
 github.allowedOrganizations: GitHubOAuthenticator.allowed_organizations
-cilogon.clientId: OAuthenticator.client_id
-cilogon.clientSecret: OAuthenticator.client_secret
-cilogon.callbackUrl: OAuthenticator.oauth_callback_url
-gitlab.clientId: OAuthenticator.client_id
-gitlab.clientSecret: OAuthenticator.client_secret
-gitlab.callbackUrl: OAuthenticator.oauth_callback_url
+cilogon.clientId: CILogonOAuthenticator.client_id
+cilogon.clientSecret: CILogonOAuthenticator.client_secret
+cilogon.callbackUrl: CILogonOAuthenticator.oauth_callback_url
+gitlab.clientId: GitLabOAuthenticator.client_id
+gitlab.clientSecret: GitLabOAuthenticator.client_secret
+gitlab.callbackUrl: GitLabOAuthenticator.oauth_callback_url
 gitlab.gitlabGroupWhitelist: GitLabOAuthenticator.allowed_gitlab_groups
 gitlab.allowedGitlabGroups: GitLabOAuthenticator.allowed_gitlab_groups
 gitlab.gitlabProjectIdWhitelist: GitLabOAuthenticator.allowed_project_ids
 gitlab.allowedProjectIds: GitLabOAuthenticator.allowed_project_ids
 gitlab.gitlabUrl: GitLabOAuthenticator.gitlab_url
-azuread.clientId: OAuthenticator.client_id
-azuread.clientSecret: OAuthenticator.client_secret
-azuread.callbackUrl: OAuthenticator.oauth_callback_url
+azuread.clientId: AzureAdOAuthenticator.client_id
+azuread.clientSecret: AzureAdOAuthenticator.client_secret
+azuread.callbackUrl: AzureAdOAuthenticator.oauth_callback_url
 azuread.tenantId: AzureAdOAuthenticator.tenant_id
 azuread.usernameClaim: AzureAdOAuthenticator.username_claim
-mediawiki.clientId: OAuthenticator.client_id
-mediawiki.clientSecret: OAuthenticator.client_secret
-mediawiki.callbackUrl: OAuthenticator.oauth_callback_url
+mediawiki.clientId: MWOAuthenticator.client_id
+mediawiki.clientSecret: MWOAuthenticator.client_secret
+mediawiki.callbackUrl: MWOAuthenticator.oauth_callback_url
 mediawiki.indexUrl: MWOAuthenticator.index_url
-globus.clientId: OAuthenticator.client_id
-globus.clientSecret: OAuthenticator.client_secret
-globus.callbackUrl: OAuthenticator.oauth_callback_url
+globus.clientId: GlobusOAuthenticator.client_id
+globus.clientSecret: GlobusOAuthenticator.client_secret
+globus.callbackUrl: GlobusOAuthenticator.oauth_callback_url
 hmac.secretKey: HMACAuthenticator.secret_key
 dummy.password: DummyAuthenticator.password
 lti.consumers: LTIAuthenticator.consumers
@@ -181,14 +180,14 @@ ldap.dn.user.useLookupName: LDAPAuthenticator.use_lookup_dn_username
     */}}
     {{- include "jupyterhub.authDep.remapOldToNew.mappable" (list $c .Values.global.safeToShowValues) }}
 
-    {{- $class_key := .Values.auth.type | default "" }}  {{- /* github */}}
-    {{- $class_long := "" }}                             {{- /* oauthenticator.github.GitHubOAuthenticator */}}
-    {{- $class_short := "" }}                            {{- /* GitHubOAuthenticator */}}
+    {{- $class_old_config_key := .Values.auth.type | default "" }}  {{- /* ldap                                - github */}}
+    {{- $class_new_entrypoint := "" }}                              {{- /* ldapauthenticator.LDAPAuthenticator - github */}}
+    {{- $class_new_config_key := "" }}                              {{- /* LDAPAuthenticator                   - GitHubOAuthenticator */}}
 
-    {{- /* SET $class_long, $class_short */}}
-    {{- if eq $class_key "custom" }}
-        {{- $class_long = .Values.auth.custom.className | default "custom.className wasn't configured!" }}
-        {{- $class_short = $class_long | splitList "." | last }}
+    {{- /* SET $class_new_entrypoint, $class_new_config_key */}}
+    {{- if eq $class_old_config_key "custom" }}
+        {{- $class_new_entrypoint = .Values.auth.custom.className | default "custom.className wasn't configured!" }}
+        {{- $class_new_config_key = $class_new_entrypoint | splitList "." | last }}
         {{- /* UPDATE c dict explicitly with auth.custom.config */}}
         {{- if .Values.auth.custom.config }}
             {{- $custom_config := merge (dict) .Values.auth.custom.config }}
@@ -197,15 +196,14 @@ ldap.dn.user.useLookupName: LDAPAuthenticator.use_lookup_dn_username
                     {{- $_ := set $custom_config $key "***" }}
                 {{- end }}
             {{- end }}
-            {{- $_ := set $c $class_short $custom_config }}
+            {{- $_ := set $c $class_new_config_key $custom_config }}
         {{- end }}
     {{- else }}
-        {{- $class_long = include "jupyterhub.authDep.classKeyToLong" $class_key }}
-        {{- $class_short = $class_long | splitList "." | last }}
+        {{- $class_new_entrypoint = include "jupyterhub.authDep.classKeyToLong" $class_old_config_key }}
     {{- end }}
 
     {{- /* UPDATE c dict authenticator_class */}}
-    {{- $_ := merge $c (dict "JupyterHub" (dict "authenticator_class" $class_long)) }}
+    {{- $_ := merge $c (dict "JupyterHub" (dict "authenticator_class" $class_new_entrypoint)) }}
 
 {{- /* Output a sensible error message */}}
 
