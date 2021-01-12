@@ -12,7 +12,8 @@ import yaml
 # memoize so we only load config once
 @lru_cache()
 def _load_config():
-    """Load Helm chart configuration passed through a mounted ConfigMap."""
+    """Load the Helm chart configuration used to render the Helm templates of
+    the chart from a mounted k8s Secret."""
 
     path = f"/etc/jupyterhub/secret/values.yaml"
     if os.path.exists(path):
