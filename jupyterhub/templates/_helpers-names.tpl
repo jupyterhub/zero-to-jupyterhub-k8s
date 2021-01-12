@@ -28,151 +28,151 @@ From containers...
 
 {{- /* The chart's resources' name prefix */}}
 {{- define "jupyterhub.fullname" -}}
-{{- /*
-    A hack to avoid issues from invoking this from a parent Helm chart.
+    {{- /*
+        A hack to avoid issues from invoking this from a parent Helm chart.
 
-    Caveats and notes:
-        1. While parent charts can, their parents chart can't reference these
-        2. The parent chart must not use an alias for this chart
-        3. There is no failsafe workaround to above due to
-           https://github.com/helm/helm/issues/9214.
-        4. Note that .Chart is of type *chart.Metadata needs to be casted to a
-           normal dict by doing "toYaml | fromYaml" for normal dict inspection.
-*/}}
-{{- $fullname_override := .Values.fullnameOverride }}
-{{- $name_override := .Values.fullnameOverride }}
-{{- if ne .Chart.Name "jupyterhub" }}
-{{- $fullname_override = .Values.jupyterhub.fullnameOverride }}
-{{- $name_override = .Values.jupyterhub.fullnameOverride }}
-{{- end }}
+        Caveats and notes:
+            1. While parent charts can, their parents chart can't reference these
+            2. The parent chart must not use an alias for this chart
+            3. There is no failsafe workaround to above due to
+            https://github.com/helm/helm/issues/9214.
+            4. Note that .Chart is of type *chart.Metadata needs to be casted to a
+            normal dict by doing "toYaml | fromYaml" for normal dict inspection.
+    */}}
+    {{- $fullname_override := .Values.fullnameOverride }}
+    {{- $name_override := .Values.fullnameOverride }}
+    {{- if ne .Chart.Name "jupyterhub" }}
+        {{- $fullname_override = .Values.jupyterhub.fullnameOverride }}
+        {{- $name_override = .Values.jupyterhub.fullnameOverride }}
+    {{- end }}
 
-{{- if eq (typeOf $fullname_override) "string" }}
-{{- $fullname_override }}
-{{- else }}
-{{- $name := $name_override | default .Chart.Name }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name }}
-{{- else }}
-{{- .Release.Name }}-{{ $name }}
-{{- end }}
-{{- end }}
+    {{- if eq (typeOf $fullname_override) "string" }}
+        {{- $fullname_override }}
+    {{- else }}
+        {{- $name := $name_override | default .Chart.Name }}
+        {{- if contains $name .Release.Name }}
+            {{- .Release.Name }}
+        {{- else }}
+            {{- .Release.Name }}-{{ $name }}
+        {{- end }}
+    {{- end }}
 {{- end }}
 
 {{- /* The chart's resources' name prefix with a separator dash */}}
 {{- define "jupyterhub.fullname.dash" -}}
-{{- if (include "jupyterhub.fullname" .) }}
-{{- include "jupyterhub.fullname" . }}-
-{{- end }}
+    {{- if (include "jupyterhub.fullname" .) }}
+        {{- include "jupyterhub.fullname" . }}-
+    {{- end }}
 {{- end }}
 
 
 
 {{- /* hub Deployment */}}
 {{- define "jupyterhub.hub.fullname" -}}
-{{- include "jupyterhub.fullname.dash" . }}hub
+    {{- include "jupyterhub.fullname.dash" . }}hub
 {{- end }}
 
 {{- /* hub-secret Secret */}}
 {{- define "jupyterhub.hub-secret.fullname" -}}
-{{- /* A hack to avoid issues from invoking this from a parent Helm chart. */}}
-{{- $existing_secret := .Values.hub.existingSecret }}
-{{- if ne .Chart.Name "jupyterhub" }}
-{{- $existing_secret = .Values.jupyterhub.hub.existingSecret }}
-{{- end }}
-{{- if $existing_secret }}
-{{- $existing_secret }}
-{{- else }}
-{{- include "jupyterhub.hub.fullname" . }}
-{{- end }}
+    {{- /* A hack to avoid issues from invoking this from a parent Helm chart. */}}
+    {{- $existing_secret := .Values.hub.existingSecret }}
+    {{- if ne .Chart.Name "jupyterhub" }}
+        {{- $existing_secret = .Values.jupyterhub.hub.existingSecret }}
+    {{- end }}
+    {{- if $existing_secret }}
+        {{- $existing_secret }}
+    {{- else }}
+        {{- include "jupyterhub.hub.fullname" . }}
+    {{- end }}
 {{- end }}
 
 {{- /* hub-db-dir PVC */}}
 {{- define "jupyterhub.hub-db-dir.fullname" -}}
-{{- include "jupyterhub.hub.fullname" . }}-db-dir
+    {{- include "jupyterhub.hub.fullname" . }}-db-dir
 {{- end }}
 
 {{- /* proxy Deployment */}}
 {{- define "jupyterhub.proxy.fullname" -}}
-{{- include "jupyterhub.fullname.dash" . }}proxy
+    {{- include "jupyterhub.fullname.dash" . }}proxy
 {{- end }}
 
 {{- /* proxy-api Service */}}
 {{- define "jupyterhub.proxy-api.fullname" -}}
-{{- include "jupyterhub.proxy.fullname" . }}-api
+    {{- include "jupyterhub.proxy.fullname" . }}-api
 {{- end }}
 
 {{- /* proxy-http Service */}}
 {{- define "jupyterhub.proxy-http.fullname" -}}
-{{- include "jupyterhub.proxy.fullname" . }}-http
+    {{- include "jupyterhub.proxy.fullname" . }}-http
 {{- end }}
 
 {{- /* proxy-public Service */}}
 {{- define "jupyterhub.proxy-public.fullname" -}}
-{{- include "jupyterhub.proxy.fullname" . }}-public
+    {{- include "jupyterhub.proxy.fullname" . }}-public
 {{- end }}
 
 {{- /* proxy-public-tls Secret */}}
 {{- define "jupyterhub.proxy-public-tls.fullname" -}}
-{{- include "jupyterhub.proxy-public.fullname" . }}-tls-acme
+    {{- include "jupyterhub.proxy-public.fullname" . }}-tls-acme
 {{- end }}
 
 {{- /* proxy-public-manual-tls Secret */}}
 {{- define "jupyterhub.proxy-public-manual-tls.fullname" -}}
-{{- include "jupyterhub.proxy-public.fullname" . }}-manual-tls
+    {{- include "jupyterhub.proxy-public.fullname" . }}-manual-tls
 {{- end }}
 
 {{- /* autohttps Deployment */}}
 {{- define "jupyterhub.autohttps.fullname" -}}
-{{- include "jupyterhub.fullname.dash" . }}autohttps
+    {{- include "jupyterhub.fullname.dash" . }}autohttps
 {{- end }}
 
 {{- /* user-scheduler Deployment */}}
 {{- define "jupyterhub.user-scheduler-deploy.fullname" -}}
-{{- include "jupyterhub.fullname.dash" . }}user-scheduler
+    {{- include "jupyterhub.fullname.dash" . }}user-scheduler
 {{- end }}
 
 {{- /* user-scheduler leader election lock resource */}}
 {{- define "jupyterhub.user-scheduler-lock.fullname" -}}
-{{- include "jupyterhub.user-scheduler-deploy.fullname" . }}-lock
+    {{- include "jupyterhub.user-scheduler-deploy.fullname" . }}-lock
 {{- end }}
 
 {{- /* user-placeholder StatefulSet */}}
 {{- define "jupyterhub.user-placeholder.fullname" -}}
-{{- include "jupyterhub.fullname.dash" . }}user-placeholder
+    {{- include "jupyterhub.fullname.dash" . }}user-placeholder
 {{- end }}
 
 {{- /* image-awaiter Job */}}
 {{- define "jupyterhub.hook-image-awaiter.fullname" -}}
-{{- include "jupyterhub.fullname.dash" . }}hook-image-awaiter
+    {{- include "jupyterhub.fullname.dash" . }}hook-image-awaiter
 {{- end }}
 
 {{- /* hook-image-puller DaemonSet */}}
 {{- define "jupyterhub.hook-image-puller.fullname" -}}
-{{- include "jupyterhub.fullname.dash" . }}hook-image-puller
+    {{- include "jupyterhub.fullname.dash" . }}hook-image-puller
 {{- end }}
 
 {{- /* continuous-image-puller DaemonSet */}}
 {{- define "jupyterhub.continuous-image-puller.fullname" -}}
-{{- include "jupyterhub.fullname.dash" . }}continuous-image-puller
+    {{- include "jupyterhub.fullname.dash" . }}continuous-image-puller
 {{- end }}
 
 {{- /* singleuser NetworkPolicy */}}
 {{- define "jupyterhub.singleuser.fullname" -}}
-{{- include "jupyterhub.fullname.dash" . }}singleuser
+    {{- include "jupyterhub.fullname.dash" . }}singleuser
 {{- end }}
 
 {{- /* image-pull-secret Secret */}}
 {{- define "jupyterhub.image-pull-secret.fullname" -}}
-{{- include "jupyterhub.fullname.dash" . }}image-pull-secret
+    {{- include "jupyterhub.fullname.dash" . }}image-pull-secret
 {{- end }}
 
 {{- /* Ingress */}}
 {{- define "jupyterhub.ingress.fullname" -}}
-{{- if (include "jupyterhub.fullname.dash" .) }}
-{{- include "jupyterhub.fullname.dash" . }}
-{{- else -}}
-jupyterhub
-{{- end }}
+    {{- if (include "jupyterhub.fullname.dash" .) }}
+        {{- include "jupyterhub.fullname.dash" . }}
+    {{- else -}}
+        jupyterhub
+    {{- end }}
 {{- end }}
 
 
@@ -182,29 +182,29 @@ jupyterhub
 
 {{- /* Priority */}}
 {{- define "jupyterhub.priority.fullname" -}}
-{{- if (include "jupyterhub.fullname.dash" .) }}
-{{- include "jupyterhub.fullname.dash" . }}
-{{- else -}}
-{{ .Release.Name }}-default-priority
-{{- end }}
+    {{- if (include "jupyterhub.fullname.dash" .) }}
+        {{- include "jupyterhub.fullname.dash" . }}
+    {{- else }}
+        {{- .Release.Name }}-default-priority
+    {{- end }}
 {{- end }}
 
 {{- /* user-placeholder Priority */}}
 {{- define "jupyterhub.user-placeholder-priority.fullname" -}}
-{{- if (include "jupyterhub.fullname.dash" .) }}
-{{- include "jupyterhub.user-placeholder.fullname" . }}
-{{- else -}}
-{{ .Release.Name }}-user-placeholder-priority
-{{- end }}
+    {{- if (include "jupyterhub.fullname.dash" .) }}
+        {{- include "jupyterhub.user-placeholder.fullname" . }}
+    {{- else }}
+        {{- .Release.Name }}-user-placeholder-priority
+    {{- end }}
 {{- end }}
 
 {{- /* user-scheduler ref - a cluster wide reference */}}
 {{- define "jupyterhub.user-scheduler.fullname" -}}
-{{- if (include "jupyterhub.fullname.dash" .) }}
-{{- include "jupyterhub.user-scheduler-deploy.fullname" . }}
-{{- else -}}
-{{ .Release.Name }}-user-scheduler
-{{- end }}
+    {{- if (include "jupyterhub.fullname.dash" .) }}
+        {{- include "jupyterhub.user-scheduler-deploy.fullname" . }}
+    {{- else }}
+        {{- .Release.Name }}-user-scheduler
+    {{- end }}
 {{- end }}
 
 {{- /*
