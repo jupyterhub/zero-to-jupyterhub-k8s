@@ -40,10 +40,10 @@ From containers...
             normal dict by doing "toYaml | fromYaml" for normal dict inspection.
     */}}
     {{- $fullname_override := .Values.fullnameOverride }}
-    {{- $name_override := .Values.fullnameOverride }}
+    {{- $name_override := .Values.nameOverride }}
     {{- if ne .Chart.Name "jupyterhub" }}
         {{- $fullname_override = .Values.jupyterhub.fullnameOverride }}
-        {{- $name_override = .Values.jupyterhub.fullnameOverride }}
+        {{- $name_override = .Values.jupyterhub.nameOverride }}
     {{- end }}
 
     {{- if eq (typeOf $fullname_override) "string" }}
