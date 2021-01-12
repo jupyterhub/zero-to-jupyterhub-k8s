@@ -86,8 +86,8 @@ From containers...
     {{- end }}
 {{- end }}
 
-{{- /* hub-db-dir PVC */}}
-{{- define "jupyterhub.hub-db-dir.fullname" -}}
+{{- /* hub PVC */}}
+{{- define "jupyterhub.hub-pvc.fullname" -}}
     {{- include "jupyterhub.hub.fullname" . }}-db-dir
 {{- end }}
 
@@ -217,7 +217,7 @@ From containers...
 fullname: {{ include "jupyterhub.fullname" . | quote }}
 hub: {{ include "jupyterhub.hub.fullname" . | quote }}
 hub-secret: {{ include "jupyterhub.hub-secret.fullname" . | quote }}
-hub-db-dir: {{ include "jupyterhub.hub-db-dir.fullname" . | quote }}
+hub-pvc: {{ include "jupyterhub.hub-pvc.fullname" . | quote }}
 proxy: {{ include "jupyterhub.proxy.fullname" . | quote }}
 proxy-api: {{ include "jupyterhub.proxy-api.fullname" . | quote }}
 proxy-http: {{ include "jupyterhub.proxy-http.fullname" . | quote }}

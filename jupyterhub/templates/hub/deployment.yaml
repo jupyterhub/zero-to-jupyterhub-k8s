@@ -47,9 +47,9 @@ spec:
         {{- .Values.hub.extraVolumes | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
         {{- if eq .Values.hub.db.type "sqlite-pvc" }}
-        - name: hub-db-dir
+        - name: pvc
           persistentVolumeClaim:
-            claimName: {{ include "jupyterhub.hub-db-dir.fullname" . }}
+            claimName: {{ include "jupyterhub.hub-pvc.fullname" . }}
         {{- end }}
       {{- if .Values.rbac.enabled }}
       serviceAccountName: {{ include "jupyterhub.hub.fullname" . }}
@@ -127,7 +127,7 @@ spec:
             {{- end }}
             {{- if eq .Values.hub.db.type "sqlite-pvc" }}
             - mountPath: /srv/jupyterhub
-              name: hub-db-dir
+              name: pvc
               {{- if .Values.hub.db.pvc.subPath }}
               subPath: {{ .Values.hub.db.pvc.subPath | quote }}
               {{- end }}
