@@ -160,7 +160,11 @@ jobs:
       - name: "Helm diff ${{ matrix.upgrade-from }} chart with current chart"
         if: matrix.test == 'upgrade'
         run: |
-          helm diff upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml
+          # FIXME: consider if there is a way we can avoid being cluttered with
+          #        changes to the "chart" label defined in _helpers.tpl
+          #        "jupyterhub.commonLabels" named template.
+          helm diff upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml \
+              --context 3
 
       - name: "Await ${{ matrix.upgrade-from }} chart"
         if: matrix.test == 'upgrade'
