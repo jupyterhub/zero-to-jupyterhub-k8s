@@ -227,8 +227,8 @@ more information about what kind of identity is managed by CILogon.
 
 ```yaml
 hub:
-  CILogonOAuthenticator:
-    CiOAuthenticator:
+ config:
+    CILogonOAuthenticator:
       client_id: your-client-id
       client_secret: your-client-secret
       oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
