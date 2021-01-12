@@ -2,7 +2,7 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: {{ include "jupyterhub.user-scheduler.fullname" . }}
+  name: {{ include "jupyterhub.user-scheduler-deploy.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 data:
@@ -15,7 +15,7 @@ data:
       resourceName: {{ include "jupyterhub.user-scheduler-lock.fullname" . }}
       resourceNamespace: {{ .Release.Namespace }}
     profiles:
-      - schedulerName: {{ include "jupyterhub.user-scheduler-ref.fullname" . }}
+      - schedulerName: {{ include "jupyterhub.user-scheduler.fullname" . }}
         plugins:
           {{- .Values.scheduling.userScheduler.plugins | toYaml | trimSuffix "\n" | nindent 10 }}
 

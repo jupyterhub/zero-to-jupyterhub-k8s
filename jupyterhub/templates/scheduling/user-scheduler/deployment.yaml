@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "jupyterhub.user-scheduler.fullname" . }}
+  name: {{ include "jupyterhub.user-scheduler-deploy.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
@@ -18,7 +18,7 @@ spec:
         checksum/config-map: {{ include (print $.Template.BasePath "/scheduling/user-scheduler/configmap.yaml") . | sha256sum }}
     spec:
       {{- if .Values.rbac.enabled }}
-      serviceAccountName: {{ include "jupyterhub.user-scheduler.fullname" . }}
+      serviceAccountName: {{ include "jupyterhub.user-scheduler-deploy.fullname" . }}
       {{- end }}
       {{- if .Values.scheduling.podPriority.enabled }}
       priorityClassName: {{ include "jupyterhub.priority.fullname" . }}
@@ -29,12 +29,12 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: {{ include "jupyterhub.user-scheduler.fullname" . }}
+            name: {{ include "jupyterhub.user-scheduler-deploy.fullname" . }}
       {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.scheduling.userScheduler.image) }}
       imagePullSecrets: {{ . }}
       {{- end }}
       containers:
-        - name: {{ include "jupyterhub.user-scheduler.fullname" . }}
+        - name: {{ include "jupyterhub.user-scheduler-deploy.fullname" . }}
           # NOTE: When the kube-scheduler 1.17+ binaries fail to find CSINode
           #       resource in the cluster, they won't start scheduling. Due to
           #       this, we fallback to the latest functional version with its
@@ -66,7 +66,7 @@ spec:
             - --config=/etc/user-scheduler/config.yaml
             - --authentication-skip-lookup=true
             {{- else }}
-            - --scheduler-name={{ include "jupyterhub.user-scheduler-ref.fullname" . }}
+            - --scheduler-name={{ include "jupyterhub.user-scheduler.fullname" . }}
             - --policy-config-file=/etc/user-scheduler/policy.cfg
             - --lock-object-name={{ include "jupyterhub.user-scheduler-lock.fullname" . }}
             - --lock-object-namespace={{ .Release.Namespace }}

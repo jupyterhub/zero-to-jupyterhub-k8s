@@ -127,13 +127,13 @@ From containers...
 {{- end }}
 
 {{- /* user-scheduler Deployment */}}
-{{- define "jupyterhub.user-scheduler.fullname" -}}
+{{- define "jupyterhub.user-scheduler-deploy.fullname" -}}
 {{- include "jupyterhub.fullname.dash" . }}user-scheduler
 {{- end }}
 
 {{- /* user-scheduler leader election lock resource */}}
 {{- define "jupyterhub.user-scheduler-lock.fullname" -}}
-{{- include "jupyterhub.user-scheduler.fullname" . }}-lock
+{{- include "jupyterhub.user-scheduler-deploy.fullname" . }}-lock
 {{- end }}
 
 {{- /* user-placeholder StatefulSet */}}
@@ -199,9 +199,9 @@ jupyterhub
 {{- end }}
 
 {{- /* user-scheduler ref - a cluster wide reference */}}
-{{- define "jupyterhub.user-scheduler-ref.fullname" -}}
+{{- define "jupyterhub.user-scheduler.fullname" -}}
 {{- if (include "jupyterhub.fullname.dash" .) }}
-{{- include "jupyterhub.user-scheduler.fullname" . }}
+{{- include "jupyterhub.user-scheduler-deploy.fullname" . }}
 {{- else -}}
 {{ .Release.Name }}-user-scheduler
 {{- end }}
@@ -225,7 +225,7 @@ proxy-public: {{ include "jupyterhub.proxy-public.fullname" . | quote }}
 proxy-public-tls: {{ include "jupyterhub.proxy-public-tls.fullname" . | quote }}
 proxy-public-manual-tls: {{ include "jupyterhub.proxy-public-manual-tls.fullname" . | quote }}
 autohttps: {{ include "jupyterhub.autohttps.fullname" . | quote }}
-user-scheduler: {{ include "jupyterhub.user-scheduler.fullname" . | quote }}
+user-scheduler-deploy: {{ include "jupyterhub.user-scheduler-deploy.fullname" . | quote }}
 user-scheduler-lock: {{ include "jupyterhub.user-scheduler-lock.fullname" . | quote }}
 user-placeholder: {{ include "jupyterhub.user-placeholder.fullname" . | quote }}
 hook-image-awaiter: {{ include "jupyterhub.hook-image-awaiter.fullname" . | quote }}
@@ -236,5 +236,5 @@ image-pull-secret: {{ include "jupyterhub.image-pull-secret.fullname" . | quote 
 ingress: {{ include "jupyterhub.ingress.fullname" . | quote }}
 priority: {{ include "jupyterhub.priority.fullname" . | quote }}
 user-placeholder-priority: {{ include "jupyterhub.user-placeholder-priority.fullname" . | quote }}
-user-scheduler-ref: {{ include "jupyterhub.user-scheduler-ref.fullname" . | quote }}
+user-scheduler: {{ include "jupyterhub.user-scheduler.fullname" . | quote }}
 {{- end }}
