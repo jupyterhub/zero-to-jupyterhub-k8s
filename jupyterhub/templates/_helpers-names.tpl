@@ -82,7 +82,7 @@ From containers...
 {{- if $existing_secret }}
 {{- $existing_secret }}
 {{- else }}
-{{- include "jupyterhub.hub.fullname" . }}-secret
+{{- include "jupyterhub.hub.fullname" . }}
 {{- end }}
 {{- end }}
 
