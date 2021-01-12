@@ -227,7 +227,7 @@ more information about what kind of identity is managed by CILogon.
 
 ```yaml
 hub:
- config:
+  config:
     CILogonOAuthenticator:
       client_id: your-client-id
       client_secret: your-client-secret
