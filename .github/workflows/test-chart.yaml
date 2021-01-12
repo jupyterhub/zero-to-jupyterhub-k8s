@@ -148,6 +148,7 @@ jobs:
         run: |
           . ./ci/common
           UPGRADE_FROM_VERSION=$(curl -sS https://jupyterhub.github.io/helm-chart/info.json | jq -er '.jupyterhub.${{ matrix.upgrade-from }}')
+          echo "UPGRADE_FROM_VERSION=$UPGRADE_FROM_VERSION" >> $GITHUB_ENV
 
           echo ""
           echo "Installing already released jupyterhub version $UPGRADE_FROM_VERSION"
@@ -157,14 +158,26 @@ jobs:
           echo "Installing Helm diff plugin while k8s resources are initializing"
           helm plugin install https://github.com/databus23/helm-diff
 
+      # ref: https://github.com/jacobtomlinson/gha-read-helm-chart
+      - name: Load local Chart.yaml
+        id: chart
+        uses: jacobtomlinson/gha-read-helm-chart@0.1.3
+        with:
+          path: jupyterhub
+
       - name: "Helm diff ${{ matrix.upgrade-from }} chart with current chart"
         if: matrix.test == 'upgrade'
         run: |
-          # FIXME: consider if there is a way we can avoid being cluttered with
-          #        changes to the "chart" label defined in _helpers.tpl
-          #        "jupyterhub.commonLabels" named template.
+          export STRING_REPLACER_A=${{ steps.chart.outputs.version }}
+          export STRING_REPLACER_B=$UPGRADE_FROM_VERSION
+
+          echo "NOTE: For the helm diff only, we have replaced the new chart"
+          echo "      version with the old chart version to reduce clutter."
+          echo
+
           helm diff upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml \
-              --context 3
+              --context=3 \
+              --post-renderer=ci/string-replacer.sh
 
       - name: "Await ${{ matrix.upgrade-from }} chart"
         if: matrix.test == 'upgrade'
