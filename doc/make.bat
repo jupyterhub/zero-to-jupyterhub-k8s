@@ -39,7 +39,7 @@ if errorlevel 9009 (
 	echo.The 'sphinx-autobuild' command was not found. Open and read README.md!
 	exit /b 1
 )
-sphinx-autobuild -b html --open-browser --ignore "*/reference.md" "%SOURCEDIR%" "%BUILDDIR%/html" %SPHINXOPTS%
+sphinx-autobuild -b html --open-browser --ignore "*/reference.md" --watch "../jupyterhub/schema.yaml" "%SOURCEDIR%" "%BUILDDIR%/html" %SPHINXOPTS%
 goto end
 
 

@@ -285,155 +285,6 @@ c.KubeSpawner.volume_mounts.extend(
     get_config("singleuser.storage.extraVolumeMounts", [])
 )
 
-# Allow switching authenticators easily
-auth_type = get_config("auth.type")
-email_domain = "local"
-
-common_oauth_traits = (
-    ("client_id", None),
-    ("client_secret", None),
-    ("oauth_callback_url", "callbackUrl"),
-)
-
-if auth_type == "google":
-    c.JupyterHub.authenticator_class = "oauthenticator.GoogleOAuthenticator"
-    for trait, cfg_key in common_oauth_traits + (
-        ("hosted_domain", None),
-        ("login_service", None),
-    ):
-        if cfg_key is None:
-            cfg_key = camelCaseify(trait)
-        set_config_if_not_none(c.GoogleOAuthenticator, trait, "auth.google." + cfg_key)
-    email_domain = get_config("auth.google.hostedDomain")
-elif auth_type == "github":
-    c.JupyterHub.authenticator_class = "oauthenticator.github.GitHubOAuthenticator"
-    for trait, cfg_key in common_oauth_traits + (
-        ("allowed_organizations", "orgWhitelist"),  # deprecated
-        ("allowed_organizations", None),
-    ):
-        if cfg_key is None:
-            cfg_key = camelCaseify(trait)
-        set_config_if_not_none(c.GitHubOAuthenticator, trait, "auth.github." + cfg_key)
-elif auth_type == "cilogon":
-    c.JupyterHub.authenticator_class = "oauthenticator.CILogonOAuthenticator"
-    for trait, cfg_key in common_oauth_traits:
-        if cfg_key is None:
-            cfg_key = camelCaseify(trait)
-        set_config_if_not_none(
-            c.CILogonOAuthenticator, trait, "auth.cilogon." + cfg_key
-        )
-elif auth_type == "gitlab":
-    c.JupyterHub.authenticator_class = "oauthenticator.gitlab.GitLabOAuthenticator"
-    for trait, cfg_key in common_oauth_traits + (
-        ("gitlab_group_whitelist", None),  # deprecated
-        ("allowed_gitlab_groups", None),
-        ("gitlab_project_id_whitelist", None),  # deprecated
-        ("allowed_project_ids", None),
-        ("gitlab_url", None),
-    ):
-        if cfg_key is None:
-            cfg_key = camelCaseify(trait)
-        set_config_if_not_none(c.GitLabOAuthenticator, trait, "auth.gitlab." + cfg_key)
-elif auth_type == "azuread":
-    c.JupyterHub.authenticator_class = "oauthenticator.azuread.AzureAdOAuthenticator"
-    for trait, cfg_key in common_oauth_traits + (
-        ("tenant_id", None),
-        ("username_claim", None),
-    ):
-        if cfg_key is None:
-            cfg_key = camelCaseify(trait)
-
-        set_config_if_not_none(
-            c.AzureAdOAuthenticator, trait, "auth.azuread." + cfg_key
-        )
-elif auth_type == "mediawiki":
-    c.JupyterHub.authenticator_class = "oauthenticator.mediawiki.MWOAuthenticator"
-    for trait, cfg_key in common_oauth_traits + (("index_url", None),):
-        if cfg_key is None:
-            cfg_key = camelCaseify(trait)
-        set_config_if_not_none(c.MWOAuthenticator, trait, "auth.mediawiki." + cfg_key)
-elif auth_type == "globus":
-    c.JupyterHub.authenticator_class = "oauthenticator.globus.GlobusOAuthenticator"
-    for trait, cfg_key in common_oauth_traits + (("identity_provider", None),):
-        if cfg_key is None:
-            cfg_key = camelCaseify(trait)
-        set_config_if_not_none(c.GlobusOAuthenticator, trait, "auth.globus." + cfg_key)
-elif auth_type == "hmac":
-    c.JupyterHub.authenticator_class = "hmacauthenticator.HMACAuthenticator"
-    c.HMACAuthenticator.secret_key = bytes.fromhex(get_config("auth.hmac.secretKey"))
-elif auth_type == "dummy":
-    c.JupyterHub.authenticator_class = "dummyauthenticator.DummyAuthenticator"
-    set_config_if_not_none(c.DummyAuthenticator, "password", "auth.dummy.password")
-elif auth_type == "tmp":
-    c.JupyterHub.authenticator_class = "tmpauthenticator.TmpAuthenticator"
-elif auth_type == "lti":
-    c.JupyterHub.authenticator_class = "ltiauthenticator.LTIAuthenticator"
-    set_config_if_not_none(c.LTIAuthenticator, "consumers", "auth.lti.consumers")
-elif auth_type == "ldap":
-    c.JupyterHub.authenticator_class = "ldapauthenticator.LDAPAuthenticator"
-    c.LDAPAuthenticator.server_address = get_config("auth.ldap.server.address")
-    set_config_if_not_none(c.LDAPAuthenticator, "server_port", "auth.ldap.server.port")
-    set_config_if_not_none(c.LDAPAuthenticator, "use_ssl", "auth.ldap.server.ssl")
-    set_config_if_not_none(
-        c.LDAPAuthenticator, "allowed_groups", "auth.ldap.allowedGroups"
-    )
-    set_config_if_not_none(
-        c.LDAPAuthenticator, "bind_dn_template", "auth.ldap.dn.templates"
-    )
-    set_config_if_not_none(c.LDAPAuthenticator, "lookup_dn", "auth.ldap.dn.lookup")
-    set_config_if_not_none(
-        c.LDAPAuthenticator, "lookup_dn_search_filter", "auth.ldap.dn.search.filter"
-    )
-    set_config_if_not_none(
-        c.LDAPAuthenticator, "lookup_dn_search_user", "auth.ldap.dn.search.user"
-    )
-    set_config_if_not_none(
-        c.LDAPAuthenticator, "lookup_dn_search_password", "auth.ldap.dn.search.password"
-    )
-    set_config_if_not_none(
-        c.LDAPAuthenticator,
-        "lookup_dn_user_dn_attribute",
-        "auth.ldap.dn.user.dnAttribute",
-    )
-    set_config_if_not_none(
-        c.LDAPAuthenticator, "escape_userdn", "auth.ldap.dn.user.escape"
-    )
-    set_config_if_not_none(
-        c.LDAPAuthenticator, "valid_username_regex", "auth.ldap.dn.user.validRegex"
-    )
-    set_config_if_not_none(
-        c.LDAPAuthenticator, "user_search_base", "auth.ldap.dn.user.searchBase"
-    )
-    set_config_if_not_none(
-        c.LDAPAuthenticator, "user_attribute", "auth.ldap.dn.user.attribute"
-    )
-    set_config_if_not_none(
-        c.LDAPAuthenticator, "use_lookup_dn_username", "auth.ldap.dn.user.useLookupName"
-    )
-elif auth_type == "custom":
-    # full_class_name looks like "myauthenticator.MyAuthenticator".
-    # To create a docker image with this class availabe, you can just have the
-    # following Dockerfile:
-    #   FROM jupyterhub/k8s-hub:v0.4
-    #   RUN pip3 install myauthenticator
-    full_class_name = get_config("auth.custom.className")
-    c.JupyterHub.authenticator_class = full_class_name
-    auth_class_name = full_class_name.rsplit(".", 1)[-1]
-    auth_config = c[auth_class_name]
-    auth_config.update(get_config("auth.custom.config") or {})
-else:
-    raise ValueError("Unhandled auth type: %r" % auth_type)
-
-set_config_if_not_none(c.OAuthenticator, "scope", "auth.scopes")
-
-set_config_if_not_none(c.Authenticator, "enable_auth_state", "auth.state.enabled")
-
-# Enable admins to access user servers
-set_config_if_not_none(c.JupyterHub, "admin_access", "auth.admin.access")
-set_config_if_not_none(c.Authenticator, "admin_users", "auth.admin.users")
-set_config_if_not_none(c.Authenticator, "allowed_users", "auth.whitelist.users")
-set_config_if_not_none(c.Authenticator, "allowed_users", "auth.allowedUsers")
-
 c.JupyterHub.services = []
 
 if get_config("cull.enabled", False):
@@ -521,6 +372,11 @@ if get_config("debug.enabled", False):
     c.Spawner.debug = True
 
 
+# load hub.config values
+for section, sub_cfg in get_config("hub.config", {}).items():
+    c[section].update(sub_cfg)
+
+# execute hub.extraConfig string
 extra_config = get_config("hub.extraConfig", {})
 if isinstance(extra_config, str):
     from textwrap import indent, dedent

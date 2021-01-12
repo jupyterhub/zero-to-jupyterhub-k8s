@@ -84,3 +84,13 @@ directly instead.
 {{- if hasKey .Values.proxy "pdb" }}
 {{ "HARD DEPRECATION: proxy.pdb has renamed to proxy.chp.pdb" | fail }}
 {{- end }}
+
+{{- if include "jupyterhub.digToTrue" (list "hub.config.Authenticator.enable_auth_state" .Values) }}
+{{- if not (include "jupyterhub.digToTrue" (list "hub.config.CryptKeeper.keys" .Values)) }}
+{{ "Using Authenticator.enable_auth_state, you also need to CryptKeeper.keys to a list with at least one key in it." | fail }}
+{{- end }}
+{{- end }}
+
+{{- if .Values.auth }}
+{{ include "jupyterhub.authDep.remapOldToNew" . | fail }}
+{{- end }}

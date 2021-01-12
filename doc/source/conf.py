@@ -217,7 +217,7 @@ def parse_schema(d, md=[], depth=0, pre=""):
         depth += 1
         # Create markdown headers for each schema level
         for key, val in d["properties"].items():
-            md.append("(schema:%s)=" % (pre + key))
+            md.append("(schema_%s)=" % (pre + key))
             md.append("#" * (depth + 1) + " " + pre + key)
             md.append("")
             if "description" in val:
@@ -249,6 +249,7 @@ linkcheck_ignore = [
     "https://cloud.ibm.com/kubernetes/catalog/create",  # works
     "https://portal.azure.com",  # sign-in redirect noise
     "https://console.cloud.google.com",  # sign-in redirect noise
+    "https://console.developers.google.com",  # sign-in redirect noise
 ]
 linkcheck_anchors_ignore = [
     "/#!",
