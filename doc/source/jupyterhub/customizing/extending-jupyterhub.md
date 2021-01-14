@@ -20,7 +20,7 @@ The general method to modify your Kubernetes deployment is to:
    NAMESPACE=jhub
    
    helm upgrade --cleanup-on-fail \
-             $RELEASE jupyterhub/jupyterhub \
+     $RELEASE jupyterhub/jupyterhub \
      --namespace $NAMESPACE \
      --version=0.10.6 \
      --values config.yaml
