@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """
 Lints and validates the chart's template files and their rendered output without
-any cluster interaction. For this script to function, you must install yamllint
-and kubeval.
+any cluster interaction. For this script to function, you must install yamllint.
 
 USAGE:
 
@@ -13,13 +12,6 @@ DEPENDENCIES:
 yamllint: https://github.com/adrienverge/yamllint
 
   pip install yamllint
-
-kubeval: https://github.com/instrumenta/kubeval
-
-  LATEST=$(curl --silent "https://api.github.com/repos/instrumenta/kubeval/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-  wget https://github.com/instrumenta/kubeval/releases/download/$LATEST/kubeval-linux-amd64.tar.gz
-  tar xf kubeval-linux-amd64.tar.gz
-  sudo mv kubeval /usr/local/bin
 """
 
 import os
@@ -47,8 +39,8 @@ def check_call(cmd, **kwargs):
         sys.exit(e.returncode)
 
 
-def lint(yamllint_config, values, kubernetes_versions, output_dir, debug):
-    """Calls `helm lint`, `helm template`, `yamllint` and `kubeval`."""
+def lint(yamllint_config, values, output_dir, debug):
+    """Calls `helm lint`, `helm template`, and `yamllint`."""
 
     print("### Clearing output directory")
     check_call(
@@ -67,7 +59,7 @@ def lint(yamllint_config, values, kubernetes_versions, output_dir, debug):
     )
 
     print("### Linting started")
-    print("### 1/4 - helm lint: lint helm templates")
+    print("### 1/3 - helm lint: lint helm templates")
     helm_lint_cmd = [
         "helm",
         "lint",
@@ -80,7 +72,7 @@ def lint(yamllint_config, values, kubernetes_versions, output_dir, debug):
         helm_lint_cmd.append("--debug")
     check_call(helm_lint_cmd)
 
-    print("### 2/4 - helm template: generate kubernetes resources")
+    print("### 2/3 - helm template: generate kubernetes resources")
     helm_template_cmd = [
         "helm",
         "template",
@@ -94,22 +86,8 @@ def lint(yamllint_config, values, kubernetes_versions, output_dir, debug):
         helm_template_cmd.append("--debug")
     check_call(helm_template_cmd)
 
-    print("### 3/4 - yamllint: yaml lint generated kubernetes resources")
+    print("### 3/3 - yamllint: yaml lint generated kubernetes resources")
     check_call(["yamllint", "-c", yamllint_config, output_dir])
-
-    print("### 4/4 - kubeval: validate generated kubernetes resources")
-    for kubernetes_version in kubernetes_versions.split(","):
-        print("#### kubernetes_version ", kubernetes_version)
-        for filename in glob.iglob(output_dir + "/**/*.yaml", recursive=True):
-            check_call(
-                [
-                    "kubeval",
-                    filename,
-                    "--kubernetes-version",
-                    kubernetes_version,
-                    "--strict",
-                ]
-            )
 
     print()
     print(
@@ -130,11 +108,6 @@ if __name__ == "__main__":
         help="Specify Helm values in a YAML file (can specify multiple)",
     )
     argparser.add_argument(
-        "--kubernetes-versions",
-        default="1.15.0",
-        help='List of Kubernetes versions to validate against separated by ","',
-    )
-    argparser.add_argument(
         "--output-dir",
         default="rendered-templates",
         help="Output directory for the rendered templates. Warning: content in this will be wiped.",
@@ -150,7 +123,6 @@ if __name__ == "__main__":
     lint(
         args.yamllint_config,
         args.values,
-        args.kubernetes_versions,
         args.output_dir,
         args.debug,
     )

@@ -67,12 +67,6 @@ await_autohttps_tls_cert_save() {
     fi
 }
 
-setup_kubeval () {
-    echo "setup kubeval ${KUBEVAL_VERSION}"
-    curl -sfL https://github.com/instrumenta/kubeval/releases/download/${KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz | tar xz kubeval
-    sudo mv kubeval /usr/local/bin/
-}
-
 install_and_run_chartpress_and_pebble () {
     helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
     helm repo update
