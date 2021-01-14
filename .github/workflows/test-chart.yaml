@@ -123,14 +123,32 @@ jobs:
         with:
           python-version: '3.8'
 
+      # Install a local ACME server to fill the role of Let's Encrypt (LE). We
+      # do this as the HTTP challenge sent out by an ACME server must be able to
+      # reach the ACME client in our autohttps pod.
+      - name: Install local ACME server
+        run: |
+          helm install pebble --repo https://jupyterhub.github.io/helm-chart/ pebble --values dev-config-pebble.yaml
+
+      # Build our images if needed and update values.yaml with the tags
       - name: Install and run chartpress
         run: |
-          . ./ci/common
-          install_and_run_chartpress_and_pebble
+          pip3 install --no-cache-dir -r dev-requirements.txt
+          chartpress
 
+      # Validate rendered helm templates against the k8s api-server with the
+      # dedicated lint-and-validate-values.yaml config.
       - name: "Helm template --validate (with lint and validate config)"
         run: |
           helm template --validate jupyterhub ./jupyterhub --values tools/templates/lint-and-validate-values.yaml
+
+      # It is only needed at this point forward as this is when we install
+      # jupyterhub and the autohttps pod is about to start, so for CI
+      # performance we delayed this until now and did other things in between.
+      - name: Await local ACME server
+        run: |
+          . ./ci/common
+          await_pebble
 
       - name: "Install ${{ matrix.upgrade-from }} chart"
         if: matrix.test == 'upgrade'
@@ -140,7 +158,7 @@ jobs:
 
           echo ""
           echo "Installing already released jupyterhub version $UPGRADE_FROM_VERSION"
-          helm install jupyterhub jupyterhub/jupyterhub --values dev-config.yaml --version=$UPGRADE_FROM_VERSION
+          helm install jupyterhub --repo https://jupyterhub.github.io/helm-chart/ jupyterhub --values dev-config.yaml --version=$UPGRADE_FROM_VERSION
 
           echo ""
           echo "Installing Helm diff plugin while k8s resources are initializing"
