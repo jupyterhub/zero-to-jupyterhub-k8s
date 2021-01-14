@@ -26,11 +26,12 @@ See [the published security
 advisory](https://github.com/jupyterhub/oauthenticator/security/advisories/GHSA-384w-5v3f-q499)
 for more information, and refer to [this forum
 post](https://discourse.jupyter.org/t/collaboration-to-mitigate-issues-of-security-advisory-in-oauthenticator/7520)
-to share experiences and insights that can be useful to others.
+to share insights that can be useful to others.
 
 #### Breaking changes
 
-- __`auth` configuration moves to `hub.config` - [#1943](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1943) ([@consideRatio](https://github.com/consideRatio))__
+- __`auth` configuration moves to `hub.config` - [#1943](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1943)__
+
   Helm chart configuration under `auth` is now no longer supported. If you make
   a `helm upgrade` using `auth` configuration, the upgrade will abort before any
   changes are made to the k8s cluster and you will be provided with the
@@ -40,6 +41,7 @@ to share experiences and insights that can be useful to others.
   secrets that shouldn't be exposed. By passing `--global.safeToShowValues=true`
   you can get an uncensored version.
 - __Pod Disruption Budget's now disabled by default - [#1938](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1938)__
+
   A Pod Disruption Budget (PDB) for the hub and proxy pods were created by
   default before, but will by default not be created from now on. The
   consequence of this is that the pods now can get _evicted_.
