@@ -74,6 +74,9 @@ For a detailed list of how Python dependencies have change in the `hub` Pod's Do
 
 #### Maintenance and upkeep improvements
 
+* dep: bump traefik (autohttps pod) from v2.3.2 to v2.3.7 [#1986](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1986) ([@consideRatio](https://github.com/consideRatio))
+* k8s: update Ingress / PriorityClass apiVersions [#1983](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1983) ([@consideRatio](https://github.com/consideRatio))
+* dep: bump kube-scheduler from 1.19.2 to 1.19.7 [#1981](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1981) ([@consideRatio](https://github.com/consideRatio))
 * singleuser-sample image: bump jupyerhub to 1.3.0 [#1961](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1961) ([@consideRatio](https://github.com/consideRatio))
 * build(deps): bump jupyterhub from 1.2.2 to 1.3.0 in /images/hub [#1959](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1959) ([@dependabot](https://github.com/dependabot))
 * Vulnerability patch in network-tools [#1947](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1947) ([@github-actions](https://github.com/github-actions))
@@ -95,6 +98,8 @@ For a detailed list of how Python dependencies have change in the `hub` Pod's Do
 
 #### Continuous integration improvements
 
+* ci: accept helm lint --strict failure, but ensure GitHub UI warns [#1985](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1985) ([@consideRatio](https://github.com/consideRatio))
+* ci: replace kubeval with helm template --validate [#1984](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1984) ([@consideRatio](https://github.com/consideRatio))
 * ci: use extracted github action for namespace report [#1980](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1980) ([@consideRatio](https://github.com/consideRatio))
 * ci: add another upgrade test and provide a template rendering diff [#1978](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1978) ([@consideRatio](https://github.com/consideRatio))
 * ci: linkcheck rework: avoid duplicated build, add colors, make it fail loud [#1976](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1976) ([@consideRatio](https://github.com/consideRatio))
