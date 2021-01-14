@@ -41,30 +41,18 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: '3.7'
+          python-version: '3.8'
 
       - name: Install dependencies
         run: |
           . ci/common
           setup_helm
-          KUBEVAL_VERSION=0.15.0 setup_kubeval
           pip install chartpress yamllint
 
       - uses: pre-commit/action@v2.0.0
 
       - name: Lint and validate
-        # NOTE: Kubernetes resource validation can only be done against
-        #       Kubernetes versions with schemas available in:
-        #       https://github.com/instrumenta/kubernetes-json-schema
-        #
-        # NOTE: The "helm template" command will evaluate
-        #       .Capabilities.APIVersion.Has in templates based on a Kubernetes
-        #       version associated with the helm binary's version. Since we
-        #       render the templates with a specific helm version, we end up
-        #       rendering templates using a mocked k8s version unrelated to the
-        #       Kubernetes version we want to validate against. This issue has
-        #       made us not validate against versions lower than 1.14.
-        run: tools/templates/lint-and-validate.py --kubernetes-versions 1.14.0,1.18.0
+        run: tools/templates/lint-and-validate.py
 
 
   test:
@@ -124,7 +112,6 @@ jobs:
       - uses: jupyterhub/action-k3s-helm@v1
         with:
           k3s-channel: ${{ matrix.k3s-channel }}
-          helm-version: v3.4.2
           metrics-enabled: false
           traefik-enabled: false
           docker-enabled: true
@@ -135,10 +122,32 @@ jobs:
         with:
           python-version: '3.8'
 
+      # Install a local ACME server to fill the role of Let's Encrypt (LE). We
+      # do this as the HTTP challenge sent out by an ACME server must be able to
+      # reach the ACME client in our autohttps pod.
+      - name: Install local ACME server
+        run: |
+          helm install pebble --repo https://jupyterhub.github.io/helm-chart/ pebble --values dev-config-pebble.yaml
+
+      # Build our images if needed and update values.yaml with the tags
       - name: Install and run chartpress
         run: |
+          pip3 install --no-cache-dir -r dev-requirements.txt
+          chartpress
+
+      # Validate rendered helm templates against the k8s api-server with the
+      # dedicated lint-and-validate-values.yaml config.
+      - name: "Helm template --validate (with lint and validate config)"
+        run: |
+          helm template --validate jupyterhub ./jupyterhub --values tools/templates/lint-and-validate-values.yaml
+
+      # It is only needed at this point forward as this is when we install
+      # jupyterhub and the autohttps pod is about to start, so for CI
+      # performance we delayed this until now and did other things in between.
+      - name: Await local ACME server
+        run: |
           . ./ci/common
-          install_and_run_chartpress_and_pebble
+          await_pebble
 
       - name: "Install ${{ matrix.upgrade-from }} chart"
         if: matrix.test == 'upgrade'
@@ -148,7 +157,7 @@ jobs:
 
           echo ""
           echo "Installing already released jupyterhub version $UPGRADE_FROM_VERSION"
-          helm install jupyterhub jupyterhub/jupyterhub --values dev-config.yaml --version=$UPGRADE_FROM_VERSION
+          helm install jupyterhub --repo https://jupyterhub.github.io/helm-chart/ jupyterhub --values dev-config.yaml --version=$UPGRADE_FROM_VERSION
 
           echo ""
           echo "Installing Helm diff plugin while k8s resources are initializing"
@@ -167,7 +176,7 @@ jobs:
           await_autohttps_tls_cert_acquisition
           await_autohttps_tls_cert_save
 
-      - name: "Upgrade ${{ matrix.upgrade-from }} chart to current chart"
+      - name: "Install or upgrade to current chart"
         run: |
           . ./ci/common
           helm upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml

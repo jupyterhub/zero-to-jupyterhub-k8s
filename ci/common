@@ -66,20 +66,3 @@ await_autohttps_tls_cert_save() {
         exit 1
     fi
 }
-
-setup_kubeval () {
-    echo "setup kubeval ${KUBEVAL_VERSION}"
-    curl -sfL https://github.com/instrumenta/kubeval/releases/download/${KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz | tar xz kubeval
-    sudo mv kubeval /usr/local/bin/
-}
-
-install_and_run_chartpress_and_pebble () {
-    helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
-    helm repo update
-    # Install a local ACME server
-    helm install pebble jupyterhub/pebble --values dev-config-pebble.yaml
-    # Build our images if needed and update values.yaml with the tags
-    pip3 install --no-cache-dir -r dev-requirements.txt
-    chartpress
-    await_pebble  # jupyterhub's autohttps communicates with it as the ACME server
-}
