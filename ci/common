@@ -18,6 +18,11 @@ await_jupyterhub() {
         if kubectl get deploy/autohttps &> /dev/null; then
             kubectl rollout status --watch --timeout 300s deployment/autohttps
         fi
+    ) \
+        && (
+        if kubectl get deploy/user-scheduler &> /dev/null; then
+            kubectl rollout status --watch --timeout 300s deployment/user-scheduler
+        fi
     )
 }
 

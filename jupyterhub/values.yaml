@@ -416,8 +416,11 @@ scheduling:
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
     image:
+      # IMPORTANT: Bumping the minor version of this binary should go hand in
+      #            hand with an inspection of the user-scheduelrs RBAC resources
+      #            that we have forked.
       name: k8s.gcr.io/kube-scheduler
-      tag: v1.19.2
+      tag: v1.19.7
       pullPolicy: ''
       pullSecrets: []
     nodeSelector: {}
