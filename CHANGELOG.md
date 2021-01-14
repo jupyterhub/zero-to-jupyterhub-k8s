@@ -24,7 +24,9 @@ unauthorized users who may have logged in during usage of version 0.10.0 -
 
 See [the published security
 advisory](https://github.com/jupyterhub/oauthenticator/security/advisories/GHSA-384w-5v3f-q499)
-for more information.
+for more information, and refer to [this forum
+post](https://discourse.jupyter.org/t/collaboration-to-mitigate-issues-of-security-advisory-in-oauthenticator/7520)
+to share experiences and insights that can be useful to others.
 
 #### Breaking changes
 
