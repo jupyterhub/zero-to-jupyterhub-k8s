@@ -54,6 +54,10 @@ jobs:
       - name: Lint and validate
         run: tools/templates/lint-and-validate.py
 
+      - name: Lint and validate (--strict, accept failure)
+        run: tools/templates/lint-and-validate.py --strict
+        continue-on-error: true
+
 
   test:
     runs-on: ubuntu-20.04
