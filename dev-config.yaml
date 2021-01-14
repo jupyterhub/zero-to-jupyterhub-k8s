@@ -79,9 +79,7 @@ prePuller:
 scheduling:
   userScheduler:
     enabled: true
-    # replicas lowered to make it easier to get the relevant logs if a pod get
-    # stuck in pending mode
-    replicas: 1
+    replicas: 2
     logLevel: 10
 
 debug:
