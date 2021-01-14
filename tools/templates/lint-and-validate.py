@@ -39,7 +39,7 @@ def check_call(cmd, **kwargs):
         sys.exit(e.returncode)
 
 
-def lint(yamllint_config, values, output_dir, debug):
+def lint(yamllint_config, values, output_dir, strict, debug):
     """Calls `helm lint`, `helm template`, and `yamllint`."""
 
     print("### Clearing output directory")
@@ -63,11 +63,12 @@ def lint(yamllint_config, values, output_dir, debug):
     helm_lint_cmd = [
         "helm",
         "lint",
-        "--strict",
         "../../jupyterhub",
         "--values",
         values,
     ]
+    if strict:
+        helm_lint_cmd.append("--strict")
     if debug:
         helm_lint_cmd.append("--debug")
     check_call(helm_lint_cmd)
@@ -103,6 +104,11 @@ if __name__ == "__main__":
         help="Run helm lint and helm template with the --debug flag",
     )
     argparser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Run helm lint with the --strict flag",
+    )
+    argparser.add_argument(
         "--values",
         default="lint-and-validate-values.yaml",
         help="Specify Helm values in a YAML file (can specify multiple)",
@@ -124,5 +130,6 @@ if __name__ == "__main__":
         args.yamllint_config,
         args.values,
         args.output_dir,
+        args.strict,
         args.debug,
     )
