@@ -112,7 +112,6 @@ jobs:
       - uses: jupyterhub/action-k3s-helm@v1
         with:
           k3s-channel: ${{ matrix.k3s-channel }}
-          helm-version: v3.4.2
           metrics-enabled: false
           traefik-enabled: false
           docker-enabled: true
