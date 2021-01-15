@@ -406,8 +406,14 @@ ingress:
   enabled: true
   annotations:
     mock: mock
-  hosts: []
-  tls: []
+  hosts:
+    - mocked1.domain.name
+    - mocked2.domain.name
+  tls:
+    - secretName: jupyterhub-tls
+      hosts:
+        - mocked1.domain.name
+        - mocked2.domain.name
 
 
 cull:
@@ -416,7 +422,7 @@ cull:
   timeout: 3600
   every: 600
   concurrency: 10
-  maxAge: 3600*8
+  maxAge: 28800
 
 
 debug:
