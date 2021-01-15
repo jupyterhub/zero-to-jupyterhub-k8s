@@ -5,7 +5,20 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ## [0.11]
 
-### [0.11.0]
+### [0.11.1] - 2021-01-15
+
+This release fixes a regression in the Ingress resource and a bump of
+jupyterhub-nativeauthenticator from 0.0.6 to 0.0.7.
+
+#### Bugs fixed
+
+* fix: fix of ingress regression and improved testing  ([@consideRatio](https://github.com/consideRatio))
+
+#### Maintenance and upkeep improvements
+
+* build(deps): bump jupyterhub-nativeauthenticator from 0.0.6 to 0.0.7 in /images/hub [#1988](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1988) ([@dependabot](https://github.com/dependabot))
+
+### [0.11.0] - 2021-01-14
 
 Please read the _security announcement_ and the _breaking changes_ below, and
 also note that this is the last release supporting Helm 2 and k8s versions lower
