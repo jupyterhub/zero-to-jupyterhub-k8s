@@ -20,9 +20,6 @@ on:
       - "dependabot/**"
   workflow_dispatch:
 
-defaults:
-  run:
-    shell: bash
 
 jobs:
   linkcheck:

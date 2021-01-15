@@ -14,9 +14,6 @@ on:
     - cron: "0 0 * * *"
   workflow_dispatch:
 
-defaults:
-  run:
-    shell: bash
 
 jobs:
   trivy_image_scan:
