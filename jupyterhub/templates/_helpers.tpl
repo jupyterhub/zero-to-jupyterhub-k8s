@@ -45,7 +45,6 @@
   ## Declared helpers
   - appLabel          |
   - componentLabel    |
-  - nameField         | uses componentLabel
   - commonLabels      | uses appLabel
   - labels            | uses commonLabels
   - matchLabels       | uses labels
@@ -58,13 +57,12 @@
   apiVersion: apps/v1
   kind: Deployment
   metadata:
-    name: {{ include "jupyterhub.nameField" . }}
+    name: {{ include "jupyterhub.autohttps.fullname" . }}
     labels:
       {{- include "jupyterhub.labels" . | nindent 4 }}
   spec:
     selector:
       matchLabels:
-        {{- $_ := merge (dict "appLabel" "kube-lego") . }}
         {{- include "jupyterhub.matchLabels" $_ | nindent 6 }}
     template:
       metadata:
@@ -94,7 +92,7 @@
 
 {{- /*
   jupyterhub.componentLabel:
-    Used by "jupyterhub.labels" and "jupyterhub.nameField".
+    Used by "jupyterhub.labels".
 
     NOTE: The component label is determined by either...
     - 1: The provided scope's .componentLabel
@@ -108,22 +106,6 @@
 {{- $component := .componentLabel | default $parent | default $file -}}
 {{- $component := print (.componentPrefix | default "") $component (.componentSuffix | default "") -}}
 {{ $component }}
-{{- end }}
-
-
-{{- /*
-  jupyterhub.nameField:
-    Populates the name field's value.
-    NOTE: some name fields are limited to 63 characters by the DNS naming spec.
-
-  TODO:
-  - [ ] Set all name fields using this helper.
-  - [ ] Optionally prefix the release name based on some setting in
-        .Values to allow for multiple deployments within a single namespace.
-*/}}
-{{- define "jupyterhub.nameField" -}}
-{{- $name := print (.namePrefix | default "") (include "jupyterhub.componentLabel" .) (.nameSuffix | default "") -}}
-{{ printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 
