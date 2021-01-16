@@ -100,8 +100,8 @@ spec:
           {{- end }}
 
         {{- /* --- Pull extra containers' images --- */}}
-        {{- range $k, $container := .Values.singleuser.extraContainers }}
-        - name: image-pull-singleuser-extra-container-{{ $k }}
+        {{- range $k, $container := concat .Values.singleuser.initContainers .Values.singleuser.extraContainers }}
+        - name: image-pull-singleuser-init-and-extra-containers-{{ $k }}
           image: {{ $container.image }}
           command:
             - /bin/sh
