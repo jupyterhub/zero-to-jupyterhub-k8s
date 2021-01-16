@@ -45,17 +45,8 @@ spec:
       imagePullSecrets: {{ . }}
       {{- end }}
       containers:
-        - name: {{ include "jupyterhub.user-scheduler-deploy.fullname" . }}
-          # NOTE: When the kube-scheduler 1.17+ binaries fail to find CSINode
-          #       resource in the cluster, they won't start scheduling. Due to
-          #       this, we fallback to the latest functional version with its
-          #       legacy configuration format. This fallback can be removed when
-          #       we assume k8s 1.17 where CSINode is generally available.
-          {{- if .Capabilities.APIVersions.Has "storage.k8s.io/v1/CSINode" }}
+        - name: kube-scheduler
           image: {{ .Values.scheduling.userScheduler.image.name }}:{{ .Values.scheduling.userScheduler.image.tag }}
-          {{- else }}
-          image: {{ .Values.scheduling.userScheduler.image.name }}:v1.16.15
-          {{- end }}
           {{- with .Values.scheduling.userScheduler.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
@@ -73,15 +64,8 @@ spec:
             #       "authentication lookup" in the future, see the linked issue.
             #
             # ref: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1894
-            {{- if .Capabilities.APIVersions.Has "storage.k8s.io/v1/CSINode" }}
             - --config=/etc/user-scheduler/config.yaml
             - --authentication-skip-lookup=true
-            {{- else }}
-            - --scheduler-name={{ include "jupyterhub.user-scheduler.fullname" . }}
-            - --policy-config-file=/etc/user-scheduler/policy.cfg
-            - --lock-object-name={{ include "jupyterhub.user-scheduler-lock.fullname" . }}
-            - --lock-object-namespace={{ .Release.Namespace }}
-            {{- end }}
             - --v={{ .Values.scheduling.userScheduler.logLevel | default 4 }}
           volumeMounts:
             - mountPath: /etc/user-scheduler

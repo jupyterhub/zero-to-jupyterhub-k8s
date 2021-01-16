@@ -18,7 +18,4 @@ data:
       - schedulerName: {{ include "jupyterhub.user-scheduler.fullname" . }}
         plugins:
           {{- .Values.scheduling.userScheduler.plugins | toYaml | trimSuffix "\n" | nindent 10 }}
-
-  {{- $defaultPolicy := .Files.Get "files/userscheduler-defaultpolicy.yaml" | fromYaml }}
-  policy.cfg: {{ .Values.scheduling.userScheduler.policy | default $defaultPolicy | toJson | quote }}
 {{- end }}
