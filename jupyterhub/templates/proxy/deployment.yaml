@@ -97,7 +97,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "jupyterhub.hub-secret.fullname" . }}
-                  key: proxy.token
+                  key: JupyterHub.proxy_auth_token
             {{- include "jupyterhub.extraEnv" .Values.proxy.chp.extraEnv | nindent 12 }}
           {{- with .Values.proxy.chp.image.pullPolicy }}
           imagePullPolicy: {{ . }}
