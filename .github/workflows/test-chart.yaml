@@ -152,7 +152,13 @@ jobs:
 
           echo ""
           echo "Installing already released jupyterhub version $UPGRADE_FROM_VERSION"
-          helm install jupyterhub --repo https://jupyterhub.github.io/helm-chart/ jupyterhub --values dev-config.yaml --version=$UPGRADE_FROM_VERSION
+
+          # FIXME: We change the directory so jupyterhub the chart name won't be
+          #        misunderstood as the local folder name.
+          #
+          #        https://github.com/helm/helm/issues/9244
+          cd ci
+          helm install jupyterhub --repo https://jupyterhub.github.io/helm-chart/ jupyterhub --values ../dev-config.yaml --version=$UPGRADE_FROM_VERSION
 
           echo ""
           echo "Installing Helm diff plugin while k8s resources are initializing"
