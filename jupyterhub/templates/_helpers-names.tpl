@@ -1,43 +1,38 @@
 {{- /*
+    These helpers encapsulates logic on how we name resources. They also enable
+    parent charts to reference these dynamic resource names.
 
-There are five modes to name resources, for more details see schema.yaml or the
-rendered configuration reference under fullnameOverride / nameOverride.
+    To avoid duplicating documentation, for more information, please see the the
+    fullnameOverride entry in schema.yaml or the configuration reference that
+    schema.yaml renders to.
 
-    1. namespaced:   component                          fullnameOverride: "",   nameOverride: ?
-       cluster wide: release-component
-    2. independent:  fullnameOverride-component         fullnameOverride: str,  nameOverride: ?
-    3. independent:  release-component                  fullnameOverride: null, nameOverride: ""
-    4. independent:  release-(nameOverride-)component   fullnameOverride: null, nameOverride: str   (omitted if contained in release)
-    5. independent:  release-(chart-)component          fullnameOverride: null, nameOverride: null  (omitted if contained in release)
-
-With such dynamic naming, referencing them is a bit complicated. With dynamic
-names, we cannot use hardcoded strings. So, how do we reference them from this
-chart and parent charts depending on this chart?
-
-From templates...
-
-    Rely on the named templates below, so instead of referencing "hub" as a name,
-    reference the named template "jupyterhub.hub.fullname" passing the . scope.
-
-From containers...
-
-    Rely on the hub ConfigMap which both has a blob of YAML and individual
-    key/value pairs.
-
+    https://z2jh.jupyter.org/en/latest/resources/reference.html#fullnameOverride
 */}}
 
-{{- /* The chart's resources' name prefix */}}
+
+
+{{- /*
+    Utility templates
+*/}}
+
+{{- /*
+    Renders to a prefix for the chart's resource names. This prefix is assumed to
+    make the resource name cluster unique.
+*/}}
 {{- define "jupyterhub.fullname" -}}
     {{- /*
-        A hack to avoid issues from invoking this from a parent Helm chart.
+        We have implemented a trick to allow a parent chart depending on this
+        chart to call these named templates.
 
         Caveats and notes:
-            1. While parent charts can, their parents chart can't reference these
-            2. The parent chart must not use an alias for this chart
+
+            1. While parent charts can reference these, grandparent charts can't.
+            2. Parent charts must not use an alias for this chart.
             3. There is no failsafe workaround to above due to
-            https://github.com/helm/helm/issues/9214.
-            4. Note that .Chart is of type *chart.Metadata needs to be casted to a
-            normal dict by doing "toYaml | fromYaml" for normal dict inspection.
+               https://github.com/helm/helm/issues/9214.
+            4. .Chart is of its own type (*chart.Metadata) and needs to be casted
+               using "toYaml | fromYaml" in order to be able to use normal helm
+               template functions on it.
     */}}
     {{- $fullname_override := .Values.fullnameOverride }}
     {{- $name_override := .Values.nameOverride }}
@@ -58,7 +53,10 @@ From containers...
     {{- end }}
 {{- end }}
 
-{{- /* The chart's resources' name prefix with a separator dash */}}
+{{- /*
+    Renders to a blank string or if the fullname template is truthy renders to it
+    with an appended dash.
+*/}}
 {{- define "jupyterhub.fullname.dash" -}}
     {{- if (include "jupyterhub.fullname" .) }}
         {{- include "jupyterhub.fullname" . }}-
@@ -67,12 +65,16 @@ From containers...
 
 
 
+{{- /*
+    Namespaced resources
+*/}}
+
 {{- /* hub Deployment */}}
 {{- define "jupyterhub.hub.fullname" -}}
     {{- include "jupyterhub.fullname.dash" . }}hub
 {{- end }}
 
-{{- /* hub-secret Secret */}}
+{{- /* hub Secret */}}
 {{- define "jupyterhub.hub-secret.fullname" -}}
     {{- /* A hack to avoid issues from invoking this from a parent Helm chart. */}}
     {{- $existing_secret := .Values.hub.existingSecret }}
@@ -176,8 +178,13 @@ From containers...
 {{- end }}
 
 
+
 {{- /*
     Cluster wide resources
+
+    We enforce uniqueness of names for our cluster wide resources. We assume that
+    the prefix from setting fullnameOverride to null or a string will be cluster
+    unique.
 */}}
 
 {{- /* Priority */}}
@@ -198,7 +205,7 @@ From containers...
     {{- end }}
 {{- end }}
 
-{{- /* user-scheduler ref - a cluster wide reference */}}
+{{- /* user-scheduler's registered name */}}
 {{- define "jupyterhub.user-scheduler.fullname" -}}
     {{- if (include "jupyterhub.fullname.dash" .) }}
         {{- include "jupyterhub.user-scheduler-deploy.fullname" . }}
@@ -207,14 +214,17 @@ From containers...
     {{- end }}
 {{- end }}
 
-{{- /*
-    name-templates - a template rendering all name templates so its easy to
-    emit them to a configmap.
 
-    IMPORTANT: Ensure 1:1 mapping of references
+
+{{- /*
+    A template to render all the named templates in this file for use in the
+    hub's ConfigMap.
+
+    It is important we keep this in sync with the available templates.
 */}}
 {{- define "jupyterhub.name-templates" -}}
 fullname: {{ include "jupyterhub.fullname" . | quote }}
+fullname-dash: {{ include "jupyterhub.fullname.dash" . | quote }}
 hub: {{ include "jupyterhub.hub.fullname" . | quote }}
 hub-secret: {{ include "jupyterhub.hub-secret.fullname" . | quote }}
 hub-pvc: {{ include "jupyterhub.hub-pvc.fullname" . | quote }}
