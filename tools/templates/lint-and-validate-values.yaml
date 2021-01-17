@@ -15,8 +15,6 @@ hub:
   baseUrl: /
   cookieSecret: mock
   publicURL: mock-public-url
-  nodeSelector:
-    node-type: mock
   activeServerLimit: 3
   deploymentStrategy:
     type: Recreate
