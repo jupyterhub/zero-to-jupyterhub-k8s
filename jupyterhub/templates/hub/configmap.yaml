@@ -5,17 +5,20 @@ metadata:
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 data:
-  {{- /* Glob files to allow them to be mounted by the hub pod */ -}}
-  {{- /* key=filename: value=content */ -}}
-  {{- (.Files.Glob "files/hub/*").AsConfig | nindent 2 }}
+  {{- /*
+    Resource names exposed to reliably reference them.
+
+    user-scheduler: "my-helm-release-user-scheduler"
+    ...
+  */}}
+  {{- include "jupyterhub.name-templates" . | nindent 2 }}
 
   {{- /*
-    The name templates from _helpers-names.tpl are made available both as a
-    single YAML blob and as separate key-value pairs for direct reference.
+    Glob files to allow them to be mounted by the hub pod
 
-    Their purpose is to help containers be able to reference dynamically
-    determined resource names.
+    jupyterhub_config: |
+      multi line string content...
+    z2jh.py: |
+      multi line string content...
   */}}
-  name-templates.yaml: |
-    {{- include "jupyterhub.name-templates" . | nindent 4 }}
-  {{- include "jupyterhub.name-templates" . | nindent 2 }}
+  {{- (.Files.Glob "files/hub/*").AsConfig | nindent 2 }}

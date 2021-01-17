@@ -25,25 +25,28 @@ def _load_config():
 
 
 @lru_cache()
-def _load_name_templates():
-    """Load dynamically determined k8s resource names so we can reference them
-    from within the container."""
+def _get_config_value(key):
+    """Load value from the k8s ConfigMap given a key."""
 
-    path = f"/etc/jupyterhub/config/name-templates.yaml"
+    path = f"/etc/jupyterhub/config/{key}"
     if os.path.exists(path):
-        print(f"Loading {path}")
         with open(path) as f:
-            return yaml.safe_load(f)
+            return f.read()
     else:
         raise Exception(f"{path} not found!")
 
 
 def get_name(name):
-    return _load_name_templates()[name]
+    """Returns the fullname of a resource given its short name"""
+    return _get_config_value(name)
 
 
 def get_name_env(name, suffix=""):
-    env_key = _load_name_templates()[name] + suffix
+    """Returns the fullname of a resource given its short name along with a
+    suffix, converted to uppercase with dashes replaced with underscores. This
+    is useful to reference named services associated environment variables, such
+    as PROXY_PUBLIC_SERVICE_PORT."""
+    env_key = _get_config_value(name) + suffix
     env_key = env_key.upper().replace("-", "_")
     return os.environ[env_key]
 
