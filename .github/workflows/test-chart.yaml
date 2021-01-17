@@ -166,19 +166,22 @@ jobs:
 
       # ref: https://github.com/jacobtomlinson/gha-read-helm-chart
       - name: Load local Chart.yaml
-        id: chart
+        id: local-chart
         uses: jacobtomlinson/gha-read-helm-chart@0.1.3
         with:
           path: jupyterhub
 
-      - name: "Helm diff ${{ matrix.upgrade-from }} chart with current chart"
+      - name: "Helm diff ${{ matrix.upgrade-from }} chart with local chart"
         if: matrix.test == 'upgrade'
         run: |
-          export STRING_REPLACER_A=${{ steps.chart.outputs.version }}
+          export STRING_REPLACER_A=${{ steps.local-chart.outputs.version }}
           export STRING_REPLACER_B=$UPGRADE_FROM_VERSION
 
           echo "NOTE: For the helm diff only, we have replaced the new chart"
           echo "      version with the old chart version to reduce clutter."
+          echo
+          echo "      Old version: $UPGRADE_FROM_VERSION"
+          echo "      New version: ${{ steps.local-chart.outputs.version }} (replaced)"
           echo
 
           helm diff upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml \
@@ -193,7 +196,7 @@ jobs:
           await_autohttps_tls_cert_acquisition
           await_autohttps_tls_cert_save
 
-      - name: "Install or upgrade to current chart"
+      - name: "Install or upgrade to local chart"
         run: |
           . ./ci/common
           helm upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml
