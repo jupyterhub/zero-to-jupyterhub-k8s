@@ -33,6 +33,12 @@ repos:
     hooks:
       - id: helmlint
 
+  # Autoformat multiple file types
+  - repo: https://github.com/prettier/prettier
+    rev: 2.1.2
+    hooks:
+      - id: prettier
+
 # The hooks in this file are automatically installed by pre-commit, but shellcheck
 # must be manually installed so it is included in .pre-commit-shellcheck.yaml
 # instead. To run it:
