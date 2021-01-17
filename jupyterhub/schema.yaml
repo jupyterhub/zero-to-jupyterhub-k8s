@@ -16,6 +16,14 @@ properties:
       release-(name-)component  | *              | null             | str          | omitted if contained in release
       release-(chart-)component | *              | null             | null         | omitted if contained in release
 
+      ```{admonition} Warning!
+      :class: warning
+      Changing fullnameOverride or nameOverride after the initial installation
+      of the chart isn't supported. Changing their values likely leads to a
+      reset of non-external JupyterHub databases, abandonment of users' storage,
+      and severed couplings to currently running user pods.
+      ```
+
       If you are a developer of a chart depending on this chart, you should
       avoid hardcoding names. If you want to reference the name of a resource in
       this chart from a parent helm chart's template, you can make use of the
@@ -35,13 +43,13 @@ properties:
         - name: SCHEDULER_NAME
           valueFrom:
             configMapKeyRef:
-              name: {{ include "jupyterhub.hub.fullname" . }}
+              name: {{ include "jupyterhub.user-scheduler.fullname" . }}
               key: user-scheduler
       ```
   nameOverride:
     type: string
     description: |
-      See `fullnameOverride`.
+      See the documentation under [`fullnameOverride`](schema_fullnameOverride).
   imagePullSecret:
     type: object
     description: |
