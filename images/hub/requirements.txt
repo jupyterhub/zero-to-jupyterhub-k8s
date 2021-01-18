@@ -43,7 +43,7 @@ onetimepass==1.0.1        # via jupyterhub-nativeauthenticator
 pamela==1.0.0             # via jupyterhub
 prometheus-client==0.9.0  # via jupyterhub
 psycopg2-binary==2.8.6    # via -r requirements.in
-py-spy==0.3.3             # via -r requirements.in
+py-spy==0.3.4             # via -r requirements.in
 pyasn1-modules==0.2.8     # via google-auth
 pyasn1==0.4.8             # via ldap3, pyasn1-modules, rsa
 pycparser==2.20           # via cffi
