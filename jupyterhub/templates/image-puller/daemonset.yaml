@@ -8,7 +8,14 @@ deleted. Only then will the actual helm upgrade start.
 {{- $_ := merge (dict "hook" true "componentPrefix" "hook-") . }}
 {{- include "jupyterhub.imagePuller.daemonset" $_ }}
 {{- end }}
----
+
+
+{{- /* Manifest separator */}}
+{{- if and .Values.prePuller.hook.enabled .Values.prePuller.continuous.enabled }}
+{{- print "\n---\n" }}
+{{- end }}
+
+
 {{- /*
 The continuous-image-puller daemonset task is to pull required images to nodes
 that are added in between helm upgrades, for example by manually adding a node
@@ -16,5 +23,5 @@ or by the cluster autoscaler.
 */}}
 {{- if .Values.prePuller.continuous.enabled }}
 {{- $_ := merge (dict "hook" false "componentPrefix" "continuous-") . }}
-{{ include "jupyterhub.imagePuller.daemonset" $_ }}
+{{- include "jupyterhub.imagePuller.daemonset" $_ }}
 {{- end }}

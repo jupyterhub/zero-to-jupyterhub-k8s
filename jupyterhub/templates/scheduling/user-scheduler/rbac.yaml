@@ -3,14 +3,14 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: user-scheduler
+  name: {{ include "jupyterhub.user-scheduler-deploy.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ .Release.Name }}-user-scheduler
+  name: {{ include "jupyterhub.user-scheduler.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 rules:
@@ -40,7 +40,7 @@ rules:
   - apiGroups:
     - coordination.k8s.io
     resourceNames:
-    - user-scheduler-lock
+    - {{ include "jupyterhub.user-scheduler-lock.fullname" . }}
     resources:
     - leases
     verbs:
@@ -55,7 +55,7 @@ rules:
   - apiGroups:
     - ""
     resourceNames:
-    - user-scheduler-lock
+    - {{ include "jupyterhub.user-scheduler-lock.fullname" . }}
     resources:
     - endpoints
     verbs:
@@ -194,7 +194,7 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ .Release.Name }}-user-scheduler
+  name: {{ include "jupyterhub.user-scheduler.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 subjects:
@@ -203,7 +203,7 @@ subjects:
     namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
-  name: {{ .Release.Name }}-user-scheduler
+  name: {{ include "jupyterhub.user-scheduler.fullname" . }}
   apiGroup: rbac.authorization.k8s.io
 {{- end }}
 {{- end }}

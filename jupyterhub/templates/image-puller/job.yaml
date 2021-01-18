@@ -9,7 +9,7 @@ command.
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: hook-image-awaiter
+  name: {{ include "jupyterhub.hook-image-awaiter.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
     hub.jupyter.org/deletable: "true"
@@ -30,7 +30,7 @@ spec:
     spec:
       restartPolicy: Never
       {{- if .Values.rbac.enabled }}
-      serviceAccountName: hook-image-awaiter
+      serviceAccountName: {{ include "jupyterhub.hook-image-awaiter.fullname" . }}
       {{- end }}
       tolerations: {{ toJson .Values.prePuller.hook.tolerations }}
       nodeSelector: {{ toJson .Values.prePuller.hook.nodeSelector }}
@@ -39,7 +39,7 @@ spec:
       {{- end }}
       containers:
         - image: {{ .Values.prePuller.hook.image.name }}:{{ .Values.prePuller.hook.image.tag }}
-          name: hook-image-awaiter
+          name: {{ include "jupyterhub.hook-image-awaiter.fullname" . }}
           {{- with .Values.prePuller.hook.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
@@ -49,7 +49,7 @@ spec:
             - -auth-token-path=/var/run/secrets/kubernetes.io/serviceaccount/token
             - -api-server-address=https://kubernetes.default.svc:$(KUBERNETES_SERVICE_PORT)
             - -namespace={{ .Release.Namespace }}
-            - -daemonset=hook-image-puller
+            - -daemonset={{ include "jupyterhub.hook-image-puller.fullname" . }}
             - -pod-scheduling-wait-duration={{ .Values.prePuller.hook.podSchedulingWaitDuration }}
           {{- with .Values.prePuller.hook.containerSecurityContext }}
           securityContext:

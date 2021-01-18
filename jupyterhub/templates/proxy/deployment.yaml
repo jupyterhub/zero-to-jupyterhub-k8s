@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: proxy
+  name: {{ include "jupyterhub.proxy.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
@@ -33,7 +33,7 @@ spec:
     spec:
       terminationGracePeriodSeconds: 60
       {{- if .Values.scheduling.podPriority.enabled }}
-      priorityClassName: {{ .Release.Name }}-default-priority
+      priorityClassName: {{ include "jupyterhub.priority.fullname" . }}
       {{- end }}
       nodeSelector: {{ toJson .Values.proxy.chp.nodeSelector }}
       tolerations: {{ toJson .Values.proxy.chp.tolerations }}
@@ -42,7 +42,7 @@ spec:
       volumes:
         - name: tls-secret
           secret:
-            secretName: proxy-manual-tls
+            secretName: {{ include "jupyterhub.proxy-public-manual-tls.fullname" . }}
       {{- else if $manualHTTPSwithsecret }}
       volumes:
         - name: tls-secret
@@ -55,13 +55,14 @@ spec:
       containers:
         - name: chp
           image: {{ .Values.proxy.chp.image.name }}:{{ .Values.proxy.chp.image.tag }}
+          {{- $hubNameAsEnv := include "jupyterhub.hub.fullname" . | upper | replace "-" "_" }}
           command:
             - configurable-http-proxy
             - "--ip=::"
             - "--api-ip=::"
             - --api-port=8001
-            - --default-target=http://hub:$(HUB_SERVICE_PORT)
-            - --error-target=http://hub:$(HUB_SERVICE_PORT)/hub/error
+            - --default-target=http://{{ include "jupyterhub.hub.fullname" . }}:$({{ $hubNameAsEnv }}_SERVICE_PORT)
+            - --error-target=http://{{ include "jupyterhub.hub.fullname" . }}:$({{ $hubNameAsEnv }}_SERVICE_PORT)/hub/error
             {{- if $manualHTTPS }}
             - --port=8443
             - --redirect-port=8000
@@ -95,7 +96,7 @@ spec:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.hub.existingSecret | default "hub-secret" }}
+                  name: {{ include "jupyterhub.hub-secret.fullname" . }}
                   key: proxy.token
             {{- include "jupyterhub.extraEnv" .Values.proxy.chp.extraEnv | nindent 12 }}
           {{- with .Values.proxy.chp.image.pullPolicy }}

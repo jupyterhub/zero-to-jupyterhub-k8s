@@ -9,25 +9,46 @@ import os
 
 import yaml
 
-
 # memoize so we only load config once
 @lru_cache()
 def _load_config():
-    """Load configuration from disk
+    """Load the Helm chart configuration used to render the Helm templates of
+    the chart from a mounted k8s Secret."""
 
-    Memoized to only load once
-    """
-    cfg = {}
-    for source in ("config", "secret"):
-        path = f"/etc/jupyterhub/{source}/values.yaml"
-        if os.path.exists(path):
-            print(f"Loading {path}")
-            with open(path) as f:
-                values = yaml.safe_load(f)
-            cfg = _merge_dictionaries(cfg, values)
-        else:
-            print(f"No config at {path}")
-    return cfg
+    path = f"/etc/jupyterhub/secret/values.yaml"
+    if os.path.exists(path):
+        print(f"Loading {path}")
+        with open(path) as f:
+            return yaml.safe_load(f)
+    else:
+        raise Exception(f"{path} not found!")
+
+
+@lru_cache()
+def _get_config_value(key):
+    """Load value from the k8s ConfigMap given a key."""
+
+    path = f"/etc/jupyterhub/config/{key}"
+    if os.path.exists(path):
+        with open(path) as f:
+            return f.read()
+    else:
+        raise Exception(f"{path} not found!")
+
+
+def get_name(name):
+    """Returns the fullname of a resource given its short name"""
+    return _get_config_value(name)
+
+
+def get_name_env(name, suffix=""):
+    """Returns the fullname of a resource given its short name along with a
+    suffix, converted to uppercase with dashes replaced with underscores. This
+    is useful to reference named services associated environment variables, such
+    as PROXY_PUBLIC_SERVICE_PORT."""
+    env_key = _get_config_value(name) + suffix
+    env_key = env_key.upper().replace("-", "_")
+    return os.environ[env_key]
 
 
 def _merge_dictionaries(a, b):

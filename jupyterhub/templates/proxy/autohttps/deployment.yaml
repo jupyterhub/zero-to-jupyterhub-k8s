@@ -4,7 +4,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: autohttps
+  name: {{ include "jupyterhub.autohttps.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
@@ -28,10 +28,10 @@ spec:
         checksum/static-config: {{ include "jupyterhub.traefik.yaml" . | fromYaml | merge .Values.proxy.traefik.extraStaticConfig | toYaml | sha256sum }}
     spec:
       {{- if .Values.rbac.enabled }}
-      serviceAccountName: autohttps
+      serviceAccountName: {{ include "jupyterhub.autohttps.fullname" . }}
       {{- end }}
       {{- if .Values.scheduling.podPriority.enabled }}
-      priorityClassName: {{ .Release.Name }}-default-priority
+      priorityClassName: {{ include "jupyterhub.priority.fullname" . }}
       {{- end }}
       nodeSelector: {{ toJson .Values.proxy.traefik.nodeSelector }}
       tolerations: {{ toJson .Values.proxy.traefik.tolerations }}
@@ -41,7 +41,7 @@ spec:
           emptyDir: {}
         - name: traefik-config
           configMap:
-            name: traefik-proxy-config
+            name: {{ include "jupyterhub.autohttps.fullname" . }}
         {{- with .Values.proxy.traefik.extraVolumes }}
         {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
@@ -56,7 +56,7 @@ spec:
           {{- end }}
           args:
             - load
-            - proxy-public-tls-acme
+            - {{ include "jupyterhub.proxy-public-tls.fullname" . }}
             - acme.json
             - /etc/acme/acme.json
           env:
@@ -114,7 +114,7 @@ spec:
             - --label=release={{ .Release.Name }}
             - --label=chart={{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
             - --label=heritage=secret-sync
-            - proxy-public-tls-acme
+            - {{ include "jupyterhub.proxy-public-tls.fullname" . }}
             - acme.json
             - /etc/acme/acme.json
           env:

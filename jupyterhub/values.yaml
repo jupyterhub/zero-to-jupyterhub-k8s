@@ -1,3 +1,8 @@
+# fullnameOverride and nameOverride distinguishes blank strings, null values,
+# and non-blank strings. For more details, see the configuration reference.
+fullnameOverride: ""
+nameOverride:
+
 # custom can contain anything you want to pass to the hub pod, as all passed
 # Helm template values will be made available there.
 custom: {}

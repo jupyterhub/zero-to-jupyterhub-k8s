@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hub
+  name: {{ include "jupyterhub.hub.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
@@ -31,7 +31,7 @@ spec:
         {{- end }}
     spec:
       {{- if .Values.scheduling.podPriority.enabled }}
-      priorityClassName: {{ .Release.Name }}-default-priority
+      priorityClassName: {{ include "jupyterhub.priority.fullname" . }}
       {{- end }}
       nodeSelector: {{ toJson .Values.hub.nodeSelector }}
       tolerations: {{ toJson .Values.hub.tolerations }}
@@ -39,20 +39,20 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: hub-config
+            name: {{ include "jupyterhub.hub.fullname" . }}
         - name: secret
           secret:
-            secretName: {{ .Values.hub.existingSecret | default "hub-secret" }}
+            secretName: {{ include "jupyterhub.hub-secret.fullname" . }}
         {{- if .Values.hub.extraVolumes }}
         {{- .Values.hub.extraVolumes | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
         {{- if eq .Values.hub.db.type "sqlite-pvc" }}
-        - name: hub-db-dir
+        - name: pvc
           persistentVolumeClaim:
-            claimName: hub-db-dir
+            claimName: {{ include "jupyterhub.hub-pvc.fullname" . }}
         {{- end }}
       {{- if .Values.rbac.enabled }}
-      serviceAccountName: hub
+      serviceAccountName: {{ include "jupyterhub.hub.fullname" . }}
       {{- end }}
       securityContext:
         fsGroup: {{ .Values.hub.fsGid }}
@@ -127,7 +127,7 @@ spec:
             {{- end }}
             {{- if eq .Values.hub.db.type "sqlite-pvc" }}
             - mountPath: /srv/jupyterhub
-              name: hub-db-dir
+              name: pvc
               {{- if .Values.hub.db.pvc.subPath }}
               subPath: {{ .Values.hub.db.pvc.subPath | quote }}
               {{- end }}
@@ -159,20 +159,20 @@ spec:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.hub.existingSecret | default "hub-secret" }}
+                  name: {{ include "jupyterhub.hub-secret.fullname" . }}
                   key: proxy.token
             {{- if .Values.hub.db.password }}
             {{- if eq .Values.hub.db.type "mysql" }}
             - name: MYSQL_PWD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.hub.existingSecret | default "hub-secret" }}
+                  name: {{ include "jupyterhub.hub-secret.fullname" . }}
                   key: hub.db.password
             {{- else if eq .Values.hub.db.type "postgres" }}
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.hub.existingSecret | default "hub-secret" }}
+                  name: {{ include "jupyterhub.hub-secret.fullname" . }}
                   key: hub.db.password
             {{- end }}
             {{- end }}

@@ -7,7 +7,11 @@ Returns an image-puller daemonset. Two daemonsets will be created like this.
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ print .componentPrefix "image-puller" }}
+  {{- if .hook }}
+  name: {{ include "jupyterhub.hook-image-puller.fullname" . }}
+  {{- else }}
+  name: {{ include "jupyterhub.continuous-image-puller.fullname" . }}
+  {{- end }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
     {{- if .hook }}
@@ -44,7 +48,7 @@ spec:
         per node limit all k8s clusters have.
       */}}
       {{- if and (not .hook) .Values.scheduling.podPriority.enabled }}
-      priorityClassName: {{ .Release.Name }}-user-placeholder-priority
+      priorityClassName: {{ include "jupyterhub.user-placeholder-priority.fullname" . }}
       {{- end }}
       tolerations:
         {{- include "jupyterhub.userTolerations" . | nindent 8 }}

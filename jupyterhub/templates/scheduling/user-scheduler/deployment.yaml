@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-scheduler
+  name: {{ include "jupyterhub.user-scheduler-deploy.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
@@ -18,10 +18,10 @@ spec:
         checksum/config-map: {{ include (print $.Template.BasePath "/scheduling/user-scheduler/configmap.yaml") . | sha256sum }}
     spec:
       {{- if .Values.rbac.enabled }}
-      serviceAccountName: user-scheduler
+      serviceAccountName: {{ include "jupyterhub.user-scheduler-deploy.fullname" . }}
       {{- end }}
       {{- if .Values.scheduling.podPriority.enabled }}
-      priorityClassName: {{ .Release.Name }}-default-priority
+      priorityClassName: {{ include "jupyterhub.priority.fullname" . }}
       {{- end }}
       nodeSelector: {{ toJson .Values.scheduling.userScheduler.nodeSelector }}
       tolerations: {{ toJson .Values.scheduling.userScheduler.tolerations }}
@@ -29,12 +29,12 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: user-scheduler
+            name: {{ include "jupyterhub.user-scheduler-deploy.fullname" . }}
       {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.scheduling.userScheduler.image) }}
       imagePullSecrets: {{ . }}
       {{- end }}
       containers:
-        - name: user-scheduler
+        - name: {{ include "jupyterhub.user-scheduler-deploy.fullname" . }}
           # NOTE: When the kube-scheduler 1.17+ binaries fail to find CSINode
           #       resource in the cluster, they won't start scheduling. Due to
           #       this, we fallback to the latest functional version with its
@@ -66,9 +66,9 @@ spec:
             - --config=/etc/user-scheduler/config.yaml
             - --authentication-skip-lookup=true
             {{- else }}
-            - --scheduler-name={{ .Release.Name }}-user-scheduler
+            - --scheduler-name={{ include "jupyterhub.user-scheduler.fullname" . }}
             - --policy-config-file=/etc/user-scheduler/policy.cfg
-            - --lock-object-name=user-scheduler-lock
+            - --lock-object-name={{ include "jupyterhub.user-scheduler-lock.fullname" . }}
             - --lock-object-namespace={{ .Release.Namespace }}
             {{- end }}
             - --v={{ .Values.scheduling.userScheduler.logLevel | default 4 }}
