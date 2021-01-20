@@ -14,7 +14,6 @@ on:
     - cron: "0 0 * * *"
   workflow_dispatch:
 
-
 jobs:
   trivy_image_scan:
     if: github.repository == 'jupyterhub/zero-to-jupyterhub-k8s'
@@ -45,7 +44,7 @@ jobs:
           mkdir ./tmp
       - uses: actions/setup-python@v2
         with:
-          python-version: '3.8'
+          python-version: "3.8"
       - name: Install chartpress
         run: |
           pip install chartpress
@@ -72,11 +71,11 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ steps.image.outputs.spec }}
-          format: json  # ref: https://github.com/aquasecurity/trivy#save-the-results-as-json
+          format: json # ref: https://github.com/aquasecurity/trivy#save-the-results-as-json
           output: tmp/scan_1.json
           ignore-unfixed: true
-          severity: 'CRITICAL,HIGH'
-          exit-code: '1'
+          severity: "CRITICAL,HIGH"
+          exit-code: "1"
         # Keep running the subsequent steps of the job, they are made to
         # explicitly adjust based on this step's outcome.
         continue-on-error: true
@@ -96,10 +95,10 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: rebuilt-image
-          format: json  # ref: https://github.com/aquasecurity/trivy#save-the-results-as-json
+          format: json # ref: https://github.com/aquasecurity/trivy#save-the-results-as-json
           output: tmp/scan_2.json
           ignore-unfixed: true
-          severity: 'CRITICAL,HIGH'
+          severity: "CRITICAL,HIGH"
 
       # Analyze the scan reports. If they differ, we want to proceed and create
       # or update a PR. We use a hash from the final scan report as an
@@ -156,7 +155,7 @@ jobs:
           image-ref: rebuilt-image
           format: table
           ignore-unfixed: true
-          severity: 'CRITICAL,HIGH'
+          severity: "CRITICAL,HIGH"
 
       - name: Decision to not proceed
         if: steps.analyze.outputs.proceed == 'no'
@@ -192,7 +191,7 @@ jobs:
           title: "Vulnerability patch in ${{ matrix.image_ref }}"
           body: |
             A rebuild of `${{ steps.image.outputs.name }}` has been found to influence the detected vulnerabilities! This PR will trigger a rebuild because it has updated a comment in the Dockerfile.
-            
+
             ## About
             This scan for known vulnerabilities has been made by [aquasecurity/trivy](https://github.com/aquasecurity/trivy). Trivy was configured to filter the vulnerabilities with the following settings:
             - severity:       `CRITICAL,HIGH`

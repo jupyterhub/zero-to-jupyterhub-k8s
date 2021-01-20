@@ -17,11 +17,11 @@ rules:
     min-spaces-after: 0
     max-spaces-after: 1
   comments:
-    require-starting-space: false   # Default: true (*)
+    require-starting-space: false # Default: true (*)
     min-spaces-from-content: 2
   comments-indentation: {}
   document-end: disable
-  document-start: disable           # Default: { present: true }
+  document-start: disable # Default: { present: true }
   empty-lines:
     max: 2
     max-start: 0
@@ -32,12 +32,12 @@ rules:
   hyphens:
     max-spaces-after: 1
   indentation:
-    spaces: 2                       # Default: consistent
-    indent-sequences: whatever      # Default true (**)
+    spaces: 2 # Default: consistent
+    indent-sequences: whatever # Default true (**)
     check-multi-line-strings: false
   key-duplicates: enable
   key-ordering: disable
-  line-length: disable              # Default: { max: 80, ... }
+  line-length: disable # Default: { max: 80, ... }
   new-line-at-end-of-file: enable
   new-lines:
     type: unix
@@ -47,7 +47,6 @@ rules:
   trailing-spaces: disable
   truthy:
     level: warning
-
 # (*) Until we can use PR: https://github.com/kubernetes/helm/pull/3811
 
 # (**) toYaml forces us to use false and be indent different amounts of spaced

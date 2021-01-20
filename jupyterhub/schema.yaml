@@ -28,7 +28,7 @@ properties:
       avoid hardcoding names. If you want to reference the name of a resource in
       this chart from a parent helm chart's template, you can make use of the
       global named templates instead.
-      
+
       ```yaml
       # some pod definition of a parent chart helm template
       schedulerName: {{ include "jupyterhub.user-scheduler.fullname" . }}
@@ -252,7 +252,7 @@ properties:
           diagnose, and can due to this could cause a lot of time expenditure
           for both the community maintaining the Helm chart as well as yourself,
           even if this wasn't the reason for the issue.
-          
+
           Due to this, we ask that you do your _absolute best to avoid replacing
           the default provided `jupyterhub_config.py` file. It can often be
           possible. For example, if your goal is to have a dedicated .py file
@@ -339,7 +339,7 @@ properties:
             description: |
               A list of references to existing Kubernetes Secrets with
               credentials to pull the image.
-              
+
               This Pod's final `imagePullSecrets` k8s specification will be a
               combination of:
 
@@ -351,12 +351,12 @@ properties:
                  conditionally created from image registry credentials provided
                  under `imagePullSecret` if `imagePullSecret.create` is set to
                  true.
-              
+
               ```yaml
               # example - k8s native syntax
               pullSecrets:
                 - name: my-k8s-secret-with-image-registry-credentials
-              
+
               # example - simplified syntax
               pullSecrets:
                 - my-k8s-secret-with-image-registry-credentials
@@ -409,7 +409,7 @@ properties:
               what the origin of the request is. The default setting for
               `proxy.chp` and `proxy.traefik`'s networkPolicy configuration is
               `[http, https]`, while it is `[]` for other networkPolicies.
-              
+
               Note that these port names or numbers target a Pod's port name or
               number, not a k8s Service's port name or number.
       db:
@@ -540,7 +540,7 @@ properties:
         type: list
         description: |
           list of initContainers to be run with hub pod. See [Kubernetes Docs](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/)
-          
+
           ```yaml
           hub:
             initContainers:
@@ -625,8 +625,7 @@ properties:
       uid:
         type: integer
         minimum: 0
-        description:
-          The UID the hub process should be running as.
+        description: The UID the hub process should be running as.
 
           Use this only if you are building your own image & know that a user with this uid
           exists inside the hub container! Advanced feature, handle with care!
@@ -763,7 +762,6 @@ properties:
           docs](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
           for more info.
 
-
   proxy:
     type: object
     properties:
@@ -861,7 +859,7 @@ properties:
           `proxy` pod, a k8s Service named `proxy-http` will be added targeting
           the `proxy` pod and only accepting HTTP traffic on port 80.
         properties:
-          type: 
+          type:
             type: string
             enum:
               - ClusterIP
@@ -919,7 +917,7 @@ properties:
               be exposed on. This entry will end up at the configurable proxy
               server that JupyterHub manages, which will direct traffic to user
               pods at the `/user` path and the hub pod at the `/hub` path.
-              
+
               Set this if you want to use a fixed external IP address instead of
               a dynamically acquired one. This is relevant if you have a domain
               name that you want to point to a specific IP and want to ensure it
@@ -1016,7 +1014,7 @@ properties:
               ```
               hosts:
                 - <your-domain-name>
-              ```   
+              ```
       traefik:
         type: object
         description: |
@@ -1072,7 +1070,6 @@ properties:
     required:
       - secretToken
 
-
   singleuser:
     type: object
     description: |
@@ -1101,7 +1098,7 @@ properties:
         type: object
         description: |
           Set Memory limits & guarantees that are enforced for each user.
-          
+
           See the [Kubernetes docs](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
           for more info.
         properties:
@@ -1120,7 +1117,7 @@ properties:
         type: list
         description: |
           list of initContainers to be run every singleuser pod. See [Kubernetes Docs](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/)
-          
+
           ```yaml
           singleuser:
             initContainers:
@@ -1208,7 +1205,7 @@ properties:
           certain label (node affinity). They may also require to be scheduled
           in proximity or with a lack of proximity to another pod (pod affinity
           and anti pod affinity).
-          
+
           See the [Kubernetes
           docs](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/)
           for more info.
@@ -1259,7 +1256,6 @@ properties:
               Pass this field an array of
               [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#weightedpodaffinityterm-v1-core)
               objects.
-
 
   scheduling:
     type: object
