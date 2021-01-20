@@ -5,7 +5,7 @@
 #
 # ref: https://github.com/jupyterhub/chartpress
 #
-chartpress
+chartpress>=1.0.4
 
 # pytest run tests that require requests and pyyaml
 pytest>=3.7.1
