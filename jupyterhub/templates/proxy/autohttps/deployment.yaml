@@ -17,8 +17,8 @@ spec:
       labels:
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
         hub.jupyter.org/network-access-proxy-http: "true"
-        {{- if .Values.proxy.traefik.labels }}
-        {{- .Values.proxy.traefik.labels | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- with .Values.proxy.traefik.labels }}
+        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
       annotations:
         # Only force a restart through a change to this checksum when the static

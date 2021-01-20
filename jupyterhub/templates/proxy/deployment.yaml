@@ -20,15 +20,15 @@ spec:
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
         hub.jupyter.org/network-access-hub: "true"
         hub.jupyter.org/network-access-singleuser: "true"
-        {{- if .Values.proxy.labels }}
-        {{- .Values.proxy.labels | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- with .Values.proxy.labels }}
+        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
       annotations:
         # This lets us autorestart when the secret changes!
         checksum/hub-secret: {{ include (print $.Template.BasePath "/hub/secret.yaml") . | sha256sum }}
         checksum/proxy-secret: {{ include (print $.Template.BasePath "/proxy/secret.yaml") . | sha256sum }}
-        {{- if .Values.proxy.annotations }}
-        {{- .Values.proxy.annotations | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- with .Values.proxy.annotations }}
+        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
     spec:
       terminationGracePeriodSeconds: 60
