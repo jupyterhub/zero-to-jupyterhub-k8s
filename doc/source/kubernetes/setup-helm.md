@@ -4,7 +4,7 @@
 
 [Helm](https://helm.sh/), the package manager for Kubernetes, is a useful tool
 for: installing, upgrading and managing applications on a Kubernetes cluster.
-Helm packages are called *charts*.
+Helm packages are called _charts_.
 We will be installing and managing JupyterHub on our Kubernetes cluster using a Helm chart.
 
 Charts are abstractions describing how to install packages onto a Kubernetes
@@ -31,8 +31,8 @@ simplest way to install Helm is to run Helm's installer script in a terminal:
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 ```
 
-* The minimum supported version of Helm in Z2JH is `3.2.0`.
-* Helm 3 uses the same security mechanisms as other Kubernetes clients such as `kubectl`.
+- The minimum supported version of Helm in Z2JH is `3.2.0`.
+- Helm 3 uses the same security mechanisms as other Kubernetes clients such as `kubectl`.
 
 ## Verify
 

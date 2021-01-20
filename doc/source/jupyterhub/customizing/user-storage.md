@@ -1,4 +1,5 @@
 (user-storage)=
+
 # Customizing User Storage
 
 For the purposes of this guide, we'll describe "storage" as
@@ -13,8 +14,8 @@ JupyterHub uses Kubernetes to manage user storage. There are two
 primary Kubernetes objects involved in allocating
 storage to pods:
 
-* A `PersistentVolumeClaim` (`PVC`) specifies what kind of storage is required. Its configuration is specified in your `config.yaml` file.
-* A `PersistentVolume` (`PV`) is the actual volume where the user's data resides. It is created by Kubernetes using details in a `PVC`.
+- A `PersistentVolumeClaim` (`PVC`) specifies what kind of storage is required. Its configuration is specified in your `config.yaml` file.
+- A `PersistentVolume` (`PV`) is the actual volume where the user's data resides. It is created by Kubernetes using details in a `PVC`.
 
 As Kubernetes objects, they can be queried
 with the standard `kubectl` commands (e.g., `kubectl --namespace=<your-namespace> get pvc`)
@@ -40,7 +41,7 @@ under-the-hood and automatically when a user logs in.
 deleted unless the `PersistentVolumeClaim` is explicitly deleted
 by the JupyterHub administrator. When a user shuts down their
 server, their user pod is deleted and their volume is
-detached from the pod, *but the `PVC` and `PV` objects still exist*.
+detached from the pod, _but the `PVC` and `PV` objects still exist_.
 In the future, when the user logs back in, JupyterHub will
 detect that the user has a pre-existing `PVC` and will simply
 attach it to their new pod, rather than creating a new `PVC`.
@@ -77,7 +78,7 @@ demonstrate here how to configure those.
 
 Note that new `PVC`s for pre-existing users will **not** be
 created unless the old ones are destroyed. If you update your
-users' `PVC`  config via `config.yaml`, then any **new** users will
+users' `PVC` config via `config.yaml`, then any **new** users will
 have the new `PVC` created for them, but **old** users will not.
 To force an upgrade of the storage type for old users, you will
 need to manually delete their `PVC` (e.g.
@@ -148,8 +149,8 @@ from the commandline. The [Kubernetes Docs](https://kubernetes.io/docs/concepts/
 have more information on what the various fields mean. The most important field is `parameters.type`,
 which specifies the type of storage you wish to use. The two options are:
 
-* `pd-ssd` makes `StorageClass` provision SSDs.
-* `pd-standard` will provision non-SSD disks.
+- `pd-ssd` makes `StorageClass` provision SSDs.
+- `pd-standard` will provision non-SSD disks.
 
 Once you have created this `StorageClass`, you can configure your JupyterHub's `PVC`
 template with the following in your `config.yaml`:
@@ -195,7 +196,6 @@ singleuser:
 ```
 
 Next {ref}`apply the changes <apply-config-changes>`.
-
 
 After the changes are applied, new users will no longer be allocated a
 persistent `$HOME` directory. Any currently running users will still have

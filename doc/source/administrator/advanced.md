@@ -11,6 +11,7 @@ to use any of this information, but these topics are essential for more complex
 installations.
 
 (ingress)=
+
 ## Ingress
 
 If you are using a Kubernetes Cluster that does not provide public IPs for
@@ -68,9 +69,9 @@ and **google cloud's ingress controller**.
      annotations:
        kubernetes.io/tls-acme: "true"
      tls:
-      - hosts:
-         - <hostname>
-        secretName: kubelego-tls-jupyterhub
+       - hosts:
+           - <hostname>
+         secretName: kubelego-tls-jupyterhub
    ```
 
 This should provision a certificate, and keep renewing it whenever it gets close
@@ -102,7 +103,7 @@ Code. Some examples of things you can do:
 3. Set traitlets for JupyterHub / Spawner / Authenticator that are not currently
    supported in the helm chart
 
-Unfortunately, you have to write your python *in* your YAML file. There's no way
+Unfortunately, you have to write your python _in_ your YAML file. There's no way
 to include a file in `config.yaml`.
 
 You can specify `hub.extraConfig` as a raw string (remember to use the `|` for multi-line
@@ -163,9 +164,9 @@ In your `hub.extraConfig`,
 3. `z2jh.get_config('custom.myDict')` will return a dict `{"key": "value"}`
 4. `z2jh.get_config('custom.myLongString')` will return a string `"Line1\nLine2"`
 5. `z2jh.get_config('custom.nonExistent')` will return `None` (since you didn't
-    specify any value for `nonExistent`)
+   specify any value for `nonExistent`)
 6. `z2jh.get_config('custom.myDefault', True)` will return `True`, since that is
-    specified as the second parameter (default)
+   specified as the second parameter (default)
 
 You need to have a `import z2jh` at the top of your `extraConfig` for
 `z2jh.get_config()` to work.

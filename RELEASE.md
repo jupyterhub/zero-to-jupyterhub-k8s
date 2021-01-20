@@ -45,10 +45,10 @@ Also the images we build are based on some image specified in the `FROM` stateme
 - [ ] [network-tools](images/network-tools/Dockerfile)
 - [ ] [singleuser-sample](images/singleuser-sample/Dockerfile)
 
-
 ## Pre-release iteration
 
 - Update `CHANGELOG.md`
+
   - [ ] Generate a list of PRs using [executablebooks/github-activity](https://github.com/executablebooks/github-activity)
     ```bash
     github-activity --output github-activity-output.md --since <last tag> jupyterhub/zero-to-jupyterhub-k8s
@@ -59,6 +59,7 @@ Also the images we build are based on some image specified in the `FROM` stateme
   - [ ] Summarize the release changes
 
 - Tag a x.y.z-beta.1 release
+
   - [ ] Create and push a git tag
     ```bash
     git checkout master
@@ -73,6 +74,7 @@ Also the images we build are based on some image specified in the `FROM` stateme
 ## Final release
 
 - Update `CHANGELOG.md`
+
   - [ ] Generate a list of merged PRs and a list of contributors and update the changelog.
     ```bash
     github-activity --output github-activity-output.md --since <last tag> jupyterhub/zero-to-jupyterhub-k8s
@@ -80,7 +82,9 @@ Also the images we build are based on some image specified in the `FROM` stateme
   - [ ] Link out to the downstream projects within the JupyterHub org to celebrate work done there as well.
 
 - Release
+
   - [ ] Create and push a git tag.
+
     ```bash
     git checkout master
     git reset --hard <upstream>/master
@@ -89,7 +93,7 @@ Also the images we build are based on some image specified in the `FROM` stateme
     ```
 
   - [ ] Create a GitHub release.
-    Visit the [release page](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/releases) and create a new release referencing the recent tag. Add a brief text like the one below.
+        Visit the [release page](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/releases) and create a new release referencing the recent tag. Add a brief text like the one below.
 
 - Communicate
   - [ ] Update the beta release's discourse post.

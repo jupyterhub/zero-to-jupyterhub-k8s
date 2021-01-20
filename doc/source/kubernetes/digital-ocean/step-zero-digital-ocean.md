@@ -12,19 +12,20 @@ If you prefer to use the Digital Ocean portal see the [Digital Ocean Get Started
    1. **Install command-line tools locally**. You'll need at least v1.13.0.
 
    You can either follow the [installation instructions](https://github.com/digitalocean/doctl/blob/master/README.md) or use the commands below:
-   
+
    ```
    wget https://github.com/digitalocean/doctl/releases/download/v1.13.0/doctl-1.13.0-linux-amd64.tar.gz
    tar -xvf doctl-1.13.0-linux-amd64.tar.gz
    sudo mv doctl /usr/bin/
    ```
-   
+
    2. Create an API token on the Digital Ocean portal. Navigate to API then Generate New Token.
    3. Connect your local CLI with your account:
 
       ```
       doctl auth init
       ```
+
 2. Create your cluster.
    Digital Ocean's use of doctl for kubernetes support is in beta so you'll need to run the following (add it to your `.bashrc` if you want to make this change permanent).
 
@@ -32,6 +33,7 @@ If you prefer to use the Digital Ocean portal see the [Digital Ocean Get Started
    export DIGITALOCEAN_ENABLE_BETA=1
    doctl k8s cluster create jupyter-kubernetes --region lon1 --version 1.18.8-do.0 --node-pool="name=worker-pool;count=3"
    ```
+
 3. Export your cluster config.
    You can change the default location from $HOME/.kube by setting the KUBECONFIG environment variable.
 
@@ -39,6 +41,7 @@ If you prefer to use the Digital Ocean portal see the [Digital Ocean Get Started
    mkdir -p ~/.kube
    doctl k8s cluster kubeconfig show bindertime-k8s > ~/.kube/config
    ```
+
 4. Create an ssh key to secure your cluster.
 
    ```
@@ -52,6 +55,7 @@ If you prefer to use the Digital Ocean portal see the [Digital Ocean Get Started
 
    This command will also print out something to your terminal screen. You
    don't need to do anything with this text.
+
 5. Check if your cluster is fully functional
 
    ```

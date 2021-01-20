@@ -186,8 +186,7 @@ Kubernetes.
 `Error` or `CrashLoopBackoff` state, or appears to be running but accessing
 the website for the JupyterHub returns an error message in the browser).
 
-**Investigating:** the output of `kubectl --namespace=jhub logs
-hub...` shows something like:
+**Investigating:** the output of `kubectl --namespace=jhub logs hub...` shows something like:
 
 ```
 File "/usr/local/lib/python3.5/dist-packages/jupyterhub/proxy.py", line 589, in get_all_routes
@@ -206,12 +205,14 @@ communicate with the proxy pod API, likely because of a problem in the
    ```
    openssl rand -hex 32
    ```
+
 2. Add the token to `config.yaml` like so:
 
    ```
    proxy:
       secretToken: '<output of `openssl rand -hex 32`>'
    ```
+
 3. Redeploy the helm chart:
 
    ```

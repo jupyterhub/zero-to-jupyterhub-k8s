@@ -6,7 +6,7 @@ This page contains instructions for common ways to enhance the user experience.
 For a list of all the configurable Helm chart options, see the
 {ref}`helm-chart-configuration-reference`.
 
-The *user environment* is the set of software packages, environment variables,
+The _user environment_ is the set of software packages, environment variables,
 and various files that are present when the user logs into JupyterHub. The user
 may also see different tools that provide interfaces to perform specialized
 tasks, such as JupyterLab, RStudio, RISE and others.
@@ -36,7 +36,6 @@ image containing useful tools and libraries for datascience, complete these step
 1. Modify your `config.yaml` file to specify the image. For example:
 
    ```yaml
-   
    singleuser:
      image:
        # Get the latest image tag at:
@@ -45,7 +44,6 @@ image containing useful tools and libraries for datascience, complete these step
        # https://github.com/jupyter/docker-stacks/tree/master/datascience-notebook/Dockerfile
        name: jupyter/datascience-notebook
        tag: 177037d09156
-
    ```
 
    ```{note}
@@ -55,13 +53,15 @@ image containing useful tools and libraries for datascience, complete these step
    `latest` as it might cause a several minute delay, confusion, or
    failures for users when a new version of the image is released.
    ```
+
 2. Apply the changes by following the directions listed in
    {ref}`apply the changes <apply-config-changes>`.
 
-   If you have configured *prePuller.hook.enabled*, all the nodes in your
+   If you have configured _prePuller.hook.enabled_, all the nodes in your
    cluster will pull the image before the hub is upgraded to let users
    use the image. The image pulling may take several minutes to complete,
    depending on the size of the image.
+
 3. Restart your server from JupyterHub control panel if you are already logged in.
 
 ```{note}
@@ -99,7 +99,7 @@ If you are missing something in the image that you would like all users to have,
 we recommend that you build a new image on top of an existing Docker image from
 jupyter/docker-stacks.
 
-Below is an example {term}`Dockerfile` building on top of the *minimal-notebook*
+Below is an example {term}`Dockerfile` building on top of the _minimal-notebook_
 image. This file can be built to a {term}`Docker image`, and pushed to a
 {term}`image registry`, and finally configured in {term}`config.yaml` to be used
 by the Helm chart.
@@ -125,8 +125,7 @@ details on this.
 
 ## Set environment variables
 
-One way to affect your user's environment is by setting {term}`environment
-variables`. While you can set them up in your Docker image if you build it
+One way to affect your user's environment is by setting {term}`environment variables`. While you can set them up in your Docker image if you build it
 yourself, it is often easier to configure your Helm chart through values
 provided in your {term}`config.yaml`.
 
@@ -163,7 +162,7 @@ directory. In practice this means that everything a user writes to the home
 directory (`/home/jovyan`) will remain, and everything else will be reset in
 between server restarts.
 
-A server can be shut down by *culling*. By default, JupyterHub's culling service
+A server can be shut down by _culling_. By default, JupyterHub's culling service
 is configured to cull a users server that has been inactive for one hour. Note
 that JupyterLab will autosave files, and as long as the file was within the
 users home directory no work is lost.
@@ -201,15 +200,15 @@ multiple commands.
 
 ```yaml
 singleuser:
- lifecycleHooks:
-     postStart:
-       exec:
-         command:
-           - "sh"
-           - "-c"
-           - >
-             cp -r /tmp/foo /home/jovyan;
-             cp -r /tmp/bar /home/jovyan
+  lifecycleHooks:
+    postStart:
+      exec:
+        command:
+          - "sh"
+          - "-c"
+          - >
+            cp -r /tmp/foo /home/jovyan;
+            cp -r /tmp/bar /home/jovyan
 ```
 
 Keep in mind that commands will be run **each time** a user starts
@@ -222,7 +221,7 @@ your user folders with a git repository.
 
 We recommend using the tool [nbgitpuller](https://github.com/jupyterhub/nbgitpuller) to synchronize a folder
 in your user's filesystem with a `git` repository whenever a user
-starts their server.  This synchronization can also be triggered by
+starts their server. This synchronization can also be triggered by
 letting a user visit a link like
 `https://your-domain.com/hub/user-redirect/git-pull?repo=https://github.com/data-8/materials-fa18`
 (e.g., as alternative start url).
@@ -237,7 +236,13 @@ singleuser:
   lifecycleHooks:
     postStart:
       exec:
-        command: ["gitpuller", "https://github.com/data-8/materials-fa17", "master", "materials-fa"]
+        command:
+          [
+            "gitpuller",
+            "https://github.com/data-8/materials-fa17",
+            "master",
+            "materials-fa",
+          ]
 ```
 
 This will synchronize the master branch of the repository to a folder called

@@ -40,20 +40,20 @@ the Helm references in this documentation are Helm v3.
 This guide will help you deploy and customize your own JupyterHub on a
 cloud. While doing this, you will gain valuable experience with:
 
--   **A cloud provider** such as Google Cloud, Microsoft Azure, Amazon
-    EC2, IBM Cloud\...
--   **Kubernetes** to manage resources on the cloud
--   **Helm v3** to configure and control the packaged JupyterHub
-    installation
--   **JupyterHub** to give users access to a Jupyter computing
-    environment
--   **A terminal interface** on some operating system
+- **A cloud provider** such as Google Cloud, Microsoft Azure, Amazon
+  EC2, IBM Cloud\...
+- **Kubernetes** to manage resources on the cloud
+- **Helm v3** to configure and control the packaged JupyterHub
+  installation
+- **JupyterHub** to give users access to a Jupyter computing
+  environment
+- **A terminal interface** on some operating system
 
 It\'s also possible you end up getting some experience with:
 
--   **Docker** to build customized image for the users
--   **Domain registration** to make the hub available at
-    <https://your-domain-name.com>
+- **Docker** to build customized image for the users
+- **Domain registration** to make the hub available at
+  <https://your-domain-name.com>
 
 ```{admonition} Note
 For a more elaborate introduction to the tools and services that
@@ -73,7 +73,7 @@ kubernetes/index
 
 ## Setup JupyterHub
 
-This tutorial starts from *Step Zero: Your Kubernetes cluster* and
+This tutorial starts from _Step Zero: Your Kubernetes cluster_ and
 describes the steps needed for you to create a complete initial
 JupyterHub deployment. Please ensure you have a working installation of
 Kubernetes and Helm before proceeding with this section.
@@ -141,7 +141,7 @@ This guide and the associated helm chart would not be possible without
 the amazing institutional support from the following organizations (and
 the organizations that support them!)
 
--   [UC Berkeley Data Science Division](https://data.berkeley.edu/)
--   [Berkeley Institute for Data Science](https://bids.berkeley.edu/)
--   [Cal Poly, San Luis Obispo](https://www.calpoly.edu/)
--   [Simula Research Institute](https://www.simula.no/)
+- [UC Berkeley Data Science Division](https://data.berkeley.edu/)
+- [Berkeley Institute for Data Science](https://bids.berkeley.edu/)
+- [Cal Poly, San Luis Obispo](https://www.calpoly.edu/)
+- [Simula Research Institute](https://www.simula.no/)

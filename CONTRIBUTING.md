@@ -20,8 +20,6 @@ See [doc/README.md](doc/README.md).
 
 # Setting up for Helm chart development
 
-
-
 ## 1: Prerequisites
 
 This needs to be installed:
@@ -57,7 +55,7 @@ With [k3s](https://github.com/rancher/k3s) we can _quickly_ create a Kubernetes
 cluster, and we _don't have to transfer docker images_ built on our computer to
 make them available in the Kubernetes cluster.
 
-__Install__
+**Install**
 
 ```shell
 # Installs a ~50 MB k3s binary, setups and starts a systemctl service called
@@ -75,7 +73,7 @@ curl -sfL https://get.k3s.io | sh -s - \
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 ```
 
-__Start/Stop and Enable/Disable__
+**Start/Stop and Enable/Disable**
 
 With `systemctl` you can `start` and `stop` the service named `k3s` representing
 the cluster, as well as `enable` and `disable` the service's automatic startup
@@ -88,7 +86,7 @@ sudo systemctl stop k3s
 docker stop $(docker container list --quiet --filter "name=k8s_")
 ```
 
-__Debug__
+**Debug**
 
 ```shell
 # what is the status of the k3s service?
@@ -101,7 +99,7 @@ journalctl -u k3s --since "1 hour ago"
 docker container list --filter "name=k8s_"
 ```
 
-__Uninstall__
+**Uninstall**
 
 When k3s was installed with the installation script, an uninstallation script is
 made available as well.
@@ -116,7 +114,7 @@ docker stop $(docker container list --all --quiet --filter "name=k8s_") | xargs 
 
 ### Linux, Mac, and possibly Windows: Kubernetes setup with k3d
 
-> __IMPORTANT:__ This setup assume k3d v1, because the k3d v3 doesn't support
+> **IMPORTANT:** This setup assume k3d v1, because the k3d v3 doesn't support
 > the `--docker` flag. This is tracked in [this issue](https://github.com/rancher/k3d/issues/113).
 
 [k3d](https://github.com/rancher/k3d) encapsulates k3s in containers. It is less
@@ -125,7 +123,7 @@ docker images to be pushed to a dedicated registry before they can be accessed
 by the pods in the Kubernetes cluster, until [this
 issue](https://github.com/rancher/k3d/issues/113) is resolved.
 
-__Install__
+**Install**
 
 ```shell
 k3d create --publish 30443:30443 --publish 32444:32444 --wait 60 \
@@ -142,18 +140,19 @@ export KUBECONFIG="$(k3d get-kubeconfig --name='k3s-default')"
 # These instructions aren't maintained, you need to figure it out yourself =/
 ```
 
-__About the published ports__
-- 30443: This port exposes the `proxy-public` service. It will route to the
-         `autohttps` pod for TLS termination, then onwards to the `proxy` pod
-         that routes to the `hub` pod or individual user pods depending on paths
-         (`/hub` vs `/user`) and how JupyterHub dynamically has configured it.
-- 32444: This port exposes the `pebble` service which which accepts two ports,
-         and this specific port will route to the `pebble` pod's management API
-         where we can access paths like `/roots/0`. For more details about
-         Pebble which we use as a local ACME server, see the section below and
-         https://github.com/jupyterhub/pebble-helm-chart.
+**About the published ports**
 
-__Stop__
+- 30443: This port exposes the `proxy-public` service. It will route to the
+  `autohttps` pod for TLS termination, then onwards to the `proxy` pod
+  that routes to the `hub` pod or individual user pods depending on paths
+  (`/hub` vs `/user`) and how JupyterHub dynamically has configured it.
+- 32444: This port exposes the `pebble` service which which accepts two ports,
+  and this specific port will route to the `pebble` pod's management API
+  where we can access paths like `/roots/0`. For more details about
+  Pebble which we use as a local ACME server, see the section below and
+  https://github.com/jupyterhub/pebble-helm-chart.
+
+**Stop**
 
 ```shell
 k3d delete
@@ -172,7 +171,7 @@ Pebble is a an ACME server like Let's Encrypt solely meant for testing purposes.
 For more information, see
 [jupyterhub/pebble-helm-chart](https://github.com/jupyterhub/pebble-helm-chart).
 
-__Install Pebble__
+**Install Pebble**
 
 ```shell
 helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
@@ -218,8 +217,7 @@ only rebuild images if their dependent files in their respective directories or
    helm upgrade --install jupyterhub ./jupyterhub --cleanup-on-fail --values dev-config.yaml
    ```
 
-   Note that `--cleanup-on-fail` is a very good practice to avoid `<resource
-   name> already exist` errors in future upgrades following a failed upgrade.
+   Note that `--cleanup-on-fail` is a very good practice to avoid `<resource name> already exist` errors in future upgrades following a failed upgrade.
 
 ## 5: Visit the JupyterHub
 
@@ -260,7 +258,6 @@ pre-commit run -a
 and commit any changes.
 
 You can configure pre-commit to automatically run as a git hook, see the [pre-commit installation instructions](https://pre-commit.com/).
-
 
 # Debugging
 
@@ -323,8 +320,7 @@ development setup is `coredns`.
 
 Have you seen the hub pod get a restart count > 0? JupyterHub 1.1.0 is typically
 crashing after 20 seconds if it started up without the configurable proxy pod
-available. This harmless error can be confirmed by doing a `kubectl logs
-deploy/hub --previous` if you spot a message about a timeout after ~20 seconds in
+available. This harmless error can be confirmed by doing a `kubectl logs deploy/hub --previous` if you spot a message about a timeout after ~20 seconds in
 the logs.
 
 ## Network errors
@@ -346,7 +342,7 @@ recognize such issues if you get errors like the ones above.
 
 As you may notice, typical keywords associated with network errors are:
 
-- *resolve host*
-- *name resolution*
-- *timeout*
-- *no route to host*
+- _resolve host_
+- _name resolution_
+- _timeout_
+- _no route to host_

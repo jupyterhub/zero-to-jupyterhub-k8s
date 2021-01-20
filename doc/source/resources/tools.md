@@ -104,7 +104,7 @@ processes in order to ensure that they remain running if needed.
 
 ### Pods
 
-Pods are essentially a collection of one or more *containers* that
+Pods are essentially a collection of one or more _containers_ that
 run together. You can think of them as a way of combining containers
 that, as a group, accomplish some goal.
 
@@ -112,10 +112,10 @@ For example, say you want to create a web server that is open to the
 world, but you also want authentication so that only a select group
 of users can access it. You could use a single pod with two containers.
 
-* One that does the authentication. It would have something like Apache
+- One that does the authentication. It would have something like Apache
   specified in its container image, and would be connected to the
   outside world.
-* One that receives information from the authentication container, and
+- One that receives information from the authentication container, and
   does something fancy with it (maybe it runs a python process).
 
 This is useful because it lets you compartmentalize the components of the
@@ -228,8 +228,8 @@ Finally, the output of JupyterHub is a user pod, which specifies the
 computational environment in which a single user will operate. So
 essentially a JupyterHub is a collection of:
 
-* Pods that contain the JupyterHub Machinery
-* A bunch of user pods that are constantly being created or destroyed.
+- Pods that contain the JupyterHub Machinery
+- A bunch of user pods that are constantly being created or destroyed.
 
 Below we'll describe the primary JupyterHub pods.
 
@@ -239,9 +239,9 @@ This is the user-facing pod. It provides the IP address that people will
 go to in order to access JupyterHub. When a new users goes to this pod,
 it will decide whether to:
 
-* send that user to the Hub pod, which will create a container for that
+- send that user to the Hub pod, which will create a container for that
   user, or
-* if that user's container already exists, send them directly to that
+- if that user's container already exists, send them directly to that
   container instead.
 
 Information about the user's identity is stored as a cookie on their

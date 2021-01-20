@@ -29,12 +29,12 @@ before doing the cloud provider specific setup.
    ```bash
    helm delete <YOUR-HELM-RELEASE-NAME>
    ```
-   
+
    `<YOUR-HELM-RELEASE-NAME>` is the name provided to `helm upgrade` when
    initially setting up the hub. If you had forgotten what you used, you
    can run `helm list` to find all the release names in your cluster.
    You can also see the `namespace` value here that will be used in the next step.
-   
+
 2. Next, delete the Kubernetes namespace the hub was installed in. This deletes
    any disks that may have been created to store user's data, and any IP
    addresses that may have been provisioned.
@@ -59,6 +59,7 @@ before doing the cloud provider specific setup.
    ```
    gcloud container clusters delete <CLUSTER-NAME> --zone=<CLUSTER-ZONE>
    ```
+
 3. Double check to make sure all the resources are now deleted, since anything you
    have not deleted will cost you money! You can check the [web console](https://console.cloud.google.com)
    (make sure you are in the right project and account) to verify that everything
@@ -94,6 +95,7 @@ before doing the cloud provider specific setup.
 
    Be careful to delete the correct Resource Group, as doing so will irreversibly
    delete all resources within the group!
+
 3. Double check to make sure all the resources are now deleted, since anything you
    have not deleted will cost you money! You can check the [web portal](https://portal.azure.com)
    (check the "Resource Groups" page) to verify that everything has been deleted.
@@ -110,10 +112,10 @@ before doing the cloud provider specific setup.
 
    ```bash
    kops delete cluster <CLUSTER-NAME> --yes
-   
+
    # Leave CI host
    exit
-   
+
    # Terminate CI host
    aws ec2 stop-instances --instance-ids <aws-instance id of CI host>
    aws ec2 terminate-instances --instance-ids <aws-instance id of CI host>

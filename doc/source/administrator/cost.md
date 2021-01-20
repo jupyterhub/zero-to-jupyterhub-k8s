@@ -17,9 +17,9 @@ on providers selected and your use cases.
 
 Below are several links to cost estimators for cloud providers:
 
-* [Google Cloud Platform cost calculator](https://cloud.google.com/products/calculator/)
-* [Amazon AWS cost calculator](https://calculator.s3.amazonaws.com/index.html)
-* [Microsoft Azure cost claculator](https://azure.microsoft.com/en-us/pricing/calculator/)
+- [Google Cloud Platform cost calculator](https://cloud.google.com/products/calculator/)
+- [Amazon AWS cost calculator](https://calculator.s3.amazonaws.com/index.html)
+- [Microsoft Azure cost claculator](https://azure.microsoft.com/en-us/pricing/calculator/)
 
 ## Factors influencing costs
 
@@ -61,7 +61,7 @@ will users use JupyterHub at different times of day?
 The usage patterns and peak load on the system have important implications for
 the resources you need to provide. In the future JupyterHub will have
 auto-scaling functionality, but currently it does not. This means that you need
-to provision resources for the *maximum* expected number of users at one time.
+to provision resources for the _maximum_ expected number of users at one time.
 
 ## Examples
 
@@ -80,5 +80,3 @@ of CPU and memory usage. Ryan Lovett put together a short Jupyter notebook
 needs.
 
 [estimating the cost for computational resources]: https://github.com/data-8/jupyterhub-k8s/blob/master/docs/cost-estimation/gce_budgeting.ipynb
-
-

@@ -131,10 +131,10 @@ so that users can authenticate with their GitHub username/password.
 
 To create OAuth credentials on GitHub, follow these steps:
 
--   Click your profile picture -> settings -> developer settings
--   Make sure you're on the "OAuth Apps" tab, then click "New OAuth App"
--   Fill out the forms (you'll need your hub address) and generate your
-    ID/Secret.
+- Click your profile picture -> settings -> developer settings
+- Make sure you're on the "OAuth Apps" tab, then click "New OAuth App"
+- Fill out the forms (you'll need your hub address) and generate your
+  ID/Secret.
 
 To enable GitHub authentication, your `config.yaml` should contain the following
 configuration:
@@ -271,8 +271,8 @@ hub:
 #### Azure Active Directory
 
 [Azure Active Directory](https://docs.microsoft.com/en-us/azure/active-directory/)
- is an identity provider from Microsoft Azure. Apart from needing a OAuth2
- _client id_ and _client secret_, you will also need a _tenant id_.
+is an identity provider from Microsoft Azure. Apart from needing a OAuth2
+_client id_ and _client secret_, you will also need a _tenant id_.
 
 ```yaml
 hub:
@@ -308,6 +308,7 @@ hub:
     JupyterHub:
       authenticator_class: auth0
 ```
+
 #### GenericOAuthenticator - OpenID Connect
 
 [OpenID Connect](https://openid.net/connect) is an identity layer on top of the

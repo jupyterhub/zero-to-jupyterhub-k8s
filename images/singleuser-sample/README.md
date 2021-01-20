@@ -8,7 +8,7 @@ which also contains many other images suitable for use with the Helm chart. To
 help you choose another one see [the docker-stacks documentation on selecting a
 user image](http://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html).
 
-For a brief introduction to *Dockerfiles*, *images* and *containers*, see [the
+For a brief introduction to _Dockerfiles_, _images_ and _containers_, see [the
 guide's summary about container technology.](https://z2jh.jupyter.org/en/latest/tools.html#container-technology).
 
 ## Basic usage
@@ -26,6 +26,7 @@ docker run  -it  --rm  -p 8888:8888 -e JUPYTER_ENABLE_LAB=true jupyterhub/k8s-si
 This image available tags can be found [here](https://hub.docker.com/r/jupyterhub/k8s-singleuser-sample/tags/).
 
 ## In the base-notebook image
+
 - Ubuntu Linux - v18.04 aka. Bionic
 - JupyterHub - required by with Helm chart since KubeSpawner requires it
 - [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) and [JupyterLab-Hub extension](https://jupyterlab.readthedocs.io/en/stable/user/jupyterhub.html) - to activate it over the classical UI by default, see [the guide's instructions](https://z2jh.jupyter.org/en/latest/user-environment.html#use-jupyterlab-by-default).

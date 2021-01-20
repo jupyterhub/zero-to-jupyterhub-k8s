@@ -1,6 +1,5 @@
 ---
 orphan: true
-
 ---
 
 <!---
@@ -41,6 +40,7 @@ to configure JupyterHub to build off of this image:
 
    You can do this by [downloading and installing Docker][https://docs.docker.com/get-docker/]. Once you’ve started
    Docker, it will show up as a tiny background application.
+
 2. **Install repo2docker** using `pip`:
 
    ```
@@ -53,6 +53,7 @@ to configure JupyterHub to build off of this image:
    ```
    pip install --user jupyter-repo2docker
    ```
+
 3. **Create (or find) a Git repository you want to use.**
 
    This repo should have all materials that you want your users to be able to
@@ -67,6 +68,7 @@ to configure JupyterHub to build off of this image:
    scipy==1.1.0
    matplotlib==2.2.2
    ```
+
 4. **Get credentials for a docker repository.**
 
    The image you will build for your JupyterHub must be made available by being
@@ -96,7 +98,7 @@ to configure JupyterHub to build off of this image:
      git ls-remote <your-git-repository> | grep HEAD | awk '{ print $1 }' | cut -c -7
      ```
 
-4. **Use repo2docker to build a Docker image.**
+5. **Use repo2docker to build a Docker image.**
 
    ```
    jupyter-repo2docker \
@@ -108,28 +110,32 @@ to configure JupyterHub to build off of this image:
 
    This tells `repo2docker` to fetch `master` of the Git repository, and
    uses heuristics to build a Docker image of it.
-5. **Push the newly-built Docker image to your repository.**
+
+6. **Push the newly-built Docker image to your repository.**
 
    ```
    docker push <your-image-reference>
    ```
-6. **Edit the JupyterHub configuration to build from this image.**
+
+7. **Edit the JupyterHub configuration to build from this image.**
    Edit `config.yaml` file to include these lines in it:
 
    ```yaml
-     singleuser:
-       image:
-         name: <your-image-reference>
-         tag: "<tag>"
+   singleuser:
+     image:
+       name: <your-image-reference>
+       tag: "<tag>"
    ```
 
    If the tag is the first several characters of the SHA and they happen to
-   all be numerical, you *must* use quotes around the tag as above in order
+   all be numerical, you _must_ use quotes around the tag as above in order
    for the YAML to be parsed correctly.
-7. **Tell helm to update JupyterHub to use this configuration.**
+
+8. **Tell helm to update JupyterHub to use this configuration.**
 
    Use the standard method to {ref}`apply the changes <apply-config-changes>` to the config.
-8. **Restart your server if you are already logged in.**
+
+9. **Restart your server if you are already logged in.**
 
    If you already have a running JupyterHub server, you’ll need to restart it
    from the JupyterHub control panel. Within JupyterLab look at the meny named
@@ -140,7 +146,8 @@ to configure JupyterHub to build off of this image:
    enabled {ref}`persistent storage <user-storage>`. Disable persistent
    storage if you want the Git repository contents to show up.
    ```
-9. **Enjoy your new computing environment!**
 
-   You should now have a live computing environment built off of the Docker
-   image we’ve created.
+10. **Enjoy your new computing environment!**
+
+    You should now have a live computing environment built off of the Docker
+    image we’ve created.

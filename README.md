@@ -12,8 +12,7 @@
 [![Gitter](https://img.shields.io/badge/social_chat-gitter-blue?logo=gitter)](https://gitter.im/jupyterhub/jupyterhub)
 [![Contribute](https://img.shields.io/badge/I_want_to_contribute!-grey?logo=jupyter)](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CONTRIBUTING.md)
 
-
-This repo contains a *Helm chart* for JupyterHub and a guide to use it. Together
+This repo contains a _Helm chart_ for JupyterHub and a guide to use it. Together
 they allow you to make a JupyterHub available to a very large group of users
 such as the staff and students of a university.
 
