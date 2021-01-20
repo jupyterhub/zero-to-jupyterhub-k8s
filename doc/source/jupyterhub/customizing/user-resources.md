@@ -24,23 +24,23 @@ groups improves the user experience for all Hub users.
 ## Set user memory and CPU guarantees / limits
 
 Each user on your JupyterHub gets a slice of memory and CPU to use. There are
-two ways to specify how much users get to use: resource *guarantees* and
-resource *limits*.
+two ways to specify how much users get to use: resource _guarantees_ and
+resource _limits_.
 
-A resource *guarantee* means that all users will have *at least* this resource
+A resource _guarantee_ means that all users will have _at least_ this resource
 available at all times, but they may be given more resources if they're
-available. For example, if users are *guaranteed* 1G of RAM, users can
+available. For example, if users are _guaranteed_ 1G of RAM, users can
 technically use more than 1G of RAM if these resources aren't being used by
 other users.
 
-A resource *limit* sets a hard limit on the resources available. In the example
+A resource _limit_ sets a hard limit on the resources available. In the example
 above, if there were a 1G memory limit, it would mean that users could use
 no more than 1G of RAM, no matter what other resources are being used on the
 machines.
 
-By default, each user is *guaranteed* 1G of RAM. All users have *at least* 1G,
+By default, each user is _guaranteed_ 1G of RAM. All users have _at least_ 1G,
 but they can technically use more if it is available. You can easily change the
-amount of these resources, and whether they are a *guarantee* or a *limit*, by
+amount of these resources, and whether they are a _guarantee_ or a _limit_, by
 changing your `config.yaml` file. This is done with the following structure.
 
 ```yaml
@@ -116,14 +116,14 @@ The following configuration will increase the SHM allocation by mounting a
 
 ```yaml
 singleuser:
- storage:
-   extraVolumes:
-     - name: shm-volume
-       emptyDir:
-         medium: Memory
-   extraVolumeMounts:
-     - name: shm-volume
-       mountPath: /dev/shm
+  storage:
+    extraVolumes:
+      - name: shm-volume
+        emptyDir:
+          medium: Memory
+    extraVolumeMounts:
+      - name: shm-volume
+        mountPath: /dev/shm
 ```
 
 The volume `shm-volume` will be created when the user's pod is created,

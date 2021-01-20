@@ -15,7 +15,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    the Azure interactive shell, the other is to install the Azure command-line
    tools locally. Instructions for each are below.
 
-   * **Using the Azure interactive shell**. The [Azure Portal](https://portal.azure.com)
+   - **Using the Azure interactive shell**. The [Azure Portal](https://portal.azure.com)
      contains an interactive shell that you can use to communicate with your
      Kubernetes cluster. To access this shell, go to [portal.azure.com](https://portal.azure.com)
      and click on the button below.
@@ -31,19 +31,20 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
      account where your shell filesystem will live.
    ```
 
-   * **Install command-line tools locally**. You can access the Azure CLI via
+   - **Install command-line tools locally**. You can access the Azure CLI via
      a package that you can install locally.
 
      To do so, first follow the [installation instructions](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) in the
      Azure documentation. Then run the following command to connect your local
      CLI with your account:
 
-     ```     
+     ```
      az login
      ```
 
      You'll need to open a browser and follow the instructions in your terminal
      to log in.
+
 2. Activate the correct subscription. Azure uses the concept
    of **subscriptions** to manage spending. You can
    get a list of subscriptions your account has access to by running:
@@ -59,6 +60,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    ```
    az account set --subscription <YOUR-CHOSEN-SUBSCRIPTION-NAME>
    ```
+
 3. Setup the CLI for Autoscaling features.
    First install the [aks-preview](https://github.com/Azure/azure-cli-extensions/tree/master/src/aks-preview) CLI extension.
    This will grant access to new commands.
@@ -89,10 +91,11 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    ```
    az provider register --namespace Microsoft.ContainerService
    ```
+
 4. Create a resource group. Azure uses the concept of
    **resource groups** to group related resources together.
    We need to create a resource group in a given data center location. We will create
-   computational resources *within* this resource group.
+   computational resources _within_ this resource group.
 
    ```
    az group create \
@@ -103,20 +106,21 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 
    where:
 
-   * `--name` specifies the name of your resource group. We recommend using something
+   - `--name` specifies the name of your resource group. We recommend using something
      that uniquely identifies this hub. For example, if you are creating a resource group
      for UC Berkeley's 2018 Spring Data100 Course, you may give it a
      `<RESOURCE-GROUP-NAME>` of `ucb_2018sp_data100_hub`.
-   * `--location` specifies the location of the data center you want your resource to be in.
+   - `--location` specifies the location of the data center you want your resource to be in.
      For options, see the
      [Azure list of locations that support AKS](https://docs.microsoft.com/en-us/azure/aks/quotas-skus-regions#region-availability).
-   * `--output table` specifies that the output should be in human readable
+   - `--output table` specifies that the output should be in human readable
      format, rather than the default JSON output. We shall use this with most
      commands when executing them by hand.
 
    Consider [setting a cloud budget](https://docs.microsoft.com/en-us/partner-center/set-an-azure-spending-budget-for-your-customers)
    for your Azure account in order to make sure you don't accidentally
    spend more than you wish to.
+
 5. Choose a cluster name.
 
    In the following steps we'll run commands that ask you to input a cluster
@@ -131,6 +135,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    mkdir <CLUSTER-NAME>
    cd <CLUSTER-NAME>
    ```
+
 6. Create an ssh key to secure your cluster.
 
    ```
@@ -144,6 +149,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 
    This command will also print out something to your terminal screen. You
    don't need to do anything with this text.
+
 7. Create a virtual network and sub-network.
 
    Kubernetes does not by default come with a controller that enforces `networkpolicy` resources.
@@ -164,11 +170,11 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 
    where:
 
-   * `--resource-group` is the ResourceGroup you created
-   * `--name` is the name you want to assign to your virtual network, for example, `hub-vnet`
-   * `--address-prefixes` are the IP address prefixes for your virtual network
-   * `--subnet-name` is your desired name for your subnet, for example, `hub-subnet`
-   * `--subnet-prefixes` are the IP address prefixes in [CIDR format](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) for the subnet
+   - `--resource-group` is the ResourceGroup you created
+   - `--name` is the name you want to assign to your virtual network, for example, `hub-vnet`
+   - `--address-prefixes` are the IP address prefixes for your virtual network
+   - `--subnet-name` is your desired name for your subnet, for example, `hub-subnet`
+   - `--subnet-prefixes` are the IP address prefixes in [CIDR format](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) for the subnet
 
    We will now retrieve the application IDs of the VNet and subnet we just created and save them to bash variables.
 
@@ -203,6 +209,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    ```
 
    You will need Owner role on your subscription for this step to succeed.
+
 8. Create an AKS cluster.
 
    The following command will request a Kubernetes cluster within the resource
@@ -232,29 +239,30 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 
    where:
 
-   * `--name` is the name you want to use to refer to your cluster
-   * `--resource-group` is the ResourceGroup you created
-   * `--ssh-key-value` is the ssh public key created
-   * `--node-count` is the number of nodes you want in your Kubernetes cluster
-   * `--node-vm-size` is the size of the nodes you want to use, which varies based on
+   - `--name` is the name you want to use to refer to your cluster
+   - `--resource-group` is the ResourceGroup you created
+   - `--ssh-key-value` is the ssh public key created
+   - `--node-count` is the number of nodes you want in your Kubernetes cluster
+   - `--node-vm-size` is the size of the nodes you want to use, which varies based on
      what you are using your cluster for and how much RAM/CPU each of your users need.
      There is a [list of all possible node sizes](https://docs.microsoft.com/en-us/azure/cloud-services/cloud-services-sizes-specs)
      for you to choose from, but not all might be available in your location.
      If you get an error whilst creating the cluster you can try changing either the region or the node size.
-   * `--enable-vmss` deploys the cluster as a scale set.
-   * `--enable-cluster-autoscaler` installs a [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler) onto the cluster (though counterintuitively, does not enable it!).
-   * `--min-count`/`--max-count` are the minimum/maximum number of nodes in the cluster at any time.
-   * `--kubernetes-version` installs a specific version of Kubernetes onto the cluster. To autoscale, we require `>= v 1.12.4`, though it's recommended to use the most recent version available (you can find out what the most recent version of kubernetes available is by running `az aks get-versions --location <LOCATION>`).
-   * `--service-principal` is the application ID of the service principal we created
-   * `--client-secret` is the password for the service principal we created
-   * `--dns-service-ip` is an IP address assigned to the [Kubernetes DNS service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/)
-   * `--docker-bridge-address` is a specific IP address and netmask for the Docker bridge, using standard CIDR notation
-   * `--network-plugin` is the Kubernetes network plugin to use. In this example, we have used Azure's own implementation.
-   * `--network-policy` is the Kubernetes network policy to use. In this example, we have used Azure's own implementation.
-   * `--service-cidr` is a CIDR notation IP range from which to assign service cluster IPs
-   * `vnet-subnet-id` is the application ID of the subnet we created
+   - `--enable-vmss` deploys the cluster as a scale set.
+   - `--enable-cluster-autoscaler` installs a [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler) onto the cluster (though counterintuitively, does not enable it!).
+   - `--min-count`/`--max-count` are the minimum/maximum number of nodes in the cluster at any time.
+   - `--kubernetes-version` installs a specific version of Kubernetes onto the cluster. To autoscale, we require `>= v 1.12.4`, though it's recommended to use the most recent version available (you can find out what the most recent version of kubernetes available is by running `az aks get-versions --location <LOCATION>`).
+   - `--service-principal` is the application ID of the service principal we created
+   - `--client-secret` is the password for the service principal we created
+   - `--dns-service-ip` is an IP address assigned to the [Kubernetes DNS service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/)
+   - `--docker-bridge-address` is a specific IP address and netmask for the Docker bridge, using standard CIDR notation
+   - `--network-plugin` is the Kubernetes network plugin to use. In this example, we have used Azure's own implementation.
+   - `--network-policy` is the Kubernetes network policy to use. In this example, we have used Azure's own implementation.
+   - `--service-cidr` is a CIDR notation IP range from which to assign service cluster IPs
+   - `vnet-subnet-id` is the application ID of the subnet we created
 
    This should take a few minutes and provide you with a working Kubernetes cluster!
+
 9. If you're using the Azure CLI locally, install [kubectl](https://kubernetes.io/docs/reference/kubectl/overview/), a tool
    for accessing the Kubernetes API from the commandline:
 
@@ -263,6 +271,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    ```
 
    Note: kubectl is already installed in Azure Cloud Shell.
+
 10. Get credentials from Azure for `kubectl` to work:
 
     ```
@@ -274,10 +283,11 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 
     where:
 
-    * `--name` is the name you gave your cluster
-    * `--resource-group` is the ResourceGroup you created
+    - `--name` is the name you gave your cluster
+    - `--resource-group` is the ResourceGroup you created
 
     This automatically updates your Kubernetes client configuration file.
+
 11. Check if your cluster is fully functional
 
     ```
@@ -287,6 +297,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
     The response should list three running nodes and their Kubernetes versions!
     Each node should have the status of `Ready`, note that this may take a
     few moments.
+
 12. Enabling Autoscaling
 
     We now move to the Azure Portal to enable autoscaling and set rules to manage the Cluster Autoscaler.
@@ -316,8 +327,8 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
     Click the blue "Enable autoscaling" button and an autogenerated form for a scale condition will appear.
     We will add two new rules to this condition:
 
-    * Increase the instance count by 1 when the average CPU usage over 10 minutes is greater than 70%
-    * Decrease the instance count by 1 when the average CPU usage over 10 minutes is less than 5%
+    - Increase the instance count by 1 when the average CPU usage over 10 minutes is greater than 70%
+    - Decrease the instance count by 1 when the average CPU usage over 10 minutes is less than 5%
 
     ```{image} ../../_static/images/azure/scale_condition.png
     :align: center

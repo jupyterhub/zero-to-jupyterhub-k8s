@@ -18,7 +18,7 @@ The general method to modify your Kubernetes deployment is to:
    ```
    RELEASE=jhub
    NAMESPACE=jhub
-   
+
    helm upgrade --cleanup-on-fail \
      $RELEASE jupyterhub/jupyterhub \
      --namespace $NAMESPACE \
@@ -27,12 +27,13 @@ The general method to modify your Kubernetes deployment is to:
    ```
 
    Note that `helm list` should display `<YOUR_RELEASE_NAME>` if you forgot it.
-3. Verify that the *hub* and *proxy* pods entered the `Running` state after
+
+3. Verify that the _hub_ and _proxy_ pods entered the `Running` state after
    the upgrade completed.
 
    ```
    NAMESPACE=jhub
-   
+
    kubectl get pod --namespace $NAMESPACE
    ```
 

@@ -16,6 +16,7 @@ If you prefer to encrypt your security reports, you can use
 [this PGP public key](https://ipython.org/ipython-doc/2/_downloads/ipython_security.asc).
 
 (https)=
+
 ## HTTPS
 
 This section describes how to enable HTTPS on your JupyterHub. The easiest way to do so is by using [Let's Encrypt](https://letsencrypt.org/), though we'll also cover how to set up your own HTTPS credentials. For more information
@@ -32,6 +33,7 @@ on HTTPS security see the certificates section of [this blog post](https://blog.
    It is important that you wait - prematurely going to the next step might cause problems!
 
 (setup-automatic-https)=
+
 ### Set up automatic HTTPS
 
 JupyterHub uses [Let's Encrypt](https://letsencrypt.org/) to automatically create
@@ -55,7 +57,8 @@ changes to your `config.yaml` file:
 2. Apply the config changes by running `helm upgrade ...`
 3. Wait for about a minute, now your hub should be HTTPS enabled!
 
-***
+---
+
 **NOTE:**
 
 If the proxy service is of type `LoadBalancer`, which it is by default, then a specific static IP address can be requested (if available) instead of a dynamically acquired one.  
@@ -64,15 +67,17 @@ This ensures the same IP address for multiple deployments.
 The IP can be provided like:
 
 ```yaml
-  proxy:
-    service:
-      loadBalancerIP: xxx.xxx.xxx.xxx
+proxy:
+  service:
+    loadBalancerIP: xxx.xxx.xxx.xxx
 ```
 
 More info about this can be found on the [Configuration Reference](helm-chart-configuration-reference) page.
-***
+
+---
 
 (setup-manual-https)=
+
 ### Set up manual HTTPS
 
 If you have your own HTTPS certificates & want to use those instead of the automatically provisioned Let's Encrypt ones, that's also possible. Note that this is considered an advanced option, so we recommend not doing it unless you have good reasons.
@@ -99,9 +104,8 @@ There are two ways to specify your manual certificate, directly in the config.ya
             -----END CERTIFICATE-----
     ```
 
-2. Apply the config changes by running helm upgrade ....
-3. Wait for about a minute, now your hub should be HTTPS enabled!
-
+2.  Apply the config changes by running helm upgrade ....
+3.  Wait for about a minute, now your hub should be HTTPS enabled!
 
 #### Specify certificate through Secret resource
 
@@ -111,16 +115,16 @@ There are two ways to specify your manual certificate, directly in the config.ya
 
 2. Add your domain and the name of your `secret` to your config.yaml.
 
-    ```yaml
-    proxy:
-      https:
-        enabled: true
-        hosts:
-          - <your-domain-name>
-        type: secret
-        secret:
-          name: example-tls
-    ```
+   ```yaml
+   proxy:
+     https:
+       enabled: true
+       hosts:
+         - <your-domain-name>
+       type: secret
+       secret:
+         name: example-tls
+   ```
 
 3. Apply the config changes by running helm upgrade ....
 4. Wait for about a minute, now your hub should be HTTPS enabled!
@@ -170,7 +174,6 @@ Helm 3 supports the security, identity, and authorization features of modern Kub
 Read more about organizing cluster access using kubeconfig files in the
 [Kubernetes docs](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/).
 
-
 ## Delete the Kubernetes Dashboard
 
 The [Kubernetes Dashboard](https://github.com/kubernetes/dashboard) gets created by default in many installations. Although the Dashboard contains useful information, the Dashboard also poses a security risk. We **recommend** deleting it and not using it for the time being until the Dashboard becomes properly securable.
@@ -188,6 +191,7 @@ kubectl --namespace=kube-system delete rc kubernetes-dashboard
 ```
 
 (rbac)=
+
 ## Use Role Based Access Control (RBAC)
 
 Kubernetes supports, and often requires, using [Role Based Access Control (RBAC)](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)
@@ -307,7 +311,7 @@ You can enable or disable enforcement of each network policy in config.yaml:
 ```yaml
 hub:
   networkPolicy:
-    enabled: true  # or false to disable
+    enabled: true # or false to disable
 proxy:
   networkPolicy:
     enabled: true
@@ -349,10 +353,10 @@ Here is an example set of labels granting access to all jupyterhub components
 metadata:
   name: my-service
   labels:
-    hub.jupyter.org/network-access-hub: "true"  # access the hub api
-    hub.jupyter.org/network-access-proxy-http: "true"  # access proxy public http endpoint
-    hub.jupyter.org/network-access-proxy-api: "true"  # access proxy api
-    hub.jupyter.org/network-access-singleuser: "true"  # access single-user servers directly
+    hub.jupyter.org/network-access-hub: "true" # access the hub api
+    hub.jupyter.org/network-access-proxy-http: "true" # access proxy public http endpoint
+    hub.jupyter.org/network-access-proxy-api: "true" # access proxy api
+    hub.jupyter.org/network-access-singleuser: "true" # access single-user servers directly
 ```
 
 You can also add additional `ingress` rules to each network policy in your `config.yaml`.

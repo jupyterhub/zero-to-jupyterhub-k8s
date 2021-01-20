@@ -12,14 +12,13 @@ custom: {}
 imagePullSecret:
   create: false
   automaticReferenceInjection: true
-  registry: ''
-  username: ''
-  email: ''
-  password: ''
+  registry: ""
+  username: ""
+  email: ""
+  password: ""
 # imagePullSecrets is configuration to reference the k8s Secret resources the
 # Helm chart's pods can get credentials from to pull their images.
 imagePullSecrets: []
-
 
 # hub relates to the hub pod, responsible for running JupyterHub, its configured
 # Authenticator class KubeSpawner, and its configured Proxy class
@@ -80,8 +79,8 @@ hub:
   extraVolumeMounts: []
   image:
     name: jupyterhub/k8s-hub
-    tag: 'set-by-chartpress'
-    pullPolicy: ''
+    tag: "set-by-chartpress"
+    pullPolicy: ""
     pullSecrets: []
   resources:
     requests:
@@ -140,11 +139,10 @@ hub:
 rbac:
   enabled: true
 
-
 # proxy relates to the proxy pod, the proxy-public service, and the autohttps
 # pod and proxy-http service.
 proxy:
-  secretToken: ''
+  secretToken: ""
   annotations: {}
   deploymentStrategy:
     ## type: Recreate
@@ -187,13 +185,13 @@ proxy:
   # on dynamic configuration sent from JupyterHub to CHP's REST API.
   chp:
     containerSecurityContext:
-      runAsUser: 65534  # nobody user
+      runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
     image:
       name: jupyterhub/configurable-http-proxy
       tag: 4.2.2
-      pullPolicy: ''
+      pullPolicy: ""
       pullSecrets: []
     extraCommandLineFlags: []
     livenessProbe:
@@ -228,7 +226,7 @@ proxy:
   # termination when proxy.https.type=letsencrypt.
   traefik:
     containerSecurityContext:
-      runAsUser: 65534  # nobody user
+      runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
     image:
@@ -239,7 +237,7 @@ proxy:
       # past. For example:
       # https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1857.
       tag: v2.3.7 # ref: https://hub.docker.com/_/traefik?tab=tags
-      pullPolicy: ''
+      pullPolicy: ""
       pullSecrets: []
     hsts:
       includeSubdomains: false
@@ -268,13 +266,13 @@ proxy:
       minAvailable: 1
   secretSync:
     containerSecurityContext:
-      runAsUser: 65534  # nobody user
+      runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
     image:
       name: jupyterhub/k8s-secret-sync
-      tag: 'set-by-chartpress'
-      pullPolicy: ''
+      tag: "set-by-chartpress"
+      pullPolicy: ""
       pullSecrets: []
     resources: {}
   labels: {}
@@ -283,18 +281,17 @@ proxy:
     type: letsencrypt
     #type: letsencrypt, manual, offload, secret
     letsencrypt:
-      contactEmail: ''
+      contactEmail: ""
       # Specify custom server here (https://acme-staging-v02.api.letsencrypt.org/directory) to hit staging LE
       acmeServer: https://acme-v02.api.letsencrypt.org/directory
     manual:
       key:
       cert:
     secret:
-      name: ''
+      name: ""
       key: tls.key
       crt: tls.crt
     hosts: []
-
 
 # singleuser relates to the configuration of KubeSpawner which runs in the hub
 # pod, and its spawning of user pods such as jupyter-myusername.
@@ -314,8 +311,8 @@ singleuser:
   networkTools:
     image:
       name: jupyterhub/k8s-network-tools
-      tag: 'set-by-chartpress'
-      pullPolicy: ''
+      tag: "set-by-chartpress"
+      pullPolicy: ""
       pullSecrets: []
   cloudMetadata:
     # block set to true will append a privileged initContainer using the
@@ -342,7 +339,7 @@ singleuser:
   events: true
   extraAnnotations: {}
   extraLabels:
-    hub.jupyter.org/network-access-hub: 'true'
+    hub.jupyter.org/network-access-hub: "true"
   extraEnv: {}
   lifecycleHooks: {}
   initContainers: []
@@ -357,7 +354,7 @@ singleuser:
     extraVolumeMounts: []
     static:
       pvcName:
-      subPath: '{username}'
+      subPath: "{username}"
     capacity: 10Gi
     homeMountPath: /home/jovyan
     dynamic:
@@ -367,8 +364,8 @@ singleuser:
       storageAccessModes: [ReadWriteOnce]
   image:
     name: jupyterhub/k8s-singleuser-sample
-    tag: 'set-by-chartpress'
-    pullPolicy: ''
+    tag: "set-by-chartpress"
+    pullPolicy: ""
     pullSecrets: []
   startTimeout: 300
   cpu:
@@ -384,7 +381,6 @@ singleuser:
   defaultUrl:
   extraPodConfig: {}
   profileList: []
-
 
 # scheduling relates to the user-scheduler pods and user-placeholder pods.
 scheduling:
@@ -419,7 +415,7 @@ scheduling:
           - name: ImageLocality
             weight: 11
     containerSecurityContext:
-      runAsUser: 65534  # nobody user
+      runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
     image:
@@ -428,7 +424,7 @@ scheduling:
       #            that we have forked.
       name: k8s.gcr.io/kube-scheduler
       tag: v1.19.7
-      pullPolicy: ''
+      pullPolicy: ""
       pullSecrets: []
     nodeSelector: {}
     tolerations: []
@@ -448,7 +444,7 @@ scheduling:
     enabled: true
     replicas: 0
     containerSecurityContext:
-      runAsUser: 65534  # nobody user
+      runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
   corePods:
@@ -458,7 +454,6 @@ scheduling:
     nodeAffinity:
       matchNodePurpose: prefer
 
-
 # prePuller relates to the hook|continuous-image-puller DaemonsSets
 prePuller:
   annotations: {}
@@ -467,7 +462,7 @@ prePuller:
       cpu: 0
       memory: 0
   containerSecurityContext:
-    runAsUser: 65534  # nobody user
+    runAsUser: 65534 # nobody user
     runAsGroup: 65534 # nobody group
     allowPrivilegeEscalation: false
   extraTolerations: []
@@ -477,11 +472,11 @@ prePuller:
     # image and the configuration below relates to the hook-image-awaiter Job
     image:
       name: jupyterhub/k8s-image-awaiter
-      tag: 'set-by-chartpress'
-      pullPolicy: ''
+      tag: "set-by-chartpress"
+      pullPolicy: ""
       pullSecrets: []
     containerSecurityContext:
-      runAsUser: 65534  # nobody user
+      runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
     podSchedulingWaitDuration: 10
@@ -497,22 +492,21 @@ prePuller:
   extraImages: {}
   pause:
     containerSecurityContext:
-      runAsUser: 65534  # nobody user
+      runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
     image:
       name: k8s.gcr.io/pause
-      tag: '3.2' # https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/pause?gcrImageListsize=30
-      pullPolicy: ''
+      tag: "3.2" # https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/pause?gcrImageListsize=30
+      pullPolicy: ""
       pullSecrets: []
 
 ingress:
   enabled: false
   annotations: {}
   hosts: []
-  pathSuffix: ''
+  pathSuffix: ""
   tls: []
-
 
 cull:
   enabled: true
@@ -522,7 +516,6 @@ cull:
   every: 600
   concurrency: 10
   maxAge: 0
-
 
 debug:
   enabled: false

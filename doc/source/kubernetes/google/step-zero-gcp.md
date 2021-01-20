@@ -16,6 +16,7 @@ your google cloud account.
    for your Google Cloud account in order to make sure you don't accidentally
    spend more than you wish to.
    ```
+
 2. Go to and enable the [Kubernetes Engine API](https://console.cloud.google.com/apis/api/container.googleapis.com/overview).
 3. Choose a terminal.
 
@@ -26,7 +27,7 @@ your google cloud account.
 
    1. **Use a web based terminal:**
 
-      Start *Google Cloud Shell* from [console.cloud.google.com](https://console.cloud.google.com) by clicking the button shown below.
+      Start _Google Cloud Shell_ from [console.cloud.google.com](https://console.cloud.google.com) by clicking the button shown below.
       You are now in control of a virtual machine with various tools
       preinstalled. If you save something in a user folder they will remain
       available to you if you return at a later stage. Additional documentation
@@ -35,22 +36,24 @@ your google cloud account.
       ```{image} ../../_static/images/google/start_interactive_cli.png
       :align: center
       ```
+
    2. **Use your own computer's terminal:**
 
       1. Download and install the `gcloud` command line tool at its [install
          page](https://cloud.google.com/sdk/docs/install). It will help you
          create and communicate with a Kubernetes cluster.
-      2. Install `kubectl` (reads *kube control*), it is a tool for controlling
+      2. Install `kubectl` (reads _kube control_), it is a tool for controlling
          Kubernetes clusters in general. From your terminal, enter:
 
          ```
          gcloud components install kubectl
          ```
+
 4. Create a managed Kubernetes cluster and a default node pool.
 
    Ask Google Cloud to create a managed Kubernetes cluster and a default [node
    pool](https://cloud.google.com/kubernetes-engine/docs/concepts/node-pools)
-   to get nodes from. *Nodes* represents hardware and a *node pool* will
+   to get nodes from. _Nodes_ represents hardware and a _node pool_ will
    keep track of how much of a certain type of hardware that you would like.
 
    ```
@@ -62,20 +65,21 @@ your google cloud account.
      <CLUSTERNAME>
    ```
 
-   * Replace `<CLUSTERNAME>` with a name that can be used to refer to this cluster
+   - Replace `<CLUSTERNAME>` with a name that can be used to refer to this cluster
      in the future.
-   * `--machine-type` specifies the amount of CPU and RAM in each node within
+   - `--machine-type` specifies the amount of CPU and RAM in each node within
      this default node pool. There is a [variety of types](https://cloud.google.com/compute/docs/machine-types) to choose from.
-   * `--num-nodes` specifies how many nodes to spin up. You can change this
+   - `--num-nodes` specifies how many nodes to spin up. You can change this
      later through the cloud console or using the `gcloud` command line tool.
-   * `--zone` specifies the data center zone where your cluster will be created.
+   - `--zone` specifies the data center zone where your cluster will be created.
      You can pick something from [this list](https://cloud.google.com/compute/docs/regions-zones/#available)
      that is not too far away from your users.
-   * A region in GCP is a geographical region with at least three zones, where each zone is representing a datacenter with servers etc.
-     * A regional cluster creates pods across zones in a region(three by default), distributing Kubernetes resources across multiple zones in the region. This is different from the default cluster, which has all its resources within a single zone(as shown above).
-     * A regional cluster has Highly Available (HA) kubernetes api-servers, this allows jupyterhub which uses them to have no downtime during upgrades of kubernetes itself.
-     * They also increase control plane uptime to 99.95%.
-     * To avoid tripling the number of nodes while still having HA kubernetes, the `--node-locations` flag can be used to specify a single zone to use.
+   - A region in GCP is a geographical region with at least three zones, where each zone is representing a datacenter with servers etc.
+     - A regional cluster creates pods across zones in a region(three by default), distributing Kubernetes resources across multiple zones in the region. This is different from the default cluster, which has all its resources within a single zone(as shown above).
+     - A regional cluster has Highly Available (HA) kubernetes api-servers, this allows jupyterhub which uses them to have no downtime during upgrades of kubernetes itself.
+     - They also increase control plane uptime to 99.95%.
+     - To avoid tripling the number of nodes while still having HA kubernetes, the `--node-locations` flag can be used to specify a single zone to use.
+
 5. To test if your cluster is initialized, run:
 
    ```
@@ -84,6 +88,7 @@ your google cloud account.
 
    The response should list two running nodes (or however many nodes you
    set with `--num-nodes` above).
+
 6. Give your account permissions to perform all administrative actions needed.
 
    ```
@@ -95,8 +100,8 @@ your google cloud account.
    Replace `<GOOGLE-EMAIL-ACCOUNT>` with the exact email of the Google account
    you used to sign up for Google Cloud.
 
-   Did you enter your email correctly? If not, you can run `kubectl delete
-   clusterrolebinding cluster-admin-binding` and do it again.
+   Did you enter your email correctly? If not, you can run `kubectl delete clusterrolebinding cluster-admin-binding` and do it again.
+
 7. [optional] Create a node pool for users
 
    This is an optional step, for those who want to separate
@@ -112,8 +117,8 @@ your google cloud account.
    about 0.2 CPU will be requested by system pods. It is a suitable choice for a
    free account that has a limit on a total of 8 CPU cores.
 
-   Note that the node pool is *tainted*. Only user pods that are configured
-   with a *toleration* for this taint can schedule on the node pool's nodes.
+   Note that the node pool is _tainted_. Only user pods that are configured
+   with a _toleration_ for this taint can schedule on the node pool's nodes.
    This is done in order to ensure the autoscaler will be able to scale down
    when the user pods have stopped.
 
@@ -134,6 +139,7 @@ your google cloud account.
    preemptible node recommendation not included
    pending handling of evictions in jupyterhub/kubespawner#223
    -->
+
    ```{note}
    Consider adding the ``--preemptible`` flag to reduce the cost
    significantly. You can `compare the prices here

@@ -11,7 +11,7 @@ proxy:
     hosts:
       - local.jovyan.org
     letsencrypt:
-      contactEmail: 'jovyan@jupyter.test'
+      contactEmail: "jovyan@jupyter.test"
       acmeServer: https://pebble/dir
   traefik:
     extraVolumes:
@@ -30,7 +30,7 @@ proxy:
         memory: 0
         cpu: 0
     networkPolicy:
-      egress: []  # overrides allowance of 0.0.0.0/0
+      egress: [] # overrides allowance of 0.0.0.0/0
 
 hub:
   cookieSecret: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -41,11 +41,11 @@ hub:
       admin: true
       apiToken: ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
   networkPolicy:
-    egress:  # overrides allowance of 0.0.0.0/0
+    egress: # overrides allowance of 0.0.0.0/0
       # In kind/k3s clusters the Kubernetes API server is exposing this port
       - ports:
-        - protocol: TCP
-          port: 6443
+          - protocol: TCP
+            port: 6443
   resources:
     requests:
       memory: 0
@@ -60,10 +60,10 @@ singleuser:
     # For testing purposes in test_singleuser_netpol
     egress:
       - to:
-        # jupyter.org has multiple IPs associated with it, among them are these
-        # two. We explicitly allow access to one, but leave out the the other.
-        - ipBlock:
-            cidr: 104.28.8.110/32
+          # jupyter.org has multiple IPs associated with it, among them are these
+          # two. We explicitly allow access to one, but leave out the the other.
+          - ipBlock:
+              cidr: 104.28.8.110/32
         # - ipBlock:
         #     cidr: 104.28.9.110/32
   extraEnv:

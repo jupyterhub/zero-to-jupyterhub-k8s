@@ -1,32 +1,33 @@
 {
   "kind": "Policy",
   "apiVersion": "v1",
-  "predicates": [
-    { "name": "PodFitsResources" },
-    { "name": "HostName" },
-    { "name": "PodFitsHostPorts" },
-    { "name": "MatchNodeSelector" },
-    { "name": "NoDiskConflict" },
-    { "name": "PodToleratesNodeTaints" },
-    { "name": "MaxEBSVolumeCount" },
-    { "name": "MaxGCEPDVolumeCount" },
-    { "name": "MaxAzureDiskVolumeCount" },
-    { "name": "MaxCSIVolumeCountPred" },
-    { "name": "CheckVolumeBinding" },
-    { "name": "NoVolumeZoneConflict" },
-    { "name": "MatchInterPodAffinity" }
-  ],
-  "priorities": [
-    { "name": "NodePreferAvoidPodsPriority",  "weight": 161051 },
-    { "name": "NodeAffinityPriority",         "weight": 14641 },
-    { "name": "InterPodAffinityPriority",     "weight": 1331 },
-    { "name": "MostRequestedPriority",        "weight": 121 },
-    { "name": "ImageLocalityPriority",        "weight": 11}
-  ],
-  "hardPodAffinitySymmetricWeight" : 100,
-  "alwaysCheckAllPredicates" : false
+  "predicates":
+    [
+      { "name": "PodFitsResources" },
+      { "name": "HostName" },
+      { "name": "PodFitsHostPorts" },
+      { "name": "MatchNodeSelector" },
+      { "name": "NoDiskConflict" },
+      { "name": "PodToleratesNodeTaints" },
+      { "name": "MaxEBSVolumeCount" },
+      { "name": "MaxGCEPDVolumeCount" },
+      { "name": "MaxAzureDiskVolumeCount" },
+      { "name": "MaxCSIVolumeCountPred" },
+      { "name": "CheckVolumeBinding" },
+      { "name": "NoVolumeZoneConflict" },
+      { "name": "MatchInterPodAffinity" },
+    ],
+  "priorities":
+    [
+      { "name": "NodePreferAvoidPodsPriority", "weight": 161051 },
+      { "name": "NodeAffinityPriority", "weight": 14641 },
+      { "name": "InterPodAffinityPriority", "weight": 1331 },
+      { "name": "MostRequestedPriority", "weight": 121 },
+      { "name": "ImageLocalityPriority", "weight": 11 },
+    ],
+  "hardPodAffinitySymmetricWeight": 100,
+  "alwaysCheckAllPredicates": false,
 }
-
 # # Notes about ranges
 # ImageLocalityPriority       - ranges from 0-10 * 11
 # MostRequestedPriority       - ranges from 0-10 * 11^2

@@ -9,14 +9,14 @@ pods are ready, and exits when they are.
 ## Why would one use it?
 
 Because it can delay the hub to be upgraded before the relevant images are made
-available, and that can for large images cut down startup time from almost ten 
+available, and that can for large images cut down startup time from almost ten
 minutes to a few seconds.
 
 ## FAQ
 
 ### What technical knowledge is needed to understand this?
 
-You need to know about [Kubernetes Jobs](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/) and [Kubernetes DaemonSets](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/), about [Helm and helm hooks](https://github.com/kubernetes/helm/blob/master/docs/charts_hooks.md), 
+You need to know about [Kubernetes Jobs](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/) and [Kubernetes DaemonSets](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/), about [Helm and helm hooks](https://github.com/kubernetes/helm/blob/master/docs/charts_hooks.md),
 and about the programming language Go.
 
 ### Why is this project in Go? Isn't the Jupyter Infrastructure ecosystem mostly Python?

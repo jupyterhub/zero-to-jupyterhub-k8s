@@ -12,7 +12,7 @@ Additions to the glossary are welcomed. Please add in alphabetical order.
 -->
 
 ```{eval-rst}
-.. glossary:: 
+.. glossary::
 
    `admin user <https://jupyterhub.readthedocs.io/en/stable/getting-started/authenticators-users-basics.html?highlight=admin>`_
       A user who can access the JupyterHub admin panel. They can start/stop user

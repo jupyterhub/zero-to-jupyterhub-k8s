@@ -9,8 +9,8 @@ home: https://z2jh.jupyter.org
 sources:
   - https://github.com/jupyterhub/zero-to-jupyterhub-k8s
 icon: https://jupyter.org/assets/hublogo.svg
-kubeVersion: '>=1.14.0-0'
-tillerVersion: '>=2.16.0-0'
+kubeVersion: ">=1.14.0-0"
+tillerVersion: ">=2.16.0-0"
 maintainers:
   # Since it is a requirement of Artifact Hub to have specific maintainers
   # listed, we have added some below, but in practice the entire JupyterHub team

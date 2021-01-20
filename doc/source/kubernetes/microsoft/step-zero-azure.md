@@ -11,7 +11,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    the Azure interactive shell, the other is to install the Azure command-line
    tools locally. Instructions for each are below.
 
-   * **Using the Azure interactive shell**. The [Azure Portal](https://portal.azure.com)
+   - **Using the Azure interactive shell**. The [Azure Portal](https://portal.azure.com)
      contains an interactive shell that you can use to communicate with your
      Kubernetes cluster. To access this shell, go to [portal.azure.com](https://portal.azure.com)
      and click on the button below.
@@ -26,8 +26,8 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    * The first time you do this, you'll be asked to create a storage
      account where your shell filesystem will live.
    ```
-   
-   * **Install command-line tools locally**. You can access the Azure CLI via
+
+   - **Install command-line tools locally**. You can access the Azure CLI via
      a package that you can install locally.
 
      To do so, first follow the [installation instructions](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) in the
@@ -40,6 +40,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 
      You'll need to open a browser and follow the instructions in your terminal
      to log in.
+
 2. Activate the correct subscription. Azure uses the concept
    of **subscriptions** to manage spending. You can
    get a list of subscriptions your account has access to by running:
@@ -55,10 +56,11 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    ```
    az account set --subscription <YOUR-CHOSEN-SUBSCRIPTION-NAME>
    ```
+
 3. Create a resource group. Azure uses the concept of
    **resource groups** to group related resources together.
    We need to create a resource group in a given data center location. We will create
-   computational resources *within* this resource group.
+   computational resources _within_ this resource group.
 
    ```
    az group create \
@@ -69,20 +71,21 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 
    where:
 
-   * `--name` specifies the name of your resource group. We recommend using something
+   - `--name` specifies the name of your resource group. We recommend using something
      that uniquely identifies this hub. For example, if you are creating a resource group
      for UC Berkeley's 2018 Spring Data100 Course, you may give it a
      `<RESOURCE-GROUP-NAME>` of `ucb_2018sp_data100_hub`.
-   * `--location` specifies the location of the data center you want your resource to be in.
+   - `--location` specifies the location of the data center you want your resource to be in.
      In this case, we used the `centralus` location. For other options, see the
      [Azure list of locations that support AKS](https://docs.microsoft.com/en-us/azure/aks/quotas-skus-regions#region-availability).
-   * `--output table` specifies that the output should be in human readable
+   - `--output table` specifies that the output should be in human readable
      format, rather than the default JSON output. We shall use this with most
      commands when executing them by hand.
 
    Consider [setting a cloud budget](https://docs.microsoft.com/en-us/partner-center/set-an-azure-spending-budget-for-your-customers)
    for your Azure account in order to make sure you don't accidentally
    spend more than you wish to.
+
 4. Choose a cluster name.
 
    In the following steps we'll run commands that ask you to input a cluster
@@ -97,6 +100,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    mkdir <CLUSTER-NAME>
    cd <CLUSTER-NAME>
    ```
+
 5. Create an ssh key to secure your cluster.
 
    ```
@@ -110,6 +114,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 
    This command will also print out something to your terminal screen. You
    don't need to do anything with this text.
+
 6. Create a virtual network and sub-network.
 
    Kubernetes does not by default come with a controller that enforces `networkpolicy` resources.
@@ -130,11 +135,11 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 
    where:
 
-   * `--resource-group` is the ResourceGroup you created
-   * `--name` is the name you want to assign to your virtual network, for example, `hub-vnet`
-   * `--address-prefixes` are the IP address prefixes for your virtual network
-   * `--subnet-name` is your desired name for your subnet, for example, `hub-subnet`
-   * `--subnet-prefixes` are the IP address prefixes in [CIDR format](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) for the subnet
+   - `--resource-group` is the ResourceGroup you created
+   - `--name` is the name you want to assign to your virtual network, for example, `hub-vnet`
+   - `--address-prefixes` are the IP address prefixes for your virtual network
+   - `--subnet-name` is your desired name for your subnet, for example, `hub-subnet`
+   - `--subnet-prefixes` are the IP address prefixes in [CIDR format](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) for the subnet
 
    We will now retrieve the application IDs of the VNet and subnet we just created and save them to bash variables.
 
@@ -169,6 +174,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    ```
 
    You will need Owner role on your subscription for this step to succeed.
+
 7. Create an AKS cluster.
 
    At this stage, you may wish to think about customising your deployment. The
@@ -200,26 +206,27 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 
    where:
 
-   * `--name` is the name you want to use to refer to your cluster
-   * `--resource-group` is the ResourceGroup you created
-   * `--ssh-key-value` is the ssh public key created
-   * `--node-count` is the number of nodes you want in your Kubernetes cluster
-   * `--node-vm-size` is the size of the nodes you want to use, which varies based on
+   - `--name` is the name you want to use to refer to your cluster
+   - `--resource-group` is the ResourceGroup you created
+   - `--ssh-key-value` is the ssh public key created
+   - `--node-count` is the number of nodes you want in your Kubernetes cluster
+   - `--node-vm-size` is the size of the nodes you want to use, which varies based on
      what you are using your cluster for and how much RAM/CPU each of your users need.
      There is a [list of all possible node sizes](https://docs.microsoft.com/en-us/azure/cloud-services/cloud-services-sizes-specs)
      for you to choose from, but not all might be available in your location.
      If you get an error whilst creating the cluster you can try changing either the region or the node size.
-   * `--service-principal` is the application ID of the service principal we created
-   * `--client-secret` is the password for the service principal we created
-   * `--dns-service-ip` is an IP address assigned to the [Kubernetes DNS service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/)
-   * `--docker-bridge-address` is a specific IP address and netmask for the Docker bridge, using standard CIDR notation
-   * `--network-plugin` is the Kubernetes network plugin to use. In this example, we have used Azure's own implementation.
-   * `--network-policy` is the Kubernetes network policy to use. In this example, we have used Azure's own implementation.
-   * `--service-cidr` is a CIDR notation IP range from which to assign service cluster IPs
-   * `vnet-subnet-id` is the application ID of the subnet we created
-   * This command will install the default version of Kubernetes. You can pass `--kubernetes-version` to install a different version.
+   - `--service-principal` is the application ID of the service principal we created
+   - `--client-secret` is the password for the service principal we created
+   - `--dns-service-ip` is an IP address assigned to the [Kubernetes DNS service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/)
+   - `--docker-bridge-address` is a specific IP address and netmask for the Docker bridge, using standard CIDR notation
+   - `--network-plugin` is the Kubernetes network plugin to use. In this example, we have used Azure's own implementation.
+   - `--network-policy` is the Kubernetes network policy to use. In this example, we have used Azure's own implementation.
+   - `--service-cidr` is a CIDR notation IP range from which to assign service cluster IPs
+   - `vnet-subnet-id` is the application ID of the subnet we created
+   - This command will install the default version of Kubernetes. You can pass `--kubernetes-version` to install a different version.
 
    This should take a few minutes and provide you with a working Kubernetes cluster!
+
 8. If you're using the Azure CLI locally, install [kubectl](https://kubernetes.io/docs/reference/kubectl/overview/), a tool
    for accessing the Kubernetes API from the commandline:
 
@@ -228,6 +235,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    ```
 
    Note: kubectl is already installed in Azure Cloud Shell.
+
 9. Get credentials from Azure for `kubectl` to work:
 
    ```
@@ -239,10 +247,11 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 
    where:
 
-   * `--name` is the name you gave your cluster
-   * `--resource-group` is the ResourceGroup you created
+   - `--name` is the name you gave your cluster
+   - `--resource-group` is the ResourceGroup you created
 
    This automatically updates your Kubernetes client configuration file.
+
 10. Check if your cluster is fully functional
 
     ```

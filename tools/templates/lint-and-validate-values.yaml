@@ -5,7 +5,7 @@ imagePullSecret:
   username: U
   email: e@domain.com
   password: P
-imagePullSecrets: [a,b]
+imagePullSecrets: [a, b]
 
 hub:
   service:
@@ -15,8 +15,6 @@ hub:
   baseUrl: /
   cookieSecret: mock
   publicURL: mock-public-url
-  nodeSelector:
-    node-type: mock
   activeServerLimit: 3
   deploymentStrategy:
     type: Recreate
@@ -96,18 +94,16 @@ hub:
       value: "mock-taint-to-tolerates-value"
       effect: "NoExecute"
 
-
 rbac:
   enabled: true
 
-
 proxy:
-  secretToken: '0000000000000000000000000000000000000000000000000000000000000000'
+  secretToken: "0000000000000000000000000000000000000000000000000000000000000000"
   service:
     extraPorts:
-    - name: ssh
-      port: 22
-      targetPort: ssh
+      - name: ssh
+        port: 22
+        targetPort: ssh
     type: LoadBalancer
     labels:
       MOCK_PROXY_ENV: mock
@@ -147,8 +143,8 @@ proxy:
       enabled: true
   traefik:
     extraPorts:
-    - name: ssh
-      containerPort: 8022
+      - name: ssh
+        containerPort: 8022
     labels:
       hub.jupyter.org/test-label: mock
     resources:
@@ -198,16 +194,15 @@ proxy:
     type: letsencrypt
     #type: letsencrypt, manual, offload, secret
     letsencrypt:
-      contactEmail: 'e@domain.com'
+      contactEmail: "e@domain.com"
     manual:
       key: mock-key
       cert: mock-cert
     secret:
-      name: 'mock-secret-name'
-      key: 'mock-key'
-      crt: 'mock-crt'
+      name: "mock-secret-name"
+      key: "mock-key"
+      crt: "mock-crt"
     hosts: [domain.com]
-
 
 singleuser:
   profileList:
@@ -230,49 +225,49 @@ singleuser:
   extraNodeAffinity:
     required:
       - matchExpressions:
-        - key: hub.jupyter.org/test-required-node
-          operator: In
-          values: [test]
+          - key: hub.jupyter.org/test-required-node
+            operator: In
+            values: [test]
     preferred:
       - weight: 10
         preference:
           matchExpressions:
-          - key: hub.jupyter.org/test-preferred-node
-            operator: In
-            values: [test]
+            - key: hub.jupyter.org/test-preferred-node
+              operator: In
+              values: [test]
   extraPodAffinity:
     required:
       - labelSelector:
           matchExpressions:
-          - key: hub.jupyter.org/test-required-pod
-            operator: In
-            values: [test]
+            - key: hub.jupyter.org/test-required-pod
+              operator: In
+              values: [test]
         topologyKey: failure-domain.beta.kubernetes.io/zone
     preferred:
       - weight: 10
         podAffinityTerm:
           labelSelector:
             matchExpressions:
-            - key: hub.jupyter.org/test-preferred-pod
-              operator: In
-              values: [test]
+              - key: hub.jupyter.org/test-preferred-pod
+                operator: In
+                values: [test]
           topologyKey: kubernetes.io/hostname
   extraPodAntiAffinity:
     required:
       - labelSelector:
           matchExpressions:
-          - key: hub.jupyter.org/test-required-anti-pod
-            operator: In
-            values: [test]
+            - key: hub.jupyter.org/test-required-anti-pod
+              operator: In
+              values: [test]
         topologyKey: failure-domain.beta.kubernetes.io/zone
     preferred:
       - weight: 10
         podAffinityTerm:
           labelSelector:
             matchExpressions:
-            - key: hub.jupyter.org/test-preferred-anti-pod
-              operator: In
-              values: [test]
+              - key: hub.jupyter.org/test-preferred-anti-pod
+                operator: In
+                values: [test]
           topologyKey: kubernetes.io/hostname
   cloudMetadata:
     blockWithIptables: true
@@ -310,7 +305,7 @@ singleuser:
     extraVolumeMounts: []
     static:
       pvcName:
-      subPath: '{username}'
+      subPath: "{username}"
     capacity: 10Gi
     homeMountPath: /home/jovyan
     dynamic:
@@ -332,7 +327,6 @@ singleuser:
       mock: 1
   cmd: jupyterhub-singleuser
   defaultUrl: /
-
 
 scheduling:
   userScheduler:
@@ -364,7 +358,6 @@ scheduling:
   userPods:
     nodeAffinity:
       matchNodePurpose: require
-
 
 prePuller:
   extraTolerations:
@@ -401,7 +394,6 @@ prePuller:
       name: mock-user/mock-image2
       tag: mock-tag
 
-
 ingress:
   enabled: true
   annotations:
@@ -415,7 +407,6 @@ ingress:
         - mocked1.domain.name
         - mocked2.domain.name
 
-
 cull:
   enabled: true
   users: true
@@ -423,7 +414,6 @@ cull:
   every: 600
   concurrency: 10
   maxAge: 28800
-
 
 debug:
   enabled: true

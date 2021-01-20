@@ -10,7 +10,6 @@ This page describes how to create a Kubernetes cluster using the OVH Control Pan
 and how to access the cluster using the command line with `kubectl`.
 
 1. Log in to the [OVH Control Panel](https://www.ovh.com/auth/).
-
    ```{note}
    You first need to create an OVH account if you don't have one already.
    ```
@@ -38,31 +37,28 @@ and how to access the cluster using the command line with `kubectl`.
    ```
 8. Click on **Send**
 9. Once the cluster is ready, click on **Nodes** to add 2 nodes:
-
    ```{image} ../../_static/images/ovh/add-nodes.png
    :alt: Add nodes to the cluster
    ```
-
    You can start with the **b2-7** flavor, or choosing a different flavor based
    on your requirements.
 10. Download the `kubeconfig` file and store it under `~/.kube/config` on your machine.
-
-   ```{image} ../../_static/images/ovh/kubeconfig.png
-   :alt: Download the kubeconfig
-   ```
+    ```{image} ../../_static/images/ovh/kubeconfig.png
+    :alt: Download the kubeconfig
+    ```
 11. To test if your cluster is initialized, run:
 
-   ```
-   kubectl get node
-   ```
+    ```
+    kubectl get node
+    ```
 
-   The response should list two running nodes (or however many nodes you
-   set with `--num-nodes` above).
+    The response should list two running nodes (or however many nodes you
+    set with `--num-nodes` above).
 
-   ```{note}
-   Check out the [Kubernetes Documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl)
-   to install `kubectl`.
-   ```
+    ```{note}
+    Check out the [Kubernetes Documentation](https://kubernetes.io/docs/tasks/tools/    install-kubectl)
+    to install `kubectl`.
+    ```
 
 Congrats! Now that you have your Kubernetes cluster running, it's time to
 begin {ref}`setup-helm`.

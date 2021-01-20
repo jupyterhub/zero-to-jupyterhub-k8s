@@ -20,7 +20,6 @@ on:
       - "dependabot/**"
   workflow_dispatch:
 
-
 jobs:
   linkcheck:
     runs-on: ubuntu-20.04
@@ -33,7 +32,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-python@v2
         with:
-          python-version: '3.8'
+          python-version: "3.8"
 
       - name: Install deps
         run: pip install --no-cache-dir -r doc/doc-requirements.txt

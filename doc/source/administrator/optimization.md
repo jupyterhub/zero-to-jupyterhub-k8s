@@ -1,4 +1,5 @@
 (optimization)=
+
 # Optimizations
 
 This page contains information and guidelines for improving the reliability,
@@ -7,16 +8,16 @@ described is only purposeful for a better autoscaling experience.
 
 To summarize, for a good autoscaling experience, we recommend you to:
 
-- Enable the *continuous image puller*, to prepare added nodes for arriving
+- Enable the _continuous image puller_, to prepare added nodes for arriving
   users.
-- Enable *pod priority* and add *user placeholders*, to scale up nodes ahead of
+- Enable _pod priority_ and add _user placeholders_, to scale up nodes ahead of
   real users' arrivals.
-- Enable the *user scheduler*, to pack users tight on some nodes and let other
+- Enable the _user scheduler_, to pack users tight on some nodes and let other
   nodes become empty and scaled down.
-- Set up an autoscaling node pool and dedicate it to user pods by *tainting* the
-  node and requiring user pods, which *tolerate* the nodes' taint, to schedule
+- Set up an autoscaling node pool and dedicate it to user pods by _tainting_ the
+  node and requiring user pods, which _tolerate_ the nodes' taint, to schedule
   on these nodes. This way, only user pods can then block scale down.
-- Set appropriate user resource *requests* and *limits*, to allow a reasonable
+- Set appropriate user resource _requests_ and _limits_, to allow a reasonable
   amount of users to share a node.
 
 A reasonable final configuration for efficient autoscaling could look something
@@ -57,6 +58,7 @@ singleuser:
 ```
 
 (pulling-images-before-users-arrive)=
+
 ## Pulling images before users arrive
 
 If a user pod is scheduled on a node requesting a Docker image that isn't
@@ -66,61 +68,62 @@ situations:
 
 1. A new single-user image is introduced (`helm upgrade`)
 
-    With the *hook-image-puller* enabled (the default), the user images being
-    introduced will be pulled to the nodes before the hub pod is updated to
-    utilize the new image. The name hook-image-puller is a technical name
-    referring to how a [Helm
-    hook](https://helm.sh/docs/topics/charts_hooks/) is used to accomplish
-    this, a more informative name would have been *pre-upgrade-image-puller*.
+   With the _hook-image-puller_ enabled (the default), the user images being
+   introduced will be pulled to the nodes before the hub pod is updated to
+   utilize the new image. The name hook-image-puller is a technical name
+   referring to how a [Helm
+   hook](https://helm.sh/docs/topics/charts_hooks/) is used to accomplish
+   this, a more informative name would have been _pre-upgrade-image-puller_.
 
-    **NOTE**: With this enabled your `helm upgrade` will take a long time if you
-    introduce a new image as it will wait for the pulling to complete. We
-    recommend that you add `--timeout 10m0s` or similar to your `helm upgrade`
-    command to give it enough time.
+   **NOTE**: With this enabled your `helm upgrade` will take a long time if you
+   introduce a new image as it will wait for the pulling to complete. We
+   recommend that you add `--timeout 10m0s` or similar to your `helm upgrade`
+   command to give it enough time.
 
-    The hook-image-puller is enabled by default. To disable it, use the
-    following snippet in your `config.yaml`:
+   The hook-image-puller is enabled by default. To disable it, use the
+   following snippet in your `config.yaml`:
 
-    ```yaml
-    prePuller:
-      hook:
-        enabled: false
-    ```
+   ```yaml
+   prePuller:
+     hook:
+       enabled: false
+   ```
 
 2. A node is added (Cluster Autoscaler)
 
-    The amount of nodes in a Kubernetes cluster can increase, either by manually
-    scaling up the cluster size or by a cluster autoscaler. As new nodes will
-    come fresh without any images on their disks, a user pod arriving to this
-    node will be forced to wait while the image is pulled.
+   The amount of nodes in a Kubernetes cluster can increase, either by manually
+   scaling up the cluster size or by a cluster autoscaler. As new nodes will
+   come fresh without any images on their disks, a user pod arriving to this
+   node will be forced to wait while the image is pulled.
 
-    With the *continuous-image-puller* enabled (**enabled** by default), the user's
-    container image will be pulled when a new node is added. New nodes can for
-    example be added manually or by a cluster autoscaler. The continuous
-    image-puller uses a
-    [daemonset](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)
-    to force Kubernetes to pull the user image on all nodes as soon as a node is
-    present.
+   With the _continuous-image-puller_ enabled (**enabled** by default), the user's
+   container image will be pulled when a new node is added. New nodes can for
+   example be added manually or by a cluster autoscaler. The continuous
+   image-puller uses a
+   [daemonset](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)
+   to force Kubernetes to pull the user image on all nodes as soon as a node is
+   present.
 
-    The continuous-image-puller is enabled by default. To disable it, use the
-    following snippet in your `config.yaml`:
+   The continuous-image-puller is enabled by default. To disable it, use the
+   following snippet in your `config.yaml`:
 
-    ```yaml
-    prePuller:
-      continuous:
-        # NOTE: if used with a Cluster Autoscaler, also add user-placeholders
-        enabled: false
-    ```
+   ```yaml
+   prePuller:
+     continuous:
+       # NOTE: if used with a Cluster Autoscaler, also add user-placeholders
+       enabled: false
+   ```
 
-    It is important to realize that if the continuous-image-puller together with
-    a Cluster Autoscaler (CA) won't guarantee a reduced wait time for users. It
-    only helps if the CA scales up before real users arrive, but the CA will
-    generally fail to do so. This is because it will only add a node if one or
-    more pods won't fit on the current nodes but would fit more if a node is
-    added, but at that point users are already waiting. To scale up nodes ahead
-    of time we can use [user-placeholders](#scaling-up-in-time-user-placeholders).
+   It is important to realize that if the continuous-image-puller together with
+   a Cluster Autoscaler (CA) won't guarantee a reduced wait time for users. It
+   only helps if the CA scales up before real users arrive, but the CA will
+   generally fail to do so. This is because it will only add a node if one or
+   more pods won't fit on the current nodes but would fit more if a node is
+   added, but at that point users are already waiting. To scale up nodes ahead
+   of time we can use [user-placeholders](#scaling-up-in-time-user-placeholders).
 
 (images-that-will-be-pulled)=
+
 ### The images that will be pulled
 
 The hook-image-puller and the continuous-image-puller has various sources
@@ -130,12 +133,14 @@ provided with the Helm chart (that can be overridden with `config.yaml`) under
 the following paths:
 
 #### Relevant image sources
+
 - `singleuser.image`
 - `singleuser.profileList[].kubespawner_override.image`
 - `singleuser.extraContainers[].image`
 - `prePuller.extraImages.someName`
 
 #### Additional sources
+
 - `singleuser.networkTools.image`
 - `prePuller.pause.image`
 
@@ -165,17 +170,18 @@ prePuller:
 ```
 
 (efficient-cluster-autoscaling)=
+
 ## Efficient Cluster Autoscaling
 
-A [*Cluster
-Autoscaler*](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler)
+A [_Cluster
+Autoscaler_](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler)
 (CA) will help you add and remove nodes from the cluster. But the CA needs some
 help to function well. Without help, it will both fail to scale up before users
 arrive and scale down nodes aggressively enough without disrupting users.
 
 ### Scaling up in time (user placeholders)
 
-A *Cluster Autoscaler* (CA) will add nodes when pods don't fit on available
+A _Cluster Autoscaler_ (CA) will add nodes when pods don't fit on available
 nodes but would fit if another node is added. But, this may lead to a long
 waiting time for the pod, and as a pod can represent a user, it can lead to a
 long waiting time for a user. There are now options to address this.
@@ -185,7 +191,7 @@ Preemption](https://kubernetes.io/docs/concepts/configuration/pod-priority-preem
 was introduced. This allows pods with higher priority to preempt / evict pods
 with lower priority if that would help the higher priority pod fit on a node.
 
-This priority mechanism allows us to add dummy users or *user-placeholders* with
+This priority mechanism allows us to add dummy users or _user-placeholders_ with
 low priority that can take up resources until a real user with (higher priority)
 requires it. At this time, the lower priority pod will get preempted to make
 room for the high priority pod. This now evicted user-placeholder will now be
@@ -200,7 +206,6 @@ with adjusted resource requests as specified in `singleuser.profileList`.
 
 To use three user placeholders for example, that can do their job thanks to pod
 priority, add the following configuration:
-
 
 ```yaml
 scheduling:
@@ -235,23 +240,23 @@ and some JupyterHub pods (without a permissive
 Consider for example that many users arrive to your JupyterHub during the
 daytime. New nodes are added by the CA. Some system pod ends up on the new nodes
 along with the user pods for some reason. At night when the
-[*culler*](culling-user-pods) has removed many inactive
+[_culler_](culling-user-pods) has removed many inactive
 pods from some nodes. They are now free from user pods but there is still a
 single system pod stopping the CA from removing the node.
 
-To avoid these scale down failures, we recommend using a *dedicated node pool*
+To avoid these scale down failures, we recommend using a _dedicated node pool_
 for the user pods. That way, all the important system pods will run at one or a
 limited set of nodes, so the autoscaling user nodes can scale from 0 to X and
 back from X to 0.
 
-This section about scaling down efficiently, will also explains how the *user
-scheduler* can help you reduce the failures to scale down due to blocking user
+This section about scaling down efficiently, will also explains how the _user
+scheduler_ can help you reduce the failures to scale down due to blocking user
 pods.
 
 #### Using a dedicated node pool for users
 
-To set up a dedicated node pool for user pods, we can use [*taints and
-tolerations*](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/).
+To set up a dedicated node pool for user pods, we can use [_taints and
+tolerations_](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/).
 If we add a taint to all the nodes in the node pool, and a toleration on the
 user pods to tolerate being scheduled on a tainted node, we have practically
 dedicated the node pool to be used only by user pods.
@@ -261,43 +266,42 @@ following:
 
 1. Setup a node pool (with autoscaling), a certain label, and a certain taint.
 
-    If you need help on how to do this, please refer to your cloud providers
-    documentation. A node pool may be called a node group.
+   If you need help on how to do this, please refer to your cloud providers
+   documentation. A node pool may be called a node group.
 
-    - The label: `hub.jupyter.org/node-purpose=user`
+   - The label: `hub.jupyter.org/node-purpose=user`
 
-      **NOTE**: Cloud providers often have their own labels, separate from
-      kubernetes labels, but this label must be a kubernetes label.
+     **NOTE**: Cloud providers often have their own labels, separate from
+     kubernetes labels, but this label must be a kubernetes label.
 
-    - The taint: `hub.jupyter.org/dedicated=user:NoSchedule`
+   - The taint: `hub.jupyter.org/dedicated=user:NoSchedule`
 
-      **NOTE**: You may need to replace `/` with `_` due cloud provider
-      limitations. Both taints are tolerated by the user pods.
+     **NOTE**: You may need to replace `/` with `_` due cloud provider
+     limitations. Both taints are tolerated by the user pods.
 
 2. Make user pods require to be scheduled on the node pool setup above
 
-    If you don't require the user pods to schedule on their dedicated node, you
-    may fill up the nodes where the other software runs. This can cause a `helm
-    upgrade` command to fail. For example, you may have run out of resources for
-    non-user pods that cannot schedule on the autoscaling node pool as they need
-    during a rolling update.
+   If you don't require the user pods to schedule on their dedicated node, you
+   may fill up the nodes where the other software runs. This can cause a `helm upgrade` command to fail. For example, you may have run out of resources for
+   non-user pods that cannot schedule on the autoscaling node pool as they need
+   during a rolling update.
 
-    The default setting is to make user pods *prefer* to be scheduled on nodes
-    with the `hub.jupyter.org/node-purpose=user` label, but you can also make it
-    *required* using the configuration below.
+   The default setting is to make user pods _prefer_ to be scheduled on nodes
+   with the `hub.jupyter.org/node-purpose=user` label, but you can also make it
+   _required_ using the configuration below.
 
-    ```yaml
-    scheduling:
-      userPods:
-        nodeAffinity:
-          # matchNodePurpose valid options:
-          # - ignore
-          # - prefer (the default)
-          # - require
-          matchNodePurpose: require
-    ```
+   ```yaml
+   scheduling:
+     userPods:
+       nodeAffinity:
+         # matchNodePurpose valid options:
+         # - ignore
+         # - prefer (the default)
+         # - require
+         matchNodePurpose: require
+   ```
 
-**NOTE**: If you end up *not* using a dedicated node pool for users and want to
+**NOTE**: If you end up _not_ using a dedicated node pool for users and want to
 scale down efficiently, you will need to learn about PodDisruptionBudget
 resources and do quite a bit more work in order to avoid ending up with almost
 empty nodes not scaling down.
@@ -307,10 +311,10 @@ empty nodes not scaling down.
 If you have users starting new servers while the total number of active users
 decreasing, how will you free up a node so it can be scaled down?
 
-This is what the *user scheduler* helps you with. The user scheduler's only task
-is to schedule new user pods to the *most utilized node*. This can be compared
-to the *default scheduler* that instead always tries to schedule pods so the
-*least utilized node*. Only the user scheduler would allow the underutilized
+This is what the _user scheduler_ helps you with. The user scheduler's only task
+is to schedule new user pods to the _most utilized node_. This can be compared
+to the _default scheduler_ that instead always tries to schedule pods so the
+_least utilized node_. Only the user scheduler would allow the underutilized
 nodes to free up over time as the total amount of users decrease but a few users
 still arrive.
 
@@ -336,7 +340,7 @@ scheduling:
 
 **NOTE**: For the user scheduler to work well, you need old user pods to shut
 down at some point. Make sure to properly configure the
-[*culler*](culling-user-pods).
+[_culler_](culling-user-pods).
 
 ## Balancing "guaranteed" vs "maximum" memory and CPU
 
@@ -357,7 +361,7 @@ Using resource _limits_ and _guarantees_, you can use your cloud resources more 
 The ratio of these two numbers is the _limit to guarantee ratio_.
 In the above case, your _limit to guarantee ratio_ is `1:1`.
 
-If you set a *guarantee* of 1GB and a *limit* of 20GB then you have a _limit to guarantee ratio_ of `20:1`.
+If you set a _guarantee_ of 1GB and a _limit_ of 20GB then you have a _limit to guarantee ratio_ of `20:1`.
 Your node will fit many more users on average.
 When a user starts a session, if there is at least 1GB of RAM available on the node then their session will start there.
 If not, a new node will be created (and your costs just went up).
@@ -369,7 +373,7 @@ Uh oh, we are now well over the 100GB limit, and user sessions will start crashi
 This is what happens when your _limit to guarantee ratio_ is too big.
 
 The problem? Your user's behavior was not the right fit for your _limit to guarantee ratio_.
-You should *increase* the guaranteed amount of RAM for each user, so that in general fewer users will be on a given node, and they are less-likely to saturate that node's memory by asking for RAM all at once.
+You should _increase_ the guaranteed amount of RAM for each user, so that in general fewer users will be on a given node, and they are less-likely to saturate that node's memory by asking for RAM all at once.
 
 Choosing the right _limit to guarantee ratio_ ratio is an art, not a science.
 We suggest **starting with a ratio of 2 to 1** and adjusting from there based on whether you run into problems on your hub.

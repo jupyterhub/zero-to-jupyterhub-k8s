@@ -93,9 +93,9 @@ will be performed automatically when you do a `helm upgrade`.
      db:
        upgrade: true
    ```
+
 4. Do a [`helm upgrade`](#upgrade-command). This should perform the database upgrade needed.
 5. Remove the lines added in step 3, and do another [`helm upgrade`](#upgrade-command).
-
 
 ### Custom Docker Images: JupyterHub version match
 

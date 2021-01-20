@@ -1,22 +1,44 @@
-# pre-commit is a tool to automatically do tasks before committing.
+# pre-commit is a tool to perform a predefined set of tasks manually and/or
+# automatically before git commits are made.
 #
 # Config reference: https://pre-commit.com/#pre-commit-configyaml---top-level
 #
+# Common tasks
+#
+# - Run on all files:   pre-commit run --all-files
+# - Register git hooks: pre-commit install --install-hooks
+#
+# About bash scripts autoformatting
+#
+# All hooks in this file can automatically be installed by pre-commit, but the
+# hook we want to use for bash script formatting, shellcheck, must be manually
+# installed. If needed, install it and run it using the link and snippet below.
+#
+#   https://github.com/koalaman/shellcheck#installing
+#
+#   pre-commit run --config .pre-commit-config-shellcheck.yaml --all-files
+#
 repos:
-  # Python code formatting
+  # Autoformat: Python code
   - repo: https://github.com/ambv/black
     rev: 20.8b1
     hooks:
       - id: black
         args: [--target-version=py36]
 
-  # Shell script code formatting
+  # Autoformat: Bash scripts
   - repo: https://github.com/lovesegfault/beautysh
     rev: 6.0.1
     hooks:
       - id: beautysh
 
-  # Reset changes by chartpress
+  # Autoformat: markdown, yaml (but not helm templates)
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.2.1
+    hooks:
+      - id: prettier
+
+  # Reset Chart.yaml version and values.yaml image tags
   - repo: local
     hooks:
       - id: chartpress
@@ -26,3 +48,9 @@ repos:
         entry: chartpress --reset
         language: system
         pass_filenames: false
+
+  # Check chart for possible issues
+  - repo: https://github.com/gruntwork-io/pre-commit
+    rev: v0.1.10
+    hooks:
+      - id: helmlint
