@@ -42,7 +42,7 @@ jobs:
       - uses: pre-commit/action@v2.0.0
       - uses: pre-commit/action@v2.0.0
         with:
-          extra_args: --config .pre-commit-shellcheck.yaml
+          extra_args: --config .pre-commit-config-shellcheck.yaml
 
       - name: Lint and validate
         run: tools/templates/lint-and-validate.py
