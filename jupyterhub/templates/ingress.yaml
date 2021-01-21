@@ -9,11 +9,9 @@ metadata:
   name: {{ include "jupyterhub.ingress.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
-  {{- if .Values.ingress.annotations }}
+  {{- with .Values.ingress.annotations }}
   annotations:
-    {{- range $key, $value := .Values.ingress.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}
+    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
 spec:
   rules:
@@ -35,8 +33,8 @@ spec:
               servicePort: 80
             {{- end }}
     {{- end }}
-  {{- if .Values.ingress.tls }}
+  {{- with .Values.ingress.tls }}
   tls:
-    {{- .Values.ingress.tls | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
 {{- end }}

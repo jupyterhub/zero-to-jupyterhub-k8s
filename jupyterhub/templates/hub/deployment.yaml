@@ -19,15 +19,15 @@ spec:
         hub.jupyter.org/network-access-proxy-api: "true"
         hub.jupyter.org/network-access-proxy-http: "true"
         hub.jupyter.org/network-access-singleuser: "true"
-        {{- if .Values.hub.labels }}
-        {{- .Values.hub.labels | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- with .Values.hub.labels }}
+        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
       annotations:
         # This lets us autorestart when the secret changes!
         checksum/config-map: {{ include (print .Template.BasePath "/hub/configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print .Template.BasePath "/hub/secret.yaml") . | sha256sum }}
-        {{- if .Values.hub.annotations }}
-        {{- .Values.hub.annotations | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- with .Values.hub.annotations }}
+        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
     spec:
       {{- if .Values.scheduling.podPriority.enabled }}
@@ -43,8 +43,8 @@ spec:
         - name: secret
           secret:
             secretName: {{ include "jupyterhub.hub-secret.fullname" . }}
-        {{- if .Values.hub.extraVolumes }}
-        {{- .Values.hub.extraVolumes | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- with .Values.hub.extraVolumes }}
+        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
         {{- if eq .Values.hub.db.type "sqlite-pvc" }}
         - name: pvc
@@ -59,13 +59,13 @@ spec:
       {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.hub.image) }}
       imagePullSecrets: {{ . }}
       {{- end }}
-      {{- if .Values.hub.initContainers }}
+      {{- with .Values.hub.initContainers }}
       initContainers:
-        {{- .Values.hub.initContainers | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
       {{- end }}
       containers:
-        {{- if .Values.hub.extraContainers }}
-        {{- .Values.hub.extraContainers | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- with .Values.hub.extraContainers }}
+        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
         - name: hub
           image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
@@ -122,14 +122,14 @@ spec:
               name: config
             - mountPath: /etc/jupyterhub/secret/
               name: secret
-            {{- if .Values.hub.extraVolumeMounts }}
-            {{- .Values.hub.extraVolumeMounts | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- with .Values.hub.extraVolumeMounts }}
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
             {{- end }}
             {{- if eq .Values.hub.db.type "sqlite-pvc" }}
             - mountPath: /srv/jupyterhub
               name: pvc
-              {{- if .Values.hub.db.pvc.subPath }}
-              subPath: {{ .Values.hub.db.pvc.subPath | quote }}
+              {{- with .Values.hub.db.pvc.subPath }}
+              subPath: {{ . | quote }}
               {{- end }}
             {{- end }}
           resources:

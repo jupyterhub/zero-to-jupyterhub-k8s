@@ -26,12 +26,12 @@ metadata:
   labels:
     {{- $_ := merge (dict "componentSuffix" "-public") . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
-    {{- if .Values.proxy.service.labels }}
-    {{- .Values.proxy.service.labels | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- with .Values.proxy.service.labels }}
+    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
-  {{- if .Values.proxy.service.annotations }}
+  {{- with .Values.proxy.service.annotations }}
   annotations:
-    {{- .Values.proxy.service.annotations | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
 spec:
   selector:

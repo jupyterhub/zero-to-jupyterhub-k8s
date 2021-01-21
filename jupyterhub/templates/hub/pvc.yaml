@@ -5,14 +5,14 @@ metadata:
   name: {{ include "jupyterhub.hub-pvc.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
-  {{- if .Values.hub.db.pvc.annotations }}
+  {{- with .Values.hub.db.pvc.annotations }}
   annotations:
-    {{- .Values.hub.db.pvc.annotations | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.hub.db.pvc.selector }}
+  {{- with .Values.hub.db.pvc.selector }}
   selector:
-    {{- .Values.hub.db.pvc.selector | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
   {{- if typeIs "string" .Values.hub.db.pvc.storageClassName }}
   storageClassName: {{ .Values.hub.db.pvc.storageClassName | quote }}
