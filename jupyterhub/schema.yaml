@@ -280,6 +280,11 @@ properties:
           - string
           - "null"
         description: |
+          ```{note}
+          As of version 1.0.0 this will automatically be generated and there is
+          no need to set it manually.
+          ```
+
           A 32-byte cryptographically secure randomly generated string used to sign values of
           secure cookies set by the hub. If unset, jupyterhub will generate one on startup and
           save it in the file `jupyterhub_cookie_secret` in the `/srv/jupyterhub` directory of
@@ -468,8 +473,6 @@ properties:
                  The user specified in the connection string must have the rights to create
                  tables in the database specified.
 
-                 Note that if you use this, you *must* also set `hub.cookieSecret`.
-
               4. **postgres**
 
                  Use an externally hosted postgres database.
@@ -484,8 +487,6 @@ properties:
 
                  The user specified in the connection string must have the rights to create
                  tables in the database specified.
-
-                 Note that if you use this, you *must* also set `hub.cookieSecret`.
           pvc:
             type: object
             description: |
@@ -826,6 +827,11 @@ properties:
       secretToken:
         type: string
         description: |
+          ```{note}
+          As of version 1.0.0 this will automatically be generated and there is
+          no need to set it manually.
+          ```
+
           A 32-byte cryptographically secure randomly generated string used to secure communications
           between the hub and the configurable-http-proxy.
 
@@ -836,7 +842,7 @@ properties:
 
           Changing this value will cause the proxy and hub pods to restart. It is good security
           practice to rotate these values over time. If this secret leaks, *immediately* change
-          it to something else, or user data can be compromised
+          it to something else, or user data can be compromised.
       service:
         type: object
         description: |
