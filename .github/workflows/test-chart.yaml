@@ -67,6 +67,10 @@ jobs:
         include:
           - k3s-channel: v1.20
             test: install
+            # FIXME: stop accepting failure when 1.20.3 is available for k3s and
+            #        this issue is resolved:
+            #        https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1962
+            accept-failure: true
           - k3s-channel: v1.19
             test: install
           - k3s-channel: v1.18
@@ -205,6 +209,7 @@ jobs:
           await_autohttps_tls_cert_acquisition
 
       - name: Run tests
+        continue-on-error: ${{ matrix.accept-failure == true }}
         run: |
           . ./ci/common
           # If you have problems with the tests add '--capture=no' to show stdout
