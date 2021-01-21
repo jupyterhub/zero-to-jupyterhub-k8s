@@ -20,6 +20,17 @@ Note that this is still an alpha release! If you have questions, feel free to
   3. File issues at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
 
 
+{{- if or .Values.proxy.secretToken .Values.hub.config.JupyterHub.proxy_auth_token }}{{ println }}
+NOTE: proxy.secretToken or hub.config.JupyterHub.proxy_auth_token was explicitly set, this is no longer needed.
+{{- end }}
+{{- if or .Values.hub.cookieSecret .Values.hub.config.JupyterHub.cookie_secret }}{{ println }}
+NOTE: hub.cookieSecret or hub.config.JupyterHub.cookie_secret was explicitly set, this is no longer needed.
+{{- end }}
+{{- if .Values.hub.config.CryptKeeper.keys }}{{ println }}
+NOTE: hub.config.CryptKeeper.keys was explicitly set, this is no longer needed.
+{{- end }}
+
+
 {{- if hasKey .Values.singleuser.cloudMetadata "enabled" }}{{ println }}
 DEPRECATION: singleuser.cloudMetadata.enabled is deprecated, instead use singleuser.cloudMetadata.blockWithIptables with the inverted value.
 {{- end }}

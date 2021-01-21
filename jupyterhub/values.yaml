@@ -27,6 +27,8 @@ imagePullSecrets: []
 # the proxy pod.
 hub:
   config:
+    Authenticator: {}
+    CryptKeeper: {}
     JupyterHub:
       admin_access: true
       authenticator_class: dummy
