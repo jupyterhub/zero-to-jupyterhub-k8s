@@ -324,3 +324,48 @@ limits:
 true
 {{- end }}
 {{- end }}
+
+{{- /*
+  jupyterhub.extraFiles.data:
+    Renders content for a k8s Secret's data field, coming from extraFiles with
+    binaryData entries.
+*/}}
+{{- define "jupyterhub.extraFiles.data.withNewLineSuffix" -}}
+    {{- range $file_name, $file_details := . }}
+        {{- if $file_details.binaryData }}
+            {{- $file_name | quote }}: {{ $file_details.binaryData | trimSuffix "\n" | quote }}{{ println }}
+        {{- end }}
+    {{- end }}
+{{- end }}
+{{- define "jupyterhub.extraFiles.data" -}}
+    {{- include "jupyterhub.extraFiles.data.withNewLineSuffix" . | trimSuffix "\n" }}
+{{- end }}
+
+{{- /*
+  jupyterhub.extraFiles.stringData:
+    Renders content for a k8s Secret's stringData field, coming from extraFiles
+    with either data or stringData entries.
+*/}}
+{{- define "jupyterhub.extraFiles.stringData.withNewLineSuffix" -}}
+    {{- range $file_name, $file_details := . }}
+        {{- if $file_details.stringData }}
+            {{- $file_name | quote }}: |
+              {{- $file_details.stringData | trimSuffix "\n" | nindent 2 }}{{ println }}
+        {{- end }}
+        {{- if $file_details.data }}
+            {{- $file_name | quote }}: |
+              {{- if or (eq (ext $file_name) ".yaml") (eq (ext $file_name) ".yml") }}
+              {{- $file_details.data | toYaml | trimSuffix "\n" | nindent 2 }}{{ println }}
+              {{- else if eq (ext $file_name) ".json" }}
+              {{- $file_details.data | toJson | trimSuffix "\n" | nindent 2 }}{{ println }}
+              {{- else if eq (ext $file_name) ".toml" }}
+              {{- $file_details.data | toToml | trimSuffix "\n" | nindent 2 }}{{ println }}
+              {{- else }}
+              {{- print "\n\nextraFiles entries with 'data' (" $file_name ") needs to have a filename extension of .yaml, .yml, .json, or .toml!" | fail }}
+              {{- end }}
+        {{- end }}
+    {{- end }}
+{{- end }}
+{{- define "jupyterhub.extraFiles.stringData" -}}
+    {{- include "jupyterhub.extraFiles.stringData.withNewLineSuffix" . | trimSuffix "\n" }}
+{{- end }}
