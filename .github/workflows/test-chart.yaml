@@ -171,8 +171,9 @@ jobs:
           cd ci
           helm install jupyterhub --repo https://jupyterhub.github.io/helm-chart/ jupyterhub --values ../dev-config.yaml --version=$UPGRADE_FROM_VERSION ${{ matrix.upgrade-from-extra-args }}
 
-          echo ""
-          echo "Installing Helm diff plugin while k8s resources are initializing"
+      - name: "Install helm diff plugin"
+        if: matrix.test == 'upgrade'
+        run: |
           helm plugin install https://github.com/databus23/helm-diff
 
       # ref: https://github.com/jacobtomlinson/gha-read-helm-chart
@@ -210,8 +211,11 @@ jobs:
 
       - name: "Install or upgrade to local chart"
         run: |
-          . ./ci/common
           helm upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml
+
+      - name: Await local chart
+        run: |
+          . ./ci/common
           await_jupyterhub
           await_autohttps_tls_cert_acquisition
 
