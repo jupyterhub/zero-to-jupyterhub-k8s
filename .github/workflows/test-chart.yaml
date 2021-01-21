@@ -94,9 +94,15 @@ jobs:
           - k3s-channel: v1.19
             test: upgrade
             upgrade-from: stable
+            upgrade-from-extra-args: >-
+              --set proxy.secretToken=aaa111
+              --set hub.cookieSecret=bbb222
+              --set hub.config.CryptKeeper.keys[0]=ccc333
           - k3s-channel: v1.19
             test: upgrade
             upgrade-from: dev
+            upgrade-from-extra-args: >-
+              --set proxy.secretToken=aaa111
 
     steps:
       - uses: actions/checkout@v2
@@ -163,7 +169,7 @@ jobs:
           #
           #        https://github.com/helm/helm/issues/9244
           cd ci
-          helm install jupyterhub --repo https://jupyterhub.github.io/helm-chart/ jupyterhub --values ../dev-config.yaml --version=$UPGRADE_FROM_VERSION
+          helm install jupyterhub --repo https://jupyterhub.github.io/helm-chart/ jupyterhub --values ../dev-config.yaml --version=$UPGRADE_FROM_VERSION ${{ matrix.upgrade-from-extra-args }}
 
           echo ""
           echo "Installing Helm diff plugin while k8s resources are initializing"
