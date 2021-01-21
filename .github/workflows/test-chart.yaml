@@ -196,6 +196,7 @@ jobs:
           echo
 
           helm diff upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml \
+              --show-secrets \
               --context=3 \
               --post-renderer=ci/string-replacer.sh
 

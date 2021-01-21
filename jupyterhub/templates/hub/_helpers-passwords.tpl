@@ -10,11 +10,9 @@
     {{- if .Values.proxy.secretToken }}
         {{- .Values.proxy.secretToken }}
     {{- else }}
-        {{- $k8s_state := lookup "v1" "Secret" .Release.Namespace "hub-secret" }}
-        {{- if $k8s_state }}
-            {{- with index $k8s_state "JupyterHub.proxy_auth_token" }}
-                {{- . }}
-            {{- end }}
+        {{- $k8s_state := lookup "v1" "Secret" .Release.Namespace (include "jupyterhub.hub-secret.fullname" .) | default dict }}
+        {{- if and $k8s_state (hasKey $k8s_state "JupyterHub.proxy_auth_token") }}
+            {{- index $k8s_state "JupyterHub.proxy_auth_token" }}
         {{- else }}
             {{- randNumeric 32 }}
         {{- end }}
@@ -25,11 +23,9 @@
     {{- if .Values.hub.cookieSecret }}
         {{- .Values.hub.cookieSecret }}
     {{- else }}
-        {{- $k8s_state := lookup "v1" "Secret" .Release.Namespace "hub-secret" }}
-        {{- if $k8s_state }}
-            {{- with index $k8s_state "JupyterHub.cookie_secret" }}
-                {{- . }}
-            {{- end }}
+        {{- $k8s_state := lookup "v1" "Secret" .Release.Namespace (include "jupyterhub.hub-secret.fullname" .) | default dict }}
+        {{- if and $k8s_state (hasKey $k8s_state "JupyterHub.cookie_secret") }}
+            {{- index $k8s_state "JupyterHub.cookie_secret" }}
         {{- else }}
             {{- randNumeric 32 }}
         {{- end }}
@@ -40,11 +36,9 @@
     {{- if .Values.hub.config.CryptKeeper }}
         {{- .Values.hub.config.CryptKeeper.keys | join ";" }}
     {{- else }}
-        {{- $k8s_state := lookup "v1" "Secret" .Release.Namespace "hub-secret" }}
-        {{- if $k8s_state }}
-            {{- with index $k8s_state "CryptKeeper.keys" }}
-                {{- . }}
-            {{- end }}
+        {{- $k8s_state := lookup "v1" "Secret" .Release.Namespace (include "jupyterhub.hub-secret.fullname" .) | default dict }}
+        {{- if and $k8s_state (hasKey $k8s_state "CryptKeeper.keys") }}
+            {{- index $k8s_state "CryptKeeper.keys" }}
         {{- else }}
             {{- randNumeric 32 }}
         {{- end }}
