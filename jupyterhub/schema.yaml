@@ -282,9 +282,8 @@ properties:
 
           ```bash
           # --set-file expects a text based file, so you need to base64 encode
-          # it manually first. Note that -w0 ensures no line breaks are
-          # introduced.
-          base64 -w0 my_image.png > my_image.png.b64
+          # it manually first.
+          base64 my_image.png > my_image.png.b64
 
           helm upgrade <...> \
               --set-file hub.extraFiles.my_image.binaryData=./my_image.png.b64

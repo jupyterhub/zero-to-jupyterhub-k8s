@@ -52,7 +52,9 @@ hub:
     binaryData.txt: &binaryData
       mountPath: /tmp/
       mode: 0666
-      binaryData: aGVsbG8gd29ybGQhCg==
+      binaryData: |
+        aGVsbG8gd
+        29ybGQhCg==
     binaryData-explicit-name.txt: &binaryData2
       name: binaryData.txt
       mountPath: /tmp/dir1

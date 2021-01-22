@@ -334,7 +334,7 @@ true
     {{- range $file_key, $file_details := . }}
         {{- include "jupyterhub.extraFiles.validate-file" (list $file_key $file_details) }}
         {{- if $file_details.binaryData }}
-            {{- $file_key | quote }}: {{ $file_details.binaryData | trimSuffix "\n" | quote }}{{ println }}
+            {{- $file_key | quote }}: {{ $file_details.binaryData | nospace | quote }}{{ println }}
         {{- end }}
     {{- end }}
 {{- end }}
