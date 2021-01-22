@@ -51,32 +51,32 @@ hub:
   extraFiles:
     my_config:
       name: my_config.py
-      mountPath: /etc/jupyterhub.d
+      mountDir: /etc/jupyterhub.d
       stringData: |
         with open("/tmp/created-by-extra-files-config.txt", "w") as f:
             f.write("hello world!")
     binaryData.txt: &binaryData
-      mountPath: /tmp/
+      mountDir: /tmp/
       mode: 0666
       binaryData: |
         aGVsbG8gd
         29ybGQhCg==
     binaryData-explicit-name.txt: &binaryData2
       name: binaryData.txt
-      mountPath: /tmp/dir1
+      mountDir: /tmp/dir1
       mode: 0666
       binaryData: aGVsbG8gd29ybGQhCg==
     stringData.txt: &stringData
-      mountPath: /tmp
+      mountDir: /tmp
       mode: 0666
       stringData: hello world!
     stringData-explicit-name.txt: &stringData2
       name: stringData.txt
-      mountPath: /tmp/dir1/
+      mountDir: /tmp/dir1/
       mode: 0666
       stringData: hello world!
     data.yaml: &data
-      mountPath: /etc/test
+      mountDir: /etc/test
       mode: 0444
       data:
         config:

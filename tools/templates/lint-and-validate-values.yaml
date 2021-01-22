@@ -10,25 +10,25 @@ imagePullSecrets: [a, b]
 hub:
   extraFiles:
     binaryData.txt:
-      mountPath: /tmp/
+      mountDir: /tmp/
       mode: 0666
       binaryData: aGVsbG8gd29ybGQhCg== # "hello world!" base64 encoded
     binaryData-explicit-name.txt:
       name: binaryData.txt
-      mountPath: /tmp/dir1
+      mountDir: /tmp/dir1
       mode: 0666
       binaryData: aGVsbG8gd29ybGQhCg== # "hello world!" base64 encoded
     stringData.txt:
-      mountPath: /tmp
+      mountDir: /tmp
       mode: 0666
       stringData: hello world!
     stringData-explicit-name.txt:
       name: stringData.txt
-      mountPath: /tmp/dir1/
+      mountDir: /tmp/dir1/
       mode: 0666
       stringData: hello world!
     data.yaml: &data
-      mountPath: /tmp
+      mountDir: /tmp
       mode: 0666
       data:
         config:
