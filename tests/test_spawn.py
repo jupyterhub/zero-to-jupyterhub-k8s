@@ -191,6 +191,31 @@ def test_hub_api_request_user_spawn(
         assert (
             c.returncode == 0
         ), f"singleuser.extraEnv didn't lead to a mounted environment variable!"
+
+        # check user pod's extra files
+        c = subprocess.run(
+            [
+                "kubectl",
+                "exec",
+                pod_name,
+                "--",
+                "sh",
+                "-c",
+                """
+                ls -l /tmp/binaryData.txt | grep -- -rw-rw-rw- || exit 1
+                ls -l /tmp/dir1/binaryData.txt | grep -- -rw-rw-rw- || exit 2
+                ls -l /tmp/stringData.txt | grep -- -rw-rw-rw- || exit 3
+                ls -l /tmp/dir1/stringData.txt | grep -- -rw-rw-rw- || exit 4
+                ls -l /etc/test/data.yaml | grep -- -r--r--r-- || exit 5
+                ls -l /etc/test/data.yml | grep -- -r--r--r-- || exit 6
+                ls -l /etc/test/data.json | grep -- -r--r--r-- || exit 7
+                ls -l /etc/test/data.toml | grep -- -r--r--r-- || exit 8
+                """,
+            ]
+        )
+        assert (
+            c.returncode == 0
+        ), f"The singleuser.extraFiles configuration doesn't seem to have been honored!"
     finally:
         _delete_server(api_request, jupyter_user, request_data["test_timeout"])
 
