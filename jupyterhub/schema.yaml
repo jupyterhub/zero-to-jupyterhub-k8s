@@ -264,6 +264,32 @@ properties:
                       - 1
                       - 2
           ```
+
+          To avoid embedding entire files in the Helm chart configuration, you
+          can use the `--set-file` flag during `helm upgrade` to set the
+          stringData or binaryData field.
+
+          ```yaml
+          hub:
+            extraFiles:
+              my_image:
+                name: my_image.png
+                mountPath: /usr/local/share/jupyterhub/static/
+              my_config:
+                name: my_jupyterhub_config.py
+                mountPath: /etc/jupyterhub.d
+          ```
+
+          ```bash
+          # --set-file expects a text based file, so you need to base64 encode
+          # it manually first. Note that -w0 ensures no line breaks are
+          # introduced.
+          base64 -w0 my_image.png > my_image.png.b64
+
+          helm upgrade <...> \
+              --set-file hub.extraFiles.my_image.binaryData=./my_image.png.b64
+              --set-file hub.extraFiles.my_config.stringData=./my_jupyterhub_config.py
+          ```
       baseUrl:
         type: string
         description: |
