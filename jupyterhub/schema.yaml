@@ -216,7 +216,7 @@ properties:
         type: string
         description: |
           A dictionary with extra files that should be injected into the pod's
-          container.
+          container on startup.
 
           ```yaml
           hub:
