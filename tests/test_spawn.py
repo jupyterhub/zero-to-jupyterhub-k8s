@@ -13,6 +13,19 @@ import yaml
 here = os.path.dirname(os.path.abspath(__file__))
 chart_yaml = os.path.join(here, os.pardir, "jupyterhub", "Chart.yaml")
 
+extra_files_test = """
+    ls -l /tmp/binaryData.txt | grep -- -rw-rw-rw- || exit 1
+    ls -l /tmp/dir1/binaryData.txt | grep -- -rw-rw-rw- || exit 2
+    ls -l /tmp/stringData.txt | grep -- -rw-rw-rw- || exit 3
+    ls -l /tmp/dir1/stringData.txt | grep -- -rw-rw-rw- || exit 4
+    ls -l /etc/test/data.yaml | grep -- -r--r--r-- || exit 5
+    ls -l /etc/test/data.yml | grep -- -r--r--r-- || exit 6
+    ls -l /etc/test/data.json | grep -- -r--r--r-- || exit 7
+    ls -l /etc/test/data.toml | grep -- -r--r--r-- || exit 8
+    cat /tmp/binaryData.txt | grep -- "hello world" || exit 9
+    cat /tmp/stringData.txt | grep -- "hello world" || exit 10
+"""
+
 with open(chart_yaml) as f:
     chart = yaml.safe_load(f)
     jupyterhub_version = chart["appVersion"]
@@ -132,16 +145,7 @@ def test_hub_mounted_extra_files():
             "--",
             "sh",
             "-c",
-            """
-            ls -l /tmp/binaryData.txt | grep -- -rw-rw-rw- || exit 1
-            ls -l /tmp/dir1/binaryData.txt | grep -- -rw-rw-rw- || exit 2
-            ls -l /tmp/stringData.txt | grep -- -rw-rw-rw- || exit 3
-            ls -l /tmp/dir1/stringData.txt | grep -- -rw-rw-rw- || exit 4
-            ls -l /etc/test/data.yaml | grep -- -r--r--r-- || exit 5
-            ls -l /etc/test/data.yml | grep -- -r--r--r-- || exit 6
-            ls -l /etc/test/data.json | grep -- -r--r--r-- || exit 7
-            ls -l /etc/test/data.toml | grep -- -r--r--r-- || exit 8
-            """,
+            extra_files_test,
         ]
     )
     assert (
@@ -201,16 +205,7 @@ def test_hub_api_request_user_spawn(
                 "--",
                 "sh",
                 "-c",
-                """
-                ls -l /tmp/binaryData.txt | grep -- -rw-rw-rw- || exit 1
-                ls -l /tmp/dir1/binaryData.txt | grep -- -rw-rw-rw- || exit 2
-                ls -l /tmp/stringData.txt | grep -- -rw-rw-rw- || exit 3
-                ls -l /tmp/dir1/stringData.txt | grep -- -rw-rw-rw- || exit 4
-                ls -l /etc/test/data.yaml | grep -- -r--r--r-- || exit 5
-                ls -l /etc/test/data.yml | grep -- -r--r--r-- || exit 6
-                ls -l /etc/test/data.json | grep -- -r--r--r-- || exit 7
-                ls -l /etc/test/data.toml | grep -- -r--r--r-- || exit 8
-                """,
+                extra_files_test,
             ]
         )
         assert (
