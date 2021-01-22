@@ -235,7 +235,6 @@ for key in (
 
 # Configure dynamically provisioning pvc
 storage_type = get_config("singleuser.storage.type")
-
 if storage_type == "dynamic":
     pvc_name_template = get_config("singleuser.storage.dynamic.pvcNameTemplate")
     c.KubeSpawner.pvc_name_template = pvc_name_template
@@ -280,6 +279,40 @@ elif storage_type == "static":
         }
     ]
 
+# Inject singleuser.extraFiles as volumes and volumeMounts with data loaded from
+# the dedicated k8s Secret prepared to hold the extraFiles actual content.
+extra_files = get_config("singleuser.extraFiles", {})
+if extra_files:
+    volume = {
+        "name": "files",
+    }
+    items = []
+    for file_name, file_details in extra_files.items():
+        item = {
+            "key": file_name,
+            "path": file_name,
+        }
+        if "mode" in file_details:
+            item["mode"] = file_details["mode"]
+        items.append(item)
+    volume["secret"] = {
+        "secretName": get_name("singleuser"),
+        "items": items,
+    }
+    c.KubeSpawner.volumes.append(volume)
+
+    volume_mounts = []
+    for file_name, file_details in extra_files.items():
+        volume_mounts.append(
+            {
+                "mountPath": file_details["mountPath"].rstrip("/") + "/" + file_name,
+                "subPath": file_name,
+                "name": "files",
+            }
+        )
+    c.KubeSpawner.volume_mounts.extend(volume_mounts)
+
+# Inject extraVolumes / extraVolumeMounts
 c.KubeSpawner.volumes.extend(get_config("singleuser.storage.extraVolumes", []))
 c.KubeSpawner.volume_mounts.extend(
     get_config("singleuser.storage.extraVolumeMounts", [])
