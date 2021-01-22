@@ -48,8 +48,46 @@ hub:
     requests:
       memory: 0
       cpu: 0
+  extraFiles:
+    binaryData.txt: &binaryData
+      mountPath: /tmp/
+      mode: 0666
+      binaryData: aGVsbG8gd29ybGQhCg==
+    binaryData2.txt: &binaryData2
+      mountPath: /tmp/dir1
+      mode: 0666
+      binaryData: aGVsbG8gd29ybGQhCg==
+    stringData.txt: &stringData
+      mountPath: /tmp
+      mode: 0666
+      stringData: hello world!
+    stringData2.txt: &stringData2
+      mountPath: /tmp/dir1/
+      mode: 0666
+      stringData: hello world!
+    data.yaml: &data
+      mountPath: /etc/test
+      mode: 0444
+      data:
+        config:
+          map:
+            number: 123
+            string: "hi"
+          list: [1, 2]
+    data.yml: *data
+    data.json: *data
+    data.toml: *data
 
 singleuser:
+  extraFiles:
+    binaryData.txt: *binaryData
+    binaryData2.txt: *binaryData2
+    stringData.txt: *stringData
+    stringData2.txt: *stringData2
+    data.yaml: *data
+    data.yml: *data
+    data.json: *data
+    data.toml: *data
   storage:
     type: none
   memory:

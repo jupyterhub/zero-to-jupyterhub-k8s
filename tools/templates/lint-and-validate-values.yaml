@@ -8,6 +8,35 @@ imagePullSecret:
 imagePullSecrets: [a, b]
 
 hub:
+  extraFiles:
+    binaryData.txt:
+      mountPath: /tmp/
+      mode: 0666
+      binaryData: aGVsbG8gd29ybGQhCg== # "hello world!" base64 encoded
+    binaryData2.txt:
+      mountPath: /tmp/dir1
+      mode: 0666
+      binaryData: aGVsbG8gd29ybGQhCg== # "hello world!" base64 encoded
+    stringData.txt:
+      mountPath: /tmp
+      mode: 0666
+      stringData: hello world!
+    stringData2.txt:
+      mountPath: /tmp/dir1/
+      mode: 0666
+      stringData: hello world!
+    data.yaml: &data
+      mountPath: /tmp
+      mode: 0666
+      data:
+        config:
+          map:
+            number: 123
+            string: "hi"
+          list: [1, 2]
+    data.yml: *data
+    data.json: *data
+    data.toml: *data
   service:
     type: ClusterIP
     ports:
