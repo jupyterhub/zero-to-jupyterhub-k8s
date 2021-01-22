@@ -119,6 +119,36 @@ def test_hub_can_talk_to_proxy(api_request, request_data):
     assert r.status_code == 200, "Failed to get /proxy"
 
 
+def test_hub_mounted_extra_files():
+    """
+    Tests the hub.extraFiles configuration. It should have mounted files to the
+    hub pod's container with specific file system permissions.
+    """
+    c = subprocess.run(
+        [
+            "kubectl",
+            "exec",
+            "deploy/hub",
+            "--",
+            "sh",
+            "-c",
+            """
+            ls -l /tmp/binaryData.txt | grep -- -rw-rw-rw- || exit 1
+            ls -l /tmp/dir1/binaryData.txt | grep -- -rw-rw-rw- || exit 2
+            ls -l /tmp/stringData.txt | grep -- -rw-rw-rw- || exit 3
+            ls -l /tmp/dir1/stringData.txt | grep -- -rw-rw-rw- || exit 4
+            ls -l /etc/test/data.yaml | grep -- -r--r--r-- || exit 5
+            ls -l /etc/test/data.yml | grep -- -r--r--r-- || exit 6
+            ls -l /etc/test/data.json | grep -- -r--r--r-- || exit 7
+            ls -l /etc/test/data.toml | grep -- -r--r--r-- || exit 8
+            """,
+        ]
+    )
+    assert (
+        c.returncode == 0
+    ), f"The hub.extraFiles configuration doesn't seem to have been honored!"
+
+
 def test_hub_api_request_user_spawn(
     api_request, jupyter_user, request_data, pebble_acme_ca_cert
 ):
