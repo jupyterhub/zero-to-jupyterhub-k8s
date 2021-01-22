@@ -411,7 +411,7 @@ if get_config("debug.enabled", False):
 # load /etc/jupyterhub.d config files
 config_dir = "/etc/jupyterhub.d"
 if os.path.isdir(config_dir):
-    for file_name in os.listdir(config_dir):
+    for file_name in sorted(os.listdir(config_dir)):
         print(f"Loading {config_dir} config: {file_name}")
         with open(f"{config_dir}/{file_name}") as f:
             file_content = f.read()

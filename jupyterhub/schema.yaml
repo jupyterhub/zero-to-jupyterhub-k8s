@@ -279,7 +279,7 @@ properties:
                 mountPath: /usr/local/share/jupyterhub/static/
 
               # Files in /etc/jupyterhub.d are automatically loaded just like
-              # hub.extraConfig entries.
+              # hub.extraConfig entries, sorted based on their name.
               my_config:
                 name: my_jupyterhub_config.py
                 mountPath: /etc/jupyterhub.d
