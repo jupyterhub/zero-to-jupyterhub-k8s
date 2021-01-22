@@ -408,6 +408,15 @@ if get_config("debug.enabled", False):
     c.JupyterHub.log_level = "DEBUG"
     c.Spawner.debug = True
 
+# load /etc/jupyterhub.d config files
+config_dir = "/etc/jupyterhub.d"
+if os.path.isdir(config_dir):
+    for file_name in os.listdir(config_dir):
+        print(f"Loading {config_dir} config: {file_name}")
+        with open(f"{config_dir}/{file_name}") as f:
+            file_content = f.read()
+        # compiling makes debugging easier: https://stackoverflow.com/a/437857
+        exec(compile(source=file_content, filename=file_name, mode="exec"))
 
 # load potentially seeded secrets
 c.JupyterHub.proxy_auth_token = get_secret_value("JupyterHub.proxy_auth_token")
