@@ -272,9 +272,14 @@ properties:
           ```yaml
           hub:
             extraFiles:
+              # Explicitly set the name to avoid having the file key include a .
+              # as it can hamper our ability to use --set-file.
               my_image:
                 name: my_image.png
                 mountPath: /usr/local/share/jupyterhub/static/
+
+              # Files in /etc/jupyterhub.d are automatically loaded just like
+              # hub.extraConfig entries.
               my_config:
                 name: my_jupyterhub_config.py
                 mountPath: /etc/jupyterhub.d

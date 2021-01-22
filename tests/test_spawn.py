@@ -153,6 +153,27 @@ def test_hub_mounted_extra_files():
     ), f"The hub.extraFiles configuration doesn't seem to have been honored!"
 
 
+def test_hub_etc_jupyterhub_d_folder():
+    """
+    Tests that the extra jupyterhub config file put into /etc/jupyterhub.d by
+    the hub.extraFiles configuration was loaded.
+    """
+    c = subprocess.run(
+        [
+            "kubectl",
+            "exec",
+            "deploy/hub",
+            "--",
+            "sh",
+            "-c",
+            "cat /tmp/created-by-extra-files-config.txt | grep -- 'hello world' || exit 1",
+        ]
+    )
+    assert (
+        c.returncode == 0
+    ), f"The hub.extraFiles configuration should have mounted a config file to /etc/jupyterhub.d which should have been loaded to write a dummy file for us!"
+
+
 def test_hub_api_request_user_spawn(
     api_request, jupyter_user, request_data, pebble_acme_ca_cert
 ):
