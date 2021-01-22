@@ -212,6 +212,58 @@ properties:
           the `--values` or `-f` flag. During merging, lists are replaced while
           dictionaries are updated.
           ```
+      extraFiles: &extraFiles
+        type: string
+        description: |
+          A dictionary with extra files that should be injected into the pod's
+          container.
+
+          ```yaml
+          hub:
+            extraFiles:
+              <implicit file name>:
+                # name is an optional way to override the implicit file name
+                # that must be unique.
+                name: <explicit file name>
+
+                # mode is by default 0644 and you can optionally override it
+                # either by octal notation (example: 0400) or decimal notation
+                # (example: 256).
+                mode: <file system permissions>
+
+                # mountPath is required and must be the directory you want to
+                # mount the file.
+                mountPath: <directory path>
+
+                # Choose one out of the three ways to represent the actual file
+                # content: data, stringData, or binaryData.
+                #
+                # Both stringData and binaryData should be set to a string
+                # representing the content, where binaryData should be the
+                # base64 encoding of the actual file content.
+                #
+                # data should be set to a mapping (dictionary). It will in the
+                # end be rendered to either YAML, JSON, or TOML based on the
+                # filename extension that are required to be either .yaml, .yml,
+                # .json, or .toml.
+                #
+                # If your content is YAML, JSON, or TOML, it can be useful to
+                # use data over stringData, because then you can update parts of
+                # the files content from different files as compared to opting
+                # for one or another string.
+                #
+                binaryData: aGVsbG8gd29ybGQhCg==
+                stringData: |
+                  hello world!
+                data:
+                  config:
+                    map:
+                      number: 123
+                      string: "hi"
+                    list:
+                      - 1
+                      - 2
+          ```
       baseUrl:
         type: string
         description: |
@@ -1154,6 +1206,7 @@ properties:
         description: |
           Deprecated and no longer does anything. Use the user-scheduler instead
           in order to accomplish a good packing of the user pods.
+      extraFiles: *extraFiles
       extraEnv:
         type: object
         description: |
