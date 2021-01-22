@@ -53,7 +53,8 @@ hub:
       mountPath: /tmp/
       mode: 0666
       binaryData: aGVsbG8gd29ybGQhCg==
-    binaryData2.txt: &binaryData2
+    binaryData-explicit-name.txt: &binaryData2
+      name: binaryData.txt
       mountPath: /tmp/dir1
       mode: 0666
       binaryData: aGVsbG8gd29ybGQhCg==
@@ -61,7 +62,8 @@ hub:
       mountPath: /tmp
       mode: 0666
       stringData: hello world!
-    stringData2.txt: &stringData2
+    stringData-explicit-name.txt: &stringData2
+      name: stringData.txt
       mountPath: /tmp/dir1/
       mode: 0666
       stringData: hello world!
@@ -81,9 +83,9 @@ hub:
 singleuser:
   extraFiles:
     binaryData.txt: *binaryData
-    binaryData2.txt: *binaryData2
+    binaryData-explicit-name.txt: *binaryData2
     stringData.txt: *stringData
-    stringData2.txt: *stringData2
+    stringData-explicit-name.txt: *stringData2
     data.yaml: *data
     data.yml: *data
     data.json: *data

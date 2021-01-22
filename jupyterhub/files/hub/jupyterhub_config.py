@@ -287,10 +287,13 @@ if extra_files:
         "name": "files",
     }
     items = []
-    for file_name, file_details in extra_files.items():
+    for file_key, file_details in extra_files.items():
+        # Each item is a mapping of a key in the k8s Secret to a path in this
+        # abstract volume, the goal is to enable us to set the mode /
+        # permissions only though so we don't change the mapping.
         item = {
-            "key": file_name,
-            "path": file_name,
+            "key": file_key,
+            "path": file_key,
         }
         if "mode" in file_details:
             item["mode"] = file_details["mode"]
@@ -302,11 +305,12 @@ if extra_files:
     c.KubeSpawner.volumes.append(volume)
 
     volume_mounts = []
-    for file_name, file_details in extra_files.items():
+    for file_key, file_details in extra_files.items():
+        file_name = file_details.get("name", file_key)
         volume_mounts.append(
             {
                 "mountPath": file_details["mountPath"].rstrip("/") + "/" + file_name,
-                "subPath": file_name,
+                "subPath": file_key,
                 "name": "files",
             }
         )

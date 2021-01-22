@@ -331,9 +331,9 @@ true
     binaryData entries.
 */}}
 {{- define "jupyterhub.extraFiles.data.withNewLineSuffix" -}}
-    {{- range $file_name, $file_details := . }}
+    {{- range $file_key, $file_details := . }}
         {{- if $file_details.binaryData }}
-            {{- $file_name | quote }}: {{ $file_details.binaryData | trimSuffix "\n" | quote }}{{ println }}
+            {{- $file_key | quote }}: {{ $file_details.binaryData | trimSuffix "\n" | quote }}{{ println }}
         {{- end }}
     {{- end }}
 {{- end }}
@@ -347,13 +347,14 @@ true
     with either data or stringData entries.
 */}}
 {{- define "jupyterhub.extraFiles.stringData.withNewLineSuffix" -}}
-    {{- range $file_name, $file_details := . }}
+    {{- range $file_key, $file_details := . }}
+        {{- $file_name := $file_details.name | default $file_key }}
         {{- if $file_details.stringData }}
-            {{- $file_name | quote }}: |
+            {{- $file_key | quote }}: |
               {{- $file_details.stringData | trimSuffix "\n" | nindent 2 }}{{ println }}
         {{- end }}
         {{- if $file_details.data }}
-            {{- $file_name | quote }}: |
+            {{- $file_key | quote }}: |
               {{- if or (eq (ext $file_name) ".yaml") (eq (ext $file_name) ".yml") }}
               {{- $file_details.data | toYaml | trimSuffix "\n" | nindent 2 }}{{ println }}
               {{- else if eq (ext $file_name) ".json" }}

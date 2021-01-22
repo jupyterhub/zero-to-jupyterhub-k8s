@@ -59,9 +59,9 @@ spec:
           secret:
             secretName: {{ include "jupyterhub.hub-secret.fullname" . }}
             items:
-              {{- range $file_name, $file_details := .Values.hub.extraFiles }}
-              - key: {{ $file_name | quote }}
-                path: {{ $file_name | quote }}
+              {{- range $file_key, $file_details := .Values.hub.extraFiles }}
+              - key: {{ $file_key | quote }}
+                path: {{ $file_key | quote }}
                 {{- with $file_details.mode }}
                 mode: {{ . }}
                 {{- end }}
@@ -146,9 +146,10 @@ spec:
               name: config
             - mountPath: /etc/jupyterhub/secret/
               name: secret
-            {{- range $file_name, $file_details := .Values.hub.extraFiles }}
+            {{- range $file_key, $file_details := .Values.hub.extraFiles }}
+            {{- $file_name := $file_details.name | default $file_key }}
             - mountPath: {{ $file_details.mountPath | trimSuffix "/" }}/{{ $file_name }}
-              subPath: {{ $file_name | quote }}
+              subPath: {{ $file_key | quote }}
               name: files
             {{- end }}
             {{- with .Values.hub.extraVolumeMounts }}

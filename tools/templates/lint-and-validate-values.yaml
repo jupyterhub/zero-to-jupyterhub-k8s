@@ -13,7 +13,8 @@ hub:
       mountPath: /tmp/
       mode: 0666
       binaryData: aGVsbG8gd29ybGQhCg== # "hello world!" base64 encoded
-    binaryData2.txt:
+    binaryData-explicit-name.txt:
+      name: binaryData.txt
       mountPath: /tmp/dir1
       mode: 0666
       binaryData: aGVsbG8gd29ybGQhCg== # "hello world!" base64 encoded
@@ -21,7 +22,8 @@ hub:
       mountPath: /tmp
       mode: 0666
       stringData: hello world!
-    stringData2.txt:
+    stringData-explicit-name.txt:
+      name: stringData.txt
       mountPath: /tmp/dir1/
       mode: 0666
       stringData: hello world!
