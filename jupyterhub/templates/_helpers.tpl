@@ -332,6 +332,7 @@ true
 */}}
 {{- define "jupyterhub.extraFiles.data.withNewLineSuffix" -}}
     {{- range $file_key, $file_details := . }}
+        {{- include "jupyterhub.extraFiles.validate-file" (list $file_key $file_details) }}
         {{- if $file_details.binaryData }}
             {{- $file_key | quote }}: {{ $file_details.binaryData | trimSuffix "\n" | quote }}{{ println }}
         {{- end }}
@@ -348,6 +349,7 @@ true
 */}}
 {{- define "jupyterhub.extraFiles.stringData.withNewLineSuffix" -}}
     {{- range $file_key, $file_details := . }}
+        {{- include "jupyterhub.extraFiles.validate-file" (list $file_key $file_details) }}
         {{- $file_name := $file_details.name | default $file_key }}
         {{- if $file_details.stringData }}
             {{- $file_key | quote }}: |
@@ -369,4 +371,22 @@ true
 {{- end }}
 {{- define "jupyterhub.extraFiles.stringData" -}}
     {{- include "jupyterhub.extraFiles.stringData.withNewLineSuffix" . | trimSuffix "\n" }}
+{{- end }}
+
+{{- define "jupyterhub.extraFiles.validate-file" -}}
+    {{- $file_key := index . 0 }}
+    {{- $file_details := index . 1 }}
+    {{- $field_count := 0 }}
+    {{- if $file_details.data }}
+        {{- $field_count = add1 $field_count }}
+    {{- end }}
+    {{- if $file_details.stringData }}
+        {{- $field_count = add1 $field_count }}
+    {{- end }}
+    {{- if $file_details.binaryData }}
+        {{- $field_count = add1 $field_count }}
+    {{- end }}
+    {{- if ne $field_count 1 }}
+        {{- print "\n\nextraFiles entries (" $file_key ") must only contain one of the fields: data, stringData, and binaryData." | fail }}
+    {{- end }}
 {{- end }}
