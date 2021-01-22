@@ -278,8 +278,9 @@ properties:
                 name: my_image.png
                 mountDir: /usr/local/share/jupyterhub/static/
 
-              # Files in /etc/jupyterhub.d are automatically loaded just like
-              # hub.extraConfig entries, sorted based on their name.
+              # Files in /etc/jupyterhub.d are automatically loaded in
+              # alphabetical order of the final file name when JupyterHub
+              # starts.
               my_config:
                 name: my_jupyterhub_config.py
                 mountDir: /etc/jupyterhub.d
@@ -291,7 +292,7 @@ properties:
           base64 my_image.png > my_image.png.b64
 
           helm upgrade <...> \
-              --set-file hub.extraFiles.my_image.binaryData=./my_image.png.b64
+              --set-file hub.extraFiles.my_image.binaryData=./my_image.png.b64 \
               --set-file hub.extraFiles.my_config.stringData=./my_jupyterhub_config.py
           ```
       baseUrl:
