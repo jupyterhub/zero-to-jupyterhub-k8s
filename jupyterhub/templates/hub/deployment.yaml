@@ -147,8 +147,7 @@ spec:
             - mountPath: /etc/jupyterhub/secret/
               name: secret
             {{- range $file_key, $file_details := .Values.hub.extraFiles }}
-            {{- $file_name := $file_details.name | default $file_key }}
-            - mountPath: {{ $file_details.mountDir | trimSuffix "/" }}/{{ $file_name }}
+            - mountPath: {{ $file_details.mountPath }}
               subPath: {{ $file_key | quote }}
               name: files
             {{- end }}

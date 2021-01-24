@@ -221,26 +221,14 @@ properties:
           ```yaml
           hub:
             extraFiles:
-              <implicit file name>:
-                # name is an optional way to override the implicit file name
-                # that must be unique.
-                name: <explicit file name>
-
-                # mode is by default 0644 and you can optionally override it
-                # either by octal notation (example: 0400) or decimal notation
-                # (example: 256).
-                mode: <file system permissions>
-
-                # mountDir is required and must be the directory you want to
-                # mount the file.
-                mountDir: <directory path>
+              # The file key is just a reference that doesn't influence the
+              # actual file name.
+              <file key>:
+                # mountPath is required and must be the absolute file path.
+                mountPath: <full file path>
 
                 # Choose one out of the three ways to represent the actual file
                 # content: data, stringData, or binaryData.
-                #
-                # Both stringData and binaryData should be set to a string
-                # representing the content, where binaryData should be the
-                # base64 encoding of the actual file content.
                 #
                 # data should be set to a mapping (dictionary). It will in the
                 # end be rendered to either YAML, JSON, or TOML based on the
@@ -252,9 +240,10 @@ properties:
                 # the files content from different files as compared to opting
                 # for one or another string.
                 #
-                binaryData: aGVsbG8gd29ybGQhCg==
-                stringData: |
-                  hello world!
+                # Both stringData and binaryData should be set to a string
+                # representing the content, where binaryData should be the
+                # base64 encoding of the actual file content.
+                #
                 data:
                   config:
                     map:
@@ -263,6 +252,14 @@ properties:
                     list:
                       - 1
                       - 2
+                stringData: |
+                  hello world!
+                binaryData: aGVsbG8gd29ybGQhCg==
+
+                # mode is by default 0644 and you can optionally override it
+                # either by octal notation (example: 0400) or decimal notation
+                # (example: 256).
+                mode: <file system permissions>
           ```
 
           To avoid embedding entire files in the Helm chart configuration, you
@@ -272,18 +269,14 @@ properties:
           ```yaml
           hub:
             extraFiles:
-              # Explicitly set the name to avoid having the file key include a .
-              # as it can hamper our ability to use --set-file.
               my_image:
-                name: my_image.png
-                mountDir: /usr/local/share/jupyterhub/static/
+                mountPath: /usr/local/share/jupyterhub/static/my_image.png
 
               # Files in /etc/jupyterhub.d are automatically loaded in
               # alphabetical order of the final file name when JupyterHub
               # starts.
               my_config:
-                name: my_jupyterhub_config.py
-                mountDir: /etc/jupyterhub.d
+                mountPath: /etc/jupyterhub.d/my_jupyterhub_config.py
           ```
 
           ```bash

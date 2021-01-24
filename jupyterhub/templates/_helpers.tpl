@@ -350,7 +350,7 @@ true
 {{- define "jupyterhub.extraFiles.stringData.withNewLineSuffix" -}}
     {{- range $file_key, $file_details := . }}
         {{- include "jupyterhub.extraFiles.validate-file" (list $file_key $file_details) }}
-        {{- $file_name := $file_details.name | default $file_key }}
+        {{- $file_name := $file_details.mountPath | base }}
         {{- if $file_details.stringData }}
             {{- $file_key | quote }}: |
               {{- $file_details.stringData | trimSuffix "\n" | nindent 2 }}{{ println }}
@@ -364,7 +364,7 @@ true
               {{- else if eq (ext $file_name) ".toml" }}
               {{- $file_details.data | toToml | trimSuffix "\n" | nindent 2 }}{{ println }}
               {{- else }}
-              {{- print "\n\nextraFiles entries with 'data' (" $file_name ") needs to have a filename extension of .yaml, .yml, .json, or .toml!" | fail }}
+              {{- print "\n\nextraFiles entries with 'data' (" $file_key " > " $file_details.mountPath ") needs to have a filename extension of .yaml, .yml, .json, or .toml!" | fail }}
               {{- end }}
         {{- end }}
     {{- end }}
@@ -376,6 +376,13 @@ true
 {{- define "jupyterhub.extraFiles.validate-file" -}}
     {{- $file_key := index . 0 }}
     {{- $file_details := index . 1 }}
+
+    {{- /* Use of mountPath. */}}
+    {{- if not ($file_details.mountPath) }}
+        {{- print "\n\nextraFiles entries (" $file_key ") must contain the field 'mountPath'." | fail }}
+    {{- end }}
+
+    {{- /* Use one of stringData, binaryData, data. */}}
     {{- $field_count := 0 }}
     {{- if $file_details.data }}
         {{- $field_count = add1 $field_count }}
@@ -387,6 +394,6 @@ true
         {{- $field_count = add1 $field_count }}
     {{- end }}
     {{- if ne $field_count 1 }}
-        {{- print "\n\nextraFiles entries (" $file_key ") must only contain one of the fields: data, stringData, and binaryData." | fail }}
+        {{- print "\n\nextraFiles entries (" $file_key ") must only contain one of the fields: 'data', 'stringData', and 'binaryData'." | fail }}
     {{- end }}
 {{- end }}

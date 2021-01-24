@@ -306,10 +306,9 @@ if extra_files:
 
     volume_mounts = []
     for file_key, file_details in extra_files.items():
-        file_name = file_details.get("name", file_key)
         volume_mounts.append(
             {
-                "mountPath": file_details["mountDir"].rstrip("/") + "/" + file_name,
+                "mountPath": file_details["mountPath"],
                 "subPath": file_key,
                 "name": "files",
             }
