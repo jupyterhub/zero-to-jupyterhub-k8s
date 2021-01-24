@@ -34,7 +34,18 @@ spec:
       priorityClassName: {{ include "jupyterhub.priority.fullname" . }}
       {{- end }}
       nodeSelector: {{ toJson .Values.proxy.traefik.nodeSelector }}
-      tolerations: {{ toJson .Values.proxy.traefik.tolerations }}
+      tolerations:
+        - key: hub.jupyter.org/dedicated
+          operator: Equal
+          value: core
+          effect: NoSchedule
+        - key: hub.jupyter.org_dedicated
+          operator: Equal
+          value: core
+          effect: NoSchedule
+        {{- with .Values.proxy.traefik.tolerations }}
+        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- end }}
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
       volumes:
         - name: certificates
