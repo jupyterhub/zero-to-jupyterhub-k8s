@@ -235,10 +235,10 @@ properties:
                 # filename extension that are required to be either .yaml, .yml,
                 # .json, or .toml.
                 #
-                # If your content is YAML, JSON, or TOML, it can be useful to
-                # use data over stringData, because then you can update parts of
-                # the files content from different files as compared to opting
-                # for one or another string.
+                # If your content is YAML, JSON, or TOML, it can make sense to
+                # use data to represent it over stringData as data can be merged
+                # instead of replaced if set partially from separate Helm
+                # configuration files.
                 #
                 # Both stringData and binaryData should be set to a string
                 # representing the content, where binaryData should be the
