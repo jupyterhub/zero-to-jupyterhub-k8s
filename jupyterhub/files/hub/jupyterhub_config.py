@@ -372,14 +372,19 @@ if get_config("debug.enabled", False):
     c.Spawner.debug = True
 
 
-# load seeded secrets
+# load potentially seeded secrets
 c.JupyterHub.proxy_auth_token = get_secret_value("JupyterHub.proxy_auth_token")
 c.JupyterHub.cookie_secret = a2b_hex(get_secret_value("JupyterHub.cookie_secret"))
 c.CryptKeeper.keys = get_secret_value("CryptKeeper.keys").split(";")
 
-# load hub.config values
+# load hub.config values, except potentially seeded secrets
 for section, sub_cfg in get_config("hub.config", {}).items():
-    c[section].update(sub_cfg)
+    if section == "JupyterHub" and sub_cfg in ["proxy_auth_token", "cookie_secret"]:
+        pass
+    elif section == "CryptKeeper" and sub_cfg in ["keys"]:
+        pass
+    else:
+        c[section].update(sub_cfg)
 
 # execute hub.extraConfig string
 extra_config = get_config("hub.extraConfig", {})
