@@ -75,15 +75,18 @@ spec:
           volumeMounts:
             - mountPath: /etc/user-scheduler
               name: config
+          ports:
+            - name: http
+              containerPort: 10251
           livenessProbe:
             httpGet:
               path: /healthz
-              port: 10251
+              port: http
             initialDelaySeconds: 15
           readinessProbe:
             httpGet:
               path: /healthz
-              port: 10251
+              port: http
           resources:
             {{- .Values.scheduling.userScheduler.resources | toYaml | trimSuffix "\n" | nindent 12 }}
           {{- with .Values.scheduling.userScheduler.containerSecurityContext }}
