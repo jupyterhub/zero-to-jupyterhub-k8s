@@ -215,8 +215,9 @@ properties:
       extraFiles: &extraFiles
         type: string
         description: |
-          A dictionary with extra files that should be injected into the pod's
-          container on startup.
+          A dictionary with extra files to be injected into the pod's container
+          on startup. This can for example be used to inject: configuration
+          files, custom user interface templates, images, and more.
 
           ```yaml
           hub:
@@ -262,6 +263,8 @@ properties:
                 mode: <file system permissions>
           ```
 
+          **Using --set-file**
+
           To avoid embedding entire files in the Helm chart configuration, you
           can use the `--set-file` flag during `helm upgrade` to set the
           stringData or binaryData field.
@@ -288,6 +291,36 @@ properties:
               --set-file hub.extraFiles.my_image.binaryData=./my_image.png.b64 \
               --set-file hub.extraFiles.my_config.stringData=./my_jupyterhub_config.py
           ```
+
+          **Common uses**
+
+          1. **JupyterHub template customization**
+
+             You can replace the default JupyterHub user interface templates in
+             the hub pod by injecting new ones to
+             `/usr/local/share/jupyterhub/templates`. These can in turn
+             reference custom images injected to
+             `/usr/local/share/jupyterhub/static`.
+
+          1. **JupyterHub standalone file config**
+
+             Instead of embedding JupyterHub python configuration as a string
+             within a YAML file through
+             [`hub.extraConfig`](schema_hub.extraConfig), you can inject a
+             standalone .py file into `/etc/jupyterhub.d` that is automatically
+             loaded.
+
+          1. **Flexible configuration**
+
+             By injecting files, you don't have to embed them in a docker image
+             that you have to rebuild.
+
+             If your configuration file is a YAML/JSON/TOML file, you can also
+             use `data` instead of `stringData` which allow you to set various
+             configuration in separate Helm config files. This can be useful to
+             help dependent charts override only some configuration part of the
+             file, or to allow for the configuration be set through multiple
+             Helm configuration files.
       baseUrl:
         type: string
         description: |
