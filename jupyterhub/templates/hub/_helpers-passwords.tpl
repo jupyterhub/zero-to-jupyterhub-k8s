@@ -10,21 +10,26 @@
 {{/*
     Returns given number of random Hex characters.
 
-    In practice, it generates up to 100 randAlphaNum strings
+    In practice, it generates up to 25 randAlphaNum strings
     that are filtered from non-hex characters and augmented
-    to the resulting string that is finally trimmed down.
+    to the resulting string that is finally trimmed down. We
+    do it multiple times as on average we filter out 4/15 of
+    the characters.
 */}}
 {{- define "jupyterhub.randHex" -}}
     {{- $result := "" }}
-    {{- range $i := until 100 }}
-        {{- if lt (len $result) . }}
-            {{- $rand_list := randAlphaNum . | splitList "" -}}
-            {{- $reduced_list := without $rand_list "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z" }}
-            {{- $rand_string := join "" $reduced_list }}
-            {{- $result = print $result $rand_string -}}
+    {{- $context := . }}
+    {{- range $i := until 26 }}{{- /* 1-25 */}}
+        {{- if lt (len $result) $context }}
+            {{- $rand_anum_string := randAlphaNum $context }}
+            {{- $rand_anum_list := $rand_anum_string | splitList "" }}
+            {{- $rand_hex_list := without $rand_anum_list "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z" }}
+            {{- $rand_hex_string := join "" $rand_hex_list }}
+            {{- $result = print $result $rand_hex_string }}
         {{- end }}
     {{- end }}
-    {{- $result | trunc . }}
+    {{- /* We shuffle the generated hex numbers for good measure */}}
+    {{- $result | trunc $context | shuffle }}
 {{- end }}
 
 {{- define "jupyterhub.config.JupyterHub.proxy_auth_token" -}}
