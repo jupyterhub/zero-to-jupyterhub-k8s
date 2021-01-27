@@ -36,6 +36,18 @@ def _get_config_value(key):
         raise Exception(f"{path} not found!")
 
 
+@lru_cache()
+def get_secret_value(key):
+    """Load value from the k8s Secret given a key."""
+
+    path = f"/etc/jupyterhub/secret/{key}"
+    if os.path.exists(path):
+        with open(path) as f:
+            return f.read()
+    else:
+        raise Exception(f"{path} not found!")
+
+
 def get_name(name):
     """Returns the fullname of a resource given its short name"""
     return _get_config_value(name)

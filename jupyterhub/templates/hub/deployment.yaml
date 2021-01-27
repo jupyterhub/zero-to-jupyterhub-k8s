@@ -160,7 +160,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "jupyterhub.hub-secret.fullname" . }}
-                  key: proxy.token
+                  key: JupyterHub.proxy_auth_token
             {{- if .Values.hub.db.password }}
             {{- if eq .Values.hub.db.type "mysql" }}
             - name: MYSQL_PWD

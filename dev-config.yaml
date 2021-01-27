@@ -1,5 +1,4 @@
 proxy:
-  secretToken: pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp
   service:
     type: NodePort
     nodePorts:
@@ -33,7 +32,6 @@ proxy:
       egress: [] # overrides allowance of 0.0.0.0/0
 
 hub:
-  cookieSecret: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
   db:
     type: sqlite-memory
   services:

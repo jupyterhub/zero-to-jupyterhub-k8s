@@ -12,7 +12,13 @@ from jupyterhub.utils import url_path_join
 configuration_directory = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, configuration_directory)
 
-from z2jh import get_config, set_config_if_not_none, get_name, get_name_env
+from z2jh import (
+    get_config,
+    set_config_if_not_none,
+    get_name,
+    get_name_env,
+    get_secret_value,
+)
 
 
 def camelCaseify(s):
@@ -66,7 +72,6 @@ for trait, cfg_key in (
     ("concurrent_spawn_limit", None),
     ("active_server_limit", None),
     ("base_url", None),
-    # ('cookie_secret', None),  # requires a Hex -> Byte transformation
     ("allow_named_servers", None),
     ("named_server_limit_per_user", None),
     ("authenticate_prometheus", None),
@@ -78,11 +83,6 @@ for trait, cfg_key in (
     if cfg_key is None:
         cfg_key = camelCaseify(trait)
     set_config_if_not_none(c.JupyterHub, trait, "hub." + cfg_key)
-
-# a required Hex -> Byte transformation
-cookie_secret_hex = get_config("hub.cookieSecret")
-if cookie_secret_hex:
-    c.JupyterHub.cookie_secret = a2b_hex(cookie_secret_hex)
 
 # hub_bind_url configures what the JupyterHub process within the hub pod's
 # container should listen to.
@@ -372,9 +372,19 @@ if get_config("debug.enabled", False):
     c.Spawner.debug = True
 
 
-# load hub.config values
+# load potentially seeded secrets
+c.JupyterHub.proxy_auth_token = get_secret_value("JupyterHub.proxy_auth_token")
+c.JupyterHub.cookie_secret = a2b_hex(get_secret_value("JupyterHub.cookie_secret"))
+c.CryptKeeper.keys = get_secret_value("CryptKeeper.keys").split(";")
+
+# load hub.config values, except potentially seeded secrets
 for section, sub_cfg in get_config("hub.config", {}).items():
-    c[section].update(sub_cfg)
+    if section == "JupyterHub" and sub_cfg in ["proxy_auth_token", "cookie_secret"]:
+        pass
+    elif section == "CryptKeeper" and sub_cfg in ["keys"]:
+        pass
+    else:
+        c[section].update(sub_cfg)
 
 # execute hub.extraConfig string
 extra_config = get_config("hub.extraConfig", {})

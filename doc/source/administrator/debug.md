@@ -104,7 +104,7 @@ Now we are sure that something is wrong with our Dockerfile. Let's check
 our `config.yaml` file for the section where we specify the user's
 Docker image. Here we see our problem:
 
-```
+```yaml
 singleuser:
   image:
     name: jupyter/scipy-notebook
@@ -116,7 +116,7 @@ the pod to fail.
 
 To fix this, let's add a tag to our `config.yaml` file:
 
-```
+```yaml
 singleuser:
   image:
     name: jupyter/scipy-notebook
@@ -173,48 +173,3 @@ And now we see that we have a running user pod!
 Note that many debugging situations are not as straightforward as this one.
 It will take some time before you get a feel for the errors that Kubernetes
 may throw at you, and how these are tied to your configuration files.
-
-## Troubleshooting Examples
-
-The following sections contain some case studies that illustrate some of the
-more common bugs / gotchas that you may experience using JupyterHub with
-Kubernetes.
-
-### Hub fails to start
-
-**Symptom:** following `kubectl get pod`, the `hub` pod is in
-`Error` or `CrashLoopBackoff` state, or appears to be running but accessing
-the website for the JupyterHub returns an error message in the browser).
-
-**Investigating:** the output of `kubectl --namespace=jhub logs hub...` shows something like:
-
-```
-File "/usr/local/lib/python3.5/dist-packages/jupyterhub/proxy.py", line 589, in get_all_routes
-  resp = yield self.api_request('', client=client)
-tornado.httpclient.HTTPError: HTTP 403: Forbidden
-```
-
-**Diagnosis:** This is likely because the `hub` pod cannot
-communicate with the proxy pod API, likely because of a problem in the
-`secretToken` that was put in `config.yaml`.
-
-**Fix:** Follow these steps:
-
-1. Create a secret token:
-
-   ```
-   openssl rand -hex 32
-   ```
-
-2. Add the token to `config.yaml` like so:
-
-   ```
-   proxy:
-      secretToken: '<output of `openssl rand -hex 32`>'
-   ```
-
-3. Redeploy the helm chart:
-
-   ```
-   helm upgrade --cleanup-on-fail jhub jupyterhub/jupyterhub -f config.yaml
-   ```

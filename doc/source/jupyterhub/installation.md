@@ -2,54 +2,45 @@
 
 # Installing JupyterHub
 
-Now that we have a {doc}`Kubernetes cluster </kubernetes/setup-kubernetes>` and {doc}`Helm </kubernetes/setup-helm>` setup, we can proceed by using Helm to install JupyterHub
-and related {term}`Kubernetes resources <Kubernetes resource>` using a
-{term}`Helm chart`.
+With a {doc}`Kubernetes cluster </kubernetes/setup-kubernetes>` cluster
+available and {doc}`Helm </kubernetes/setup-helm>` installed, we can install
+JupyterHub in the Kubernetes cluster using the JupyterHub Helm chart.
 
-## Prepare configuration file
+## Initialize a Helm chart configuration file
 
-In this step we will prepare a [YAML](https://en.wikipedia.org/wiki/YAML)
-configuration file that we will refer to as `config.yaml`. It will contain the multiple
-{term}`Helm values` to be provided to a JupyterHub {term}`Helm chart` developed
-specifically together with this guide.
+Helm charts' contain {term}`templates <Helm template>` that can be rendered to
+the {term}`Kubernetes resources <Kubernetes resource>` to be installed. A user
+of a Helm chart can override the chart's default values to influence how the
+templates render.
 
-Helm charts contains {term}`templates <Helm template>` that with provided values will render to {term}`Kubernetes resources <Kubernetes resource>` to be installed in a Kubernetes cluster. This
-config file will provide the values to be used by our Helm chart.
+In this step we will initialize a chart configuration file for you to adjust
+your installation of JupyterHub. We will name and refer to it as `config.yaml`
+going onwards.
 
-1. Generate a random hex string representing 32 bytes to use as a security
-   token. Run this command in a terminal and copy the output:
+```{admonition} Introduction to YAML
+If you haven't worked with YAML before, investing some
+minutes [learning about it]([YAML](https://www.youtube.com/watch?v=cdLNKUoMc6c)
+will likely be worth your time.
+```
 
-   ```{code-block} bash
+As of version 1.0.0, you don't need any configuration to get started so you can
+just create a `config.yaml` file with some helpful comments.
 
-   openssl rand -hex 32
+```yaml
+# This file can update the JupyterHub Helm chart's default configuration values.
+#
+# For reference see the configuration reference and default values, but make
+# sure to refer to the Helm chart version of interest to you!
+#
+# Introduction to YAML:     https://www.youtube.com/watch?v=cdLNKUoMc6c
+# Chart config reference:   https://zero-to-jupyterhub.readthedocs.io/en/stable/resources/reference.html
+# Chart default values:     https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/values.yaml
+# Available chart versions: https://jupyterhub.github.io/helm-chart/
+#
+```
 
-   ```
-
-2. Create and start editing a file called `config.yaml`. In the code snippet
-   below we start the widely available [nano editor](https://en.wikipedia.org/wiki/GNU_nano), but any editor will do.
-
-   ```
-   nano config.yaml
-   ```
-
-3. Write the following into the `config.yaml` file but instead of writing
-   `<RANDOM-HEX>` paste the generated hex string you copied in step 1.
-
-   ```
-   proxy:
-     secretToken: "<RANDOM_HEX>"
-   ```
-
-   It is common practice for Helm and Kubernetes YAML files to indent using
-   two spaces.
-
-4. Save the `config.yaml` file. In the nano editor this is done by pressing **CTRL+X** or
-   **CMD+X** followed by a confirmation to save the changes.
-
-<!---
-Don't put an example here! People will just copy paste that & that's a
-security issue.
--->
+In case you are working from a terminal and are unsure how to create this file,
+can try with `nano config.yaml`.
 
 ## Install JupyterHub
 

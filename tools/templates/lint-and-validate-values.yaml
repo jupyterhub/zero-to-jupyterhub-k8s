@@ -13,7 +13,6 @@ hub:
     ports:
       nodePort:
   baseUrl: /
-  cookieSecret: mock
   publicURL: mock-public-url
   activeServerLimit: 3
   deploymentStrategy:
@@ -98,7 +97,6 @@ rbac:
   enabled: true
 
 proxy:
-  secretToken: "0000000000000000000000000000000000000000000000000000000000000000"
   service:
     extraPorts:
       - name: ssh
