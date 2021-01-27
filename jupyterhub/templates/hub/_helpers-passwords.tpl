@@ -37,7 +37,7 @@
         {{- .Values.proxy.secretToken }}
     {{- else }}
         {{- $k8s_state := lookup "v1" "Secret" .Release.Namespace (include "jupyterhub.hub-secret.fullname" .) | default dict }}
-        {{- if and $k8s_state (hasKey $k8s_state "JupyterHub.proxy_auth_token") }}
+        {{- if hasKey $k8s_state "JupyterHub.proxy_auth_token" }}
             {{- index $k8s_state "JupyterHub.proxy_auth_token" }}
         {{- else }}
             {{- include "jupyterhub.randHex" 64 }}
@@ -50,7 +50,7 @@
         {{- .Values.hub.cookieSecret }}
     {{- else }}
         {{- $k8s_state := lookup "v1" "Secret" .Release.Namespace (include "jupyterhub.hub-secret.fullname" .) | default dict }}
-        {{- if and $k8s_state (hasKey $k8s_state "JupyterHub.cookie_secret") }}
+        {{- if hasKey $k8s_state "JupyterHub.cookie_secret" }}
             {{- index $k8s_state "JupyterHub.cookie_secret" }}
         {{- else }}
             {{- include "jupyterhub.randHex" 64 }}
@@ -63,7 +63,7 @@
         {{- .Values.hub.config.CryptKeeper.keys | join ";" }}
     {{- else }}
         {{- $k8s_state := lookup "v1" "Secret" .Release.Namespace (include "jupyterhub.hub-secret.fullname" .) | default dict }}
-        {{- if and $k8s_state (hasKey $k8s_state "CryptKeeper.keys") }}
+        {{- if hasKey $k8s_state "CryptKeeper.keys" }}
             {{- index $k8s_state "CryptKeeper.keys" }}
         {{- else }}
             {{- include "jupyterhub.randHex" 64 }}
