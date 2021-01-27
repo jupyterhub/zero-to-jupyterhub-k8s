@@ -407,8 +407,8 @@ if get_config("debug.enabled", False):
     c.JupyterHub.log_level = "DEBUG"
     c.Spawner.debug = True
 
-# load /etc/jupyterhub.d config files
-config_dir = "/etc/jupyterhub.d"
+# load /usr/local/etc/jupyterhub/jupyterhub_config.d config files
+config_dir = "/usr/local/etc/jupyterhub/jupyterhub_config.d"
 if os.path.isdir(config_dir):
     for file_name in sorted(os.listdir(config_dir)):
         print(f"Loading {config_dir} config: {file_name}")

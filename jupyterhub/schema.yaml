@@ -275,11 +275,11 @@ properties:
               my_image:
                 mountPath: /usr/local/share/jupyterhub/static/my_image.png
 
-              # Files in /etc/jupyterhub.d are automatically loaded in
-              # alphabetical order of the final file name when JupyterHub
-              # starts.
+              # Files in /usr/local/etc/jupyterhub/jupyterhub_config.d are
+              # automatically loaded in alphabetical order of the final file
+              # name when JupyterHub starts.
               my_config:
-                mountPath: /etc/jupyterhub.d/my_jupyterhub_config.py
+                mountPath: /usr/local/etc/jupyterhub/jupyterhub_config.d/my_jupyterhub_config.py
           ```
 
           ```bash
@@ -307,8 +307,9 @@ properties:
              Instead of embedding JupyterHub python configuration as a string
              within a YAML file through
              [`hub.extraConfig`](schema_hub.extraConfig), you can inject a
-             standalone .py file into `/etc/jupyterhub.d` that is automatically
-             loaded.
+             standalone .py file into
+             `/usr/local/etc/jupyterhub/jupyterhub_config.d` that is
+             automatically loaded.
 
           1. **Flexible configuration**
 
@@ -371,10 +372,10 @@ properties:
 
           ```{warning}
           By replacing the entire configuration file, which is mounted to
-          `/etc/jupyterhub/jupyterhub_config.py` by the Helm chart, instead of
-          appending to it with `hub.extraConfig`, you expose your deployment for
-          issues stemming from getting out of sync with the Helm chart's config
-          file.
+          `/usr/local/etc/jupyterhub/jupyterhub_config.py` by the Helm chart,
+          instead of appending to it with `hub.extraConfig`, you expose your
+          deployment for issues stemming from getting out of sync with the Helm
+          chart's config file.
 
           These kind of issues will be significantly harder to debug and
           diagnose, and can due to this could cause a lot of time expenditure
@@ -396,7 +397,7 @@ properties:
             args:
               - "jupyterhub"
               - "--config"
-              - "/etc/jupyterhub/jupyterhub_config.py"
+              - "/usr/local/etc/jupyterhub/jupyterhub_config.py"
               - "--debug"
               - "--upgrade-db"
           ```

@@ -15,7 +15,7 @@ def _load_config():
     """Load the Helm chart configuration used to render the Helm templates of
     the chart from a mounted k8s Secret."""
 
-    path = f"/etc/jupyterhub/secret/values.yaml"
+    path = f"/usr/local/etc/jupyterhub/secret/values.yaml"
     if os.path.exists(path):
         print(f"Loading {path}")
         with open(path) as f:
@@ -28,7 +28,7 @@ def _load_config():
 def _get_config_value(key):
     """Load value from the k8s ConfigMap given a key."""
 
-    path = f"/etc/jupyterhub/config/{key}"
+    path = f"/usr/local/etc/jupyterhub/config/{key}"
     if os.path.exists(path):
         with open(path) as f:
             return f.read()
@@ -40,7 +40,7 @@ def _get_config_value(key):
 def get_secret_value(key):
     """Load value from the k8s Secret given a key."""
 
-    path = f"/etc/jupyterhub/secret/{key}"
+    path = f"/usr/local/etc/jupyterhub/secret/{key}"
     if os.path.exists(path):
         with open(path) as f:
             return f.read()

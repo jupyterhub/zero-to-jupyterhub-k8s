@@ -155,8 +155,9 @@ def test_hub_mounted_extra_files():
 
 def test_hub_etc_jupyterhub_d_folder():
     """
-    Tests that the extra jupyterhub config file put into /etc/jupyterhub.d by
-    the hub.extraFiles configuration was loaded.
+    Tests that the extra jupyterhub config file put into
+    /usr/local/etc/jupyterhub/jupyterhub_config.d by the hub.extraFiles
+    configuration was loaded.
     """
     c = subprocess.run(
         [
@@ -171,7 +172,7 @@ def test_hub_etc_jupyterhub_d_folder():
     )
     assert (
         c.returncode == 0
-    ), f"The hub.extraFiles configuration should have mounted a config file to /etc/jupyterhub.d which should have been loaded to write a dummy file for us!"
+    ), f"The hub.extraFiles configuration should have mounted a config file to /usr/local/etc/jupyterhub/jupyterhub_config.d which should have been loaded to write a dummy file for us!"
 
 
 def test_hub_api_request_user_spawn(
