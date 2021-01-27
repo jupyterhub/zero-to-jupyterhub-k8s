@@ -5,6 +5,9 @@
     proxy.secretToken       / hub.config.JupyterHub.proxy_auth_token
     hub.cookieSecret        / hub.config.JupyterHub.cookie_secret
     auth.state.cryptoKey    / hub.config.CryptKeeper.keys
+
+    Note that lookup logic returns falsy value when run with
+    `helm diff upgrade`, so it is a bit troublesome to test.
 */}}
 
 {{/*
