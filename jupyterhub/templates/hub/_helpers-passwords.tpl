@@ -36,7 +36,7 @@
         {{- if hasKey $k8s_state.data "JupyterHub.proxy_auth_token" }}
             {{- index $k8s_state.data "JupyterHub.proxy_auth_token" | b64dec }}
         {{- else }}
-            {{- include "jupyterhub.randHex" 64 }}
+            {{- randAlphaNum 64 }}
         {{- end }}
     {{- end }}
 {{- end }}
