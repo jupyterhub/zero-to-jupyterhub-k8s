@@ -13,26 +13,19 @@
 {{/*
     Returns given number of random Hex characters.
 
-    In practice, it generates up to 25 randAlphaNum strings
-    that are filtered from non-hex characters and augmented
-    to the resulting string that is finally trimmed down. We
-    do it multiple times as on average we filter out 4/15 of
-    the characters.
+    - randNumeric 4 | atoi generates a random number in [0, 10^4)
+      This is a range range evenly divisble by 16, but even if off by one,
+      that last partial interval offsetting randomness is only 1 part in 625.
+    - mod N 16 maps to the range 0-15
+    - printf "%x" represents a single number 0-15 as a single hex character
 */}}
 {{- define "jupyterhub.randHex" -}}
     {{- $result := "" }}
-    {{- $context := . }}
-    {{- range $i := until 26 }}{{- /* 1-25 */}}
-        {{- if lt (len $result) $context }}
-            {{- $rand_anum_string := randAlphaNum $context }}
-            {{- $rand_anum_list := $rand_anum_string | splitList "" }}
-            {{- $rand_hex_list := without $rand_anum_list "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "A" "B" "C" "D" "E" "F" "G" "H" "I" "J" "K" "L" "M" "N" "O" "P" "Q" "R" "S" "T" "U" "V" "W" "X" "Y" "Z" }}
-            {{- $rand_hex_string := join "" $rand_hex_list }}
-            {{- $result = print $result $rand_hex_string }}
-        {{- end }}
+    {{- range $i := until . }}
+        {{- $rand_hex_char := mod (randNumeric 4 | atoi) 16 | printf "%x" }}
+        {{- $result = print $result $rand_hex_char }}
     {{- end }}
-    {{- /* We shuffle the generated hex numbers for good measure */}}
-    {{- $result | trunc $context | shuffle }}
+    {{- $result }}
 {{- end }}
 
 {{- define "jupyterhub.config.JupyterHub.proxy_auth_token" -}}
