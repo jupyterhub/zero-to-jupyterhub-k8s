@@ -154,7 +154,7 @@ jobs:
           . ./ci/common
           await_pebble
 
-      - name: "Install ${{ matrix.upgrade-from }} chart"
+      - name: "(Upgrade) Install ${{ matrix.upgrade-from }} chart"
         if: matrix.test == 'upgrade'
         run: |
           . ./ci/common
@@ -171,29 +171,31 @@ jobs:
           cd ci
           helm install jupyterhub --repo https://jupyterhub.github.io/helm-chart/ jupyterhub --values ../dev-config.yaml --version=$UPGRADE_FROM_VERSION ${{ matrix.upgrade-from-extra-args }}
 
-      - name: "Install helm diff plugin"
+      - name: "(Upgrade) Install helm diff"
         if: matrix.test == 'upgrade'
         run: |
           helm plugin install https://github.com/databus23/helm-diff
 
-      # ref: https://github.com/jacobtomlinson/gha-read-helm-chart
-      - name: Load local Chart.yaml
-        id: local-chart
-        uses: jacobtomlinson/gha-read-helm-chart@0.1.3
-        with:
-          path: jupyterhub
-
-      - name: "Helm diff ${{ matrix.upgrade-from }} chart with local chart"
+      # ref: https://github.com/mikefarah/yq
+      - name: "(Upgrade) Install yq"
         if: matrix.test == 'upgrade'
         run: |
-          export STRING_REPLACER_A=${{ steps.local-chart.outputs.version }}
+          VERSION=v4.4.1
+          wget https://github.com/mikefarah/yq/releases/download/$VERSION/yq_linux_amd64.tar.gz -qO - | tar xz
+          sudo mv yq_linux_amd64 /usr/bin/yq
+
+      - name: "(Upgrade) Helm diff ${{ matrix.upgrade-from }} chart with local chart"
+        if: matrix.test == 'upgrade'
+        run: |
+          LOCAL_CHART_VERSION=$(cat jupyterhub/Chart.yaml | yq e '.version' -)
+          export STRING_REPLACER_A=$LOCAL_CHART_VERSION
           export STRING_REPLACER_B=$UPGRADE_FROM_VERSION
 
           echo "NOTE: For the helm diff only, we have replaced the new chart"
           echo "      version with the old chart version to reduce clutter."
           echo
           echo "      Old version: $UPGRADE_FROM_VERSION"
-          echo "      New version: ${{ steps.local-chart.outputs.version }} (replaced)"
+          echo "      New version: $LOCAL_CHART_VERSION (replaced)"
           echo
 
           helm diff upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml \
@@ -201,7 +203,7 @@ jobs:
               --context=3 \
               --post-renderer=ci/string-replacer.sh
 
-      - name: "Await ${{ matrix.upgrade-from }} chart"
+      - name: "(Upgrade) Await ${{ matrix.upgrade-from }} chart"
         if: matrix.test == 'upgrade'
         run: |
           . ./ci/common
@@ -209,7 +211,7 @@ jobs:
           await_autohttps_tls_cert_acquisition
           await_autohttps_tls_cert_save
 
-      - name: "Install or upgrade to local chart"
+      - name: "Install local chart"
         run: |
           helm upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml
 
