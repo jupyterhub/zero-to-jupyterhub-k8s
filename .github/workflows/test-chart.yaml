@@ -191,6 +191,9 @@ jobs:
           export STRING_REPLACER_A=$LOCAL_CHART_VERSION
           export STRING_REPLACER_B=$UPGRADE_FROM_VERSION
 
+          echo "NOTE: Helm diff upgrade won't trigger lookup functions, so it"
+          echo "      will look like we seed new passwords all the time."
+          echo
           echo "NOTE: For the helm diff only, we have replaced the new chart"
           echo "      version with the old chart version to reduce clutter."
           echo
