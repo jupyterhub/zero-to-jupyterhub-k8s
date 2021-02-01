@@ -231,12 +231,7 @@ proxy:
       allowPrivilegeEscalation: false
     image:
       name: traefik
-      # If you bump the tag for Traefik, please help out by keeping an eye out
-      # for intermittency failures in the test suite on acquiring HTTPS
-      # certificates as there has been a lot of struggles with in this in the
-      # past. For example:
-      # https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1857.
-      tag: v2.3.7 # ref: https://hub.docker.com/_/traefik?tab=tags
+      tag: v2.4.1 # ref: https://hub.docker.com/_/traefik?tab=tags
       pullPolicy: ""
       pullSecrets: []
     hsts:
