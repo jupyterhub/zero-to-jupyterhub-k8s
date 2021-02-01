@@ -73,6 +73,7 @@ hub:
   args: []
   extraConfig: {}
   extraConfigMap: {}
+  extraFiles: {}
   extraEnv: {}
   extraContainers: []
   extraVolumes: []
@@ -340,6 +341,7 @@ singleuser:
   extraAnnotations: {}
   extraLabels:
     hub.jupyter.org/network-access-hub: "true"
+  extraFiles: {}
   extraEnv: {}
   lifecycleHooks: {}
   initContainers: []

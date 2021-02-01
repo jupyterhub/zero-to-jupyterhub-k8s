@@ -235,7 +235,6 @@ for key in (
 
 # Configure dynamically provisioning pvc
 storage_type = get_config("singleuser.storage.type")
-
 if storage_type == "dynamic":
     pvc_name_template = get_config("singleuser.storage.dynamic.pvcNameTemplate")
     c.KubeSpawner.pvc_name_template = pvc_name_template
@@ -280,6 +279,43 @@ elif storage_type == "static":
         }
     ]
 
+# Inject singleuser.extraFiles as volumes and volumeMounts with data loaded from
+# the dedicated k8s Secret prepared to hold the extraFiles actual content.
+extra_files = get_config("singleuser.extraFiles", {})
+if extra_files:
+    volume = {
+        "name": "files",
+    }
+    items = []
+    for file_key, file_details in extra_files.items():
+        # Each item is a mapping of a key in the k8s Secret to a path in this
+        # abstract volume, the goal is to enable us to set the mode /
+        # permissions only though so we don't change the mapping.
+        item = {
+            "key": file_key,
+            "path": file_key,
+        }
+        if "mode" in file_details:
+            item["mode"] = file_details["mode"]
+        items.append(item)
+    volume["secret"] = {
+        "secretName": get_name("singleuser"),
+        "items": items,
+    }
+    c.KubeSpawner.volumes.append(volume)
+
+    volume_mounts = []
+    for file_key, file_details in extra_files.items():
+        volume_mounts.append(
+            {
+                "mountPath": file_details["mountPath"],
+                "subPath": file_key,
+                "name": "files",
+            }
+        )
+    c.KubeSpawner.volume_mounts.extend(volume_mounts)
+
+# Inject extraVolumes / extraVolumeMounts
 c.KubeSpawner.volumes.extend(get_config("singleuser.storage.extraVolumes", []))
 c.KubeSpawner.volume_mounts.extend(
     get_config("singleuser.storage.extraVolumeMounts", [])
@@ -371,6 +407,15 @@ if get_config("debug.enabled", False):
     c.JupyterHub.log_level = "DEBUG"
     c.Spawner.debug = True
 
+# load /usr/local/etc/jupyterhub/jupyterhub_config.d config files
+config_dir = "/usr/local/etc/jupyterhub/jupyterhub_config.d"
+if os.path.isdir(config_dir):
+    for file_name in sorted(os.listdir(config_dir)):
+        print(f"Loading {config_dir} config: {file_name}")
+        with open(f"{config_dir}/{file_name}") as f:
+            file_content = f.read()
+        # compiling makes debugging easier: https://stackoverflow.com/a/437857
+        exec(compile(source=file_content, filename=file_name, mode="exec"))
 
 # load potentially seeded secrets
 c.JupyterHub.proxy_auth_token = get_secret_value("JupyterHub.proxy_auth_token")

@@ -48,8 +48,59 @@ hub:
     requests:
       memory: 0
       cpu: 0
+  extraFiles:
+    my_config:
+      mountPath: /usr/local/etc/jupyterhub/jupyterhub_config.d/my_config.py
+      stringData: |
+        with open("/tmp/created-by-extra-files-config.txt", "w") as f:
+            f.write("hello world!")
+    binaryData1: &binaryData1
+      mountPath: /tmp/binaryData.txt
+      mode: 0666
+      binaryData: |
+        aGVsbG8gd
+        29ybGQhCg==
+    binaryData2: &binaryData2
+      mountPath: /tmp/dir1/binaryData.txt
+      mode: 0666
+      binaryData: aGVsbG8gd29ybGQhCg==
+    stringData1: &stringData1
+      mountPath: /tmp/stringData.txt
+      mode: 0666
+      stringData: hello world!
+    stringData2: &stringData2
+      mountPath: /tmp/dir1/stringData.txt
+      mode: 0666
+      stringData: hello world!
+    data-yaml: &data-yaml
+      mountPath: /etc/test/data.yaml
+      mode: 0444
+      data:
+        config:
+          map:
+            number: 123
+            string: "hi"
+          list: [1, 2]
+    data-yml: &data-yml
+      <<: *data-yaml
+      mountPath: /etc/test/data.yml
+    data-json: &data-json
+      <<: *data-yaml
+      mountPath: /etc/test/data.json
+    data-toml: &data-toml
+      <<: *data-yaml
+      mountPath: /etc/test/data.toml
 
 singleuser:
+  extraFiles:
+    binaryData1: *binaryData1
+    binaryData2: *binaryData2
+    stringData1: *stringData1
+    stringData2: *stringData2
+    data-yaml: *data-yaml
+    data-yml: *data-yml
+    data-json: *data-json
+    data-toml: *data-toml
   storage:
     type: none
   memory:

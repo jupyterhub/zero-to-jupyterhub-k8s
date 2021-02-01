@@ -13,6 +13,19 @@ import yaml
 here = os.path.dirname(os.path.abspath(__file__))
 chart_yaml = os.path.join(here, os.pardir, "jupyterhub", "Chart.yaml")
 
+extra_files_test = """
+    ls -l /tmp/binaryData.txt | grep -- -rw-rw-rw- || exit 1
+    ls -l /tmp/dir1/binaryData.txt | grep -- -rw-rw-rw- || exit 2
+    ls -l /tmp/stringData.txt | grep -- -rw-rw-rw- || exit 3
+    ls -l /tmp/dir1/stringData.txt | grep -- -rw-rw-rw- || exit 4
+    ls -l /etc/test/data.yaml | grep -- -r--r--r-- || exit 5
+    ls -l /etc/test/data.yml | grep -- -r--r--r-- || exit 6
+    ls -l /etc/test/data.json | grep -- -r--r--r-- || exit 7
+    ls -l /etc/test/data.toml | grep -- -r--r--r-- || exit 8
+    cat /tmp/binaryData.txt | grep -- "hello world" || exit 9
+    cat /tmp/stringData.txt | grep -- "hello world" || exit 10
+"""
+
 with open(chart_yaml) as f:
     chart = yaml.safe_load(f)
     jupyterhub_version = chart["appVersion"]
@@ -119,6 +132,49 @@ def test_hub_can_talk_to_proxy(api_request, request_data):
     assert r.status_code == 200, "Failed to get /proxy"
 
 
+def test_hub_mounted_extra_files():
+    """
+    Tests the hub.extraFiles configuration. It should have mounted files to the
+    hub pod's container with specific file system permissions.
+    """
+    c = subprocess.run(
+        [
+            "kubectl",
+            "exec",
+            "deploy/hub",
+            "--",
+            "sh",
+            "-c",
+            extra_files_test,
+        ]
+    )
+    assert (
+        c.returncode == 0
+    ), f"The hub.extraFiles configuration doesn't seem to have been honored!"
+
+
+def test_hub_etc_jupyterhub_d_folder():
+    """
+    Tests that the extra jupyterhub config file put into
+    /usr/local/etc/jupyterhub/jupyterhub_config.d by the hub.extraFiles
+    configuration was loaded.
+    """
+    c = subprocess.run(
+        [
+            "kubectl",
+            "exec",
+            "deploy/hub",
+            "--",
+            "sh",
+            "-c",
+            "cat /tmp/created-by-extra-files-config.txt | grep -- 'hello world' || exit 1",
+        ]
+    )
+    assert (
+        c.returncode == 0
+    ), f"The hub.extraFiles configuration should have mounted a config file to /usr/local/etc/jupyterhub/jupyterhub_config.d which should have been loaded to write a dummy file for us!"
+
+
 def test_hub_api_request_user_spawn(
     api_request, jupyter_user, request_data, pebble_acme_ca_cert
 ):
@@ -161,6 +217,22 @@ def test_hub_api_request_user_spawn(
         assert (
             c.returncode == 0
         ), f"singleuser.extraEnv didn't lead to a mounted environment variable!"
+
+        # check user pod's extra files
+        c = subprocess.run(
+            [
+                "kubectl",
+                "exec",
+                pod_name,
+                "--",
+                "sh",
+                "-c",
+                extra_files_test,
+            ]
+        )
+        assert (
+            c.returncode == 0
+        ), f"The singleuser.extraFiles configuration doesn't seem to have been honored!"
     finally:
         _delete_server(api_request, jupyter_user, request_data["test_timeout"])
 
