@@ -150,9 +150,10 @@ jobs:
       # jupyterhub and the autohttps pod is about to start, so for CI
       # performance we delayed this until now and did other things in between.
       - name: Await local ACME server
-        run: |
-          . ./ci/common
-          await_pebble
+        uses: jupyterhub/action-k8s-await-workloads@v1
+        with:
+          timeout: 90
+          max-restarts: 0
 
       - name: "(Upgrade) Install ${{ matrix.upgrade-from }} chart"
         if: matrix.test == 'upgrade'
@@ -208,9 +209,15 @@ jobs:
 
       - name: "(Upgrade) Await ${{ matrix.upgrade-from }} chart"
         if: matrix.test == 'upgrade'
+        uses: jupyterhub/action-k8s-await-workloads@v1
+        with:
+          timeout: 90
+          max-restarts: 0
+
+      - name: "(Upgrade) Await ${{ matrix.upgrade-from }} chart cert acquisition"
+        if: matrix.test == 'upgrade'
         run: |
           . ./ci/common
-          await_jupyterhub
           await_autohttps_tls_cert_acquisition
           await_autohttps_tls_cert_save
 
@@ -218,10 +225,15 @@ jobs:
         run: |
           helm upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml
 
-      - name: Await local chart
+      - name: "Await local chart"
+        uses: jupyterhub/action-k8s-await-workloads@v1
+        with:
+          timeout: 90
+          max-restarts: 0
+
+      - name: Await local chart cert acquisition
         run: |
           . ./ci/common
-          await_jupyterhub
           await_autohttps_tls_cert_acquisition
 
       - name: Run tests
