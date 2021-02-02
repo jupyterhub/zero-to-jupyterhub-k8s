@@ -1,3 +1,4 @@
+import glob
 import os
 import re
 import sys
@@ -410,9 +411,10 @@ if get_config("debug.enabled", False):
 # load /usr/local/etc/jupyterhub/jupyterhub_config.d config files
 config_dir = "/usr/local/etc/jupyterhub/jupyterhub_config.d"
 if os.path.isdir(config_dir):
-    for file_name in sorted(os.listdir(config_dir)):
+    for file_path in sorted(glob.glob(f"{config_dir}/*.py")):
+        file_name = os.path.basename(file_path)
         print(f"Loading {config_dir} config: {file_name}")
-        with open(f"{config_dir}/{file_name}") as f:
+        with open(file_path) as f:
             file_content = f.read()
         # compiling makes debugging easier: https://stackoverflow.com/a/437857
         exec(compile(source=file_content, filename=file_name, mode="exec"))
