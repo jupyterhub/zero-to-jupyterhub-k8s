@@ -11,6 +11,9 @@ metadata:
     {{- if not (index .Values.hub.service.annotations "prometheus.io/path") }}
     prometheus.io/path: {{ .Values.hub.baseUrl }}hub/metrics
     {{- end }}
+    {{- if not (index .Values.hub.service.annotations "prometheus.io/port") }}
+    prometheus.io/port: "8081"
+    {{- end }}
     {{- with .Values.hub.service.annotations }}
     {{- . | toYaml | nindent 4 }}
     {{- end }}
