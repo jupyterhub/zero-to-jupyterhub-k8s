@@ -152,7 +152,7 @@ jobs:
       - name: Await local ACME server
         uses: jupyterhub/action-k8s-await-workloads@v1
         with:
-          timeout: 90
+          timeout: 150
           max-restarts: 0
 
       - name: "(Upgrade) Install ${{ matrix.upgrade-from }} chart"
@@ -211,7 +211,7 @@ jobs:
         if: matrix.test == 'upgrade'
         uses: jupyterhub/action-k8s-await-workloads@v1
         with:
-          timeout: 90
+          timeout: 150
           max-restarts: 0
 
       - name: "(Upgrade) Await ${{ matrix.upgrade-from }} chart cert acquisition"
@@ -228,7 +228,7 @@ jobs:
       - name: "Await local chart"
         uses: jupyterhub/action-k8s-await-workloads@v1
         with:
-          timeout: 90
+          timeout: 150
           max-restarts: 0
 
       - name: Await local chart cert acquisition
