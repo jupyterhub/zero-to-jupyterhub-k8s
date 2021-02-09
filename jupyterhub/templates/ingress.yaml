@@ -22,9 +22,10 @@ spec:
         name: http
   {{- else }}
   backend:
-    serviceName: {{ include "jupyterhub.proxy-public.fullname" $ }}
+    serviceName: {{ include "jupyterhub.proxy-public.fullname" . }}
     servicePort: 80
   {{- end }}
+  {{- if .Values.ingress.hosts }}
   rules:
     {{- range $host := .Values.ingress.hosts }}
     - host: {{ $host | quote }}
@@ -44,6 +45,7 @@ spec:
               servicePort: 80
             {{- end }}
     {{- end }}
+  {{- end }}
   {{- with .Values.ingress.tls }}
   tls:
     {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
