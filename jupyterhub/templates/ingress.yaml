@@ -14,17 +14,6 @@ metadata:
     {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
-  defaultBackend:
-    service:
-      name: {{ include "jupyterhub.proxy-public.fullname" . }}
-      port:
-        name: http
-  {{- else }}
-  backend:
-    serviceName: {{ include "jupyterhub.proxy-public.fullname" . }}
-    servicePort: 80
-  {{- end }}
   {{- if .Values.ingress.hosts }}
   rules:
     {{- range $host := .Values.ingress.hosts }}
