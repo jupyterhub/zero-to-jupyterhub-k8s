@@ -14,11 +14,9 @@ metadata:
     {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.ingress.hosts }}
   rules:
-    {{- range $host := .Values.ingress.hosts }}
-    - host: {{ $host | quote }}
-      http:
+    {{- range $host := .Values.ingress.hosts | default (list "") }}
+    - http:
         paths:
           - path: {{ $.Values.hub.baseUrl }}{{ $.Values.ingress.pathSuffix }}
             {{- if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
@@ -33,8 +31,10 @@ spec:
               serviceName: {{ include "jupyterhub.proxy-public.fullname" $ }}
               servicePort: 80
             {{- end }}
+      {{- if $host }}
+      host: {{ $host | quote }}
+      {{- end }}
     {{- end }}
-  {{- end }}
   {{- with .Values.ingress.tls }}
   tls:
     {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
