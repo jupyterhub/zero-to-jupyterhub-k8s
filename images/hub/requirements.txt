@@ -123,7 +123,7 @@ pyjwt==1.7.1
     # via
     #   -r requirements.in
     #   mwoauth
-pymysql==0.10.1
+pymysql==1.0.2
     # via -r requirements.in
 pyopenssl==20.0.0
     # via certipy
