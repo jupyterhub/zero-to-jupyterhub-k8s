@@ -46,16 +46,7 @@ spec:
       {{- end }}
       containers:
         - name: {{ include "jupyterhub.user-scheduler-deploy.fullname" . }}
-          # NOTE: When the kube-scheduler 1.17+ binaries fail to find CSINode
-          #       resource in the cluster, they won't start scheduling. Due to
-          #       this, we fallback to the latest functional version with its
-          #       legacy configuration format. This fallback can be removed when
-          #       we assume k8s 1.17 where CSINode is generally available.
-          {{- if .Capabilities.APIVersions.Has "storage.k8s.io/v1/CSINode" }}
           image: {{ .Values.scheduling.userScheduler.image.name }}:{{ .Values.scheduling.userScheduler.image.tag }}
-          {{- else }}
-          image: {{ .Values.scheduling.userScheduler.image.name }}:v1.16.15
-          {{- end }}
           {{- with .Values.scheduling.userScheduler.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
