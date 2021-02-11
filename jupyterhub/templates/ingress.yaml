@@ -15,16 +15,15 @@ metadata:
   {{- end }}
 spec:
   rules:
-    {{- range $host := .Values.ingress.hosts }}
-    - host: {{ $host | quote }}
-      http:
+    {{- range $host := .Values.ingress.hosts | default (list "") }}
+    - http:
         paths:
           - path: {{ $.Values.hub.baseUrl }}{{ $.Values.ingress.pathSuffix }}
             {{- if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
             pathType: Prefix
             backend:
               service:
-                name: proxy-public
+                name: {{ include "jupyterhub.proxy-public.fullname" $ }}
                 port:
                   name: http
             {{- else }}
@@ -32,6 +31,9 @@ spec:
               serviceName: {{ include "jupyterhub.proxy-public.fullname" $ }}
               servicePort: 80
             {{- end }}
+      {{- if $host }}
+      host: {{ $host | quote }}
+      {{- end }}
     {{- end }}
   {{- with .Values.ingress.tls }}
   tls:

@@ -14,34 +14,33 @@ installations.
 
 ## Ingress
 
-If you are using a Kubernetes Cluster that does not provide public IPs for
-services directly, you need to use a [Kubernetes Ingress
+The Helm chart can be configured to create a [Kubernetes Ingress
 resource](https://kubernetes.io/docs/concepts/services-networking/ingress/) to
-get traffic into your JupyterHub. This varies wildly based on how your cluster
-was set up, which is why this is in the 'Advanced' section.
+expose JupyterHub using an [Ingress
+controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
-You can enable the required Ingress resources with the following in your
-`config.yaml`
+```note
+Not all k8s clusters are setup with an Ingress controller by default. If you need to
+install one manually, we recommend using
+[ingress-nginx](https://github.com/kubernetes/ingress-nginx/blob/master/docs/deploy/index.md#using-helm).
+```
+
+The minimal example to expose JupyterHub using an Ingress resource is the following:
+
+```yaml
+ingress:
+  enabled: true
+```
+
+Typically you should declare that only traffic to a certain domain name should
+be accepted though to avoid conflicts with other Ingress resources.
 
 ```yaml
 ingress:
   enabled: true
   hosts:
-    - <hostname>
+    - hub.example.com
 ```
-
-You can specify multiple hosts that should be routed to the hub by listing them
-under `ingress.hosts`.
-
-Note that you need to install and configure an [Ingress
-controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/)
-for the ingress object to work.
-
-We recommend the community-maintained [nginx-ingress](https://github.com/helm/charts/tree/master/stable/nginx-ingress)
-controller, [**kubernetes/ingress-nginx**](https://github.com/kubernetes/ingress-nginx).
-Note that Nginx maintains two additional ingress controllers.
-For most use cases, we recommend the community maintained **kubernetes/ingress-nginx** since that
-is the ingress controller that the development team has the most experience using.
 
 ### Ingress and Automatic HTTPS with kube-lego & Let's Encrypt
 
