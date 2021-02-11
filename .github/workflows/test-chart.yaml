@@ -77,8 +77,6 @@ jobs:
             test: install
           - k3s-channel: v1.17
             test: install
-          - k3s-channel: v1.16
-            test: install
 
           # We run two upgrade tests where we first install an already released
           # Helm chart version and then upgrades to the version we are now
