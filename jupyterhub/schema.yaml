@@ -2,7 +2,9 @@ title: Config
 type: object
 properties:
   fullnameOverride:
-    type: string
+    type:
+      - string
+      - "null"
     description: |
       fullnameOverride and nameOverride allow you to adjust how the resources
       part of the Helm chart are named.
@@ -47,7 +49,9 @@ properties:
               key: user-scheduler
       ```
   nameOverride:
-    type: string
+    type:
+      - string
+      - "null"
     description: |
       See the documentation under [`fullnameOverride`](schema_fullnameOverride).
   imagePullSecret:
@@ -94,7 +98,9 @@ properties:
           Toggle the automatic reference injection of the created Secret to all
           pods' `spec.imagePullSecrets` configuration.
       registry:
-        type: string
+        type:
+          - string
+          - "null"
         description: |
           Name of the private registry you want to create a credential set for.
           It will default to Docker Hub's image registry.
@@ -105,7 +111,9 @@ properties:
             - eu.gcr.io
             - alexmorreale.privatereg.net
       username:
-        type: string
+        type:
+          - string
+          - "null"
         description: |
           Name of the user you want to use to connect to your private registry.
 
@@ -116,7 +124,9 @@ properties:
             - alex@pfc.com
             - _json_key
       password:
-        type: string
+        type:
+          - string
+          - "null"
         description: |
           Password for the private image registry's user.
 
@@ -140,7 +150,7 @@ properties:
           Learn more in [this
           guide](http://docs.heptio.com/content/private-registries/pr-gcr.html).
   imagePullSecrets:
-    type: list
+    type: array
     description: |
       Chart wide configuration to _append_ k8s Secret references to all its
       pod's `spec.imagePullSecrets` configuration.
@@ -213,7 +223,7 @@ properties:
           dictionaries are updated.
           ```
       extraFiles: &extraFiles
-        type: string
+        type: object
         description: |
           A dictionary with extra files to be injected into the pod's container
           on startup. This can for example be used to inject: configuration
@@ -342,13 +352,15 @@ properties:
              directory we mount in.
 
       baseUrl:
-        type: string
+        type:
+          - string
+          - "null"
         description: |
           This is the equivalent of c.JupyterHub.base_url, but it is also needed
           by the Helm chart in general. So, instead of setting
           c.JupyterHub.base_url, use this configuration.
       command:
-        type: list
+        type: array
         description: |
           A list of strings to be used to replace the JupyterHub image's
           `ENTRYPOINT` entry. Note that in k8s lingo, the Dockerfile's
@@ -362,7 +374,7 @@ properties:
           For more details, see the [Kubernetes
           documentation](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#notes).
       args:
-        type: list
+        type: array
         description: |
           A list of strings to be used to replace the JupyterHub image's `CMD`
           entry as well as the Helm chart's default way to start JupyterHub.
@@ -438,7 +450,9 @@ properties:
           Set custom image name, tag, pullPolicy, or pullSecrets for the pod.
         properties:
           name:
-            type: string
+            type:
+              - string
+              - "null"
             description: |
               The name of the image, without the tag.
 
@@ -447,7 +461,9 @@ properties:
               gcr.io/my-project/my-image
               ```
           tag:
-            type: string
+            type:
+              - string
+              - "null"
             description: |
               The tag of the image to pull. This is the value following `:` in
               complete image specifications.
@@ -458,8 +474,11 @@ properties:
               zhy270a
               ```
           pullPolicy:
-            type: string
+            type:
+              - string
+              - "null"
             enum:
+              - ""
               - IfNotPresent
               - Always
               - Never
@@ -469,7 +488,7 @@ properties:
               See the [Kubernetes docs](https://kubernetes.io/docs/concepts/containers/images/#updating-images)
               for more info.
           pullSecrets:
-            type: list
+            type: array
             description: |
               A list of references to existing Kubernetes Secrets with
               credentials to pull the image.
@@ -502,15 +521,15 @@ properties:
           _NetworkPolicy resource_.
         properties:
           enabled:
-            type: bool
+            type: boolean
             description: |
               Toggle the creation of the NetworkPolicy resource for this pod.
           ingress:
-            type: list
+            type: array
             description: |
               Additional ingress rules to add except those that is known to be needed by the respective pods in the Helm chart.
           egress:
-            type: list
+            type: array
             description: |
               Additional egress rules to add except those that is known to be needed by  the respective pods in the Helm chart.
 
@@ -518,7 +537,9 @@ properties:
 
               If you want to restrict egress, you can override this permissive default to be an empty list.
           interNamespaceAccessLabels:
-            type: string
+            type:
+              - string
+              - "null"
             enum:
               - accept
               - ignore
@@ -537,7 +558,7 @@ properties:
               - `hub.jupyter.org/network-access-proxy-api: "true"` (proxy.chp)
               - `hub.jupyter.org/network-access-singleuser: "true"` (singleuser)
           allowedIngressPorts:
-            type: list
+            type: array
             description: |
               A rule to allow ingress on these ports will be added no matter
               what the origin of the request is. The default setting for
@@ -550,7 +571,9 @@ properties:
         type: object
         properties:
           type:
-            type: string
+            type:
+              - string
+              - "null"
             enum:
               - sqlite-pvc
               - sqlite-memory
@@ -642,7 +665,9 @@ properties:
                   for more details about using a label selector for what PV to
                   bind to.
               storage:
-                type: string
+                type:
+                  - string
+                  - "null"
                 description: |
                   Size of disk to request for the database disk.
           url:
@@ -667,7 +692,7 @@ properties:
           See the [Kubernetes docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
           to learn more about labels.
       initContainers:
-        type: list
+        type: array
         description: |
           list of initContainers to be run with hub pod. See [Kubernetes Docs](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/)
 
@@ -779,7 +804,9 @@ properties:
           Object to configure the service the JupyterHub will be exposed on by the Kubernetes server.
         properties:
           type:
-            type: string
+            type:
+              - string
+              - "null"
             enum:
               - ClusterIP
               - NodePort
@@ -797,7 +824,9 @@ properties:
               Object to configure the ports the hub service will be deployed on.
             properties:
               nodePort:
-                type: integer
+                type:
+                  - integer
+                  - "null"
                 description: |
                   The nodePort to deploy the hub service on.
           annotations:
@@ -840,6 +869,7 @@ properties:
       existingSecret:
         type:
           - string
+          - "null"
         description: |
           Name of an existing k8s Secret to use instead of the chart managed k8s
           Secret.
@@ -848,8 +878,7 @@ properties:
           and by using this option, you are in change of ensuring the secret
           structure is reflected when upgrading to new versions of the chart.
       nodeSelector: &nodeSelector-spec
-        type:
-          - object
+        type: object
         description: |
           An object with key value pairs representing labels. K8s Nodes are
           required to have match all these labels for this Pod to scheduled on
@@ -864,8 +893,7 @@ properties:
           documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
           for more details.
       tolerations: &tolerations-spec
-        type:
-          - list
+        type: array
         description: |
           Tolerations allow a pod to be scheduled on nodes with taints. These
           are additional tolerations other than the user pods and core pods
@@ -893,7 +921,7 @@ properties:
         properties:
           networkPolicy: *networkPolicy-spec
           extraCommandLineFlags:
-            type: list
+            type: array
             description: |
               A list of strings to be added as command line options when
               starting
@@ -954,7 +982,9 @@ properties:
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
       secretToken:
-        type: string
+        type:
+          - string
+          - "null"
         description: |
           ```{note}
           As of version 1.0.0 this will automatically be generated and there is
@@ -985,7 +1015,9 @@ properties:
           the `proxy` pod and only accepting HTTP traffic on port 80.
         properties:
           type:
-            type: string
+            type:
+              - string
+              - "null"
             enum:
               - ClusterIP
               - NodePort
@@ -1018,15 +1050,19 @@ properties:
               for more details about NodePorts.
             properties:
               http:
-                type: integer
+                type:
+                  - integer
+                  - "null"
                 description: |
                   The HTTP port the proxy-public service should be exposed on.
               https:
-                type: integer
+                type:
+                  - integer
+                  - "null"
                 description: |
                   The HTTPS port the proxy-public service should be exposed on.
           extraPorts:
-            type: list
+            type: array
             description: |
               Extra ports the k8s Service should accept incoming traffic on,
               which will be redirected to either the `autohttps` pod (treafik)
@@ -1036,7 +1072,9 @@ properties:
               documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#serviceport-v1-core)
               for the structure of the items in this list.
           loadBalancerIP:
-            type: string
+            type:
+              - string
+              - "null"
             description: |
               The public IP address the proxy-public Kubernetes service should
               be exposed on. This entry will end up at the configurable proxy
@@ -1048,7 +1086,7 @@ properties:
               name that you want to point to a specific IP and want to ensure it
               doesn't change.
           loadBalancerSourceRanges:
-            type: list
+            type: array
             description: |
               A list of IP CIDR ranges that are allowed to access the load balancer service.
               Defaults to allowing everyone to access it.
@@ -1063,7 +1101,9 @@ properties:
             description: |
               Indicator to set whether HTTPS should be enabled or not on the proxy. Defaults to `true` if the https object is provided.
           type:
-            type: string
+            type:
+              - string
+              - "null"
             enum:
               - letsencrypt
               - manual
@@ -1077,7 +1117,9 @@ properties:
             type: object
             properties:
               contactEmail:
-                type: string
+                type:
+                  - string
+                  - "null"
                 description: |
                   The contact email to be used for automatically provisioned HTTPS certificates by Let's Encrypt. For more information see [Set up automatic HTTPS](setup-automatic-https).
                   Required for automatic HTTPS.
@@ -1088,7 +1130,9 @@ properties:
               See [Set up manual HTTPS](setup-manual-https)
             properties:
               key:
-                type: string
+                type:
+                  - string
+                  - "null"
                 description: |
                   The RSA private key to be used for HTTPS.
                   To be provided in the form of
@@ -1100,7 +1144,9 @@ properties:
                     -----END RSA PRIVATE KEY-----
                   ```
               cert:
-                type: string
+                type:
+                  - string
+                  - "null"
                 description: |
                   The certificate to be used for HTTPS.
                   To be provided in the form of
@@ -1117,21 +1163,27 @@ properties:
               Secret to be provided when setting `https.type` to `secret`.
             properties:
               name:
-                type: string
+                type:
+                  - string
+                  - "null"
                 description: |
                   Name of the secret
               key:
-                type: string
+                type:
+                  - string
+                  - "null"
                 description: |
                   Path to the private key to be used for HTTPS.
                   Example: `'tls.key'`
               crt:
-                type: string
+                type:
+                  - string
+                  - "null"
                 description: |
                   Path to the certificate to be used for HTTPS.
                   Example: `'tls.crt'`
           hosts:
-            type: list
+            type: array
             description: |
               You domain in list form.
               Required for automatic HTTPS. See [Set up automatic HTTPS](setup-automatic-https).
@@ -1202,7 +1254,9 @@ properties:
     properties:
       networkPolicy: *networkPolicy-spec
       podNameTemplate:
-        type: string
+        type:
+          - string
+          - "null"
         description: |
           Template for the pod name of each user, such as `jupyter-{username}{servername}`.
       cpu:
@@ -1239,7 +1293,7 @@ properties:
               Note that this field is referred to as *requests* by the Kubernetes API.
       image: *image-spec
       initContainers:
-        type: list
+        type: array
         description: |
           list of initContainers to be run every singleuser pod. See [Kubernetes Docs](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/)
 
@@ -1254,7 +1308,7 @@ properties:
                 command: ['sh', '-c', 'command2']
           ```
       profileList:
-        type: list
+        type: array
         description: |
           For more information about the profile list, see [KubeSpawner's
           documentation](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner)
@@ -1337,13 +1391,13 @@ properties:
           for more info.
         properties:
           required:
-            type: list
+            type: array
             description: |
               Pass this field an array of
               [`NodeSelectorTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#nodeselectorterm-v1-core)
               objects.
           preferred:
-            type: list
+            type: array
             description: |
               Pass this field an array of
               [`PreferredSchedulingTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#preferredschedulingterm-v1-core)
@@ -1354,13 +1408,13 @@ properties:
           See the description of `singleuser.extraNodeAffinity`.
         properties:
           required:
-            type: list
+            type: array
             description: |
               Pass this field an array of
               [`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#podaffinityterm-v1-core)
               objects.
           preferred:
-            type: list
+            type: array
             description: |
               Pass this field an array of
               [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#weightedpodaffinityterm-v1-core)
@@ -1371,13 +1425,13 @@ properties:
           See the description of `singleuser.extraNodeAffinity`.
         properties:
           required:
-            type: list
+            type: array
             description: |
               Pass this field an array of
               [`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#podaffinityterm-v1-core)
               objects.
           preferred:
-            type: list
+            type: array
             description: |
               Pass this field an array of
               [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#weightedpodaffinityterm-v1-core)
@@ -1450,9 +1504,9 @@ properties:
           ```
         properties:
           enabled:
-            type: bool
+            type: boolean
           globalDefault:
-            type: bool
+            type: boolean
             description: |
               Warning! This will influence all pods in the cluster.
 
@@ -1461,11 +1515,11 @@ properties:
               default. This configuration option allows for the creation of such
               global default.
           defaultPriority:
-            type: int
+            type: integer
             description: |
               The actual value for the default pod priority.
           userPlaceholderPriority:
-            type: int
+            type: integer
             description: |
               The actual value for the user-placeholder pods' priority.
       userPlaceholder:
@@ -1486,9 +1540,9 @@ properties:
           ```
         properties:
           enabled:
-            type: bool
+            type: boolean
           replicas:
-            type: int
+            type: integer
             description: |
               How many placeholder pods would you like to have?
           resources:
@@ -1509,7 +1563,9 @@ properties:
               label is preferred or even required?
             properties:
               matchNodePurpose:
-                type: string
+                type:
+                  - string
+                  - "null"
                 enum:
                   - ignore
                   - prefer
@@ -1533,7 +1589,9 @@ properties:
               label is preferred or even required?
             properties:
               matchNodePurpose:
-                type: string
+                type:
+                  - string
+                  - "null"
                 enum:
                   - ignore
                   - prefer
@@ -1564,17 +1622,19 @@ properties:
           documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
           for more details about annotations.
       hosts:
-        type: list
+        type: array
         description: |
           List of hosts to route requests to the proxy.
       pathSuffix:
-        type: string
+        type:
+          - string
+          - "null"
         description: |
           Suffix added to Ingress's routing path pattern.
 
           Specify `*` if your ingress matches path by glob pattern.
       tls:
-        type: list
+        type: array
         description: |
           TLS configurations for Ingress.
 
@@ -1609,7 +1669,7 @@ properties:
         type: object
         properties:
           enabled:
-            type: bool
+            type: boolean
           podSchedulingWaitDuration:
             description: |
               The `hook-image-awaiter` has a criteria to await all the
@@ -1626,7 +1686,7 @@ properties:
               An infinite duration to wait for pods to schedule can be
               represented by `-1`. This was the default behavior of version
               0.9.0 and earlier.
-            type: int
+            type: integer
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
       continuous:
@@ -1640,9 +1700,9 @@ properties:
         type: object
         properties:
           enabled:
-            type: bool
+            type: boolean
       pullProfileListImages:
-        type: bool
+        type: boolean
         description: |
           The singleuser.profileList configuration can let the user choose an
           image through the selection of a profile. This option determines if
