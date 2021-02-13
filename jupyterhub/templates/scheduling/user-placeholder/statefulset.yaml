@@ -46,6 +46,7 @@ spec:
         - name: pause
           image: {{ .Values.prePuller.pause.image.name }}:{{ .Values.prePuller.pause.image.tag }}
           resources:
+            # FIXME: should render scheduling.userPlaceholder.resources if specified
             {{- include "jupyterhub.resources" . | nindent 12 }}
           {{- with .Values.scheduling.userPlaceholder.containerSecurityContext }}
           securityContext:
