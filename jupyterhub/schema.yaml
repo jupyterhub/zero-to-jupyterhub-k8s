@@ -1,5 +1,4 @@
 # Anchor candidates
-# - resources
 # - image
 # - containerSecurityContext
 # - livenessProbe
@@ -967,16 +966,11 @@ properties:
             type: integer
       redirectToServer: # DESCRIBE ME
         type: "null"
-      resources: # DESCRIBE ME
+      resources: &resources-spec
         type: object
-        properties:
-          requests:
-            type: object
-            properties:
-              cpu:
-                type: string
-              memory:
-                type: string
+        description: |
+          A k8s native specification of resources, see [the
+          documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#resourcerequirements-v1-core).
       services: # DESCRIBE ME
         type: object
       shutdownOnLogout: # DESCRIBE ME
@@ -1065,8 +1059,7 @@ properties:
             type: object
           readinessProbe: # DESCRIBE ME
             type: object
-          resources: # DESCRIBE ME
-            type: object
+          resources: *resources-spec
       secretToken:
         type: [string, "null"]
         description: |
@@ -1331,8 +1324,7 @@ properties:
                 type: boolean
           image: # DESCRIBE ME
             type: object
-          resources: # DESCRIBE ME
-            type: object
+          resources: *resources-spec
       labels: # DESCRIBE ME
         type: object
       annotations: # DESCRIBE ME
@@ -1351,8 +1343,7 @@ properties:
             type: object
           image:
             type: object
-          resources:
-            type: object
+          resources: *resources-spec
 
   singleuser:
     type: object
@@ -1659,8 +1650,7 @@ properties:
                           type: string
                         weight:
                           type: integer
-          resources: # DESCRIBE ME
-            type: object
+          resources: *resources-spec
       podPriority:
         type: object
         description: |
@@ -1898,8 +1888,7 @@ properties:
                 type: array
               tag:
                 type: string
-          resources: # DESCRIBE ME
-            type: object
+          resources: *resources-spec
       continuous:
         description: |
           See the [*optimization
