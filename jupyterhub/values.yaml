@@ -443,6 +443,7 @@ scheduling:
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
+    resources: {}
   corePods:
     nodeAffinity:
       matchNodePurpose: prefer
