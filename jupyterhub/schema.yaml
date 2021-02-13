@@ -929,8 +929,10 @@ properties:
       allowNamedServers:
         type: boolean
         description: *jupyterhub-native-config-description
-      annotations: # DESCRIBE ME
+      annotations:
         type: object
+        description: |
+          K8s annotations for the hub pod.
       authenticatePrometheus:
         type: [boolean, "null"]
         description: *jupyterhub-native-config-description
@@ -1338,14 +1340,46 @@ properties:
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
           containerSecurityContext: *containerSecurityContext-spec
-          extraDynamicConfig: # DESCRIBE ME
+          extraDynamicConfig:
             type: object
-          extraPorts: # DESCRIBE ME
+            description: |
+              This refers to traefik's post-startup configuration.
+
+              This Helm chart already provide such configuration, so this is a
+              place where you can merge in additional configuration. If you are
+              about to use this configuration, you may want to inspect the
+              default configuration declared
+              [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/jupyterhub/templates/proxy/autohttps/_configmap-dynamic.yaml).
+          extraPorts:
             type: array
-          extraStaticConfig: # DESCRIBE ME
+            description: |
+              Extra ports for the traefik container within the autohttps pod
+              that you would like to expose, formatted in a k8s native way.
+          extraStaticConfig:
             type: object
+            description: |
+              This refers to traefik's startup configuration.
+
+              This Helm chart already provide such configuration, so this is a
+              place where you can merge in additional configuration. If you are
+              about to use this configuration, you may want to inspect the
+              default configuration declared
+              [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/jupyterhub/templates/proxy/autohttps/_configmap-traefik.yaml).
           extraVolumeMounts: *extraVolumeMounts-spec
-          hsts: # DESCRIBE ME
+          hsts:
+            type: object
+            description: |
+              This section regards a HTTP Strict-Transport-Security (HSTS)
+              response header. It can act as a request for a visiting web
+              browsers to enforce HTTPS on their end in for a given time into
+              the future, and optionally also for future requests to subdomains.
+
+              These settings relate to traefik configuration which we use as a
+              TLS termination proxy.
+
+              See [Mozilla's
+              documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
+              for more information.
             properties:
               includeSubdomains:
                 type: boolean
@@ -1355,19 +1389,49 @@ properties:
                 type: boolean
           image: *image-spec
           resources: *resources-spec
-      labels: # DESCRIBE ME
+      labels:
         type: object
-      annotations: # DESCRIBE ME
+        description: |
+          K8s labels for the proxy pod.
+
+          ```{note}
+          For consistency, this should really be located under
+          proxy.chp.labels but isn't for historical reasons.
+          ```
+      annotations:
         type: object
-      deploymentStrategy: # DESCRIBE ME
+        description: |
+          K8s annotations for the proxy pod.
+
+          ```{note}
+          For consistency, this should really be located under
+          proxy.chp.annotations but isn't for historical reasons.
+          ```
+      deploymentStrategy:
         type: object
         properties:
           rollingUpdate:
-            type: "null"
+            type: [string, "null"]
           type:
             type: string
-      secretSync: # DESCRIBE ME
+            description: |
+              While the proxy pod running
+              [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy)
+              could run in parallel, two instances running in parallel wouldn't
+              both receive updates from JupyterHub regarding how it should route
+              traffic. Due to this we default to using a deployment strategy of
+              Recreate instead of RollingUpdate.
+      secretSync:
         type: object
+        description: |
+          This configuration section refers to configuration of the sidecar
+          container in the autohttps pod running next to its traefik container
+          responsible for TLS termination.
+
+          The purpose of this container is to store away and load TLS
+          certificates from a k8s Secret. The TLS certificates are acquired by
+          the ACME client (LEGO) that is running within the traefik container,
+          where traefik is using them for TLS termination.
         properties:
           containerSecurityContext: *containerSecurityContext-spec
           image: *image-spec
@@ -1545,48 +1609,79 @@ properties:
               Pass this field an array of
               [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#weightedpodaffinityterm-v1-core)
               objects.
-      cloudMetadata: # DESCRIBE ME
+      cloudMetadata:
         type: object
+        description: |
+          Please refer to dedicated section in [the Helm chart
+          documentation](block-metadata-iptables) for more information about
+          this.
         properties:
           blockWithIptables:
             type: boolean
           ip:
             type: string
-      cmd: # DESCRIBE ME
-        type: string
-      defaultUrl: # DESCRIBE ME
-        type: "null"
-      events: # DESCRIBE ME
+      cmd:
+        type: [array, string]
+        description: &kubespawner-native-config-description |
+          KubeSpawner native configuration, see the [KubeSpawner
+          documentation](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html)
+          for more information.
+      defaultUrl:
+        type: [string, "null"]
+        description: *kubespawner-native-config-description
+      # FIXME: named events_enabled in kubespawner
+      events:
         type: boolean
-      extraAnnotations: # DESCRIBE ME
+        description: *kubespawner-native-config-description
+      extraAnnotations:
         type: object
-      extraContainers: *extraContainers-spec
-      extraLabels: # DESCRIBE ME
+        description: *kubespawner-native-config-description
+      extraContainers:
+        type: array
+        description: *kubespawner-native-config-description
+      extraLabels:
+        type: object
+        description: *kubespawner-native-config-description
+      extraPodConfig:
+        type: object
+        description: *kubespawner-native-config-description
+      extraResource:
         type: object
         properties:
-          hub.jupyter.org/network-access-hub:
-            type: string
-      extraPodConfig: # DESCRIBE ME
-        type: object
-      extraResource: # DESCRIBE ME
-        type: object
-        properties:
+          # FIXME: named extra_resource_guarantees in kubespawner
           guarantees:
             type: object
+            description: *kubespawner-native-config-description
+          # FIXME: named extra_resource_limits in kubespawner
           limits:
             type: object
-      fsGid: # DESCRIBE ME
-        type: integer
-      lifecycleHooks: # DESCRIBE ME
+            description: *kubespawner-native-config-description
+      fsGid:
+        type: [integer, "null"]
+        description: *kubespawner-native-config-description
+      lifecycleHooks:
         type: object
-      networkTools: # DESCRIBE ME
+        description: *kubespawner-native-config-description
+      networkTools:
         type: object
+        description: |
+          This configuration section refers to configuration of a conditionally
+          created initContainer for the user pods with a purpose to block a
+          specific IP address.
+
+          This initContainer will be created if
+          [`singleuser.cloudMetadata.blockWithIptables`](schema_singleuser.cloudMetadata.blockWithIptables)
+          is set to true.
         properties:
           image: *image-spec
-      serviceAccountName: # DESCRIBE ME
-        type: "null"
-      startTimeout: # DESCRIBE ME
+          # FIXME: no resources here
+      # FIXME: named service_account in kubespawner
+      serviceAccountName:
+        type: [string, "null"]
+        description: *kubespawner-native-config-description
+      startTimeout:
         type: integer
+        description: *kubespawner-native-config-description
       storage: # DESCRIBE ME
         type: object
         properties:
@@ -1620,8 +1715,15 @@ properties:
                 type: string
           type:
             type: string
-      uid: # DESCRIBE ME
+      uid:
         type: integer
+        description: |
+          This dictates as what user the main container will start up as.
+
+          As an example of when this is needed, consider if you want to enable
+          sudo rights for some of your users. This can be done by starting up as
+          root, enabling it from the container in a startup script, and then
+          transitioning to the normal user.
 
   scheduling:
     type: object
@@ -1649,10 +1751,20 @@ properties:
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
           containerSecurityContext: *containerSecurityContext-spec
-          logLevel: # DESCRIBE ME
+          logLevel:
             type: integer
-          plugins: # DESCRIBE ME
+            description: |
+              Corresponds to the verbosity level of logging made by the
+              kube-scheduler binary running within the user-scheduler pod.
+          plugins:
             type: object
+            description: |
+              These plugins refers to kube-scheduler plugins as documented
+              [here](https://kubernetes.io/docs/reference/scheduling/config/).
+
+              The user-scheduler is really just a kube-scheduler configured in a
+              way to pack users tight on nodes using these plugins. See
+              values.yaml for information about the default plugins.
             properties:
               score:
                 type: object
@@ -1826,7 +1938,7 @@ properties:
       annotations:
         type: object
         description: |
-          Annotations to apply to the Ingress.
+          Annotations to apply to the Ingress resource.
 
           See [the Kubernetes
           documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
