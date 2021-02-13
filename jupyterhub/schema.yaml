@@ -7,6 +7,18 @@
 
 "$schema": http://json-schema.org/draft/2019-09/schema
 type: object
+required:
+  - imagePullSecrets
+  - hub
+  - proxy
+  - singleuser
+  - ingress
+  - prePuller
+  - custom
+  - cull
+  - debug
+  - rbac
+  - global
 properties:
   fullnameOverride:
     type:
