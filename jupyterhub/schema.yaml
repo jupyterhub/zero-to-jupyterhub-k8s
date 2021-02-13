@@ -153,8 +153,11 @@ properties:
 
           Learn more in [this
           guide](http://docs.heptio.com/content/private-registries/pr-gcr.html).
-      email: # DESCRIBE ME
-        type: string
+      email:
+        type: [string, "null"]
+        description: |
+          Specification of an email is most often not required, but it is
+          supported.
 
   imagePullSecrets:
     type: array
@@ -666,11 +669,11 @@ properties:
                 items:
                   type: string
               storageClassName: # DESCRIBE ME
-                type: "null"
+                type: [string, null"]
               subPath: # DESCRIBE ME
-                type: "null"
+                type: [string, "null"]
           upgrade: # DESCRIBE ME
-            type: "null"
+            type: [boolean, "null"]
           url:
             type: [string, "null"]
             description: |
@@ -904,13 +907,13 @@ properties:
           docs](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
           for more info.
       activeServerLimit: # DESCRIBE ME
-        type: "null"
+        type: [integer, "null"]
       allowNamedServers: # DESCRIBE ME
         type: boolean
       annotations: # DESCRIBE ME
         type: object
       authenticatePrometheus: # DESCRIBE ME
-        type: "null"
+        type: [boolean, "null"]
       concurrentSpawnLimit: # DESCRIBE ME
         type: integer
       consecutiveFailureLimit: # DESCRIBE ME
@@ -928,6 +931,7 @@ properties:
             type: string
       extraConfigMap: # DESCRIBE ME
         type: object
+        deprecated: true
       extraContainers: # DESCRIBE ME
         type: array
       extraVolumeMounts: # DESCRIBE ME
@@ -946,9 +950,9 @@ properties:
           for more details.
       readinessProbe: *probe-spec
       namedServerLimitPerUser: # DESCRIBE ME
-        type: "null"
+        type: [integer, "null"]
       redirectToServer: # DESCRIBE ME
-        type: "null"
+        type: [boolean, "null"]
       resources: &resources-spec
         type: object
         description: |
@@ -957,7 +961,7 @@ properties:
       services: # DESCRIBE ME
         type: object
       shutdownOnLogout: # DESCRIBE ME
-        type: "null"
+        type: [boolean, "null"]
       templatePaths: # DESCRIBE ME
         type: array
       templateVars: # DESCRIBE ME
@@ -1167,8 +1171,14 @@ properties:
                 description: |
                   The contact email to be used for automatically provisioned HTTPS certificates by Let's Encrypt. For more information see [Set up automatic HTTPS](setup-automatic-https).
                   Required for automatic HTTPS.
-              acmeServer: # DESCRIBE ME
+              acmeServer:
                 type: string
+                description: |
+                  Let's Encrypt is one of various ACME servers that can provide
+                  a certificate, and by default their production server is used.
+
+                  Let's Encrypt staging:    https://acme-staging-v02.api.letsencrypt.org/directory
+                  Let's Encrypt production: acmeServer: https://acme-v02.api.letsencrypt.org/directory
           manual:
             type: object
             description: |
