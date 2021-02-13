@@ -664,16 +664,30 @@ properties:
                 type: [string, "null"]
                 description: |
                   Size of disk to request for the database disk.
-              accessModes: # DESCRIBE ME
+              accessModes:
                 type: array
                 items:
                   type: string
-              storageClassName: # DESCRIBE ME
-                type: [string, null"]
-              subPath: # DESCRIBE ME
+                description: |
+                  AccessModes contains the desired access modes the volume
+                  should have. See [the k8s
+                  documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1)
+                  for more information.
+              storageClassName:
                 type: [string, "null"]
-          upgrade: # DESCRIBE ME
+                description: |
+                  Name of the StorageClass required by the claim.
+              subPath:
+                type: [string, "null"]
+                description: |
+                  Path within the volume from which the container's volume
+                  should be mounted. Defaults to "" (volume's root).
+          upgrade:
             type: [boolean, "null"]
+            description: |
+              Users with external databases need to opt-in for upgrades of the
+              JupyterHub specific database schema if needed as part of a
+              JupyterHub version upgrade.
           url:
             type: [string, "null"]
             description: |
@@ -906,38 +920,58 @@ properties:
           See the [Kubernetes
           docs](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
           for more info.
-      activeServerLimit: # DESCRIBE ME
+      activeServerLimit:
         type: [integer, "null"]
-      allowNamedServers: # DESCRIBE ME
+        description: &jupyterhub-native-config-description |
+          JupyterHub native configuration, see the [JupyterHub
+          documentation](https://jupyterhub.readthedocs.io/en/stable/api/app.html)
+          for more information.
+      allowNamedServers:
         type: boolean
+        description: *jupyterhub-native-config-description
       annotations: # DESCRIBE ME
         type: object
-      authenticatePrometheus: # DESCRIBE ME
+      authenticatePrometheus:
         type: [boolean, "null"]
-      concurrentSpawnLimit: # DESCRIBE ME
+        description: *jupyterhub-native-config-description
+      concurrentSpawnLimit:
         type: integer
-      consecutiveFailureLimit: # DESCRIBE ME
+        description: *jupyterhub-native-config-description
+      consecutiveFailureLimit:
         type: integer
+        description: *jupyterhub-native-config-description
       containerSecurityContext: &containerSecurityContext-spec
         type: object
         description: |
           A k8s native specification of the container's security context, see [the
           documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#securitycontext-v1-core)
           for details.
-      deploymentStrategy: # DESCRIBE ME
+      deploymentStrategy:
         type: object
         properties:
           type:
             type: string
-      extraConfigMap: # DESCRIBE ME
+            description: |
+              JupyterHub does not support running in parallel, due to this we
+              default to using a deployment strategy of Recreate.
+      extraConfigMap:
         type: object
         deprecated: true
-      extraContainers: # DESCRIBE ME
+        description: |
+          Deprecated since chart version 0.8. Use [`custom`](schema_custom)
+          instead.
+      extraContainers: &extraContainers-spec
         type: array
-      extraVolumeMounts: # DESCRIBE ME
+        description: |
+          Additional containers for the Pod. Use a k8s native syntax.
+      extraVolumeMounts: &extraVolumeMounts-spec
         type: array
-      extraVolumes: # DESCRIBE ME
+        description: |
+          Additional volume mounts for the Container. Use a k8s native syntax.
+      extraVolumes: &extraVolumes-spec
         type: array
+        description: |
+          Additional volumes for the Pod. Use a k8s native syntax.
       livenessProbe: &probe-spec
         type: object
         description: |
@@ -949,23 +983,36 @@ properties:
           documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#probe-v1-core)
           for more details.
       readinessProbe: *probe-spec
-      namedServerLimitPerUser: # DESCRIBE ME
+      namedServerLimitPerUser:
         type: [integer, "null"]
-      redirectToServer: # DESCRIBE ME
+        description: *jupyterhub-native-config-description
+      redirectToServer:
         type: [boolean, "null"]
+        description: *jupyterhub-native-config-description
       resources: &resources-spec
         type: object
         description: |
           A k8s native specification of resources, see [the
           documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#resourcerequirements-v1-core).
-      services: # DESCRIBE ME
+      services:
         type: object
-      shutdownOnLogout: # DESCRIBE ME
+        description: |
+          You can refer to the [JupyterHub
+          documentation](https://jupyterhub.readthedocs.io/en/stable/api/app.html)
+          except that you need to pass the services as a dictionary instead of a
+          list.
+
+          The `name` field can be filled in by the dictionary keys, and a
+          camelCase formatting of api_token is also accepted.
+      shutdownOnLogout:
         type: [boolean, "null"]
-      templatePaths: # DESCRIBE ME
+        description: *jupyterhub-native-config-description
+      templatePaths:
         type: array
-      templateVars: # DESCRIBE ME
+        description: *jupyterhub-native-config-description
+      templateVars:
         type: object
+        description: *jupyterhub-native-config-description
 
   proxy:
     type: object
@@ -1297,12 +1344,8 @@ properties:
             type: array
           extraStaticConfig: # DESCRIBE ME
             type: object
-          extraVolumeMounts: # DESCRIBE ME
-            type: array
-          extraVolumes: # DESCRIBE ME
-            type: array
+          extraVolumeMounts: *extraVolumeMounts-spec
           hsts: # DESCRIBE ME
-            type: object
             properties:
               includeSubdomains:
                 type: boolean
@@ -1517,8 +1560,7 @@ properties:
         type: boolean
       extraAnnotations: # DESCRIBE ME
         type: object
-      extraContainers: # DESCRIBE ME
-        type: array
+      extraContainers: *extraContainers-spec
       extraLabels: # DESCRIBE ME
         type: object
         properties:
@@ -1565,10 +1607,8 @@ properties:
                 type: string
           extraLabels:
             type: object
-          extraVolumeMounts:
-            type: array
-          extraVolumes:
-            type: array
+          extraVolumeMounts: *extraVolumeMounts-spec
+          extraVolumes: *extraVolumes-spec
           homeMountPath:
             type: string
           static:
