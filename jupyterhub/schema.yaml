@@ -1,5 +1,4 @@
 # Anchor candidates
-# - containerSecurityContext
 # - livenessProbe
 # - readinessProbe
 
@@ -920,8 +919,12 @@ properties:
         type: integer
       consecutiveFailureLimit: # DESCRIBE ME
         type: integer
-      containerSecurityContext: # DESCRIBE ME
+      containerSecurityContext: &containerSecurityContext-spec
         type: object
+        description: |
+          A k8s native specification of the container's security context, see [the
+          documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#securitycontext-v1-core)
+          for details.
       deploymentStrategy: # DESCRIBE ME
         type: object
         properties:
@@ -1050,8 +1053,7 @@ properties:
           pdb: *pdb-spec
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
-          containerSecurityContext: # DESCRIBE ME
-            type: object
+          containerSecurityContext: *containerSecurityContext-spec
           image: *image-spec
           livenessProbe: # DESCRIBE ME
             type: object
@@ -1299,8 +1301,7 @@ properties:
           pdb: *pdb-spec
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
-          containerSecurityContext: # DESCRIBE ME
-            type: object
+          containerSecurityContext: *containerSecurityContext-spec
           extraDynamicConfig: # DESCRIBE ME
             type: object
           extraPorts: # DESCRIBE ME
@@ -1336,8 +1337,7 @@ properties:
       secretSync: # DESCRIBE ME
         type: object
         properties:
-          containerSecurityContext:
-            type: object
+          containerSecurityContext: *containerSecurityContext-spec
           image: *image-spec
           resources: *resources-spec
 
@@ -1619,8 +1619,7 @@ properties:
           pdb: *pdb-spec
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
-          containerSecurityContext: # DESCRIBE ME
-            type: object
+          containerSecurityContext: *containerSecurityContext-spec
           logLevel: # DESCRIBE ME
             type: integer
           plugins: # DESCRIBE ME
@@ -1734,8 +1733,7 @@ properties:
             description: |
               Unless specified here, the placeholder pods will request the same
               resources specified for the real singleuser pods.
-          containerSecurityContext: # DESCRIBE ME
-            type: object
+          containerSecurityContext: *containerSecurityContext-spec
       corePods:
         type: object
         description: |
@@ -1870,8 +1868,7 @@ properties:
             type: integer
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
-          containerSecurityContext: # DESCRIBE ME
-            type: object
+          containerSecurityContext: *containerSecurityContext-spec
           image: *image-spec
           resources: *resources-spec
       continuous:
@@ -1911,13 +1908,11 @@ properties:
                 name: jupyter/all-spark-notebook
                 tag: 2343e33dec46
           ```
-      containerSecurityContext: # DESCRIBE ME
-        type: object
+      containerSecurityContext: *containerSecurityContext-spec
       pause: # DESCRIBE ME
         type: object
         properties:
-          containerSecurityContext:
-            type: object
+          containerSecurityContext: *containerSecurityContext-spec
           image: *image-spec
 
   custom:
