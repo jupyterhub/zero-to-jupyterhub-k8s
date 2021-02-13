@@ -1938,8 +1938,12 @@ properties:
                 tag: 2343e33dec46
           ```
       containerSecurityContext: *containerSecurityContext-spec
-      pause: # DESCRIBE ME
+      pause:
         type: object
+        description: |
+          The image-puller pods rely on initContainer to pull all images, and
+          their actual container when they are done is just running a `pause`
+          container. These are settings for that pause container.
         properties:
           containerSecurityContext: *containerSecurityContext-spec
           image: *image-spec
