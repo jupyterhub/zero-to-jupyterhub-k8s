@@ -38,7 +38,6 @@ hub:
     loadBalancerIP:
   baseUrl: /
   cookieSecret:
-  publicURL:
   initContainers: []
   fsGid: 1000
   nodeSelector: {}

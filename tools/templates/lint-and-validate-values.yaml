@@ -55,7 +55,6 @@ hub:
     ports:
       nodePort:
   baseUrl: /
-  publicURL: mock-public-url
   activeServerLimit: 3
   deploymentStrategy:
     type: Recreate
