@@ -1,7 +1,3 @@
-# Anchor candidates
-# - livenessProbe
-# - readinessProbe
-
 "$schema": http://json-schema.org/draft/2019-09/schema
 type: object
 required:
@@ -938,34 +934,19 @@ properties:
         type: array
       extraVolumes: # DESCRIBE ME
         type: array
-      livenessProbe: # DESCRIBE ME
+      livenessProbe: &probe-spec
         type: object
-        properties:
-          enabled:
-            type: boolean
-          failureThreshold:
-            type: integer
-          initialDelaySeconds:
-            type: integer
-          periodSeconds:
-            type: integer
-          timeoutSeconds:
-            type: integer
+        description: |
+          This config option is exactly like the k8s native specification of a
+          container probe, except that it also supports an `enabled` boolean
+          flag.
+
+          See [the k8s
+          documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#probe-v1-core)
+          for more details.
+      readinessProbe: *probe-spec
       namedServerLimitPerUser: # DESCRIBE ME
         type: "null"
-      readinessProbe: # DESCRIBE ME
-        type: object
-        properties:
-          enabled:
-            type: boolean
-          failureThreshold:
-            type: integer
-          initialDelaySeconds:
-            type: integer
-          periodSeconds:
-            type: integer
-          timeoutSeconds:
-            type: integer
       redirectToServer: # DESCRIBE ME
         type: "null"
       resources: &resources-spec
@@ -1055,10 +1036,8 @@ properties:
           tolerations: *tolerations-spec
           containerSecurityContext: *containerSecurityContext-spec
           image: *image-spec
-          livenessProbe: # DESCRIBE ME
-            type: object
-          readinessProbe: # DESCRIBE ME
-            type: object
+          livenessProbe: *probe-spec
+          readinessProbe: *probe-spec
           resources: *resources-spec
       secretToken:
         type: [string, "null"]
