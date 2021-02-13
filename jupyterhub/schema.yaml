@@ -21,9 +21,7 @@ required:
   - global
 properties:
   fullnameOverride:
-    type:
-      - string
-      - "null"
+    type: [string, "null"]
     description: |
       fullnameOverride and nameOverride allow you to adjust how the resources
       part of the Helm chart are named.
@@ -69,9 +67,7 @@ properties:
       ```
 
   nameOverride:
-    type:
-      - string
-      - "null"
+    type: [string, "null"]
     description: |
       See the documentation under [`fullnameOverride`](schema_fullnameOverride).
 
@@ -119,9 +115,7 @@ properties:
           Toggle the automatic reference injection of the created Secret to all
           pods' `spec.imagePullSecrets` configuration.
       registry:
-        type:
-          - string
-          - "null"
+        type: [string, "null"]
         description: |
           Name of the private registry you want to create a credential set for.
           It will default to Docker Hub's image registry.
@@ -132,9 +126,7 @@ properties:
             - eu.gcr.io
             - alexmorreale.privatereg.net
       username:
-        type:
-          - string
-          - "null"
+        type: [string, "null"]
         description: |
           Name of the user you want to use to connect to your private registry.
 
@@ -145,9 +137,7 @@ properties:
             - alex@pfc.com
             - _json_key
       password:
-        type:
-          - string
-          - "null"
+        type: [string, "null"]
         description: |
           Password for the private image registry's user.
 
@@ -376,9 +366,7 @@ properties:
              as is required to avoid replacing the content of the entire
              directory we mount in.
       baseUrl:
-        type:
-          - string
-          - "null"
+        type: [string, "null"]
         description: |
           This is the equivalent of c.JupyterHub.base_url, but it is also needed
           by the Helm chart in general. So, instead of setting
@@ -441,9 +429,7 @@ properties:
           For more details, see the [Kubernetes
           documentation](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#notes).
       cookieSecret:
-        type:
-          - string
-          - "null"
+        type: [string, "null"]
         description: |
           ```{note}
           As of version 1.0.0 this will automatically be generated and there is
@@ -474,9 +460,7 @@ properties:
           Set custom image name, tag, pullPolicy, or pullSecrets for the pod.
         properties:
           name:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
             description: |
               The name of the image, without the tag.
 
@@ -485,9 +469,7 @@ properties:
               gcr.io/my-project/my-image
               ```
           tag:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
             description: |
               The tag of the image to pull. This is the value following `:` in
               complete image specifications.
@@ -498,9 +480,7 @@ properties:
               zhy270a
               ```
           pullPolicy:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
             enum:
               - ""
               - IfNotPresent
@@ -561,9 +541,7 @@ properties:
 
               If you want to restrict egress, you can override this permissive default to be an empty list.
           interNamespaceAccessLabels:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
             enum:
               - accept
               - ignore
@@ -595,9 +573,7 @@ properties:
         type: object
         properties:
           type:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
             enum:
               - sqlite-pvc
               - sqlite-memory
@@ -689,9 +665,7 @@ properties:
                   for more details about using a label selector for what PV to
                   bind to.
               storage:
-                type:
-                  - string
-                  - "null"
+                type: [string, "null"]
                 description: |
                   Size of disk to request for the database disk.
               accessModes: # DESCRIBE ME
@@ -705,17 +679,13 @@ properties:
           upgrade: # DESCRIBE ME
             type: "null"
           url:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
             description: |
               Connection string when `hub.db.type` is mysql or postgres.
 
               See documentation for `hub.db.type` for more details on the format of this property.
           password:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
             description: |
               Password for the database when `hub.db.type` is mysql or postgres.
       labels:
@@ -841,9 +811,7 @@ properties:
           Object to configure the service the JupyterHub will be exposed on by the Kubernetes server.
         properties:
           type:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
             enum:
               - ClusterIP
               - NodePort
@@ -861,9 +829,7 @@ properties:
               Object to configure the ports the hub service will be deployed on.
             properties:
               nodePort:
-                type:
-                  - integer
-                  - "null"
+                type: [integer, "null"]
                 description: |
                   The nodePort to deploy the hub service on.
           annotations:
@@ -904,9 +870,7 @@ properties:
               The minimum number of pods required to be available during
               voluntary disruptions.
       existingSecret:
-        type:
-          - string
-          - "null"
+        type: [string, "null"]
         description: |
           Name of an existing k8s Secret to use instead of the chart managed k8s
           Secret.
@@ -1104,9 +1068,7 @@ properties:
           resources: # DESCRIBE ME
             type: object
       secretToken:
-        type:
-          - string
-          - "null"
+        type: [string, "null"]
         description: |
           ```{note}
           As of version 1.0.0 this will automatically be generated and there is
@@ -1137,9 +1099,7 @@ properties:
           the `proxy` pod and only accepting HTTP traffic on port 80.
         properties:
           type:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
             enum:
               - ClusterIP
               - NodePort
@@ -1172,15 +1132,11 @@ properties:
               for more details about NodePorts.
             properties:
               http:
-                type:
-                  - integer
-                  - "null"
+                type: [integer, "null"]
                 description: |
                   The HTTP port the proxy-public service should be exposed on.
               https:
-                type:
-                  - integer
-                  - "null"
+                type: [integer, "null"]
                 description: |
                   The HTTPS port the proxy-public service should be exposed on.
           extraPorts:
@@ -1194,9 +1150,7 @@ properties:
               documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#serviceport-v1-core)
               for the structure of the items in this list.
           loadBalancerIP:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
             description: |
               The public IP address the proxy-public Kubernetes service should
               be exposed on. This entry will end up at the configurable proxy
@@ -1223,9 +1177,7 @@ properties:
             description: |
               Indicator to set whether HTTPS should be enabled or not on the proxy. Defaults to `true` if the https object is provided.
           type:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
             enum:
               - letsencrypt
               - manual
@@ -1239,9 +1191,7 @@ properties:
             type: object
             properties:
               contactEmail:
-                type:
-                  - string
-                  - "null"
+                type: [string, "null"]
                 description: |
                   The contact email to be used for automatically provisioned HTTPS certificates by Let's Encrypt. For more information see [Set up automatic HTTPS](setup-automatic-https).
                   Required for automatic HTTPS.
@@ -1254,9 +1204,7 @@ properties:
               See [Set up manual HTTPS](setup-manual-https)
             properties:
               key:
-                type:
-                  - string
-                  - "null"
+                type: [string, "null"]
                 description: |
                   The RSA private key to be used for HTTPS.
                   To be provided in the form of
@@ -1268,9 +1216,7 @@ properties:
                     -----END RSA PRIVATE KEY-----
                   ```
               cert:
-                type:
-                  - string
-                  - "null"
+                type: [string, "null"]
                 description: |
                   The certificate to be used for HTTPS.
                   To be provided in the form of
@@ -1287,22 +1233,16 @@ properties:
               Secret to be provided when setting `https.type` to `secret`.
             properties:
               name:
-                type:
-                  - string
-                  - "null"
+                type: [string, "null"]
                 description: |
                   Name of the secret
               key:
-                type:
-                  - string
-                  - "null"
+                type: [string, "null"]
                 description: |
                   Path to the private key to be used for HTTPS.
                   Example: `'tls.key'`
               crt:
-                type:
-                  - string
-                  - "null"
+                type: [string, "null"]
                 description: |
                   Path to the certificate to be used for HTTPS.
                   Example: `'tls.crt'`
@@ -1421,9 +1361,7 @@ properties:
     properties:
       networkPolicy: *networkPolicy-spec
       podNameTemplate:
-        type:
-          - string
-          - "null"
+        type: [string, "null"]
         description: |
           Template for the pod name of each user, such as `jupyter-{username}{servername}`.
       cpu:
@@ -1433,13 +1371,9 @@ properties:
           See: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
         properties:
           limit:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
           guarantee:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
       memory:
         type: object
         description: |
@@ -1449,13 +1383,9 @@ properties:
           for more info.
         properties:
           limit:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
           guarantee:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
             description: |
               Note that this field is referred to as *requests* by the Kubernetes API.
       image: *image-spec
@@ -1834,9 +1764,7 @@ properties:
               label is preferred or even required?
             properties:
               matchNodePurpose:
-                type:
-                  - string
-                  - "null"
+                type: [string, "null"]
                 enum:
                   - ignore
                   - prefer
@@ -1860,9 +1788,7 @@ properties:
               label is preferred or even required?
             properties:
               matchNodePurpose:
-                type:
-                  - string
-                  - "null"
+                type: [string, "null"]
                 enum:
                   - ignore
                   - prefer
@@ -1898,9 +1824,7 @@ properties:
         description: |
           List of hosts to route requests to the proxy.
       pathSuffix:
-        type:
-          - string
-          - "null"
+        type: [string, "null"]
         description: |
           Suffix added to Ingress's routing path pattern.
 
