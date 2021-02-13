@@ -1,4 +1,11 @@
-title: Config
+# Anchor candidates
+# - resources
+# - image
+# - containerSecurityContext
+# - livenessProbe
+# - readinessProbe
+
+"$schema": http://json-schema.org/schema#
 type: object
 properties:
   fullnameOverride:
@@ -48,12 +55,14 @@ properties:
               name: {{ include "jupyterhub.user-scheduler.fullname" . }}
               key: user-scheduler
       ```
+
   nameOverride:
     type:
       - string
       - "null"
     description: |
       See the documentation under [`fullnameOverride`](schema_fullnameOverride).
+
   imagePullSecret:
     type: object
     description: |
@@ -149,6 +158,9 @@ properties:
 
           Learn more in [this
           guide](http://docs.heptio.com/content/private-registries/pr-gcr.html).
+      email: # DESCRIBE ME
+        type: string
+
   imagePullSecrets:
     type: array
     description: |
@@ -161,6 +173,7 @@ properties:
       You can use both the k8s native syntax, where each list element is like
       `{"name": "my-secret-name"}`, or you can let list elements be strings
       naming the secrets directly.
+
   hub:
     type: object
     properties:
@@ -350,7 +363,6 @@ properties:
              `subPath`](https://kubernetes.io/docs/concepts/storage/volumes/#secret)
              as is required to avoid replacing the content of the entire
              directory we mount in.
-
       baseUrl:
         type:
           - string
@@ -670,6 +682,16 @@ properties:
                   - "null"
                 description: |
                   Size of disk to request for the database disk.
+              accessModes: # DESCRIBE ME
+                type: array
+                items:
+                  type: string
+              storageClassName: # DESCRIBE ME
+                type: "null"
+              subPath: # DESCRIBE ME
+                type: "null"
+          upgrade: # DESCRIBE ME
+            type: "null"
           url:
             type:
               - string
@@ -780,7 +802,10 @@ properties:
       uid:
         type: integer
         minimum: 0
-        description: The UID the hub process should be running as.
+        description: |
+          DEPRECATED: Use hub.containerSecurityContext instead.
+
+          The UID the hub process should be running as.
 
           Use this only if you are building your own image & know that a user with this uid
           exists inside the hub container! Advanced feature, handle with care!
@@ -909,6 +934,81 @@ properties:
           See the [Kubernetes
           docs](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
           for more info.
+      activeServerLimit: # DESCRIBE ME
+        type: "null"
+      allowNamedServers: # DESCRIBE ME
+        type: boolean
+      annotations: # DESCRIBE ME
+        type: object
+      authenticatePrometheus: # DESCRIBE ME
+        type: "null"
+      concurrentSpawnLimit: # DESCRIBE ME
+        type: integer
+      consecutiveFailureLimit: # DESCRIBE ME
+        type: integer
+      containerSecurityContext: # DESCRIBE ME
+        type: object
+      deploymentStrategy: # DESCRIBE ME
+        type: object
+        properties:
+          type:
+            type: string
+      extraConfigMap: # DESCRIBE ME
+        type: object
+      extraContainers: # DESCRIBE ME
+        type: array
+      extraVolumeMounts: # DESCRIBE ME
+        type: array
+      extraVolumes: # DESCRIBE ME
+        type: array
+      livenessProbe: # DESCRIBE ME
+        type: object
+        properties:
+          enabled:
+            type: boolean
+          failureThreshold:
+            type: integer
+          initialDelaySeconds:
+            type: integer
+          periodSeconds:
+            type: integer
+          timeoutSeconds:
+            type: integer
+      namedServerLimitPerUser: # DESCRIBE ME
+        type: "null"
+      readinessProbe: # DESCRIBE ME
+        type: object
+        properties:
+          enabled:
+            type: boolean
+          failureThreshold:
+            type: integer
+          initialDelaySeconds:
+            type: integer
+          periodSeconds:
+            type: integer
+          timeoutSeconds:
+            type: integer
+      redirectToServer: # DESCRIBE ME
+        type: "null"
+      resources: # DESCRIBE ME
+        type: object
+        properties:
+          requests:
+            type: object
+            properties:
+              cpu:
+                type: string
+              memory:
+                type: string
+      services: # DESCRIBE ME
+        type: object
+      shutdownOnLogout: # DESCRIBE ME
+        type: "null"
+      templatePaths: # DESCRIBE ME
+        type: array
+      templateVars: # DESCRIBE ME
+        type: object
 
   proxy:
     type: object
@@ -981,6 +1081,16 @@ properties:
           pdb: *pdb-spec
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
+          containerSecurityContext: # DESCRIBE ME
+            type: object
+          image: # DESCRIBE ME
+            type: object
+          livenessProbe: # DESCRIBE ME
+            type: object
+          readinessProbe: # DESCRIBE ME
+            type: object
+          resources: # DESCRIBE ME
+            type: object
       secretToken:
         type:
           - string
@@ -1123,6 +1233,8 @@ properties:
                 description: |
                   The contact email to be used for automatically provisioned HTTPS certificates by Let's Encrypt. For more information see [Set up automatic HTTPS](setup-automatic-https).
                   Required for automatic HTTPS.
+              acmeServer: # DESCRIBE ME
+                type: string
           manual:
             type: object
             description: |
@@ -1244,6 +1356,51 @@ properties:
           pdb: *pdb-spec
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
+          containerSecurityContext: # DESCRIBE ME
+            type: object
+          extraDynamicConfig: # DESCRIBE ME
+            type: object
+          extraPorts: # DESCRIBE ME
+            type: array
+          extraStaticConfig: # DESCRIBE ME
+            type: object
+          extraVolumeMounts: # DESCRIBE ME
+            type: array
+          extraVolumes: # DESCRIBE ME
+            type: array
+          hsts: # DESCRIBE ME
+            type: object
+            properties:
+              includeSubdomains:
+                type: boolean
+              maxAge:
+                type: integer
+              preload:
+                type: boolean
+          image: # DESCRIBE ME
+            type: object
+          resources: # DESCRIBE ME
+            type: object
+      labels: # DESCRIBE ME
+        type: object
+      annotations: # DESCRIBE ME
+        type: object
+      deploymentStrategy: # DESCRIBE ME
+        type: object
+        properties:
+          rollingUpdate:
+            type: "null"
+          type:
+            type: string
+      secretSync: # DESCRIBE ME
+        type: object
+        properties:
+          containerSecurityContext:
+            type: object
+          image:
+            type: object
+          resources:
+            type: object
 
   singleuser:
     type: object
@@ -1427,6 +1584,87 @@ properties:
               Pass this field an array of
               [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#weightedpodaffinityterm-v1-core)
               objects.
+      cloudMetadata: # DESCRIBE ME
+        type: object
+        properties:
+          blockWithIptables:
+            type: boolean
+          ip:
+            type: string
+      cmd: # DESCRIBE ME
+        type: string
+      defaultUrl: # DESCRIBE ME
+        type: "null"
+      events: # DESCRIBE ME
+        type: boolean
+      extraAnnotations: # DESCRIBE ME
+        type: object
+      extraContainers: # DESCRIBE ME
+        type: array
+      extraLabels: # DESCRIBE ME
+        type: object
+        properties:
+          hub.jupyter.org/network-access-hub:
+            type: string
+      extraPodConfig: # DESCRIBE ME
+        type: object
+      extraResource: # DESCRIBE ME
+        type: object
+        properties:
+          guarantees:
+            type: object
+          limits:
+            type: object
+      fsGid: # DESCRIBE ME
+        type: integer
+      lifecycleHooks: # DESCRIBE ME
+        type: object
+      networkTools: # DESCRIBE ME
+        type: object
+        properties:
+          image:
+            type: object
+      serviceAccountName: # DESCRIBE ME
+        type: "null"
+      startTimeout: # DESCRIBE ME
+        type: integer
+      storage: # DESCRIBE ME
+        type: object
+        properties:
+          capacity:
+            type: string
+          dynamic:
+            type: object
+            properties:
+              pvcNameTemplate:
+                type: string
+              storageAccessModes:
+                type: array
+                items:
+                  type: string
+              storageClass:
+                type: "null"
+              volumeNameTemplate:
+                type: string
+          extraLabels:
+            type: object
+          extraVolumeMounts:
+            type: array
+          extraVolumes:
+            type: array
+          homeMountPath:
+            type: string
+          static:
+            type: object
+            properties:
+              pvcName:
+                type: "null"
+              subPath:
+                type: string
+          type:
+            type: string
+      uid: # DESCRIBE ME
+        type: integer
 
   scheduling:
     type: object
@@ -1453,6 +1691,34 @@ properties:
           pdb: *pdb-spec
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
+          containerSecurityContext: # DESCRIBE ME
+            type: object
+          logLevel: # DESCRIBE ME
+            type: integer
+          plugins: # DESCRIBE ME
+            type: object
+            properties:
+              score:
+                type: object
+                properties:
+                  disabled:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                  enabled:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        weight:
+                          type: integer
+          resources: # DESCRIBE ME
+            type: object
       podPriority:
         type: object
         description: |
@@ -1541,6 +1807,8 @@ properties:
             description: |
               Unless specified here, the placeholder pods will request the same
               resources specified for the real singleuser pods.
+          containerSecurityContext: # DESCRIBE ME
+            type: object
       corePods:
         type: object
         description: |
@@ -1593,6 +1861,7 @@ properties:
                   ```
                   hub.jupyter.org/node-purpose=user
                   ```
+
   ingress:
     type: object
     properties:
@@ -1680,6 +1949,21 @@ properties:
             type: integer
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
+          containerSecurityContext: # DESCRIBE ME
+            type: object
+          image: # DESCRIBE ME
+            type: object
+            properties:
+              name:
+                type: string
+              pullPolicy:
+                type: string
+              pullSecrets:
+                type: array
+              tag:
+                type: string
+          resources: # DESCRIBE ME
+            type: object
       continuous:
         description: |
           See the [*optimization
@@ -1717,6 +2001,24 @@ properties:
                 name: jupyter/all-spark-notebook
                 tag: 2343e33dec46
           ```
+      containerSecurityContext: # DESCRIBE ME
+        type: object
+      pause: # DESCRIBE ME
+        type: object
+        properties:
+          containerSecurityContext:
+            type: object
+          image:
+            type: object
+            properties:
+              name:
+                type: string
+              pullPolicy:
+                type: string
+              pullSecrets:
+                type: array
+              tag:
+                type: string
 
   custom:
     type: object
@@ -1734,3 +2036,41 @@ properties:
           myConfig.py: |
             c.MyAuthenticator.host = get_config("custom.myHost")
       ```
+
+  cull: # DESCRIBE ME
+    type: object
+    properties:
+      enabled:
+        type: boolean
+      users:
+        type: boolean
+      removeNamedServers:
+        type: boolean
+      timeout:
+        type: integer
+      every:
+        type: integer
+      concurrency:
+        type: integer
+      maxAge:
+        type: integer
+
+  debug:
+    type: object
+    properties:
+      enabled:
+        type: boolean
+        description: |
+          Increases the loglevel throughout the resources in the Helm chart.
+
+  rbac: # DESCRIBE ME
+    type: object
+    properties:
+      enabled:
+        type: boolean
+
+  global: # DESCRIBE ME
+    type: object
+    properties:
+      safeToShowValues:
+        type: boolean
