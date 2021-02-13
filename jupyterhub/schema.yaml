@@ -1244,8 +1244,6 @@ properties:
           pdb: *pdb-spec
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
-    required:
-      - secretToken
 
   singleuser:
     type: object
