@@ -1,5 +1,4 @@
 # Anchor candidates
-# - image
 # - containerSecurityContext
 # - livenessProbe
 # - readinessProbe
@@ -1053,8 +1052,7 @@ properties:
           tolerations: *tolerations-spec
           containerSecurityContext: # DESCRIBE ME
             type: object
-          image: # DESCRIBE ME
-            type: object
+          image: *image-spec
           livenessProbe: # DESCRIBE ME
             type: object
           readinessProbe: # DESCRIBE ME
@@ -1322,8 +1320,7 @@ properties:
                 type: integer
               preload:
                 type: boolean
-          image: # DESCRIBE ME
-            type: object
+          image: *image-spec
           resources: *resources-spec
       labels: # DESCRIBE ME
         type: object
@@ -1341,8 +1338,7 @@ properties:
         properties:
           containerSecurityContext:
             type: object
-          image:
-            type: object
+          image: *image-spec
           resources: *resources-spec
 
   singleuser:
@@ -1555,8 +1551,7 @@ properties:
       networkTools: # DESCRIBE ME
         type: object
         properties:
-          image:
-            type: object
+          image: *image-spec
       serviceAccountName: # DESCRIBE ME
         type: "null"
       startTimeout: # DESCRIBE ME
@@ -1877,17 +1872,7 @@ properties:
           tolerations: *tolerations-spec
           containerSecurityContext: # DESCRIBE ME
             type: object
-          image: # DESCRIBE ME
-            type: object
-            properties:
-              name:
-                type: string
-              pullPolicy:
-                type: string
-              pullSecrets:
-                type: array
-              tag:
-                type: string
+          image: *image-spec
           resources: *resources-spec
       continuous:
         description: |
@@ -1933,17 +1918,7 @@ properties:
         properties:
           containerSecurityContext:
             type: object
-          image:
-            type: object
-            properties:
-              name:
-                type: string
-              pullPolicy:
-                type: string
-              pullSecrets:
-                type: array
-              tag:
-                type: string
+          image: *image-spec
 
   custom:
     type: object
