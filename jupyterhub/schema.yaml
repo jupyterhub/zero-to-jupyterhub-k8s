@@ -1999,14 +1999,21 @@ properties:
         description: |
           Increases the loglevel throughout the resources in the Helm chart.
 
-  rbac: # DESCRIBE ME
+  rbac:
     type: object
     properties:
       enabled:
         type: boolean
+        description: |
+          Decides if RBAC resources are to be created and referenced by the the
+          Helm chart's workloads.
 
-  global: # DESCRIBE ME
+  global:
     type: object
     properties:
       safeToShowValues:
         type: boolean
+        description: |
+          A flag that should only be set to true temporarily when experiencing a
+          deprecation message that contain censored content that you wish to
+          reveal.
