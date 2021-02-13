@@ -1961,23 +1961,35 @@ properties:
             c.MyAuthenticator.host = get_config("custom.myHost")
       ```
 
-  cull: # DESCRIBE ME
+  cull:
     type: object
+    description: |
+      The
+      [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler)
+      can run as a JupyterHub managed service to _cull_ running servers.
     properties:
       enabled:
         type: boolean
+        description: |
+          Enable/disable use of jupyter-idle-culler.
       users:
         type: boolean
+        description: See the `--cull-users` flag.
       removeNamedServers:
         type: boolean
+        description: See the `--remove-named-servers` flag.
       timeout:
         type: integer
+        description: See the `--timeout` flag.
       every:
         type: integer
+        description: See the `--cull-every` flag.
       concurrency:
         type: integer
+        description: See the `--concurrency` flag.
       maxAge:
         type: integer
+        description: See the `--max-age` flag.
 
   debug:
     type: object
