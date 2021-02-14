@@ -1494,9 +1494,11 @@ properties:
           documentation](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner)
           as this is simply a passthrough to that configuration.
 
-          **NOTE**: The image-pullers are aware of the overrides of images in
+          ```{note}
+          The image-pullers are aware of the overrides of images in
           `singleuser.profileList` but they won't be if you configure it in
           JupyterHub's configuration of '`c.KubeSpawner.profile_list`.
+          ```
 
           ```yaml
           singleuser:
@@ -2069,8 +2071,10 @@ properties:
           section*](pulling-images-before-users-arrive)
           for more details.
 
-          **NOTE**: If used with a Cluster Autoscaler (an autoscaling node
-          pool), also add user-placeholders and enable pod priority.
+          ```{note}
+          If used with a Cluster Autoscaler (an autoscaling node pool), also add
+          user-placeholders and enable pod priority.
+          ```
         type: object
         properties:
           enabled:
