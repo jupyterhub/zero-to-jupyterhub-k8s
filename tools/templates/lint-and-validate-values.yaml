@@ -456,3 +456,8 @@ cull:
 
 debug:
   enabled: true
+
+global: {}
+
+custom:
+  myCustomStuff: [hello]

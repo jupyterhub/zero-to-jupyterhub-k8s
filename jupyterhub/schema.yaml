@@ -846,6 +846,13 @@ properties:
             type: object
             description: |
               Kubernetes annotations to apply to the hub service.
+          loadBalancerIP:
+            type: [string, "null"]
+            description: |
+              A public IP address the hub Kubernetes service should be exposed
+              on. To expose the hub directly is not recommended. Instead route
+              traffic through the proxy-public service towards the hub.
+
       pdb: &pdb-spec
         type: object
         description: |
@@ -1365,6 +1372,7 @@ properties:
               about to use this configuration, you may want to inspect the
               default configuration declared
               [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/jupyterhub/templates/proxy/autohttps/_configmap-traefik.yaml).
+          extraVolumes: *extraVolumes-spec
           extraVolumeMounts: *extraVolumeMounts-spec
           hsts:
             type: object
