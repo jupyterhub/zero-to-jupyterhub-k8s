@@ -31,7 +31,6 @@ def clean_jsonschema(d, parent_key=""):
 
     # start by cleaning up the current level
     for k in set.intersection(JSONSCHEMA_KEYS_TO_REMOVE, set(d.keys())):
-        print(f"Removing key: {k}, from parent_key: {parent_key}")
         del d[k]
 
     # Recursively cleanup nested levels, bypassing one level where there could
@@ -57,6 +56,8 @@ def run():
     # dump schema to values.schema.json
     with open("../jupyterhub/values.schema.json", "w") as f:
         json.dump(schema, f)
+
+    print("jupyterhub/values.schema.json created")
 
 
 run()
