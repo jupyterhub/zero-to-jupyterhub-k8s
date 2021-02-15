@@ -476,7 +476,7 @@ properties:
               zhy270a
               ```
           pullPolicy:
-            type: string
+            type: [string, "null"]
             enum:
               - ""
               - IfNotPresent
