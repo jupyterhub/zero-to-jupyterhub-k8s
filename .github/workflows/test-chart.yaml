@@ -24,7 +24,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint_and_validate:
+  lint_and_validate_rendered_templates:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
@@ -48,6 +48,38 @@ jobs:
 
       - name: Lint and validate (--strict, accept failure)
         run: tools/templates/lint-and-validate.py --strict
+        continue-on-error: true
+
+  lint_and_validate_templates_with_schema:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+
+      - name: Install dependencies
+        run: |
+          . ci/common
+          setup_helm
+
+      - name: Generate values.schema.json
+        run: tools/generate-json-schema.py
+
+      - name: Helm lint (values.yaml)
+        run: helm lint ./jupyterhub
+
+      - name: Helm lint (lint-and-validate-values.yaml)
+        run: helm lint ./jupyterhub
+
+      # FIXME: We can probably emit a GitHub workflow warning if these fail
+      #        instead having them show as green without a warning or similar
+      - name: Helm lint --strict (values.yaml)
+        run: helm lint --strict ./jupyterhub
+        continue-on-error: true
+
+      - name: Helm lint --strict (lint-and-validate-values.yaml)
+        run: helm lint --strict ./jupyterhub
         continue-on-error: true
 
   test:
@@ -137,6 +169,11 @@ jobs:
         run: |
           pip3 install --no-cache-dir -r dev-requirements.txt
           chartpress
+
+      # Generate values.schema.json from schema.yaml
+      - name: Generate values.schema.json from schema.yaml
+        run: |
+          tools/generate-json-schema.py
 
       # Validate rendered helm templates against the k8s api-server with the
       # dedicated lint-and-validate-values.yaml config.
