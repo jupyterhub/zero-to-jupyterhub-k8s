@@ -18,9 +18,10 @@ FIXME: It would be nice to run this as part of our CI pipeline to report if
 import jsonschema
 import os
 import sys
-import yaml
 
 from collections.abc import MutableMapping
+
+import yaml
 
 # Change current directory to this directory
 os.chdir(os.path.dirname(sys.argv[0]))

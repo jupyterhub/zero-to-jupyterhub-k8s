@@ -62,6 +62,7 @@ jobs:
         run: |
           . ci/common
           setup_helm
+          pip install pyyaml
 
       - name: Generate values.schema.json
         run: tools/generate-json-schema.py

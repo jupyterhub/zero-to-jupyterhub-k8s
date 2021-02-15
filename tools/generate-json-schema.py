@@ -12,9 +12,10 @@ we trim away everything that isn't needed.
 import json
 import os
 import sys
-import yaml
 
 from collections.abc import MutableMapping
+
+import yaml
 
 # Change current directory to this directory
 os.chdir(os.path.dirname(sys.argv[0]))
