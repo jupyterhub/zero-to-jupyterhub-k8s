@@ -71,7 +71,7 @@ jobs:
         run: helm lint ./jupyterhub
 
       - name: Helm lint (lint-and-validate-values.yaml)
-        run: helm lint ./jupyterhub
+        run: helm lint ./jupyterhub --values tools/templates/lint-and-validate-values.yaml
 
       # FIXME: We can probably emit a GitHub workflow warning if these fail
       #        instead having them show as green without a warning or similar
