@@ -35,9 +35,9 @@ hub:
     annotations: {}
     ports:
       nodePort:
-    loadBalancerIP:
+    loadBalancerIP: ""
   baseUrl: /
-  cookieSecret:
+  cookieSecret: ""
   initContainers: []
   uid:
   fsGid: 1000
@@ -63,10 +63,10 @@ hub:
       accessModes:
         - ReadWriteOnce
       storage: 1Gi
-      subPath:
-      storageClassName:
-    url:
-    password:
+      subPath: ""
+      storageClassName: ""
+    url: ""
+    password: ""
   labels: {}
   annotations: {}
   command: []
@@ -135,7 +135,7 @@ hub:
     periodSeconds: 2
     failureThreshold: 1000
     timeoutSeconds: 1
-  existingSecret:
+  existingSecret: ""
 
 rbac:
   enabled: true
@@ -180,7 +180,7 @@ proxy:
       http:
       https:
     extraPorts: []
-    loadBalancerIP:
+    loadBalancerIP: ""
     loadBalancerSourceRanges: []
   # chp relates to the proxy pod, which is responsible for routing traffic based
   # on dynamic configuration sent from JupyterHub to CHP's REST API.
@@ -282,8 +282,8 @@ proxy:
       # Specify custom server here (https://acme-staging-v02.api.letsencrypt.org/directory) to hit staging LE
       acmeServer: https://acme-v02.api.letsencrypt.org/directory
     manual:
-      key:
-      cert:
+      key: ""
+      cert: ""
     secret:
       name: ""
       key: tls.key
