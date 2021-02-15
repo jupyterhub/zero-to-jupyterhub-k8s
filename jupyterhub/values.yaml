@@ -83,10 +83,7 @@ hub:
     tag: "set-by-chartpress"
     pullPolicy: ""
     pullSecrets: []
-  resources:
-    requests:
-      cpu: 200m
-      memory: 512Mi
+  resources: {}
   containerSecurityContext:
     runAsUser: 1000
     runAsGroup: 1000
@@ -204,10 +201,7 @@ proxy:
       initialDelaySeconds: 0
       periodSeconds: 2
       failureThreshold: 1000
-    resources:
-      requests:
-        cpu: 200m
-        memory: 512Mi
+    resources: {}
     extraEnv: {}
     nodeSelector: {}
     tolerations: []
@@ -428,10 +422,7 @@ scheduling:
     pdb:
       enabled: true
       minAvailable: 1
-    resources:
-      requests:
-        cpu: 50m
-        memory: 256Mi
+    resources: {}
   podPriority:
     enabled: false
     globalDefault: false
@@ -454,10 +445,7 @@ scheduling:
 # prePuller relates to the hook|continuous-image-puller DaemonsSets
 prePuller:
   annotations: {}
-  resources:
-    requests:
-      cpu: 0
-      memory: 0
+  resources: {}
   containerSecurityContext:
     runAsUser: 65534 # nobody user
     runAsGroup: 65534 # nobody group
@@ -479,10 +467,7 @@ prePuller:
     podSchedulingWaitDuration: 10
     nodeSelector: {}
     tolerations: []
-    resources:
-      requests:
-        cpu: 0
-        memory: 0
+    resources: {}
   continuous:
     enabled: true
   pullProfileListImages: true
