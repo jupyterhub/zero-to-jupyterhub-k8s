@@ -792,7 +792,7 @@ properties:
           manifest as either the hub pod going into `Error` or `CrashLoopBackoff` states, or in
           some special cases, the hub running but... just doing very random things. Be careful!
       uid:
-        type: integer
+        type: [integer, "null"]
         minimum: 0
         description: |
           DEPRECATED: Use hub.containerSecurityContext instead.
@@ -805,7 +805,7 @@ properties:
           Defaults to 1000, which is the uid of the `jovyan` user that is present in the
           default hub image.
       fsGid:
-        type: integer
+        type: [integer, "null"]
         minimum: 0
         description:
           The gid the hub process should be using when touching any volumes mounted.
@@ -882,7 +882,7 @@ properties:
               Decides if a PodDisruptionBudget is created targeting the
               Deployment's pods.
           minAvailable:
-            type: integer
+            type: [integer, "null"]
             description: |
               The minimum number of pods required to be available during
               voluntary disruptions.
@@ -944,10 +944,10 @@ properties:
         type: [boolean, "null"]
         description: *jupyterhub-native-config-description
       concurrentSpawnLimit:
-        type: integer
+        type: [integer, "null"]
         description: *jupyterhub-native-config-description
       consecutiveFailureLimit:
-        type: integer
+        type: [integer, "null"]
         description: *jupyterhub-native-config-description
       containerSecurityContext: &containerSecurityContext-spec
         type: object
@@ -959,7 +959,7 @@ properties:
         type: object
         properties:
           type:
-            type: string
+            type: [string, "null"]
             description: |
               JupyterHub does not support running in parallel, due to this we
               default to using a deployment strategy of Recreate.
@@ -1228,7 +1228,7 @@ properties:
                   The contact email to be used for automatically provisioned HTTPS certificates by Let's Encrypt. For more information see [Set up automatic HTTPS](setup-automatic-https).
                   Required for automatic HTTPS.
               acmeServer:
-                type: string
+                type: [string, "null"]
                 description: |
                   Let's Encrypt is one of various ACME servers that can provide
                   a certificate, and by default their production server is used.
@@ -1392,7 +1392,7 @@ properties:
               includeSubdomains:
                 type: boolean
               maxAge:
-                type: integer
+                type: [integer, "null"]
               preload:
                 type: boolean
           image: *image-spec
@@ -1421,7 +1421,7 @@ properties:
           rollingUpdate:
             type: [string, "null"]
           type:
-            type: string
+            type: [string, "null"]
             description: |
               While the proxy pod running
               [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy)
@@ -1629,7 +1629,7 @@ properties:
           blockWithIptables:
             type: boolean
           ip:
-            type: string
+            type: [string, "null"]
       cmd:
         type: [array, string]
         description: &kubespawner-native-config-description |
@@ -1690,7 +1690,7 @@ properties:
         type: [string, "null"]
         description: *kubespawner-native-config-description
       startTimeout:
-        type: integer
+        type: [integer, "null"]
         description: *kubespawner-native-config-description
       storage:
         type: object
@@ -1700,7 +1700,7 @@ properties:
           [`singleuser.storage.type`](schema_singleuser.storage.type).
         properties:
           capacity:
-            type: string
+            type: [string, "null"]
             description: |
               Configures `KubeSpawner.storage_capacity`.
 
@@ -1711,7 +1711,7 @@ properties:
             type: object
             properties:
               pvcNameTemplate:
-                type: string
+                type: [string, "null"]
                 description: |
                   Configures `KubeSpawner.pvc_name_template` which will be the
                   resource name of the PVC created by KubeSpawner for each user
@@ -1736,7 +1736,7 @@ properties:
                   There is of a default StorageClass available in k8s clusters
                   for use if this is unspecified.
               volumeNameTemplate:
-                type: string
+                type: [string, "null"]
                 description: |
                   Configures `KubeSpawner.volume_name_template`, which is the
                   name to reference from the containers volumeMounts section.
@@ -1749,7 +1749,7 @@ properties:
           extraVolumeMounts: *extraVolumeMounts-spec
           extraVolumes: *extraVolumes-spec
           homeMountPath:
-            type: string
+            type: [string, "null"]
             description: |
               The location within the container where the home folder storage
               should be mounted.
@@ -1777,7 +1777,7 @@ properties:
               (dynamic), or if you want to attach existing storage (static), or
               don't want any storage to be attached (none).
       uid:
-        type: integer
+        type: [integer, "null"]
         description: |
           This dictates as what user the main container will start up as.
 
@@ -1803,7 +1803,7 @@ properties:
             description: |
               Enables the user scheduler.
           replicas:
-            type: integer
+            type: [integer, "null"]
             description: |
               You can have multiple schedulers to share the workload or improve
               availability on node failure.
@@ -1813,7 +1813,7 @@ properties:
           tolerations: *tolerations-spec
           containerSecurityContext: *containerSecurityContext-spec
           logLevel:
-            type: integer
+            type: [integer, "null"]
             description: |
               Corresponds to the verbosity level of logging made by the
               kube-scheduler binary running within the user-scheduler pod.
@@ -1900,11 +1900,11 @@ properties:
               default. This configuration option allows for the creation of such
               global default.
           defaultPriority:
-            type: integer
+            type: [integer, "null"]
             description: |
               The actual value for the default pod priority.
           userPlaceholderPriority:
-            type: integer
+            type: [integer, "null"]
             description: |
               The actual value for the user-placeholder pods' priority.
       userPlaceholder:
@@ -1927,7 +1927,7 @@ properties:
           enabled:
             type: boolean
           replicas:
-            type: integer
+            type: [integer, "null"]
             description: |
               How many placeholder pods would you like to have?
           resources:
@@ -2067,7 +2067,7 @@ properties:
               An infinite duration to wait for pods to schedule can be
               represented by `-1`. This was the default behavior of version
               0.9.0 and earlier.
-            type: integer
+            type: [integer, "null"]
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
           containerSecurityContext: *containerSecurityContext-spec
@@ -2158,16 +2158,16 @@ properties:
         type: boolean
         description: See the `--remove-named-servers` flag.
       timeout:
-        type: integer
+        type: [integer, "null"]
         description: See the `--timeout` flag.
       every:
-        type: integer
+        type: [integer, "null"]
         description: See the `--cull-every` flag.
       concurrency:
-        type: integer
+        type: [integer, "null"]
         description: See the `--concurrency` flag.
       maxAge:
-        type: integer
+        type: [integer, "null"]
         description: See the `--max-age` flag.
 
   debug:
