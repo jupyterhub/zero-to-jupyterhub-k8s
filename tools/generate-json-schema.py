@@ -17,8 +17,11 @@ from collections.abc import MutableMapping
 
 import yaml
 
-# Change current directory to this directory
-os.chdir(os.path.dirname(sys.argv[0]))
+here_dir = os.path.abspath(os.path.dirname(__file__))
+schema_yaml = os.path.join(here_dir, os.pardir, "jupyterhub", "schema.yaml")
+values_schema_json = os.path.join(
+    here_dir, os.pardir, "jupyterhub", "values.schema.json"
+)
 
 
 def clean_jsonschema(d, parent_key=""):
@@ -45,7 +48,7 @@ def clean_jsonschema(d, parent_key=""):
 def run():
     # Using these sets, we can validate further manually by printing the results
     # of set operations.
-    with open("../jupyterhub/schema.yaml") as f:
+    with open(schema_yaml) as f:
         schema = yaml.safe_load(f)
 
     # Drop what isn't relevant for a values.schema.json file packaged with the
@@ -54,7 +57,7 @@ def run():
     clean_jsonschema(schema)
 
     # dump schema to values.schema.json
-    with open("../jupyterhub/values.schema.json", "w") as f:
+    with open(values_schema_json, "w") as f:
         json.dump(schema, f)
 
     print("jupyterhub/values.schema.json created")
