@@ -75,7 +75,7 @@ can try with `nano config.yaml`.
      --install $RELEASE jupyterhub/jupyterhub \
      --namespace $NAMESPACE \
      --create-namespace \
-     --version=0.10.6 \
+     --version=0.11.1 \
      --values config.yaml
    ```
 
