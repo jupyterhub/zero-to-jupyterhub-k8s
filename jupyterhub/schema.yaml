@@ -890,9 +890,12 @@ properties:
             description: |
               Decides if a PodDisruptionBudget is created targeting the
               Deployment's pods.
+          maxUnavailable:
+            type: [integer, "null"]
+            description: |
+              The maximum number of pods required to not be available during
+              voluntary disruptions.
           minAvailable:
-            # FIXME: support maxUnavailable alongside minAvailable, making it
-            #        make sense for both to be null also.
             type: [integer, "null"]
             description: |
               The minimum number of pods required to be available during

@@ -94,6 +94,7 @@ hub:
   services: {}
   pdb:
     enabled: false
+    maxUnavailable:
     minAvailable: 1
   networkPolicy:
     enabled: true
@@ -222,6 +223,7 @@ proxy:
       allowedIngressPorts: [http, https]
     pdb:
       enabled: false
+      maxUnavailable:
       minAvailable: 1
   # traefik relates to the autohttps pod, which is responsible for TLS
   # termination when proxy.https.type=letsencrypt.
@@ -260,6 +262,7 @@ proxy:
       allowedIngressPorts: [http, https]
     pdb:
       enabled: false
+      maxUnavailable:
       minAvailable: 1
   secretSync:
     containerSecurityContext:
@@ -428,6 +431,7 @@ scheduling:
     tolerations: []
     pdb:
       enabled: true
+      maxUnavailable:
       minAvailable: 1
     resources:
       requests:
