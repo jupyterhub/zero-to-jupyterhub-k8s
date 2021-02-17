@@ -1699,7 +1699,6 @@ properties:
           is set to true.
         properties:
           image: *image-spec
-          # FIXME: no resources here
       # FIXME: name mismatch, named service_account in kubespawner
       serviceAccountName:
         type: [string, "null"]
