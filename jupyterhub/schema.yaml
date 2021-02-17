@@ -1,4 +1,17 @@
-"$schema": http://json-schema.org/draft/2019-09/schema
+# This schema (a jsonschema in YAML format) is used to generate
+# values.schema.json which is packaged with the Helm chart for client side
+# validation by Helm of values before template rendering.
+#
+# This schema is also used by our documentation system to build the
+# configuration reference section based on the description fields. See
+# doc/source/conf.py for that logic!
+#
+# We look to document everything we have default values for in values.yaml, but
+# we don't look to enforce the perfect validation logic within this file.
+#
+# ref: https://json-schema.org/learn/getting-started-step-by-step.html
+#
+$schema": http://json-schema.org/draft-07/schema#
 type: object
 required:
   - imagePullSecrets
@@ -66,98 +79,105 @@ properties:
 
   imagePullSecret:
     type: object
-    description: |
-      This is configuration to create a k8s Secret resource of `type:
-      kubernetes.io/dockerconfigjson`, with credentials to pull images from a
-      private image registry. If you opt to do so, it will be available for use
-      by all pods in their respective `spec.imagePullSecrets` alongside other
-      k8s Secrets defined in `imagePullSecrets` or the pod respective
-      `...image.pullSecrets` configuration.
+    required: [create]
+    if:
+      properties:
+        create:
+          const: true
+    then:
+      required: [registry, username, password]
+      description: |
+        This is configuration to create a k8s Secret resource of `type:
+        kubernetes.io/dockerconfigjson`, with credentials to pull images from a
+        private image registry. If you opt to do so, it will be available for use
+        by all pods in their respective `spec.imagePullSecrets` alongside other
+        k8s Secrets defined in `imagePullSecrets` or the pod respective
+        `...image.pullSecrets` configuration.
 
-      In other words, using this configuration option can automate both the
-      otherwise manual creation of a k8s Secret and the otherwise manual
-      configuration to reference this k8s Secret in all the pods of the Helm
-      chart.
+        In other words, using this configuration option can automate both the
+        otherwise manual creation of a k8s Secret and the otherwise manual
+        configuration to reference this k8s Secret in all the pods of the Helm
+        chart.
 
-      ```sh
-      # you won't need to create a k8s Secret manually...
-      kubectl create secret docker-registry image-pull-secret \
-        --docker-server=<REGISTRY> \
-        --docker-username=<USERNAME> \
-        --docker-email=<EMAIL> \
-        --docker-password=<PASSWORD>
-      ```
+        ```sh
+        # you won't need to create a k8s Secret manually...
+        kubectl create secret docker-registry image-pull-secret \
+          --docker-server=<REGISTRY> \
+          --docker-username=<USERNAME> \
+          --docker-email=<EMAIL> \
+          --docker-password=<PASSWORD>
+        ```
 
-      If you just want to let all Pods reference an existing secret, use the
-      `imagePullSecrets` configuration instead.
+        If you just want to let all Pods reference an existing secret, use the
+        `imagePullSecrets` configuration instead.
 
-      To learn the username and password fields to access a gcr.io registry from
-      a Kubernetes cluster not associated with the same google cloud
-      credentials, look into [this
-      guide](http://docs.heptio.com/content/private-registries/pr-gcr.html) and
-      read the notes about the password.
-    properties:
-      create:
-        type: boolean
-        description: |
-          Toggle the creation of the k8s Secret with provided credentials to
-          access a private image registry.
-      automaticReferenceInjection:
-        type: boolean
-        description: |
-          Toggle the automatic reference injection of the created Secret to all
-          pods' `spec.imagePullSecrets` configuration.
-      registry:
-        type: string
-        description: |
-          Name of the private registry you want to create a credential set for.
-          It will default to Docker Hub's image registry.
+        To learn the username and password fields to access a gcr.io registry from
+        a Kubernetes cluster not associated with the same google cloud
+        credentials, look into [this
+        guide](http://docs.heptio.com/content/private-registries/pr-gcr.html) and
+        read the notes about the password.
+      properties:
+        create:
+          type: boolean
+          description: |
+            Toggle the creation of the k8s Secret with provided credentials to
+            access a private image registry.
+        automaticReferenceInjection:
+          type: boolean
+          description: |
+            Toggle the automatic reference injection of the created Secret to all
+            pods' `spec.imagePullSecrets` configuration.
+        registry:
+          type: string
+          description: |
+            Name of the private registry you want to create a credential set for.
+            It will default to Docker Hub's image registry.
 
-          Examples:
-            - https://index.docker.io/v1/
-            - quay.io
-            - eu.gcr.io
-            - alexmorreale.privatereg.net
-      username:
-        type: string
-        description: |
-          Name of the user you want to use to connect to your private registry.
+            Examples:
+              - https://index.docker.io/v1/
+              - quay.io
+              - eu.gcr.io
+              - alexmorreale.privatereg.net
+        username:
+          type: string
+          description: |
+            Name of the user you want to use to connect to your private registry.
 
-          For external gcr.io, you will use the `_json_key`.
+            For external gcr.io, you will use the `_json_key`.
 
-          Examples:
-            - alexmorreale
-            - alex@pfc.com
-            - _json_key
-      password:
-        type: string
-        description: |
-          Password for the private image registry's user.
+            Examples:
+              - alexmorreale
+              - alex@pfc.com
+              - _json_key
+        password:
+          type: string
+          description: |
+            Password for the private image registry's user.
 
-          Examples:
-            - plaintextpassword
-            - abc123SECRETzyx098
+            Examples:
+              - plaintextpassword
+              - abc123SECRETzyx098
 
-          For gcr.io registries the password will be a big JSON blob for a
-          Google cloud service account, it should look something like below.
+            For gcr.io registries the password will be a big JSON blob for a
+            Google cloud service account, it should look something like below.
 
-          ```yaml
-          password: |-
-            {
-              "type": "service_account",
-              "project_id": "jupyter-se",
-              "private_key_id": "f2ba09118a8d3123b3321bd9a7d6d0d9dc6fdb85",
-              ...
-            }
-          ```
+            ```yaml
+            password: |-
+              {
+                "type": "service_account",
+                "project_id": "jupyter-se",
+                "private_key_id": "f2ba09118a8d3123b3321bd9a7d6d0d9dc6fdb85",
+                ...
+              }
+            ```
 
-          Learn more in [this
-          guide](http://docs.heptio.com/content/private-registries/pr-gcr.html).
-      email:
-        type: string
-        description: |
-          Specification of an email is most often not required, but it is
-          supported.
+            Learn more in [this
+            guide](http://docs.heptio.com/content/private-registries/pr-gcr.html).
+        email:
+          type: [string, "null"]
+          description: |
+            Specification of an email is most often not required, but it is
+            supported.
 
   imagePullSecrets:
     type: array
@@ -174,6 +194,7 @@ properties:
 
   hub:
     type: object
+    required: [baseUrl]
     properties:
       config:
         type: object
@@ -425,7 +446,7 @@ properties:
           For more details, see the [Kubernetes
           documentation](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#notes).
       cookieSecret:
-        type: string
+        type: [string, "null"]
         description: |
           ```{note}
           As of version 1.0.0 this will automatically be generated and there is
@@ -452,6 +473,7 @@ properties:
           ```
       image: &image-spec
         type: object
+        required: [name, tag]
         description: |
           Set custom image name, tag, pullPolicy, or pullSecrets for the pod.
         properties:
@@ -476,12 +498,7 @@ properties:
               zhy270a
               ```
           pullPolicy:
-            type: [string, "null"]
-            enum:
-              - ""
-              - IfNotPresent
-              - Always
-              - Never
+            enum: [null, "", IfNotPresent, Always, Never]
             description: |
               Configures the Pod's `spec.imagePullPolicy`.
 
@@ -537,10 +554,7 @@ properties:
 
               If you want to restrict egress, you can override this permissive default to be an empty list.
           interNamespaceAccessLabels:
-            type: string
-            enum:
-              - accept
-              - ignore
+            enum: [accept, ignore]
             description: |
               This configuration option determines if both namespaces and pods
               in other namespaces, that have specific access labels, should be
@@ -569,12 +583,7 @@ properties:
         type: object
         properties:
           type:
-            type: string
-            enum:
-              - sqlite-pvc
-              - sqlite-memory
-              - mysql
-              - postgres
+            enum: [sqlite-pvc, sqlite-memory, mysql, postgres]
             description: |
               Type of database backend to use for the hub database.
 
@@ -637,6 +646,7 @@ properties:
                  tables in the database specified.
           pvc:
             type: object
+            required: [storage]
             description: |
               Customize the Persistent Volume Claim used when `hub.db.type` is `sqlite-pvc`.
             properties:
@@ -667,7 +677,7 @@ properties:
               accessModes:
                 type: array
                 items:
-                  type: string
+                  type: [string, "null"]
                 description: |
                   AccessModes contains the desired access modes the volume
                   should have. See [the k8s
@@ -681,7 +691,7 @@ properties:
                   If this is a blank string it will be set to a blank string,
                   while if it is null, it will not be set at all.
               subPath:
-                type: string
+                type: [string, "null"]
                 description: |
                   Path within the volume from which the container's volume
                   should be mounted. Defaults to "" (volume's root).
@@ -692,13 +702,13 @@ properties:
               JupyterHub specific database schema if needed as part of a
               JupyterHub version upgrade.
           url:
-            type: string
+            type: [string, "null"]
             description: |
               Connection string when `hub.db.type` is mysql or postgres.
 
               See documentation for `hub.db.type` for more details on the format of this property.
           password:
-            type: string
+            type: [string, "null"]
             description: |
               Password for the database when `hub.db.type` is mysql or postgres.
       labels:
@@ -824,12 +834,7 @@ properties:
           Object to configure the service the JupyterHub will be exposed on by the Kubernetes server.
         properties:
           type:
-            type: [string, "null"]
-            enum:
-              - ClusterIP
-              - NodePort
-              - LoadBalancer
-              - ExternalName
+            enum: [ClusterIP, NodePort, LoadBalancer, ExternalName]
             description: |
               The Kubernetes ServiceType to be used.
 
@@ -843,6 +848,7 @@ properties:
             properties:
               nodePort:
                 type: [integer, "null"]
+                minimum: 0
                 description: |
                   The nodePort to deploy the hub service on.
           annotations:
@@ -850,7 +856,7 @@ properties:
             description: |
               Kubernetes annotations to apply to the hub service.
           loadBalancerIP:
-            type: string
+            type: [string, "null"]
             description: |
               A public IP address the hub Kubernetes service should be exposed
               on. To expose the hub directly is not recommended. Instead route
@@ -892,7 +898,7 @@ properties:
               The minimum number of pods required to be available during
               voluntary disruptions.
       existingSecret:
-        type: string
+        type: [string, "null"]
         description: |
           Name of an existing k8s Secret to use instead of the chart managed k8s
           Secret.
@@ -939,7 +945,7 @@ properties:
           documentation](https://jupyterhub.readthedocs.io/en/stable/api/app.html)
           for more information.
       allowNamedServers:
-        type: boolean
+        type: [boolean, "null"]
         description: *jupyterhub-native-config-description
       annotations:
         type: object
@@ -964,7 +970,7 @@ properties:
         type: object
         properties:
           type:
-            type: string
+            type: [string, "null"]
             description: |
               JupyterHub does not support running in parallel, due to this we
               default to using a deployment strategy of Recreate.
@@ -988,14 +994,20 @@ properties:
           Additional volumes for the Pod. Use a k8s native syntax.
       livenessProbe: &probe-spec
         type: object
-        description: |
-          This config option is exactly like the k8s native specification of a
-          container probe, except that it also supports an `enabled` boolean
-          flag.
+        required: [enabled]
+        if:
+          properties:
+            enabled:
+              const: true
+        then:
+          description: |
+            This config option is exactly like the k8s native specification of a
+            container probe, except that it also supports an `enabled` boolean
+            flag.
 
-          See [the k8s
-          documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#probe-v1-core)
-          for more details.
+            See [the k8s
+            documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#probe-v1-core)
+            for more details.
       readinessProbe: *probe-spec
       namedServerLimitPerUser:
         type: [integer, "null"]
@@ -1105,7 +1117,7 @@ properties:
           readinessProbe: *probe-spec
           resources: *resources-spec
       secretToken:
-        type: string
+        type: [string, "null"]
         description: |
           ```{note}
           As of version 1.0.0 this will automatically be generated and there is
@@ -1136,12 +1148,7 @@ properties:
           the `proxy` pod and only accepting HTTP traffic on port 80.
         properties:
           type:
-            type: string
-            enum:
-              - ClusterIP
-              - NodePort
-              - LoadBalancer
-              - ExternalName
+            enum: [ClusterIP, NodePort, LoadBalancer, ExternalName]
             description: |
               Default `LoadBalancer`. See `hub.service.type` for supported values.
           labels:
@@ -1187,7 +1194,7 @@ properties:
               documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#serviceport-v1-core)
               for the structure of the items in this list.
           loadBalancerIP:
-            type: string
+            type: [string, "null"]
             description: |
               The public IP address the proxy-public Kubernetes service should
               be exposed on. This entry will end up at the configurable proxy
@@ -1210,17 +1217,11 @@ properties:
           For more information on configuring HTTPS for your JupyterHub, see the [HTTPS section in our security guide](https)
         properties:
           enabled:
-            type: boolean
+            type: [boolean, "null"]
             description: |
               Indicator to set whether HTTPS should be enabled or not on the proxy. Defaults to `true` if the https object is provided.
           type:
-            type: string
-            enum:
-              - ""
-              - letsencrypt
-              - manual
-              - offload
-              - secret
+            enum: [null, "", letsencrypt, manual, offload, secret]
             description: |
               The type of HTTPS encryption that is used.
               Decides on which ports and network policies are used for communication via HTTPS. Setting this to `secret` sets the type to manual HTTPS with a secret that has to be provided in the `https.secret` object.
@@ -1229,12 +1230,12 @@ properties:
             type: object
             properties:
               contactEmail:
-                type: string
+                type: [string, "null"]
                 description: |
                   The contact email to be used for automatically provisioned HTTPS certificates by Let's Encrypt. For more information see [Set up automatic HTTPS](setup-automatic-https).
                   Required for automatic HTTPS.
               acmeServer:
-                type: string
+                type: [string, "null"]
                 description: |
                   Let's Encrypt is one of various ACME servers that can provide
                   a certificate, and by default their production server is used.
@@ -1248,7 +1249,7 @@ properties:
               See [Set up manual HTTPS](setup-manual-https)
             properties:
               key:
-                type: string
+                type: [string, "null"]
                 description: |
                   The RSA private key to be used for HTTPS.
                   To be provided in the form of
@@ -1260,7 +1261,7 @@ properties:
                     -----END RSA PRIVATE KEY-----
                   ```
               cert:
-                type: string
+                type: [string, "null"]
                 description: |
                   The certificate to be used for HTTPS.
                   To be provided in the form of
@@ -1382,6 +1383,7 @@ properties:
           extraVolumeMounts: *extraVolumeMounts-spec
           hsts:
             type: object
+            required: [includeSubdomains, maxAge, preload]
             description: |
               This section regards a HTTP Strict-Transport-Security (HSTS)
               response header. It can act as a request for a visiting web
@@ -1427,7 +1429,7 @@ properties:
           rollingUpdate:
             type: [string, "null"]
           type:
-            type: string
+            type: [string, "null"]
             description: |
               While the proxy pod running
               [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy)
@@ -1631,15 +1633,21 @@ properties:
               objects.
       cloudMetadata:
         type: object
-        description: |
-          Please refer to dedicated section in [the Helm chart
-          documentation](block-metadata-iptables) for more information about
-          this.
-        properties:
-          blockWithIptables:
-            type: boolean
-          ip:
-            type: string
+        required: [blockWithIptables]
+        if:
+          properties:
+            blockWithIptables:
+              const: true
+        then:
+          description: |
+            Please refer to dedicated section in [the Helm chart
+            documentation](block-metadata-iptables) for more information about
+            this.
+          properties:
+            blockWithIptables:
+              type: boolean
+            ip:
+              type: string
       cmd:
         type: [array, string, "null"]
         description: *kubespawner-native-config-description
@@ -1701,6 +1709,7 @@ properties:
         description: *kubespawner-native-config-description
       storage:
         type: object
+        required: [type, homeMountPath]
         description: |
           This section configures KubeSpawner directly to some extent but also
           indirectly through Helm chart specific configuration options such as
@@ -1726,7 +1735,7 @@ properties:
               storageAccessModes:
                 type: array
                 items:
-                  type: string
+                  type: [string, "null"]
                 description: |
                   Configures `KubeSpawner.storage_access_modes`.
 
@@ -1769,7 +1778,7 @@ properties:
                   Configures `KubeSpawner.pvc_claim_name` to reference
                   pre-existing storage.
               subPath:
-                type: string
+                type: [string, "null"]
                 description: |
                   Configures the `subPath` field of a
                   `KubeSpawner.volume_mounts` entry added by the Helm chart.
@@ -1777,7 +1786,6 @@ properties:
                   Path within the volume from which the container's volume
                   should be mounted.
           type:
-            type: string
             enum: [dynamic, static, none]
             description: |
               Decide if you want storage to be provisioned dynamically
@@ -1801,6 +1809,7 @@ properties:
     properties:
       userScheduler:
         type: object
+        required: [enabled, plugins, logLevel]
         description: |
           The user scheduler is making sure that user pods are scheduled
           tight on nodes, this is useful for autoscaling of user node pools.
@@ -1956,11 +1965,7 @@ properties:
               label is preferred or even required?
             properties:
               matchNodePurpose:
-                type: string
-                enum:
-                  - ignore
-                  - prefer
-                  - require
+                enum: [ignore, prefer, require]
                 description: |
                   Decide if core pods *ignore*, *prefer* or *require* to
                   schedule on nodes with this label:
@@ -1980,11 +1985,7 @@ properties:
               label is preferred or even required?
             properties:
               matchNodePurpose:
-                type: string
-                enum:
-                  - ignore
-                  - prefer
-                  - require
+                enum: [ignore, prefer, require]
                 description: |
                   Decide if user pods *ignore*, *prefer* or *require* to
                   schedule on nodes with this label:
@@ -1994,6 +1995,7 @@ properties:
 
   ingress:
     type: object
+    required: [enabled]
     properties:
       enabled:
         type: boolean
@@ -2016,7 +2018,7 @@ properties:
         description: |
           List of hosts to route requests to the proxy.
       pathSuffix:
-        type: string
+        type: [string, "null"]
         description: |
           Suffix added to Ingress's routing path pattern.
 
@@ -2032,6 +2034,7 @@ properties:
 
   prePuller:
     type: object
+    required: [hook, continuous]
     properties:
       annotations:
         type: object
@@ -2050,11 +2053,12 @@ properties:
           containers in the namespace to have explicit resources set.
       extraTolerations: *tolerations-spec
       hook:
+        type: object
+        required: [enabled]
         description: |
           See the [*optimization
           section*](pulling-images-before-users-arrive)
           for more details.
-        type: object
         properties:
           enabled:
             type: boolean
@@ -2081,6 +2085,8 @@ properties:
           image: *image-spec
           resources: *resources-spec
       continuous:
+        type: object
+        required: [enabled]
         description: |
           See the [*optimization
           section*](pulling-images-before-users-arrive)
@@ -2090,7 +2096,6 @@ properties:
           If used with a Cluster Autoscaler (an autoscaling node pool), also add
           user-placeholders and enable pod priority.
           ```
-        type: object
         properties:
           enabled:
             type: boolean
@@ -2149,6 +2154,7 @@ properties:
 
   cull:
     type: object
+    required: [enabled]
     description: |
       The
       [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler)
@@ -2159,10 +2165,10 @@ properties:
         description: |
           Enable/disable use of jupyter-idle-culler.
       users:
-        type: boolean
+        type: [boolean, "null"]
         description: See the `--cull-users` flag.
       removeNamedServers:
-        type: boolean
+        type: [boolean, "null"]
         description: See the `--remove-named-servers` flag.
       timeout:
         type: [integer, "null"]
@@ -2179,6 +2185,7 @@ properties:
 
   debug:
     type: object
+    required: [enabled]
     properties:
       enabled:
         type: boolean
@@ -2187,6 +2194,7 @@ properties:
 
   rbac:
     type: object
+    required: [enabled]
     properties:
       enabled:
         type: boolean
