@@ -893,7 +893,7 @@ properties:
           maxUnavailable:
             type: [integer, "null"]
             description: |
-              The maximum number of pods required to not be available during
+              The maximum number of pods that can be unavailable during
               voluntary disruptions.
           minAvailable:
             type: [integer, "null"]
