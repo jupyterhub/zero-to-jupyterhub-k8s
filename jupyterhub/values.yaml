@@ -12,10 +12,10 @@ custom: {}
 imagePullSecret:
   create: false
   automaticReferenceInjection: true
-  registry: ""
-  username: ""
-  email: ""
-  password: ""
+  registry:
+  username:
+  password:
+  email:
 # imagePullSecrets is configuration to reference the k8s Secret resources the
 # Helm chart's pods can get credentials from to pull their images.
 imagePullSecrets: []
@@ -38,8 +38,8 @@ hub:
     loadBalancerIP:
   baseUrl: /
   cookieSecret:
-  publicURL:
   initContainers: []
+  uid:
   fsGid: 1000
   nodeSelector: {}
   tolerations: []
@@ -81,7 +81,7 @@ hub:
   image:
     name: jupyterhub/k8s-hub
     tag: "set-by-chartpress"
-    pullPolicy: ""
+    pullPolicy:
     pullSecrets: []
   resources:
     requests:
@@ -143,7 +143,7 @@ rbac:
 # proxy relates to the proxy pod, the proxy-public service, and the autohttps
 # pod and proxy-http service.
 proxy:
-  secretToken: ""
+  secretToken:
   annotations: {}
   deploymentStrategy:
     ## type: Recreate
@@ -192,7 +192,7 @@ proxy:
     image:
       name: jupyterhub/configurable-http-proxy
       tag: 4.2.2
-      pullPolicy: ""
+      pullPolicy:
       pullSecrets: []
     extraCommandLineFlags: []
     livenessProbe:
@@ -233,13 +233,14 @@ proxy:
     image:
       name: traefik
       tag: v2.4.2 # ref: https://hub.docker.com/_/traefik?tab=tags
-      pullPolicy: ""
+      pullPolicy:
       pullSecrets: []
     hsts:
       includeSubdomains: false
       preload: false
       maxAge: 15724800 # About 6 months
     resources: {}
+    labels: {}
     extraEnv: {}
     extraVolumes: []
     extraVolumeMounts: []
@@ -268,7 +269,7 @@ proxy:
     image:
       name: jupyterhub/k8s-secret-sync
       tag: "set-by-chartpress"
-      pullPolicy: ""
+      pullPolicy:
       pullSecrets: []
     resources: {}
   labels: {}
@@ -277,14 +278,14 @@ proxy:
     type: letsencrypt
     #type: letsencrypt, manual, offload, secret
     letsencrypt:
-      contactEmail: ""
+      contactEmail:
       # Specify custom server here (https://acme-staging-v02.api.letsencrypt.org/directory) to hit staging LE
       acmeServer: https://acme-v02.api.letsencrypt.org/directory
     manual:
       key:
       cert:
     secret:
-      name: ""
+      name:
       key: tls.key
       crt: tls.crt
     hosts: []
@@ -308,7 +309,7 @@ singleuser:
     image:
       name: jupyterhub/k8s-network-tools
       tag: "set-by-chartpress"
-      pullPolicy: ""
+      pullPolicy:
       pullSecrets: []
   cloudMetadata:
     # block set to true will append a privileged initContainer using the
@@ -362,7 +363,7 @@ singleuser:
   image:
     name: jupyterhub/k8s-singleuser-sample
     tag: "set-by-chartpress"
-    pullPolicy: ""
+    pullPolicy:
     pullSecrets: []
   startTimeout: 300
   cpu:
@@ -421,7 +422,7 @@ scheduling:
       #            that we have forked.
       name: k8s.gcr.io/kube-scheduler
       tag: v1.19.7
-      pullPolicy: ""
+      pullPolicy:
       pullSecrets: []
     nodeSelector: {}
     tolerations: []
@@ -444,6 +445,7 @@ scheduling:
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
+    resources: {}
   corePods:
     nodeAffinity:
       matchNodePurpose: prefer
@@ -470,7 +472,7 @@ prePuller:
     image:
       name: jupyterhub/k8s-image-awaiter
       tag: "set-by-chartpress"
-      pullPolicy: ""
+      pullPolicy:
       pullSecrets: []
     containerSecurityContext:
       runAsUser: 65534 # nobody user
@@ -495,14 +497,14 @@ prePuller:
     image:
       name: k8s.gcr.io/pause
       tag: "3.2" # https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/pause?gcrImageListsize=30
-      pullPolicy: ""
+      pullPolicy:
       pullSecrets: []
 
 ingress:
   enabled: false
   annotations: {}
   hosts: []
-  pathSuffix: ""
+  pathSuffix:
   tls: []
 
 cull:
@@ -517,4 +519,5 @@ cull:
 debug:
   enabled: false
 
-global: {}
+global:
+  safeToShowValues: false

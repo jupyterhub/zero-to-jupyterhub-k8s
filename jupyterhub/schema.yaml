@@ -1,10 +1,33 @@
-title: Config
+# This schema (a jsonschema in YAML format) is used to generate
+# values.schema.json which is packaged with the Helm chart for client side
+# validation by Helm of values before template rendering.
+#
+# This schema is also used by our documentation system to build the
+# configuration reference section based on the description fields. See
+# doc/source/conf.py for that logic!
+#
+# We look to document everything we have default values for in values.yaml, but
+# we don't look to enforce the perfect validation logic within this file.
+#
+# ref: https://json-schema.org/learn/getting-started-step-by-step.html
+#
+$schema": http://json-schema.org/draft-07/schema#
 type: object
+required:
+  - imagePullSecrets
+  - hub
+  - proxy
+  - singleuser
+  - ingress
+  - prePuller
+  - custom
+  - cull
+  - debug
+  - rbac
+  - global
 properties:
   fullnameOverride:
-    type:
-      - string
-      - "null"
+    type: [string, "null"]
     description: |
       fullnameOverride and nameOverride allow you to adjust how the resources
       part of the Helm chart are named.
@@ -48,107 +71,114 @@ properties:
               name: {{ include "jupyterhub.user-scheduler.fullname" . }}
               key: user-scheduler
       ```
+
   nameOverride:
-    type:
-      - string
-      - "null"
+    type: [string, "null"]
     description: |
       See the documentation under [`fullnameOverride`](schema_fullnameOverride).
+
   imagePullSecret:
     type: object
-    description: |
-      This is configuration to create a k8s Secret resource of `type:
-      kubernetes.io/dockerconfigjson`, with credentials to pull images from a
-      private image registry. If you opt to do so, it will be available for use
-      by all pods in their respective `spec.imagePullSecrets` alongside other
-      k8s Secrets defined in `imagePullSecrets` or the pod respective
-      `...image.pullSecrets` configuration.
+    required: [create]
+    if:
+      properties:
+        create:
+          const: true
+    then:
+      required: [registry, username, password]
+      description: |
+        This is configuration to create a k8s Secret resource of `type:
+        kubernetes.io/dockerconfigjson`, with credentials to pull images from a
+        private image registry. If you opt to do so, it will be available for use
+        by all pods in their respective `spec.imagePullSecrets` alongside other
+        k8s Secrets defined in `imagePullSecrets` or the pod respective
+        `...image.pullSecrets` configuration.
 
-      In other words, using this configuration option can automate both the
-      otherwise manual creation of a k8s Secret and the otherwise manual
-      configuration to reference this k8s Secret in all the pods of the Helm
-      chart.
+        In other words, using this configuration option can automate both the
+        otherwise manual creation of a k8s Secret and the otherwise manual
+        configuration to reference this k8s Secret in all the pods of the Helm
+        chart.
 
-      ```sh
-      # you won't need to create a k8s Secret manually...
-      kubectl create secret docker-registry image-pull-secret \
-        --docker-server=<REGISTRY> \
-        --docker-username=<USERNAME> \
-        --docker-email=<EMAIL> \
-        --docker-password=<PASSWORD>
-      ```
+        ```sh
+        # you won't need to create a k8s Secret manually...
+        kubectl create secret docker-registry image-pull-secret \
+          --docker-server=<REGISTRY> \
+          --docker-username=<USERNAME> \
+          --docker-email=<EMAIL> \
+          --docker-password=<PASSWORD>
+        ```
 
-      If you just want to let all Pods reference an existing secret, use the
-      `imagePullSecrets` configuration instead.
+        If you just want to let all Pods reference an existing secret, use the
+        `imagePullSecrets` configuration instead.
 
-      To learn the username and password fields to access a gcr.io registry from
-      a Kubernetes cluster not associated with the same google cloud
-      credentials, look into [this
-      guide](http://docs.heptio.com/content/private-registries/pr-gcr.html) and
-      read the notes about the password.
-    properties:
-      create:
-        type: boolean
-        description: |
-          Toggle the creation of the k8s Secret with provided credentials to
-          access a private image registry.
-      automaticReferenceInjection:
-        type: boolean
-        description: |
-          Toggle the automatic reference injection of the created Secret to all
-          pods' `spec.imagePullSecrets` configuration.
-      registry:
-        type:
-          - string
-          - "null"
-        description: |
-          Name of the private registry you want to create a credential set for.
-          It will default to Docker Hub's image registry.
+        To learn the username and password fields to access a gcr.io registry from
+        a Kubernetes cluster not associated with the same google cloud
+        credentials, look into [this
+        guide](http://docs.heptio.com/content/private-registries/pr-gcr.html) and
+        read the notes about the password.
+      properties:
+        create:
+          type: boolean
+          description: |
+            Toggle the creation of the k8s Secret with provided credentials to
+            access a private image registry.
+        automaticReferenceInjection:
+          type: boolean
+          description: |
+            Toggle the automatic reference injection of the created Secret to all
+            pods' `spec.imagePullSecrets` configuration.
+        registry:
+          type: string
+          description: |
+            Name of the private registry you want to create a credential set for.
+            It will default to Docker Hub's image registry.
 
-          Examples:
-            - https://index.docker.io/v1/
-            - quay.io
-            - eu.gcr.io
-            - alexmorreale.privatereg.net
-      username:
-        type:
-          - string
-          - "null"
-        description: |
-          Name of the user you want to use to connect to your private registry.
+            Examples:
+              - https://index.docker.io/v1/
+              - quay.io
+              - eu.gcr.io
+              - alexmorreale.privatereg.net
+        username:
+          type: string
+          description: |
+            Name of the user you want to use to connect to your private registry.
 
-          For external gcr.io, you will use the `_json_key`.
+            For external gcr.io, you will use the `_json_key`.
 
-          Examples:
-            - alexmorreale
-            - alex@pfc.com
-            - _json_key
-      password:
-        type:
-          - string
-          - "null"
-        description: |
-          Password for the private image registry's user.
+            Examples:
+              - alexmorreale
+              - alex@pfc.com
+              - _json_key
+        password:
+          type: string
+          description: |
+            Password for the private image registry's user.
 
-          Examples:
-            - plaintextpassword
-            - abc123SECRETzyx098
+            Examples:
+              - plaintextpassword
+              - abc123SECRETzyx098
 
-          For gcr.io registries the password will be a big JSON blob for a
-          Google cloud service account, it should look something like below.
+            For gcr.io registries the password will be a big JSON blob for a
+            Google cloud service account, it should look something like below.
 
-          ```yaml
-          password: |-
-            {
-              "type": "service_account",
-              "project_id": "jupyter-se",
-              "private_key_id": "f2ba09118a8d3123b3321bd9a7d6d0d9dc6fdb85",
-              ...
-            }
-          ```
+            ```yaml
+            password: |-
+              {
+                "type": "service_account",
+                "project_id": "jupyter-se",
+                "private_key_id": "f2ba09118a8d3123b3321bd9a7d6d0d9dc6fdb85",
+                ...
+              }
+            ```
 
-          Learn more in [this
-          guide](http://docs.heptio.com/content/private-registries/pr-gcr.html).
+            Learn more in [this
+            guide](http://docs.heptio.com/content/private-registries/pr-gcr.html).
+        email:
+          type: [string, "null"]
+          description: |
+            Specification of an email is most often not required, but it is
+            supported.
+
   imagePullSecrets:
     type: array
     description: |
@@ -161,8 +191,10 @@ properties:
       You can use both the k8s native syntax, where each list element is like
       `{"name": "my-secret-name"}`, or you can let list elements be strings
       naming the secrets directly.
+
   hub:
     type: object
+    required: [baseUrl]
     properties:
       config:
         type: object
@@ -350,11 +382,8 @@ properties:
              `subPath`](https://kubernetes.io/docs/concepts/storage/volumes/#secret)
              as is required to avoid replacing the content of the entire
              directory we mount in.
-
       baseUrl:
-        type:
-          - string
-          - "null"
+        type: string
         description: |
           This is the equivalent of c.JupyterHub.base_url, but it is also needed
           by the Helm chart in general. So, instead of setting
@@ -417,9 +446,7 @@ properties:
           For more details, see the [Kubernetes
           documentation](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#notes).
       cookieSecret:
-        type:
-          - string
-          - "null"
+        type: [string, "null"]
         description: |
           ```{note}
           As of version 1.0.0 this will automatically be generated and there is
@@ -446,13 +473,12 @@ properties:
           ```
       image: &image-spec
         type: object
+        required: [name, tag]
         description: |
           Set custom image name, tag, pullPolicy, or pullSecrets for the pod.
         properties:
           name:
-            type:
-              - string
-              - "null"
+            type: string
             description: |
               The name of the image, without the tag.
 
@@ -461,9 +487,7 @@ properties:
               gcr.io/my-project/my-image
               ```
           tag:
-            type:
-              - string
-              - "null"
+            type: string
             description: |
               The tag of the image to pull. This is the value following `:` in
               complete image specifications.
@@ -474,14 +498,7 @@ properties:
               zhy270a
               ```
           pullPolicy:
-            type:
-              - string
-              - "null"
-            enum:
-              - ""
-              - IfNotPresent
-              - Always
-              - Never
+            enum: [null, "", IfNotPresent, Always, Never]
             description: |
               Configures the Pod's `spec.imagePullPolicy`.
 
@@ -537,12 +554,7 @@ properties:
 
               If you want to restrict egress, you can override this permissive default to be an empty list.
           interNamespaceAccessLabels:
-            type:
-              - string
-              - "null"
-            enum:
-              - accept
-              - ignore
+            enum: [accept, ignore]
             description: |
               This configuration option determines if both namespaces and pods
               in other namespaces, that have specific access labels, should be
@@ -571,14 +583,7 @@ properties:
         type: object
         properties:
           type:
-            type:
-              - string
-              - "null"
-            enum:
-              - sqlite-pvc
-              - sqlite-memory
-              - mysql
-              - postgres
+            enum: [sqlite-pvc, sqlite-memory, mysql, postgres]
             description: |
               Type of database backend to use for the hub database.
 
@@ -641,6 +646,7 @@ properties:
                  tables in the database specified.
           pvc:
             type: object
+            required: [storage]
             description: |
               Customize the Persistent Volume Claim used when `hub.db.type` is `sqlite-pvc`.
             properties:
@@ -665,23 +671,44 @@ properties:
                   for more details about using a label selector for what PV to
                   bind to.
               storage:
-                type:
-                  - string
-                  - "null"
+                type: string
                 description: |
                   Size of disk to request for the database disk.
+              accessModes:
+                type: array
+                items:
+                  type: [string, "null"]
+                description: |
+                  AccessModes contains the desired access modes the volume
+                  should have. See [the k8s
+                  documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1)
+                  for more information.
+              storageClassName:
+                type: [string, "null"]
+                description: |
+                  Name of the StorageClass required by the claim.
+
+                  If this is a blank string it will be set to a blank string,
+                  while if it is null, it will not be set at all.
+              subPath:
+                type: [string, "null"]
+                description: |
+                  Path within the volume from which the container's volume
+                  should be mounted. Defaults to "" (volume's root).
+          upgrade:
+            type: [boolean, "null"]
+            description: |
+              Users with external databases need to opt-in for upgrades of the
+              JupyterHub specific database schema if needed as part of a
+              JupyterHub version upgrade.
           url:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
             description: |
               Connection string when `hub.db.type` is mysql or postgres.
 
               See documentation for `hub.db.type` for more details on the format of this property.
           password:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
             description: |
               Password for the database when `hub.db.type` is mysql or postgres.
       labels:
@@ -778,9 +805,12 @@ properties:
           manifest as either the hub pod going into `Error` or `CrashLoopBackoff` states, or in
           some special cases, the hub running but... just doing very random things. Be careful!
       uid:
-        type: integer
+        type: [integer, "null"]
         minimum: 0
-        description: The UID the hub process should be running as.
+        description: |
+          DEPRECATED: Use hub.containerSecurityContext instead.
+
+          The UID the hub process should be running as.
 
           Use this only if you are building your own image & know that a user with this uid
           exists inside the hub container! Advanced feature, handle with care!
@@ -788,7 +818,7 @@ properties:
           Defaults to 1000, which is the uid of the `jovyan` user that is present in the
           default hub image.
       fsGid:
-        type: integer
+        type: [integer, "null"]
         minimum: 0
         description:
           The gid the hub process should be using when touching any volumes mounted.
@@ -804,14 +834,7 @@ properties:
           Object to configure the service the JupyterHub will be exposed on by the Kubernetes server.
         properties:
           type:
-            type:
-              - string
-              - "null"
-            enum:
-              - ClusterIP
-              - NodePort
-              - LoadBalancer
-              - ExternalName
+            enum: [ClusterIP, NodePort, LoadBalancer, ExternalName]
             description: |
               The Kubernetes ServiceType to be used.
 
@@ -824,15 +847,21 @@ properties:
               Object to configure the ports the hub service will be deployed on.
             properties:
               nodePort:
-                type:
-                  - integer
-                  - "null"
+                type: [integer, "null"]
+                minimum: 0
                 description: |
                   The nodePort to deploy the hub service on.
           annotations:
             type: object
             description: |
               Kubernetes annotations to apply to the hub service.
+          loadBalancerIP:
+            type: [string, "null"]
+            description: |
+              A public IP address the hub Kubernetes service should be exposed
+              on. To expose the hub directly is not recommended. Instead route
+              traffic through the proxy-public service towards the hub.
+
       pdb: &pdb-spec
         type: object
         description: |
@@ -862,14 +891,14 @@ properties:
               Decides if a PodDisruptionBudget is created targeting the
               Deployment's pods.
           minAvailable:
-            type: integer
+            # FIXME: support maxUnavailable alongside minAvailable, making it
+            #        make sense for both to be null also.
+            type: [integer, "null"]
             description: |
               The minimum number of pods required to be available during
               voluntary disruptions.
       existingSecret:
-        type:
-          - string
-          - "null"
+        type: [string, "null"]
         description: |
           Name of an existing k8s Secret to use instead of the chart managed k8s
           Secret.
@@ -909,6 +938,107 @@ properties:
           See the [Kubernetes
           docs](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
           for more info.
+      activeServerLimit:
+        type: [integer, "null"]
+        description: &jupyterhub-native-config-description |
+          JupyterHub native configuration, see the [JupyterHub
+          documentation](https://jupyterhub.readthedocs.io/en/stable/api/app.html)
+          for more information.
+      allowNamedServers:
+        type: [boolean, "null"]
+        description: *jupyterhub-native-config-description
+      annotations:
+        type: object
+        description: |
+          K8s annotations for the hub pod.
+      authenticatePrometheus:
+        type: [boolean, "null"]
+        description: *jupyterhub-native-config-description
+      concurrentSpawnLimit:
+        type: [integer, "null"]
+        description: *jupyterhub-native-config-description
+      consecutiveFailureLimit:
+        type: [integer, "null"]
+        description: *jupyterhub-native-config-description
+      containerSecurityContext: &containerSecurityContext-spec
+        type: object
+        description: |
+          A k8s native specification of the container's security context, see [the
+          documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#securitycontext-v1-core)
+          for details.
+      deploymentStrategy:
+        type: object
+        properties:
+          type:
+            type: [string, "null"]
+            description: |
+              JupyterHub does not support running in parallel, due to this we
+              default to using a deployment strategy of Recreate.
+      extraConfigMap:
+        type: object
+        deprecated: true
+        description: |
+          Deprecated since chart version 0.8. Use [`custom`](schema_custom)
+          instead.
+      extraContainers: &extraContainers-spec
+        type: array
+        description: |
+          Additional containers for the Pod. Use a k8s native syntax.
+      extraVolumeMounts: &extraVolumeMounts-spec
+        type: array
+        description: |
+          Additional volume mounts for the Container. Use a k8s native syntax.
+      extraVolumes: &extraVolumes-spec
+        type: array
+        description: |
+          Additional volumes for the Pod. Use a k8s native syntax.
+      livenessProbe: &probe-spec
+        type: object
+        required: [enabled]
+        if:
+          properties:
+            enabled:
+              const: true
+        then:
+          description: |
+            This config option is exactly like the k8s native specification of a
+            container probe, except that it also supports an `enabled` boolean
+            flag.
+
+            See [the k8s
+            documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#probe-v1-core)
+            for more details.
+      readinessProbe: *probe-spec
+      namedServerLimitPerUser:
+        type: [integer, "null"]
+        description: *jupyterhub-native-config-description
+      redirectToServer:
+        type: [boolean, "null"]
+        description: *jupyterhub-native-config-description
+      resources: &resources-spec
+        type: object
+        description: |
+          A k8s native specification of resources, see [the
+          documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#resourcerequirements-v1-core).
+      services:
+        type: object
+        description: |
+          You can refer to the [JupyterHub
+          documentation](https://jupyterhub.readthedocs.io/en/stable/api/app.html)
+          except that you need to pass the services as a dictionary instead of a
+          list.
+
+          The `name` field can be filled in by the dictionary keys, and a
+          camelCase formatting of api_token is also accepted.
+      shutdownOnLogout:
+        type: [boolean, "null"]
+        description: *jupyterhub-native-config-description
+      templatePaths:
+        type: array
+        description: *jupyterhub-native-config-description
+      templateVars:
+        type: object
+        description: *jupyterhub-native-config-description
 
   proxy:
     type: object
@@ -981,10 +1111,13 @@ properties:
           pdb: *pdb-spec
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
+          containerSecurityContext: *containerSecurityContext-spec
+          image: *image-spec
+          livenessProbe: *probe-spec
+          readinessProbe: *probe-spec
+          resources: *resources-spec
       secretToken:
-        type:
-          - string
-          - "null"
+        type: [string, "null"]
         description: |
           ```{note}
           As of version 1.0.0 this will automatically be generated and there is
@@ -1015,14 +1148,7 @@ properties:
           the `proxy` pod and only accepting HTTP traffic on port 80.
         properties:
           type:
-            type:
-              - string
-              - "null"
-            enum:
-              - ClusterIP
-              - NodePort
-              - LoadBalancer
-              - ExternalName
+            enum: [ClusterIP, NodePort, LoadBalancer, ExternalName]
             description: |
               Default `LoadBalancer`. See `hub.service.type` for supported values.
           labels:
@@ -1050,15 +1176,11 @@ properties:
               for more details about NodePorts.
             properties:
               http:
-                type:
-                  - integer
-                  - "null"
+                type: [integer, "null"]
                 description: |
                   The HTTP port the proxy-public service should be exposed on.
               https:
-                type:
-                  - integer
-                  - "null"
+                type: [integer, "null"]
                 description: |
                   The HTTPS port the proxy-public service should be exposed on.
           extraPorts:
@@ -1072,9 +1194,7 @@ properties:
               documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#serviceport-v1-core)
               for the structure of the items in this list.
           loadBalancerIP:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
             description: |
               The public IP address the proxy-public Kubernetes service should
               be exposed on. This entry will end up at the configurable proxy
@@ -1097,18 +1217,11 @@ properties:
           For more information on configuring HTTPS for your JupyterHub, see the [HTTPS section in our security guide](https)
         properties:
           enabled:
-            type: boolean
+            type: [boolean, "null"]
             description: |
               Indicator to set whether HTTPS should be enabled or not on the proxy. Defaults to `true` if the https object is provided.
           type:
-            type:
-              - string
-              - "null"
-            enum:
-              - letsencrypt
-              - manual
-              - offload
-              - secret
+            enum: [null, "", letsencrypt, manual, offload, secret]
             description: |
               The type of HTTPS encryption that is used.
               Decides on which ports and network policies are used for communication via HTTPS. Setting this to `secret` sets the type to manual HTTPS with a secret that has to be provided in the `https.secret` object.
@@ -1117,12 +1230,18 @@ properties:
             type: object
             properties:
               contactEmail:
-                type:
-                  - string
-                  - "null"
+                type: [string, "null"]
                 description: |
                   The contact email to be used for automatically provisioned HTTPS certificates by Let's Encrypt. For more information see [Set up automatic HTTPS](setup-automatic-https).
                   Required for automatic HTTPS.
+              acmeServer:
+                type: [string, "null"]
+                description: |
+                  Let's Encrypt is one of various ACME servers that can provide
+                  a certificate, and by default their production server is used.
+
+                  Let's Encrypt staging:    https://acme-staging-v02.api.letsencrypt.org/directory
+                  Let's Encrypt production: acmeServer: https://acme-v02.api.letsencrypt.org/directory
           manual:
             type: object
             description: |
@@ -1130,9 +1249,7 @@ properties:
               See [Set up manual HTTPS](setup-manual-https)
             properties:
               key:
-                type:
-                  - string
-                  - "null"
+                type: [string, "null"]
                 description: |
                   The RSA private key to be used for HTTPS.
                   To be provided in the form of
@@ -1144,9 +1261,7 @@ properties:
                     -----END RSA PRIVATE KEY-----
                   ```
               cert:
-                type:
-                  - string
-                  - "null"
+                type: [string, "null"]
                 description: |
                   The certificate to be used for HTTPS.
                   To be provided in the form of
@@ -1163,22 +1278,16 @@ properties:
               Secret to be provided when setting `https.type` to `secret`.
             properties:
               name:
-                type:
-                  - string
-                  - "null"
+                type: [string, "null"]
                 description: |
                   Name of the secret
               key:
-                type:
-                  - string
-                  - "null"
+                type: [string, "null"]
                 description: |
                   Path to the private key to be used for HTTPS.
                   Example: `'tls.key'`
               crt:
-                type:
-                  - string
-                  - "null"
+                type: [string, "null"]
                 description: |
                   Path to the certificate to be used for HTTPS.
                   Example: `'tls.crt'`
@@ -1244,8 +1353,105 @@ properties:
           pdb: *pdb-spec
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
-    required:
-      - secretToken
+          containerSecurityContext: *containerSecurityContext-spec
+          extraDynamicConfig:
+            type: object
+            description: |
+              This refers to traefik's post-startup configuration.
+
+              This Helm chart already provide such configuration, so this is a
+              place where you can merge in additional configuration. If you are
+              about to use this configuration, you may want to inspect the
+              default configuration declared
+              [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/jupyterhub/templates/proxy/autohttps/_configmap-dynamic.yaml).
+          extraPorts:
+            type: array
+            description: |
+              Extra ports for the traefik container within the autohttps pod
+              that you would like to expose, formatted in a k8s native way.
+          extraStaticConfig:
+            type: object
+            description: |
+              This refers to traefik's startup configuration.
+
+              This Helm chart already provide such configuration, so this is a
+              place where you can merge in additional configuration. If you are
+              about to use this configuration, you may want to inspect the
+              default configuration declared
+              [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/jupyterhub/templates/proxy/autohttps/_configmap-traefik.yaml).
+          extraVolumes: *extraVolumes-spec
+          extraVolumeMounts: *extraVolumeMounts-spec
+          hsts:
+            type: object
+            required: [includeSubdomains, maxAge, preload]
+            description: |
+              This section regards a HTTP Strict-Transport-Security (HSTS)
+              response header. It can act as a request for a visiting web
+              browsers to enforce HTTPS on their end in for a given time into
+              the future, and optionally also for future requests to subdomains.
+
+              These settings relate to traefik configuration which we use as a
+              TLS termination proxy.
+
+              See [Mozilla's
+              documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
+              for more information.
+            properties:
+              includeSubdomains:
+                type: boolean
+              maxAge:
+                type: integer
+              preload:
+                type: boolean
+          image: *image-spec
+          resources: *resources-spec
+      labels:
+        type: object
+        description: |
+          K8s labels for the proxy pod.
+
+          ```{note}
+          For consistency, this should really be located under
+          proxy.chp.labels but isn't for historical reasons.
+          ```
+      annotations:
+        type: object
+        description: |
+          K8s annotations for the proxy pod.
+
+          ```{note}
+          For consistency, this should really be located under
+          proxy.chp.annotations but isn't for historical reasons.
+          ```
+      deploymentStrategy:
+        type: object
+        properties:
+          rollingUpdate:
+            type: [string, "null"]
+          type:
+            type: [string, "null"]
+            description: |
+              While the proxy pod running
+              [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy)
+              could run in parallel, two instances running in parallel wouldn't
+              both receive updates from JupyterHub regarding how it should route
+              traffic. Due to this we default to using a deployment strategy of
+              Recreate instead of RollingUpdate.
+      secretSync:
+        type: object
+        description: |
+          This configuration section refers to configuration of the sidecar
+          container in the autohttps pod running next to its traefik container
+          responsible for TLS termination.
+
+          The purpose of this container is to store away and load TLS
+          certificates from a k8s Secret. The TLS certificates are acquired by
+          the ACME client (LEGO) that is running within the traefik container,
+          where traefik is using them for TLS termination.
+        properties:
+          containerSecurityContext: *containerSecurityContext-spec
+          image: *image-spec
+          resources: *resources-spec
 
   singleuser:
     type: object
@@ -1254,25 +1460,23 @@ properties:
     properties:
       networkPolicy: *networkPolicy-spec
       podNameTemplate:
-        type:
-          - string
-          - "null"
-        description: |
-          Template for the pod name of each user, such as `jupyter-{username}{servername}`.
+        type: [string, "null"]
+        description: &kubespawner-native-config-description |
+          KubeSpawner native configuration, see the [KubeSpawner
+          documentation](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html)
+          for more information.
       cpu:
         type: object
         description: |
           Set CPU limits & guarantees that are enforced for each user.
-          See: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+
+          See the [Kubernetes docs](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
+          for more info.
         properties:
           limit:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
           guarantee:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
       memory:
         type: object
         description: |
@@ -1282,13 +1486,9 @@ properties:
           for more info.
         properties:
           limit:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
           guarantee:
-            type:
-              - string
-              - "null"
+            type: [string, "null"]
             description: |
               Note that this field is referred to as *requests* by the Kubernetes API.
       image: *image-spec
@@ -1314,9 +1514,11 @@ properties:
           documentation](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner)
           as this is simply a passthrough to that configuration.
 
-          **NOTE**: The image-pullers are aware of the overrides of images in
+          ```{note}
+          The image-pullers are aware of the overrides of images in
           `singleuser.profileList` but they won't be if you configure it in
           JupyterHub's configuration of '`c.KubeSpawner.profile_list`.
+          ```
 
           ```yaml
           singleuser:
@@ -1330,13 +1532,6 @@ properties:
                   extra_resource_limits:
                     nvidia.com/gpu: "1"
           ```
-      schedulerStrategy:
-        type:
-          - string
-          - "null"
-        description: |
-          Deprecated and no longer does anything. Use the user-scheduler instead
-          in order to accomplish a good packing of the user pods.
       extraFiles: *extraFiles
       extraEnv:
         type: object
@@ -1436,6 +1631,174 @@ properties:
               Pass this field an array of
               [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#weightedpodaffinityterm-v1-core)
               objects.
+      cloudMetadata:
+        type: object
+        required: [blockWithIptables]
+        if:
+          properties:
+            blockWithIptables:
+              const: true
+        then:
+          description: |
+            Please refer to dedicated section in [the Helm chart
+            documentation](block-metadata-iptables) for more information about
+            this.
+          properties:
+            blockWithIptables:
+              type: boolean
+            ip:
+              type: string
+      cmd:
+        type: [array, string, "null"]
+        description: *kubespawner-native-config-description
+      defaultUrl:
+        type: [string, "null"]
+        description: *kubespawner-native-config-description
+      # FIXME: name mismatch, named events_enabled in kubespawner
+      events:
+        type: [boolean, "null"]
+        description: *kubespawner-native-config-description
+      extraAnnotations:
+        type: object
+        description: *kubespawner-native-config-description
+      extraContainers:
+        type: array
+        description: *kubespawner-native-config-description
+      extraLabels:
+        type: object
+        description: *kubespawner-native-config-description
+      extraPodConfig:
+        type: object
+        description: *kubespawner-native-config-description
+      extraResource:
+        type: object
+        properties:
+          # FIXME: name mismatch, named extra_resource_guarantees in kubespawner
+          guarantees:
+            type: object
+            description: *kubespawner-native-config-description
+          # FIXME: name mismatch, named extra_resource_limits in kubespawner
+          limits:
+            type: object
+            description: *kubespawner-native-config-description
+      fsGid:
+        type: [integer, "null"]
+        description: *kubespawner-native-config-description
+      lifecycleHooks:
+        type: object
+        description: *kubespawner-native-config-description
+      networkTools:
+        type: object
+        description: |
+          This configuration section refers to configuration of a conditionally
+          created initContainer for the user pods with a purpose to block a
+          specific IP address.
+
+          This initContainer will be created if
+          [`singleuser.cloudMetadata.blockWithIptables`](schema_singleuser.cloudMetadata.blockWithIptables)
+          is set to true.
+        properties:
+          image: *image-spec
+      # FIXME: name mismatch, named service_account in kubespawner
+      serviceAccountName:
+        type: [string, "null"]
+        description: *kubespawner-native-config-description
+      startTimeout:
+        type: [integer, "null"]
+        description: *kubespawner-native-config-description
+      storage:
+        type: object
+        required: [type, homeMountPath]
+        description: |
+          This section configures KubeSpawner directly to some extent but also
+          indirectly through Helm chart specific configuration options such as
+          [`singleuser.storage.type`](schema_singleuser.storage.type).
+        properties:
+          capacity:
+            type: [string, "null"]
+            description: |
+              Configures `KubeSpawner.storage_capacity`.
+
+              See the [KubeSpawner
+              documentation](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html)
+              for more information.
+          dynamic:
+            type: object
+            properties:
+              pvcNameTemplate:
+                type: [string, "null"]
+                description: |
+                  Configures `KubeSpawner.pvc_name_template` which will be the
+                  resource name of the PVC created by KubeSpawner for each user
+                  if needed.
+              storageAccessModes:
+                type: array
+                items:
+                  type: [string, "null"]
+                description: |
+                  Configures `KubeSpawner.storage_access_modes`.
+
+                  See KubeSpawners documentation and [the k8s
+                  documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)
+                  for more information.
+              storageClass:
+                type: [string, "null"]
+                description: |
+                  Configures `KubeSpawner.storage_class`, which can be an
+                  explicit StorageClass to dynamically provision storage for the
+                  PVC that KubeSpawner will create.
+
+                  There is of a default StorageClass available in k8s clusters
+                  for use if this is unspecified.
+              volumeNameTemplate:
+                type: [string, "null"]
+                description: |
+                  Configures `KubeSpawner.volume_name_template`, which is the
+                  name to reference from the containers volumeMounts section.
+          extraLabels:
+            type: object
+            description: |
+              Configures `KubeSpawner.storage_extra_labels`. Note that these
+              labels are set on the PVC during creation only and won't be
+              updated after creation.
+          extraVolumeMounts: *extraVolumeMounts-spec
+          extraVolumes: *extraVolumes-spec
+          homeMountPath:
+            type: string
+            description: |
+              The location within the container where the home folder storage
+              should be mounted.
+          static:
+            type: object
+            properties:
+              pvcName:
+                type: [string, "null"]
+                description: |
+                  Configures `KubeSpawner.pvc_claim_name` to reference
+                  pre-existing storage.
+              subPath:
+                type: [string, "null"]
+                description: |
+                  Configures the `subPath` field of a
+                  `KubeSpawner.volume_mounts` entry added by the Helm chart.
+
+                  Path within the volume from which the container's volume
+                  should be mounted.
+          type:
+            enum: [dynamic, static, none]
+            description: |
+              Decide if you want storage to be provisioned dynamically
+              (dynamic), or if you want to attach existing storage (static), or
+              don't want any storage to be attached (none).
+      uid:
+        type: [integer, "null"]
+        description: |
+          This dictates as what user the main container will start up as.
+
+          As an example of when this is needed, consider if you want to enable
+          sudo rights for some of your users. This can be done by starting up as
+          root, enabling it from the container in a startup script, and then
+          transitioning to the normal user.
 
   scheduling:
     type: object
@@ -1445,6 +1808,7 @@ properties:
     properties:
       userScheduler:
         type: object
+        required: [enabled, plugins, logLevel]
         description: |
           The user scheduler is making sure that user pods are scheduled
           tight on nodes, this is useful for autoscaling of user node pools.
@@ -1462,6 +1826,42 @@ properties:
           pdb: *pdb-spec
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
+          containerSecurityContext: *containerSecurityContext-spec
+          logLevel:
+            type: integer
+            description: |
+              Corresponds to the verbosity level of logging made by the
+              kube-scheduler binary running within the user-scheduler pod.
+          plugins:
+            type: object
+            description: |
+              These plugins refers to kube-scheduler plugins as documented
+              [here](https://kubernetes.io/docs/reference/scheduling/config/).
+
+              The user-scheduler is really just a kube-scheduler configured in a
+              way to pack users tight on nodes using these plugins. See
+              values.yaml for information about the default plugins.
+            properties:
+              score:
+                type: object
+                properties:
+                  disabled:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                  enabled:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        weight:
+                          type: integer
+          resources: *resources-spec
       podPriority:
         type: object
         description: |
@@ -1550,6 +1950,7 @@ properties:
             description: |
               Unless specified here, the placeholder pods will request the same
               resources specified for the real singleuser pods.
+          containerSecurityContext: *containerSecurityContext-spec
       corePods:
         type: object
         description: |
@@ -1563,13 +1964,7 @@ properties:
               label is preferred or even required?
             properties:
               matchNodePurpose:
-                type:
-                  - string
-                  - "null"
-                enum:
-                  - ignore
-                  - prefer
-                  - require
+                enum: [ignore, prefer, require]
                 description: |
                   Decide if core pods *ignore*, *prefer* or *require* to
                   schedule on nodes with this label:
@@ -1589,21 +1984,17 @@ properties:
               label is preferred or even required?
             properties:
               matchNodePurpose:
-                type:
-                  - string
-                  - "null"
-                enum:
-                  - ignore
-                  - prefer
-                  - require
+                enum: [ignore, prefer, require]
                 description: |
                   Decide if user pods *ignore*, *prefer* or *require* to
                   schedule on nodes with this label:
                   ```
                   hub.jupyter.org/node-purpose=user
                   ```
+
   ingress:
     type: object
+    required: [enabled]
     properties:
       enabled:
         type: boolean
@@ -1616,7 +2007,7 @@ properties:
       annotations:
         type: object
         description: |
-          Annotations to apply to the Ingress.
+          Annotations to apply to the Ingress resource.
 
           See [the Kubernetes
           documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
@@ -1626,9 +2017,7 @@ properties:
         description: |
           List of hosts to route requests to the proxy.
       pathSuffix:
-        type:
-          - string
-          - "null"
+        type: [string, "null"]
         description: |
           Suffix added to Ingress's routing path pattern.
 
@@ -1644,6 +2033,7 @@ properties:
 
   prePuller:
     type: object
+    required: [hook, continuous]
     properties:
       annotations:
         type: object
@@ -1662,11 +2052,12 @@ properties:
           containers in the namespace to have explicit resources set.
       extraTolerations: *tolerations-spec
       hook:
+        type: object
+        required: [enabled]
         description: |
           See the [*optimization
           section*](pulling-images-before-users-arrive)
           for more details.
-        type: object
         properties:
           enabled:
             type: boolean
@@ -1689,15 +2080,21 @@ properties:
             type: integer
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
+          containerSecurityContext: *containerSecurityContext-spec
+          image: *image-spec
+          resources: *resources-spec
       continuous:
+        type: object
+        required: [enabled]
         description: |
           See the [*optimization
           section*](pulling-images-before-users-arrive)
           for more details.
 
-          **NOTE**: If used with a Cluster Autoscaler (an autoscaling node
-          pool), also add user-placeholders and enable pod priority.
-        type: object
+          ```{note}
+          If used with a Cluster Autoscaler (an autoscaling node pool), also add
+          user-placeholders and enable pod priority.
+          ```
         properties:
           enabled:
             type: boolean
@@ -1726,6 +2123,16 @@ properties:
                 name: jupyter/all-spark-notebook
                 tag: 2343e33dec46
           ```
+      containerSecurityContext: *containerSecurityContext-spec
+      pause:
+        type: object
+        description: |
+          The image-puller pods rely on initContainer to pull all images, and
+          their actual container when they are done is just running a `pause`
+          container. These are settings for that pause container.
+        properties:
+          containerSecurityContext: *containerSecurityContext-spec
+          image: *image-spec
 
   custom:
     type: object
@@ -1743,3 +2150,63 @@ properties:
           myConfig.py: |
             c.MyAuthenticator.host = get_config("custom.myHost")
       ```
+
+  cull:
+    type: object
+    required: [enabled]
+    description: |
+      The
+      [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler)
+      can run as a JupyterHub managed service to _cull_ running servers.
+    properties:
+      enabled:
+        type: boolean
+        description: |
+          Enable/disable use of jupyter-idle-culler.
+      users:
+        type: [boolean, "null"]
+        description: See the `--cull-users` flag.
+      removeNamedServers:
+        type: [boolean, "null"]
+        description: See the `--remove-named-servers` flag.
+      timeout:
+        type: [integer, "null"]
+        description: See the `--timeout` flag.
+      every:
+        type: [integer, "null"]
+        description: See the `--cull-every` flag.
+      concurrency:
+        type: [integer, "null"]
+        description: See the `--concurrency` flag.
+      maxAge:
+        type: [integer, "null"]
+        description: See the `--max-age` flag.
+
+  debug:
+    type: object
+    required: [enabled]
+    properties:
+      enabled:
+        type: boolean
+        description: |
+          Increases the loglevel throughout the resources in the Helm chart.
+
+  rbac:
+    type: object
+    required: [enabled]
+    properties:
+      enabled:
+        type: boolean
+        description: |
+          Decides if RBAC resources are to be created and referenced by the the
+          Helm chart's workloads.
+
+  global:
+    type: object
+    properties:
+      safeToShowValues:
+        type: boolean
+        description: |
+          A flag that should only be set to true temporarily when experiencing a
+          deprecation message that contain censored content that you wish to
+          reveal.

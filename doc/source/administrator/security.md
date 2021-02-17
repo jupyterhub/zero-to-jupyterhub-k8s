@@ -255,6 +255,8 @@ provides more information on the dangers presented by this attack.
 This Helm chart blocks access to this metadata in two ways by default, but you
 only need one.
 
+(block-metadata-netpol)=
+
 ### Block metadata with a NetworkPolicy enforced by a NetworkPolicy controller
 
 If you have _NetworkPolicy controller_ such as Calico in the Kubernetes cluster,
@@ -262,6 +264,8 @@ it will enforce the NetworkPolicy resource created by this chart
 (`singleuser.networkPolicy.*`) that blocks user access to the metadata server.
 We recommend relying on this approach if you you had a NetworkPolicy controller,
 and then you can disable the other option.
+
+(block-metadata-iptables)=
 
 ### Block metadata with a privileged initContainer running `iptables`
 

@@ -1,4 +1,5 @@
 ### Zero to JupyterHub Kubernetes ###
+jupyterhub/values.schema.json
 tools/templates/rendered-templates/
 bin/
 .vagrant/

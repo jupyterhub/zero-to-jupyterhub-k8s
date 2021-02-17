@@ -55,7 +55,6 @@ hub:
     ports:
       nodePort:
   baseUrl: /
-  publicURL: mock-public-url
   activeServerLimit: 3
   deploymentStrategy:
     type: Recreate
@@ -80,6 +79,8 @@ hub:
   annotations:
     mock: mock
   image:
+    name: dummy-name
+    tag: dummy-tag
     pullSecrets: [c]
   initContainers:
     - name: mock-init-container-name
@@ -372,6 +373,7 @@ scheduling:
   userScheduler:
     enabled: true
     replicas: 1
+    logLevel: 10
     image:
       name: gcr.io/google_containers/kube-scheduler-amd64
       tag: v1.11.2
@@ -386,6 +388,14 @@ scheduling:
         operator: "Equal"
         value: "mock-taint-to-tolerates-value"
         effect: "NoExecute"
+    plugins:
+      score:
+        disabled:
+          - name: SelectorSpread
+        enabled:
+          - name: NodePreferAvoidPods
+            weight: 161051
+          - name: NodeAffinity
   podPriority:
     enabled: true
   userPlaceholder:
@@ -457,3 +467,8 @@ cull:
 
 debug:
   enabled: true
+
+global: {}
+
+custom:
+  myCustomStuff: [hello]
