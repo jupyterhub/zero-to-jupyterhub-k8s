@@ -9,7 +9,7 @@ metadata:
     prometheus.io/scrape: "true"
     {{- end }}
     {{- if not (index .Values.hub.service.annotations "prometheus.io/path") }}
-    prometheus.io/path: {{ .Values.hub.baseUrl }}hub/metrics
+    prometheus.io/path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/metrics
     {{- end }}
     {{- if not (index .Values.hub.service.annotations "prometheus.io/port") }}
     prometheus.io/port: "8081"
