@@ -115,6 +115,8 @@ hub:
   imagePullPolicy: Always
   pdb:
     enabled: true
+    maxUnavailable: 1
+    minAvailable: null
   networkPolicy:
     enabled: true
     egress:
@@ -182,6 +184,8 @@ proxy:
       allowedIngressPorts: [http, https]
     pdb:
       enabled: true
+      maxUnavailable: 1
+      minAvailable: 1
   traefik:
     extraPorts:
       - name: ssh
@@ -218,6 +222,8 @@ proxy:
       allowedIngressPorts: [http, https]
     pdb:
       enabled: true
+      maxUnavailable: null
+      minAvailable: 1
   secretSync:
     resources:
       requests:
