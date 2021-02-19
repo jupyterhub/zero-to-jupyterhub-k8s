@@ -77,6 +77,14 @@ jobs:
         env:
           GITHUB_REPOSITORY: "${{ github.repository }}"
         run: |
+          # Create values.schema.yaml from schema.yaml.
           ./tools/generate-json-schema.py
+
+          # Append annotations to Chart.yaml with current images so that
+          # artifacthub.io can scan and provide vulnerability reports for them.
+          chartpress --no-build
           ./tools/set-chart-yaml-annotations.py
+
+          # Package the Helm chart and publish it to the gh-pages branch of
+          # the jupyterhub/helm-chart repo.
           ./ci/publish
