@@ -13,15 +13,20 @@ import yaml
 @lru_cache()
 def _load_config():
     """Load the Helm chart configuration used to render the Helm templates of
-    the chart from a mounted k8s Secret."""
+    the chart from a mounted k8s Secret, and merge in values from an optionally
+    mounted secret (hub.existingSecret)."""
 
-    path = f"/usr/local/etc/jupyterhub/secret/values.yaml"
-    if os.path.exists(path):
-        print(f"Loading {path}")
-        with open(path) as f:
-            return yaml.safe_load(f)
-    else:
-        raise Exception(f"{path} not found!")
+    cfg = {}
+    for source in ("secret/values.yaml", "existing-secret/values.yaml"):
+        path = f"/usr/local/etc/jupyterhub/{source}"
+        if os.path.exists(path):
+            print(f"Loading {path}")
+            with open(path) as f:
+                values = yaml.safe_load(f)
+            cfg = _merge_dictionaries(cfg, values)
+        else:
+            print(f"No config at {path}")
+    return cfg
 
 
 @lru_cache()
@@ -38,14 +43,15 @@ def _get_config_value(key):
 
 @lru_cache()
 def get_secret_value(key):
-    """Load value from the k8s Secret given a key."""
+    """Load value from the user managed k8s Secret or the default k8s Secret
+    given a key."""
 
-    path = f"/usr/local/etc/jupyterhub/secret/{key}"
-    if os.path.exists(path):
-        with open(path) as f:
-            return f.read()
-    else:
-        raise Exception(f"{path} not found!")
+    for source in ("existing-secret", "secret"):
+        path = f"/usr/local/etc/jupyterhub/{source}/{key}"
+        if os.path.exists(path):
+            with open(path) as f:
+                return f.read()
+    raise Exception(f"{key} not found in either k8s Secret!")
 
 
 def get_name(name):
