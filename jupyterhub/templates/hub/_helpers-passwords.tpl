@@ -2,7 +2,7 @@
     This file contains logic to lookup already
     generated passwords or generate a new.
 
-    proxy.secretToken       / hub.config.JupyterHub.proxy_auth_token
+    proxy.secretToken       / hub.config.ConfigurableHTTPProxy.auth_token
     hub.cookieSecret        / hub.config.JupyterHub.cookie_secret
     auth.state.cryptoKey    / hub.config.CryptKeeper.keys
 
@@ -28,13 +28,13 @@
     {{- $result }}
 {{- end }}
 
-{{- define "jupyterhub.config.JupyterHub.proxy_auth_token" -}}
+{{- define "jupyterhub.config.ConfigurableHTTPProxy.auth_token" -}}
     {{- if .Values.proxy.secretToken }}
         {{- .Values.proxy.secretToken }}
     {{- else }}
         {{- $k8s_state := lookup "v1" "Secret" .Release.Namespace (include "jupyterhub.hub.fullname" .) | default (dict "data" (dict)) }}
-        {{- if hasKey $k8s_state.data "JupyterHub.proxy_auth_token" }}
-            {{- index $k8s_state.data "JupyterHub.proxy_auth_token" | b64dec }}
+        {{- if hasKey $k8s_state.data "ConfigurableHTTPProxy.auth_token" }}
+            {{- index $k8s_state.data "ConfigurableHTTPProxy.auth_token" | b64dec }}
         {{- else }}
             {{- randAlphaNum 64 }}
         {{- end }}

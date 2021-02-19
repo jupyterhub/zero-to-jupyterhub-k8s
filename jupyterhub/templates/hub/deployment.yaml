@@ -201,7 +201,7 @@ spec:
                   #       hub.existingSecret is specified to avoid using the
                   #       lookup function on the user managed k8s Secret.
                   name: {{ include "jupyterhub.hub.fullname" . }}
-                  key: JupyterHub.proxy_auth_token
+                  key: ConfigurableHTTPProxy.auth_token
             {{- if .Values.hub.db.password }}
             {{- if eq .Values.hub.db.type "mysql" }}
             - name: MYSQL_PWD

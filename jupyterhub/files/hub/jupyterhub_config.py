@@ -420,13 +420,17 @@ if os.path.isdir(config_dir):
         exec(compile(source=file_content, filename=file_name, mode="exec"))
 
 # load potentially seeded secrets
-c.JupyterHub.proxy_auth_token = get_secret_value("JupyterHub.proxy_auth_token")
+c.ConfigurableHTTPProxy.auth_token = get_secret_value(
+    "ConfigurableHTTPProxy.auth_token"
+)
 c.JupyterHub.cookie_secret = a2b_hex(get_secret_value("JupyterHub.cookie_secret"))
 c.CryptKeeper.keys = get_secret_value("CryptKeeper.keys").split(";")
 
 # load hub.config values, except potentially seeded secrets
 for section, sub_cfg in get_config("hub.config", {}).items():
     if section == "JupyterHub" and sub_cfg in ["proxy_auth_token", "cookie_secret"]:
+        pass
+    elif section == "ConfigurableHTTPProxy" and sub_cfg in ["auth_token"]:
         pass
     elif section == "CryptKeeper" and sub_cfg in ["keys"]:
         pass
