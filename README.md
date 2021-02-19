@@ -60,4 +60,3 @@ This repository is dual licensed under the Apache2 (to match the upstream
 Kubernetes [charts](https://github.com/helm/charts) repository) and
 3-clause BSD (to match the rest of Project Jupyter repositories) licenses. See
 the `LICENSE` file for more information!
-
