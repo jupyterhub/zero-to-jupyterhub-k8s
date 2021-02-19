@@ -234,7 +234,7 @@ proxy:
       allowPrivilegeEscalation: false
     image:
       name: traefik
-      tag: v2.4.2 # ref: https://hub.docker.com/_/traefik?tab=tags
+      tag: v2.4.5 # ref: https://hub.docker.com/_/traefik?tab=tags
       pullPolicy:
       pullSecrets: []
     hsts:
