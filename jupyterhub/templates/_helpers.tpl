@@ -182,7 +182,8 @@ component: {{ include "jupyterhub.componentLabel" . }}
 {{- define "jupyterhub.imagePullSecrets" -}}
 {{- /* Populate $_.list with all relevant entries */}}
 {{- $_ := dict "list" (concat .image.pullSecrets .root.Values.imagePullSecrets | uniq) }}
-{{- if and .root.Values.imagePullSecret.automaticReferenceInjection .root.Values.imagePullSecret.create }}
+{{- $create_or_enabled := or .root.Values.imagePullSecret.create .root.Values.imagePullSecret.enabled }}
+{{- if and $create_or_enabled .root.Values.imagePullSecret.automaticReferenceInjection }}
 {{- $__ := set $_ "list" (append $_.list (include "jupyterhub.image-pull-secret.fullname" .root) | uniq) }}
 {{- end }}
 
