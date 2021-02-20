@@ -51,10 +51,10 @@ This section covers upgrade information specific to the following:
 ### `helm upgrade` command
 
 After modifying your `config.yaml` file according to the CHANGELOG, you will need
-`<YOUR-HELM-RELEASE-NAME>` to run the upgrade commands. To find `<YOUR-RELEASE-NAME>`, run:
+`<helm-release-name>` to run the upgrade commands. To find `<helm-release-name>`, run:
 
 ```
-helm list
+helm list --namespace <k8s-namespace>
 ```
 
 Make sure to test the upgrade on a staging environment before doing the upgrade on
@@ -63,13 +63,13 @@ a production system!
 To run the upgrade:
 
 ```
-helm upgrade --cleanup-on-fail <YOUR-HELM-RELEASE-NAME> jupyterhub/jupyterhub --version=<RELEASE-VERSION> -f config.yaml
+helm upgrade --cleanup-on-fail <helm-release-name> jupyterhub/jupyterhub --version=<chart-version> --values config.yaml --namespace <k8s-namespace>
 ```
 
-For example, to upgrade to v0.6, enter and substituting `<YOUR-HELM-RELEASE-NAME>` and version v0.6:
+For example, to upgrade to v0.6, enter and substituting `<helm-release-name>` and version v0.6:
 
 ```
-helm upgrade --cleanup-on-fail <YOUR-HELM-RELEASE-NAME> jupyterhub/jupyterhub --version=v0.6 -f config.yaml
+helm upgrade --cleanup-on-fail <helm-release-name> jupyterhub/jupyterhub --version=<chart-version> --values config.yaml --namespace <k8s-namespace>
 ```
 
 ### Database
@@ -113,7 +113,7 @@ RUN pip install --no-cache-dir jupyterhub==0.8.1
 ## JupyterHub versions installed in each Helm Chart
 
 Each Helm Chart is packaged with a specific version of JupyterHub (and
-other software as well). See the [Helm Chart repository](https://github.com/jupyterhub/helm-chart#release-notes>) for
+other software as well). See the [Helm Chart repository](https://jupyterhub.github.io/helm-chart/) for
 information about the versions of relevant software packages.
 
 ## Troubleshooting
@@ -122,7 +122,7 @@ If the upgrade is failing on a test system or a system that does not serve users
 deleting the helm chart using:
 
 ```
-helm delete <YOUR-HELM-RELEASE-NAME>
+helm delete <helm-release-name> --namespace <k8s-namespace>
 ```
 
-`helm list` may be used to find <YOUR-HELM-RELEASE-NAME>.
+`helm list --namespace <k8s-namespace>` may be used to find <helm-release-name>.

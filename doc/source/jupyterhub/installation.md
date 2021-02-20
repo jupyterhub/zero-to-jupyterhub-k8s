@@ -66,49 +66,42 @@ can try with `nano config.yaml`.
    command from the directory that contains your `config.yaml`:
 
    ```
-   # Suggested values: advanced users of Kubernetes and Helm should feel
-   # free to use different values.
-   RELEASE=jhub
-   NAMESPACE=jhub
-
    helm upgrade --cleanup-on-fail \
-     --install $RELEASE jupyterhub/jupyterhub \
-     --namespace $NAMESPACE \
+     --install <helm-release-name> jupyterhub/jupyterhub \
+     --namespace <k8s-namespace> \
      --create-namespace \
-     --version=0.11.1 \
+     --version=<chart-version> \
      --values config.yaml
    ```
 
    where:
 
-   - `RELEASE` refers to a [Helm release name](https://helm.sh/docs/glossary/#release), an identifier used to
+   - `<helm-release-name>` refers to a [Helm release name](https://helm.sh/docs/glossary/#release), an identifier used to
      differentiate chart installations. You need it when you are changing or
      deleting the configuration of this chart installation. If your Kubernetes
      cluster will contain multiple JupyterHubs make sure to differentiate them.
      You can list your Helm releases with `helm list`.
-   - `NAMESPACE` refers to a [Kubernetes namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/),
+   - `<k8s-namespace>` refers to a [Kubernetes namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/),
      an identifier used to group Kubernetes resources, in this case all
      Kubernetes resources associated with the JupyterHub chart. You'll need the
      namespace identifier for performing any commands with `kubectl`.
-
-   * This step may take a moment, during which time there will be no output
+   - This step may take a moment, during which time there will be no output
      to your terminal. JupyterHub is being installed in the background.
-   * If you get a `release named <YOUR-RELEASE-NAME> already exists` error,
-     then you should delete the release by running `helm delete <YOUR-RELEASE-NAME>`. Then reinstall by repeating this step. If it
-     persists, also do `kubectl delete namespace <YOUR-NAMESPACE>` and try
-     again.
-   * In general, if something goes _wrong_ with the install step, delete the
-     Helm release by running `helm delete <YOUR-RELEASE-NAME>`
+   - If you get a `release named <helm-release-name> already exists` error, then
+     you should delete the release by running `helm delete <helm-release-name>`.
+     Then reinstall by repeating this step. If it persists, also do `kubectl delete namespace <k8s-namespace>` and try again.
+   - In general, if something goes _wrong_ with the install step, delete the
+     Helm release by running `helm delete <helm-release-name>`
      before re-running the install command.
-   * If you're pulling from a large Docker image you may get a
+   - If you're pulling from a large Docker image you may get a
      `Error: timed out waiting for the condition` error, add a
-     `--timeout=<NUMBER-OF-MINUTES>m<NUMBER-OF-SECONDS>s` parameter to the `helm install` command.
-   * The `--version` parameter corresponds to the _version of the Helm
+     `--timeout=<number-of-minutes>m` parameter to the `helm` command.
+   - The `--version` parameter corresponds to the _version of the Helm
      chart_, not the version of JupyterHub. Each version of the JupyterHub
      Helm chart is paired with a specific version of JupyterHub. E.g.,
-     `0.7.0` of the Helm chart runs JupyterHub `0.9.2`.
+     `0.11.1` of the Helm chart runs JupyterHub `1.3.0`.
      For a list of which JupyterHub version is installed in each version
-     of the Z2JH Helm Chart, see the [Helm Chart repository](https://github.com/jupyterhub/helm-chart#release-notes).
+     of the JupyterHub Helm Chart, see the [Helm Chart repository](https://jupyterhub.github.io/helm-chart/).
 
 3. While Step 2 is running, you can see the pods being created by entering in
    a different terminal:
@@ -121,7 +114,7 @@ can try with `nano config.yaml`.
    and set a default value for the `--namespace` flag:
 
    ```
-   kubectl config set-context $(kubectl config current-context) --namespace ${NAMESPACE:-jhub}
+   kubectl config set-context $(kubectl config current-context) --namespace <k8s-namespace>
    ```
 
 4. Wait for the _hub_ and _proxy_ pod to enter the `Running` state.
@@ -137,7 +130,7 @@ can try with `nano config.yaml`.
    available like in the example output.
 
    ```
-   kubectl get service --namespace jhub
+   kubectl get service --namespace <k8s-namespace>
    ```
 
    ```
@@ -151,7 +144,7 @@ can try with `nano config.yaml`.
    can find the longer version by calling:
 
    ```
-   kubectl describe service proxy-public --namespace jhub
+   kubectl describe service proxy-public --namespace <k8s-namespace>
    ```
 
 6. To use JupyterHub, enter the external IP for the `proxy-public` service in
