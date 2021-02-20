@@ -15,17 +15,12 @@ for debugging.
 tells you that they are experiencing strange behavior. Let's take a look
 at our deployment to figure out what is going on.
 
-```{note}
-For our real world scenario, we'll assume that our Kubernetes namespace
-is called `jhub`. Your namespace may be called something different
-```
-
 ### `kubectl get pod`
 
 To list all pods in your Kubernetes deployment:
 
 ```
-kubectl --namespace=jhub get pod
+kubectl get pod --namespace <k8s-namespace>
 ```
 
 This will output a list of all pods being used in the deployment.
@@ -37,7 +32,7 @@ pod that was created when somebody logged in to the JupyterHub.
 Here's an example of the output:
 
 ```
-$ kubectl --namespace=jhub get pod
+$ kubectl get pod --namespace <k8s-namespace>
 NAME                                READY     STATUS         RESTARTS   AGE
 hub-3311438805-xnfvp     1/1       Running        0          2m
 jupyter-choldgraf                   0/1       ErrImagePull   0          25s
@@ -60,7 +55,7 @@ To see more detail about the state of a specific pod, use the following
 command:
 
 ```
-kubectl --namespace=jhub describe pod <POD_NAME>
+kubectl describe pod <pod-name> --namespace <k8s-namespace>
 ```
 
 This will output several pieces of information, including configuration and
@@ -72,7 +67,7 @@ show up in this section.
 displays an error:
 
 ```
-$ kubectl --namespace=jhub describe pod jupyter-choldgraf
+$ kubectl describe pod jupyter-choldgraf --namespace <k8s-namespace>
 ...
 2m            52s             4       kubelet, gke-jhubtest-default-pool-52c36683-jv6r        spec.containers{notebook}       Warning         Failed           Failed to pull image "jupyter/scipy-notebook:v0.4": rpc error: code = 2 desc = Error response from daemon: {"message":"manifest for jupyter/scipy-notebook:v0.4 not found"}
 ...
@@ -86,7 +81,7 @@ this by getting another view on the events that have transpired in the pod.
 If you only want to see the latest logs for a pod, use the following command:
 
 ```
-kubectl --namespace=jhub logs <POD_NAME>
+kubectl logs <POD_NAME> --namespace <k8s-namespace>
 ```
 
 This will show you the logs from the pod, which often contain useful
@@ -96,7 +91,7 @@ to see if something is generating an error.
 **Real world scenario:** In our case, we get this line back:
 
 ```
-$ kubectl --namespace=jhub logs jupyter-choldgraf
+$ kubectl logs jupyter-choldgraf --namespace <k8s-namespace>
 Error from server (BadRequest): container "notebook" in pod "jupyter-choldgraf" is waiting to start: trying and failing to pull image
 ```
 
@@ -126,7 +121,7 @@ singleuser:
 Then run a helm upgrade:
 
 ```
-helm upgrade --cleanup-on-fail jhub jupyterhub/jupyterhub --version=v0.6 -f config.yaml
+helm upgrade --cleanup-on-fail jhub jupyterhub/jupyterhub --version=<chart-version> -f config.yaml
 ```
 
 where `jhub` is the helm release name (substitute the release name that you
@@ -140,7 +135,7 @@ Right after you run this command, let's once again list the pods in our
 deployment:
 
 ```
-$ kubectl --namespace=jhub get pod
+$ kubectl get pod --namespace=<k8s-namespace>
 NAME                                READY     STATUS              RESTARTS   AGE
 hub-2653507799-r7wf8     0/1       ContainerCreating   0          31s
 hub-3311438805-xnfvp     1/1       Terminating         0          14m
@@ -154,14 +149,14 @@ which will not be deleted automatically. Let's manually delete it so a newer
 working pod can be started.:
 
 ```
-$ kubectl --namespace=jhub delete pod jupyter-choldgraf
+$ kubectl delete pod jupyter-choldgraf --namespace <k8s-namespace>
 ```
 
 Finally, we'll tell our user to log back in to the JupyterHub. Then let's
 list our running pods once again:
 
 ```
-$ kubectl --namespace=jhub get pod
+$ kubectl get pod --namespace <k8s-namespace>
 NAME                                READY     STATUS    RESTARTS   AGE
 hub-2653507799-r7wf8     1/1       Running   0          3m
 jupyter-choldgraf                   1/1       Running   0          18s
