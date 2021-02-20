@@ -81,8 +81,10 @@ spec:
             - /bin/sh
             - -c
             - echo "Pulling complete"
+          {{- with .Values.prePuller.resources }}
           resources:
-            {{- .Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
           {{- with .Values.prePuller.containerSecurityContext }}
           securityContext:
             {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
@@ -96,8 +98,10 @@ spec:
             - /bin/sh
             - -c
             - echo "Pulling complete"
+          {{- with .Values.prePuller.resources }}
           resources:
-            {{- .Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
           {{- with .Values.prePuller.containerSecurityContext }}
           securityContext:
             {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
@@ -111,8 +115,10 @@ spec:
             - /bin/sh
             - -c
             - echo "Pulling complete"
+          {{- with $.Values.prePuller.resources }}
           resources:
-            {{- $.Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
           {{- with $.Values.prePuller.containerSecurityContext }}
           securityContext:
             {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
@@ -130,8 +136,10 @@ spec:
             - /bin/sh
             - -c
             - echo "Pulling complete"
+          {{- with $.Values.prePuller.resources }}
           resources:
-            {{- $.Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
           {{- with $.Values.prePuller.containerSecurityContext }}
           securityContext:
             {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
@@ -149,8 +157,10 @@ spec:
             - /bin/sh
             - -c
             - echo "Pulling complete"
+          {{- with $.Values.prePuller.resources }}
           resources:
-            {{- $.Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
           {{- with $.Values.prePuller.containerSecurityContext }}
           securityContext:
             {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
@@ -159,8 +169,10 @@ spec:
       containers:
         - name: pause
           image: {{ .Values.prePuller.pause.image.name }}:{{ .Values.prePuller.pause.image.tag }}
+          {{- with .Values.prePuller.resources }}
           resources:
-            {{- .Values.prePuller.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
           {{- with .Values.prePuller.pause.containerSecurityContext }}
           securityContext:
             {{- . | toYaml | trimSuffix "\n" | nindent 12 }}

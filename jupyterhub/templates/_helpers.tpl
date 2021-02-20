@@ -208,10 +208,10 @@ strings become the name keys' values into $_.res */}}
 {{- end }}
 
 {{- /*
-  jupyterhub.resources:
+  jupyterhub.singleuser.resources:
     The resource request of a singleuser.
 */}}
-{{- define "jupyterhub.resources" -}}
+{{- define "jupyterhub.singleuser.resources" -}}
 {{- $r1 := .Values.singleuser.cpu.guarantee -}}
 {{- $r2 := .Values.singleuser.memory.guarantee -}}
 {{- $r3 := .Values.singleuser.extraResource.guarantees -}}

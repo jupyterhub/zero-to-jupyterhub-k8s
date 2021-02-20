@@ -101,8 +101,10 @@ spec:
               mountPath: /etc/chp/tls
               readOnly: true
           {{- end }}
+          {{- with .Values.proxy.chp.resources }}
           resources:
-            {{- .Values.proxy.chp.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
           env:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
