@@ -426,16 +426,16 @@ c.ConfigurableHTTPProxy.auth_token = get_secret_value(
 c.JupyterHub.cookie_secret = a2b_hex(get_secret_value("JupyterHub.cookie_secret"))
 c.CryptKeeper.keys = get_secret_value("CryptKeeper.keys").split(";")
 
-# load hub.config values, except potentially seeded secrets
-for section, sub_cfg in get_config("hub.config", {}).items():
-    if section == "JupyterHub" and sub_cfg in ["proxy_auth_token", "cookie_secret"]:
-        pass
-    elif section == "ConfigurableHTTPProxy" and sub_cfg in ["auth_token"]:
-        pass
-    elif section == "CryptKeeper" and sub_cfg in ["keys"]:
-        pass
-    else:
-        c[section].update(sub_cfg)
+# load hub.config values, except potentially seeded secrets already loaded
+for app, cfg in get_config("hub.config", {}).items():
+    if app == "JupyterHub":
+        cfg.pop("proxy_auth_token", None)
+        cfg.pop("cookie_secret", None)
+    elif app == "ConfigurableHTTPProxy":
+        cfg.pop("auth_token", None)
+    elif app == "CryptKeeper":
+        cfg.pop("keys", None)
+    c[app].update(cfg)
 
 # execute hub.extraConfig string
 extra_config = get_config("hub.extraConfig", {})
