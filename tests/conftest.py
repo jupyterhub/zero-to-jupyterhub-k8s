@@ -5,7 +5,9 @@ ref: https://docs.pytest.org/en/latest/writing_plugins.html#conftest-py-plugins
 
 import os
 import requests
+import textwrap
 import uuid
+
 from urllib.parse import urlparse
 
 import pytest
@@ -121,3 +123,21 @@ def jupyter_user(api_request):
     yield username
     r = api_request.delete("/users/" + username)
     assert r.status_code == 204
+
+
+@pytest.fixture(scope="module")
+def extra_files_test_command():
+    return textwrap.dedent(
+        """
+        ls -l /tmp/binaryData.txt | grep -- -rw-rw-rw- || exit 1
+        ls -l /tmp/dir1/binaryData.txt | grep -- -rw-rw-rw- || exit 2
+        ls -l /tmp/stringData.txt | grep -- -rw-rw-rw- || exit 3
+        ls -l /tmp/dir1/stringData.txt | grep -- -rw-rw-rw- || exit 4
+        ls -l /etc/test/data.yaml | grep -- -r--r--r-- || exit 5
+        ls -l /etc/test/data.yml | grep -- -r--r--r-- || exit 6
+        ls -l /etc/test/data.json | grep -- -r--r--r-- || exit 7
+        ls -l /etc/test/data.toml | grep -- -r--r--r-- || exit 8
+        cat /tmp/binaryData.txt | grep -- "hello world" || exit 9
+        cat /tmp/stringData.txt | grep -- "hello world" || exit 10
+        """
+    ).strip()
