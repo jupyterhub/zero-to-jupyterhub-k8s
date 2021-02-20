@@ -79,8 +79,10 @@ spec:
             httpGet:
               path: /healthz
               port: 10251
+          {{- with .Values.scheduling.userScheduler.resources }}
           resources:
-            {{- .Values.scheduling.userScheduler.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
           {{- with .Values.scheduling.userScheduler.containerSecurityContext }}
           securityContext:
             {{- . | toYaml | trimSuffix "\n" | nindent 12 }}

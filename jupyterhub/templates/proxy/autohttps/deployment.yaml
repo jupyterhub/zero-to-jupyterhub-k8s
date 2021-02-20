@@ -88,8 +88,10 @@ spec:
           {{- with .Values.proxy.traefik.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
+          {{- with .Values.proxy.traefik.resources }}
           resources:
-            {{- .Values.proxy.traefik.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 8080

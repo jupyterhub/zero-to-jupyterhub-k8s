@@ -161,8 +161,10 @@ spec:
               subPath: {{ . | quote }}
               {{- end }}
             {{- end }}
+          {{- with .Values.hub.resources }}
           resources:
-            {{- .Values.hub.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
           {{- with .Values.hub.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}

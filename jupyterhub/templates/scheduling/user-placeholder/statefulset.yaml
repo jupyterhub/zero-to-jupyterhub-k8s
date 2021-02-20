@@ -45,12 +45,13 @@ spec:
       containers:
         - name: pause
           image: {{ .Values.prePuller.pause.image.name }}:{{ .Values.prePuller.pause.image.tag }}
+          {{- if .Values.scheduling.userPlaceholder.resources }}
           resources:
-            {{- if .Values.scheduling.userPlaceholder.resources }}
             {{- .Values.scheduling.userPlaceholder.resources | toYaml | trimSuffix "\n" | nindent 12 }}
-            {{- else }}
+          {{- else if (include "jupyterhub.singleuser.resources" .) }}
+          resources:
             {{- include "jupyterhub.singleuser.resources" . | nindent 12 }}
-            {{- end }}
+          {{- end }}
           {{- with .Values.scheduling.userPlaceholder.containerSecurityContext }}
           securityContext:
             {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
