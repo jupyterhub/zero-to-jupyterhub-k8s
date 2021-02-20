@@ -911,13 +911,10 @@ properties:
           ```{warning}
           1. The self managed k8s Secret must mirror the structure in the chart
              managed secret.
-          2. [`hub.db.password`](schema_hub.db.password) specifically must be
-             provided in the self managed k8s Secret if you are using an
-             external database.
-          3. [`hub.db.password`](schema_proxy.secretToken) specifically will be
-             ignored in the self managed k8s Secret in favor of the value in the
-             chart managed k8s Secret, which value can be automatically set. If
-             you want to set it manually, do it in the chart managed k8s Secret.
+          2. [`proxy.secretToken`](schema_proxy.secretToken) (aka.
+             `JupyterHub.proxy_auth_token` and
+             `ConfigurableHTTPProxy.auth_token`) is only read from the chart
+             managed k8s Secret.
           ```
       nodeSelector: &nodeSelector-spec
         type: object

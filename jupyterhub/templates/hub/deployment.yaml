@@ -202,21 +202,6 @@ spec:
                   #       lookup function on the user managed k8s Secret.
                   name: {{ include "jupyterhub.hub.fullname" . }}
                   key: ConfigurableHTTPProxy.auth_token
-            {{- if .Values.hub.db.password }}
-            {{- if eq .Values.hub.db.type "mysql" }}
-            - name: MYSQL_PWD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "jupyterhub.hub-existing-secret-or-default.fullname" . }}
-                  key: hub.db.password
-            {{- else if eq .Values.hub.db.type "postgres" }}
-            - name: PGPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "jupyterhub.hub-existing-secret-or-default.fullname" . }}
-                  key: hub.db.password
-            {{- end }}
-            {{- end }}
             {{- include "jupyterhub.extraEnv" .Values.hub.extraEnv | nindent 12 }}
           ports:
             - name: http

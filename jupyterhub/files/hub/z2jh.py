@@ -42,7 +42,7 @@ def _get_config_value(key):
 
 
 @lru_cache()
-def get_secret_value(key):
+def get_secret_value(key, default="never-explicitly-set"):
     """Load value from the user managed k8s Secret or the default k8s Secret
     given a key."""
 
@@ -51,6 +51,8 @@ def get_secret_value(key):
         if os.path.exists(path):
             with open(path) as f:
                 return f.read()
+    if default != "never-explicitly-set":
+        return default
     raise Exception(f"{key} not found in either k8s Secret!")
 
 
