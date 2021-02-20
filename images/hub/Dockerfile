@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-# VULN_SCAN_HASH=
+# VULN_SCAN_TIME=
 
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=C.UTF-8
