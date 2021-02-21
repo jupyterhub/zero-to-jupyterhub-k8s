@@ -425,9 +425,9 @@ if os.path.isdir(config_dir):
         exec(compile(source=file_content, filename=file_name, mode="exec"))
 
 # load potentially seeded secrets
-c.ConfigurableHTTPProxy.auth_token = get_secret_value(
-    "ConfigurableHTTPProxy.auth_token"
-)
+#
+# NOTE: ConfigurableHTTPProxy.auth_token is set through an environment variable
+#       that is set using the chart managed secret.
 c.JupyterHub.cookie_secret = a2b_hex(get_secret_value("JupyterHub.cookie_secret"))
 c.CryptKeeper.keys = get_secret_value("CryptKeeper.keys").split(";")
 

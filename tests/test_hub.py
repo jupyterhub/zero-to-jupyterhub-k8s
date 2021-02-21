@@ -4,14 +4,16 @@ http://petstore.swagger.io/?url=https://raw.githubusercontent.com/jupyterhub/jup
 """
 
 import os
+import re
 import subprocess
 import time
 
+import pytest
 import requests
 import yaml
 
 
-def test_api(api_request):
+def test_api_root(api_request):
     """
     Tests the hub api's root endpoint (/). The hub's version should be returned.
 
@@ -51,7 +53,7 @@ def test_api_info(api_request):
     assert result["spawner"]["class"] == "kubespawner.spawner.KubeSpawner"
 
 
-def test_hub_api_create_user_and_get_information_about_user(api_request, jupyter_user):
+def test_api_create_and_get_user(api_request, jupyter_user):
     """
     Tests the hub api's /users/:user endpoint, both POST and GET.
 
@@ -79,7 +81,7 @@ def test_hub_api_create_user_and_get_information_about_user(api_request, jupyter
     assert r.json()["name"] == jupyter_user
 
 
-def test_hub_api_list_users(api_request, jupyter_user):
+def test_api_list_users(api_request, jupyter_user):
     """
     Tests the hub api's /users endpoint. Information about users should be
     returned.
@@ -98,7 +100,7 @@ def test_hub_api_list_users(api_request, jupyter_user):
     assert any(u["name"] == jupyter_user for u in r.json())
 
 
-def test_hub_can_talk_to_proxy(api_request, request_data):
+def test_api_proxy_connectivity(api_request, request_data):
     """
     Tests the hub api's /proxy endpoint.
 
@@ -120,7 +122,7 @@ def test_hub_can_talk_to_proxy(api_request, request_data):
     assert r.status_code == 200, "Failed to get /proxy"
 
 
-def test_hub_mounted_extra_files(extra_files_test_command):
+def test_extra_files(extra_files_test_command):
     """
     Tests the hub.extraFiles configuration. It should have mounted files to the
     hub pod's container with specific file system permissions.
@@ -141,7 +143,7 @@ def test_hub_mounted_extra_files(extra_files_test_command):
     ), f"The hub.extraFiles configuration doesn't seem to have been honored!"
 
 
-def test_hub_etc_jupyterhub_d_folder():
+def test_load_etc_jupyterhub_d():
     """
     Tests that the extra jupyterhub config file put into
     /usr/local/etc/jupyterhub/jupyterhub_config.d by the hub.extraFiles
@@ -163,16 +165,26 @@ def test_hub_etc_jupyterhub_d_folder():
     ), f"The hub.extraFiles configuration should have mounted a config file to /usr/local/etc/jupyterhub/jupyterhub_config.d which should have been loaded to write a dummy file for us!"
 
 
-def test_hub_existing_secret():
+def test_load_existing_secret():
     """
-    Tests that use of hub.existingSecret works
+    Tests that use of hub.existingSecret works as intended, which mean it should
+    combine values from a self managed k8s Secret with the chart managed k8s
+    Secret.
 
-    Required for this test to not be skipped:
+    Required for this test to not error or be skipped:
 
-        1. A k8s Secret is created
-        2. The chart is configured with hub.existingSecret
-        3. The chart is configured with a hub.extraConfig entry logging what
-           this test explicitly looks for in the hub logs.
+        1. The chart is configured with a hub.extraConfig entry emitting logs
+           that this test looks for in the hub logs. Test error otherwise.
+        2. The chart is configured with hub.existingSecret. Skip otherwise.
+
+    Various configuration from a hardcoded k8s Secret referenced by
+    hub.existingSecret is actually consumed properly.
+
+        - hub.db.password
+        - ConfigurableHTTPProxy.auth_token - ignored
+        - JupyterHub.cookie_secret
+        - CryptKeeper.keys
+        - values.yaml -> singleuser.extraEnv.SET_FROM_EXISTING_SECRET
     """
     c = subprocess.run(
         [
@@ -192,6 +204,36 @@ def test_hub_existing_secret():
         print(hub_logs)
         raise AssertionError("Logs from deploy/hub not accessible!")
 
+    # error on missing hub.extraConfig entry
     assert (
         "test_hub_existing_secret" in hub_logs
     ), "Expected specific logs to be emitted as planned from dev-config.yaml!"
+
+    # skip on missing hub.existingSecret or the referenced secret isn't available
+    if "hub.existingSecret=None" in hub_logs:
+        pytest.skip("hub.existingSecret is None")
+    else:
+        k8s_secret_exist = False
+        match = re.compile(r".*hub.existingSecret=(?P<ref>[\S]*).*", re.DOTALL).match(
+            hub_logs
+        )
+        if match:
+            k8s_secret = match.group("ref")
+            assert k8s_secret, "This should never be found "
+            c = subprocess.run(["kubectl", "get", "secret", k8s_secret])
+            if c.returncode != 0:
+                pytest.skip(f"k8s Secret '{k8s_secret}' not found")
+
+    # NOTE:  These values should match a what is defined in our GitHub workflows
+    #        where we pass values and create a k8s Secret.
+    #
+    # FIXME: It would be good to test use against custom databases, then we
+    #        would also test hub.db.password here and that the environment
+    #        variables MYSQL_PWD and PGPASSWORD would be setup correctly. But,
+    #        configuring that would make the hub fail to startup without an
+    #        actual database.
+    assert "CONFIGPROXY_AUTH_TOKEN=aaa111" in hub_logs
+    assert "JupyterHub.cookie_secret=fff999" in hub_logs
+    assert "CryptKeeper.keys=fff999" in hub_logs
+    assert "singleuser.extraLabels.test-chart-managed-secret=ok" in hub_logs
+    assert "singleuser.extraLabels.test-self-managed-secret=ok" in hub_logs

@@ -5,7 +5,7 @@ import pytest
 import requests
 
 
-def test_hub_api_request_user_spawn(
+def test_spawn_basic(
     api_request,
     jupyter_user,
     request_data,
@@ -73,7 +73,7 @@ def test_hub_api_request_user_spawn(
 
 
 @pytest.mark.netpol
-def test_singleuser_netpol(api_request, jupyter_user, request_data):
+def test_spawn_netpol(api_request, jupyter_user, request_data):
     """
     Tests a spawned user pods ability to communicate with allowed and blocked
     internet locations.

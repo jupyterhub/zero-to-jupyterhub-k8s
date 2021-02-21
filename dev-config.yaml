@@ -51,10 +51,28 @@ hub:
   extraConfig:
     # emit logs associated with our pytest tests
     test_hub_existing_secret: |
-      print()
-      print("TEST LOGS: test_hub_existing_secret")
-      print("---")
-      print()
+      try:
+          from z2jh import get_secret_value
+
+          print()
+          print("TEST LOGS: test_hub_existing_secret")
+          print(f"hub.existingSecret={get_config('hub.existingSecret')}")
+          print()
+          print(f"hub.db.type={get_config('hub.db.type')}")
+          print(f"MYSQL_PWD={os.environ.get('MYSQL_PWD', None)}")
+          print(f"PGPASSWORD={os.environ.get('PGPASSWORD', None)}")
+          print()
+          print(f"CONFIGPROXY_AUTH_TOKEN={os.environ.get('CONFIGPROXY_AUTH_TOKEN', None)}")
+          print(f"JupyterHub.cookie_secret={get_secret_value('JupyterHub.cookie_secret', None)}")
+          print(f"CryptKeeper.keys={get_secret_value('CryptKeeper.keys', None)}")
+          print()
+          print(f"singleuser.extraLabels.test-chart-managed-secret={get_config('singleuser.extraLabels.test-chart-managed-secret')}")
+          print(f"singleuser.extraLabels.test-self-managed-secret={get_config('singleuser.extraLabels.test-self-managed-secret')}")
+          print("---")
+          print()
+      except ImportError:
+          print("WARNING: z2jh.py didn't contain get_secret_value")
+
   extraFiles:
     my_config:
       mountPath: /usr/local/etc/jupyterhub/jupyterhub_config.d/my_config.py
@@ -99,6 +117,8 @@ hub:
       mountPath: /etc/test/data.toml
 
 singleuser:
+  extraLabels:
+    test-chart-managed-secret: "ok"
   extraFiles:
     binaryData1: *binaryData1
     binaryData2: *binaryData2
