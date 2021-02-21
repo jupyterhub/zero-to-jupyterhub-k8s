@@ -185,8 +185,8 @@ def test_load_existing_secret():
           to the helm install command, and for it to set
           matrix.create-k8s-test-resources on the same GitHub workflow job.
         - ci/test-hub-existing-secret.yaml to define a k8s Secret to create.
-        - dev-config.yaml to set hub.services.test.api_token, and for it to set
-          hub.extraConfig to log values on jupyterhub startup.
+        - dev-config.yaml to set hub.services.test-hub-existing-secret.api_token,
+          and for it to set hub.extraConfig to log values on jupyterhub startup.
     """
     c = subprocess.run(
         [
@@ -226,8 +226,8 @@ def test_load_existing_secret():
             if c.returncode != 0:
                 pytest.skip(f"k8s Secret '{k8s_secret}' not found")
 
-    # NOTE:  fff999 are values from ci/test-hub-existing-secret.yaml that
-    #        hub.existingSecret will reference, while aaa111-ddd444 come from
+    # NOTE:  ffff9999 are values from ci/test-hub-existing-secret.yaml that
+    #        hub.existingSecret will reference, while aaaa1111-dddd4444 come from
     #        the chart managed k8s Secret.
     #
     # FIXME: It would be good to test use against custom databases, then we
@@ -235,9 +235,9 @@ def test_load_existing_secret():
     #        variables MYSQL_PWD and PGPASSWORD would be setup correctly. But,
     #        configuring that would make the hub fail to startup without an
     #        actual database.
-    assert "hub.services.test.api_token=fff999" in hub_logs
-    assert "CONFIGPROXY_AUTH_TOKEN=aaa111" in hub_logs
-    assert "JupyterHub.cookie_secret=fff999" in hub_logs
-    assert "CryptKeeper.keys=fff999" in hub_logs
+    assert "hub.services.test-hub-existing-secret.api_token=ffff9999" in hub_logs
+    assert "CONFIGPROXY_AUTH_TOKEN=aaaa1111" in hub_logs
+    assert "JupyterHub.cookie_secret=ffff9999" in hub_logs
+    assert "CryptKeeper.keys=ffff9999" in hub_logs
     assert "singleuser.extraLabels.test-chart-managed-secret=ok" in hub_logs
     assert "singleuser.extraLabels.test-self-managed-secret=ok" in hub_logs

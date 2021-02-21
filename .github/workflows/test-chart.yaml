@@ -112,9 +112,9 @@ jobs:
             test: install
             local-chart-extra-args: >-
               --set hub.existingSecret=test-hub-existing-secret
-              --set proxy.secretToken=aaa111
-              --set hub.cookieSecret=bbb222
-              --set hub.config.CryptKeeper.keys[0]=ccc333
+              --set proxy.secretToken=aaaa1111
+              --set hub.cookieSecret=bbbb2222
+              --set hub.config.CryptKeeper.keys[0]=cccc3333
             create-k8s-test-resources: true
 
           # We run two upgrade tests where we first install an already released
@@ -132,15 +132,15 @@ jobs:
             test: upgrade
             upgrade-from: stable
             upgrade-from-extra-args: >-
-              --set proxy.secretToken=aaa111
-              --set hub.cookieSecret=bbb222
-              --set hub.config.CryptKeeper.keys[0]=ccc333
+              --set proxy.secretToken=aaaa1111
+              --set hub.cookieSecret=bbbb2222
+              --set hub.config.CryptKeeper.keys[0]=cccc3333
             create-k8s-test-resources: true
           - k3s-channel: v1.19
             test: upgrade
             upgrade-from: dev
             upgrade-from-extra-args: >-
-              --set proxy.secretToken=aaa111
+              --set proxy.secretToken=aaaa1111
 
     steps:
       - uses: actions/checkout@v2

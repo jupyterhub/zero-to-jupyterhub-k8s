@@ -35,9 +35,14 @@ hub:
   db:
     type: sqlite-memory
   services:
+    # The test service and its apiToken is used to make requests in our pytest
+    # suite of tests. Note that it can be overridden by the hub.existingSecret,
+    # which can cause tests to fail with 403.
     test:
       admin: true
-      apiToken: ddd444
+      apiToken: give-pytest-control
+    test-hub-existing-secret:
+      apiToken: dddd4444
   networkPolicy:
     egress: # overrides allowance of 0.0.0.0/0
       # In kind/k3s clusters the Kubernetes API server is exposing this port
@@ -62,7 +67,7 @@ hub:
           print(f"MYSQL_PWD={os.environ.get('MYSQL_PWD', None)}")
           print(f"PGPASSWORD={os.environ.get('PGPASSWORD', None)}")
           print()
-          print(f"hub.services.test.api_token={get_secret_value('hub.services.test.api_token', None)}")
+          print(f"hub.services.test-hub-existing-secret.api_token={get_secret_value('hub.services.test-hub-existing-secret.api_token', None)}")
           print()
           print(f"CONFIGPROXY_AUTH_TOKEN={os.environ.get('CONFIGPROXY_AUTH_TOKEN', None)}")
           print(f"hub.config.ConfigurableHTTPProxy.auth_token={get_secret_value('hub.config.ConfigurableHTTPProxy.auth_token', None)}")
