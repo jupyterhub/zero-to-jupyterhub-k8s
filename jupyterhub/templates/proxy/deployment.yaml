@@ -111,7 +111,7 @@ spec:
                   #       hub.existingSecret is specified to avoid using the
                   #       lookup function on the user managed k8s Secret.
                   name: {{ include "jupyterhub.hub.fullname" . }}
-                  key: ConfigurableHTTPProxy.auth_token
+                  key: hub.config.ConfigurableHTTPProxy.auth_token
             {{- include "jupyterhub.extraEnv" .Values.proxy.chp.extraEnv | nindent 12 }}
           {{- with .Values.proxy.chp.image.pullPolicy }}
           imagePullPolicy: {{ . }}

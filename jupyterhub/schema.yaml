@@ -912,9 +912,9 @@ properties:
           1. The self managed k8s Secret must mirror the structure in the chart
              managed secret.
           2. [`proxy.secretToken`](schema_proxy.secretToken) (aka.
-             `JupyterHub.proxy_auth_token` and
-             `ConfigurableHTTPProxy.auth_token`) is only read from the chart
-             managed k8s Secret.
+             `hub.config.JupyterHub.proxy_auth_token` and
+             `hub.config.ConfigurableHTTPProxy.auth_token`) is only read from
+             the chart managed k8s Secret.
           ```
       nodeSelector: &nodeSelector-spec
         type: object

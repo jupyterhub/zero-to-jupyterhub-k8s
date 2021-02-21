@@ -432,8 +432,10 @@ if os.path.isdir(config_dir):
 #
 # NOTE: ConfigurableHTTPProxy.auth_token is set through an environment variable
 #       that is set using the chart managed secret.
-c.JupyterHub.cookie_secret = a2b_hex(get_secret_value("JupyterHub.cookie_secret"))
-c.CryptKeeper.keys = get_secret_value("CryptKeeper.keys").split(";")
+c.JupyterHub.cookie_secret = a2b_hex(
+    get_secret_value("hub.config.JupyterHub.cookie_secret")
+)
+c.CryptKeeper.keys = get_secret_value("hub.config.CryptKeeper.keys").split(";")
 
 # load hub.config values, except potentially seeded secrets already loaded
 for app, cfg in get_config("hub.config", {}).items():
