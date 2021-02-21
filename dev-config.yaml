@@ -37,7 +37,7 @@ hub:
   services:
     test:
       admin: true
-      apiToken: ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+      apiToken: ddd444
   networkPolicy:
     egress: # overrides allowance of 0.0.0.0/0
       # In kind/k3s clusters the Kubernetes API server is exposing this port
@@ -62,7 +62,10 @@ hub:
           print(f"MYSQL_PWD={os.environ.get('MYSQL_PWD', None)}")
           print(f"PGPASSWORD={os.environ.get('PGPASSWORD', None)}")
           print()
+          print(f"hub.services.test.api_token={get_secret_value('hub.services.test.api_token', None)}")
+          print()
           print(f"CONFIGPROXY_AUTH_TOKEN={os.environ.get('CONFIGPROXY_AUTH_TOKEN', None)}")
+          print(f"ConfigurableHTTPProxy.auth_token={get_secret_value('ConfigurableHTTPProxy.auth_token', None)}")
           print(f"JupyterHub.cookie_secret={get_secret_value('JupyterHub.cookie_secret', None)}")
           print(f"CryptKeeper.keys={get_secret_value('CryptKeeper.keys', None)}")
           print()

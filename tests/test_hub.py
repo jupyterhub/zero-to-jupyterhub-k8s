@@ -167,9 +167,11 @@ def test_load_etc_jupyterhub_d():
 
 def test_load_existing_secret():
     """
-    Tests that use of hub.existingSecret works as intended, which mean it should
-    combine values from a self managed k8s Secret with the chart managed k8s
-    Secret.
+    Tests that use of hub.existingSecret works as intended, which mean the
+    JupyterHub helm chart should make use of the combined values from a self
+    managed k8s Secret and a chart managed k8s Secret. The one exception to this
+    rule is CONFIGPROXY_AUTH_TOKEN which is always set using the chart managed
+    k8s Secret.
 
     Required for this test to not error or be skipped:
 
@@ -177,14 +179,14 @@ def test_load_existing_secret():
            that this test looks for in the hub logs. Test error otherwise.
         2. The chart is configured with hub.existingSecret. Skip otherwise.
 
-    Various configuration from a hardcoded k8s Secret referenced by
-    hub.existingSecret is actually consumed properly.
+    For this test to work, we rely on:
 
-        - hub.db.password
-        - ConfigurableHTTPProxy.auth_token - ignored
-        - JupyterHub.cookie_secret
-        - CryptKeeper.keys
-        - values.yaml -> singleuser.extraEnv.SET_FROM_EXISTING_SECRET
+        - .github/workflows/test-chart.yaml to pass matrix.local-chart-extra-args
+          to the helm install command, and for it to set
+          matrix.create-k8s-test-resources on the same GitHub workflow job.
+        - ci/test-hub-existing-secret.yaml to define a k8s Secret to create.
+        - dev-config.yaml to set hub.services.test.api_token, and for it to set
+          hub.extraConfig to log values on jupyterhub startup.
     """
     c = subprocess.run(
         [
@@ -224,14 +226,16 @@ def test_load_existing_secret():
             if c.returncode != 0:
                 pytest.skip(f"k8s Secret '{k8s_secret}' not found")
 
-    # NOTE:  These values should match a what is defined in our GitHub workflows
-    #        where we pass values and create a k8s Secret.
+    # NOTE:  fff999 are values from ci/test-hub-existing-secret.yaml that
+    #        hub.existingSecret will reference, while aaa111-ddd444 come from
+    #        the chart managed k8s Secret.
     #
     # FIXME: It would be good to test use against custom databases, then we
     #        would also test hub.db.password here and that the environment
     #        variables MYSQL_PWD and PGPASSWORD would be setup correctly. But,
     #        configuring that would make the hub fail to startup without an
     #        actual database.
+    assert "hub.services.test.api_token=fff999" in hub_logs
     assert "CONFIGPROXY_AUTH_TOKEN=aaa111" in hub_logs
     assert "JupyterHub.cookie_secret=fff999" in hub_logs
     assert "CryptKeeper.keys=fff999" in hub_logs
