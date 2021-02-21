@@ -129,7 +129,12 @@ scheduling:
   userScheduler:
     enabled: true
     replicas: 2
-    logLevel: 10
+    # Can be set too low too not show scoring of scheduled pods, but also too
+    # high to show hex dumps of all network traffic.
+    #
+    # FIXME: Tweak this to include scoring, but exclude hex dumps. 10 includes
+    #        hex dumps. 4 does not include scoring. Trying with 6...
+    logLevel: 6
 
 debug:
   enabled: true
