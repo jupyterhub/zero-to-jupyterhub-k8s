@@ -48,6 +48,13 @@ hub:
     requests:
       memory: 0
       cpu: 0
+  extraConfig:
+    # emit logs associated with our pytest tests
+    test_hub_existing_secret: |
+      print()
+      print("TEST LOGS: test_hub_existing_secret")
+      print("---")
+      print()
   extraFiles:
     my_config:
       mountPath: /usr/local/etc/jupyterhub/jupyterhub_config.d/my_config.py

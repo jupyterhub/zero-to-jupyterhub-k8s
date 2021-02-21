@@ -161,3 +161,37 @@ def test_hub_etc_jupyterhub_d_folder():
     assert (
         c.returncode == 0
     ), f"The hub.extraFiles configuration should have mounted a config file to /usr/local/etc/jupyterhub/jupyterhub_config.d which should have been loaded to write a dummy file for us!"
+
+
+def test_hub_existing_secret():
+    """
+    Tests that use of hub.existingSecret works
+
+    Required for this test to not be skipped:
+
+        1. A k8s Secret is created
+        2. The chart is configured with hub.existingSecret
+        3. The chart is configured with a hub.extraConfig entry logging what
+           this test explicitly looks for in the hub logs.
+    """
+    c = subprocess.run(
+        [
+            "kubectl",
+            "logs",
+            "deploy/hub",
+        ],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    hub_logs = c.stdout
+
+    if c.returncode != 0:
+        print(f"Return code: {c.returncode}")
+        print("---")
+        print(hub_logs)
+        raise AssertionError("Logs from deploy/hub not accessible!")
+
+    assert (
+        "test_hub_existing_secret" in hub_logs
+    ), "Expected specific logs to be emitted as planned from dev-config.yaml!"
