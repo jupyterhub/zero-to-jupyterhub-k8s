@@ -67,7 +67,7 @@ hub:
           print(f"MYSQL_PWD={os.environ.get('MYSQL_PWD', None)}")
           print(f"PGPASSWORD={os.environ.get('PGPASSWORD', None)}")
           print()
-          print(f"hub.services.test-hub-existing-secret.api_token={get_secret_value('hub.services.test-hub-existing-secret.api_token', None)}")
+          print(f"hub.services.test-hub-existing-secret.apiToken={get_secret_value('hub.services.test-hub-existing-secret.apiToken', None)}")
           print()
           print(f"CONFIGPROXY_AUTH_TOKEN={os.environ.get('CONFIGPROXY_AUTH_TOKEN', None)}")
           print(f"hub.config.ConfigurableHTTPProxy.auth_token={get_secret_value('hub.config.ConfigurableHTTPProxy.auth_token', None)}")

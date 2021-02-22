@@ -185,7 +185,7 @@ def test_load_existing_secret():
           to the helm install command, and for it to set
           matrix.create-k8s-test-resources on the same GitHub workflow job.
         - ci/test-hub-existing-secret.yaml to define a k8s Secret to create.
-        - dev-config.yaml to set hub.services.test-hub-existing-secret.api_token,
+        - dev-config.yaml to set hub.services.test-hub-existing-secret.apiToken,
           and for it to set hub.extraConfig to log values on jupyterhub startup.
     """
     c = subprocess.run(
@@ -235,7 +235,7 @@ def test_load_existing_secret():
     #        variables MYSQL_PWD and PGPASSWORD would be setup correctly. But,
     #        configuring that would make the hub fail to startup without an
     #        actual database.
-    assert "hub.services.test-hub-existing-secret.api_token=ffff9999" in hub_logs
+    assert "hub.services.test-hub-existing-secret.apiToken=ffff9999" in hub_logs
     assert "CONFIGPROXY_AUTH_TOKEN=aaaa1111" in hub_logs
     assert "JupyterHub.cookie_secret=ffff9999" in hub_logs
     assert "CryptKeeper.keys=ffff9999" in hub_logs
