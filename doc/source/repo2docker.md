@@ -38,7 +38,7 @@ to configure JupyterHub to build off of this image:
 
 1. **Download and start Docker.**
 
-   You can do this by [downloading and installing Docker][https://docs.docker.com/get-docker/]. Once you’ve started
+   You can do this by [downloading and installing Docker](https://docs.docker.com/get-docker/). Once you’ve started
    Docker, it will show up as a tiny background application.
 
 2. **Install repo2docker** using `pip`:
