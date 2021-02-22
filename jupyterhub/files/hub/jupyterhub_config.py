@@ -60,17 +60,18 @@ c.JupyterHub.tornado_settings = {
 
 # configure the hub db connection
 db_type = get_config("hub.db.type")
-db_password = get_secret_value("hub.db.password", None)
 if db_type == "sqlite-pvc":
     c.JupyterHub.db_url = "sqlite:///jupyterhub.sqlite"
 elif db_type == "sqlite-memory":
     c.JupyterHub.db_url = "sqlite://"
-elif db_type == "mysql" and db_password != None:
-    os.environ["MYSQL_PWD"] = db_password
-elif db_type == "postgres" and db_password != None:
-    os.environ["PGPASSWORD"] = db_password
 else:
     set_config_if_not_none(c.JupyterHub, "db_url", "hub.db.url")
+db_password = get_secret_value("hub.db.password", None)
+if db_password is not None:
+    if db_type == "mysql":
+        os.environ["MYSQL_PWD"] = db_password
+    elif db_type == "postgres":
+        os.environ["PGPASSWORD"] = db_password
 
 
 # c.JupyterHub configuration from Helm chart's configmap
