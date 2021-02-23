@@ -114,7 +114,7 @@ hub:
   extraConfig:
     00-first-config: |
       import time
-      c.Spawner.environment.update(
+      c.KubeSpawner.environment.update(
           {
               "CURRENT_TIME": str(time.time())
           }
