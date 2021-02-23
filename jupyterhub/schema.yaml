@@ -852,6 +852,12 @@ properties:
                 type: integer
                 description: |
                   The HTTPS port the proxy-public service should be exposed on.
+          disableHttpPort:
+            type: boolean
+            description: |
+              Default `false`.
+
+              If `true` disables service HTTP traffic on port 80, and therefore forcing use of HTTPS. 
           extraPorts:
             type: list
             description: |
