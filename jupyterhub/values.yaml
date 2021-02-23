@@ -175,7 +175,7 @@ proxy:
     nodePorts:
       http:
       https:
-    disableHttp: false
+    disableHttpPort: false
     extraPorts: []
     loadBalancerIP:
     loadBalancerSourceRanges: []
