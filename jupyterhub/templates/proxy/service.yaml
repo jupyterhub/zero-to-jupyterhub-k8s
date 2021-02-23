@@ -57,12 +57,14 @@ spec:
       nodePort: {{ . }}
       {{- end }}
     {{- end }}
+    {{- if eq .Values.proxy.service.disableHttp true }}
     - name: http
       port: 80
       targetPort: http
       {{- with .Values.proxy.service.nodePorts.http }}
       nodePort: {{ . }}
       {{- end }}
+    {{- end }}
     {{- with .Values.proxy.service.extraPorts }}
     {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
     {{- end }}
