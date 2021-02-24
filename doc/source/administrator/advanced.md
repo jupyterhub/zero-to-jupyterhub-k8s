@@ -105,9 +105,23 @@ Code. Some examples of things you can do:
 Unfortunately, you have to write your python _in_ your YAML file. There's no way
 to include a file in `config.yaml`.
 
-You must specify `hub.extraConfig` as a dictionary. This enables you to
-logically split your customizations when there is more than one. The code will
-be evaluated in alphabetical sorted order of the key.
+You can specify `hub.extraConfig` as a raw string (remember to use the `|` for multi-line
+YAML strings):
+
+```yaml
+hub:
+  extraConfig: |
+    import time
+    c.KubeSpawner.environment.update(
+        {
+            "CURRENT_TIME": str(time.time())
+        }
+    )
+```
+
+You can also specify `hub.extraConfig` as a dictionary, if you want to logically
+split your customizations. The code will be evaluated in alphabetical sorted
+order of the key.
 
 ```yaml
 hub:
@@ -118,6 +132,7 @@ hub:
           {
               "CURRENT_TIME": str(time.time())
           }
+      # some code
     10-second-config: |
       # some other code
 ```
