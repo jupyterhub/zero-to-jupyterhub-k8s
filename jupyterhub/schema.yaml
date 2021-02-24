@@ -857,7 +857,7 @@ properties:
             description: |
               Default `false`.
 
-              If `true` disables service HTTP traffic on port 80, and therefore forcing use of HTTPS.
+              If `true`, port 80 for incoming HTTP traffic will no longer be exposed. This should not be used with `proxy.https.type=letsencrypt` or `proxy.https.enabled=false` as it would remove the only exposed port.
           extraPorts:
             type: list
             description: |
