@@ -1186,6 +1186,12 @@ properties:
                 type: [integer, "null"]
                 description: |
                   The HTTPS port the proxy-public service should be exposed on.
+          disableHttpPort:
+            type: boolean
+            description: |
+              Default `false`.
+
+              If `true`, port 80 for incoming HTTP traffic will no longer be exposed. This should not be used with `proxy.https.type=letsencrypt` or `proxy.https.enabled=false` as it would remove the only exposed port.
           extraPorts:
             type: array
             description: |

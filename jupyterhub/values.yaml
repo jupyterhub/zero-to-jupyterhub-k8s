@@ -180,6 +180,7 @@ proxy:
     nodePorts:
       http:
       https:
+    disableHttpPort: false
     extraPorts: []
     loadBalancerIP:
     loadBalancerSourceRanges: []
