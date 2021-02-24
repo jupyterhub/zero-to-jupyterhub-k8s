@@ -112,9 +112,11 @@ YAML strings):
 hub:
   extraConfig: |
     import time
-    c.Spawner.environment += {
-       "CURRENT_TIME": str(time.time())
-    }
+    c.KubeSpawner.environment.update(
+        {
+            "CURRENT_TIME": str(time.time())
+        }
+    )
 ```
 
 You can also specify `hub.extraConfig` as a dictionary, if you want to logically
@@ -125,7 +127,12 @@ order of the key.
 hub:
   extraConfig:
     00-first-config: |
-      # some code
+      import time
+      c.KubeSpawner.environment.update(
+          {
+              "CURRENT_TIME": str(time.time())
+          }
+      )
     10-second-config: |
       # some other code
 ```
