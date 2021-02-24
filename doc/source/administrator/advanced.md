@@ -132,7 +132,7 @@ hub:
           {
               "CURRENT_TIME": str(time.time())
           }
-      # some code
+      )
     10-second-config: |
       # some other code
 ```
