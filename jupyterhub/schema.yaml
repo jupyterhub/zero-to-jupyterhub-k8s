@@ -1490,9 +1490,9 @@ properties:
           for more info.
         properties:
           limit:
-            type: [string, "null"]
+            type: [number, "null"]
           guarantee:
-            type: [string, "null"]
+            type: [number, "null"]
       memory:
         type: object
         description: |
@@ -1502,9 +1502,9 @@ properties:
           for more info.
         properties:
           limit:
-            type: [string, "null"]
+            type: [number, string, "null"]
           guarantee:
-            type: [string, "null"]
+            type: [number, string, "null"]
             description: |
               Note that this field is referred to as *requests* by the Kubernetes API.
       image: *image-spec
