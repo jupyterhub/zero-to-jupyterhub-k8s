@@ -53,11 +53,16 @@ spec:
             name: {{ include "jupyterhub.hub.fullname" . }}
         - name: secret
           secret:
-            secretName: {{ include "jupyterhub.hub-secret.fullname" . }}
+            secretName: {{ include "jupyterhub.hub.fullname" . }}
+        {{- with (include "jupyterhub.hub-existing-secret.fullname" .) }}
+        - name: existing-secret
+          secret:
+            secretName: {{ . }}
+        {{- end }}
         {{- if .Values.hub.extraFiles }}
         - name: files
           secret:
-            secretName: {{ include "jupyterhub.hub-secret.fullname" . }}
+            secretName: {{ include "jupyterhub.hub.fullname" . }}
             items:
               {{- range $file_key, $file_details := .Values.hub.extraFiles }}
               - key: {{ $file_key | quote }}
@@ -146,6 +151,10 @@ spec:
               name: config
             - mountPath: /usr/local/etc/jupyterhub/secret/
               name: secret
+            {{- if (include "jupyterhub.hub-existing-secret.fullname" .) }}
+            - mountPath: /usr/local/etc/jupyterhub/existing-secret/
+              name: existing-secret
+            {{- end }}
             {{- range $file_key, $file_details := .Values.hub.extraFiles }}
             - mountPath: {{ $file_details.mountPath }}
               subPath: {{ $file_key | quote }}
@@ -190,23 +199,11 @@ spec:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "jupyterhub.hub-secret.fullname" . }}
-                  key: JupyterHub.proxy_auth_token
-            {{- if .Values.hub.db.password }}
-            {{- if eq .Values.hub.db.type "mysql" }}
-            - name: MYSQL_PWD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "jupyterhub.hub-secret.fullname" . }}
-                  key: hub.db.password
-            {{- else if eq .Values.hub.db.type "postgres" }}
-            - name: PGPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "jupyterhub.hub-secret.fullname" . }}
-                  key: hub.db.password
-            {{- end }}
-            {{- end }}
+                  # NOTE: References the chart managed k8s Secret even if
+                  #       hub.existingSecret is specified to avoid using the
+                  #       lookup function on the user managed k8s Secret.
+                  name: {{ include "jupyterhub.hub.fullname" . }}
+                  key: hub.config.ConfigurableHTTPProxy.auth_token
             {{- include "jupyterhub.extraEnv" .Values.hub.extraEnv | nindent 12 }}
           ports:
             - name: http

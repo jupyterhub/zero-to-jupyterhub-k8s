@@ -106,6 +106,12 @@ jobs:
             test: install
           - k3s-channel: v1.17
             test: install
+            local-chart-extra-args: >-
+              --set hub.existingSecret=test-hub-existing-secret
+              --set proxy.secretToken=aaaa1111
+              --set hub.cookieSecret=bbbb2222
+              --set hub.config.CryptKeeper.keys[0]=cccc3333
+            create-k8s-test-resources: true
 
           # We run two upgrade tests where we first install an already released
           # Helm chart version and then upgrades to the version we are now
@@ -122,14 +128,15 @@ jobs:
             test: upgrade
             upgrade-from: stable
             upgrade-from-extra-args: >-
-              --set proxy.secretToken=aaa111
-              --set hub.cookieSecret=bbb222
-              --set hub.config.CryptKeeper.keys[0]=ccc333
+              --set proxy.secretToken=aaaa1111
+              --set hub.cookieSecret=bbbb2222
+              --set hub.config.CryptKeeper.keys[0]=cccc3333
+            create-k8s-test-resources: true
           - k3s-channel: v1.19
             test: upgrade
             upgrade-from: dev
             upgrade-from-extra-args: >-
-              --set proxy.secretToken=aaa111
+              --set proxy.secretToken=aaaa1111
 
     steps:
       - uses: actions/checkout@v2
@@ -253,9 +260,14 @@ jobs:
           await_autohttps_tls_cert_acquisition
           await_autohttps_tls_cert_save
 
+      - name: Create k8s test resources
+        if: matrix.create-k8s-test-resources
+        run: |
+          kubectl apply -f ci/test-hub-existing-secret.yaml
+
       - name: "Install local chart"
         run: |
-          helm upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml
+          helm upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml ${{ matrix.local-chart-extra-args }}
 
       - name: "Await local chart"
         uses: jupyterhub/action-k8s-await-workloads@v1

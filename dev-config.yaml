@@ -35,9 +35,14 @@ hub:
   db:
     type: sqlite-memory
   services:
+    # The test service and its apiToken is used to make requests in our pytest
+    # suite of tests. Note that it can be overridden by the hub.existingSecret,
+    # which can cause tests to fail with 403.
     test:
       admin: true
-      apiToken: ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+      apiToken: give-pytest-control
+    test-hub-existing-secret:
+      apiToken: dddd4444
   networkPolicy:
     egress: # overrides allowance of 0.0.0.0/0
       # In kind/k3s clusters the Kubernetes API server is exposing this port
@@ -48,6 +53,34 @@ hub:
     requests:
       memory: 0
       cpu: 0
+  extraConfig:
+    # emit logs associated with our pytest tests
+    test_hub_existing_secret: |
+      try:
+          from z2jh import get_secret_value
+
+          print()
+          print("TEST LOGS: test_hub_existing_secret")
+          print(f"hub.existingSecret={get_config('hub.existingSecret')}")
+          print()
+          print(f"hub.db.type={get_config('hub.db.type')}")
+          print(f"MYSQL_PWD={os.environ.get('MYSQL_PWD', None)}")
+          print(f"PGPASSWORD={os.environ.get('PGPASSWORD', None)}")
+          print()
+          print(f"hub.services.test-hub-existing-secret.apiToken={get_secret_value('hub.services.test-hub-existing-secret.apiToken', None)}")
+          print()
+          print(f"CONFIGPROXY_AUTH_TOKEN={os.environ.get('CONFIGPROXY_AUTH_TOKEN', None)}")
+          print(f"hub.config.ConfigurableHTTPProxy.auth_token={get_secret_value('hub.config.ConfigurableHTTPProxy.auth_token', None)}")
+          print(f"hub.config.JupyterHub.cookie_secret={get_secret_value('hub.config.JupyterHub.cookie_secret', None)}")
+          print(f"hub.config.CryptKeeper.keys={get_secret_value('hub.config.CryptKeeper.keys', None)}")
+          print()
+          print(f"singleuser.extraLabels.test-chart-managed-secret={get_config('singleuser.extraLabels.test-chart-managed-secret')}")
+          print(f"singleuser.extraLabels.test-self-managed-secret={get_config('singleuser.extraLabels.test-self-managed-secret')}")
+          print("---")
+          print()
+      except ImportError:
+          print("WARNING: z2jh.py didn't contain get_secret_value")
+
   extraFiles:
     my_config:
       mountPath: /usr/local/etc/jupyterhub/jupyterhub_config.d/my_config.py
@@ -92,6 +125,8 @@ hub:
       mountPath: /etc/test/data.toml
 
 singleuser:
+  extraLabels:
+    test-chart-managed-secret: "ok"
   extraFiles:
     binaryData1: *binaryData1
     binaryData2: *binaryData2
@@ -129,7 +164,12 @@ scheduling:
   userScheduler:
     enabled: true
     replicas: 2
-    logLevel: 10
+    # Can be set too low too not show scoring of scheduled pods, but also too
+    # high to show hex dumps of all network traffic.
+    #
+    # FIXME: Tweak this to include scoring, but exclude hex dumps. 10 includes
+    #        hex dumps. 4 does not include scoring. Trying with 6...
+    logLevel: 6
 
 debug:
   enabled: true
