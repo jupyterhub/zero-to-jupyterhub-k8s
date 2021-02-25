@@ -10,7 +10,7 @@
     `helm diff upgrade`, so it is a bit troublesome to test.
 */}}
 
-{{/*
+{{- /*
     Returns given number of random Hex characters.
 
     - randNumeric 4 | atoi generates a random number in [0, 10^4)

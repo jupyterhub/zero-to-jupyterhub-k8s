@@ -102,9 +102,12 @@ jobs:
             test: install
           - k3s-channel: v1.19
             test: install
-          - k3s-channel: v1.18
+          - k3s-channel: v1.18 # also test prePuller.hook
             test: install
-          - k3s-channel: v1.17
+            local-chart-extra-args: >-
+              --set prePuller.hook.enabled=true
+              --set prePuller.hook.pullOnlyOnChanges=true
+          - k3s-channel: v1.17 # also test hub.existingSecret
             test: install
             local-chart-extra-args: >-
               --set hub.existingSecret=test-hub-existing-secret
