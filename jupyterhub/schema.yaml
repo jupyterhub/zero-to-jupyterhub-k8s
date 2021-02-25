@@ -1483,9 +1483,9 @@ properties:
           for more info.
         properties:
           limit:
-            type: [string, "null"]
+            type: [number, "null"]
           guarantee:
-            type: [string, "null"]
+            type: [number, "null"]
       memory:
         type: object
         description: |
