@@ -39,7 +39,6 @@ hub:
   baseUrl: /
   cookieSecret:
   initContainers: []
-  uid:
   fsGid: 1000
   nodeSelector: {}
   tolerations: []
