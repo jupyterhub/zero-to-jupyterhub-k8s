@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-# VULN_SCAN_TIME=
+# VULN_SCAN_TIME=2021-02-26_00:07:23
 
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=C.UTF-8
