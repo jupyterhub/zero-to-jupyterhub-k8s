@@ -56,7 +56,7 @@ jupyterhub-hmacauthenticator==1.0
     # via -r requirements.in
 jupyterhub-idle-culler==1.0
     # via -r requirements.in
-jupyterhub-kubespawner==0.15.0
+jupyterhub-kubespawner==0.16.0
     # via -r requirements.in
 jupyterhub-ldapauthenticator==1.3.2
     # via -r requirements.in
