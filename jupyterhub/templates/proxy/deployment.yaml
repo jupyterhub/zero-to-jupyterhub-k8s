@@ -24,8 +24,9 @@ spec:
         {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
       annotations:
-        # This lets us autorestart when the secret changes!
-        checksum/hub-secret: {{ include (print $.Template.BasePath "/hub/secret.yaml") . | sha256sum }}
+        # This restarts the pod when the proxy secret changes.
+        # The proxy secret is *only* present when doing manual HTTPS
+        # certs, so restarting is required to get those changes.
         checksum/proxy-secret: {{ include (print $.Template.BasePath "/proxy/secret.yaml") . | sha256sum }}
         {{- with .Values.proxy.annotations }}
         {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
@@ -106,14 +107,13 @@ spec:
             {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
           {{- end }}
           env:
+            # Restarting the proxy pod causes a temporary outage,
+            # so we should do it as few times as possible. Including
+            # the auth token here directly means the pod only restarts
+            # if the auth token changes, rather than when the hub-secret
+            # changes, since the latter happens all the time.
             - name: CONFIGPROXY_AUTH_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  # NOTE: References the chart managed k8s Secret even if
-                  #       hub.existingSecret is specified to avoid using the
-                  #       lookup function on the user managed k8s Secret.
-                  name: {{ include "jupyterhub.hub.fullname" . }}
-                  key: hub.config.ConfigurableHTTPProxy.auth_token
+              value: {{ include "jupyterhub.hub.config.ConfigurableHTTPProxy.auth_token" . | quote }}
             {{- include "jupyterhub.extraEnv" .Values.proxy.chp.extraEnv | nindent 12 }}
           {{- with .Values.proxy.chp.image.pullPolicy }}
           imagePullPolicy: {{ . }}
