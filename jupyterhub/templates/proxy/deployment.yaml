@@ -67,13 +67,14 @@ spec:
         - name: chp
           image: {{ .Values.proxy.chp.image.name }}:{{ .Values.proxy.chp.image.tag }}
           {{- $hubNameAsEnv := include "jupyterhub.hub.fullname" . | upper | replace "-" "_" }}
+          {{- $hubHost := printf "http://%s:$(%s_SERVICE_PORT)" (include "jupyterhub.hub.fullname" .) $hubNameAsEnv }}
           command:
             - configurable-http-proxy
             - "--ip=::"
             - "--api-ip=::"
             - --api-port=8001
-            - --default-target=http://{{ include "jupyterhub.hub.fullname" . }}:$({{ $hubNameAsEnv }}_SERVICE_PORT)
-            - --error-target=http://{{ include "jupyterhub.hub.fullname" . }}:$({{ $hubNameAsEnv }}_SERVICE_PORT)/hub/error
+            - --default-target={{ .Values.proxy.chp.defaultTarget | default $hubHost }}
+            - --error-target={{ .Values.proxy.chp.errorTarget | default (printf "%s/hub/error" $hubHost) }}
             {{- if $manualHTTPS }}
             - --port=8443
             - --redirect-port=8000

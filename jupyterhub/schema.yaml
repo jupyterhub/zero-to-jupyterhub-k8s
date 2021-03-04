@@ -1126,6 +1126,22 @@ properties:
           livenessProbe: *probe-spec
           readinessProbe: *probe-spec
           resources: *resources-spec
+          defaultTarget:
+            type: [string, "null"]
+            description: |
+              Override the URL for the default routing target for the proxy.
+              Defaults to JupyterHub itself.
+              This will generally only have an effect while JupyterHub is not running,
+              as JupyterHub adds itself as the default target after it starts.
+          errorTarget:
+            type: [string, "null"]
+            description: |
+              Override the URL for the error target for the proxy.
+              Defaults to JupyterHub itself.
+              Useful to reduce load on the Hub
+              or produce more informative error messages than the Hub's default,
+              e.g. in highly customized deployments such as BinderHub.
+              See Configurable HTTP Proxy for details on implementing an error target.
       secretToken:
         type: [string, "null"]
         description: |
