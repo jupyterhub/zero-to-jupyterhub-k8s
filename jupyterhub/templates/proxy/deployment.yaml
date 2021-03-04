@@ -26,8 +26,8 @@ spec:
       annotations:
         # We want to restart proxy only if the auth token changes
         # Other changes to the hub config should not restart.
-+       # We truncate to 4 chars to avoid leaking auth token info,
-+       # since someone could brute force the hash to obtain the token
+        # We truncate to 4 chars to avoid leaking auth token info,
+        # since someone could brute force the hash to obtain the token
         checksum/auth-token: {{ include "jupyterhub.hub.config.ConfigurableHTTPProxy.auth_token" . | sha256sum | trunc 4 }}
         checksum/proxy-secret: {{ include (print $.Template.BasePath "/proxy/secret.yaml") . | sha256sum }}
         {{- with .Values.proxy.annotations }}
