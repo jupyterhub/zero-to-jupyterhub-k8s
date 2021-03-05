@@ -163,6 +163,8 @@ proxy:
       requests:
         cpu: 100m
         memory: 512Mi
+    defaultTarget: http://dummy.local/hello
+    errorTarget: http://dummy.local/error
     nodeSelector:
       node-type: mock
     tolerations:

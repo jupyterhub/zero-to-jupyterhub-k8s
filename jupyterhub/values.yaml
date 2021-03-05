@@ -209,6 +209,8 @@ proxy:
       requests:
         cpu: 200m
         memory: 512Mi
+    defaultTarget:
+    errorTarget:
     extraEnv: {}
     nodeSelector: {}
     tolerations: []
