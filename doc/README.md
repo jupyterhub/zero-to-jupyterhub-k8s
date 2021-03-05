@@ -9,7 +9,7 @@ in the `readthedocs.yml` file, and made available on
 
 ```shell
 cd doc
-pip install -r doc-requirements.txt
+pip install -r requirements.txt
 ```
 
 ```

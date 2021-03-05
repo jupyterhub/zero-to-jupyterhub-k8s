@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          # chartpress is used by doc/conf.py, part of doc/doc-requirements.txt,
+          # chartpress is used by doc/conf.py,
           # and requires information about the latest tagged commit, which
           # requires the git history.
           fetch-depth: 0
@@ -35,7 +35,7 @@ jobs:
           python-version: "3.8"
 
       - name: Install deps
-        run: pip install --no-cache-dir -r doc/doc-requirements.txt
+        run: pip install -r doc/requirements.txt
 
       - name: make linkcheck
         run: |
