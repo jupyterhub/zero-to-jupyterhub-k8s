@@ -37,7 +37,8 @@ Kubernetes has a helper script that allows you to auto-complete commands
 and references to objects when using `kubectl`. This lets you
 {kbd}`TAB`-complete and saves a lot of time.
 
-[Here are the instructions to install kubectl auto-completion](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion).
+Follow [the kubectl installation instructions for your platform](https://kubernetes.io/docs/tasks/tools/#kubectl)
+to find the shell autocompletion instructions.
 
 ## `helm` autocompletion
 

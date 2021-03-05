@@ -22,4 +22,4 @@ python:
     #          accepting the existing version.
     #
     #          ref: https://github.com/readthedocs/readthedocs.org/blob/0e3df509e7810e46603be47d268273c596e68455/readthedocs/doc_builder/python_environments.py#L335-L344
-    - requirements: doc/doc-requirements.txt
+    - requirements: doc/requirements.txt

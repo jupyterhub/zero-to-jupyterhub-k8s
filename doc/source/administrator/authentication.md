@@ -166,7 +166,7 @@ hub:
 ```
 
 ```{admonition} Alternative scopes
-While you can set other scopes than `read:user` as described in [GitHub OAuth scopes documentation](https://docs.github.com/en/free-pro-team@latest/developers/apps/scopes-for-oauth-apps), we recommend `read:user`.
+While you can set other scopes than `read:user` as described in [GitHub OAuth scopes documentation](https://docs.github.com/en/developers/apps/scopes-for-oauth-apps), we recommend `read:user`.
 
 With `read:user`, the user will be requested to permit JupyterHub to read their profile data. The benefit of this choice is that it won't require configuration by the GitHub organizations' admins by by its members.
 ```
@@ -175,7 +175,7 @@ With `read:user`, the user will be requested to permit JupyterHub to read their 
 
 Google authentication is used by many universities (it is part of "G Suite").
 
-If your institution is a [G Suite customer](https://gsuite.google.com) that
+If your institution is a [G Suite customer](https://workspace.google.com) that
 integrates with Google services such as Gmail, Calendar, and Drive, you can
 authenticate users to your JupyterHub using Google for authentication.
 
