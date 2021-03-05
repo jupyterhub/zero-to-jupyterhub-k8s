@@ -110,7 +110,10 @@ can try with `nano config.yaml`.
    kubectl get pod --namespace jhub
    ```
 
-   To remain sane we recommend that you [enable autocompletion for kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion)
+   To remain sane we recommend that you enable autocompletion for kubectl
+   (follow [the kubectl installation instructions for your platform](https://kubernetes.io/docs/tasks/tools/#kubectl)
+   to find the shell autocompletion instructions)
+
    and set a default value for the `--namespace` flag:
 
    ```
