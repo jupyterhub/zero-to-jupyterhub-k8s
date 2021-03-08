@@ -6,9 +6,9 @@ name: Publish
 # Trigger the workflow's on pushed tags or commits to main/master branch.
 on:
   pull_request:
+    paths-ignore:
+      - "doc/**"
   push:
-    branches: ["main", "master"]
-    tags: ["[0-9]+.[0-9]+.[0-9]+*"]
 
 jobs:
   # Builds and pushes docker images to DockerHub and package the Helm chart and
@@ -30,6 +30,33 @@ jobs:
         with:
           python-version: "3.8"
 
+      - name: store whether we are publishing the chart
+        id: publishing
+        shell: python
+        env:
+          REPO: ${{ github.repository }}
+          EVENT: ${{ github.event_name }}
+          REF: ${{ github.event.ref }}
+        run: |
+          import os
+          repo = os.environ["REPO"]
+          event = os.environ["EVENT"]
+          ref = os.environ["REF"]
+          publishing = ""
+          if (
+              repo == "jupyterhub/zero-to-jupyterhub-k8s"
+              and event == "push"
+              and (
+                  # any tag
+                  ref.startswith("refs/tags/")
+                  # or default branch
+                  or ref in {"refs/heads/main", "refs/heads/master"}
+              )
+          ):
+              publishing = "true"
+              print("Publishing chart")
+          print(f"::set-output name=publishing::{publishing}")
+
       - name: Install chart publishing dependencies (chartpress, helm)
         run: |
           . ./ci/common
@@ -46,9 +73,7 @@ jobs:
         # 3. Registering the public key (/tmp/id_ed25519.pub) as a deploy key
         #    with push rights for the jupyterhub/helm chart repo:
         #    https://github.com/jupyterhub/helm-chart/settings/keys
-        if: >
-          github.repository == 'jupyterhub/zero-to-jupyterhub-k8s'
-          && github.event_name == 'push'
+        if: steps.publishing.outputs.publishing
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan github.com >> ~/.ssh/known_hosts
@@ -63,9 +88,7 @@ jobs:
         #    https://hub.docker.com/orgs/jupyterhub/teams/bots/permissions
         # 3. Registering the username and password as a secret for this repo:
         #    https://github.com/jupyterhub/zero-to-jupyterhub-k8s/settings/secrets/actions
-        if: >
-          github.repository == 'jupyterhub/zero-to-jupyterhub-k8s'
-          && github.event_name == 'push'
+        if: steps.publishing.outputs.publishing
         run: |
           docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
 
@@ -89,9 +112,7 @@ jobs:
           ./tools/set-chart-yaml-annotations.py
 
       - name: Publish images and chart with chartpress
-        if: >
-          github.repository == 'jupyterhub/zero-to-jupyterhub-k8s'
-          && github.event_name == 'push'
+        if: steps.publishing.outputs.publishing
         env:
           GITHUB_REPOSITORY: "${{ github.repository }}"
         run: |
@@ -100,12 +121,12 @@ jobs:
           ./ci/publish
 
       - name: Package helm chart as a CI artifact
-        if: github.event_name == 'pull_request'
+        if: steps.publishing.outputs.publishing == ''
         run: helm package jupyterhub
 
       # ref: https://github.com/actions/upload-artifact
       - uses: actions/upload-artifact@v2
-        if: github.event_name == 'pull_request'
+        if: steps.publishing.outputs.publishing == ''
         with:
           name: jupyterhub-${{ github.sha }}
           path: "jupyterhub-*.tgz"
