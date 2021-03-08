@@ -13,12 +13,16 @@ on:
       - "**/test-docs.yaml"
       - "**.md"
       - "**/schema.yaml"
+      - ".github/workflows/*"
+      - "!.github/workflows/test-chart.yaml"
   push:
     paths-ignore:
       - "doc/**"
       - "**/test-docs.yaml"
       - "**.md"
       - "**/schema.yaml"
+      - ".github/workflows/*"
+      - "!.github/workflows/test-chart.yaml"
     branches-ignore:
       - "dependabot/**"
   workflow_dispatch:
