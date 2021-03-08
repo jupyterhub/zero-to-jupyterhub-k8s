@@ -1,9 +1,9 @@
-FROM jupyter/base-notebook:45bfe5a474fa
+FROM jupyter/base-notebook:016833b15ceb
 # Built from... https://hub.docker.com/r/jupyter/base-notebook/
 #               https://github.com/jupyter/docker-stacks/blob/master/base-notebook/Dockerfile
 # Built from... Ubuntu 18.04
 
-# VULN_SCAN_HASH=
+# VULN_SCAN_TIME=2021-02-26_00:06:33
 
 # The jupyter/docker-stacks images contains jupyterhub, jupyterlab and the
 # jupyterlab-hub extension already.

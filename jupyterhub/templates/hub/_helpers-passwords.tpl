@@ -2,7 +2,7 @@
     This file contains logic to lookup already
     generated passwords or generate a new.
 
-    proxy.secretToken       / hub.config.JupyterHub.proxy_auth_token
+    proxy.secretToken       / hub.config.ConfigurableHTTPProxy.auth_token
     hub.cookieSecret        / hub.config.JupyterHub.cookie_secret
     auth.state.cryptoKey    / hub.config.CryptKeeper.keys
 
@@ -10,7 +10,7 @@
     `helm diff upgrade`, so it is a bit troublesome to test.
 */}}
 
-{{/*
+{{- /*
     Returns given number of random Hex characters.
 
     - randNumeric 4 | atoi generates a random number in [0, 10^4)
@@ -28,39 +28,39 @@
     {{- $result }}
 {{- end }}
 
-{{- define "jupyterhub.config.JupyterHub.proxy_auth_token" -}}
+{{- define "jupyterhub.hub.config.ConfigurableHTTPProxy.auth_token" -}}
     {{- if .Values.proxy.secretToken }}
         {{- .Values.proxy.secretToken }}
     {{- else }}
-        {{- $k8s_state := lookup "v1" "Secret" .Release.Namespace (include "jupyterhub.hub-secret.fullname" .) | default (dict "data" (dict)) }}
-        {{- if hasKey $k8s_state.data "JupyterHub.proxy_auth_token" }}
-            {{- index $k8s_state.data "JupyterHub.proxy_auth_token" | b64dec }}
+        {{- $k8s_state := lookup "v1" "Secret" .Release.Namespace (include "jupyterhub.hub.fullname" .) | default (dict "data" (dict)) }}
+        {{- if hasKey $k8s_state.data "hub.config.ConfigurableHTTPProxy.auth_token" }}
+            {{- index $k8s_state.data "hub.config.ConfigurableHTTPProxy.auth_token" | b64dec }}
         {{- else }}
             {{- randAlphaNum 64 }}
         {{- end }}
     {{- end }}
 {{- end }}
 
-{{- define "jupyterhub.config.JupyterHub.cookie_secret" -}}
+{{- define "jupyterhub.hub.config.JupyterHub.cookie_secret" -}}
     {{- if .Values.hub.cookieSecret }}
         {{- .Values.hub.cookieSecret }}
     {{- else }}
-        {{- $k8s_state := lookup "v1" "Secret" .Release.Namespace (include "jupyterhub.hub-secret.fullname" .) | default (dict "data" (dict)) }}
-        {{- if hasKey $k8s_state.data "JupyterHub.cookie_secret" }}
-            {{- index $k8s_state.data "JupyterHub.cookie_secret" | b64dec }}
+        {{- $k8s_state := lookup "v1" "Secret" .Release.Namespace (include "jupyterhub.hub.fullname" .) | default (dict "data" (dict)) }}
+        {{- if hasKey $k8s_state.data "hub.config.JupyterHub.cookie_secret" }}
+            {{- index $k8s_state.data "hub.config.JupyterHub.cookie_secret" | b64dec }}
         {{- else }}
             {{- include "jupyterhub.randHex" 64 }}
         {{- end }}
     {{- end }}
 {{- end }}
 
-{{- define "jupyterhub.config.CryptKeeper.keys" -}}
+{{- define "jupyterhub.hub.config.CryptKeeper.keys" -}}
     {{- if .Values.hub.config.CryptKeeper }}
         {{- .Values.hub.config.CryptKeeper.keys | join ";" }}
     {{- else }}
-        {{- $k8s_state := lookup "v1" "Secret" .Release.Namespace (include "jupyterhub.hub-secret.fullname" .) | default (dict "data" (dict)) }}
-        {{- if hasKey $k8s_state.data "CryptKeeper.keys" }}
-            {{- index $k8s_state.data "CryptKeeper.keys" | b64dec }}
+        {{- $k8s_state := lookup "v1" "Secret" .Release.Namespace (include "jupyterhub.hub.fullname" .) | default (dict "data" (dict)) }}
+        {{- if hasKey $k8s_state.data "hub.config.CryptKeeper.keys" }}
+            {{- index $k8s_state.data "hub.config.CryptKeeper.keys" | b64dec }}
         {{- else }}
             {{- include "jupyterhub.randHex" 64 }}
         {{- end }}

@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-# VULN_SCAN_HASH=
+# VULN_SCAN_TIME=2021-02-26_00:07:23
 
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=C.UTF-8
@@ -45,7 +45,7 @@ RUN PYCURL_SSL_LIBRARY=openssl \
 # Support overriding a package or two through passed docker --build-args.
 # ARG PIP_OVERRIDES="jupyterhub==1.3.0 git+https://github.com/consideratio/kubespawner.git"
 ARG PIP_OVERRIDES=
-RUN if [[ -n "$PIP_OVERRIDES" ]]; then \
+RUN if test -n "$PIP_OVERRIDES"; then \
         pip install --no-cache-dir $PIP_OVERRIDES; \
     fi
 

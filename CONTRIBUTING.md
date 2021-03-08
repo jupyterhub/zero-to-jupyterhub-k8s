@@ -30,7 +30,7 @@ This needs to be installed:
 - Python 3.6+ (install at [Anaconda.com](https://www.anaconda.com/distribution/) or [Python.org](https://www.python.org/downloads/)) and dependencies:
   ```shell
   pip install -r dev-requirements.txt
-  pip install -r doc/doc-requirements.txt
+  pip install -r doc/requirements.txt
   ```
 
 You can check if you have it all like this:

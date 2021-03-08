@@ -66,6 +66,12 @@ elif db_type == "sqlite-memory":
     c.JupyterHub.db_url = "sqlite://"
 else:
     set_config_if_not_none(c.JupyterHub, "db_url", "hub.db.url")
+db_password = get_secret_value("hub.db.password", None)
+if db_password is not None:
+    if db_type == "mysql":
+        os.environ["MYSQL_PWD"] = db_password
+    elif db_type == "postgres":
+        os.environ["PGPASSWORD"] = db_password
 
 
 # c.JupyterHub configuration from Helm chart's configmap
@@ -360,13 +366,17 @@ if get_config("cull.enabled", False):
     )
 
 for name, service in get_config("hub.services", {}).items():
-    # jupyterhub.services is a list of dicts, but
-    # in the helm chart it is a dict of dicts for easier merged-config
+    # c.JupyterHub.services is a list of dicts, but
+    # hub.services is a dict of dicts to make the config mergable
     service.setdefault("name", name)
-    # handle camelCase->snake_case of api_token
-    api_token = service.pop("apiToken", None)
+
+    # As the api_token could be exposed in hub.existingSecret, we need to read
+    # it it from there or fall back to the chart managed k8s Secret's value.
+    service.pop("apiToken", None)
+    api_token = get_secret_value(f"hub.services.{service['name']}.apiToken", None)
     if api_token:
         service["api_token"] = api_token
+
     c.JupyterHub.services.append(service)
 
 
@@ -420,18 +430,25 @@ if os.path.isdir(config_dir):
         exec(compile(source=file_content, filename=file_name, mode="exec"))
 
 # load potentially seeded secrets
-c.JupyterHub.proxy_auth_token = get_secret_value("JupyterHub.proxy_auth_token")
-c.JupyterHub.cookie_secret = a2b_hex(get_secret_value("JupyterHub.cookie_secret"))
-c.CryptKeeper.keys = get_secret_value("CryptKeeper.keys").split(";")
+#
+# NOTE: ConfigurableHTTPProxy.auth_token is set through an environment variable
+#       that is set using the chart managed secret.
+c.JupyterHub.cookie_secret = a2b_hex(
+    get_secret_value("hub.config.JupyterHub.cookie_secret")
+)
+c.CryptKeeper.keys = get_secret_value("hub.config.CryptKeeper.keys").split(";")
 
-# load hub.config values, except potentially seeded secrets
-for section, sub_cfg in get_config("hub.config", {}).items():
-    if section == "JupyterHub" and sub_cfg in ["proxy_auth_token", "cookie_secret"]:
-        pass
-    elif section == "CryptKeeper" and sub_cfg in ["keys"]:
-        pass
-    else:
-        c[section].update(sub_cfg)
+# load hub.config values, except potentially seeded secrets already loaded
+for app, cfg in get_config("hub.config", {}).items():
+    if app == "JupyterHub":
+        cfg.pop("proxy_auth_token", None)
+        cfg.pop("cookie_secret", None)
+        cfg.pop("services", None)
+    elif app == "ConfigurableHTTPProxy":
+        cfg.pop("auth_token", None)
+    elif app == "CryptKeeper":
+        cfg.pop("keys", None)
+    c[app].update(cfg)
 
 # execute hub.extraConfig string
 extra_config = get_config("hub.extraConfig", {})

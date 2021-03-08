@@ -19,7 +19,7 @@ resource](https://kubernetes.io/docs/concepts/services-networking/ingress/) to
 expose JupyterHub using an [Ingress
 controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
-```note
+```{note}
 Not all k8s clusters are setup with an Ingress controller by default. If you need to
 install one manually, we recommend using
 [ingress-nginx](https://github.com/kubernetes/ingress-nginx/blob/master/docs/deploy/index.md#using-helm).
@@ -112,9 +112,11 @@ YAML strings):
 hub:
   extraConfig: |
     import time
-    c.Spawner.environment += {
-       "CURRENT_TIME": str(time.time())
-    }
+    c.KubeSpawner.environment.update(
+        {
+            "CURRENT_TIME": str(time.time())
+        }
+    )
 ```
 
 You can also specify `hub.extraConfig` as a dictionary, if you want to logically
@@ -125,7 +127,12 @@ order of the key.
 hub:
   extraConfig:
     00-first-config: |
-      # some code
+      import time
+      c.KubeSpawner.environment.update(
+          {
+              "CURRENT_TIME": str(time.time())
+          }
+      )
     10-second-config: |
       # some other code
 ```

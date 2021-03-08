@@ -24,9 +24,12 @@ spec:
         {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
       annotations:
-        # This lets us autorestart when the secret changes!
-        checksum/hub-secret: {{ include (print $.Template.BasePath "/hub/secret.yaml") . | sha256sum }}
-        checksum/proxy-secret: {{ include (print $.Template.BasePath "/proxy/secret.yaml") . | sha256sum }}
+        # We want to restart proxy only if the auth token changes
+        # Other changes to the hub config should not restart.
+        # We truncate to 4 chars to avoid leaking auth token info,
+        # since someone could brute force the hash to obtain the token
+        checksum/auth-token: {{ include "jupyterhub.hub.config.ConfigurableHTTPProxy.auth_token" . | sha256sum | trunc 4 | quote }}
+        checksum/proxy-secret: {{ include (print $.Template.BasePath "/proxy/secret.yaml") . | sha256sum | quote }}
         {{- with .Values.proxy.annotations }}
         {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
@@ -67,13 +70,14 @@ spec:
         - name: chp
           image: {{ .Values.proxy.chp.image.name }}:{{ .Values.proxy.chp.image.tag }}
           {{- $hubNameAsEnv := include "jupyterhub.hub.fullname" . | upper | replace "-" "_" }}
+          {{- $hubHost := printf "http://%s:$(%s_SERVICE_PORT)" (include "jupyterhub.hub.fullname" .) $hubNameAsEnv }}
           command:
             - configurable-http-proxy
             - "--ip=::"
             - "--api-ip=::"
             - --api-port=8001
-            - --default-target=http://{{ include "jupyterhub.hub.fullname" . }}:$({{ $hubNameAsEnv }}_SERVICE_PORT)
-            - --error-target=http://{{ include "jupyterhub.hub.fullname" . }}:$({{ $hubNameAsEnv }}_SERVICE_PORT)/hub/error
+            - --default-target={{ .Values.proxy.chp.defaultTarget | default $hubHost }}
+            - --error-target={{ .Values.proxy.chp.errorTarget | default (printf "%s/hub/error" $hubHost) }}
             {{- if $manualHTTPS }}
             - --port=8443
             - --redirect-port=8000
@@ -101,14 +105,19 @@ spec:
               mountPath: /etc/chp/tls
               readOnly: true
           {{- end }}
+          {{- with .Values.proxy.chp.resources }}
           resources:
-            {{- .Values.proxy.chp.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
           env:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "jupyterhub.hub-secret.fullname" . }}
-                  key: JupyterHub.proxy_auth_token
+                  # NOTE: References the chart managed k8s Secret even if
+                  #       hub.existingSecret is specified to avoid using the
+                  #       lookup function on the user managed k8s Secret.
+                  name: {{ include "jupyterhub.hub.fullname" . }}
+                  key: hub.config.ConfigurableHTTPProxy.auth_token
             {{- include "jupyterhub.extraEnv" .Values.proxy.chp.extraEnv | nindent 12 }}
           {{- with .Values.proxy.chp.image.pullPolicy }}
           imagePullPolicy: {{ . }}

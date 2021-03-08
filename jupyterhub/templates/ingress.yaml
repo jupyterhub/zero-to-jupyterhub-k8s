@@ -18,7 +18,7 @@ spec:
     {{- range $host := .Values.ingress.hosts | default (list "") }}
     - http:
         paths:
-          - path: {{ $.Values.hub.baseUrl }}{{ $.Values.ingress.pathSuffix }}
+          - path: {{ $.Values.hub.baseUrl | trimSuffix "/" }}/{{ $.Values.ingress.pathSuffix }}
             {{- if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
             pathType: Prefix
             backend:

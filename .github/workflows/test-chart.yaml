@@ -24,7 +24,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint_and_validate:
+  lint_and_validate_rendered_templates:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
@@ -50,6 +50,39 @@ jobs:
         run: tools/templates/lint-and-validate.py --strict
         continue-on-error: true
 
+  lint_and_validate_templates_with_schema:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+
+      - name: Install dependencies
+        run: |
+          . ci/common
+          setup_helm
+          pip install pyyaml
+
+      - name: Generate values.schema.json
+        run: tools/generate-json-schema.py
+
+      - name: Helm lint (values.yaml)
+        run: helm lint ./jupyterhub
+
+      - name: Helm lint (lint-and-validate-values.yaml)
+        run: helm lint ./jupyterhub --values tools/templates/lint-and-validate-values.yaml
+
+      # FIXME: We can probably emit a GitHub workflow warning if these fail
+      #        instead having them show as green without a warning or similar
+      - name: Helm lint --strict (values.yaml)
+        run: helm lint --strict ./jupyterhub
+        continue-on-error: true
+
+      - name: Helm lint --strict (lint-and-validate-values.yaml)
+        run: helm lint --strict ./jupyterhub
+        continue-on-error: true
+
   test:
     runs-on: ubuntu-20.04
     timeout-minutes: 20
@@ -67,16 +100,21 @@ jobs:
         include:
           - k3s-channel: v1.20
             test: install
-            # FIXME: stop accepting failure when 1.20.3 is available for k3s and
-            #        this issue is resolved:
-            #        https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1962
-            accept-failure: true
           - k3s-channel: v1.19
             test: install
-          - k3s-channel: v1.18
+          - k3s-channel: v1.18 # also test prePuller.hook
             test: install
-          - k3s-channel: v1.17
+            local-chart-extra-args: >-
+              --set prePuller.hook.enabled=true
+              --set prePuller.hook.pullOnlyOnChanges=true
+          - k3s-channel: v1.17 # also test hub.existingSecret
             test: install
+            local-chart-extra-args: >-
+              --set hub.existingSecret=test-hub-existing-secret
+              --set proxy.secretToken=aaaa1111
+              --set hub.cookieSecret=bbbb2222
+              --set hub.config.CryptKeeper.keys[0]=cccc3333
+            create-k8s-test-resources: true
 
           # We run two upgrade tests where we first install an already released
           # Helm chart version and then upgrades to the version we are now
@@ -93,14 +131,15 @@ jobs:
             test: upgrade
             upgrade-from: stable
             upgrade-from-extra-args: >-
-              --set proxy.secretToken=aaa111
-              --set hub.cookieSecret=bbb222
-              --set hub.config.CryptKeeper.keys[0]=ccc333
+              --set proxy.secretToken=aaaa1111
+              --set hub.cookieSecret=bbbb2222
+              --set hub.config.CryptKeeper.keys[0]=cccc3333
+            create-k8s-test-resources: true
           - k3s-channel: v1.19
             test: upgrade
             upgrade-from: dev
             upgrade-from-extra-args: >-
-              --set proxy.secretToken=aaa111
+              --set proxy.secretToken=aaaa1111
 
     steps:
       - uses: actions/checkout@v2
@@ -137,6 +176,11 @@ jobs:
         run: |
           pip3 install --no-cache-dir -r dev-requirements.txt
           chartpress
+
+      # Generate values.schema.json from schema.yaml
+      - name: Generate values.schema.json from schema.yaml
+        run: |
+          tools/generate-json-schema.py
 
       # Validate rendered helm templates against the k8s api-server with the
       # dedicated lint-and-validate-values.yaml config.
@@ -219,9 +263,14 @@ jobs:
           await_autohttps_tls_cert_acquisition
           await_autohttps_tls_cert_save
 
+      - name: Create k8s test resources
+        if: matrix.create-k8s-test-resources
+        run: |
+          kubectl apply -f ci/test-hub-existing-secret.yaml
+
       - name: "Install local chart"
         run: |
-          helm upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml
+          helm upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml ${{ matrix.local-chart-extra-args }}
 
       - name: "Await local chart"
         uses: jupyterhub/action-k8s-await-workloads@v1

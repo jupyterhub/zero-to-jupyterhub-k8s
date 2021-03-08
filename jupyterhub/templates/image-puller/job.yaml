@@ -5,7 +5,7 @@ its' pods running. If all those pods are running they must have pulled all the
 required images on all nodes as they are used as init containers with a dummy
 command.
 */}}
-{{- if .Values.prePuller.hook.enabled -}}
+{{- if (include "jupyterhub.imagePuller.daemonset.hook.install" .) -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -66,6 +66,8 @@ spec:
           securityContext:
             {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
           {{- end }}
+          {{- with .Values.prePuller.hook.resources }}
           resources:
-            {{- .Values.prePuller.hook.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
 {{- end }}

@@ -213,6 +213,9 @@ def parse_schema(d, md=[], depth=0, pre=""):
     Generate markdown headers from a passed python dictionary created by
     parsing a schema.yaml file.
     """
+    if "then" in d:
+        d = d["then"]
+
     if "properties" in d:
         depth += 1
         # Create markdown headers for each schema level
