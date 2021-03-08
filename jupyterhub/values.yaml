@@ -474,6 +474,7 @@ prePuller:
   # hook relates to the hook-image-awaiter Job and hook-image-puller DaemonSet
   hook:
     enabled: true
+    pullOnlyOnChanges: false
     # image and the configuration below relates to the hook-image-awaiter Job
     image:
       name: jupyterhub/k8s-image-awaiter

@@ -2093,6 +2093,12 @@ properties:
         properties:
           enabled:
             type: boolean
+          pullOnlyOnChanges:
+            type: boolean
+            description: |
+              Pull only if  changes have been made to the images to pull, or
+              more accurately if the hook-image-puller daemonset has changed in
+              any way.
           podSchedulingWaitDuration:
             description: |
               The `hook-image-awaiter` has a criteria to await all the
