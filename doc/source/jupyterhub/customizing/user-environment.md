@@ -38,12 +38,12 @@ image containing useful tools and libraries for datascience, complete these step
    ```yaml
    singleuser:
      image:
-       # Get the latest image tag at:
+       # You should replace the "latest" tag with a fixed version from:
        # https://hub.docker.com/r/jupyter/datascience-notebook/tags/
        # Inspect the Dockerfile at:
        # https://github.com/jupyter/docker-stacks/tree/master/datascience-notebook/Dockerfile
        name: jupyter/datascience-notebook
-       tag: 177037d09156
+       tag: latest
    ```
 
    ```{note}
