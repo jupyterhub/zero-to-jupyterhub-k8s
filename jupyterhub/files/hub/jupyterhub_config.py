@@ -361,7 +361,9 @@ if get_config("cull.enabled", False):
         cull_proto = "https"
 
     base_url = c.JupyterHub.get("base_url", "/")
-    cull_cmd.append(f"--url={cull_proto}://localhost:8081" + url_path_join(base_url, "hub/api"))
+    cull_cmd.append(
+        f"--url={cull_proto}://localhost:8081" + url_path_join(base_url, "hub/api")
+    )
 
     c.JupyterHub.services.append(
         {
