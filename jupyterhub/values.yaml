@@ -42,6 +42,10 @@ hub:
   fsGid: 1000
   nodeSelector: {}
   tolerations: []
+  defaultTolerations:
+    # hub.jupyter.org/dedicated and hub.jupyter.org_dedicated
+    # defined in _helpers-default-tolerations.tpl
+    enabled: true
   concurrentSpawnLimit: 64
   consecutiveFailureLimit: 5
   activeServerLimit:
