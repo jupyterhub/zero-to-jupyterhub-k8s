@@ -35,7 +35,7 @@ spec:
       {{- end }}
       nodeSelector: {{ toJson .Values.proxy.traefik.nodeSelector }}
       tolerations:
-        {{- include "jupyterhub.defaultTolerations" | nindent 8 }}
+        {{- include "jupyterhub.defaultTolerations" . | nindent 8 }}
         {{- with .Values.proxy.traefik.tolerations }}
         {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
