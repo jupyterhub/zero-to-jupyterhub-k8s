@@ -184,7 +184,7 @@ spec:
     Returns a rendered k8s DaemonSet resource: continuous-image-puller
 */}}
 {{- define "jupyterhub.imagePuller.daemonset.continuous" -}}
-    {{- $_ := merge (dict "hook" true "componentPrefix" "hook-") . }}
+    {{- $_ := merge (dict "hook" false "componentPrefix" "continuous-") . }}
     {{- include "jupyterhub.imagePuller.daemonset" $_ }}
 {{- end }}
 
@@ -193,7 +193,7 @@ spec:
     Returns a rendered k8s DaemonSet resource: hook-image-puller
 */}}
 {{- define "jupyterhub.imagePuller.daemonset.hook" -}}
-    {{- $_ := merge (dict "hook" false "componentPrefix" "continuous-") . }}
+    {{- $_ := merge (dict "hook" true "componentPrefix" "hook-") . }}
     {{- include "jupyterhub.imagePuller.daemonset" $_ }}
 {{- end }}
 
