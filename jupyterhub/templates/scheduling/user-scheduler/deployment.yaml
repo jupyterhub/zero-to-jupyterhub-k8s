@@ -25,7 +25,7 @@ spec:
       {{- end }}
       nodeSelector: {{ toJson .Values.scheduling.userScheduler.nodeSelector }}
       tolerations:
-        {{- include "jupyterhub.defaultTolerations" | nindent 8}}
+        {{- include "jupyterhub.defaultTolerations" . | nindent 8}}
         {{- with .Values.scheduling.userScheduler.tolerations }}
         {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
