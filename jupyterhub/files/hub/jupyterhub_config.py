@@ -226,19 +226,23 @@ if match_node_purpose:
         )
 
 # add dedicated-node toleration
-for key in (
-    "hub.jupyter.org/dedicated",
-    # workaround GKE not supporting / in initial node taints
-    "hub.jupyter.org_dedicated",
-):
-    c.KubeSpawner.tolerations.append(
-        dict(
-            key=key,
-            operator="Equal",
-            value="user",
-            effect="NoSchedule",
+# TODO: read these from a central config source instead of 
+#       defining both here and in _helpers-default-tolerations.tpl ?
+default_tolerations_enabled = get_config('hub.defaultTolerations.enabled')
+if default_tolerations_enabled:
+    for key in (
+        "hub.jupyter.org/dedicated",
+        # workaround GKE not supporting / in initial node taints
+        "hub.jupyter.org_dedicated",
+    ):
+        c.KubeSpawner.tolerations.append(
+            dict(
+                key=key,
+                operator="Equal",
+                value="user",
+                effect="NoSchedule",
+            )
         )
-    )
 
 # Configure dynamically provisioning pvc
 storage_type = get_config("singleuser.storage.type")
