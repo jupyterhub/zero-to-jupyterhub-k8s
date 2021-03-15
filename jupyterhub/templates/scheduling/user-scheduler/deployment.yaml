@@ -25,14 +25,7 @@ spec:
       {{- end }}
       nodeSelector: {{ toJson .Values.scheduling.userScheduler.nodeSelector }}
       tolerations:
-        - key: hub.jupyter.org/dedicated
-          operator: Equal
-          value: core
-          effect: NoSchedule
-        - key: hub.jupyter.org_dedicated
-          operator: Equal
-          value: core
-          effect: NoSchedule
+        {{- include "jupyterhub.defaultTolerations" | nindent 8}}
         {{- with .Values.scheduling.userScheduler.tolerations }}
         {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}

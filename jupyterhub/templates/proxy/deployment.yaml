@@ -40,14 +40,7 @@ spec:
       {{- end }}
       nodeSelector: {{ toJson .Values.proxy.chp.nodeSelector }}
       tolerations:
-        - key: hub.jupyter.org/dedicated
-          operator: Equal
-          value: core
-          effect: NoSchedule
-        - key: hub.jupyter.org_dedicated
-          operator: Equal
-          value: core
-          effect: NoSchedule
+        {{- include "jupyterhub.defaultTolerations" . | nindent 8 }}
         {{- with .Values.proxy.chp.tolerations }}
         {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
