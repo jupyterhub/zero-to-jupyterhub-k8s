@@ -42,10 +42,6 @@ hub:
   fsGid: 1000
   nodeSelector: {}
   tolerations: []
-  defaultTolerations:
-    # hub.jupyter.org/dedicated and hub.jupyter.org_dedicated
-    # defined in _helpers-default-tolerations.tpl
-    enabled: true
   concurrentSpawnLimit: 64
   consecutiveFailureLimit: 5
   activeServerLimit:
@@ -511,6 +507,23 @@ cull:
   every: 600
   concurrency: 10
   maxAge: 0
+
+# default tolerations are top level
+# because they are applied to pods across
+# all of the different parts of z2jh
+defaultTolerations:
+  enabled: true
+  tolerations:
+    - key: hub.jupyter.org/dedicated
+      operator: Equal
+      value: user
+      effect: NoSchedule
+    # also include _ for environments like GKE
+    # that don't like / in tolerations  
+    - key: hub.jupyter.org_dedicated
+      operator: Equal
+      value: user
+      effect: NoSchedule
 
 debug:
   enabled: false
