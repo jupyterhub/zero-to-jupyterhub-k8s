@@ -935,11 +935,7 @@ properties:
         type: array
         description: |
           Tolerations allow a pod to be scheduled on nodes with taints. These
-          are additional tolerations other than the user pods and core pods
-          default ones `hub.jupyter.org/dedicated=user:NoSchedule` or
-          `hub.jupyter.org/dedicated=core:NoSchedule`. Note that a duplicate set
-          of tolerations exist where `/` is replaced with `_` as the Google
-          cloud does not support the character `/` yet in the toleration.
+          are additional tolerations other than [defaultTolerations](schema_defaultTolerations).
 
           Pass this field an array of
           [`Toleration`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#toleration-v1-core)
@@ -2219,6 +2215,37 @@ properties:
       maxAge:
         type: [integer, "null"]
         description: See the `--max-age` flag.
+
+  defaultTolerations:
+    type: object
+    required: [enabled]
+    description: |
+      Default [Toleration objects](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#toleration-v1-core)
+      applied to all Pods.  If your cluster has a [PodTolerationRestriction 
+      admission-controller](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#podtolerationrestriction)
+      then you may need to configure it to accept these tolerations, 
+      or disable the defaultTolerations.
+    properties:
+      enabled:
+        type: boolean
+        description: Enable/disable default tolerations (enabled by default)
+      tolerations:
+        type: array
+        description: |
+          ```
+          - key: hub.jupyter.org/dedicated
+            operator: Equal
+            value: user
+            effect: NoSchedule 
+          - key: hub.jupyter.org_dedicated
+            operator: Equal
+            value: user
+            effect: NoSchedule
+          ```
+
+          See the [Kubernetes
+          docs](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
+          for more info.
 
   debug:
     type: object
