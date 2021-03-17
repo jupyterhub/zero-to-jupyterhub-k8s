@@ -473,6 +473,19 @@ cull:
   concurrency: 10
   maxAge: 28800
 
+defaultTolerations:
+  enabled: true
+  tolerations:
+    - key: "mock-taint-to-tolerates-key"
+      operator: "Equal"
+      value: "mock-taint-to-tolerates-value"
+      effect: "NoSchedule"
+    - key: "mock-taint-to-tolerates-key"
+      operator: "Equal"
+      value: "mock-taint-to-tolerates-value"
+      effect: "NoExecute"
+
+
 debug:
   enabled: true
 
