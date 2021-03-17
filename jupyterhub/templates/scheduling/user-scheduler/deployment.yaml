@@ -24,11 +24,11 @@ spec:
       priorityClassName: {{ include "jupyterhub.priority.fullname" . }}
       {{- end }}
       nodeSelector: {{ toJson .Values.scheduling.userScheduler.nodeSelector }}
+      {{- with include "jupyterhub.tolerations" (dict "root" . "extraTolerations" .Values.scheduling.userScheduler.tolerations) }}
       tolerations:
-        {{- include "jupyterhub.defaultTolerations" . | nindent 8}}
-        {{- with .Values.scheduling.userScheduler.tolerations }}
-        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
-        {{- end }}
+        {{- . | nindent 8 }}
+      {{- end }}
+
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
       volumes:
         - name: config
