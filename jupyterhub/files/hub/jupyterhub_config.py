@@ -232,7 +232,7 @@ if match_node_purpose:
 #  'effect': 'NoSchedule'}
 default_tolerations = get_config("defaultTolerations")
 if default_tolerations["enabled"]:
-    for toleration_dict in default_tolerations["tolerations"]
+    for toleration_dict in default_tolerations["tolerations"]:
         c.KubeSpawner.tolerations.append(toleration_dict)
 
 # Configure dynamically provisioning pvc
