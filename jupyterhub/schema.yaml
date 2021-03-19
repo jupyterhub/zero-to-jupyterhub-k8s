@@ -639,7 +639,7 @@ properties:
 
                  The general format of the connection string is:
                  ```
-                 postgres+psycopg2://<db-username>:<db-password>@<db-hostname>:<db-port>/<db-name>
+                 postgresql+psycopg2://<db-username>:<db-password>@<db-hostname>:<db-port>/<db-name>
                  ```
 
                  The user specified in the connection string must have the rights to create
