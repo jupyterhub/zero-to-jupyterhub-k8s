@@ -188,7 +188,7 @@ traitlets==5.0.5
     #   jupyter-telemetry
     #   jupyterhub
     #   jupyterhub-ldapauthenticator
-urllib3==1.26.2
+urllib3==1.26.4
     # via
     #   jupyterhub-kubespawner
     #   kubernetes
