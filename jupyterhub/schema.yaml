@@ -935,7 +935,10 @@ properties:
         type: array
         description: |
           Tolerations allow a pod to be scheduled on nodes with taints. These
-          are additional tolerations other than [defaultTolerations](schema_defaultTolerations).
+          tolerations are additional tolerations to the tolerations common to
+          all pods of a their respective kind
+          ([scheduling.corePods.tolerations](schema_scheduling.corePods.tolerations),
+          [scheduling.userPods.tolerations](schema_scheduling.userPods.tolerations)).
 
           Pass this field an array of
           [`Toleration`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#toleration-v1-core)
