@@ -34,11 +34,10 @@ spec:
       priorityClassName: {{ include "jupyterhub.priority.fullname" . }}
       {{- end }}
       nodeSelector: {{ toJson .Values.hub.nodeSelector }}
-      {{- with include "jupyterhub.tolerations" (dict "root" . "extraTolerations" .Values.hub.tolerations) }}
+      {{- with include "jupyterhub.coreTolerations" (dict "root" . "extraTolerations" .Values.hub.tolerations) }}
       tolerations:
         {{- . | nindent 8 }}
       {{- end }}
-
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
       volumes:
         - name: config

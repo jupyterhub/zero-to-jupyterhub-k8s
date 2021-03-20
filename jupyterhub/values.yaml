@@ -444,9 +444,27 @@ scheduling:
       allowPrivilegeEscalation: false
     resources: {}
   corePods:
+    tolerations:
+      - key: hub.jupyter.org/dedicated
+        operator: Equal
+        value: core
+        effect: NoSchedule
+      - key: hub.jupyter.org_dedicated
+        operator: Equal
+        value: core
+        effect: NoSchedule
     nodeAffinity:
       matchNodePurpose: prefer
   userPods:
+    tolerations:
+      - key: hub.jupyter.org/dedicated
+        operator: Equal
+        value: user
+        effect: NoSchedule
+      - key: hub.jupyter.org_dedicated
+        operator: Equal
+        value: user
+        effect: NoSchedule
     nodeAffinity:
       matchNodePurpose: prefer
 
@@ -507,23 +525,6 @@ cull:
   every: 600
   concurrency: 10
   maxAge: 0
-
-# default tolerations are top level
-# because they are applied to pods across
-# all of the different parts of z2jh
-defaultTolerations:
-  enabled: true
-  tolerations:
-    - key: hub.jupyter.org/dedicated
-      operator: Equal
-      value: user
-      effect: NoSchedule
-    # also include _ for environments like GKE
-    # that don't like / in tolerations  
-    - key: hub.jupyter.org_dedicated
-      operator: Equal
-      value: user
-      effect: NoSchedule
 
 debug:
   enabled: false

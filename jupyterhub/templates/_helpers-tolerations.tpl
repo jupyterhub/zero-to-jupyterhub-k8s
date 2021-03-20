@@ -1,26 +1,45 @@
-{{- define "jupyterhub.tolerations" }}
 {{- /*
-This function expects a dictionary with two keys:
-"root" (top level .) and "extraTolerations" (.Values.<thing>.tolerations)
+  jupyterhub.coreTolerations
 
-Use in yaml files:
-{{- with include "jupyterhub.tolerations" (dict "root" . "extraTolerations" .Values.prePuller.hook.tolerations) }}
+    Lists the tolerations for node taints that the core pods should have.
+
+    This function expects a dictionary of two keys:
+
+      - "root",             should be .
+      - "extraTolerations", should be .Values.<thing>.tolerations
+
+    Example:
+
+      {{- with include "jupyterhub.coreTolerations" (dict "root" . "extraTolerations" .Values.hub.tolerations) }}
       tolerations:
-        {{- . | indent 8 }}
-{{- end }}
-
-Note in example if this returns nil (no defaultTolerations or extraTolerations) 
-then the `tolerations` line is not rendered in the yaml file
+        {{- . | nindent 8 }}
+      {{- end }}
 */}}
-{{- if .root.Values.defaultTolerations.enabled }}
-{{- with .root.Values.defaultTolerations.tolerations }}
-{{- . | toYaml | nindent 0 }}
-{{- end }}
-{{- end }}
-{{- if .extraTolerations }}
-{{- with .extraTolerations }}
-{{- . | toYaml | nindent 0 }}
-{{- end }}
+{{- define "jupyterhub.coreTolerations" }}
+{{- with concat .root.Values.scheduling.corePods.tolerations (.extraTolerations | default list) }}
+{{- . | toYaml | trimSuffix "\n" }}
 {{- end }}
 {{- end }}
 
+{{- /*
+  jupyterhub.userTolerations
+
+    Lists the tolerations for node taints that the user pods should have.
+
+    This function expects a dictionary of two keys:
+
+      - "root",             should be .
+      - "extraTolerations", should be .Values.<thing>.tolerations
+
+    Example:
+
+      {{- with include "jupyterhub.userTolerations" (dict "root" . "extraTolerations" .Values.prePuller.extraTolerations) }}
+      tolerations:
+        {{- . | nindent 8 }}
+      {{- end }}
+*/}}
+{{- define "jupyterhub.userTolerations" }}
+{{- with concat .root.Values.scheduling.userPods.tolerations .root.Values.singleuser.extraTolerations (.extraTolerations | default list) }}
+{{- . | toYaml | trimSuffix "\n" }}
+{{- end }}
+{{- end }}

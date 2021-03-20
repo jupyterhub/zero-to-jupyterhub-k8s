@@ -34,11 +34,10 @@ spec:
       priorityClassName: {{ include "jupyterhub.priority.fullname" . }}
       {{- end }}
       nodeSelector: {{ toJson .Values.proxy.traefik.nodeSelector }}
-      {{- with include "jupyterhub.tolerations" (dict "root" . "extraTolerations" .Values.proxy.traefik.tolerations) }}
+      {{- with include "jupyterhub.coreTolerations" (dict "root" . "extraTolerations" .Values.proxy.traefik.tolerations) }}
       tolerations:
         {{- . | nindent 8 }}
       {{- end }}
-      
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
       volumes:
         - name: certificates

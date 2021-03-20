@@ -144,7 +144,7 @@ for trait, cfg_key in (
     ("fs_gid", None),
     ("service_account", "serviceAccountName"),
     ("storage_extra_labels", "storage.extraLabels"),
-    ("tolerations", "extraTolerations"),
+    # ("tolerations", "extraTolerations"), # Managed manually below
     ("node_selector", None),
     ("node_affinity_required", "extraNodeAffinity.required"),
     ("node_affinity_preferred", "extraNodeAffinity.preferred"),
@@ -225,15 +225,12 @@ if match_node_purpose:
             "Unrecognized value for matchNodePurpose: %r" % match_node_purpose
         )
 
-# add dedicated-node toleration that look like
-# {'key': 'hub.jupyter.org/dedicated', 
-#  'operator': 'Equal', 
-#  'value': 'user'
-#  'effect': 'NoSchedule'}
-default_tolerations = get_config("defaultTolerations")
-if default_tolerations["enabled"]:
-    for toleration_dict in default_tolerations["tolerations"]:
-        c.KubeSpawner.tolerations.append(toleration_dict)
+# Combine the common tolerations for user pods with singleuser tolerations
+scheduling_user_pods_tolerations = get_config("scheduling.userPods.tolerations", [])
+singleuser_extra_tolerations = get_config("singleuser.extraTolerations", [])
+tolerations = scheduling_user_pods_tolerations + singleuser_extra_tolerations
+if tolerations:
+    c.KubeSpawner.tolerations = tolerations
 
 # Configure dynamically provisioning pvc
 storage_type = get_config("singleuser.storage.type")

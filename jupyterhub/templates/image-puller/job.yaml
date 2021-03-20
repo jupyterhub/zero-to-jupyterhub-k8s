@@ -33,11 +33,10 @@ spec:
       serviceAccountName: {{ include "jupyterhub.hook-image-awaiter.fullname" . }}
       {{- end }}
       nodeSelector: {{ toJson .Values.prePuller.hook.nodeSelector }}
-      {{- with include "jupyterhub.tolerations" (dict "root" . "extraTolerations" .Values.prePuller.hook.tolerations) }}
+      {{- with include "jupyterhub.coreTolerations" (dict "root" . "extraTolerations" .Values.prePuller.hook.tolerations) }}
       tolerations:
         {{- . | nindent 8 }}
       {{- end }}
-      
       {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.prePuller.hook.image) }}
       imagePullSecrets: {{ . }}
       {{- end }}

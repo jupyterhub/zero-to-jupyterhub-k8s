@@ -1984,7 +1984,24 @@ properties:
         description: |
           These settings influence the core pods like the hub, proxy and
           user-scheduler pods.
+          These settings influence all pods considered core pods, namely:
+
+          - hub
+          - proxy
+          - autohttps
+          - hook-image-awaiter
+          - user-scheduler
+
+          By defaults, the tolerations are:
+
+          - hub.jupyter.org/dedicated=core:NoSchedule
+          - hub.jupyter.org_dedicated=core:NoSchedule
+
+          Note that tolerations set here are combined with the respective
+          components dedicated tolerations, and that `_` is available in case
+          `/` isn't allowed in the clouds tolerations.
         properties:
+          tolerations: *tolerations-spec
           nodeAffinity:
             type: object
             description: |
@@ -2002,9 +2019,23 @@ properties:
       userPods:
         type: object
         description: |
-          These settings influence the user pods like the user-placeholder,
-          user-dummy and actual user pods named like jupyter-someusername.
+          These settings influence all pods considered user pods, namely:
+
+          - user-placeholder
+          - hook-image-puller
+          - continuous-image-puller
+          - jupyter-<username>
+
+          By defaults, the tolerations are:
+
+          - hub.jupyter.org/dedicated=core:NoSchedule
+          - hub.jupyter.org_dedicated=core:NoSchedule
+
+          Note that tolerations set here are combined with the respective
+          components dedicated tolerations, and that `_` is available in case
+          `/` isn't allowed in the clouds tolerations.
         properties:
+          tolerations: *tolerations-spec
           nodeAffinity:
             type: object
             description: |
@@ -2215,37 +2246,6 @@ properties:
       maxAge:
         type: [integer, "null"]
         description: See the `--max-age` flag.
-
-  defaultTolerations:
-    type: object
-    required: [enabled]
-    description: |
-      Default [Toleration objects](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#toleration-v1-core)
-      applied to all Pods.  If your cluster has a [PodTolerationRestriction 
-      admission-controller](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#podtolerationrestriction)
-      then you may need to configure it to accept these tolerations, 
-      or disable the defaultTolerations.
-    properties:
-      enabled:
-        type: boolean
-        description: Enable/disable default tolerations (enabled by default)
-      tolerations:
-        type: array
-        description: |
-          ```
-          - key: hub.jupyter.org/dedicated
-            operator: Equal
-            value: user
-            effect: NoSchedule 
-          - key: hub.jupyter.org_dedicated
-            operator: Equal
-            value: user
-            effect: NoSchedule
-          ```
-
-          See the [Kubernetes
-          docs](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
-          for more info.
 
   debug:
     type: object
