@@ -33,9 +33,9 @@ spec:
       serviceAccountName: {{ include "jupyterhub.hook-image-awaiter.fullname" . }}
       {{- end }}
       nodeSelector: {{ toJson .Values.prePuller.hook.nodeSelector }}
-      {{- with include "jupyterhub.coreTolerations" (dict "root" . "extraTolerations" .Values.prePuller.hook.tolerations) }}
+      {{- with concat .Values.scheduling.corePods.tolerations .Values.prePuller.hook.tolerations }}
       tolerations:
-        {{- . | nindent 8 }}
+        {{- . | toYaml | nindent 8 }}
       {{- end }}
       {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.prePuller.hook.image) }}
       imagePullSecrets: {{ . }}

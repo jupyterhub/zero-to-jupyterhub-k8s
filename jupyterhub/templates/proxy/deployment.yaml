@@ -39,9 +39,9 @@ spec:
       priorityClassName: {{ include "jupyterhub.priority.fullname" . }}
       {{- end }}
       nodeSelector: {{ toJson .Values.proxy.chp.nodeSelector }}
-      {{- with include "jupyterhub.coreTolerations" (dict "root" . "extraTolerations" .Values.proxy.chp.tolerations) }}
+      {{- with concat .Values.scheduling.corePods.tolerations .Values.proxy.chp.tolerations }}
       tolerations:
-        {{- . | nindent 8 }}
+        {{- . | toYaml | nindent 8 }}
       {{- end }}
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
       {{- if $manualHTTPS }}

@@ -34,9 +34,9 @@ spec:
       schedulerName: {{ include "jupyterhub.user-scheduler.fullname" . }}
       {{- end }}
       nodeSelector: {{ toJson .Values.singleuser.nodeSelector }}
-      {{- with include "jupyterhub.userTolerations" (dict "root" .) }}
+      {{- with concat .Values.scheduling.userPods.tolerations .Values.singleuser.extraTolerations }}
       tolerations:
-        {{- . | nindent 8 }}
+        {{- . | toYaml | nindent 8 }}
       {{- end }}
       {{- if include "jupyterhub.userAffinity" . }}
       affinity:

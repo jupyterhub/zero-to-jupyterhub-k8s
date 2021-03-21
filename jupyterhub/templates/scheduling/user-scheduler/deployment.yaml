@@ -24,9 +24,9 @@ spec:
       priorityClassName: {{ include "jupyterhub.priority.fullname" . }}
       {{- end }}
       nodeSelector: {{ toJson .Values.scheduling.userScheduler.nodeSelector }}
-      {{- with include "jupyterhub.coreTolerations" (dict "root" . "extraTolerations" .Values.scheduling.userScheduler.tolerations) }}
+      {{- with concat .Values.scheduling.corePods.tolerations .Values.scheduling.userScheduler.tolerations }}
       tolerations:
-        {{- . | nindent 8 }}
+        {{- . | toYaml | nindent 8 }}
       {{- end }}
       {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
       volumes:

@@ -51,9 +51,9 @@ spec:
       priorityClassName: {{ include "jupyterhub.user-placeholder-priority.fullname" . }}
       {{- end }}
       nodeSelector: {{ toJson .Values.singleuser.nodeSelector }}
-      {{- with include "jupyterhub.userTolerations" (dict "root" . "extraTolerations" .Values.prePuller.extraTolerations) }}
+      {{- with concat .Values.scheduling.userPods.tolerations .Values.singleuser.extraTolerations .Values.prePuller.extraTolerations }}
       tolerations:
-        {{- . | nindent 8 }}
+        {{- . | toYaml | nindent 8 }}
       {{- end }}
       {{- if include "jupyterhub.userNodeAffinityRequired" . }}
       affinity:
