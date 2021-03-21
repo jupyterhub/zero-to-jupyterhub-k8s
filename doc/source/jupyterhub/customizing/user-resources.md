@@ -95,7 +95,7 @@ provider. Here are a few links to help you get started:
 
 - [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine/docs/how-to/gpus)
 - [Amazon Elastic Kubernetes Service (EKS)](https://aws.amazon.com/blogs/compute/running-gpu-accelerated-kubernetes-workloads-on-p3-and-p2-ec2-instances-with-amazon-eks/)
-- [Azure Kubernetes Service (AKS)](https://cloud.google.com/kubernetes-engine/docs/how-to/gpus)
+- [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/gpu-cluster)
 
 You will also need to deploy the k8s-device-plugin following the instructions [here](https://github.com/NVIDIA/k8s-device-plugin#quick-start).
 
