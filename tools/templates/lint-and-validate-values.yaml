@@ -8,6 +8,16 @@ imagePullSecret:
 imagePullSecrets: [a, b]
 
 hub:
+  cookieSecret: bbbb2222
+  config:
+    # We pin these to avoid generating changes which cause diffs
+    # FIXME: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/2108
+    ConfigurableHTTPProxy:
+      auth_token: aaaa1111 # currently ignored, proxy.secretToken is used
+    JupyterHub:
+      cookie_secret: bbbb2222 # currently ignored, hub.cookieSecret is used
+    CryptKeeper:
+      keys: [cccc3333]
   extraFiles:
     my_config:
       mountPath: /usr/local/etc/jupyterhub/jupyterhub_config.d/my_config.py
@@ -138,6 +148,7 @@ rbac:
   enabled: true
 
 proxy:
+  secretToken: aaaa1111 # see hub.config section for a FIXME
   service:
     extraPorts:
       - name: ssh
