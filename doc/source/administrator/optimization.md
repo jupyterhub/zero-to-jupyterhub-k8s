@@ -306,6 +306,10 @@ scale down efficiently, you will need to learn about PodDisruptionBudget
 resources and do quite a bit more work in order to avoid ending up with almost
 empty nodes not scaling down.
 
+#### Disabling default tolerations
+
+Some clusters may have a [PodTolerationRestriction admission-controller](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#podtolerationrestriction) running that will block Kubernetes objects that include tolerations outside of a specified whitelist. If your cluster has this controller running and you cannot update it to include the `hub.jupyter.org/dedicated` / `_dedicated` tolerations, then you can disable those across all the chart's pods by setting `scheduling.corePods.tolerations` and `scheduling.userPods.tolerations` to an empty list.
+
 #### Using available nodes efficiently (the user scheduler)
 
 If you have users starting new servers while the total number of active users

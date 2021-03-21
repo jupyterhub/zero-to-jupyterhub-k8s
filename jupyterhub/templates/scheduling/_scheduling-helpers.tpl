@@ -1,23 +1,3 @@
-{{- /*
-  jupyterhub.userTolerations
-    Lists the tolerations for node taints that the user pods should have
-*/}}
-{{- define "jupyterhub.userTolerations" -}}
-- key: hub.jupyter.org_dedicated
-  operator: Equal
-  value: user
-  effect: NoSchedule
-- key: hub.jupyter.org/dedicated
-  operator: Equal
-  value: user
-  effect: NoSchedule
-{{- with .Values.singleuser.extraTolerations }}
-{{- . | toYaml | trimSuffix "\n" | nindent 0 }}
-{{- end }}
-{{- end }}
-
-
-
 {{- define "jupyterhub.userNodeAffinityRequired" -}}
 {{- if eq .Values.scheduling.userPods.nodeAffinity.matchNodePurpose "require" -}}
 - matchExpressions:

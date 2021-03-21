@@ -444,9 +444,27 @@ scheduling:
       allowPrivilegeEscalation: false
     resources: {}
   corePods:
+    tolerations:
+      - key: hub.jupyter.org/dedicated
+        operator: Equal
+        value: core
+        effect: NoSchedule
+      - key: hub.jupyter.org_dedicated
+        operator: Equal
+        value: core
+        effect: NoSchedule
     nodeAffinity:
       matchNodePurpose: prefer
   userPods:
+    tolerations:
+      - key: hub.jupyter.org/dedicated
+        operator: Equal
+        value: user
+        effect: NoSchedule
+      - key: hub.jupyter.org_dedicated
+        operator: Equal
+        value: user
+        effect: NoSchedule
     nodeAffinity:
       matchNodePurpose: prefer
 

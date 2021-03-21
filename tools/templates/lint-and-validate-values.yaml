@@ -8,6 +8,16 @@ imagePullSecret:
 imagePullSecrets: [a, b]
 
 hub:
+  cookieSecret: bbbb2222
+  config:
+    # We pin these to avoid generating changes which cause diffs
+    # FIXME: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/2108
+    ConfigurableHTTPProxy:
+      auth_token: aaaa1111 # currently ignored, proxy.secretToken is used
+    JupyterHub:
+      cookie_secret: bbbb2222 # currently ignored, hub.cookieSecret is used
+    CryptKeeper:
+      keys: [cccc3333]
   extraFiles:
     my_config:
       mountPath: /usr/local/etc/jupyterhub/jupyterhub_config.d/my_config.py
@@ -129,19 +139,16 @@ hub:
   nodeSelector:
     node-type: mock
   tolerations:
-    - key: "mock-taint-to-tolerates-key"
-      operator: "Equal"
-      value: "mock-taint-to-tolerates-value"
-      effect: "NoSchedule"
-    - key: "mock-taint-to-tolerates-key"
-      operator: "Equal"
-      value: "mock-taint-to-tolerates-value"
-      effect: "NoExecute"
+    - key: mock-taint-key-hub
+      operator: Equal
+      value: mock-taint-value-hub
+      effect: NoSchedule
 
 rbac:
   enabled: true
 
 proxy:
+  secretToken: aaaa1111 # see hub.config section for a FIXME
   service:
     extraPorts:
       - name: ssh
@@ -168,14 +175,10 @@ proxy:
     nodeSelector:
       node-type: mock
     tolerations:
-      - key: "mock-taint-to-tolerates-key"
-        operator: "Equal"
-        value: "mock-taint-to-tolerates-value"
-        effect: "NoSchedule"
-      - key: "mock-taint-to-tolerates-key"
-        operator: "Equal"
-        value: "mock-taint-to-tolerates-value"
-        effect: "NoExecute"
+      - key: mock-taint-key-chp
+        operator: Equal
+        value: mock-taint-value-chp
+        effect: NoSchedule
     networkPolicy:
       enabled: true
       egress:
@@ -206,14 +209,10 @@ proxy:
     nodeSelector:
       node-type: mock
     tolerations:
-      - key: "mock-taint-to-tolerates-key"
-        operator: "Equal"
-        value: "mock-taint-to-tolerates-value"
-        effect: "NoSchedule"
-      - key: "mock-taint-to-tolerates-key"
-        operator: "Equal"
-        value: "mock-taint-to-tolerates-value"
-        effect: "NoExecute"
+      - key: mock-taint-key-traefik
+        operator: Equal
+        value: mock-taint-value-traefik
+        effect: NoSchedule
     networkPolicy:
       enabled: true
       egress:
@@ -267,10 +266,10 @@ singleuser:
   nodeSelector:
     mock-node-selector: mock
   extraTolerations:
-    - key: hub.jupyter.org/test
+    - effect: NoSchedule
+      key: mock-taint-key-singleuser
       operator: Equal
-      value: test
-      effect: NoSchedule
+      value: mock-taint-value-singleuser
   extraNodeAffinity:
     required:
       - matchExpressions:
@@ -388,14 +387,10 @@ scheduling:
     nodeSelector:
       node-type: mock
     tolerations:
-      - key: "mock-taint-to-tolerates-key"
-        operator: "Equal"
-        value: "mock-taint-to-tolerates-value"
-        effect: "NoSchedule"
-      - key: "mock-taint-to-tolerates-key"
-        operator: "Equal"
-        value: "mock-taint-to-tolerates-value"
-        effect: "NoExecute"
+      - key: mock-taint-key-scheduling
+        operator: Equal
+        value: mock-taint-value-scheduling
+        effect: NoSchedule
     plugins:
       score:
         disabled:
@@ -411,22 +406,28 @@ scheduling:
     replicas: 1
     resources: {}
   corePods:
+    tolerations:
+      - key: mock-taint-key-corePods
+        operator: Equal
+        value: mock-taint-value-corePods
+        effect: NoSchedule
     nodeAffinity:
       matchNodePurpose: require
   userPods:
+    tolerations:
+      - key: mock-taint-key-userPods
+        operator: Equal
+        value: mock-taint-value-userPods
+        effect: NoSchedule
     nodeAffinity:
       matchNodePurpose: require
 
 prePuller:
   extraTolerations:
-    - key: "mock-taint-to-tolerates-key"
-      operator: "Equal"
-      value: "mock-taint-to-tolerates-value"
-      effect: "NoSchedule"
-    - key: "mock-taint-to-tolerates-key"
-      operator: "Equal"
-      value: "mock-taint-to-tolerates-value"
-      effect: "NoExecute"
+    - key: mock-taint-key-prePuller
+      operator: Equal
+      value: mock-taint-value-prePuller
+      effect: NoSchedule
   hook:
     enabled: true
     extraEnv:
@@ -434,14 +435,10 @@ prePuller:
     nodeSelector:
       node-type: mock
     tolerations:
-      - key: "mock-taint-to-tolerates-key"
-        operator: "Equal"
-        value: "mock-taint-to-tolerates-value"
-        effect: "NoSchedule"
-      - key: "mock-taint-to-tolerates-key"
-        operator: "Equal"
-        value: "mock-taint-to-tolerates-value"
-        effect: "NoExecute"
+      - key: mock-taint-key-hook
+        operator: Equal
+        value: mock-taint-value-hook
+        effect: NoSchedule
   continuous:
     enabled: true
   extraImages:

@@ -33,18 +33,10 @@ spec:
       serviceAccountName: {{ include "jupyterhub.hook-image-awaiter.fullname" . }}
       {{- end }}
       nodeSelector: {{ toJson .Values.prePuller.hook.nodeSelector }}
+      {{- with concat .Values.scheduling.corePods.tolerations .Values.prePuller.hook.tolerations }}
       tolerations:
-        - key: hub.jupyter.org/dedicated
-          operator: Equal
-          value: core
-          effect: NoSchedule
-        - key: hub.jupyter.org_dedicated
-          operator: Equal
-          value: core
-          effect: NoSchedule
-        {{- with .Values.prePuller.hook.tolerations }}
-        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
-        {{- end }}
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
       {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.prePuller.hook.image) }}
       imagePullSecrets: {{ . }}
       {{- end }}
