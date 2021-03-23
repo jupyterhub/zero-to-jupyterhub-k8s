@@ -106,7 +106,7 @@ prometheus-client==0.9.0
     # via jupyterhub
 psycopg2-binary==2.8.6
     # via -r requirements.in
-py-spy==0.3.4
+py-spy==0.3.5
     # via -r requirements.in
 pyasn1-modules==0.2.8
     # via google-auth
