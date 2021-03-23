@@ -40,7 +40,7 @@ spec:
 
     # allowed pods (hub.jupyter.org/network-access-singleuser) --> singleuser-server
     - ports:
-        - port: notebook-port
+        - port: 8888 
       from:
         # source 1 - labeled pods
         - podSelector:
