@@ -14,6 +14,7 @@ authentication
 optimization
 security
 upgrading
+../../jupyterhub/customization
 troubleshooting
 advanced
 cost
