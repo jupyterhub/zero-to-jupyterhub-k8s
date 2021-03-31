@@ -38,7 +38,17 @@ COPY requirements.txt /tmp/requirements.txt
 RUN pip3 install --upgrade --no-cache-dir \
         setuptools \
         pip
-RUN PYCURL_SSL_LIBRARY=openssl \
+
+# Automatically set by docker buildx
+ARG TARGETPLATFORM
+
+# psycopg2-binary not available for arm64
+RUN if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
+        echo "Removing psycopg2-binary from dependencies ($TARGETPLATFORM)"; \
+        sed -i '/psycopg2-binary==/d' /tmp/requirements.txt; \
+        cat /tmp/requirements.txt; \
+    fi; \
+    PYCURL_SSL_LIBRARY=openssl \
     pip install --no-cache-dir \
         -r /tmp/requirements.txt
 
