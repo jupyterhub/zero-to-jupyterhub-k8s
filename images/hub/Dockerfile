@@ -4,7 +4,13 @@ FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=C.UTF-8
-RUN apt-get update && \
+
+# psycopg2-binary in requirements.txt is not compiled for linux/arm64
+# TODO: Use build stages to compile psycopg2-binary separately instead of
+# bloating the image size
+RUN EXTRA_PACKAGES=; \
+    if [ `uname -m` != 'x86_64' ]; then EXTRA_PACKAGES=libpq-dev; fi; \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
       git \
       vim \
@@ -20,6 +26,7 @@ RUN apt-get update && \
       sqlite3 \
       curl \
       dnsutils \
+      $EXTRA_PACKAGES \
       && \
     rm -rf /var/lib/apt/lists/*
 
@@ -38,17 +45,7 @@ COPY requirements.txt /tmp/requirements.txt
 RUN pip3 install --upgrade --no-cache-dir \
         setuptools \
         pip
-
-# Automatically set by docker buildx
-ARG TARGETPLATFORM
-
-# psycopg2-binary not available for arm64
-RUN if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
-        echo "Removing psycopg2-binary from dependencies ($TARGETPLATFORM)"; \
-        sed -i '/psycopg2-binary==/d' /tmp/requirements.txt; \
-        cat /tmp/requirements.txt; \
-    fi; \
-    PYCURL_SSL_LIBRARY=openssl \
+RUN PYCURL_SSL_LIBRARY=openssl \
     pip install --no-cache-dir \
         -r /tmp/requirements.txt
 
