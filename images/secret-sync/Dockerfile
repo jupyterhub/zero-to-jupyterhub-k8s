@@ -1,6 +1,6 @@
 FROM python:3.8-alpine
 
-# VULN_SCAN_TIME=2021-03-27_00:01:53
+# VULN_SCAN_TIME=2021-04-02_00:08:00
 
 # Note that we use tini-static, it embeds dependencies missing in alpine
 RUN wget -qO /tini https://github.com/krallin/tini/releases/download/v0.19.0/tini-static \
