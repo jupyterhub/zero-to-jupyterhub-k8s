@@ -25,8 +25,17 @@ spec:
   selector:
     {{- include "jupyterhub.matchLabels" . | nindent 4 }}
   ports:
-    - port: 8081
+    - name: http
+      port: 8081
       targetPort: http
       {{- with .Values.hub.service.ports.nodePort }}
       nodePort: {{ . }}
       {{- end }}
+    # Support for Hub-managed services in k8s
+    {{- range $name, $config := .Values.hub.services }}
+    {{- if hasKey $config "k8s_managed_port" }}
+    - name: {{ $name | replace "_" "-"}}
+      port: {{ get $config "k8s_managed_port" }}
+      targetPort: {{ get $config "k8s_managed_port" }}
+    {{- end }}
+    {{- end }}
