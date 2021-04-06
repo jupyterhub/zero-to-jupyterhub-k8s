@@ -39,7 +39,7 @@ If you prefer to use the Digital Ocean portal see the [Digital Ocean Get Started
 
    ```
    mkdir -p ~/.kube
-   doctl k8s cluster kubeconfig show bindertime-k8s > ~/.kube/config
+   doctl k8s cluster kubeconfig show jupyter-kubernetes > ~/.kube/config
    ```
 
 4. Create an ssh key to secure your cluster.
