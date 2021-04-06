@@ -38,8 +38,8 @@ jobs:
           setup_helm
           pip install chartpress yamllint
 
-      - uses: pre-commit/action@v2.0.0
-      - uses: pre-commit/action@v2.0.0
+      - uses: pre-commit/action@v2.0.2
+      - uses: pre-commit/action@v2.0.2
         with:
           extra_args: --config .pre-commit-config-shellcheck.yaml
 
