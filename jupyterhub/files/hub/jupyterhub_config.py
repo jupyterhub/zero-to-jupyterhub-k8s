@@ -369,6 +369,11 @@ for name, service in get_config("hub.services", {}).items():
     if api_token:
         service["api_token"] = api_token
 
+    # Support for Hub-managed services in k8s
+    if "k8s_managed_port" in service:
+        port = service.pop("k8s_managed_port")
+        service["url"] = f"http://hub:{port}"
+
     c.JupyterHub.services.append(service)
 
 
