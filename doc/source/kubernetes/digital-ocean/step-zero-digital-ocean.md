@@ -31,7 +31,7 @@ If you prefer to use the Digital Ocean portal see the [Digital Ocean Get Started
 
    ```
    export DIGITALOCEAN_ENABLE_BETA=1
-   doctl k8s cluster create jupyter-kubernetes --region lon1 --version 1.18.14-do.0 --node-pool="name=worker-pool;count=3"
+   doctl k8s cluster create jupyter-kubernetes --region lon1 --node-pool="name=worker-pool;count=3"
    ```
 
 3. Export your cluster config.
