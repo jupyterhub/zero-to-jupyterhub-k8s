@@ -15,9 +15,3 @@ pyyaml
 sphinx-autobuild
 sphinx-copybutton
 sphinxext-rediraffe
-
-# As of 0.17.0 we experience bug https://sourceforge.net/p/docutils/bugs/415/
-# when building using RTD. The build error can be seen in
-# https://readthedocs.org/projects/zero-to-jupyterhub/builds/13469169/.
-#
-docutils==0.16.*
