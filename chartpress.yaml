@@ -46,5 +46,8 @@ charts:
         valuesPath: prePuller.hook.image
 
       # singleuser-sample, a primitive user container to start with.
+      # Image is based on https://github.com/jupyter/docker-stacks/ which is amd64 only
       singleuser-sample:
         valuesPath: singleuser.image
+        skipPlatforms:
+          - linux/arm64

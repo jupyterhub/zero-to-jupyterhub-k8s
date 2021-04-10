@@ -25,25 +25,21 @@ on:
 
 jobs:
   # TODO: this is just a quick test to check the arm64 docker images
-  # this should instead be done using chartpress
   # Based on
   # https://github.com/docker/build-push-action/blob/v2.3.0/docs/advanced/local-registry.md
   # https://github.com/docker/build-push-action/blob/v2.3.0/docs/advanced/multi-platform.md
   build_images:
     runs-on: ubuntu-20.04
-    strategy:
-      # Keep running even if one variation of the job fails
-      fail-fast: false
-      matrix:
-        image:
-          - hub
-          - image-awaiter
-          - network-tools
-          - secret-sync
-          # - singleuser-sample
-
     steps:
       - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+
+      # https://github.com/jupyterhub/chartpress/pull/124
+      - name: Install chartpress buildx-platforms-dev version
+        run: pip install --no-cache-dir chartpress@git+https://github.com/manics/chartpress.git@buildx-platforms-skip
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -60,9 +56,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push to local registry
-        uses: docker/build-push-action@v2
-        with:
-          context: images/${{ matrix.image }}
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: ghcr.io/${{ github.repository_owner }}/z2jh-${{ matrix.image }}:dev
+        run: >-
+          chartpress --push --tag dev
+          --builder docker-buildx
+          --platform linux/amd64 --platform linux/arm64
+          --image-prefix ghcr.io/${{ github.repository_owner }}/z2jh-
