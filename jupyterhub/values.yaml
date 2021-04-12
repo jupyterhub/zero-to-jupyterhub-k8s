@@ -189,7 +189,7 @@ proxy:
       allowPrivilegeEscalation: false
     image:
       name: jupyterhub/configurable-http-proxy
-      tag: 4.3.1
+      tag: 4.3.2
       pullPolicy:
       pullSecrets: []
     extraCommandLineFlags: []
