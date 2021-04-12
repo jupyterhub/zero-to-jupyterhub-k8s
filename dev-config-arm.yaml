@@ -1,0 +1,9 @@
+# Override some values in dev-config.yaml
+proxy:
+  https:
+    enabled: false
+
+singleuser:
+  image:
+    name: sakuraiyuta/base-notebook
+    tag: latest
