@@ -56,7 +56,7 @@ jobs:
 
       - name: Build and push to local registry
         run: >-
-          chartpress --push --tag dev
+          chartpress --push --tag 0.0.1-dev
           --builder docker-buildx
           --platform linux/amd64 --platform linux/arm64
           --image-prefix ghcr.io/${{ github.repository_owner }}/z2jh-
