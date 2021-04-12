@@ -37,9 +37,8 @@ jobs:
         with:
           python-version: "3.8"
 
-      # https://github.com/jupyterhub/chartpress/pull/124
-      - name: Install chartpress buildx-platforms-dev version
-        run: pip install --no-cache-dir chartpress@git+https://github.com/manics/chartpress.git@buildx-platforms-skip
+      - name: Install chartpress
+        run: pip install chartpress
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
