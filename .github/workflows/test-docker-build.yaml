@@ -46,17 +46,8 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      # https://github.com/docker/login-action/tree/v1.8.0#github-container-registry
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push to local registry
+      - name: Build a multiple architecture Docker image
         run: >-
-          chartpress --push --tag 0.0.1-dev
+          chartpress
           --builder docker-buildx
           --platform linux/amd64 --platform linux/arm64
-          --image-prefix ghcr.io/${{ github.repository_owner }}/z2jh-
