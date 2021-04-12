@@ -4,7 +4,13 @@ FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=C.UTF-8
-RUN apt-get update && \
+
+# psycopg2-binary in requirements.txt is not compiled for linux/arm64
+# TODO: Use build stages to compile psycopg2-binary separately instead of
+# bloating the image size
+RUN EXTRA_APT_PACKAGES=; \
+    if [ `uname -m` != 'x86_64' ]; then EXTRA_APT_PACKAGES=libpq-dev; fi; \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
       git \
       vim \
@@ -20,6 +26,7 @@ RUN apt-get update && \
       sqlite3 \
       curl \
       dnsutils \
+      $EXTRA_APT_PACKAGES \
       && \
     rm -rf /var/lib/apt/lists/*
 
