@@ -31,7 +31,7 @@ spec:
       {{- with .Values.hub.service.ports.nodePort }}
       nodePort: {{ . }}
       {{- end }}
-    {{- /* Expose ports for additional services running in the hub pod /*}}
+    {{- /* Expose ports for additional services running in the hub pod */}}
     {{- range $name, $config := .Values.hub.services }}
     {{- if hasKey $config "k8s_managed_port" }}
     {{- $k8s_compliant_name := $name | lower | replace "_" "-" | trunc 63 | trimSuffix "-" }}
