@@ -35,7 +35,6 @@ spec:
     {{- range $name, $config := .Values.hub.services }}
     {{- if hasKey $config "k8s_managed_port" }}
     {{- $k8s_compliant_name := $name | lower | replace "_" "-" | trunc 63 | trimSuffix "-" }}
-    # jupyterhub service name: {{ $name }}
     - name: {{ $k8s_compliant_name }}
       port: {{ $config.k8s_managed_port }}
       targetPort: {{ $config.k8s_managed_port }}
