@@ -31,11 +31,12 @@ spec:
       {{- with .Values.hub.service.ports.nodePort }}
       nodePort: {{ . }}
       {{- end }}
-      # Support for Hub-managed services in k8s
+    {{- /* Expose ports for additional services running in the hub pod /*}} 
     {{- range $name, $config := .Values.hub.services }}
     {{- if hasKey $config "k8s_managed_port" }}
-    - name: {{ $name | replace "_" "-"}}
-      port: {{ get $config "k8s_managed_port" }}
-      targetPort: {{ get $config "k8s_managed_port" }}
+    {{- $k8s_compliant_name := $name | lower | replace "_" "-" | trunc 63 | trimSuffix "-"}}
+    - name: {{ $k8s_compliant_name }}
+      port: {{ $config.k8s_managed_port }}
+      targetPort: {{ $config.k8s_managed_port }}
     {{- end }}
     {{- end }}
