@@ -40,10 +40,10 @@ spec:
     # allowed pods (hub.jupyter.org/network-access-hub) --> hub
     - ports:
         - port: http
-          # Support for Hub-managed services in k8s
+        {{- /* Also accept traffic to ports for additional services running in hub pod /*}}
         {{- range $name, $config := .Values.hub.services }}
         {{- if hasKey $config "k8s_managed_port" }}
-        - port: {{ get $config "k8s_managed_port" }}
+        - port: {{ $config.k8s_managed_port }}
         {{- end }}
         {{- end }}
       from:
