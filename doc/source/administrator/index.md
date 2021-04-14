@@ -11,6 +11,7 @@ cloud-based deployments and tips for maintaining your deployment.
 architecture
 debug
 authentication
+services
 optimization
 security
 upgrading
