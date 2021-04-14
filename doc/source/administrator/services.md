@@ -51,9 +51,8 @@ hub:
                 hub.jupyter.org/network-access-hub: "true"
 
   service:
-    ports:
-      extraPorts:
-        - port: 8181
-          targetPort: 8181
-          name: fastapi
+    extraPorts:
+      - port: 8181
+        targetPort: 8181
+        name: fastapi
 ```
