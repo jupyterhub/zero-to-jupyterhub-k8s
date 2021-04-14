@@ -25,8 +25,13 @@ spec:
   selector:
     {{- include "jupyterhub.matchLabels" . | nindent 4 }}
   ports:
-    - port: 8081
+    - name: hub
+      port: 8081
       targetPort: http
       {{- with .Values.hub.service.ports.nodePort }}
       nodePort: {{ . }}
       {{- end }}
+
+    {{- with .Values.hub.service.ports.extraPorts }}
+    {{- . | toYaml | nindent 4}}
+    {{- end }}
