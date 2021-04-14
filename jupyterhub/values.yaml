@@ -35,6 +35,7 @@ hub:
     annotations: {}
     ports:
       nodePort:
+      extraPorts: []
     loadBalancerIP:
   baseUrl: /
   cookieSecret:
