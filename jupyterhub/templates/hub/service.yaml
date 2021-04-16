@@ -33,5 +33,5 @@ spec:
       {{- end }}
 
     {{- with .Values.hub.service.extraPorts }}
-    {{- . | toYaml | nindent 4}}
+    {{- . | toYaml | nindent 4 }}
     {{- end }}

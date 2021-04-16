@@ -16,7 +16,7 @@ In addition to the code for the service, you need to modify the Hub Kubernetes S
 
 In the following snippet, I'm using a custom image that copies over the application code and installs the dependencies listed in the [fastapi service example](https://github.com/jupyterhub/jupyterhub/tree/master/examples/service-fastapi).
 
-```
+```Dockerfile
 # Dockerfile
 # 0.11.1 is latest stable release at the time of this writing
 FROM jupyterhub/k8s-hub:0.11.1
@@ -25,7 +25,7 @@ COPY ./service-fastapi /usr/src/fastapi
 RUN python3 -m pip install -r /usr/src/fastapi/requirements.txt
 ```
 
-```
+```yaml
 # config.yaml
 
 hub:
@@ -44,7 +44,7 @@ hub:
   networkPolicy:
     ingress:
       - ports:
-        - port: 8181
+          - port: 8181
         from:
           - podSelector:
               matchLabels:
