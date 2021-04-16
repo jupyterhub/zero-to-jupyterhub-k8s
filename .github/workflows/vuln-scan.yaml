@@ -185,6 +185,7 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
+          author: jupyterhub vuln-scan bot <noreply@github.com>
           reviewers: "consideratio"
           branch: "vuln-scan-${{ matrix.image_ref }}"
           title: "Vulnerability patch in ${{ matrix.image_ref }}"
