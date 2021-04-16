@@ -64,6 +64,13 @@ hub:
     type: ClusterIP
     ports:
       nodePort:
+    extraPorts:
+      - name: dummy-port-1
+        port: 8181
+        targetPort: 8181
+      - name: dummy-port-2
+        port: 8182
+        targetPort: string-named-target-port
   baseUrl: /
   activeServerLimit: 3
   deploymentStrategy:
