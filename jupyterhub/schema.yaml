@@ -855,6 +855,12 @@ properties:
             type: object
             description: |
               Kubernetes annotations to apply to the hub service.
+          extraPorts:
+            type: array
+            description: |
+              Extra ports to add to the Hub Service object besides `hub` / `8081`.  
+              This should be an array that includes `name`, `port`, and `targetPort`.
+              See [Multi-port Services](https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services) for more details.
           loadBalancerIP:
             type: [string, "null"]
             description: |
