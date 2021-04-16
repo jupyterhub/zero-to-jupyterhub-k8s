@@ -36,10 +36,18 @@ hub:
   services:
     fastapi:
       url: http://hub:8181
-      command: ["/home/jovyan/.local/bin/uvicorn", "app:app", "--port", "8181", "--host", "0.0.0.0", "--app-dir", "/usr/src/fastapi"]
-      oauth_redirect_uri: "https://jupyterhub.mycloud.com/services/fastapi/oauth_callback"
+      command:
+        - /home/jovyan/.local/bin/uvicorn
+        - app:app
+        - --port
+        - "8181"
+        - --host
+        - "0.0.0.0"
+        - --app-dir
+        - /usr/src/fastapi
+      oauth_redirect_uri: https://jupyterhub.mycloud.com/services/fastapi/oauth_callback
       environment:
-        PUBLIC_HOST: "https://jupyterhub.mycloud.com"
+        PUBLIC_HOST: https://jupyterhub.mycloud.com
 
   networkPolicy:
     ingress:
