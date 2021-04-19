@@ -26,14 +26,7 @@ you have tips or deployments that you would like to share, see the
 This documentation is for Helm chart version {{chart_version}} that deploys
 JupyterHub version {{jupyterhub_version}} and other components versioned
 in {{requirements}}. The Helm chart requires Kubernetes version >={{kube_version}}
-and Helm >=2.16.
-
-```{admonition} Note
-Helm 2 is deprecated since of November 2019, and [will receive bugfixes
-until August 13,
-2020](https://helm.sh/blog/covid-19-extending-helm-v2-bug-fixes). So,
-the Helm references in this documentation are Helm v3.
-```
+and Helm 3.
 
 ## What To Expect
 
