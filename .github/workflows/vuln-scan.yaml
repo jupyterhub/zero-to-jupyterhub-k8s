@@ -169,7 +169,7 @@ jobs:
       # ref: https://github.com/jacobtomlinson/gha-find-replace
       - name: Update VULN_SCAN_TIME in Dockerfile
         if: steps.analyze.outputs.proceed == 'yes'
-        uses: jacobtomlinson/gha-find-replace@0.1.2
+        uses: jacobtomlinson/gha-find-replace@0.1.3
         with:
           include: "images/${{ matrix.image_ref }}/Dockerfile"
           find: "#.*VULN_SCAN_TIME=.*"
