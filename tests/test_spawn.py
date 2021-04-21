@@ -142,8 +142,8 @@ def test_spawn_netpol(api_request, jupyter_user, request_data):
         # explicitly pinned these IPs and explicitly pass the Host header in the
         # web-request in order to avoid test failures following additional IPs
         # are added.
-        allowed_jupyter_org_ip = "104.28.8.110"
-        blocked_jupyter_org_ip = "104.28.9.110"
+        allowed_jupyter_org_ip = "104.21.25.233"
+        blocked_jupyter_org_ip = "172.67.134.225"
 
         cmd_kubectl_exec = ["kubectl", "exec", pod_name, "--"]
         cmd_python_exec = ["python", "-c"]
