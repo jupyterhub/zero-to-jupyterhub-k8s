@@ -147,9 +147,9 @@ singleuser:
           # jupyter.org has multiple IPs associated with it, among them are these
           # two. We explicitly allow access to one, but leave out the the other.
           - ipBlock:
-              cidr: 104.28.8.110/32
+              cidr: 104.21.25.233/32
         # - ipBlock:
-        #     cidr: 104.28.9.110/32
+        #     cidr: 172.67.134.225/32
   extraEnv:
     TEST_ENV_FIELDREF_TO_NAMESPACE:
       valueFrom:
