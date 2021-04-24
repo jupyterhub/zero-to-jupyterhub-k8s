@@ -25,6 +25,20 @@ You can find the NodePorts of JupyterHub by running:
   kubectl --namespace={{ .Release.Namespace }} get svc {{ include "jupyterhub.proxy-public.fullname" . }} -o jsonpath='{range .spec.ports[*]} {.name}: {.port}{"\n"} {end}'
 {{- end }}
 
+{{- if .Values.ingress.enabled }}
+
+You should be able to access JupyterHub at:
+{{ range $host := .Values.ingress.hosts }}
+  http://{{ $host }}{{ $.Values.hub.baseUrl | trimSuffix "/" }}/{{ $.Values.ingress.pathSuffix }}
+{{- end }}
+{{- range $tls := .Values.ingress.tls }}
+  {{- range $host := $tls.hosts }}
+  https://{{ $host }}{{ $.Values.hub.baseUrl | trimSuffix "/" }}/{{ $.Values.ingress.pathSuffix }}
+  {{- end }}
+{{- end }}
+
+{{- end }}
+
 To get full information about the JupyterHub proxy service run:
 
   kubectl --namespace={{ .Release.Namespace }} get svc {{ include "jupyterhub.proxy-public.fullname" . }}
