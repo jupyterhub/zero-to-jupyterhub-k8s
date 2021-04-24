@@ -1,24 +1,42 @@
 Thank you for installing JupyterHub!
 
-Your release is named {{ .Release.Name }} and installed into the namespace {{ .Release.Namespace }}.
+Your release is named "{{ .Release.Name }}" and installed into the namespace "{{ .Release.Namespace }}".
 
-You can find if the hub and proxy is ready by doing:
+You can check whether the hub and proxy are ready by running:
 
  kubectl --namespace={{ .Release.Namespace }} get pod
 
 and watching for both those pods to be in status 'Running'.
+{{/* Force an empty newline */}}
 
-You can find the public IP of the JupyterHub by doing:
+{{- if eq .Values.proxy.service.type "LoadBalancer" }}
+You can find the public IP of JupyterHub by running:
 
- kubectl --namespace={{ .Release.Namespace }} get svc {{ include "jupyterhub.proxy-public.fullname" . }}
+  kubectl -n {{ .Release.Namespace }} get svc {{ include "jupyterhub.proxy-public.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[].ip}'
+{{- end }}
+{{- if eq .Values.proxy.service.type "ClusterIP" }}
+You can find the internal IP of JupyterHub by running:
+
+  kubectl get -n {{ .Release.Namespace }} svc {{ include "jupyterhub.proxy-public.fullname" . }} -o jsonpath='{.spec.clusterIP}'
+{{- end }}
+{{- if eq .Values.proxy.service.type "NodePort" }}
+You can find the NodePorts of JupyterHub by running:
+
+  kubectl --namespace={{ .Release.Namespace }} get svc {{ include "jupyterhub.proxy-public.fullname" . }} -o jsonpath='{range .spec.ports[*]} {.name}: {.port}{"\n"} {end}'
+{{- end }}
+
+To get full information about the JupyterHub proxy service run:
+
+  kubectl --namespace={{ .Release.Namespace }} get svc {{ include "jupyterhub.proxy-public.fullname" . }}
 
 It might take a few minutes for it to appear!
 
-Note that this is still an alpha release! If you have questions, feel free to
-  1. Read the guide at https://z2jh.jupyter.org
-  2. Chat with us at https://gitter.im/jupyterhub/jupyterhub
-  3. File issues at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
+If you have questions, please:
 
+  1. Read the guide at https://z2jh.jupyter.org
+  2. Ask for help or chat to us on https://discourse.jupyter.org/
+  3. If you find a bug please report it at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
+{{/* Force an empty newline */}}
 
 {{- if hasKey .Values.singleuser.cloudMetadata "enabled" }}{{ println }}
 DEPRECATION: singleuser.cloudMetadata.enabled is deprecated, instead use singleuser.cloudMetadata.blockWithIptables with the inverted value.
