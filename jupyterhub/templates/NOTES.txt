@@ -29,11 +29,11 @@ You can find the NodePorts of JupyterHub by running:
 
 You should be able to access JupyterHub at:
 {{ range $host := .Values.ingress.hosts }}
-  http://{{ $host }}{{ $.Values.hub.baseUrl | trimSuffix "/" }}/{{ $.Values.ingress.pathSuffix }}
+  http://{{ $host }}{{ $.Values.hub.baseUrl | trimSuffix "/" }}/
 {{- end }}
 {{- range $tls := .Values.ingress.tls }}
   {{- range $host := $tls.hosts }}
-  https://{{ $host }}{{ $.Values.hub.baseUrl | trimSuffix "/" }}/{{ $.Values.ingress.pathSuffix }}
+  https://{{ $host }}{{ $.Values.hub.baseUrl | trimSuffix "/" }}/
   {{- end }}
 {{- end }}
 
