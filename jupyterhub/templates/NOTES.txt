@@ -6,16 +6,17 @@ You can check whether the hub and proxy are ready by running:
 
  kubectl --namespace={{ .Release.Namespace }} get pod
 
-and watching for both those pods to be in status 'Running'.
-{{/* Force an empty newline */}}
+and watching for both those pods to be in status 'Running'.{{ println }}
 
 {{- if eq .Values.proxy.service.type "LoadBalancer" }}
-You can find the public IP of JupyterHub by running:
+You can find the public (load-balancer) IP of JupyterHub by running:
 
   kubectl -n {{ .Release.Namespace }} get svc {{ include "jupyterhub.proxy-public.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[].ip}'
+
+It might take a few minutes for it to appear!
 {{- end }}
 {{- if eq .Values.proxy.service.type "ClusterIP" }}
-You can find the internal IP of JupyterHub by running:
+You can find the internal (cluster) IP of JupyterHub by running:
 
   kubectl get -n {{ .Release.Namespace }} svc {{ include "jupyterhub.proxy-public.fullname" . }} -o jsonpath='{.spec.clusterIP}'
 {{- end }}
@@ -27,7 +28,7 @@ You can find the NodePorts of JupyterHub by running:
 
 {{- if .Values.ingress.enabled }}
 
-You should be able to access JupyterHub at:
+You should be able to access JupyterHub using your configured ingress at:
 {{ range $host := .Values.ingress.hosts }}
   http://{{ $host }}{{ $.Values.hub.baseUrl | trimSuffix "/" }}/
 {{- end }}
@@ -43,16 +44,13 @@ To get full information about the JupyterHub proxy service run:
 
   kubectl --namespace={{ .Release.Namespace }} get svc {{ include "jupyterhub.proxy-public.fullname" . }}
 
-It might take a few minutes for it to appear!
-
 If you have questions, please:
 
   1. Read the guide at https://z2jh.jupyter.org
   2. Ask for help or chat to us on https://discourse.jupyter.org/
-  3. If you find a bug please report it at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
-{{/* Force an empty newline */}}
+  3. If you find a bug please report it at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues{{ println }}
 
-{{- if hasKey .Values.singleuser.cloudMetadata "enabled" }}{{ println }}
+{{- if hasKey .Values.singleuser.cloudMetadata "enabled" }}
 DEPRECATION: singleuser.cloudMetadata.enabled is deprecated, instead use singleuser.cloudMetadata.blockWithIptables with the inverted value.
 {{- end }}
 
