@@ -10,11 +10,13 @@ on:
   pull_request:
     paths:
       - "images/**"
-      - "**/test-docker-build.yaml"
+      - "chartpress.yaml"
+      - ".github/workflows/test-docker-build.yaml"
   push:
     paths:
       - "images/**"
-      - "**/test-docker-build.yaml"
+      - "chartpress.yaml"
+      - ".github/workflows/test-docker-build.yaml"
     branches-ignore:
       - "dependabot/**"
   workflow_dispatch:
