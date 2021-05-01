@@ -199,7 +199,7 @@ jobs:
         uses: jupyterhub/action-k8s-await-workloads@v1
         with:
           timeout: 150
-          max-restarts: 0
+          max-restarts: 1
 
       - name: "(Upgrade) Install ${{ matrix.upgrade-from }} chart"
         if: matrix.test == 'upgrade'
@@ -258,7 +258,7 @@ jobs:
         uses: jupyterhub/action-k8s-await-workloads@v1
         with:
           timeout: 150
-          max-restarts: 0
+          max-restarts: 1
 
       - name: "(Upgrade) Await ${{ matrix.upgrade-from }} chart cert acquisition"
         if: matrix.test == 'upgrade'
