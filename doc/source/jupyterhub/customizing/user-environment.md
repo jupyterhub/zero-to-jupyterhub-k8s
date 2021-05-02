@@ -72,15 +72,16 @@ see {ref}`multiple-profiles`.
 The Docker image will be started with the [`ENTRYPOINT`](https://docs.docker.com/engine/reference/builder/#entrypoint) and [`CMD`](https://docs.docker.com/engine/reference/builder/#cmd) defined in the image.
 You can override `CMD`, by setting `singleuser.cmd`.
 
-```{note}
-In versions of Z2JH prior to 1.0.0 the images default was overridden.
+````{note}
+In versions of Z2JH prior to 1.0.0 the image's default was overridden.
 To restore this behaviour:
-```
 
-```yaml
-singleuser:
-  cmd: jupyterhub-singleuser
-```
+   ```yaml
+   singleuser:
+     cmd: jupyterhub-singleuser
+   ```
+
+````
 
 (jupyterlab-by-default)=
 
