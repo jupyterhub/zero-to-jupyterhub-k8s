@@ -1681,7 +1681,18 @@ properties:
               type: string
       cmd:
         type: [array, string, "null"]
-        description: *kubespawner-native-config-description
+        description: |
+          The command and arguments passed to the container.
+          This is the equivalent of the `CMD` Dockerfile instruction.
+          If not set the default from the container image will be used.
+
+          Note that in versions of Z2JH prior to 1.0.0 this was set to
+          `jupyterhub-singleuser` instead of using the image's default.
+
+          See the [KubeSpawner
+          documentation](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html)
+          for more information.
+
       defaultUrl:
         type: [string, "null"]
         description: *kubespawner-native-config-description

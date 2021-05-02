@@ -2,6 +2,19 @@
 
 Here you can find upgrade changes in between releases and upgrade instructions.
 
+## [UNRELEASED]
+
+#### Breaking changes
+
+- **`singleuser.cmd` does not default to `jupyterhub-singleuser` - [#2138](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2138)**
+
+  Previous versions of Z2JH ignored the command (`CMD`) configured in the singleuser image by default.
+  This is no longer the case, when a singleuser pod is started the `CMD` from the container image will be used.
+  If you want to revert to the previous behaviour set `singleuser.cmd=jupyterhub-singleuser`.
+
+  This change was made to make it easier to support custom startup scripts such as those used in [`docker-stacks`](https://github.com/jupyter/docker-stacks),
+  as well as alternatives to jupyter-notebook including [Jupyterlab](https://jupyterlab.readthedocs.io/en/stable/getting_started/overview.html) and other applications based on [jupyter-server](https://jupyter-server.readthedocs.io/).
+
 ## [0.11]
 
 ### [0.11.1] - 2021-01-15
