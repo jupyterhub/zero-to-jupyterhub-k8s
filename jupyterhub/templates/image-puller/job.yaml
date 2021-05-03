@@ -19,6 +19,11 @@ metadata:
     "helm.sh/hook-weight": "10"
 spec:
   template:
+    # The hook-image-awaiter Job and hook-image-puller DaemonSet was
+    # conditionally created based on this state:
+    #
+    {{- include "jupyterhub.imagePuller.daemonset.hook.install" . | nindent 4 }}
+    #
     metadata:
       labels:
         {{- /* Changes here will cause the Job to restart the pods. */}}
