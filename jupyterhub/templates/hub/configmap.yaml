@@ -27,4 +27,4 @@ data:
     Store away a checksum of the hook-image-puller daemonset so future upgrades
     can compare and decide if it should run or not using the `lookup` function.
   */}}
-  checksum_hook-image-puller: {{ include "jupyterhub.imagePuller.daemonset.hook" . | sha256sum | quote }}
+  checksum_hook-image-puller: {{ include "jupyterhub.imagePuller.daemonset.hook.checksum" . | quote }}
