@@ -198,6 +198,24 @@ spec:
 
 
 {{- /*
+    Returns a checksum of the rendered k8s DaemonSet resource: hook-image-puller
+
+    This checksum is used when prePuller.hook.pullOnlyOnChanges=true to decide if
+    it is worth creating the hook-image-puller associated resources.
+*/}}
+{{- define "jupyterhub.imagePuller.daemonset.hook.checksum" -}}
+    {{- /*
+        We pin componentLabel and Chart.Version as doing so can pin labels
+        of no importance if they would change. Chart.Name is also pinned as
+        a harmless technical workaround when we compute the checksum.
+    */}}
+    {{- $_ := merge (dict "componentLabel" "pinned" "Chart" (dict "Name" "jupyterhub" "Version" "pinned")) . -}}
+    {{- $yaml := include "jupyterhub.imagePuller.daemonset.hook" $_ }}
+    {{- $yaml | sha256sum }}
+{{- end }}
+
+
+{{- /*
     Returns a truthy string or a blank string depending on if the
     hook-image-puller should be installed. The truthy strings are comments
     that summarize the state that led to returning a truthy string.
@@ -209,7 +227,7 @@ spec:
 {{- define "jupyterhub.imagePuller.daemonset.hook.install" -}}
     {{- if .Values.prePuller.hook.enabled }}
         {{- if .Values.prePuller.hook.pullOnlyOnChanges }}
-            {{- $new_checksum := include "jupyterhub.imagePuller.daemonset.hook" . | sha256sum }}
+            {{- $new_checksum := include "jupyterhub.imagePuller.daemonset.hook.checksum" . }}
             {{- $k8s_state := lookup "v1" "ConfigMap" .Release.Namespace (include "jupyterhub.hub.fullname" .) | default (dict "data" (dict)) }}
             {{- $old_checksum := index $k8s_state.data "checksum_hook-image-puller" | default "" }}
             {{- if ne $new_checksum $old_checksum -}}

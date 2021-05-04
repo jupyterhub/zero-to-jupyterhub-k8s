@@ -1,8 +1,8 @@
 {{- /*
 Permissions to be used by the hook-image-awaiter job
 */}}
-{{- if .Values.prePuller.hook.enabled }}
 {{- if .Values.rbac.enabled }}
+{{- if (include "jupyterhub.imagePuller.daemonset.hook.install" .) }}
 {{- /*
 This service account...
 */ -}}
