@@ -58,9 +58,7 @@ jobs:
           print(f"::set-output name=publishing::{publishing}")
 
       - name: Set up QEMU (for docker buildx)
-        # NOTE: Updates to the actions commit hash should go hand in hand with
-        #       updates in the test-docker-build workflow.
-        uses: docker/setup-qemu-action@c308fdd69d26ed66f4506ebd74b180abe5362145 # associated tag: v1.0.2
+        uses: docker/setup-qemu-action@c308fdd69d26ed66f4506ebd74b180abe5362145 # dependabot updates to latest release
 
       - name: Set up Docker Buildx (for chartpress multi-arch builds)
         # NOTE: Updates to the actions commit hash should go hand in hand with
