@@ -199,7 +199,8 @@ spec:
 
 {{- /*
     Returns a truthy string or a blank string depending on if the
-    hook-image-puller should be installed.
+    hook-image-puller should be installed. The truthy strings are comments
+    that summarize the state that led to returning a truthy string.
 
     - prePuller.hook.enabled must be true
     - if prePuller.hook.pullOnlyOnChanges is true, the checksum of the
@@ -212,10 +213,14 @@ spec:
             {{- $k8s_state := lookup "v1" "ConfigMap" .Release.Namespace (include "jupyterhub.hub.fullname" .) | default (dict "data" (dict)) }}
             {{- $old_checksum := index $k8s_state.data "checksum_hook-image-puller" | default "" }}
             {{- if ne $new_checksum $old_checksum -}}
-                Pulling because new checksum != old checksum: "{{ $new_checksum }}" != "{{ $old_checksum}}"
+# prePuller.hook.enabled={{ .Values.prePuller.hook.enabled }}
+# prePuller.hook.pullOnlyOnChanges={{ .Values.prePuller.hook.pullOnlyOnChanges }}
+# post-upgrade checksum != pre-upgrade checksum (of the hook-image-puller DaemonSet)
+# "{{ $new_checksum }}" != "{{ $old_checksum}}"
             {{- end }}
         {{- else -}}
-            Pulling because prePuller.hook.pullOnlyOnChanges was falsy.
+# prePuller.hook.enabled={{ .Values.prePuller.hook.enabled }}
+# prePuller.hook.pullOnlyOnChanges={{ .Values.prePuller.hook.pullOnlyOnChanges }}
         {{- end }}
     {{- end }}
 {{- end }}
