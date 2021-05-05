@@ -231,7 +231,7 @@ proxy:
       allowPrivilegeEscalation: false
     image:
       name: traefik
-      tag: v2.4.5 # ref: https://hub.docker.com/_/traefik?tab=tags
+      tag: v2.4.8 # ref: https://hub.docker.com/_/traefik?tab=tags
       pullPolicy:
       pullSecrets: []
     hsts:
@@ -421,7 +421,7 @@ scheduling:
       #            hand with an inspection of the user-scheduelrs RBAC resources
       #            that we have forked.
       name: k8s.gcr.io/kube-scheduler
-      tag: v1.19.7
+      tag: v1.19.10 # ref: https://github.com/kubernetes/sig-release/blob/master/releases/patch-releases.md
       pullPolicy:
       pullSecrets: []
     nodeSelector: {}
