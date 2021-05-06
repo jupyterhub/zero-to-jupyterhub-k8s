@@ -280,7 +280,7 @@ jobs:
         uses: jupyterhub/action-k8s-await-workloads@v1
         with:
           timeout: 150
-          max-restarts: 0
+          max-restarts: 1
 
       - name: Await local chart cert acquisition
         run: |
