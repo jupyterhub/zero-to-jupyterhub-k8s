@@ -56,6 +56,21 @@ jobs:
 
   lint_and_validate_templates_with_schema:
     runs-on: ubuntu-20.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # We run this job with the latest lowest helm version we support.
+        #
+        # helm version 3.4.X is known to cause the following error in the named
+        # template "jupyterhub.imagePuller.daemonset.hook.checksum":
+        #
+        #     error calling merge: reflect: call of reflect.Value.MapKeys on ptr Value
+        #
+        include:
+          - helm-version: "" # latest
+          - helm-version: v3.5.0 # minimal required version
+
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -67,6 +82,8 @@ jobs:
           . ci/common
           setup_helm
           pip install pyyaml
+        env:
+          HELM_VERSION: "${{ matrix.helm-version }}"
 
       - name: Generate values.schema.json
         run: tools/generate-json-schema.py
@@ -79,6 +96,10 @@ jobs:
 
       # FIXME: We can probably emit a GitHub workflow warning if these fail
       #        instead having them show as green without a warning or similar
+      #
+      # NOTE: --strict means that any warning is considered an error, and there
+      #       are several warnings that we should ignore.
+      #
       - name: Helm lint --strict (values.yaml)
         run: helm lint --strict ./jupyterhub
         continue-on-error: true
