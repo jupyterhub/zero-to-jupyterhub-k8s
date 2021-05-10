@@ -18,8 +18,11 @@ jobs:
   trivy_image_scan:
     if: github.repository == 'jupyterhub/zero-to-jupyterhub-k8s'
     runs-on: ubuntu-20.04
+    # Write permissions granted for the peter-evans/create-pull-request action
+    # to push to a branch and create/update a PR
     permissions:
       contents: write
+      pull-requests: write
 
     strategy:
       fail-fast: false
