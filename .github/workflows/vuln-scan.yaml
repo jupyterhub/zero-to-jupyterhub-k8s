@@ -164,8 +164,7 @@ jobs:
       - name: Decision to not proceed
         if: steps.analyze.outputs.proceed == 'no'
         run: |
-          echo "None of the $VULNERABILITY_COUNT_1 vulnerabilities got patched by rebuilding the image :("
-          exit 1
+          echo "::warning::None of the $VULNERABILITY_COUNT_1 vulnerabilities got patched by rebuilding the image :("
         continue-on-error: ${{ matrix.accept_failure == true }}
 
       # Steps below are executed if the analyze step decided to proceed.
