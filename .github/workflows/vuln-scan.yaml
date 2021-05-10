@@ -18,8 +18,11 @@ jobs:
   trivy_image_scan:
     if: github.repository == 'jupyterhub/zero-to-jupyterhub-k8s'
     runs-on: ubuntu-20.04
+    # Write permissions granted for the peter-evans/create-pull-request action
+    # to push to a branch and create/update a PR
     permissions:
       contents: write
+      pull-requests: write
 
     strategy:
       fail-fast: false
@@ -70,7 +73,7 @@ jobs:
       # Action reference: https://github.com/aquasecurity/trivy-action
       - name: Scan latest published image
         id: scan_1
-        uses: aquasecurity/trivy-action@b38389f8efef9798810fe0c5b5096ac198cffd54 # associated tag: 0.0.14
+        uses: aquasecurity/trivy-action@b38389f8efef9798810fe0c5b5096ac198cffd54
         with:
           image-ref: ${{ steps.image.outputs.spec }}
           format: json # ref: https://github.com/aquasecurity/trivy#save-the-results-as-json
@@ -93,7 +96,7 @@ jobs:
       - name: Scan rebuilt image
         id: scan_2
         if: steps.rebuild.outcome == 'success'
-        uses: aquasecurity/trivy-action@b38389f8efef9798810fe0c5b5096ac198cffd54 # associated tag: 0.0.14
+        uses: aquasecurity/trivy-action@b38389f8efef9798810fe0c5b5096ac198cffd54
         with:
           image-ref: rebuilt-image
           format: json # ref: https://github.com/aquasecurity/trivy#save-the-results-as-json
@@ -152,7 +155,7 @@ jobs:
 
       - name: Describe vulnerabilities
         if: steps.rebuild.outcome == 'success'
-        uses: aquasecurity/trivy-action@b38389f8efef9798810fe0c5b5096ac198cffd54 # associated tag: 0.0.14
+        uses: aquasecurity/trivy-action@b38389f8efef9798810fe0c5b5096ac198cffd54
         with:
           image-ref: rebuilt-image
           format: table
@@ -171,7 +174,7 @@ jobs:
       # ref: https://github.com/jacobtomlinson/gha-find-replace
       - name: Update VULN_SCAN_TIME in Dockerfile
         if: steps.analyze.outputs.proceed == 'yes'
-        uses: jacobtomlinson/gha-find-replace@f9e200cf233bcde71011fa5e4178037881764379 # associated tag: 0.1.3
+        uses: jacobtomlinson/gha-find-replace@f9e200cf233bcde71011fa5e4178037881764379
         with:
           include: "images/${{ matrix.image_ref }}/Dockerfile"
           find: "#.*VULN_SCAN_TIME=.*"
@@ -184,7 +187,7 @@ jobs:
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create or update a PR
         if: steps.analyze.outputs.proceed == 'yes'
-        uses: peter-evans/create-pull-request@d9d6fd980e1e0904e8e4dce3f0992640091bde37 # associated tag: v3.8.2
+        uses: peter-evans/create-pull-request@d9d6fd980e1e0904e8e4dce3f0992640091bde37
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
           author: jupyterhub vuln-scan bot <noreply@github.com>
