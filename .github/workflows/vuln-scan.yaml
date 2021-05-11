@@ -164,21 +164,21 @@ jobs:
       - name: Decision to not proceed
         if: steps.analyze.outputs.proceed == 'no'
         run: |
-          echo "None of the $VULNERABILITY_COUNT_1 vulnerabilities got patched by rebuilding the image :("
-          exit 1
+          echo "::warning::None of the $VULNERABILITY_COUNT_1 vulnerabilities got patched by rebuilding the image :("
         continue-on-error: ${{ matrix.accept_failure == true }}
 
       # Steps below are executed if the analyze step decided to proceed.
       # -----------------------------------------------------------------------
 
-      # ref: https://github.com/jacobtomlinson/gha-find-replace
+      # Searches for the "# VULN_SCAN_TIME=..." in the Dockerfile and sets a new
+      # value, which can be used to submit a PR that when merged will trigger a
+      # rebuild of the image.
       - name: Update VULN_SCAN_TIME in Dockerfile
         if: steps.analyze.outputs.proceed == 'yes'
-        uses: jacobtomlinson/gha-find-replace@f9e200cf233bcde71011fa5e4178037881764379
-        with:
-          include: "images/${{ matrix.image_ref }}/Dockerfile"
-          find: "#.*VULN_SCAN_TIME=.*"
-          replace: "# VULN_SCAN_TIME=${{ steps.analyze.outputs.utc_time }}"
+        run: |
+          value_to_set="${{ steps.analyze.outputs.utc_time }}"
+          file_to_update="images/${{ matrix.image_ref }}/Dockerfile"
+          sed --in-place "s/\(#.*VULN_SCAN_TIME=\)\(.*\)/\1${value_to_set}/" "$file_to_update"
 
       # The create-pull-request action is smart enough to only create/update a
       # PR if there is a change to anything not .gitignored. A change will be
