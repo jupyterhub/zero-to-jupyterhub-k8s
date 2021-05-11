@@ -16,7 +16,7 @@ FIXME: describe AKS cluster setup documentation issue.
 
 #### Breaking changes
 
-- **Kubernetes 1.17+ and Helm 3.1+ is now required**
+- **Kubernetes 1.17+ and Helm 3.1+ are now required**
 
   Helm 3 (3.1+) is now required as Helm 2 reached end of life last year and we
   have started relying on Helm 3 specific features.
