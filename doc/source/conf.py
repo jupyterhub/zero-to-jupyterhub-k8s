@@ -79,6 +79,7 @@ jupyterhub_version = chart["appVersion"]
 #        run into this issue:
 #        https://github.com/executablebooks/MyST-Parser/issues/282
 kube_version = chart["kubeVersion"].split("-", 1)[0][2:]
+helm_version = "3.5"  # minimum helm cli version
 
 # These substitution variables only work in markdown contexts, and does not work
 # within links etc. Reference using {{ variable_name }}
@@ -90,6 +91,7 @@ myst_substitutions = {
     "chart_version_git_ref": chart_version_git_ref,
     "jupyterhub_version": jupyterhub_version,
     "kube_version": kube_version,
+    "helm_version": helm_version,
     "requirements": f"[hub/images/requirements.txt](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/{chart_version_git_ref}/images/hub/requirements.txt)",
 }
 
