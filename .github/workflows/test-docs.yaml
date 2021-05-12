@@ -30,7 +30,7 @@ jobs:
           # and requires information about the latest tagged commit, which
           # requires the git history.
           fetch-depth: 0
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v2.2.2
         with:
           python-version: "3.8"
 
