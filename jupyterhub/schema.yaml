@@ -262,6 +262,8 @@ properties:
           files, custom user interface templates, images, and more.
 
           ```yaml
+          # NOTE: "hub" is used in this example, but the configuration is the
+          #       same for "singleuser".
           hub:
             extraFiles:
               # The file key is just a reference that doesn't influence the
@@ -288,11 +290,11 @@ properties:
                 # base64 encoding of the actual file content.
                 #
                 data:
-                  config:
-                    map:
+                  myConfig:
+                    myMap:
                       number: 123
                       string: "hi"
-                    list:
+                    myList:
                       - 1
                       - 2
                 stringData: |
@@ -382,6 +384,25 @@ properties:
              `subPath`](https://kubernetes.io/docs/concepts/storage/volumes/#secret)
              as is required to avoid replacing the content of the entire
              directory we mount in.
+        patternProperties:
+          ".*":
+            type: object
+            required: [mountPath]
+            oneOf:
+              - required: [data]
+              - required: [stringData]
+              - required: [binaryData]
+            properties:
+              mountPath:
+                type: string
+              data:
+                type: object
+              stringData:
+                type: string
+              binaryData:
+                type: string
+              mode:
+                type: number
       baseUrl:
         type: string
         description: |
