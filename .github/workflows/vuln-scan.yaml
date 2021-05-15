@@ -191,9 +191,10 @@ jobs:
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
           author: jupyterhub vuln-scan bot <noreply@github.com>
-          reviewers: "consideratio"
-          branch: "vuln-scan-${{ matrix.image_ref }}"
-          title: "Vulnerability patch in ${{ matrix.image_ref }}"
+          reviewers: consideratio
+          branch: vuln-scan-${{ matrix.image_ref }}
+          title: Vulnerability patch in ${{ matrix.image_ref }}
+          labels: image:rebuild-to-patch-vuln
           body: |
             A rebuild of `${{ steps.image.outputs.name }}` has been found to influence the detected vulnerabilities! This PR will trigger a rebuild because it has updated a comment in the Dockerfile.
 
