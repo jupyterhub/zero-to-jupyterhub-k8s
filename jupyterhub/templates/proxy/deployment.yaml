@@ -116,7 +116,9 @@ spec:
                   #       lookup function on the user managed k8s Secret.
                   name: {{ include "jupyterhub.hub.fullname" . }}
                   key: hub.config.ConfigurableHTTPProxy.auth_token
-            {{- include "jupyterhub.extraEnv" .Values.proxy.chp.extraEnv | nindent 12 }}
+            {{- with .Values.proxy.chp.extraEnv }}
+            {{- include "jupyterhub.extraEnv" . | nindent 12 }}
+            {{- end }}
           {{- with .Values.proxy.chp.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}

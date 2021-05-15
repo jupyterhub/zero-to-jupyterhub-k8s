@@ -66,7 +66,9 @@ spec:
             # We need this to get logs immediately
             - name: PYTHONUNBUFFERED
               value: "True"
-            {{- include "jupyterhub.extraEnv" .Values.proxy.traefik.extraEnv | nindent 12 }}
+            {{- with .Values.proxy.traefik.extraEnv }}
+            {{- include "jupyterhub.extraEnv" . | nindent 12 }}
+            {{- end }}
           volumeMounts:
             - name: certificates
               mountPath: /etc/acme

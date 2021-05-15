@@ -127,7 +127,6 @@ hub:
   services:
     tests:
       apiToken: mocked-api-token
-  imagePullPolicy: Always
   pdb:
     enabled: true
     maxUnavailable: 1
@@ -176,6 +175,8 @@ proxy:
         memory: 512Mi
     defaultTarget: http://dummy.local/hello
     errorTarget: http://dummy.local/error
+    extraEnv:
+      MOCK_ENV: mock
     nodeSelector:
       node-type: mock
     tolerations:
@@ -239,8 +240,6 @@ proxy:
         memory: 1Gi
   labels:
     mock-proxy-label: mock
-  nodeSelector:
-    mock-proxy-node-selector: mock
   https:
     enabled: true
     type: letsencrypt
@@ -367,11 +366,11 @@ singleuser:
       storageAccessModes: [ReadWriteOnce]
   startTimeout: 300
   cpu:
-    guarantees: 1G
-    limits: 5
+    guarantee: 0.2
+    limit: 4
   memory:
-    guarantees: 1G
-    limits:
+    guarantee: 1G
+    limit: 8G
   extraResource:
     guarantees:
       mock: 3
@@ -434,8 +433,6 @@ prePuller:
       effect: NoSchedule
   hook:
     enabled: true
-    extraEnv:
-      MOCK_ENV: mock
     nodeSelector:
       node-type: mock
     tolerations:

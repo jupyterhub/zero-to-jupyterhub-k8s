@@ -13,6 +13,7 @@
 #
 $schema": http://json-schema.org/draft-07/schema#
 type: object
+additionalProperties: false
 required:
   - imagePullSecrets
   - hub
@@ -85,6 +86,7 @@ properties:
         create:
           const: true
     then:
+      additionalProperties: false
       required: [registry, username, password]
       description: |
         This is configuration to create a k8s Secret resource of `type:
@@ -194,10 +196,12 @@ properties:
 
   hub:
     type: object
+    additionalProperties: false
     required: [baseUrl]
     properties:
       config:
         type: object
+        additionalProperties: true
         description: |
           JupyterHub and its components (authenticators, spawners, etc), are
           Python classes that expose its configuration through
@@ -256,6 +260,7 @@ properties:
           ```
       extraFiles: &extraFiles
         type: object
+        additionalProperties: false
         description: |
           A dictionary with extra files to be injected into the pod's container
           on startup. This can for example be used to inject: configuration
@@ -387,6 +392,7 @@ properties:
         patternProperties:
           ".*":
             type: object
+            additionalProperties: false
             required: [mountPath]
             oneOf:
               - required: [data]
@@ -397,6 +403,7 @@ properties:
                 type: string
               data:
                 type: object
+                additionalProperties: true
               stringData:
                 type: string
               binaryData:
@@ -499,6 +506,7 @@ properties:
           ```
       image: &image-spec
         type: object
+        additionalProperties: false
         required: [name, tag]
         description: |
           Set custom image name, tag, pullPolicy, or pullSecrets for the pod.
@@ -559,6 +567,7 @@ properties:
               ```
       networkPolicy: &networkPolicy-spec
         type: object
+        additionalProperties: false
         description: |
           This configuration regards the creation and configuration of a k8s
           _NetworkPolicy resource_.
@@ -607,6 +616,7 @@ properties:
               number, not a k8s Service's port name or number.
       db:
         type: object
+        additionalProperties: false
         properties:
           type:
             enum: [sqlite-pvc, sqlite-memory, mysql, postgres]
@@ -672,12 +682,14 @@ properties:
                  tables in the database specified.
           pvc:
             type: object
+            additionalProperties: false
             required: [storage]
             description: |
               Customize the Persistent Volume Claim used when `hub.db.type` is `sqlite-pvc`.
             properties:
               annotations:
                 type: object
+                additionalProperties: true
                 description: |
                   Annotations to apply to the PVC containing the sqlite database.
 
@@ -686,6 +698,7 @@ properties:
                   for more details about annotations.
               selector:
                 type: object
+                additionalProperties: true
                 description: |
                   Label selectors to set for the PVC containing the sqlite database.
 
@@ -739,6 +752,7 @@ properties:
               Password for the database when `hub.db.type` is mysql or postgres.
       labels:
         type: object
+        additionalProperties: true
         description: |
           Extra labels to add to the hub pod.
 
@@ -761,6 +775,7 @@ properties:
           ```
       extraEnv:
         type: object
+        additionalProperties: true
         description: |
           Extra environment variables that should be set for the hub pod.
 
@@ -799,6 +814,7 @@ properties:
           specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core).
       extraConfig:
         type: object
+        additionalProperties: true
         description: |
           Arbitrary extra python based configuration that should be in `jupyterhub_config.py`.
 
@@ -856,6 +872,7 @@ properties:
           default hub image.
       service:
         type: object
+        additionalProperties: false
         description: |
           Object to configure the service the JupyterHub will be exposed on by the Kubernetes server.
         properties:
@@ -869,6 +886,7 @@ properties:
               to learn more about service types.
           ports:
             type: object
+            additionalProperties: false
             description: |
               Object to configure the ports the hub service will be deployed on.
             properties:
@@ -879,6 +897,7 @@ properties:
                   The nodePort to deploy the hub service on.
           annotations:
             type: object
+            additionalProperties: true
             description: |
               Kubernetes annotations to apply to the hub service.
           extraPorts:
@@ -896,6 +915,7 @@ properties:
 
       pdb: &pdb-spec
         type: object
+        additionalProperties: false
         description: |
           Configure a PodDisruptionBudget for this Deployment.
 
@@ -949,6 +969,7 @@ properties:
           ```
       nodeSelector: &nodeSelector-spec
         type: object
+        additionalProperties: true
         description: |
           An object with key value pairs representing labels. K8s Nodes are
           required to have match all these labels for this Pod to scheduled on
@@ -989,6 +1010,7 @@ properties:
         description: *jupyterhub-native-config-description
       annotations:
         type: object
+        additionalProperties: true
         description: |
           K8s annotations for the hub pod.
       authenticatePrometheus:
@@ -1002,13 +1024,17 @@ properties:
         description: *jupyterhub-native-config-description
       containerSecurityContext: &containerSecurityContext-spec
         type: object
+        additionalProperties: true
         description: |
           A k8s native specification of the container's security context, see [the
           documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#securitycontext-v1-core)
           for details.
       deploymentStrategy:
         type: object
+        additionalProperties: false
         properties:
+          rollingUpdate:
+            type: [string, "null"]
           type:
             type: [string, "null"]
             description: |
@@ -1016,6 +1042,7 @@ properties:
               default to using a deployment strategy of Recreate.
       extraConfigMap:
         type: object
+        additionalProperties: true
         deprecated: true
         description: |
           Deprecated since chart version 0.8. Use [`custom`](schema_custom)
@@ -1034,6 +1061,7 @@ properties:
           Additional volumes for the Pod. Use a k8s native syntax.
       livenessProbe: &probe-spec
         type: object
+        additionalProperties: true
         required: [enabled]
         if:
           properties:
@@ -1057,11 +1085,13 @@ properties:
         description: *jupyterhub-native-config-description
       resources: &resources-spec
         type: object
+        additionalProperties: true
         description: |
           A k8s native specification of resources, see [the
           documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#resourcerequirements-v1-core).
       services:
         type: object
+        additionalProperties: true
         description: |
           You can refer to the [JupyterHub
           documentation](https://jupyterhub.readthedocs.io/en/stable/api/app.html)
@@ -1078,13 +1108,16 @@ properties:
         description: *jupyterhub-native-config-description
       templateVars:
         type: object
+        additionalProperties: false
         description: *jupyterhub-native-config-description
 
   proxy:
     type: object
+    additionalProperties: false
     properties:
       chp:
         type: object
+        additionalProperties: false
         description: |
           Configure the configurable-http-proxy (chp) pod managed by jupyterhub to route traffic
           both to itself and to user pods.
@@ -1112,6 +1145,7 @@ properties:
               override the default flag values as well.
           extraEnv:
             type: object
+            additionalProperties: true
             description: |
               Extra environment variables that should be set for the chp pod.
 
@@ -1200,6 +1234,7 @@ properties:
           it to something else, or user data can be compromised.
       service:
         type: object
+        additionalProperties: false
         description: |
           Configuration of the k8s Service `proxy-public` which either will
           point to the `autohttps` pod running Traefik for TLS termination, or
@@ -1216,6 +1251,7 @@ properties:
               Default `LoadBalancer`. See `hub.service.type` for supported values.
           labels:
             type: object
+            additionalProperties: true
             description: |
               Extra labels to add to the proxy service.
 
@@ -1223,6 +1259,7 @@ properties:
               to learn more about labels.
           annotations:
             type: object
+            additionalProperties: true
             description: |
               Annotations to apply to the service that is exposing the proxy.
 
@@ -1231,6 +1268,7 @@ properties:
               for more details about annotations.
           nodePorts:
             type: object
+            additionalProperties: false
             description: |
               Object to set NodePorts to expose the service on for http and https.
 
@@ -1281,6 +1319,7 @@ properties:
               Defaults to allowing everyone to access it.
       https:
         type: object
+        additionalProperties: false
         description: |
           Object for customizing the settings for HTTPS used by the JupyterHub's proxy.
           For more information on configuring HTTPS for your JupyterHub, see the [HTTPS section in our security guide](https)
@@ -1297,6 +1336,7 @@ properties:
               Defaults to `letsencrypt`.
           letsencrypt:
             type: object
+            additionalProperties: false
             properties:
               contactEmail:
                 type: [string, "null"]
@@ -1313,6 +1353,7 @@ properties:
                   Let's Encrypt production: acmeServer: https://acme-v02.api.letsencrypt.org/directory
           manual:
             type: object
+            additionalProperties: false
             description: |
               Object for providing own certificates for manual HTTPS configuration. To be provided when setting `https.type` to `manual`.
               See [Set up manual HTTPS](setup-manual-https)
@@ -1343,6 +1384,7 @@ properties:
                   ```
           secret:
             type: object
+            additionalProperties: false
             description: |
               Secret to be provided when setting `https.type` to `secret`.
             properties:
@@ -1372,11 +1414,13 @@ properties:
               ```
       traefik:
         type: object
+        additionalProperties: false
         description: |
           Configure the traefik proxy used to terminate TLS when 'autohttps' is enabled
         properties:
           labels:
             type: object
+            additionalProperties: true
             description: |
               Extra labels to add to the traefik pod.
 
@@ -1385,6 +1429,7 @@ properties:
           networkPolicy: *networkPolicy-spec
           extraEnv:
             type: object
+            additionalProperties: true
             description: |
               Extra environment variables that should be set for the traefik pod.
 
@@ -1425,6 +1470,7 @@ properties:
           containerSecurityContext: *containerSecurityContext-spec
           extraDynamicConfig:
             type: object
+            additionalProperties: false
             description: |
               This refers to traefik's post-startup configuration.
 
@@ -1440,6 +1486,7 @@ properties:
               that you would like to expose, formatted in a k8s native way.
           extraStaticConfig:
             type: object
+            additionalProperties: false
             description: |
               This refers to traefik's startup configuration.
 
@@ -1452,6 +1499,7 @@ properties:
           extraVolumeMounts: *extraVolumeMounts-spec
           hsts:
             type: object
+            additionalProperties: false
             required: [includeSubdomains, maxAge, preload]
             description: |
               This section regards a HTTP Strict-Transport-Security (HSTS)
@@ -1476,6 +1524,7 @@ properties:
           resources: *resources-spec
       labels:
         type: object
+        additionalProperties: true
         description: |
           K8s labels for the proxy pod.
 
@@ -1485,6 +1534,7 @@ properties:
           ```
       annotations:
         type: object
+        additionalProperties: true
         description: |
           K8s annotations for the proxy pod.
 
@@ -1494,6 +1544,7 @@ properties:
           ```
       deploymentStrategy:
         type: object
+        additionalProperties: false
         properties:
           rollingUpdate:
             type: [string, "null"]
@@ -1508,6 +1559,7 @@ properties:
               Recreate instead of RollingUpdate.
       secretSync:
         type: object
+        additionalProperties: false
         description: |
           This configuration section refers to configuration of the sidecar
           container in the autohttps pod running next to its traefik container
@@ -1524,6 +1576,7 @@ properties:
 
   singleuser:
     type: object
+    additionalProperties: false
     description: |
       Options for customizing the environment that is provided to the users after they log in.
     properties:
@@ -1536,6 +1589,7 @@ properties:
           for more information.
       cpu:
         type: object
+        additionalProperties: false
         description: |
           Set CPU limits & guarantees that are enforced for each user.
 
@@ -1548,6 +1602,7 @@ properties:
             type: [number, "null"]
       memory:
         type: object
+        additionalProperties: false
         description: |
           Set Memory limits & guarantees that are enforced for each user.
 
@@ -1604,6 +1659,7 @@ properties:
       extraFiles: *extraFiles
       extraEnv:
         type: object
+        additionalProperties: true
         description: |
           Extra environment variables that should be set for the user pods.
 
@@ -1643,6 +1699,7 @@ properties:
       extraTolerations: *tolerations-spec
       extraNodeAffinity:
         type: object
+        additionalProperties: false
         description: |
           Affinities describe where pods prefer or require to be scheduled, they
           may prefer or require a node where they are to be scheduled to have a
@@ -1668,6 +1725,7 @@ properties:
               objects.
       extraPodAffinity:
         type: object
+        additionalProperties: false
         description: |
           See the description of `singleuser.extraNodeAffinity`.
         properties:
@@ -1685,6 +1743,7 @@ properties:
               objects.
       extraPodAntiAffinity:
         type: object
+        additionalProperties: false
         description: |
           See the description of `singleuser.extraNodeAffinity`.
         properties:
@@ -1708,6 +1767,7 @@ properties:
             blockWithIptables:
               const: true
         then:
+          additionalProperties: false
           description: |
             Please refer to dedicated section in [the Helm chart
             documentation](block-metadata-iptables) for more information about
@@ -1729,35 +1789,43 @@ properties:
         description: *kubespawner-native-config-description
       extraAnnotations:
         type: object
+        additionalProperties: true
         description: *kubespawner-native-config-description
       extraContainers:
         type: array
         description: *kubespawner-native-config-description
       extraLabels:
         type: object
+        additionalProperties: true
         description: *kubespawner-native-config-description
       extraPodConfig:
         type: object
+        additionalProperties: true
         description: *kubespawner-native-config-description
       extraResource:
         type: object
+        additionalProperties: false
         properties:
           # FIXME: name mismatch, named extra_resource_guarantees in kubespawner
           guarantees:
             type: object
+            additionalProperties: true
             description: *kubespawner-native-config-description
           # FIXME: name mismatch, named extra_resource_limits in kubespawner
           limits:
             type: object
+            additionalProperties: true
             description: *kubespawner-native-config-description
       fsGid:
         type: [integer, "null"]
         description: *kubespawner-native-config-description
       lifecycleHooks:
         type: object
+        additionalProperties: false
         description: *kubespawner-native-config-description
       networkTools:
         type: object
+        additionalProperties: false
         description: |
           This configuration section refers to configuration of a conditionally
           created initContainer for the user pods with a purpose to block a
@@ -1777,6 +1845,7 @@ properties:
         description: *kubespawner-native-config-description
       storage:
         type: object
+        additionalProperties: false
         required: [type, homeMountPath]
         description: |
           This section configures KubeSpawner directly to some extent but also
@@ -1793,6 +1862,7 @@ properties:
               for more information.
           dynamic:
             type: object
+            additionalProperties: false
             properties:
               pvcNameTemplate:
                 type: [string, "null"]
@@ -1826,6 +1896,7 @@ properties:
                   name to reference from the containers volumeMounts section.
           extraLabels:
             type: object
+            additionalProperties: true
             description: |
               Configures `KubeSpawner.storage_extra_labels`. Note that these
               labels are set on the PVC during creation only and won't be
@@ -1839,6 +1910,7 @@ properties:
               should be mounted.
           static:
             type: object
+            additionalProperties: false
             properties:
               pvcName:
                 type: [string, "null"]
@@ -1871,12 +1943,14 @@ properties:
 
   scheduling:
     type: object
+    additionalProperties: false
     description: |
       Objects for customizing the scheduling of various pods on the nodes and
       related labels.
     properties:
       userScheduler:
         type: object
+        additionalProperties: false
         required: [enabled, plugins, logLevel]
         description: |
           The user scheduler is making sure that user pods are scheduled
@@ -1903,6 +1977,7 @@ properties:
               kube-scheduler binary running within the user-scheduler pod.
           plugins:
             type: object
+            additionalProperties: false
             description: |
               These plugins refers to kube-scheduler plugins as documented
               [here](https://kubernetes.io/docs/reference/scheduling/config/).
@@ -1913,11 +1988,13 @@ properties:
             properties:
               score:
                 type: object
+                additionalProperties: false
                 properties:
                   disabled:
                     type: array
                     items:
                       type: object
+                      additionalProperties: false
                       properties:
                         name:
                           type: string
@@ -1925,6 +2002,7 @@ properties:
                     type: array
                     items:
                       type: object
+                      additionalProperties: false
                       properties:
                         name:
                           type: string
@@ -1933,6 +2011,7 @@ properties:
           resources: *resources-spec
       podPriority:
         type: object
+        additionalProperties: false
         description: |
           Pod Priority is used to allow real users evict placeholder pods that
           in turn triggers a scale up by a cluster autoscaler. So, enabling this
@@ -1993,6 +2072,7 @@ properties:
               The actual value for the user-placeholder pods' priority.
       userPlaceholder:
         type: object
+        additionalProperties: false
         description: |
           User placeholders simulate users but will thanks to PodPriority be
           evicted by the cluster autoscaler if a real user shows up. In this way
@@ -2016,12 +2096,14 @@ properties:
               How many placeholder pods would you like to have?
           resources:
             type: object
+            additionalProperties: true
             description: |
               Unless specified here, the placeholder pods will request the same
               resources specified for the real singleuser pods.
           containerSecurityContext: *containerSecurityContext-spec
       corePods:
         type: object
+        additionalProperties: false
         description: |
           These settings influence the core pods like the hub, proxy and
           user-scheduler pods.
@@ -2045,6 +2127,7 @@ properties:
           tolerations: *tolerations-spec
           nodeAffinity:
             type: object
+            additionalProperties: false
             description: |
               Where should pods be scheduled? Perhaps on nodes with a certain
               label is preferred or even required?
@@ -2059,6 +2142,7 @@ properties:
                   ```
       userPods:
         type: object
+        additionalProperties: false
         description: |
           These settings influence all pods considered user pods, namely:
 
@@ -2079,6 +2163,7 @@ properties:
           tolerations: *tolerations-spec
           nodeAffinity:
             type: object
+            additionalProperties: false
             description: |
               Where should pods be scheduled? Perhaps on nodes with a certain
               label is preferred or even required?
@@ -2094,6 +2179,7 @@ properties:
 
   ingress:
     type: object
+    additionalProperties: false
     required: [enabled]
     properties:
       enabled:
@@ -2106,6 +2192,7 @@ properties:
           for more details.
       annotations:
         type: object
+        additionalProperties: true
         description: |
           Annotations to apply to the Ingress resource.
 
@@ -2133,15 +2220,18 @@ properties:
 
   prePuller:
     type: object
+    additionalProperties: false
     required: [hook, continuous]
     properties:
       annotations:
         type: object
+        additionalProperties: true
         description: |
           Annotations to apply to the hook and continous image puller pods. One example use case is to
           disable istio sidecars which could interfere with the image pulling.
       resources:
         type: object
+        additionalProperties: true
         description: |
           These are standard Kubernetes resources with requests and limits for
           cpu and memory. They will be used on the containers in the pods
@@ -2153,6 +2243,7 @@ properties:
       extraTolerations: *tolerations-spec
       hook:
         type: object
+        additionalProperties: false
         required: [enabled]
         description: |
           See the [*optimization
@@ -2191,6 +2282,7 @@ properties:
           resources: *resources-spec
       continuous:
         type: object
+        additionalProperties: false
         required: [enabled]
         description: |
           See the [*optimization
@@ -2218,6 +2310,7 @@ properties:
           user arriving wait for a single image to be pulled on arrival.
       extraImages:
         type: object
+        additionalProperties: false
         description: |
           See the [*optimization section*](images-that-will-be-pulled) for more
           details.
@@ -2229,9 +2322,20 @@ properties:
                 name: jupyter/all-spark-notebook
                 tag: 2343e33dec46
           ```
+        patternProperties:
+          ".*":
+            type: object
+            additionalProperties: false
+            required: [name, tag]
+            properties:
+              name:
+                type: string
+              tag:
+                type: string
       containerSecurityContext: *containerSecurityContext-spec
       pause:
         type: object
+        additionalProperties: false
         description: |
           The image-puller pods rely on initContainer to pull all images, and
           their actual container when they are done is just running a `pause`
@@ -2242,6 +2346,7 @@ properties:
 
   custom:
     type: object
+    additionalProperties: true
     description: |
       Additional values to pass to the Hub.
       JupyterHub will not itself look at these,
@@ -2259,6 +2364,7 @@ properties:
 
   cull:
     type: object
+    additionalProperties: false
     required: [enabled]
     description: |
       The
@@ -2290,6 +2396,7 @@ properties:
 
   debug:
     type: object
+    additionalProperties: false
     required: [enabled]
     properties:
       enabled:
@@ -2299,6 +2406,7 @@ properties:
 
   rbac:
     type: object
+    additionalProperties: false
     required: [enabled]
     properties:
       enabled:
@@ -2309,6 +2417,7 @@ properties:
 
   global:
     type: object
+    additionalProperties: false
     properties:
       safeToShowValues:
         type: boolean
