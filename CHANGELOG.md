@@ -2,13 +2,20 @@
 
 Here you can find upgrade changes in between releases and upgrade instructions.
 
-## [12.0] - 2021-05-FIXME
+## [1.0]
 
-### [12.0.0]
+### [1.0.0] - 2021-05-FIXME
 
-FIXME: summarize release
+FIXME: Summary
 
-- note 12.0.0 bump from 0.11.1
+- note 1.0.0 bump from 0.11.1
+- arm64
+- pullOnlyOnChanges
+- extraFiles
+- fullnameOverride
+- seeding of secrets
+
+  NOTE about the need to do one upgrade before removing secrets.
 
 #### Security announcement
 
@@ -18,19 +25,75 @@ FIXME: describe AKS cluster setup documentation issue.
 
 - **Kubernetes 1.17+ and Helm 3.1+ are now required**
 
-  Helm 3 (3.1+) is now required as Helm 2 reached end of life last year and we
+  Helm 3 (3.5+) is now required. Helm 2 reached end of life last year and we
   have started relying on Helm 3 specific features.
 
-  Kubernetes 1.17+ is now required as it helped us avoid maintaining two
-  separate sets of implementations for the the user-scheduler.
+  Kubernetes 1.17+ is now required. It helped us avoid maintaining two separate
+  sets of implementations for the the user-scheduler.
+
+- **Schema validation of chart config** ([#2033](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2033), [#2200](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2200))
+
+  The Helm chart now bundles with a `values.schema.json` file that will validate
+  all use of the Helm chart during template rendering. If the Helm chart's
+  passed values doesn't comply with the schema, then `helm` will error before
+  the k8s api-server has become involved and anything has changed in the k8s
+  cluster.
+
+  The most common validation errors are:
+
+  - _Unrecognized config values_
+
+    For example if you have misspelled something.
+
+    Note that if you want to pass your custom values for inspection by custom
+    logic in the hub pod, then you should pass these values via the `custom`
+    config section where anything will be accepted.
+
+  - _Recognized config values with the wrong type_
+
+    For example if you have passed a numerical value to a configuration that
+    expected a string.
+
+- default requests:
+  https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2034
+
+  prePuller.resources (0, 0)
+  prePuller.hook.resources (0, 0)
+  scheduling.userScheduler.resources (50m, 256Mi)
+  hub.resources (200m, 512Mi)
+  proxy.resources (200m, 512Mi)
+
+- **KubeSpawner and deletion of PVCs** ([jupyterhub#3337](https://github.com/jupyterhub/jupyterhub/pull/3337), [kubespawner#475](https://github.com/jupyterhub/kubespawner/pull/475))
+
+  Deleting a user in JupyterHub's admin interface (/hub/admin) or removing a
+  named server will now lead to the deletion of the user's or named server's
+  dynamically created PVC resource if there was one.
+
+  To opt out of this behavior and retain the current behavior where dynamically
+  created PVC resources will remain, configure KubeSpawner's `delete_pvc`
+  configuration to be false.
+
+  ```yaml
+  hub:
+    config:
+      KubeSpawner:
+        delete_pvc: false
+  ```
+
+  Note that this feature relies on both KubeSpawner 1.0.0+ and JupyterHub 1.4.1+
+  which is now used as part of this release.
+
+- **hub.existingSecret is reworked** ([#2042](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2042))
+
+  See [the documentation](http://z2jh.jupyter.org/en/latest/resources/reference.html#hub-existingsecret) and [pull request #2042](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2042) for more details.
 
 #### Notable dependencies updated
 
 | Dependency                                                                       | Version in 0.11.0 | Version in 12.0.0 | Changelog link                                                                              | Note                               |
 | -------------------------------------------------------------------------------- | ----------------- | ----------------- | ------------------------------------------------------------------------------------------- | ---------------------------------- |
-| [jupyterhub](https://github.com/jupyterhub/jupyterhub)                           | 1.3.0             | 1.4.0             | [Changelog](https://jupyterhub.readthedocs.io/en/stable/changelog.html)                     | Run in the `hub` pod               |
-| [kubespawner](https://github.com/jupyterhub/kubespawner)                         | 0.15.0            | 0.16.1            | [Changelog](https://jupyterhub-kubespawner.readthedocs.io/en/latest/changelog.html)         | Run in the `hub` pod               |
-| [oauthenticator](https://github.com/jupyterhub/oauthenticator)                   | 0.12.3            | 0.14.0            | [Changelog](https://oauthenticator.readthedocs.io/en/latest/changelog.html)                 | Run in the `hub` pod               |
+| [jupyterhub](https://github.com/jupyterhub/jupyterhub)                           | 1.3.0             | 1.4.1             | [Changelog](https://jupyterhub.readthedocs.io/en/stable/changelog.html)                     | Run in the `hub` pod               |
+| [kubespawner](https://github.com/jupyterhub/kubespawner)                         | 0.15.0            | 1.0.0             | [Changelog](https://jupyterhub-kubespawner.readthedocs.io/en/latest/changelog.html)         | Run in the `hub` pod               |
+| [oauthenticator](https://github.com/jupyterhub/oauthenticator)                   | 0.12.3            | 14.0.0            | [Changelog](https://oauthenticator.readthedocs.io/en/latest/changelog.html)                 | Run in the `hub` pod               |
 | [ldapauthenticator](https://github.com/jupyterhub/ldapauthenticator)             | 1.3.2             | 1.3.2             | [Changelog](https://github.com/jupyterhub/ldapauthenticator/blob/master/CHANGELOG.md)       | Run in the `hub` pod               |
 | [ltiauthenticator](https://github.com/jupyterhub/ltiauthenticator)               | 1.0.0             | 1.0.0             | [Changelog](https://github.com/jupyterhub/ltiauthenticator/blob/master/CHANGELOG.md)        | Run in the `hub` pod               |
 | [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 0.0.6             | 0.0.7             | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/master/CHANGELOG.md)     | Run in the `hub` pod               |
