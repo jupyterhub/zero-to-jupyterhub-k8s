@@ -849,8 +849,9 @@ properties:
       uid:
         type: [integer, "null"]
         minimum: 0
+        deprecated: true
         description: |
-          DEPRECATED: Use hub.containerSecurityContext instead.
+          DEPRECATED: Use [`hub.containerSecurityContext`](schema_hub.containerSecurityContext) instead.
 
           The UID the hub process should be running as.
 
@@ -1110,6 +1111,12 @@ properties:
         type: object
         additionalProperties: false
         description: *jupyterhub-native-config-description
+      imagePullSecret: &deprecated-imagePullSecret
+        type: object
+        additionalProperties: true
+        deprecated: true
+        description: |
+          DEPRECATED: Use [`imagePullSecret`](schema_imagePullSecret) instead.
 
   proxy:
     type: object
@@ -1573,6 +1580,12 @@ properties:
           containerSecurityContext: *containerSecurityContext-spec
           image: *image-spec
           resources: *resources-spec
+      pdb:
+        type: object
+        additionalProperties: true
+        deprecated: true
+        description: |
+          DEPRECATED: Use [`proxy.chp.pdb`](schema_proxy.chp.pdb) instead.
 
   singleuser:
     type: object
@@ -1940,6 +1953,7 @@ properties:
           sudo rights for some of your users. This can be done by starting up as
           root, enabling it from the container in a startup script, and then
           transitioning to the normal user.
+      imagePullSecret: *deprecated-imagePullSecret
 
   scheduling:
     type: object
@@ -2417,7 +2431,7 @@ properties:
 
   global:
     type: object
-    additionalProperties: false
+    additionalProperties: true
     properties:
       safeToShowValues:
         type: boolean
@@ -2425,3 +2439,10 @@ properties:
           A flag that should only be set to true temporarily when experiencing a
           deprecation message that contain censored content that you wish to
           reveal.
+
+  auth:
+    type: object
+    additionalProperties: true
+    deprecated: true
+    description: |
+      DEPRECATED: The Authenticator should be configured using [`hub.config`](schema_hub.config) instead.
