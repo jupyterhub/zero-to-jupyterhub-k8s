@@ -170,6 +170,8 @@ scheduling:
     # FIXME: Tweak this to include scoring, but exclude hex dumps. 10 includes
     #        hex dumps. 4 does not include scoring. Trying with 6...
     logLevel: 6
+  podPriority:
+    enabled: true
 
 debug:
   enabled: true
