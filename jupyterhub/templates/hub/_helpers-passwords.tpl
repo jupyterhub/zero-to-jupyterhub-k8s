@@ -4,7 +4,10 @@
 
     proxy.secretToken       / hub.config.ConfigurableHTTPProxy.auth_token
     hub.cookieSecret        / hub.config.JupyterHub.cookie_secret
-    auth.state.cryptoKey    / hub.config.CryptKeeper.keys
+    auth.state.cryptoKey*   / hub.config.CryptKeeper.keys
+
+    *Note that the entire auth section is deprecated and users
+    are forced through "fail" in NOTES.txt to migrate to hub.config.
 
     Note that lookup logic returns falsy value when run with
     `helm diff upgrade`, so it is a bit troublesome to test.
