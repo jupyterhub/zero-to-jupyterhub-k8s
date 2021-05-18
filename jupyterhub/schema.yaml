@@ -851,7 +851,9 @@ properties:
         minimum: 0
         deprecated: true
         description: |
-          DEPRECATED: Use [`hub.containerSecurityContext`](schema_hub.containerSecurityContext) instead.
+          Deprecated since chart version 0.11.0. Use
+          [`hub.containerSecurityContext`](schema_hub.containerSecurityContext)
+          instead.
 
           The UID the hub process should be running as.
 
@@ -1564,6 +1566,21 @@ properties:
               both receive updates from JupyterHub regarding how it should route
               traffic. Due to this we default to using a deployment strategy of
               Recreate instead of RollingUpdate.
+      containerSecurityContext:
+        type: object
+        additionalProperties: true
+        deprecated: true
+        description: |
+          Deprecated since chart version 0.11.0. Use
+          [`proxy.chp.containerSecurityContext`](schema_proxy.chp.containerSecurityContext)
+          instead.
+      networkPolicy:
+        type: object
+        additionalProperties: true
+        deprecated: true
+        description: |
+          Deprecated since chart version 0.11.0. Use
+          [`proxy.chp.networkPolicy`](schema_proxy.chp.networkPolicy) instead.
       secretSync:
         type: object
         additionalProperties: false
