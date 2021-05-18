@@ -1791,22 +1791,24 @@ properties:
               objects.
       cloudMetadata:
         type: object
-        required: [blockWithIptables]
-        if:
-          properties:
-            blockWithIptables:
-              const: true
-        then:
-          additionalProperties: false
-          description: |
-            Please refer to dedicated section in [the Helm chart
-            documentation](block-metadata-iptables) for more information about
-            this.
-          properties:
-            blockWithIptables:
-              type: boolean
-            ip:
-              type: string
+        additionalProperties: false
+        description: |
+          Please refer to dedicated section in [the Helm chart
+          documentation](block-metadata-iptables) for more information about
+          this.
+        properties:
+          blockWithIptables:
+            type: boolean
+          ip:
+            type: string
+          enabled:
+            type: boolean
+            deprecated: true
+            description: |
+              Deprecated since chart version 0.11.0. Use
+              [`singleuser.cloudMetadata.blockWithIptables`](schema_singleuser.cloudMetadata.blockWithIptables)
+              instead.
+
       cmd:
         type: [array, string, "null"]
         description: *kubespawner-native-config-description
