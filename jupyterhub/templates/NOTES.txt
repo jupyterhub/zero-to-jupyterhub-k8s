@@ -80,12 +80,8 @@ WARNING: Configuring proxy.https without setting proxy.https.enabled to true is 
   Deprecation messages that can be removed in 2.0.0
 */}}
 
-{{- if .Values.hub.extraConfigMap }}{{ println }}
-DEPRECATION: hub.extraConfigMap is deprecated in jupyterhub chart 0.8.
-Use top-level `custom` instead:
-
-custom:
-{{- (merge dict .Values.custom .Values.hub.extraConfigMap) | toYaml | nindent 2 }}
+{{- if hasKey .Values.hub "extraConfigMap" }}
+{{- fail "\n\nHARD DEPRECATION: hub.extraConfigMap has been renamed to custom" }}
 {{- end }}
 
 

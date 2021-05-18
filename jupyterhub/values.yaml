@@ -72,7 +72,6 @@ hub:
   command: []
   args: []
   extraConfig: {}
-  extraConfigMap: {}
   extraFiles: {}
   extraEnv: {}
   extraContainers: []
