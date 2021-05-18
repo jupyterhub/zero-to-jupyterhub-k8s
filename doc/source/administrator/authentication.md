@@ -85,26 +85,39 @@ hub:
 ### [enable_auth_state](https://jupyterhub.readthedocs.io/en/latest/api/auth.html#jupyterhub.auth.Authenticator.enable_auth_state)
 
 If you want JupyterHub to persist often sensitive information received as part
-of logging in, you need to enable it and provide one or more keys for encryption
-and decryption.
-
-The recommended way of doing so for this Helm chart is to configure
-[CryptKeeper](https://github.com/jupyterhub/jupyterhub/blob/master/jupyterhub/crypto.py)
-with keys rather than setting an environment variable.
-
-For more information, see [JupyterHub's own
-documentation](https://jupyterhub.readthedocs.io/en/latest/reference/authenticators.html#authentication-state)
-about authentication state.
+of logging in, you need to enable it.
 
 ```yaml
 hub:
   config:
     Authenticator:
       enable_auth_state: true
+```
+
+For more information about authentication state, see [JupyterHub's own
+documentation](https://jupyterhub.readthedocs.io/en/latest/reference/authenticators.html#authentication-state)
+about authentication state.
+
+````{note}
+The encryption and decryption of auth state requires a cryptographical key.
+
+As of version 1.0.0 this will automatically be generated and there is no need to
+set it manually.
+
+If you wish to reset a generated key, you can use `kubectl edit` on the k8s
+Secret typically named `hub` and remove the `hub.config.CryptKeeper.keys` entry
+in the k8s Secret, then perform a new `helm upgrade`.
+
+To manually set a cryptographical key, you can do it like this.
+
+```yaml
+hub:
+  config:
     CryptKeeper:
       keys:
         - 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 ```
+````
 
 ## Configuring authenticator classes
 
