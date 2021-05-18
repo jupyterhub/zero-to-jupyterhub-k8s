@@ -50,38 +50,13 @@ If you have questions, please:
   2. Ask for help or chat to us on https://discourse.jupyter.org/
   3. If you find a bug please report it at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
 
-{{- if hasKey .Values.singleuser.cloudMetadata "enabled" }}{{ println }}
-DEPRECATION: singleuser.cloudMetadata.enabled is deprecated, instead use singleuser.cloudMetadata.blockWithIptables with the inverted value.
-{{- end }}
 
 
-{{- /* Warn about an attempt to configure HTTPS but not having enabled it. */}}
-{{- if eq .Values.proxy.https.enabled false }}
-{{- if or (not (eq .Values.proxy.https.type "letsencrypt")) (not (eq (.Values.proxy.https.letsencrypt.contactEmail | default "") "")) }}{{ println }}
-WARNING: Configuring proxy.https without setting proxy.https.enabled to true is no longer allowed.
-{{- end }}
-{{- end }}
 
 
-{{- if .Values.proxy.containerSecurityContext }}
-{{- fail "DEPRECATION: proxy.containerSecurityContext has been renamed to proxy.chp.containerSecurityContext" }}
-{{- end }}
-
-
-{{- if .Values.proxy.networkPolicy }}
-{{- fail "DEPRECATION: proxy.networkPolicy has been renamed to proxy.chp.networkPolicy" }}
-{{- end }}
-
-
-{{- if .Values.hub.extraConfigMap }}{{ println }}
-DEPRECATION: hub.extraConfigMap is deprecated in jupyterhub chart 0.8.
-Use top-level `custom` instead:
-
----
-custom:
-{{- (merge dict .Values.custom .Values.hub.extraConfigMap) | toYaml | nindent 2}}
----
-{{- end }}
+{{- /*
+  Warnings for likely misconfiguration
+*/}}
 
 {{- if and (not .Values.scheduling.podPriority.enabled) (and .Values.scheduling.userPlaceholder.enabled .Values.scheduling.userPlaceholder.replicas) }}
 
@@ -91,30 +66,72 @@ resources.
 {{- end }}
 
 
-{{- if hasKey .Values.hub "uid" }}{{ println }}
-DEPRECATION: hub.uid is deprecated in jupyterhub chart 0.9. Set the hub.containerSecurityContext.runAsUser value
-directly instead.
-{{- end }}
-
-
-{{- if hasKey .Values.hub "imagePullSecret" }}
-{{- if .Values.hub.imagePullSecret.enabled }}
-{{ "HARD DEPRECATION: hub.imagePullSecret has renamed to imagePullSecret" | fail }}
+{{- if eq .Values.proxy.https.enabled false }}
+{{- if or (not (eq .Values.proxy.https.type "letsencrypt")) (not (eq (.Values.proxy.https.letsencrypt.contactEmail | default "") "")) }}{{ println }}
+WARNING: Configuring proxy.https without setting proxy.https.enabled to true is no longer allowed.
 {{- end }}
 {{- end }}
 
 
-{{- if hasKey .Values.singleuser "imagePullSecret" }}
-{{- if .Values.singleuser.imagePullSecret.enabled }}
-{{ "HARD DEPRECATION: singleuser.imagePullSecret has renamed to imagePullSecret" | fail }}
+
+
+
+{{- /*
+  Deprecation messages that can be removed in 2.0.0
+*/}}
+
+{{- if .Values.hub.extraConfigMap }}{{ println }}
+DEPRECATION: hub.extraConfigMap is deprecated in jupyterhub chart 0.8.
+Use top-level `custom` instead:
+
+custom:
+{{- (merge dict .Values.custom .Values.hub.extraConfigMap) | toYaml | nindent 2 }}
 {{- end }}
+
+
+{{- if .Values.auth }}
+{{ fail (include "jupyterhub.authDep.remapOldToNew" .) }}
+{{- end }}
+
+
+{{- if .Values.proxy.containerSecurityContext }}
+{{- fail "\n\nHARD DEPRECATION: proxy.containerSecurityContext has been renamed to proxy.chp.containerSecurityContext" }}
 {{- end }}
 
 
 {{- if hasKey .Values.proxy "pdb" }}
-{{ "HARD DEPRECATION: proxy.pdb has renamed to proxy.chp.pdb" | fail }}
+{{ fail "\n\nHARD DEPRECATION: proxy.pdb has renamed to proxy.chp.pdb" }}
 {{- end }}
 
-{{- if .Values.auth }}
-{{ include "jupyterhub.authDep.remapOldToNew" . | fail }}
+
+{{- if .Values.proxy.networkPolicy }}
+{{- fail "\n\nHARD DEPRECATION: proxy.networkPolicy has been renamed to proxy.chp.networkPolicy" }}
 {{- end }}
+
+
+{{- if hasKey .Values.hub "uid" }}
+{{- print "\n\nDEPRECATION: hub.uid is deprecated in jupyterhub chart 0.9. Set the hub.containerSecurityContext.runAsUser value directly instead." }}
+{{- end }}
+
+
+{{- if (.Values.hub | dig "imagePullSecret" "enabled" "") }}
+{{- fail "\n\nHARD DEPRECATION: hub.imagePullSecret has renamed to imagePullSecret" }}
+{{- end }}
+
+
+{{- if (.Values.singleuser | dig "imagePullSecret" "enabled" "") }}
+{{- fail "\n\nHARD DEPRECATION: singleuser.imagePullSecret has renamed to imagePullSecret" }}
+{{- end }}
+
+
+{{- if (.Values.singleuser | dig "cloudMetadata" "enabled" "") }}
+{{- print "\n\nDEPRECATION: singleuser.cloudMetadata.enabled is deprecated, instead use singleuser.cloudMetadata.blockWithIptables with the inverted value." }}
+{{- end }}
+
+
+
+
+
+{{- /*
+  Deprecation messages that can be removed in 3.0.0
+*/}}
