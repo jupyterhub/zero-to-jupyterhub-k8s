@@ -472,6 +472,11 @@ properties:
           ```{note}
           As of version 1.0.0 this will automatically be generated and there is
           no need to set it manually.
+
+          If you wish to reset a generated key, you can use `kubectl edit` on
+          the k8s Secret typically named `hub` and remove the
+          `hub.config.JupyterHub.cookie_secret` entry in the k8s Secret, then
+          perform a new `helm upgrade`.
           ```
 
           A 32-byte cryptographically secure randomly generated string used to sign values of
@@ -939,7 +944,6 @@ properties:
           1. The self managed k8s Secret must mirror the structure in the chart
              managed secret.
           2. [`proxy.secretToken`](schema_proxy.secretToken) (aka.
-             `hub.config.JupyterHub.proxy_auth_token` and
              `hub.config.ConfigurableHTTPProxy.auth_token`) is only read from
              the chart managed k8s Secret.
           ```
@@ -1174,10 +1178,17 @@ properties:
           ```{note}
           As of version 1.0.0 this will automatically be generated and there is
           no need to set it manually.
+
+          If you wish to reset a generated key, you can use `kubectl edit` on
+          the k8s Secret typically named `hub` and remove the
+          `hub.config.ConfigurableHTTPProxy.auth_token` entry in the k8s Secret,
+          then perform a new `helm upgrade`.
           ```
 
-          A 32-byte cryptographically secure randomly generated string used to secure communications
-          between the hub and the configurable-http-proxy.
+          A 32-byte cryptographically secure randomly generated string used to
+          secure communications between the hub pod and the proxy pod running a
+          [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy)
+          instance.
 
           ```sh
           # to generate a value, run
