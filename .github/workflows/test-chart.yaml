@@ -12,7 +12,6 @@ on:
       - "doc/**"
       - "**/test-docs.yaml"
       - "**.md"
-      - "**/schema.yaml"
       - ".github/workflows/*"
       - "!.github/workflows/test-chart.yaml"
   push:
@@ -20,7 +19,6 @@ on:
       - "doc/**"
       - "**/test-docs.yaml"
       - "**.md"
-      - "**/schema.yaml"
       - ".github/workflows/*"
       - "!.github/workflows/test-chart.yaml"
     branches-ignore:
