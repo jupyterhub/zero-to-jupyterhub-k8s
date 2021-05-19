@@ -121,7 +121,7 @@ WARNING: Configuring proxy.https without setting proxy.https.enabled to true is 
 
 
 {{- if (.Values.singleuser | dig "cloudMetadata" "enabled" "") }}
-{{- print "\n\nDEPRECATION: singleuser.cloudMetadata.enabled is deprecated, instead use singleuser.cloudMetadata.blockWithIptables with the inverted value." }}
+{{- fail "\n\nHARD DEPRECATION: singleuser.cloudMetadata.enabled must as of 1.0.0 be configured using singleuser.cloudMetadata.blockWithIptables with the opposite value." }}
 {{- end }}
 
 

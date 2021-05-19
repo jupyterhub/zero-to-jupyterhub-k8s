@@ -377,10 +377,7 @@ set_config_if_not_none(c.Spawner, "default_url", "singleuser.defaultUrl")
 
 cloud_metadata = get_config("singleuser.cloudMetadata", {})
 
-if (
-    cloud_metadata.get("blockWithIptables") == True
-    or cloud_metadata.get("enabled") == False
-):
+if cloud_metadata.get("blockWithIptables") == True:
     # Use iptables to block access to cloud metadata by default
     network_tools_image_name = get_config("singleuser.networkTools.image.name")
     network_tools_image_tag = get_config("singleuser.networkTools.image.tag")
