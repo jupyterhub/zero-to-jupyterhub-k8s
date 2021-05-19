@@ -77,55 +77,64 @@ WARNING: Configuring proxy.https without setting proxy.https.enabled to true is 
 
 
 {{- /*
-  Deprecation messages that can be removed in 2.0.0
+  Deprecation messages that can be removed in 2.0.0 because they have been
+  strictly enforced in 1.0.0.
 */}}
 
+{{- $hard_deprecations := "" }}
+
+
 {{- if hasKey .Values.hub "extraConfigMap" }}
-{{- fail "\n\nHARD DEPRECATION: hub.extraConfigMap has been renamed to custom" }}
+{{- $hard_deprecations = print $hard_deprecations "\n\nHARD DEPRECATION: hub.extraConfigMap has been renamed to custom" }}
 {{- end }}
 
 
 {{- if hasKey .Values "auth" }}
 {{- if .Values.auth }}
-{{- fail (include "jupyterhub.authDep.remapOldToNew" .) }}
+{{- $hard_deprecations = print $hard_deprecations (include "jupyterhub.authDep.remapOldToNew" .) }}
 {{- else }}
-{{- fail "\n\nHARD DEPRECATION: Please remove the empty 'auth' config" }}
+{{- $hard_deprecations = print $hard_deprecations "\n\nHARD DEPRECATION: Please remove the empty 'auth' config" }}
 {{- end }}
 {{- end }}
 
 
 {{- if hasKey .Values.proxy "containerSecurityContext" }}
-{{- fail "\n\nHARD DEPRECATION: proxy.containerSecurityContext has been renamed to proxy.chp.containerSecurityContext" }}
+{{- $hard_deprecations = print $hard_deprecations "\n\nHARD DEPRECATION: proxy.containerSecurityContext has been renamed to proxy.chp.containerSecurityContext" }}
 {{- end }}
 
 
 {{- if hasKey .Values.proxy "pdb" }}
-{{ fail "\n\nHARD DEPRECATION: proxy.pdb has renamed to proxy.chp.pdb" }}
+{{- $hard_deprecations = print $hard_deprecations "\n\nHARD DEPRECATION: proxy.pdb has renamed to proxy.chp.pdb" }}
 {{- end }}
 
 
 {{- if hasKey .Values.proxy "networkPolicy" }}
-{{- fail "\n\nHARD DEPRECATION: proxy.networkPolicy has been renamed to proxy.chp.networkPolicy" }}
+{{- $hard_deprecations = print $hard_deprecations "\n\nHARD DEPRECATION: proxy.networkPolicy has been renamed to proxy.chp.networkPolicy" }}
 {{- end }}
 
 
 {{- if hasKey .Values.hub "uid" }}
-{{- fail "\n\nHARD DEPRECATION: hub.uid must as of 1.0.0 be configured using hub.containerSecurityContext.runAsUser" }}
+{{- $hard_deprecations = print $hard_deprecations "\n\nHARD DEPRECATION: hub.uid must as of 1.0.0 be configured using hub.containerSecurityContext.runAsUser" }}
 {{- end }}
 
 
 {{- if hasKey .Values.hub "imagePullSecret" }}
-{{- fail "\n\nHARD DEPRECATION: hub.imagePullSecret has renamed to imagePullSecret" }}
+{{- $hard_deprecations = print $hard_deprecations "\n\nHARD DEPRECATION: hub.imagePullSecret has renamed to imagePullSecret" }}
 {{- end }}
 
 
 {{- if hasKey .Values.singleuser "imagePullSecret" }}
-{{- fail "\n\nHARD DEPRECATION: singleuser.imagePullSecret has renamed to imagePullSecret" }}
+{{- $hard_deprecations = print $hard_deprecations "\n\nHARD DEPRECATION: singleuser.imagePullSecret has renamed to imagePullSecret" }}
 {{- end }}
 
 
 {{- if hasKey .Values.singleuser.cloudMetadata "enabled" }}
-{{- fail "\n\nHARD DEPRECATION: singleuser.cloudMetadata.enabled must as of 1.0.0 be configured using singleuser.cloudMetadata.blockWithIptables with the opposite value." }}
+{{- $hard_deprecations = print $hard_deprecations "\n\nHARD DEPRECATION: singleuser.cloudMetadata.enabled must as of 1.0.0 be configured using singleuser.cloudMetadata.blockWithIptables with the opposite value." }}
+{{- end }}
+
+
+{{- if $hard_deprecations }}
+{{- fail $hard_deprecations }}
 {{- end }}
 
 
