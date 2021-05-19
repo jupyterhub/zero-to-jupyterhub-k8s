@@ -70,7 +70,7 @@ jobs:
           helm version
 
           # FIXME: six is required by docker 5.0.0 but isn't explicitly required
-          #        https://github.com/docker/docker-py/commit/c8fba210a222d4f7fde90da8f48db1e7faa637ec
+          #        https://github.com/docker/docker-py/issues/2807
           #
           pip install chartpress pyyaml six
           pip list
