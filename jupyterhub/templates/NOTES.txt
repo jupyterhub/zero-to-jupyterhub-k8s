@@ -106,7 +106,7 @@ WARNING: Configuring proxy.https without setting proxy.https.enabled to true is 
 
 
 {{- if hasKey .Values.hub "uid" }}
-{{- print "\n\nDEPRECATION: hub.uid is deprecated in jupyterhub chart 0.9. Set the hub.containerSecurityContext.runAsUser value directly instead." }}
+{{- fail "\n\nHARD DEPRECATION: hub.uid must as of 1.0.0 be configured using hub.containerSecurityContext.runAsUser" }}
 {{- end }}
 
 
