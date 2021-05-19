@@ -203,7 +203,9 @@ ldap.dn.user.useLookupName: LDAPAuthenticator.use_lookup_dn_username
     {{- end }}
 
     {{- /* UPDATE c dict authenticator_class */}}
-    {{- $_ := merge $c (dict "JupyterHub" (dict "authenticator_class" $class_new_entrypoint)) }}
+    {{- if ne $class_new_entrypoint "<no value>" }}
+        {{- $_ := merge $c (dict "JupyterHub" (dict "authenticator_class" $class_new_entrypoint)) }}
+    {{- end }}
 
 {{- /* Output a sensible error message */}}
 
