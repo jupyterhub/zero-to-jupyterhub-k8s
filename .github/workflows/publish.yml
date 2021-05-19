@@ -8,7 +8,17 @@ on:
   pull_request:
     paths-ignore:
       - "doc/**"
+      - "**.md"
+      - ".github/workflows/*"
+      - "!.github/workflows/publish.yaml"
   push:
+    paths-ignore:
+      - "doc/**"
+      - "**.md"
+      - ".github/workflows/*"
+      - "!.github/workflows/publish.yaml"
+    branches-ignore:
+      - "dependabot/**"
 
 jobs:
   # Builds and pushes docker images to DockerHub and package the Helm chart and
