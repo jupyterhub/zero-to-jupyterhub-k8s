@@ -85,12 +85,16 @@ WARNING: Configuring proxy.https without setting proxy.https.enabled to true is 
 {{- end }}
 
 
+{{- if hasKey .Values "auth" }}
 {{- if .Values.auth }}
-{{ fail (include "jupyterhub.authDep.remapOldToNew" .) }}
+{{- fail (include "jupyterhub.authDep.remapOldToNew" .) }}
+{{- else }}
+{{- fail "\n\nHARD DEPRECATION: Please remove the empty 'auth' config" }}
+{{- end }}
 {{- end }}
 
 
-{{- if .Values.proxy.containerSecurityContext }}
+{{- if hasKey .Values.proxy "containerSecurityContext" }}
 {{- fail "\n\nHARD DEPRECATION: proxy.containerSecurityContext has been renamed to proxy.chp.containerSecurityContext" }}
 {{- end }}
 
@@ -100,7 +104,7 @@ WARNING: Configuring proxy.https without setting proxy.https.enabled to true is 
 {{- end }}
 
 
-{{- if .Values.proxy.networkPolicy }}
+{{- if hasKey .Values.proxy "networkPolicy" }}
 {{- fail "\n\nHARD DEPRECATION: proxy.networkPolicy has been renamed to proxy.chp.networkPolicy" }}
 {{- end }}
 
@@ -110,17 +114,17 @@ WARNING: Configuring proxy.https without setting proxy.https.enabled to true is 
 {{- end }}
 
 
-{{- if (.Values.hub | dig "imagePullSecret" "enabled" "") }}
+{{- if hasKey .Values.hub "imagePullSecret" }}
 {{- fail "\n\nHARD DEPRECATION: hub.imagePullSecret has renamed to imagePullSecret" }}
 {{- end }}
 
 
-{{- if (.Values.singleuser | dig "imagePullSecret" "enabled" "") }}
+{{- if hasKey .Values.singleuser "imagePullSecret" }}
 {{- fail "\n\nHARD DEPRECATION: singleuser.imagePullSecret has renamed to imagePullSecret" }}
 {{- end }}
 
 
-{{- if (.Values.singleuser | dig "cloudMetadata" "enabled" "") }}
+{{- if hasKey .Values.singleuser.cloudMetadata "enabled" }}
 {{- fail "\n\nHARD DEPRECATION: singleuser.cloudMetadata.enabled must as of 1.0.0 be configured using singleuser.cloudMetadata.blockWithIptables with the opposite value." }}
 {{- end }}
 
