@@ -93,6 +93,9 @@ spec:
         {{- /* --- Pull default image --- */}}
         - name: image-pull-singleuser
           image: {{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}
+          {{- with .Values.singleuser.image.pullPolicy }}
+          imagePullPolicy: {{ . }}
+          {{- end }}
           command:
             - /bin/sh
             - -c
