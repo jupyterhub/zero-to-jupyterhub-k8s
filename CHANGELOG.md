@@ -6,20 +6,27 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ### [1.0.0] - 2021-05-FIXME
 
-FIXME: Summary
+This release includes a security announcement, breaking changes, several new
+features, and more. With the 1.0.0 version of this Helm chart, we look to follow
+[SemVer 2 versioning scheme](https://semver.org/).
 
-- note 1.0.0 bump from 0.11.1
-- arm64
-- pullOnlyOnChanges
-- extraFiles
-- fullnameOverride
-- seeding of secrets
+#### Highlights
 
+- **arm64 compatible images**
+- **`hub.extraFiles` and `singleuser.extraFiles`**
+- **Automatic secret generation**
   NOTE about the need to do one upgrade before removing secrets.
+- referencing resources
+  TODO: add documentation section about this
+- (pullOnlyOnChanges)
+- (fullnameOverride)
 
 #### Security announcement
 
-FIXME: describe AKS cluster setup documentation issue.
+The documentation for how to setup a Amazon EKS cluster included an insecure
+step that would give anyone access to the Kubernetes cluster. If you have
+followed these instructions between `0.7.0-beta.1` and `0.11.1`, please see the
+[this post in the Jupyter forum](TODO).
 
 #### Breaking changes
 
