@@ -405,7 +405,7 @@ hub:
 ```
 
 Another example is provided below, equivalent to the example given in the
-[ldapauthenticator README](https://github.com/jupyterhub/ldapauthenticator/blob/master/README.md).
+[ldapauthenticator README](https://github.com/jupyterhub/ldapauthenticator/blob/HEAD/README.md).
 
 ```yaml
 hub:
