@@ -28,7 +28,7 @@ While several [methods to install Helm](https://helm.sh/docs/intro/install/) exi
 simplest way to install Helm is to run Helm's installer script in a terminal:
 
 ```
-curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+curl https://raw.githubusercontent.com/helm/helm/HEAD/scripts/get-helm-3 | bash
 ```
 
 - The minimum supported version of Helm in Z2JH is `3.2.0`.

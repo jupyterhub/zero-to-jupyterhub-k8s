@@ -22,7 +22,7 @@ controller](https://kubernetes.io/docs/concepts/services-networking/ingress-cont
 ```{note}
 Not all k8s clusters are setup with an Ingress controller by default. If you need to
 install one manually, we recommend using
-[ingress-nginx](https://github.com/kubernetes/ingress-nginx/blob/master/docs/deploy/index.md#using-helm).
+[ingress-nginx](https://github.com/kubernetes/ingress-nginx/blob/HEAD/docs/deploy/index.md#using-helm).
 ```
 
 The minimal example to expose JupyterHub using an Ingress resource is the following:
@@ -58,7 +58,7 @@ and **google cloud's ingress controller**.
    controller you are using and how your cluster was set up). Accessing
    `<hostname>` from a browser should route traffic to the hub.
 2. Install & configure kube-lego using the
-   [kube-lego helm-chart](https://github.com/helm/charts/tree/master/stable/kube-lego).
+   [kube-lego helm-chart](https://github.com/helm/charts/tree/HEAD/stable/kube-lego).
    Remember to change `config.LEGO_EMAIL` and `config.LEGO_URL` at the least.
 3. Add an annotation + TLS config to the ingress so kube-lego knows to get certificates for
    it:

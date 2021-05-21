@@ -48,7 +48,7 @@ tags
 # GCloud Credentials
 data8-travis-creds.json
 
-#### Python .gitignore from https://github.com/github/gitignore/blob/master/Python.gitignore
+#### Python .gitignore from https://github.com/github/gitignore/blob/HEAD/Python.gitignore
 ####
 # Byte-compiled / optimized / DLL files
 __pycache__/

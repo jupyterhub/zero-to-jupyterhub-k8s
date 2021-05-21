@@ -35,7 +35,7 @@ These images version/tags are set in [values.yaml](jupyterhub/values.yaml), cons
 - [ ] [kube-scheduler](https://github.com/kubernetes/kube-scheduler)
   - [Available image tags](https://gcr.io/google_containers/kube-scheduler-amd64)
   - values.yaml entry: `scheduling.userScheduler.image`
-- [ ] [kubernetes/pause](https://github.com/kubernetes/kubernetes/tree/master/build/pause)
+- [ ] [kubernetes/pause](https://github.com/kubernetes/kubernetes/tree/HEAD/build/pause)
   - values.yaml entry: `prePuller.pause.image`
 
 Also the images we build are based on some image specified in the `FROM` statement, consider if we want to bump those versions as well.

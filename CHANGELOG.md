@@ -74,7 +74,7 @@ to share insights that can be useful to others.
 | [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 0.0.6             | 0.0.6             | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/HEAD/CHANGELOG.md)     | Run in the `hub` pod               |
 | [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler)   | 1.0               | 1.0               | -                                                                                           | Run in the `hub` pod               |
 | [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy) | 4.2.2             | 4.2.2             | [Changelog](https://github.com/jupyterhub/configurable-http-proxy/blob/HEAD/CHANGELOG.md) | Run in the `proxy` pod             |
-| [traefik](https://github.com/traefik/traefik)                                    | v2.3.2            | v2.3.7            | [Changelog](https://github.com/traefik/traefik/blob/master/CHANGELOG.md)                    | Run in the `autohttps` pod         |
+| [traefik](https://github.com/traefik/traefik)                                    | v2.3.2            | v2.3.7            | [Changelog](https://github.com/traefik/traefik/blob/HEAD/CHANGELOG.md)                    | Run in the `autohttps` pod         |
 | [kube-scheduler](https://github.com/kubernetes/kube-scheduler)                   | v1.19.2           | v1.19.7           | -                                                                                           | Run in the `user-scheduler` pod(s) |
 
 For a detailed list of how Python dependencies have change in the `hub` Pod's Docker image, inspect the [images/hub/requirements.txt](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/images/hub/requirements.txt) file.
@@ -355,7 +355,7 @@ the Helm chart to easier comply with PodSecurityPolicies by default.
 | [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 0.0.5                       | 0.0.5                   | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/HEAD/CHANGELOG.md)     | Run in the `hub` pod               |
 | [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler)   | -                           | v1.0                    | -                                                                                           | Run in the `hub` pod               |
 | [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy) | 4.2.1                       | 4.2.2                   | [Changelog](https://github.com/jupyterhub/configurable-http-proxy/blob/HEAD/CHANGELOG.md) | Run in the `proxy` pod             |
-| [traefik](https://github.com/traefik/traefik)                                    | v2.1                        | v2.3.2                  | [Changelog](https://github.com/traefik/traefik/blob/master/CHANGELOG.md)                    | Run in the `autohttps` pod         |
+| [traefik](https://github.com/traefik/traefik)                                    | v2.1                        | v2.3.2                  | [Changelog](https://github.com/traefik/traefik/blob/HEAD/CHANGELOG.md)                    | Run in the `autohttps` pod         |
 | [kube-scheduler](https://github.com/kubernetes/kube-scheduler)                   | v1.13.12                    | v1.19.2                 | -                                                                                           | Run in the `user-scheduler` pod(s) |
 
 For a detailed list of how Python dependencies have change in the `hub` Pod's
@@ -1421,7 +1421,7 @@ done
 
 ```sh
 # Update helm
-curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
+curl https://raw.githubusercontent.com/kubernetes/helm/HEAD/scripts/get | bash
 
 # Update tiller (on the cluster)
 helm init --upgrade --service-account=tiller
@@ -2267,7 +2267,7 @@ you read through it!
 
 #### Autoscaling improvements
 
-Some cloud providers support the [kubernetes node autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler),
+Some cloud providers support the [kubernetes node autoscaler](https://github.com/kubernetes/autoscaler/tree/HEAD/cluster-autoscaler),
 which can add / remove nodes depending on how much your
 cluster is being used. In this release, we made a few
 changes to let z2jh interact better with the autoscaler!

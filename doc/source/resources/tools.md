@@ -206,7 +206,7 @@ begin deploying the objects above into that namespace.
 
 Charts have both names and versions, which means that you can easily
 update them and build off of them. There are
-[community maintained charts](https://github.com/helm/charts/tree/master/stable)
+[community maintained charts](https://github.com/helm/charts/tree/HEAD/stable)
 available, and we use a chart to install and upgrade JupyterHub in
 this guide. In our case, the helm chart is a file called `config.yaml`.
 

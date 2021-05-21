@@ -79,4 +79,4 @@ of CPU and memory usage. Ryan Lovett put together a short Jupyter notebook
 [estimating the cost for computational resources][estimating the cost for computational resources] depending on the student
 needs.
 
-[estimating the cost for computational resources]: https://github.com/data-8/jupyterhub-k8s/blob/master/docs/cost-estimation/gce_budgeting.ipynb
+[estimating the cost for computational resources]: https://github.com/data-8/jupyterhub-k8s/blob/HEAD/docs/cost-estimation/gce_budgeting.ipynb

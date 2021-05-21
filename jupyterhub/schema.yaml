@@ -932,7 +932,7 @@ properties:
           hub/proxy/autohttps pod that would cause disruptions of the
           deployment, then you should instead annotate the pods of the
           Deployment [as described
-          here](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#what-types-of-pods-can-prevent-ca-from-removing-a-node).
+          here](https://github.com/kubernetes/autoscaler/blob/HEAD/cluster-autoscaler/FAQ.md#what-types-of-pods-can-prevent-ca-from-removing-a-node).
 
               "cluster-autoscaler.kubernetes.io/safe-to-evict": "false"
 

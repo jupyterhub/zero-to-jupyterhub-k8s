@@ -34,7 +34,7 @@ template you will use to setup and shape your cluster.
 3. SSH to your CI host
 4. Install kops and kubectl on your CI host
 
-   - Follow the instructions here: <https://github.com/kubernetes/kops/blob/master/docs/install.md>
+   - Follow the instructions here: <https://github.com/kubernetes/kops/blob/HEAD/docs/install.md>
 
 5. Choose a cluster name:
 
@@ -110,14 +110,14 @@ template you will use to setup and shape your cluster.
     In order to SSH into your cluster you will need to set up a bastion node. Make sure you do that step below.
     If you have the default number of elastic IPs (10) you may need to put in a request to AWS support to bump up that limit. The alternative is reducing the number of zones specified.
 
-    More reading on this subject: https://github.com/kubernetes/kops/blob/master/docs/networking.md
+    More reading on this subject: https://github.com/kubernetes/kops/blob/HEAD/docs/networking.md
 
     Settings to consider (not covered in this guide):
 
     ```
     --vpc
       Allows you to use a custom VPC or share a VPC
-      https://github.com/kubernetes/kops/blob/master/docs/run_in_existing_vpc.md
+      https://github.com/kubernetes/kops/blob/HEAD/docs/run_in_existing_vpc.md
     --master-count
       Spawns more masters in one or more VPCs
       This improves redudancy and reduces downtime during cluster upgrades
@@ -178,7 +178,7 @@ template you will use to setup and shape your cluster.
 
     Ideally we would simply be passing the `--bastion` flag into the kops command above. However that flag is not functioning as intended at the moment. <https://github.com/kubernetes/kops/issues/2881>
 
-    Instead we need to follow this guide: <https://github.com/kubernetes/kops/blob/master/docs/examples/kops-tests-private-net-bastion-host.md#adding-a-bastion-host-to-our-cluster>
+    Instead we need to follow this guide: <https://github.com/kubernetes/kops/blob/HEAD/docs/examples/kops-tests-private-net-bastion-host.md#adding-a-bastion-host-to-our-cluster>
 
     At this point there are a few public endpoints left open which need to be addressed
 

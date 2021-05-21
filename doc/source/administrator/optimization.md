@@ -174,7 +174,7 @@ prePuller:
 ## Efficient Cluster Autoscaling
 
 A [_Cluster
-Autoscaler_](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler)
+Autoscaler_](https://github.com/kubernetes/autoscaler/tree/HEAD/cluster-autoscaler)
 (CA) will help you add and remove nodes from the cluster. But the CA needs some
 help to function well. Without help, it will both fail to scale up before users
 arrive and scale down nodes aggressively enough without disrupting users.
@@ -231,7 +231,7 @@ kubernetes. See the [configuration reference](schema_scheduling.podPriority) for
 
 Scaling up is the easy part, scaling down is harder. To scale down a node,
 [certain technical
-criteria](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#what-types-of-pods-can-prevent-ca-from-removing-a-node)
+criteria](https://github.com/kubernetes/autoscaler/blob/HEAD/cluster-autoscaler/FAQ.md#what-types-of-pods-can-prevent-ca-from-removing-a-node)
 need to be met. The central one is in order for a node to be scaled down, it
 must be free from pods that aren't allowed to be disrupted. Pods that are not
 allowed to be disrupted are, for example, real user pods, important system pods,
