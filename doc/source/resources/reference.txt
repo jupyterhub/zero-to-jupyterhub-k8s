@@ -14,7 +14,7 @@ of different Docker images, manage security and authentication, and more.
 
 Below is a description of many *but not all* of the configurable values for the
 Helm chart. To see *all* configurable options, inspect their default values
-defined [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/jupyterhub/values.yaml).
+defined [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/values.yaml).
 
 For more guided information about some specific things you can do with
 modifications to the helm chart, see the {ref}`customization-guide`.

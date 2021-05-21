@@ -14,7 +14,7 @@ experiences.
 
 ```{note}
 **Contributing to Z2JH**. If you would like to help improve the Zero to
-JupyterHub guide, please see the [issues page](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues) as well as the [contributor guide](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CONTRIBUTING.md).
+JupyterHub guide, please see the [issues page](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues) as well as the [contributor guide](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/CONTRIBUTING.md).
 ```
 
 We hope that you will use this section to share deployments with on a variety

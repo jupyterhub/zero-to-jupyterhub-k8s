@@ -77,7 +77,7 @@ to share insights that can be useful to others.
 | [traefik](https://github.com/traefik/traefik)                                    | v2.3.2            | v2.3.7            | [Changelog](https://github.com/traefik/traefik/blob/master/CHANGELOG.md)                    | Run in the `autohttps` pod         |
 | [kube-scheduler](https://github.com/kubernetes/kube-scheduler)                   | v1.19.2           | v1.19.7           | -                                                                                           | Run in the `user-scheduler` pod(s) |
 
-For a detailed list of how Python dependencies have change in the `hub` Pod's Docker image, inspect the [images/hub/requirements.txt](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/images/hub/requirements.txt) file.
+For a detailed list of how Python dependencies have change in the `hub` Pod's Docker image, inspect the [images/hub/requirements.txt](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/images/hub/requirements.txt) file.
 
 #### Enhancements made
 
@@ -359,7 +359,7 @@ the Helm chart to easier comply with PodSecurityPolicies by default.
 | [kube-scheduler](https://github.com/kubernetes/kube-scheduler)                   | v1.13.12                    | v1.19.2                 | -                                                                                           | Run in the `user-scheduler` pod(s) |
 
 For a detailed list of how Python dependencies have change in the `hub` Pod's
-Docker image, inspect the [images/hub/requirements.txt](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/images/hub/requirements.txt) file.
+Docker image, inspect the [images/hub/requirements.txt](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/images/hub/requirements.txt) file.
 
 #### Enhancements made
 

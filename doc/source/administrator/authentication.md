@@ -19,10 +19,10 @@ To use other sources of authentication, choose _one_ [_authenticator
 class_](https://jupyterhub.readthedocs.io/en/stable/reference/authenticators.html) to use.
 Several such classes are already available in the hub image through [installed
 Python
-packages](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/images/hub/requirements.txt).
+packages](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/images/hub/requirements.txt).
 
 JupyterHub provides a base class,
-[`Authenticator`](https://github.com/jupyterhub/jupyterhub/blob/master/jupyterhub/auth.py),
+[`Authenticator`](https://github.com/jupyterhub/jupyterhub/blob/HEAD/jupyterhub/auth.py),
 that all other authenticator classes are supposed to derive from. By configuring
 this base class, we influence the behavior of the derived class as well.
 

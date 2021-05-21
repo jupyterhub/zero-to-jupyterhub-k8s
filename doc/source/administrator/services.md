@@ -2,7 +2,7 @@
 
 # Services
 
-JupyterHub services (not to be confused with Kubernetes Service objects) are processes that interact with the JupyterHub API. [nbgrader](https://nbgrader.readthedocs.io/en/stable/configuration/jupyterhub_config.html) and [culling idle Notebooks](https://github.com/jupyterhub/jupyterhub-idle-culler) are examples of production services, and there are minimal examples of "hello world" services in the [Jupyterhub examples repo](https://github.com/jupyterhub/jupyterhub/tree/master/examples).
+JupyterHub services (not to be confused with Kubernetes Service objects) are processes that interact with the JupyterHub API. [nbgrader](https://nbgrader.readthedocs.io/en/stable/configuration/jupyterhub_config.html) and [culling idle Notebooks](https://github.com/jupyterhub/jupyterhub-idle-culler) are examples of production services, and there are minimal examples of "hello world" services in the [Jupyterhub examples repo](https://github.com/jupyterhub/jupyterhub/tree/HEAD/examples).
 
 Services can be run [externally](https://jupyterhub.readthedocs.io/en/stable/getting-started/services-basics.html) from the Hub, meaning they are started and stopped independently of the Hub and must know about things like their Hub authentication token on their own. Alternatively, a service can be [Hub-managed](https://jupyterhub.readthedocs.io/en/stable/reference/services.html#hub-managed-services), where the Hub starts and stops the process and passes key information to the service via environment variables.
 
@@ -14,7 +14,7 @@ In addition to the code for the service, you need to modify the Hub Kubernetes S
 
 ## Example service
 
-In the following snippet, I'm using a custom image that copies over the application code and installs the dependencies listed in the [fastapi service example](https://github.com/jupyterhub/jupyterhub/tree/master/examples/service-fastapi).
+In the following snippet, I'm using a custom image that copies over the application code and installs the dependencies listed in the [fastapi service example](https://github.com/jupyterhub/jupyterhub/tree/HEAD/examples/service-fastapi).
 
 ```Dockerfile
 # Dockerfile

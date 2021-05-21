@@ -1487,7 +1487,7 @@ properties:
               place where you can merge in additional configuration. If you are
               about to use this configuration, you may want to inspect the
               default configuration declared
-              [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/jupyterhub/templates/proxy/autohttps/_configmap-dynamic.yaml).
+              [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/templates/proxy/autohttps/_configmap-dynamic.yaml).
           extraPorts:
             type: array
             description: |
@@ -1503,7 +1503,7 @@ properties:
               place where you can merge in additional configuration. If you are
               about to use this configuration, you may want to inspect the
               default configuration declared
-              [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/jupyterhub/templates/proxy/autohttps/_configmap-traefik.yaml).
+              [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/templates/proxy/autohttps/_configmap-traefik.yaml).
           extraVolumes: *extraVolumes-spec
           extraVolumeMounts: *extraVolumeMounts-spec
           hsts:
