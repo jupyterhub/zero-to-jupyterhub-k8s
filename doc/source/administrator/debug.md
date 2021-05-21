@@ -5,6 +5,17 @@
 Sometimes your JupyterHub deployment doesn't behave the way you'd expect.
 This section provides some tips on debugging and fixing some common problems.
 
+## Verbose logging
+
+You can increase the level of detail in JupyterHub's logs by adding this to your configuration:
+
+```yaml
+debug:
+  enabled: true
+```
+
+This is particularly useful if JupyterHub has started but you have problems with authentication, singleuser servers or services.
+
 ## Debugging commands
 
 In order to debug your JupyterHub deployment, you need to be able to inspect
