@@ -277,7 +277,7 @@ html_theme_options = {
 html_context = {
     "github_user": "jupyterhub",
     "github_repo": "zero-to-jupyterhub-k8s",
-    "github_version": "master",
+    "github_version": "main",
     "doc_path": "doc/source",
 }
 

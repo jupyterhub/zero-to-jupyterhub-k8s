@@ -62,10 +62,10 @@ Also the images we build are based on some image specified in the `FROM` stateme
 
   - [ ] Create and push a git tag
     ```bash
-    git checkout master
-    git reset --hard <upstream>/master
-    git tag -a x.y.z-beta.1 -m x.y.z-beta.1 <commit on master>
-    git push --follow-tags <upstream> master
+    git checkout main
+    git reset --hard <upstream>/main
+    git tag -a x.y.z-beta.1 -m x.y.z-beta.1 <commit on main>
+    git push --follow-tags <upstream> main
     ```
 
 - Announce the x.y.z-beta.1 release
@@ -86,10 +86,10 @@ Also the images we build are based on some image specified in the `FROM` stateme
   - [ ] Create and push a git tag.
 
     ```bash
-    git checkout master
-    git reset --hard <upstream>/master
+    git checkout main
+    git reset --hard <upstream>/main
     git tag -a x.y.z -m x.y.z HEAD
-    git push --follow-tags <upstream> master
+    git push --follow-tags <upstream> main
     ```
 
   - [ ] Create a GitHub release.
