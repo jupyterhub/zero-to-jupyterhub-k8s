@@ -1,6 +1,6 @@
 FROM jupyter/base-notebook:cf9a75c29789
 # Built from... https://hub.docker.com/r/jupyter/base-notebook/
-#               https://github.com/jupyter/docker-stacks/blob/master/base-notebook/Dockerfile
+#               https://github.com/jupyter/docker-stacks/blob/HEAD/base-notebook/Dockerfile
 # Built from... Ubuntu 20.04
 
 # VULN_SCAN_TIME=2021-04-13_00:03:33

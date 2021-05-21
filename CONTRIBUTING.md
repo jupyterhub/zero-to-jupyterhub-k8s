@@ -4,7 +4,7 @@ Welcome dear open source colleague! As this is a [Jupyter](https://jupyter.org)
 project please start by looking at the [Jupyter contributor
 guide](https://jupyter.readthedocs.io/en/latest/contributing/content-contributor.html),
 and follow [Project Jupyter's Code of
-Conduct](https://github.com/jupyter/governance/blob/master/conduct/code_of_conduct.md)
+Conduct](https://github.com/jupyter/governance/blob/HEAD/conduct/code_of_conduct.md)
 to help us sustain a warm and welcoming collaborative environment.
 
 If you don't have [git](https://www.git-scm.com/) already, install it and clone
