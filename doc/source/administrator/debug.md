@@ -7,14 +7,14 @@ This section provides some tips on debugging and fixing some common problems.
 
 ## Verbose logging
 
-You can increase the level of detail in JupyterHub's logs by adding this to your configuration:
+You can increase the level of detail in logs emitted by various pods (hub, proxy, autohttps, and user pods) by adding this to your configuration:
 
 ```yaml
 debug:
   enabled: true
 ```
 
-This is particularly useful if JupyterHub has started but you have problems with authentication, singleuser servers or services.
+This is particularly useful if JupyterHub has started but you have problems with authentication, singleuser servers or services. A downside to enabling this is that the amount of logs emitted will make it harder to read logs for an overview and will increase the costs of a system setup to collect and store logs.
 
 ## Debugging commands
 
