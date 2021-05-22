@@ -61,14 +61,43 @@ followed these instructions between `0.7.0-beta.1` and `0.11.1`, please see the
     For example if you have passed a numerical value to a configuration that
     expected a string.
 
-- default requests:
-  https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2034
+- **Default resource requests are no longer set** [#2034](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2034)
 
-  prePuller.resources (0, 0)
-  prePuller.hook.resources (0, 0)
-  scheduling.userScheduler.resources (50m, 256Mi)
-  hub.resources (200m, 512Mi)
-  proxy.resources (200m, 512Mi)
+  Z2JH now follows Helm chart best practice in not setting default resource limits.
+  If you want to restore the old behaviour you can set:
+
+  ```yaml
+  hub:
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+
+  proxy:
+    chp:
+      resources:
+        requests:
+          cpu: 200m
+          memory: 512Mi
+
+  scheduling:
+    userScheduler:
+      resources:
+        requests:
+          cpu: 50m
+          memory: 256Mi
+
+  prePuller:
+    resources:
+      requests:
+        cpu: 0
+        memory: 0
+    hook:
+      resources:
+        requests:
+          cpu: 0
+          memory: 0
+  ```
 
 - **KubeSpawner and deletion of PVCs** ([jupyterhub#3337](https://github.com/jupyterhub/jupyterhub/pull/3337), [kubespawner#475](https://github.com/jupyterhub/kubespawner/pull/475))
 
@@ -77,8 +106,7 @@ followed these instructions between `0.7.0-beta.1` and `0.11.1`, please see the
   dynamically created PVC resource if there was one.
 
   To opt out of this behavior and retain the current behavior where dynamically
-  created PVC resources will remain, configure KubeSpawner's `delete_pvc`
-  configuration to be false.
+  created PVC resources will remain, set `KubeSpawner.delete_pvc` to `false`.
 
   ```yaml
   hub:
@@ -88,7 +116,7 @@ followed these instructions between `0.7.0-beta.1` and `0.11.1`, please see the
   ```
 
   Note that this feature relies on both KubeSpawner 1.0.0+ and JupyterHub 1.4.1+
-  which is now used as part of this release.
+  which are included in this release.
 
 - **hub.existingSecret is reworked** ([#2042](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2042))
 
