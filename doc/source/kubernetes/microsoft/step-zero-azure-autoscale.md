@@ -62,7 +62,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    ```
 
 3. Setup the CLI for Autoscaling features.
-   First install the [aks-preview](https://github.com/Azure/azure-cli-extensions/tree/master/src/aks-preview) CLI extension.
+   First install the [aks-preview](https://github.com/Azure/azure-cli-extensions/tree/HEAD/src/aks-preview) CLI extension.
    This will grant access to new commands.
 
    ```
@@ -249,7 +249,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
      for you to choose from, but not all might be available in your location.
      If you get an error whilst creating the cluster you can try changing either the region or the node size.
    - `--enable-vmss` deploys the cluster as a scale set.
-   - `--enable-cluster-autoscaler` installs a [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler) onto the cluster (though counterintuitively, does not enable it!).
+   - `--enable-cluster-autoscaler` installs a [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/HEAD/cluster-autoscaler) onto the cluster (though counterintuitively, does not enable it!).
    - `--min-count`/`--max-count` are the minimum/maximum number of nodes in the cluster at any time.
    - `--kubernetes-version` installs a specific version of Kubernetes onto the cluster. To autoscale, we require `>= v 1.12.4`, though it's recommended to use the most recent version available (you can find out what the most recent version of kubernetes available is by running `az aks get-versions --location <LOCATION>`).
    - `--service-principal` is the application ID of the service principal we created

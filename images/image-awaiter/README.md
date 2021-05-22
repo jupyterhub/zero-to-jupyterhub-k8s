@@ -16,7 +16,7 @@ minutes to a few seconds.
 
 ### What technical knowledge is needed to understand this?
 
-You need to know about [Kubernetes Jobs](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/) and [Kubernetes DaemonSets](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/), about [Helm and helm hooks](https://github.com/kubernetes/helm/blob/master/docs/charts_hooks.md),
+You need to know about [Kubernetes Jobs](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/) and [Kubernetes DaemonSets](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/), about [Helm and helm hooks](https://github.com/kubernetes/helm/blob/HEAD/docs/charts_hooks.md),
 and about the programming language Go.
 
 ### Why is this project in Go? Isn't the Jupyter Infrastructure ecosystem mostly Python?
@@ -33,6 +33,6 @@ Go is used.
 
 ### Why is the Go Kubernetes library not used here?
 
-It is currently [hard to depend on](https://github.com/kubernetes/client-go/blob/master/INSTALL.md)
+It is currently [hard to depend on](https://github.com/kubernetes/client-go/blob/HEAD/INSTALL.md)
 in small Go projects. Once that situation changes, we'll simplify our code by switching
 to it.

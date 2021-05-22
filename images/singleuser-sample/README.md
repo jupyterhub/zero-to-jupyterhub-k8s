@@ -2,7 +2,7 @@
 
 This Docker image is the Helm chart's default user image. It contains the
 fundamentals only so that it can get pulled quickly. It is based on the
-[base-notebook image](https://github.com/jupyter/docker-stacks/blob/master/base-notebook/Dockerfile)
+[base-notebook image](https://github.com/jupyter/docker-stacks/blob/HEAD/base-notebook/Dockerfile)
 from Project Jupyter's [jupyter/docker-stacks repository](https://github.com/jupyter/docker-stacks)
 which also contains many other images suitable for use with the Helm chart. To
 help you choose another one see [the docker-stacks documentation on selecting a

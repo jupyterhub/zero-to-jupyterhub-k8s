@@ -121,7 +121,7 @@ JupyterHub experiences.
 If you would like to help improve this guide or Helm chart, please see the [issues
 page](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues) as
 well as the [contributor
-guide](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CONTRIBUTING.md).
+guide](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/CONTRIBUTING.md).
 ```
 
 We hope that you will use this section to share deployments with on a

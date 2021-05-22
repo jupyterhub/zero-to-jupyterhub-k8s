@@ -10,7 +10,7 @@
 
 setup_helm () {
     echo "setup helm ${HELM_VERSION}"
-    curl -sf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
+    curl -sf https://raw.githubusercontent.com/helm/helm/HEAD/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
 }
 
 await_pebble() {

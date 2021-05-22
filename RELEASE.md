@@ -35,7 +35,7 @@ These images version/tags are set in [values.yaml](jupyterhub/values.yaml), cons
 - [ ] [kube-scheduler](https://github.com/kubernetes/kube-scheduler)
   - [Available image tags](https://gcr.io/google_containers/kube-scheduler-amd64)
   - values.yaml entry: `scheduling.userScheduler.image`
-- [ ] [kubernetes/pause](https://github.com/kubernetes/kubernetes/tree/master/build/pause)
+- [ ] [kubernetes/pause](https://github.com/kubernetes/kubernetes/tree/HEAD/build/pause)
   - values.yaml entry: `prePuller.pause.image`
 
 Also the images we build are based on some image specified in the `FROM` statement, consider if we want to bump those versions as well.
@@ -62,10 +62,10 @@ Also the images we build are based on some image specified in the `FROM` stateme
 
   - [ ] Create and push a git tag
     ```bash
-    git checkout master
-    git reset --hard <upstream>/master
-    git tag -a x.y.z-beta.1 -m x.y.z-beta.1 <commit on master>
-    git push --follow-tags <upstream> master
+    git checkout main
+    git reset --hard <upstream>/main
+    git tag -a x.y.z-beta.1 -m x.y.z-beta.1 <commit on main>
+    git push --follow-tags <upstream> main
     ```
 
 - Announce the x.y.z-beta.1 release
@@ -86,10 +86,10 @@ Also the images we build are based on some image specified in the `FROM` stateme
   - [ ] Create and push a git tag.
 
     ```bash
-    git checkout master
-    git reset --hard <upstream>/master
+    git checkout main
+    git reset --hard <upstream>/main
     git tag -a x.y.z -m x.y.z HEAD
-    git push --follow-tags <upstream> master
+    git push --follow-tags <upstream> main
     ```
 
   - [ ] Create a GitHub release.

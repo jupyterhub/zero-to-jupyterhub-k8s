@@ -41,7 +41,7 @@ image containing useful tools and libraries for datascience, complete these step
        # You should replace the "latest" tag with a fixed version from:
        # https://hub.docker.com/r/jupyter/datascience-notebook/tags/
        # Inspect the Dockerfile at:
-       # https://github.com/jupyter/docker-stacks/tree/master/datascience-notebook/Dockerfile
+       # https://github.com/jupyter/docker-stacks/tree/HEAD/datascience-notebook/Dockerfile
        name: jupyter/datascience-notebook
        tag: latest
    ```
@@ -109,7 +109,7 @@ FROM jupyter/minimal-notebook:177037d09156
 # Get the latest image tag at:
 # https://hub.docker.com/r/jupyter/minimal-notebook/tags/
 # Inspect the Dockerfile at:
-# https://github.com/jupyter/docker-stacks/tree/master/minimal-notebook/Dockerfile
+# https://github.com/jupyter/docker-stacks/tree/HEAD/minimal-notebook/Dockerfile
 
 # install additional package...
 RUN pip install --no-cache-dir astropy

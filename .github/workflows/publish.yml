@@ -3,7 +3,7 @@
 #
 name: Publish
 
-# Trigger the workflow's on pushed tags or commits to main/master branch.
+# Trigger the workflow on pushed tags or commits to main branch.
 on:
   pull_request:
     paths-ignore:
@@ -60,7 +60,7 @@ jobs:
                   # any tag
                   ref.startswith("refs/tags/")
                   # or default branch
-                  or ref in {"refs/heads/main", "refs/heads/master"}
+                  or ref == "refs/heads/main"
               )
           ):
               publishing = "true"

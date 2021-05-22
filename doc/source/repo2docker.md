@@ -108,7 +108,7 @@ to configure JupyterHub to build off of this image:
        <a-git-repository-url>
    ```
 
-   This tells `repo2docker` to fetch `master` of the Git repository, and
+   This tells `repo2docker` to fetch the default branch of the Git repository, and
    uses heuristics to build a Docker image of it.
 
 6. **Push the newly-built Docker image to your repository.**

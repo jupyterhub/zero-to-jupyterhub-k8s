@@ -14,7 +14,7 @@ experiences.
 
 ```{note}
 **Contributing to Z2JH**. If you would like to help improve the Zero to
-JupyterHub guide, please see the [issues page](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues) as well as the [contributor guide](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/CONTRIBUTING.md).
+JupyterHub guide, please see the [issues page](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues) as well as the [contributor guide](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/CONTRIBUTING.md).
 ```
 
 We hope that you will use this section to share deployments with on a variety
@@ -141,9 +141,9 @@ If you have a suggestion for something to add to this page, please
 - **Setup Kubernetes with Terraform**
   - [terraform-deploy repository](https://github.com/pangeo-data/terraform-deploy)
     This repo houses several example Kubernetes cluster deployments on AWS.
-  - [Terraform tutorial example](https://github.com/pangeo-data/terraform-deploy/tree/master/aws-examples/minimal-deployment-tutorial)
+  - [Terraform tutorial example](https://github.com/pangeo-data/terraform-deploy/tree/HEAD/aws-examples/minimal-deployment-tutorial)
     This is meant to introduce newcomers to Terraform and show them how to deploy an AWS EKS cluster with it.
-  - [Terraform blog post](https://github.com/pangeo-data/terraform-deploy/tree/master/aws-examples/blog-post)
+  - [Terraform blog post](https://github.com/pangeo-data/terraform-deploy/tree/HEAD/aws-examples/blog-post)
     This example is a more in-depth look at deploying an opinionated kubernetes cluster with
     Terraform. It has a partnered blog post as well, available
     [on Medium](https://medium.com/pangeo/terraform-jupyterhub-aws-34f2b725f4fd).

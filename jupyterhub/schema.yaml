@@ -932,7 +932,7 @@ properties:
           hub/proxy/autohttps pod that would cause disruptions of the
           deployment, then you should instead annotate the pods of the
           Deployment [as described
-          here](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#what-types-of-pods-can-prevent-ca-from-removing-a-node).
+          here](https://github.com/kubernetes/autoscaler/blob/HEAD/cluster-autoscaler/FAQ.md#what-types-of-pods-can-prevent-ca-from-removing-a-node).
 
               "cluster-autoscaler.kubernetes.io/safe-to-evict": "false"
 
@@ -1487,7 +1487,7 @@ properties:
               place where you can merge in additional configuration. If you are
               about to use this configuration, you may want to inspect the
               default configuration declared
-              [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/jupyterhub/templates/proxy/autohttps/_configmap-dynamic.yaml).
+              [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/templates/proxy/autohttps/_configmap-dynamic.yaml).
           extraPorts:
             type: array
             description: |
@@ -1503,7 +1503,7 @@ properties:
               place where you can merge in additional configuration. If you are
               about to use this configuration, you may want to inspect the
               default configuration declared
-              [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/master/jupyterhub/templates/proxy/autohttps/_configmap-traefik.yaml).
+              [here](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/templates/proxy/autohttps/_configmap-traefik.yaml).
           extraVolumes: *extraVolumes-spec
           extraVolumeMounts: *extraVolumeMounts-spec
           hsts:
