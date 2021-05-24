@@ -410,7 +410,7 @@ relevant:
    of the specific container and other containers on the nodes.
 
 1. Requested memory is reserved and unavailable for other containers on a node
-   to use, but any requested CPU can be used by other containers until its
+   to use, but any requested CPU can be used by other containers until it is
    required by the requesting container.
 
 1. A container running out of memory is typically terminated and restarted as a
@@ -435,8 +435,7 @@ relevant:
 
 Some additional more technical details are:
 
-1. A container requesting `0` CPU will still be granted a share of `0.002` CPU,
-   or `2m` CPU, it is a lower limit.
+1. A container requesting `0` CPU will be granted the smallest amount of CPU supported by the Kubernetes container runtime.
 1. CPU core sharing is enforced between containers in time intervals of 100 ms
    typically.
 1. The management of a k8s Pod and its containers requires a small overhead CPU
@@ -458,7 +457,7 @@ some notes about them.
 | proxy.traefik.resources                 | autohttps                     | -                                | The container performs TLS termination only. Will require small amounts of resources.                                                                                                                                                                                                                                              |
 | proxy.secretSync.resources              | autohttps                     | -                                | The sidecar container is a watchdog, watching a file for changes and updates a k8s Secret with those changes. Will require minimal resources.                                                                                                                                                                                      |
 | scheduling.userScheduler.resources      | user-scheduler                | 50m, 256Mi                       | The container runs a `kube-scheduler` binary with custom configuration to schedule the user pods. Will require a small amount of resources.                                                                                                                                                                                        |
-| scheduling.userPlaceholder.resources    | user-placeholder              | -                                | This is an explicit override of the default behavior to reuse the values in `singleuser.cpu.guarantee\|limit` and `singleuser.memory.guarantee\|limit`. It can be useful to increase this to a multiple of the typical real users' requests if you want to have may user-placeholder pods to reduce the pod scheduling complexity. |
+| scheduling.userPlaceholder.resources    | user-placeholder              | -                                | This is an explicit override of the default behavior to reuse the values in `singleuser.cpu.[guarantee\|limit]` and `singleuser.memory.[guarantee\|limit]`. It can be useful to increase this to a multiple of the typical real users' requests if you want to have may user-placeholder pods to reduce the pod scheduling complexity. |
 | prePuller.resources                     | hook\|continuous-image-puller | 0, 0                             | This pod's containers are all running `echo` or `pause` commands as a trick to pull the images. Will require minimal resources.                                                                                                                                                                                                    |
 | prePuller.hook.resources                | hook-image-awaiter            | 0, 0                             | The container just polls the k8s api-server. Will require minimal resources.                                                                                                                                                                                                                                                       |
 | singleuser.cpu\|memory.guarantee\|limit | jupyter-username              | 0, 1G                            | The configuration syntax is different because it is native to the Spawner base class rather than Kubernetes. It is commonly useful to guarantee a certain amount of memory rather than CPU to help users share CPU with each other.                                                                                                |
