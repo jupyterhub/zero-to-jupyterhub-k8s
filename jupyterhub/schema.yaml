@@ -1868,6 +1868,13 @@ properties:
         type: object
         additionalProperties: false
         description: *kubespawner-native-config-description
+        properties:
+          postStart:
+            type: object
+            additionalProperties: true
+          preStop:
+            type: object
+            additionalProperties: true
       networkTools:
         type: object
         additionalProperties: false
