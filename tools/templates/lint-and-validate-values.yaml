@@ -124,6 +124,19 @@ hub:
     requests:
       cpu: 100m
       memory: 512Mi
+  lifecycle: &lifecycle
+    postStart:
+      exec:
+        command:
+          - "/bin/sh"
+          - "-c"
+          - "echo Hello from the postStart handler >> /usr/share/message"
+    preStop:
+      exec:
+        command:
+          - "/bin/sh"
+          - "-c"
+          - "echo Hello from the preStart handler >> /usr/share/message"
   services:
     tests:
       apiToken: mocked-api-token
@@ -336,7 +349,7 @@ singleuser:
   events: true
   extraLabels: {}
   extraEnv: {}
-  lifecycleHooks: {}
+  lifecycleHooks: *lifecycle
   initContainers:
     - name: mock-init-container-name
       image: mock-init-container-image

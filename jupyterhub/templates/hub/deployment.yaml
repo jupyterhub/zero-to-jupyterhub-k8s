@@ -179,6 +179,10 @@ spec:
           securityContext:
             {{- $securityContext | toYaml | trimSuffix "\n" | nindent 12 }}
           {{- end }}
+          {{- with .Values.hub.lifecycle }}
+          lifecycle:
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+          {{- end }}
           env:
             - name: PYTHONUNBUFFERED
               value: "1"

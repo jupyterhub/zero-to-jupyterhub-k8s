@@ -1092,6 +1092,19 @@ properties:
         description: |
           A k8s native specification of resources, see [the
           documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#resourcerequirements-v1-core).
+      lifecycle: &lifecycle-spec
+        type: object
+        additionalProperties: false
+        description: |
+          A k8s native specification of lifecycle hooks on the container, see [the
+          documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#lifecycle-v1-core).
+        properties:
+          postStart:
+            type: object
+            additionalProperties: true
+          preStop:
+            type: object
+            additionalProperties: true
       services:
         type: object
         additionalProperties: true
