@@ -383,3 +383,73 @@ Choosing the right _limit to guarantee ratio_ ratio is an art, not a science.
 We suggest **starting with a ratio of 2 to 1** and adjusting from there based on whether you run into problems on your hub.
 For example, if the limit is 10GB, start with a guarantee of 5GB.
 Use a service such as Prometheus + Grafana to monitor the memory usage over time, and use this to decide whether to adjust your ratio.
+
+## Explicit memory and CPU allocated to core pods' containers
+
+The Helm chart creates several k8s Pods that typically have one container
+running in them, but sometimes more. In this section you are guided on how to
+explicitly specify how much CPU and memory they are guaranteed via _requests_
+and how much CPU and memory they are limited to via _limits_.
+
+To decide what requests and limits to set, some background knowledge is
+relevant:
+
+1. A [LimitRange](https://kubernetes.io/docs/concepts/policy/limit-range/)
+   resource in a namespace can provide defaults to containers without explicitly
+   set requests and limits.
+
+   Check the namespace where you deploy JupyterHub for such resource by doing
+   `kubectl get limitrange --namespace <k8s-namespace>`.
+
+1. Setting only resource limits _will make_ k8s assume the same in resource
+   requests, but setting only resource requests _will not make_ k8s assume any
+   resource limits.
+1. Requested memory is reserved and unavailable for other containers on a node
+   to use, but any requested CPU can be used by other containers until its
+   required by the requesting container.
+1. A container running out of memory is typically terminated and restarted as a
+   process is killed by a _Out Of Memory Killer_ (OOMKiller). When this happens
+   you should see a trace of it by using `kubectl describe pod --namespace <k8s-namespace> <k8s-pod-name>`
+   and `kubectl logs --previous --namespace <k8s-namespace> <k8s-pod-name>`.
+1. A container starved of CPU could act up in many unique ways and is harder to
+   debug. Various timeouts can be clues to suspect CPU starvation.
+1. When scheduling a Pod on a node, the [_effective
+   requests/limits_](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/#resources)
+   are considered. As a Pod's init containers are run in sequence before the
+   Pod's main containers are started, the effective requests/limits are
+   calculated as the highest of the init containers requests/limits and the sum
+   of the main containers requests/limits.
+1. Software may not be able to make use of more than 1 CPU because it doesn't
+   support running code concurrently across multiple CPU cores. The `hub` pod
+   running JupyterHub in Python and the `proxy` pod running
+   ConfigurableHTTPProxy in NodeJS are such applications.
+
+Some additional more technical details are:
+
+1. A container requesting `0` CPU will still be granted a share of `0.002` CPU,
+   or `2m` CPU, it is a lower limit.
+1. CPU core sharing is enforced between containers in time intervals of 100 ms
+   typically.
+1. The management of a k8s Pod and its containers requires a small overhead CPU
+   and memory, this will count towards the quota.
+
+As a reference, you can compare with the CPU and memory use of JupyterHub Helm
+chart pods that are part of the mybinder.org deployment that runs a BinderHub,
+which relies on this JupyterHub Helm chart. Such information is available in
+[mybinder.org's Grafana
+dashboard](https://grafana.mybinder.org/d/GYEYQm7ik/components-resource-metrics?orgId=1&refresh=1m&from=now-30d&to=now).
+
+Below are the various resource requests you can configure in this Helm chart and
+some notes about them.
+
+| Configuration                           | pod                           | cpu/memory requests before 1.0.0 | Note                                                                                                                                                                                                                                                                                                                               |
+| --------------------------------------- | ----------------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| hub.resources                           | hub                           | 200m, 510Mi                      | JupyterHub and KubeSpawner runs here. Can manage with small resources but could peak up to 1 CPU during very heavy load of simultaneous users starting and stopping servers.                                                                                                                                                       |
+| proxy.chp.resources                     | proxy                         | 200m, 510Mi                      | The container runs `configurable-http-proxy`. Will require small amounts of resources.                                                                                                                                                                                                                                             |
+| proxy.traefik.resources                 | autohttps                     | -                                | The container performs TLS termination only. Will require small amounts of resources.                                                                                                                                                                                                                                              |
+| proxy.secretSync.resources              | autohttps                     | -                                | The sidecar container is a watchdog, watching a file for changes and updates a k8s Secret with those changes. Will require minimal resources.                                                                                                                                                                                      |
+| scheduling.userScheduler.resources      | user-scheduler                | 50m, 256Mi                       | The container runs a `kube-scheduler` binary with custom configuration to schedule the user pods. Will require a small amount of resources.                                                                                                                                                                                        |
+| scheduling.userPlaceholder.resources    | user-placeholder              | -                                | This is an explicit override of the default behavior to reuse the values in `singleuser.cpu.guarantee\|limit` and `singleuser.memory.guarantee\|limit`. It can be useful to increase this to a multiple of the typical real users' requests if you want to have may user-placeholder pods to reduce the pod scheduling complexity. |
+| prePuller.resources                     | hook\|continuous-image-puller | 0, 0                             | This pod's containers are all running `echo` or `pause` commands as a trick to pull the images. Will require minimal resources.                                                                                                                                                                                                    |
+| prePuller.hook.resources                | hook-image-awaiter            | 0, 0                             | The container just polls the k8s api-server. Will require minimal resources.                                                                                                                                                                                                                                                       |
+| singleuser.cpu\|memory.guarantee\|limit | jupyter-username              | 0, 1G                            | The configuration syntax is different because it is native to the Spawner base class rather than Kubernetes. It is commonly useful to guarantee a certain amount of memory rather than CPU to help users share CPU with each other.                                                                                                |
