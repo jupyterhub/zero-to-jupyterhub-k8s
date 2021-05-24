@@ -404,21 +404,30 @@ relevant:
 1. Setting only resource limits _will make_ k8s assume the same in resource
    requests, but setting only resource requests _will not make_ k8s assume any
    resource limits.
+
+1. Setting resource requests improves the reliability of the container's
+   execution. Setting resource limits improves the consistency of the execution
+   of the specific container and other containers on the nodes.
+
 1. Requested memory is reserved and unavailable for other containers on a node
    to use, but any requested CPU can be used by other containers until its
    required by the requesting container.
+
 1. A container running out of memory is typically terminated and restarted as a
    process is killed by a _Out Of Memory Killer_ (OOMKiller). When this happens
    you should see a trace of it by using `kubectl describe pod --namespace <k8s-namespace> <k8s-pod-name>`
    and `kubectl logs --previous --namespace <k8s-namespace> <k8s-pod-name>`.
+
 1. A container starved of CPU could act up in many unique ways and is harder to
    debug. Various timeouts can be clues to suspect CPU starvation.
+
 1. When scheduling a Pod on a node, the [_effective
    requests/limits_](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/#resources)
    are considered. As a Pod's init containers are run in sequence before the
    Pod's main containers are started, the effective requests/limits are
    calculated as the highest of the init containers requests/limits and the sum
    of the main containers requests/limits.
+
 1. Software may not be able to make use of more than 1 CPU because it doesn't
    support running code concurrently across multiple CPU cores. The `hub` pod
    running JupyterHub in Python and the `proxy` pod running
@@ -453,3 +462,54 @@ some notes about them.
 | prePuller.resources                     | hook\|continuous-image-puller | 0, 0                             | This pod's containers are all running `echo` or `pause` commands as a trick to pull the images. Will require minimal resources.                                                                                                                                                                                                    |
 | prePuller.hook.resources                | hook-image-awaiter            | 0, 0                             | The container just polls the k8s api-server. Will require minimal resources.                                                                                                                                                                                                                                                       |
 | singleuser.cpu\|memory.guarantee\|limit | jupyter-username              | 0, 1G                            | The configuration syntax is different because it is native to the Spawner base class rather than Kubernetes. It is commonly useful to guarantee a certain amount of memory rather than CPU to help users share CPU with each other.                                                                                                |
+
+### Example resource requests for high reliability
+
+Here are some examples of resource requests reasonable for a larger deployment.
+If you collect metrics on the resource usage of pods in your k8s cluster
+(Prometheus) and have dashboards showing you its usage (Grafana), you could
+tweak these over time.
+
+```yaml
+hub: # hub pod, running jupyterhub/jupyterhub
+  resources:
+    requests:
+      cpu: 1
+      memory: 512Mi
+proxy:
+  chp: # proxy pod, running jupyterhub/configurable-http-proxy
+    resources:
+      requests:
+        cpu: 1
+        memory: 512Mi
+  traefik: # autohttps pod (optional, running traefik/traefik)
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+  secretSync: # autohttps pod (optional, sidecar container running small Python script)
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+scheduling:
+  userScheduler: # user-scheduler pods (optional, running kubernetes/kube-scheduler)
+    resources:
+      requests:
+        cpu: 20m
+        memory: 128Mi
+  userPlaceholder: # user-placeholder pods (optional, running pause container)
+    # This is just an override of the resource requests that otherwise match
+    # those configured in singleuser.cpu|memory.guarantee|limit.
+    resources: {}
+prePuller: # hook|continuous-image-puller pods (optional, running pause container)
+  resources:
+    requests:
+      cpu: 10m
+      memory: 8Mi
+  hook: # hook-image-awaiter pod (optional, running GoLang binary defined in images/image-awaiter)
+    resources:
+      requests:
+        cpu: 10m
+        memory: 8Mi
+```
