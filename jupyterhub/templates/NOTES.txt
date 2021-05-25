@@ -86,7 +86,7 @@ If you have questions, please:
 
 
 {{- /*
-  Breaking changes in 1.0.0
+  Breaking changes.
 */}}
 
 {{- $breaking := "" }}
@@ -152,11 +152,3 @@ If you have questions, please:
 {{- if $breaking }}
 {{- fail (print $breaking_title $breaking) }}
 {{- end }}
-
-
-
-
-
-{{- /*
-  Deprecation messages that can be removed in 3.0.0
-*/}}
