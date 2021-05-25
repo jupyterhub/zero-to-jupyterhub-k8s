@@ -75,8 +75,10 @@ If you have questions, please:
 {{- if eq .Values.proxy.https.enabled false }}
 {{- if or (not (eq .Values.proxy.https.type "letsencrypt")) (not (eq (.Values.proxy.https.letsencrypt.contactEmail | default "") "")) }}{{ println }}
 #################################################################################
-######   WARNING: Configuring proxy.https without setting                   #####
-######            proxy.https.enabled to true is no longer allowed.         #####
+######   WARNING: proxy.https.enabled is set to false by default since      #####
+######            version 0.10.0. It is now set to false but proxy.https    #####
+######            seem to have been modified indicating you may want it     #####
+######            enabled.                                                  #####
 #################################################################################
 {{- end }}
 {{- end }}
