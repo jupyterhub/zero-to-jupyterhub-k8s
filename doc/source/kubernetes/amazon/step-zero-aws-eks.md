@@ -75,15 +75,6 @@ This guide uses AWS to set up a cluster. This mirrors the steps found at [Gettin
    This is necessary for the workers to find the master plane.
    
    See [Getting Started with Amazon EKS][getting started with amazon eks] *Step 3: Launch and Configure Amazon EKS Worker Nodes*
-10. Preparing authenticator for Helm
-
-    There might be a better way to configure this
-
-    Since the described helm deployment in the next section uses RBAC, `system:anonymous` user must be given access to administer the cluster. This can be done by the following command
-
-    ```
-    kubectl create clusterrolebinding cluster-system-anonymous --clusterrole=cluster-admin --user=system:anonymous
-    ```
     
 [getting started with amazon eks]: https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html
 [selected regions]: https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/
