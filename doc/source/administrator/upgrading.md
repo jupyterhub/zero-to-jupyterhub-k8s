@@ -35,7 +35,7 @@ Since it is a major upgrade of JupyterHub that changes how authentication is
 implemented, user servers must be stopped during the upgrade.
 The database schema has also changed, so a database upgrade must be performed.
 
-See the [documentation for v0.5 for the upgrade process](https://zero-to-jupyterhub.readthedocs.io/en/v0.5-doc/upgrading.html)
+See the [documentation for v0.5 for the upgrade process](https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/upgrading.html#v0-4-to-v0-5)
 as well as the [CHANGELOG](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/CHANGELOG.md#05---hamid-hassan---2017-12-05)
 for this release for more information about changes.
 
