@@ -405,9 +405,10 @@ relevant:
    requests, but setting only resource requests _will not make_ k8s assume any
    resource limits.
 
-1. Setting resource requests improves the reliability of the container's
-   execution. Setting resource limits improves the consistency of the execution
-   of the specific container and other containers on the nodes.
+1. Setting resource _requests_ guarantees a minimal level of resources for the
+   container and therefore some minimal capacity for it to do its job. Setting
+   resource _limits_ close to or equal to the resource requests can be useful to
+   make the container operational performance more consistent.
 
 1. Requested memory is reserved and unavailable for other containers on a node
    to use, but any requested CPU can be used by other containers until it is
