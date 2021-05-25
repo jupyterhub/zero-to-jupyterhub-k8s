@@ -61,10 +61,27 @@ followed these instructions between `0.7.0-beta.1` and `0.11.1`, please see the
     For example if you have passed a numerical value to a configuration that
     expected a string.
 
-- **Default resource requests are no longer set** [#2034](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2034)
+- **Breaking changes to config** ([#2211](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2211))
 
-  Z2JH now follows Helm chart best practice in not setting default resource limits.
-  If you want to restore the old behaviour you can set:
+  As the Helm chart has evolved over time, configuration options have been
+  renamed and changed in various ways. With the release of 1.0.0, we enforce a
+  transition from various old configuration options to new that have previously
+  been ignored or accepted.
+
+  If you are using outdated configuration options you will be informed about it
+  before any changes have been made to your deployment of the Helm chart.
+
+- **Default resource requests are no longer set** ([#2034](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2034), [#2226](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2226))
+
+  The helm chart now follows a common Helm chart practice by not setting default
+  resource requests or limits.
+
+  To help in this transition, there is documentation with some guidance on
+  setting explicit resource requests available
+  [here](https://z2jh.jupyter.org/en/latest/administrator/optimization.html#explicit-memory-and-cpu-allocated-to-core-pods-containers).
+
+  If you want to restore the previous behavior, you can explicitly set the
+  resource requests like below.
 
   ```yaml
   hub:
