@@ -58,17 +58,27 @@ If you have questions, please:
   Warnings for likely misconfiguration
 */}}
 
-{{- if and (not .Values.scheduling.podPriority.enabled) (and .Values.scheduling.userPlaceholder.enabled .Values.scheduling.userPlaceholder.replicas) }}
-
-WARNING: You are using user placeholders without pod priority enabled, either
-enable pod priority or stop using the user placeholders to avoid wasting cloud
-resources.
+{{- if and (not .Values.scheduling.podPriority.enabled) (and .Values.scheduling.userPlaceholder.enabled .Values.scheduling.userPlaceholder.replicas) }}{{ println }}
+#################################################################################
+######   WARNING: You are using user placeholders without pod priority      #####
+######            enabled*, either enable pod priority or stop using the    #####
+######            user placeholders** to avoid having placeholders that     #####
+######            refuse to make room for a real user.                      #####
+######                                                                      #####
+######            *scheduling.podPriority.enabled                           #####
+######            **scheduling.userPlaceholder.enabled                      #####
+######            **scheduling.userPlaceholder.replicas                     #####
+#################################################################################
 {{- end }}
 
 
 {{- if eq .Values.proxy.https.enabled false }}
 {{- if or (not (eq .Values.proxy.https.type "letsencrypt")) (not (eq (.Values.proxy.https.letsencrypt.contactEmail | default "") "")) }}{{ println }}
-WARNING: Configuring proxy.https without setting proxy.https.enabled to true is no longer allowed.
+#################################################################################
+######   WARNING: proxy.https.enabled is set to false by default since      #####
+######            version 0.10.0. It is now set to false but proxy.https    #####
+######            has been modified indicating you may want it enabled.     #####
+#################################################################################
 {{- end }}
 {{- end }}
 
@@ -77,61 +87,69 @@ WARNING: Configuring proxy.https without setting proxy.https.enabled to true is 
 
 
 {{- /*
-  Deprecation messages that can be removed in 2.0.0
+  Breaking changes.
 */}}
 
-{{- if .Values.hub.extraConfigMap }}{{ println }}
-DEPRECATION: hub.extraConfigMap is deprecated in jupyterhub chart 0.8.
-Use top-level `custom` instead:
+{{- $breaking := "" }}
+{{- $breaking_title := "\n" }}
+{{- $breaking_title = print $breaking_title "\n#################################################################################" }}
+{{- $breaking_title = print $breaking_title "\n######   BREAKING: The config values passed contained no longer accepted    #####" }}
+{{- $breaking_title = print $breaking_title "\n######             options. See the messages below for more details.        #####" }}
+{{- $breaking_title = print $breaking_title "\n######                                                                      #####" }}
+{{- $breaking_title = print $breaking_title "\n######             To verify your updated config is accepted, you can use   #####" }}
+{{- $breaking_title = print $breaking_title "\n######             the `helm template` command.                             #####" }}
+{{- $breaking_title = print $breaking_title "\n#################################################################################" }}
 
-custom:
-{{- (merge dict .Values.custom .Values.hub.extraConfigMap) | toYaml | nindent 2 }}
+
+{{- if hasKey .Values.hub "extraConfigMap" }}
+{{- $breaking = print $breaking "\n\nRENAMED: hub.extraConfigMap has been renamed to custom" }}
 {{- end }}
 
 
+{{- if hasKey .Values "auth" }}
 {{- if .Values.auth }}
-{{ fail (include "jupyterhub.authDep.remapOldToNew" .) }}
+{{- $breaking = print $breaking (include "jupyterhub.authDep.remapOldToNew" .) }}
+{{- else }}
+{{- $breaking = print $breaking "\n\nREMOVED: Please remove the empty 'auth' config" }}
+{{- end }}
 {{- end }}
 
 
-{{- if .Values.proxy.containerSecurityContext }}
-{{- fail "\n\nHARD DEPRECATION: proxy.containerSecurityContext has been renamed to proxy.chp.containerSecurityContext" }}
+{{- if hasKey .Values.proxy "containerSecurityContext" }}
+{{- $breaking = print $breaking "\n\nRENAMED: proxy.containerSecurityContext has been renamed to proxy.chp.containerSecurityContext" }}
 {{- end }}
 
 
 {{- if hasKey .Values.proxy "pdb" }}
-{{ fail "\n\nHARD DEPRECATION: proxy.pdb has renamed to proxy.chp.pdb" }}
+{{- $breaking = print $breaking "\n\nRENAMED: proxy.pdb has renamed to proxy.chp.pdb" }}
 {{- end }}
 
 
-{{- if .Values.proxy.networkPolicy }}
-{{- fail "\n\nHARD DEPRECATION: proxy.networkPolicy has been renamed to proxy.chp.networkPolicy" }}
+{{- if hasKey .Values.proxy "networkPolicy" }}
+{{- $breaking = print $breaking "\n\nRENAMED: proxy.networkPolicy has been renamed to proxy.chp.networkPolicy" }}
 {{- end }}
 
 
 {{- if hasKey .Values.hub "uid" }}
-{{- print "\n\nDEPRECATION: hub.uid is deprecated in jupyterhub chart 0.9. Set the hub.containerSecurityContext.runAsUser value directly instead." }}
+{{- $breaking = print $breaking "\n\nRENAMED: hub.uid must as of 1.0.0 be configured using hub.containerSecurityContext.runAsUser" }}
 {{- end }}
 
 
-{{- if (.Values.hub | dig "imagePullSecret" "enabled" "") }}
-{{- fail "\n\nHARD DEPRECATION: hub.imagePullSecret has renamed to imagePullSecret" }}
+{{- if hasKey .Values.hub "imagePullSecret" }}
+{{- $breaking = print $breaking "\n\nREMOVED: hub.imagePullSecret has been removed, but there is now a chart wide wide configuration named imagePullSecret" }}
 {{- end }}
 
 
-{{- if (.Values.singleuser | dig "imagePullSecret" "enabled" "") }}
-{{- fail "\n\nHARD DEPRECATION: singleuser.imagePullSecret has renamed to imagePullSecret" }}
+{{- if hasKey .Values.singleuser "imagePullSecret" }}
+{{- $breaking = print $breaking "\n\nREMOVED: singleuser.imagePullSecret has been removed, but there is now a chart wide wide configuration named imagePullSecret" }}
 {{- end }}
 
 
-{{- if (.Values.singleuser | dig "cloudMetadata" "enabled" "") }}
-{{- print "\n\nDEPRECATION: singleuser.cloudMetadata.enabled is deprecated, instead use singleuser.cloudMetadata.blockWithIptables with the inverted value." }}
+{{- if hasKey .Values.singleuser.cloudMetadata "enabled" }}
+{{- $breaking = print $breaking "\n\nCHANGED: singleuser.cloudMetadata.enabled must as of 1.0.0 be configured using singleuser.cloudMetadata.blockWithIptables with the opposite value." }}
 {{- end }}
 
 
-
-
-
-{{- /*
-  Deprecation messages that can be removed in 3.0.0
-*/}}
+{{- if $breaking }}
+{{- fail (print $breaking_title $breaking) }}
+{{- end }}

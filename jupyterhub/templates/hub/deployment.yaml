@@ -169,15 +169,9 @@ spec:
           {{- with .Values.hub.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
-          {{- /* Below is deprecation logic of .Values.hub.uid */}}
-          {{- if .Values.hub.containerSecurityContext }}
-          {{- $securityContext := dict }}
-          {{- if hasKey .Values.hub "uid" }}
-          {{- $_ := merge $securityContext (dict "runAsUser" .Values.hub.uid) }}
-          {{- end }}
-          {{- $_ := merge $securityContext .Values.hub.containerSecurityContext }}
+          {{- with .Values.hub.containerSecurityContext }}
           securityContext:
-            {{- $securityContext | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
           {{- end }}
           {{- with .Values.hub.lifecycle }}
           lifecycle:
