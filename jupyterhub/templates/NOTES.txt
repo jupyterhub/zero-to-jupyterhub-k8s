@@ -77,8 +77,7 @@ If you have questions, please:
 #################################################################################
 ######   WARNING: proxy.https.enabled is set to false by default since      #####
 ######            version 0.10.0. It is now set to false but proxy.https    #####
-######            seem to have been modified indicating you may want it     #####
-######            enabled.                                                  #####
+######            has been modified indicating you may want it enabled.     #####
 #################################################################################
 {{- end }}
 {{- end }}
@@ -142,7 +141,7 @@ If you have questions, please:
 
 
 {{- if hasKey .Values.singleuser "imagePullSecret" }}
-{{- $breaking = print $breaking "\n\nCHANGED: singleuser.imagePullSecret has been removed, but there is now a chart wide wide configuration named imagePullSecret" }}
+{{- $breaking = print $breaking "\n\nREMOVED: singleuser.imagePullSecret has been removed, but there is now a chart wide wide configuration named imagePullSecret" }}
 {{- end }}
 
 
