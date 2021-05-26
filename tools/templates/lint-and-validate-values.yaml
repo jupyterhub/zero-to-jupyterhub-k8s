@@ -107,8 +107,6 @@ hub:
   extraConfig:
     test: |-
       c.Spawner.cmd = 'mock'
-  extraConfigMap:
-    mock.entry: mock-config-map-entry
   extraEnv: &extraEnv
     IGNORED_KEY_NAME:
       name: MOCK_ENV_VAR_NAME1
