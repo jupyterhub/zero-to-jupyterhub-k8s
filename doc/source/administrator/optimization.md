@@ -434,7 +434,7 @@ relevant:
    running JupyterHub in Python and the `proxy` pod running
    ConfigurableHTTPProxy in NodeJS are such applications.
 
-Some additional more technical details are:
+Some additional technical details:
 
 1. A container requesting `0` CPU will be granted the smallest amount of CPU supported by the Kubernetes container runtime.
 1. CPU core sharing is enforced between containers in time intervals of 100 ms
