@@ -74,25 +74,23 @@ hub:
   deploymentStrategy:
     type: Recreate
     rollingUpdate:
+  labels: &labels
+    mock-label1-key: mock-label1-value
+    mock-label2-key: mock-label2-value
+  annotations: &annotations
+    mock-annotation1-key: mock-annotation1-value
+    mock-annotation2-key: mock-annotation2-value
   db:
     type: sqlite-pvc
     upgrade:
     pvc:
-      annotations:
-        mock-annotation: mock
-      selector:
-        matchLabels:
-          mock-selector: mock
+      annotations: *annotations
       accessModes:
         - ReadWriteOnce
       storage: 1Gi
       subPath: /mock
       storageClassName: custom-storage-class
     url: custom-db-url
-  labels:
-    mock: mock
-  annotations:
-    mock: mock
   image:
     name: dummy-name
     tag: dummy-tag
@@ -111,7 +109,7 @@ hub:
       c.Spawner.cmd = 'mock'
   extraConfigMap:
     mock.entry: mock-config-map-entry
-  extraEnv:
+  extraEnv: &extraEnv
     IGNORED_KEY_NAME:
       name: MOCK_ENV_VAR_NAME1
       value: MOCK_ENV_VAR_VALUE1
@@ -120,10 +118,26 @@ hub:
   extraContainers: []
   extraVolumes: []
   extraVolumeMounts: []
-  resources:
+  resources: &resources
     requests:
       cpu: 100m
       memory: 512Mi
+    limits:
+      cpu: 200m
+      memory: 1Gi
+  lifecycle: &lifecycle
+    postStart:
+      exec:
+        command:
+          - "/bin/sh"
+          - "-c"
+          - "echo Hello from the postStart handler >> /usr/share/message"
+    preStop:
+      exec:
+        command:
+          - "/bin/sh"
+          - "-c"
+          - "echo Hello from the preStart handler >> /usr/share/message"
   services:
     tests:
       apiToken: mocked-api-token
@@ -158,10 +172,8 @@ proxy:
         port: 22
         targetPort: ssh
     type: LoadBalancer
-    labels:
-      MOCK_PROXY_ENV: mock
-    annotations:
-      hub.jupyter.org/mock-proxy-annotation: mock
+    labels: *labels
+    annotations: *annotations
     nodePorts:
       http:
       https:
@@ -169,14 +181,10 @@ proxy:
     extraCommandLineFlags:
       - "--auto-rewrite"
       - "--mock-flag {{ .Values.proxy.chp.resources.requests.memory }}"
-    resources:
-      requests:
-        cpu: 100m
-        memory: 512Mi
+    resources: *resources
     defaultTarget: http://dummy.local/hello
     errorTarget: http://dummy.local/error
-    extraEnv:
-      MOCK_ENV: mock
+    extraEnv: *extraEnv
     nodeSelector:
       node-type: mock
     tolerations:
@@ -200,17 +208,9 @@ proxy:
     extraPorts:
       - name: ssh
         containerPort: 8022
-    labels:
-      hub.jupyter.org/test-label: mock
-    resources:
-      requests:
-        cpu: 200m
-        memory: 512Mi
-      limits:
-        cpu: 200m
-        memory: 1Gi
-    extraEnv:
-      LEGO_CA_CERTIFICATES: /etc/pebble/root-cert.pem
+    labels: *labels
+    resources: *resources
+    extraEnv: *extraEnv
     nodeSelector:
       node-type: mock
     tolerations:
@@ -231,15 +231,8 @@ proxy:
       maxUnavailable: null
       minAvailable: 1
   secretSync:
-    resources:
-      requests:
-        cpu: 100m
-        memory: 128Mi
-      limits:
-        cpu: 200m
-        memory: 1Gi
-  labels:
-    mock-proxy-label: mock
+    resources: *resources
+  labels: *labels
   https:
     enabled: true
     type: letsencrypt
@@ -334,9 +327,9 @@ singleuser:
     interNamespaceAccessLabels: ignore
     allowedIngressPorts: []
   events: true
-  extraLabels: {}
-  extraEnv: {}
-  lifecycleHooks: {}
+  extraLabels: *labels
+  extraEnv: *extraEnv
+  lifecycleHooks: *lifecycle
   initContainers:
     - name: mock-init-container-name
       image: mock-init-container-image
@@ -350,8 +343,7 @@ singleuser:
   serviceAccountName:
   storage:
     type: dynamic
-    extraLabels:
-      mock-label: mock-value
+    extraLabels: *labels
     extraVolumes: []
     extraVolumeMounts: []
     static:
@@ -407,7 +399,7 @@ scheduling:
   userPlaceholder:
     enabled: true
     replicas: 1
-    resources: {}
+    resources: *resources
   corePods:
     tolerations:
       - key: mock-taint-key-corePods
@@ -452,8 +444,7 @@ prePuller:
 
 ingress:
   enabled: true
-  annotations:
-    mock: mock
+  annotations: *annotations
   hosts:
     - mocked1.domain.name
     - mocked2.domain.name
@@ -474,7 +465,9 @@ cull:
 debug:
   enabled: true
 
-global: {}
+global:
+  whatever:
+    this-should-be-accepted: true
 
 custom:
   myCustomStuff: [hello]

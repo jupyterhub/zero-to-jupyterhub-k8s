@@ -88,6 +88,7 @@ hub:
     runAsUser: 1000
     runAsGroup: 1000
     allowPrivilegeEscalation: false
+  lifecycle: {}
   services: {}
   pdb:
     enabled: false
