@@ -139,6 +139,9 @@ followed these instructions between `0.7.0-beta.1` and `0.11.1`, please see the
 
   See [the documentation](http://z2jh.jupyter.org/en/latest/resources/reference.html#hub-existingsecret) and [pull request #2042](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2042) for more details.
 
+ - **configurable-http-proxy statsd metrics removed** ([#2231](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2231))
+ 
+   [statsd metrics have been removed](https://github.com/jupyterhub/configurable-http-proxy/pull/314) in configurable-http-proxy. This will only affect administrators who have overridden the CHP command line arguments as statsd is not supported in the Helm chart. Support for Prometheus metrics will be added in a future release.
 #### Notable dependencies updated
 
 | Dependency                                                                       | Version in 0.11.0 | Version in 12.0.0 | Changelog link                                                                              | Note                               |
@@ -150,7 +153,7 @@ followed these instructions between `0.7.0-beta.1` and `0.11.1`, please see the
 | [ltiauthenticator](https://github.com/jupyterhub/ltiauthenticator)               | 1.0.0             | 1.0.0             | [Changelog](https://github.com/jupyterhub/ltiauthenticator/blob/master/CHANGELOG.md)        | Run in the `hub` pod               |
 | [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 0.0.6             | 0.0.7             | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/master/CHANGELOG.md)     | Run in the `hub` pod               |
 | [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler)   | 1.0               | 1.1               | -                                                                                           | Run in the `hub` pod               |
-| [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy) | 4.2.2             | 4.3.2             | [Changelog](https://github.com/jupyterhub/configurable-http-proxy/blob/master/CHANGELOG.md) | Run in the `proxy` pod             |
+| [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy) | 4.2.2             | 4.4.0             | [Changelog](https://github.com/jupyterhub/configurable-http-proxy/blob/master/CHANGELOG.md) | Run in the `proxy` pod             |
 | [traefik](https://github.com/traefik/traefik)                                    | v2.3.7            | v2.4.8            | [Changelog](https://github.com/traefik/traefik/blob/master/CHANGELOG.md)                    | Run in the `autohttps` pod         |
 | [kube-scheduler](https://github.com/kubernetes/kube-scheduler)                   | v1.19.7           | v1.19.11          | -                                                                                           | Run in the `user-scheduler` pod(s) |
 
