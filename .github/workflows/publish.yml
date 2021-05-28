@@ -19,6 +19,8 @@ on:
       - "!.github/workflows/publish.yaml"
     branches-ignore:
       - "dependabot/**"
+    tags:
+      - "**"
 
 jobs:
   # Builds and pushes docker images to DockerHub and package the Helm chart and
