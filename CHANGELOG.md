@@ -4,22 +4,66 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ## [1.0]
 
-### [1.0.0] - 2021-05-FIXME
+### [1.0.0-beta.1] - 2021-05-28
 
 This release includes a security announcement, breaking changes, several new
-features, and more. With the 1.0.0 version of this Helm chart, we look to follow
-[SemVer 2 versioning scheme](https://semver.org/).
+features, and more. Please read through this to be able to help yourself and
+others upgrade successfully.
+
+As of the 1.0.0 version of this Helm chart, we aim to follow [SemVer 2
+versioning scheme](https://semver.org/) where breaking changes, new features,
+and small bugfixes will increment the three version numbers.
 
 #### Highlights
 
 - **arm64 compatible images**
+
+  All images except the user image (`singleuser.image`) now support the arm64
+  architecture. This allows this Helm chart to be installable on a RaspberryPi
+  based k8s cluster.
+
 - **`hub.extraFiles` and `singleuser.extraFiles`**
+
+  Have you wanted to mount various files to the hub pod or the user pods, such
+  as a configuration file or similar? While this could be done by creating a
+  dedicated ConfigMap that was mounted etc before, you don't need to go through
+  that trouble.
+
+  Read more in [the configuration reference](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#hub-extrafiles).
+
 - **Automatic secret generation**
-  NOTE about the need to do one upgrade before removing secrets.
-- referencing resources
-  TODO: add documentation section about this
-- (pullOnlyOnChanges)
-- (fullnameOverride)
+
+  Are you explicitly passing `proxy.secretToken`, `hub.config.CryptKeeper.keys`,
+  `hub.config.JupyterHub.cookie_secret`? Do it one more time when upgrading to
+  1.0.0! After that, they will be stored away in a k8s Secret and reused.
+
+  If you install 1.0.0 from scratch, those will be automatically generated for
+  you if you don't specify them.
+
+- **Smoother helm upgrades**
+
+  - `prePuller.hook.pullOnlyOnChanges` is now available and enabled by default,
+    which only intercepts a `helm upgrade` by pulling images if they have
+    changed since the last upgrade.
+
+  - The `proxy` pod were sometimes restarted when it wasn't needed and that
+    could cause needless disruptions for users. This is now fixed.
+
+- **`fullnameOverride` and `nameOverride`**
+
+  These options let you control the naming of the k8s resources created by the
+  Helm chart, but should _not be used_ unless you install from scratch.
+
+  Read more in [the configuration
+  reference](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#fullnameOverride).
+
+- **Referencing resources from a parent Helm chart's templates**
+
+  Are you a developer of a Helm chart that depends on this Helm chart, and you
+  want to reference a k8s resource by name from one of your Helm templates?
+
+  Learn how to do it the recommended way by reading [this
+  documentation](https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/advanced.html#referencing-resources-from-a-parent-helm-chart-s-templates).
 
 #### Security announcement
 
@@ -137,11 +181,20 @@ followed these instructions between `0.7.0-beta.1` and `0.11.1`, please see the
 
 - **hub.existingSecret is reworked** ([#2042](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2042))
 
-  See [the documentation](http://z2jh.jupyter.org/en/latest/resources/reference.html#hub-existingsecret) and [pull request #2042](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2042) for more details.
+  See [the
+  documentation](http://z2jh.jupyter.org/en/latest/resources/reference.html#hub-existingsecret)
+  and [pull request
+  #2042](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2042) for
+  more details.
 
- - **configurable-http-proxy statsd metrics removed** ([#2231](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2231))
- 
-   [statsd metrics have been removed](https://github.com/jupyterhub/configurable-http-proxy/pull/314) in configurable-http-proxy. This will only affect administrators who have overridden the CHP command line arguments as statsd is not supported in the Helm chart. Support for Prometheus metrics will be added in a future release.
+- **configurable-http-proxy statsd metrics removed** ([#2231](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2231))
+
+  [statsd metrics have been
+  removed](https://github.com/jupyterhub/configurable-http-proxy/pull/314) in
+  configurable-http-proxy. This will only affect administrators who have
+  overridden the CHP command line arguments as statsd is not supported in the
+  Helm chart. Support for Prometheus metrics will be added in a future release.
+
 #### Notable dependencies updated
 
 | Dependency                                                                       | Version in 0.11.0 | Version in 12.0.0 | Changelog link                                                                              | Note                               |

@@ -206,3 +206,30 @@ under hub.db.pvc, but make sure
 to choose one that the hub can write quickly and safely to. Slow or higher
 latency storage classes can cause hub operations to lag which may ultimately
 lead to HTTP errors in user environments.
+
+### Referencing resources from a parent Helm chart's templates
+
+The k8s resources in this Helm chart should not be referenced by hardcoded name
+as they can be adjusted via [`fullnameOverride`](schema_fullnameOverride) or
+[`nameOverride`](schema_nameOverride). So to reliably reference them, you can
+make use of defined Helm templates.
+
+Below is an example of how you could define a RoleBinding binding some Role you
+have defined as well and the `hub` k8s ServiceAccount that may be named
+something slightly different if `fullnameOverride` or `nameOverride` has been
+used.
+
+```handlebars
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: my-role-binding
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "jupyterhub.hub.fullname" . }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: Role
+  name: my-role
+  apiGroup: rbac.authorization.k8s.io
+```
