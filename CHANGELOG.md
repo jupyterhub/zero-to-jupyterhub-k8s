@@ -70,7 +70,7 @@ and small bugfixes will increment the three version numbers.
 The documentation for how to setup a Amazon EKS cluster included an insecure
 step that would give anyone access to the Kubernetes cluster. If you have
 followed these instructions between `0.7.0-beta.1` and `0.11.1`, please see the
-[this post in the Jupyter forum](TODO).
+[this post in the Jupyter forum](https://discourse.jupyter.org/t/-/9372).
 
 #### Breaking changes
 
