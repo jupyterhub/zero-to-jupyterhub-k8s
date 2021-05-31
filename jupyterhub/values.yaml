@@ -134,6 +134,8 @@ hub:
     failureThreshold: 1000
     timeoutSeconds: 1
   existingSecret:
+  serviceAccount:
+    annotations: {}
 
 rbac:
   enabled: true

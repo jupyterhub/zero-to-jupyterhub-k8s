@@ -3,6 +3,10 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: {{ include "jupyterhub.hub.fullname" . }}
+  {{- with .Values.hub.serviceAccount.annotations }}
+  annotations:
+    {{- . | toYaml | nindent 4 }}
+  {{- end }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 ---
