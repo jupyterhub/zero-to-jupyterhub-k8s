@@ -159,6 +159,8 @@ hub:
       operator: Equal
       value: mock-taint-value-hub
       effect: NoSchedule
+  serviceAccount: &serviceAccount
+    annotations: *annotations
 
 rbac:
   enabled: true
@@ -228,6 +230,7 @@ proxy:
       enabled: true
       maxUnavailable: null
       minAvailable: 1
+    serviceAccount: *serviceAccount
   secretSync:
     resources: *resources
   labels: *labels
@@ -392,6 +395,7 @@ scheduling:
           - name: NodePreferAvoidPods
             weight: 161051
           - name: NodeAffinity
+    serviceAccount: *serviceAccount
   podPriority:
     enabled: true
   userPlaceholder:
@@ -430,6 +434,7 @@ prePuller:
         operator: Equal
         value: mock-taint-value-hook
         effect: NoSchedule
+    serviceAccount: *serviceAccount
   continuous:
     enabled: true
   extraImages:

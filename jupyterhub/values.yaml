@@ -134,6 +134,8 @@ hub:
     failureThreshold: 1000
     timeoutSeconds: 1
   existingSecret:
+  serviceAccount:
+    annotations: {}
 
 rbac:
   enabled: true
@@ -261,6 +263,8 @@ proxy:
       enabled: false
       maxUnavailable:
       minAvailable: 1
+    serviceAccount:
+      annotations: {}
   secretSync:
     containerSecurityContext:
       runAsUser: 65534 # nobody user
@@ -431,6 +435,8 @@ scheduling:
       maxUnavailable: 1
       minAvailable:
     resources: {}
+    serviceAccount:
+      annotations: {}
   podPriority:
     enabled: false
     globalDefault: false
@@ -496,6 +502,8 @@ prePuller:
     nodeSelector: {}
     tolerations: []
     resources: {}
+    serviceAccount:
+      annotations: {}
   continuous:
     enabled: true
   pullProfileListImages: true

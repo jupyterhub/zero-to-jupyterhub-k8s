@@ -1132,6 +1132,18 @@ properties:
         deprecated: true
         description: |
           DEPRECATED: Use [`imagePullSecret`](schema_imagePullSecret) instead.
+      serviceAccount: &serviceAccount
+        type: object
+        additionalProperties: false
+        description: |
+          Configuration for a k8s ServiceAccount dedicated for use by the
+          specific pod which this configuration is nested under.
+        properties:
+          annotations:
+            type: object
+            additionalProperties: true
+            description: |
+              Kubernetes annotations to apply to the k8s ServiceAccount.
 
   proxy:
     type: object
@@ -1544,6 +1556,7 @@ properties:
                 type: boolean
           image: *image-spec
           resources: *resources-spec
+          serviceAccount: *serviceAccount
       labels:
         type: object
         additionalProperties: true
@@ -2062,6 +2075,7 @@ properties:
                         weight:
                           type: integer
           resources: *resources-spec
+          serviceAccount: *serviceAccount
       podPriority:
         type: object
         additionalProperties: false
@@ -2333,6 +2347,7 @@ properties:
           containerSecurityContext: *containerSecurityContext-spec
           image: *image-spec
           resources: *resources-spec
+          serviceAccount: *serviceAccount
       continuous:
         type: object
         additionalProperties: false
