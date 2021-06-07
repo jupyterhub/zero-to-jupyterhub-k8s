@@ -119,6 +119,8 @@ jobs:
         # k3s-version: https://github.com/rancher/k3s/tags
         # k3s-channel: https://update.k3s.io/v1-release/channels
         include:
+          - k3s-channel: v1.21
+            test: install
           - k3s-channel: v1.20
             test: install
           - k3s-channel: v1.19
