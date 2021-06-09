@@ -4,7 +4,7 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ## [1.0]
 
-### [1.0.0-beta.1] - 2021-05-28
+### [1.0.0] - 2021-06-09
 
 This release includes a security announcement, breaking changes, several new
 features, and more. Please read through this to be able to help yourself and
@@ -225,6 +225,7 @@ For a detailed list of how Python dependencies have change in the `hub` Pod's Do
 
 #### Enhancements made
 
+- Add ...serviceAccount.annotations config for our k8s ServiceAccounts [#2236](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2236) ([@AndreaGiardini](https://github.com/AndreaGiardini))
 - upload chart as github artifact [#2086](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2086) ([@minrk](https://github.com/minrk))
 - allow override of CHP defaultTarget, errorTarget [#2079](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2079) ([@minrk](https://github.com/minrk))
 - Don't restart the proxy pod with each deploy [#2077](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2077) ([@yuvipanda](https://github.com/yuvipanda))
@@ -249,6 +250,7 @@ For a detailed list of how Python dependencies have change in the `hub` Pod's Do
 
 #### Maintenance and upkeep improvements
 
+- Test against k8s 1.21 and avoid deprecation warning for old k8s api policy/v1beta1 [#2243](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2243) ([@consideRatio](https://github.com/consideRatio))
 - Rename master branch to main [#2217](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2217) ([@manics](https://github.com/manics))
 - singleuser-sample: update base image [#2213](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2213) ([@consideRatio](https://github.com/consideRatio))
 - Remove deprecated logic and emit clear messages [#2211](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2211) ([@consideRatio](https://github.com/consideRatio))
