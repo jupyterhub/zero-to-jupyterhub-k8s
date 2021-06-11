@@ -19,7 +19,7 @@ going onwards.
 
 ```{admonition} Introduction to YAML
 If you haven't worked with YAML before, investing some
-minutes [learning about it]([YAML](https://www.youtube.com/watch?v=cdLNKUoMc6c)
+minutes [learning about it](https://www.youtube.com/watch?v=cdLNKUoMc6c)
 will likely be worth your time.
 ```
 
