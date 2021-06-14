@@ -16,20 +16,6 @@ This repo contains a _Helm chart_ for JupyterHub and a guide to use it. Together
 they allow you to make a JupyterHub available to a very large group of users
 such as the staff and students of a university.
 
----
-
-Please note that this repository is participating in a study into sustainability
-of open source projects. Data will be gathered about this repository for
-approximately the next 12 months, starting from 2021-06-11.
-
-Data collected will include number of contributors, number of PRs, time taken to
-close/merge these PRs, and issues closed.
-
-For more information, please visit
-[our informational page](https://sustainable-open-science-and-software.github.io/) or download our [participant information sheet](https://sustainable-open-science-and-software.github.io/assets/PIS_sustainable_software.pdf).
-
----
-
 ## The guide
 
 The [Zero to JupyterHub with Kubernetes guide](https://z2jh.jupyter.org)
@@ -45,6 +31,18 @@ The JupyterHub Helm chart lets a user create a reproducible and maintainable
 deployment of JupyterHub on a Kubernetes cluster in a cloud environment. The
 released charts are made available in our [Helm chart
 repository](https://jupyterhub.github.io/helm-chart).
+
+## Notice of Participation in Study
+
+Please note that this repository is participating in a study into sustainability
+of open source projects. Data will be gathered about this repository for
+approximately the next 12 months, starting from 2021-06-11.
+
+Data collected will include number of contributors, number of PRs, time taken to
+close/merge these PRs, and issues closed.
+
+For more information, please visit
+[the informational page](https://sustainable-open-science-and-software.github.io/) or download the [participant information sheet](https://sustainable-open-science-and-software.github.io/assets/PIS_sustainable_software.pdf).
 
 ## History
 
