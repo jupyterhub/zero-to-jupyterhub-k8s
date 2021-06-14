@@ -32,6 +32,18 @@ deployment of JupyterHub on a Kubernetes cluster in a cloud environment. The
 released charts are made available in our [Helm chart
 repository](https://jupyterhub.github.io/helm-chart).
 
+## Notice of Participation in Study
+
+Please note that this repository is participating in a study into sustainability
+of open source projects. Data will be gathered about this repository for
+approximately the next 12 months, starting from 2021-06-11.
+
+Data collected will include number of contributors, number of PRs, time taken to
+close/merge these PRs, and issues closed.
+
+For more information, please visit
+[the informational page](https://sustainable-open-science-and-software.github.io/) or download the [participant information sheet](https://sustainable-open-science-and-software.github.io/assets/PIS_sustainable_software.pdf).
+
 ## History
 
 Much of the initial groundwork for this documentation is information learned
