@@ -173,8 +173,8 @@
 
 {{- /* Ingress */}}
 {{- define "jupyterhub.ingress.fullname" -}}
-    {{- if (include "jupyterhub.fullname.dash" .) }}
-        {{- include "jupyterhub.fullname.dash" . }}
+    {{- if (include "jupyterhub.fullname" .) }}
+        {{- include "jupyterhub.fullname" . }}
     {{- else -}}
         jupyterhub
     {{- end }}
@@ -192,8 +192,8 @@
 
 {{- /* Priority */}}
 {{- define "jupyterhub.priority.fullname" -}}
-    {{- if (include "jupyterhub.fullname.dash" .) }}
-        {{- include "jupyterhub.fullname.dash" . }}
+    {{- if (include "jupyterhub.fullname" .) }}
+        {{- include "jupyterhub.fullname" . }}
     {{- else }}
         {{- .Release.Name }}-default-priority
     {{- end }}
@@ -201,7 +201,7 @@
 
 {{- /* user-placeholder Priority */}}
 {{- define "jupyterhub.user-placeholder-priority.fullname" -}}
-    {{- if (include "jupyterhub.fullname.dash" .) }}
+    {{- if (include "jupyterhub.fullname" .) }}
         {{- include "jupyterhub.user-placeholder.fullname" . }}
     {{- else }}
         {{- .Release.Name }}-user-placeholder-priority
@@ -210,7 +210,7 @@
 
 {{- /* user-scheduler's registered name */}}
 {{- define "jupyterhub.user-scheduler.fullname" -}}
-    {{- if (include "jupyterhub.fullname.dash" .) }}
+    {{- if (include "jupyterhub.fullname" .) }}
         {{- include "jupyterhub.user-scheduler-deploy.fullname" . }}
     {{- else }}
         {{- .Release.Name }}-user-scheduler
