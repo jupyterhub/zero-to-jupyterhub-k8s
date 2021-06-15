@@ -174,7 +174,7 @@
 {{- /* Ingress */}}
 {{- define "jupyterhub.ingress.fullname" -}}
     {{- if (include "jupyterhub.fullname.dash" .) }}
-        {{- include "jupyterhub.fullname.dash" . }}
+        {{- include "jupyterhub.fullname.dash" . }}ingress
     {{- else -}}
         jupyterhub
     {{- end }}
