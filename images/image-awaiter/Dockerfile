@@ -9,8 +9,8 @@ WORKDIR /build
 RUN CGO_ENABLED=0 GOOS=linux go build -ldflags '-w -s' -installsuffix cgo -a -o out/image-awaiter
 
 
-# present the result within a slimmed image
-FROM scratch
+# present the result within a slimmed image (must be multi-arch which rules out scratch)
+FROM busybox
 
 COPY --from=0 /build/out/image-awaiter /image-awaiter
 
