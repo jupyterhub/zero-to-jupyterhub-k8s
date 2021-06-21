@@ -202,3 +202,40 @@ az aks show --name <YOUR-CLUSTER-NAME> --resource-group <YOUR-RESOURCE-GROUP>
 
 It may take some time for the new cluster nodes to be ready.
 You can use `kubectl get node` to report the current `Ready/NotReady` status of all nodes in the cluster.
+
+### Amazon Web Services Elastic Kubernetes Service (EKS)
+
+To scale an existing nodegroup using the `eksctl` command line tools:
+
+```bash
+eksctl scale nodegroup \
+  -n <NODEGROUP-NAME> \
+  --nodes <DESIRED-NUMBER-OF-NODES>\
+  --nodes-max <MAX-NUMBER-OF-NODES>\
+  --nodes-min <MIN-NUMBER-OF-NODES>\
+  --cluster=<YOUR-CLUSTER-NAME>
+```
+
+If you have a cluster autoscaler set up, you can also create an autoscaling nodegroup with the `eksctl` command line tool.
+
+```bash
+eksctl create nodegroup \
+  --cluster <YOUR-CLUSTER-NAME> \
+  --name <NODEGROUP-NAME> \
+  --node-type <EC2-INSTANCE-TYPE(S)> \
+  --nodes-max <MAX-NUMBER-OF-NODES>\
+  --nodes-min <MIN-NUMBER-OF-NODES>\
+  --ssh-access \
+  --ssh-public-key <PATH-TO-KEYPAIR-WITH-EKS-PERMISSIONS> \
+  --node-zones <OPTIONALLY-SPECIFY-AVAILABILIYT-ZONE-FOR-NODES> \
+  --tags "k8s.io/cluster-autoscaler/node-template/taint/<some-taint-key>=<some-taint-value>:<some-taint-effect>, k8s.io/cluster-autoscaler/node-template/label/<some-node-label-key>=<some-node-label-value>,k8s.io/cluster-autoscaler/<YOUR-CLUSTER-NAME>=true,k8s.io/cluster-autoscaler/enabled=true" \
+  --node-labels "<some-node-label-key>=<some-node-label-value>,failure-domain.beta.kubernetes.io/zone=<AVAILABILITY-ZONE>,failure-domain.beta.kubernetes.io/region=<AVAILABILITY-REGION>"
+```
+
+The tags `k8s.io/cluster-autoscaler/<YOUR-CLUSTER-NAME>=<any-value-only-key-matters>` and `k8s.io/cluster-autoscaler/enabled=true` must be applied in order for the AWS cluster autoscaler to autoscale the nodegroup.
+
+A `tag` must be added that corresponds to each of the `node-labels` that will be used as a `nodeSelector` when scheduling pods; with `node-labels` of the form `<some-node-label-key>=<some-node-label-value>`, these tags should be of the form `k8s.io/cluster-autoscaler/node-template/label/<some-node-label-key>=<some-node-label-value>`.
+
+Taints can also be applied to the nodes in the nodegroup with tags of the form `k8s.io/cluster-autoscaler/node-template/taint/<some-taint-key>=<some-taint-value>:<some-taint-effect>`
+
+Finally, the AWS region and availability zone can be set with `node-labels`: `failure-domain.beta.kubernetes.io/region=<AVAILABILITY-REGION>` and `failure-domain.beta.kubernetes.io/zone=<AVAILABILITY-ZONE>`; and/or the `--node-zones` flag. Setting the availbility zone is useful when singleUser pods could get scheduled to nodes in different availability zones; that scenario is problematic when using any `persistentVolume` storage backing that does not support mounting across availability zones (including the default `gp2` storage in AWS EKS). In those cases, the `PV` gets created in the availability zone of the node to which the user's pod is first scheduled and errors occur if the same user pod is scheuled in a different availbility zone in the future. Avoid this by controlling the zone to which `nodegroups` are deployed and/or by specifying an availability zone in a custom `StorageClass` referenced in your `values.yaml`. 
