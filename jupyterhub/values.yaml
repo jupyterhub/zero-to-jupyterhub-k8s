@@ -526,6 +526,11 @@ ingress:
   pathSuffix:
   tls: []
 
+# cull relates to the jupyterhub-idle-culler service, responsible
+# for evicting inactive singleUser pods. Inactivity is defined
+# as no JupyterHub API response from the user's web browser (i.e., web socket closed).
+# The culling behavior is configured below with options corresponding to the
+# command-line flags for jupyterhub-idle-culler (see docs).
 cull:
   enabled: true
   users: false
