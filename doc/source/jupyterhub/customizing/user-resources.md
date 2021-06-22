@@ -205,6 +205,11 @@ You can use `kubectl get node` to report the current `Ready/NotReady` status of 
 
 ### Amazon Web Services Elastic Kubernetes Service (EKS)
 
+AWS EKS is an Amazon service providing an AWS-managed kubernetes control plane and a set of command-line tools, `eksctl`, to create and manager kubernetes clusters. It is but one way to deploy kubernetes with AWS infrastructure, but the following assumes that you have:
+
+1. a kubernetes cluster on deployed on EKS
+1. the `eksctl` command line tools [installed](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html) and configured to point to your EKS cluster.
+
 To scale an existing nodegroup using the `eksctl` command line tools:
 
 ```bash
