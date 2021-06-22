@@ -1,11 +1,11 @@
 (setup-helm)=
 
-# Setting up Helm
+# Setting up `helm`
 
-[Helm](https://helm.sh/), the package manager for Kubernetes, is a useful tool
-for: installing, upgrading and managing applications on a Kubernetes cluster.
-Helm packages are called _charts_.
-We will be installing and managing JupyterHub on our Kubernetes cluster using a Helm chart.
+[`helm`](https://helm.sh/), the package manager for Kubernetes, is a useful
+command line tool for: installing, upgrading and managing applications on a
+Kubernetes cluster. Helm packages are called _charts_. We will be installing and
+managing JupyterHub on our Kubernetes cluster using a Helm chart.
 
 Charts are abstractions describing how to install packages onto a Kubernetes
 cluster. When a chart is deployed, it works as a templating engine to populate
@@ -24,6 +24,9 @@ For **migrating from Helm v2 to v3**, checkout the official
 
 ## Installation
 
+For version {{chart_version}} of the Helm chart, `helm` >={{helm_version}} is
+required.
+
 While several [methods to install Helm](https://helm.sh/docs/intro/install/) exist, the
 simplest way to install Helm is to run Helm's installer script in a terminal:
 
@@ -31,23 +34,14 @@ simplest way to install Helm is to run Helm's installer script in a terminal:
 curl https://raw.githubusercontent.com/helm/helm/HEAD/scripts/get-helm-3 | bash
 ```
 
-- The minimum supported version of Helm in Z2JH is `3.2.0`.
-- Helm 3 uses the same security mechanisms as other Kubernetes clients such as `kubectl`.
-
 ## Verify
 
 You can verify that it is installed properly by running:
 
 ```
-helm list
-```
-
-You should see an empty list since no Helm charts have been installed:
-
-```
-NAME    NAMESPACE       REVISION        UPDATED STATUS  CHART   APP VERSION
+helm version
 ```
 
 ## Next Step
 
-Congratulations, Helm is now set up! Let's continue with {ref}`setup-jupyterhub`!
+Congratulations, `helm` is now set up! Let's continue with {ref}`setup-jupyterhub`!
