@@ -7,7 +7,7 @@ permissions on JupyterHub.
 
 ## Culling user pods
 
-JupyterHub uses the [jupyterhub-idle-culler](github.com/jupyterhub/jupyterhub-idle-culler) to automatically delete any user pods that have no activity
+JupyterHub uses the [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler) to automatically delete any user pods that have no activity
 for a period of time. This helps free up computational resources and keeps
 costs down if you are using an autoscaling cluster.
 When these users navigate back to your JupyterHub, they will
@@ -40,7 +40,7 @@ cull:
   every: <number-of-seconds-this-check-is-done>
 ```
 
-The above options correspond to flags in the [jupyterhub-idle-culler](github.com/jupyterhub/jupyterhub-idle-culler) package. Full documentation of these and additional flags can be found in the [jupyterhub-idle-culler docs](github.com/jupyterhub/jupyterhub-idle-culler#as-a-standalone-script).
+The above options correspond to flags in the [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler) package. Full documentation of these and additional flags can be found in the [jupyterhub-idle-culler docs](https://github.com/jupyterhub/jupyterhub-idle-culler#as-a-standalone-script).
 
 ```{note}
 While JupyterHub automatically runs the culling process, it is not a
