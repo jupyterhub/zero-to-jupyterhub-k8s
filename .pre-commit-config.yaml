@@ -43,9 +43,3 @@ repos:
     rev: 1.2.0
     hooks:
       - id: chartpress
-
-  # Check chart for possible issues
-  - repo: https://github.com/gruntwork-io/pre-commit
-    rev: v0.1.10
-    hooks:
-      - id: helmlint
