@@ -227,7 +227,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: {{ include "jupyterhub.hub.fullname" . }}
-    namespace: {{ .Release.Namespace }}
+    namespace: "{{ .Release.Namespace }}"
 roleRef:
   kind: Role
   name: my-role

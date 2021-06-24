@@ -204,7 +204,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: {{ include "jupyterhub.user-scheduler-deploy.fullname" . }}
-    namespace: {{ .Release.Namespace }}
+    namespace: "{{ .Release.Namespace }}"
 roleRef:
   kind: ClusterRole
   name: {{ include "jupyterhub.user-scheduler.fullname" . }}
