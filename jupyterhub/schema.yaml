@@ -619,7 +619,7 @@ properties:
         additionalProperties: false
         properties:
           type:
-            enum: [sqlite-pvc, sqlite-memory, mysql, postgres]
+            enum: [sqlite-pvc, sqlite-memory, mysql, postgres, other]
             description: |
               Type of database backend to use for the hub database.
 
@@ -680,6 +680,15 @@ properties:
 
                  The user specified in the connection string must have the rights to create
                  tables in the database specified.
+
+              5. **other**
+
+                 Use an externally hosted database of some kind other than mysql
+                 or postgres.
+
+                 When using _other_, the database password must be passed as
+                 part of [hub.db.url](schema_hub.db.url) as
+                 [hub.db.password](schema_hub.db.password) will be ignored.
           pvc:
             type: object
             additionalProperties: false
