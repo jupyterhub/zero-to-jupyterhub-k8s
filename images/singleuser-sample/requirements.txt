@@ -2,4 +2,4 @@
 # .github/dependabot.yaml.
 
 jupyterhub==1.4.1
-nbgitpuller==0.10.0
+nbgitpuller==0.10.1
