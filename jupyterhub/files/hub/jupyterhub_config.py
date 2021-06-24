@@ -72,6 +72,8 @@ if db_password is not None:
         os.environ["MYSQL_PWD"] = db_password
     elif db_type == "postgres":
         os.environ["PGPASSWORD"] = db_password
+    else:
+        print(f"Warning: hub.db.password is ignored for hub.db.type={db_type}")
 
 
 # c.JupyterHub configuration from Helm chart's configmap
