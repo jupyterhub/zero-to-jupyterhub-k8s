@@ -4,6 +4,44 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ## [1.0]
 
+### [1.0.1] - 2021-06-25
+
+#### Bugs fixed
+
+- Relax hub.db.type schema to accept unknown database types [#2285](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2285) ([@consideRatio](https://github.com/consideRatio))
+- templates: quote namespace in case they are only contain numbers [#2284](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2284) ([@consideRatio](https://github.com/consideRatio))
+- Corrected scheduler rbac custom naming [#2276](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2276) ([@v1r7u](https://github.com/v1r7u))
+- Fix fullnameOverride for Ingress & PriorityClass resources [#2251](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2251) ([@v1r7u](https://github.com/v1r7u))
+
+#### Maintenance and upkeep improvements
+
+- Bump traefik from 2.4.8 to 2.4.9 [#2288](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2288) ([@consideRatio](https://github.com/consideRatio))
+- singleuser-sample image: bump base image to reduce known vulns [#2286](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2286) ([@consideRatio](https://github.com/consideRatio))
+- schema: force labels and annotations to be strings [#2283](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2283) ([@consideRatio](https://github.com/consideRatio))
+- build(deps): bump nbgitpuller from 0.10.0 to 0.10.1 in /images/singleuser-sample [#2279](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2279) ([@dependabot](https://github.com/dependabot))
+- hub image: add sqlalchemy-cocroachdb dependency [#2262](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2262) ([@weisdd](https://github.com/weisdd))
+- build(deps): bump psycopg2-binary from 2.8.6 to 2.9.1 in /images/hub [#2259](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2259) ([@dependabot](https://github.com/dependabot))
+- build(deps): bump nbgitpuller from 0.9.0 to 0.10.0 in /images/singleuser-sample [#2247](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2247) ([@dependabot](https://github.com/dependabot))
+
+#### Documentation improvements
+
+- docs: de-hardcode mentioned minimum helm version [#2272](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2272) ([@consideRatio](https://github.com/consideRatio))
+- added AWS EKS cluster scaling/auto-scaling documentation for z2jh [#2268](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2268) ([@cdibble](https://github.com/cdibble))
+- Update installation.md [#2249](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2249) ([@enolfc](https://github.com/enolfc))
+- Add participation in study notice to readme [#2248](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2248) ([@sgibson91](https://github.com/sgibson91))
+- Update 1.0.0-beta.1 changelog entry to 1.0.0 [#2245](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2245) ([@consideRatio](https://github.com/consideRatio))
+
+#### Continuous integration improvements
+
+- Transition to use pre-commit hook in jupyterhub/chartpress [#2278](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2278) ([@consideRatio](https://github.com/consideRatio))
+- Remove pre-commit from GHA [#2273](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2273) ([@minrk](https://github.com/minrk))
+
+#### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2021-06-09&to=2021-06-24&type=c))
+
+[@cdibble](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Acdibble+updated%3A2021-06-09..2021-06-24&type=Issues) | [@consideRatio](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2021-06-09..2021-06-24&type=Issues) | [@dependabot](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Adependabot+updated%3A2021-06-09..2021-06-24&type=Issues) | [@enolfc](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aenolfc+updated%3A2021-06-09..2021-06-24&type=Issues) | [@manics](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2021-06-09..2021-06-24&type=Issues) | [@minrk](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aminrk+updated%3A2021-06-09..2021-06-24&type=Issues) | [@sgibson91](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Asgibson91+updated%3A2021-06-09..2021-06-24&type=Issues) | [@v1r7u](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Av1r7u+updated%3A2021-06-09..2021-06-24&type=Issues) | [@weisdd](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aweisdd+updated%3A2021-06-09..2021-06-24&type=Issues)
+
 ### [1.0.0] - 2021-06-09
 
 This release includes a security announcement, breaking changes, several new
