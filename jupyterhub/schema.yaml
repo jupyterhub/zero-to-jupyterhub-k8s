@@ -689,7 +689,10 @@ properties:
             properties:
               annotations:
                 type: object
-                additionalProperties: true
+                additionalProperties: false
+                patternProperties: &labels-and-annotations-patternProperties
+                  ".*":
+                    type: string
                 description: |
                   Annotations to apply to the PVC containing the sqlite database.
 
@@ -752,7 +755,8 @@ properties:
               Password for the database when `hub.db.type` is mysql or postgres.
       labels:
         type: object
-        additionalProperties: true
+        additionalProperties: false
+        patternProperties: *labels-and-annotations-patternProperties
         description: |
           Extra labels to add to the hub pod.
 
@@ -900,7 +904,8 @@ properties:
                   The nodePort to deploy the hub service on.
           annotations:
             type: object
-            additionalProperties: true
+            additionalProperties: false
+            patternProperties: *labels-and-annotations-patternProperties
             description: |
               Kubernetes annotations to apply to the hub service.
           extraPorts:
@@ -1013,7 +1018,8 @@ properties:
         description: *jupyterhub-native-config-description
       annotations:
         type: object
-        additionalProperties: true
+        additionalProperties: false
+        patternProperties: *labels-and-annotations-patternProperties
         description: |
           K8s annotations for the hub pod.
       authenticatePrometheus:
@@ -1141,7 +1147,8 @@ properties:
         properties:
           annotations:
             type: object
-            additionalProperties: true
+            additionalProperties: false
+            patternProperties: *labels-and-annotations-patternProperties
             description: |
               Kubernetes annotations to apply to the k8s ServiceAccount.
 
@@ -1285,7 +1292,8 @@ properties:
               Default `LoadBalancer`. See `hub.service.type` for supported values.
           labels:
             type: object
-            additionalProperties: true
+            additionalProperties: false
+            patternProperties: *labels-and-annotations-patternProperties
             description: |
               Extra labels to add to the proxy service.
 
@@ -1293,7 +1301,8 @@ properties:
               to learn more about labels.
           annotations:
             type: object
-            additionalProperties: true
+            additionalProperties: false
+            patternProperties: *labels-and-annotations-patternProperties
             description: |
               Annotations to apply to the service that is exposing the proxy.
 
@@ -1454,7 +1463,8 @@ properties:
         properties:
           labels:
             type: object
-            additionalProperties: true
+            additionalProperties: false
+            patternProperties: *labels-and-annotations-patternProperties
             description: |
               Extra labels to add to the traefik pod.
 
@@ -1559,7 +1569,8 @@ properties:
           serviceAccount: *serviceAccount
       labels:
         type: object
-        additionalProperties: true
+        additionalProperties: false
+        patternProperties: *labels-and-annotations-patternProperties
         description: |
           K8s labels for the proxy pod.
 
@@ -1569,7 +1580,8 @@ properties:
           ```
       annotations:
         type: object
-        additionalProperties: true
+        additionalProperties: false
+        patternProperties: *labels-and-annotations-patternProperties
         description: |
           K8s annotations for the proxy pod.
 
@@ -1847,14 +1859,16 @@ properties:
         description: *kubespawner-native-config-description
       extraAnnotations:
         type: object
-        additionalProperties: true
+        additionalProperties: false
+        patternProperties: *labels-and-annotations-patternProperties
         description: *kubespawner-native-config-description
       extraContainers:
         type: array
         description: *kubespawner-native-config-description
       extraLabels:
         type: object
-        additionalProperties: true
+        additionalProperties: false
+        patternProperties: *labels-and-annotations-patternProperties
         description: *kubespawner-native-config-description
       extraPodConfig:
         type: object
@@ -1961,7 +1975,8 @@ properties:
                   name to reference from the containers volumeMounts section.
           extraLabels:
             type: object
-            additionalProperties: true
+            additionalProperties: false
+            patternProperties: *labels-and-annotations-patternProperties
             description: |
               Configures `KubeSpawner.storage_extra_labels`. Note that these
               labels are set on the PVC during creation only and won't be
@@ -2259,7 +2274,8 @@ properties:
           for more details.
       annotations:
         type: object
-        additionalProperties: true
+        additionalProperties: false
+        patternProperties: *labels-and-annotations-patternProperties
         description: |
           Annotations to apply to the Ingress resource.
 
@@ -2292,7 +2308,8 @@ properties:
     properties:
       annotations:
         type: object
-        additionalProperties: true
+        additionalProperties: false
+        patternProperties: *labels-and-annotations-patternProperties
         description: |
           Annotations to apply to the hook and continous image puller pods. One example use case is to
           disable istio sidecars which could interfere with the image pulling.
