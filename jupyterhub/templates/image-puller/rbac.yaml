@@ -57,7 +57,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: {{ include "jupyterhub.hook-image-awaiter.fullname" . }}
-    namespace: {{ .Release.Namespace }}
+    namespace: "{{ .Release.Namespace }}"
 roleRef:
   kind: Role
   name: {{ include "jupyterhub.hook-image-awaiter.fullname" . }}

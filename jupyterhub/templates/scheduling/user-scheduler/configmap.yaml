@@ -13,7 +13,7 @@ data:
     leaderElection:
       resourceLock: endpoints
       resourceName: {{ include "jupyterhub.user-scheduler-lock.fullname" . }}
-      resourceNamespace: {{ .Release.Namespace }}
+      resourceNamespace: "{{ .Release.Namespace }}"
     profiles:
       - schedulerName: {{ include "jupyterhub.user-scheduler.fullname" . }}
         plugins:
