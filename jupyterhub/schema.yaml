@@ -787,7 +787,7 @@ properties:
                 command: ['sh', '-c', 'command2']
           ```
       extraEnv:
-        type: object
+        type: [object, array]
         additionalProperties: true
         description: |
           Extra environment variables that should be set for the hub pod.
@@ -1194,7 +1194,7 @@ properties:
               flag twice, the last flag will be used, which mean you can
               override the default flag values as well.
           extraEnv:
-            type: object
+            type: [object, array]
             additionalProperties: true
             description: |
               Extra environment variables that should be set for the chp pod.
@@ -1481,7 +1481,7 @@ properties:
               to learn more about labels.
           networkPolicy: *networkPolicy-spec
           extraEnv:
-            type: object
+            type: [object, array]
             additionalProperties: true
             description: |
               Extra environment variables that should be set for the traefik pod.
@@ -1735,7 +1735,7 @@ properties:
           ```
       extraFiles: *extraFiles
       extraEnv:
-        type: object
+        type: [object, array]
         additionalProperties: true
         description: |
           Extra environment variables that should be set for the user pods.
