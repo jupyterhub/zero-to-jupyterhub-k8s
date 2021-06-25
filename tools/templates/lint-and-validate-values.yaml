@@ -184,7 +184,14 @@ proxy:
     resources: *resources
     defaultTarget: http://dummy.local/hello
     errorTarget: http://dummy.local/error
-    extraEnv: *extraEnv
+    extraEnv:
+      - name: MOCK_ENV_VAR_NAME1
+        value: MOCK_ENV_VAR_VALUE1
+      - name: MOCK_ENV_VAR_NAME2
+        valueFrom:
+          secretKeyRef:
+            name: my-k8s-secret
+            key: my-k8s-secret-key
     nodeSelector:
       node-type: mock
     tolerations:
