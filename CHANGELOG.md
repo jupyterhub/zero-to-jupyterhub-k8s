@@ -8,6 +8,7 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 #### Bugs fixed
 
+- Relax extraEnv schema to allow for array values [#2289](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2289) ([@consideRatio](https://github.com/consideRatio))
 - Relax hub.db.type schema to accept unknown database types [#2285](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2285) ([@consideRatio](https://github.com/consideRatio))
 - templates: quote namespace in case they are only contain numbers [#2284](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2284) ([@consideRatio](https://github.com/consideRatio))
 - Corrected scheduler rbac custom naming [#2276](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2276) ([@v1r7u](https://github.com/v1r7u))
