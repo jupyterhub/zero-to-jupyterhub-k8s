@@ -91,9 +91,10 @@ hub:
       subPath: /mock
       storageClassName: custom-storage-class
     url: custom-db-url
-  image:
+  image: &image
     name: dummy-name
     tag: dummy-tag
+    pullPolicy: Always
     pullSecrets: [c]
   initContainers:
     - name: mock-init-container-name
@@ -384,9 +385,7 @@ scheduling:
     enabled: true
     replicas: 1
     logLevel: 10
-    image:
-      name: gcr.io/google_containers/kube-scheduler-amd64
-      tag: v1.11.2
+    image: *image
     nodeSelector:
       node-type: mock
     tolerations:

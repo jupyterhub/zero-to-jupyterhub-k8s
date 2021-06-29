@@ -444,6 +444,11 @@ scheduling:
     userPlaceholderPriority: -10
   userPlaceholder:
     enabled: true
+    image:
+      name: k8s.gcr.io/pause
+      tag: "3.2" # https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/pause?gcrImageListsize=30
+      pullPolicy:
+      pullSecrets: []
     replicas: 0
     containerSecurityContext:
       runAsUser: 65534 # nobody user
