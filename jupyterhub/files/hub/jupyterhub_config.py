@@ -366,11 +366,17 @@ for name, service in get_config("hub.services", {}).items():
 
     # As the api_token could be exposed in hub.existingSecret, we need to read
     # it it from there or fall back to the chart managed k8s Secret's value.
+    print("------------------before------------------", service)
     service.pop("apiToken", None)
     service.pop("api_token", None)
+    print("------------------after pop------------------", service)
     api_token = get_secret_value(f"hub.services.{service['name']}.apiToken", None)
+    print(f"api_token received: {api_token}")
     if api_token:
         service["api_token"] = api_token
+    else:
+        service["api_token"] = None
+    print("------------------after assignment------------------", service)
 
     c.JupyterHub.services.append(service)
 
