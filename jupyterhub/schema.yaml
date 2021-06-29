@@ -2181,6 +2181,7 @@ properties:
         properties:
           enabled:
             type: boolean
+          image: *image-spec
           replicas:
             type: integer
             description: |

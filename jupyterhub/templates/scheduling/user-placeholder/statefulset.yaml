@@ -44,15 +44,21 @@ spec:
       {{- end }}
       terminationGracePeriodSeconds: 0
       automountServiceAccountToken: false
+      {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.scheduling.userPlaceholder.image) }}
+      imagePullSecrets: {{ . }}
+      {{- end }}
       containers:
         - name: pause
-          image: {{ .Values.prePuller.pause.image.name }}:{{ .Values.prePuller.pause.image.tag }}
+          image: {{ .Values.scheduling.userPlaceholder.image.name }}:{{ .Values.scheduling.userPlaceholder.image.tag }}
           {{- if .Values.scheduling.userPlaceholder.resources }}
           resources:
             {{- .Values.scheduling.userPlaceholder.resources | toYaml | trimSuffix "\n" | nindent 12 }}
           {{- else if (include "jupyterhub.singleuser.resources" .) }}
           resources:
             {{- include "jupyterhub.singleuser.resources" . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.scheduling.userPlaceholder.image.pullPolicy }}
+          imagePullPolicy: {{ . }}
           {{- end }}
           {{- with .Values.scheduling.userPlaceholder.containerSecurityContext }}
           securityContext:
