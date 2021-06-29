@@ -379,7 +379,7 @@ for name, service in get_config("hub.services", {}).items():
     c.JupyterHub.services.append(service)
 
 print("------------------after assignment------------------")
-print(c.JupyterHub.services)
+print(list(c.JupyterHub.services))
 
 
 set_config_if_not_none(c.Spawner, "cmd", "singleuser.cmd")
