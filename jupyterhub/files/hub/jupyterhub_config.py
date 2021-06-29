@@ -374,11 +374,12 @@ for name, service in get_config("hub.services", {}).items():
     print(f"api_token received: {api_token}")
     if api_token:
         service["api_token"] = api_token
-    else:
-        service["api_token"] = None
     print("------------------after assignment------------------", service)
 
     c.JupyterHub.services.append(service)
+
+print("------------------after assignment------------------")
+print(c.JupyterHub.services)
 
 
 set_config_if_not_none(c.Spawner, "cmd", "singleuser.cmd")
