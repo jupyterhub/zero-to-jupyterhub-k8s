@@ -43,6 +43,8 @@ hub:
       apiToken: give-pytest-control
     test-hub-existing-secret:
       apiToken: dddd4444
+    test-dummy-service:
+      url: http://dummy-service
   networkPolicy:
     egress: # overrides allowance of 0.0.0.0/0
       # In kind/k3s clusters the Kubernetes API server is exposing this port
