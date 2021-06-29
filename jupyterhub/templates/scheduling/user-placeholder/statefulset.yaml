@@ -44,6 +44,9 @@ spec:
       {{- end }}
       terminationGracePeriodSeconds: 0
       automountServiceAccountToken: false
+      {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.prePuller.pause.image) }}
+      imagePullSecrets: {{ . }}
+      {{- end }}
       containers:
         - name: pause
           image: {{ .Values.prePuller.pause.image.name }}:{{ .Values.prePuller.pause.image.tag }}
