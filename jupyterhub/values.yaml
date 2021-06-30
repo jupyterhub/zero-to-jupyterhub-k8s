@@ -233,7 +233,13 @@ proxy:
       allowPrivilegeEscalation: false
     image:
       name: traefik
-      tag: v2.4.9 # ref: https://hub.docker.com/_/traefik?tab=tags
+      # WARNING: Bumping traefik patch versions have proven to be a common cause
+      #          for introducing issues with ACME cert acquisitions. Due to
+      #          this, let's not do it often. v2.4.9 caused the following issue
+      #          https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/2296
+      #          for example.
+      #
+      tag: v2.4.8 # ref: https://hub.docker.com/_/traefik?tab=tags
       pullPolicy:
       pullSecrets: []
     hsts:
