@@ -504,6 +504,19 @@ properties:
           # to generate a value, run
           openssl rand -hex 32
           ```
+      hostNetwork:
+        type: boolean
+        description: |
+          Use host networking for the hub pod. This is disabled by default.
+
+          Host networking is an advanced configuration for use in nonstandard
+          deployments. For example, host networking is useful in deployments where
+          notebook server pods are also deployed with host networking.
+
+          Host networking is intended for expert use where the implications are
+          well-understood. Host networking has its own class of security
+          vulnerabilities. Therefore, we recommend its use only in trusted
+          environments such as private data centers.
       image: &image-spec
         type: object
         additionalProperties: false
@@ -1165,6 +1178,19 @@ properties:
     type: object
     additionalProperties: false
     properties:
+      hostNetwork:
+        type: boolean
+        description: |
+          Use host networking for the proxy pod. This is disabled by default.
+
+          Host networking is an advanced configuration for use in nonstandard
+          deployments. For example, host networking is useful in deployments where
+          notebook server pods are also deployed with host networking.
+
+          Host networking is intended for expert use where the implications are
+          well-understood. Host networking has its own class of security
+          vulnerabilities. Therefore, we recommend its use only in trusted
+          environments such as private data centers.
       chp:
         type: object
         additionalProperties: false

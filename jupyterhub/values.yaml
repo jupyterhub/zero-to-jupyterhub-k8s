@@ -30,6 +30,7 @@ hub:
     JupyterHub:
       admin_access: true
       authenticator_class: dummy
+  hostNetwork: false
   service:
     type: ClusterIP
     annotations: {}
@@ -171,6 +172,7 @@ proxy:
     ##     Error: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
     ##     Error: UPGRADE FAILED: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
     rollingUpdate:
+  hostNetwork: false
   # service relates to the proxy-public service
   service:
     type: LoadBalancer
