@@ -51,7 +51,12 @@ def pebble_acme_ca_cert():
     when we make web requests with the requests library.
 
         requests.get(..., verify=<True|False|path_to_certificate>)
+
+    If HUB_URL is http:// return False since no certificate is required
     """
+    if os.getenv("HUB_URL", "").startswith("http://"):
+        return False
+
     # 'localhost' may resolve to an ipv6 address which may not be supported on older K3S
     # 127.0.0.1 is more reliable
     response = requests.get("https://127.0.0.1:32444/roots/0", verify=False, timeout=10)

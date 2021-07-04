@@ -1,0 +1,70 @@
+version: 2.1
+
+orbs:
+  python: circleci/python@0.2.1
+
+jobs:
+  # Testing on ARM64
+  # https://circleci.com/docs/2.0/arm-resources/#using-arm-resources
+  test-arm:
+    machine:
+      image: ubuntu-2004:202101-01
+    resource_class: arm.medium
+    steps:
+      - checkout
+
+      - run:
+          command: uname -a
+          name: Check architecture
+
+      - run:
+          command: >-
+            curl -sfL https://get.k3s.io |
+            INSTALL_K3S_CHANNEL=v1.20 sh -s -
+            --disable metrics-server
+            --disable traefik
+            --docker
+          name: Install K3S
+
+      - run:
+          command: |
+            mkdir -p ~/.kube
+            sudo cat /etc/rancher/k3s/k3s.yaml > "$HOME/.kube/config"
+            chmod 600 "$HOME/.kube/config"
+          name: Prepare a kubeconfig in ~/.kube/config
+
+      - run:
+          command: |
+            . ci/common
+            setup_helm
+            pip3 install --no-cache-dir -r dev-requirements.txt
+          name: Install dependencies
+
+      # TODO: test 'docker build' instead of buildx
+      # Ideally we'd use standard docker build since we're building for the native
+      # platform. Unfortunately the singleuser image can't be built on arm64, and the
+      # easiest way to skip this image is to use chartpress's --platform option,
+      # which is only supported with docker-buildx engine
+      - run:
+          command: |
+            chartpress --builder docker-buildx --platform linux/arm64
+          name: Run chartpress
+
+      - run:
+          command: |
+            export KUBECONFIG="$HOME/.kube/config"
+            helm upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml  --values dev-config-arm.yaml --wait
+          name: Install local chart
+
+      - run:
+          command: |
+            export KUBECONFIG="$HOME/.kube/config"
+            export HUB_URL=http://localhost:30080
+            . ./ci/common
+            pytest --verbose --color=yes ./tests -m 'not netpol'
+          name: Run tests
+
+workflows:
+  main:
+    jobs:
+      - test-arm
