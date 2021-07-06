@@ -11,6 +11,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 RUN EXTRA_APT_PACKAGES=; \
     if [ `uname -m` != 'x86_64' ]; then EXTRA_APT_PACKAGES=libpq-dev; fi; \
     apt-get update && \
+    apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
       git \
       vim \
