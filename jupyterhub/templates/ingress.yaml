@@ -20,7 +20,7 @@ spec:
         paths:
           - path: {{ $.Values.hub.baseUrl | trimSuffix "/" }}/{{ $.Values.ingress.pathSuffix }}
             {{- if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
-            pathType: Prefix
+            pathType: {{ $.Values.ingress.pathType }}
             backend:
               service:
                 name: {{ include "jupyterhub.proxy-public.fullname" $ }}
