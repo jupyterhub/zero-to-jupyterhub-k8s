@@ -33,6 +33,10 @@ spec:
       {{- if .Values.scheduling.podPriority.enabled }}
       priorityClassName: {{ include "jupyterhub.priority.fullname" . }}
       {{- end }}
+      {{- if .Values.proxy.traefik.hostNetwork }}
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      {{- end }}
       nodeSelector: {{ toJson .Values.proxy.traefik.nodeSelector }}
       {{- with concat .Values.scheduling.corePods.tolerations .Values.proxy.traefik.tolerations }}
       tolerations:

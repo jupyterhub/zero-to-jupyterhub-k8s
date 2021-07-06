@@ -172,7 +172,6 @@ proxy:
     ##     Error: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
     ##     Error: UPGRADE FAILED: Deployment.apps "proxy" is invalid: spec.strategy.rollingUpdate: Forbidden: may not be specified when strategy `type` is 'Recreate'
     rollingUpdate:
-  hostNetwork: false
   # service relates to the proxy-public service
   service:
     type: LoadBalancer
@@ -192,6 +191,7 @@ proxy:
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
+    hostNetwork: false
     image:
       name: jupyterhub/configurable-http-proxy
       tag: 4.4.0
@@ -233,6 +233,7 @@ proxy:
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
+    hostNetwork: false
     image:
       name: traefik
       tag: v2.4.9 # ref: https://hub.docker.com/_/traefik?tab=tags
@@ -422,6 +423,7 @@ scheduling:
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
+    hostNetwork: false
     image:
       # IMPORTANT: Bumping the minor version of this binary should go hand in
       #            hand with an inspection of the user-scheduelrs RBAC resources

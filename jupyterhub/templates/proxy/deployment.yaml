@@ -40,13 +40,13 @@ spec:
         {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
         {{- end }}
     spec:
-      {{- if .Values.proxy.hostNetwork }}
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
-      {{- end }}
       terminationGracePeriodSeconds: 60
       {{- if .Values.scheduling.podPriority.enabled }}
       priorityClassName: {{ include "jupyterhub.priority.fullname" . }}
+      {{- end }}
+      {{- if .Values.proxy.chp.hostNetwork }}
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       {{- end }}
       nodeSelector: {{ toJson .Values.proxy.chp.nodeSelector }}
       {{- with concat .Values.scheduling.corePods.tolerations .Values.proxy.chp.tolerations }}

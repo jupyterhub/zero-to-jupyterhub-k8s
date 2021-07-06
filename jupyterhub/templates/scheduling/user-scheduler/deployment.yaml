@@ -17,6 +17,10 @@ spec:
       annotations:
         checksum/config-map: {{ include (print $.Template.BasePath "/scheduling/user-scheduler/configmap.yaml") . | sha256sum }}
     spec:
+      {{- if .Values.scheduling.userScheduler.hostNetwork }}
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      {{- end }}
       {{- if .Values.rbac.enabled }}
       serviceAccountName: {{ include "jupyterhub.user-scheduler-deploy.fullname" . }}
       {{- end }}

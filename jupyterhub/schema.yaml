@@ -504,10 +504,10 @@ properties:
           # to generate a value, run
           openssl rand -hex 32
           ```
-      hostNetwork:
-        type: boolean
+      hostNetwork: &hostNetwork-spec
+        type: [boolean, "null"]
         description: |
-          Use host networking for the hub pod. This is disabled by default.
+          Use host networking for this pod. This is disabled by default.
 
           Host networking is an advanced configuration for use in nonstandard
           deployments. For example, host networking is useful in deployments where
@@ -1178,19 +1178,6 @@ properties:
     type: object
     additionalProperties: false
     properties:
-      hostNetwork:
-        type: boolean
-        description: |
-          Use host networking for the proxy pod. This is disabled by default.
-
-          Host networking is an advanced configuration for use in nonstandard
-          deployments. For example, host networking is useful in deployments where
-          notebook server pods are also deployed with host networking.
-
-          Host networking is intended for expert use where the implications are
-          well-understood. Host networking has its own class of security
-          vulnerabilities. Therefore, we recommend its use only in trusted
-          environments such as private data centers.
       chp:
         type: object
         additionalProperties: false
@@ -1262,6 +1249,7 @@ properties:
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
           containerSecurityContext: *containerSecurityContext-spec
+          hostNetwork: *hostNetwork-spec
           image: *image-spec
           livenessProbe: *probe-spec
           readinessProbe: *probe-spec
@@ -1599,6 +1587,7 @@ properties:
                 type: integer
               preload:
                 type: boolean
+          hostNetwork: *hostNetwork-spec
           image: *image-spec
           resources: *resources-spec
           serviceAccount: *serviceAccount
@@ -2081,6 +2070,7 @@ properties:
             description: |
               You can have multiple schedulers to share the workload or improve
               availability on node failure.
+          hostNetwork: *hostNetwork-spec
           image: *image-spec
           pdb: *pdb-spec
           nodeSelector: *nodeSelector-spec
