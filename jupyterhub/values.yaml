@@ -529,6 +529,7 @@ ingress:
   annotations: {}
   hosts: []
   pathSuffix:
+  pathType: Prefix
   tls: []
 
 cull:

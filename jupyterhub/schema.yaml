@@ -2302,6 +2302,13 @@ properties:
           Suffix added to Ingress's routing path pattern.
 
           Specify `*` if your ingress matches path by glob pattern.
+      pathType:
+        enum: [Prefix, Exact, ImplementationSpecific]
+        description: |
+          The path type to use. The default value is 'Prefix'. Only applies on Kubernetes v1.18+.
+
+          See [the Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types) 
+          for more details about path types.
       tls:
         type: array
         description: |
