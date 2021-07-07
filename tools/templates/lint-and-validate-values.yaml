@@ -162,6 +162,9 @@ hub:
       effect: NoSchedule
   serviceAccount: &serviceAccount
     annotations: *annotations
+  extraPodSpec: &extraPodSpec
+    hostNetwork: true
+    dnsPolicy: ClusterFirstWithHostNet
 
 rbac:
   enabled: true
@@ -212,6 +215,7 @@ proxy:
       enabled: true
       maxUnavailable: 1
       minAvailable: 1
+    extraPodSpec: *extraPodSpec
   traefik:
     extraPorts:
       - name: ssh
@@ -239,6 +243,7 @@ proxy:
       maxUnavailable: null
       minAvailable: 1
     serviceAccount: *serviceAccount
+    extraPodSpec: *extraPodSpec
   secretSync:
     resources: *resources
   labels: *labels
@@ -402,6 +407,7 @@ scheduling:
             weight: 161051
           - name: NodeAffinity
     serviceAccount: *serviceAccount
+    extraPodSpec: *extraPodSpec
   podPriority:
     enabled: true
   userPlaceholder:
