@@ -135,7 +135,7 @@ spec:
           securityContext:
             {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
           {{- end }}
-      {{- if .Values.proxy.traefik.extraPodSpec }}
-      {{ toYaml .Values.proxy.traefik.extraPodSpec | nindent 6 }}
+      {{- with .Values.proxy.traefik.extraPodSpec }}
+      {{- . | toYaml | trimSuffix "\n" | nindent 6 }}
       {{- end }}
 {{- end }}

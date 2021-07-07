@@ -1160,13 +1160,13 @@ properties:
             patternProperties: *labels-and-annotations-patternProperties
             description: |
               Kubernetes annotations to apply to the k8s ServiceAccount.
-      extraPodSpec: &jupyterhub-extra-pod-spec
+      extraPodSpec: &extraPodSpec-spec
         type: object
         additionalProperties: true
         description: |
           Arbitrary extra k8s pod specification as a YAML object. The default
           value of this setting is an empty object, i.e. no extra configuration.
-          The value of this property is merged into the pod specification as-is.
+          The value of this property is augmented to the pod specification as-is.
 
           This is a powerful tool for expert k8s administrators with advanced
           configuration requirements. This setting should only be used for
@@ -1293,7 +1293,7 @@ properties:
               or produce more informative error messages than the Hub's default,
               e.g. in highly customized deployments such as BinderHub.
               See Configurable HTTP Proxy for details on implementing an error target.
-          extraPodSpec: *jupyterhub-extra-pod-spec
+          extraPodSpec: *extraPodSpec-spec
       secretToken:
         type: [string, "null"]
         description: |
@@ -1614,7 +1614,7 @@ properties:
           image: *image-spec
           resources: *resources-spec
           serviceAccount: *serviceAccount
-          extraPodSpec: *jupyterhub-extra-pod-spec
+          extraPodSpec: *extraPodSpec-spec
       labels:
         type: object
         additionalProperties: false
@@ -2139,7 +2139,7 @@ properties:
                           type: integer
           resources: *resources-spec
           serviceAccount: *serviceAccount
-          extraPodSpec: *jupyterhub-extra-pod-spec
+          extraPodSpec: *extraPodSpec-spec
       podPriority:
         type: object
         additionalProperties: false
