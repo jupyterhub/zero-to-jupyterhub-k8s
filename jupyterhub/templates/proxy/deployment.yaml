@@ -163,3 +163,6 @@ spec:
           securityContext:
             {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
           {{- end }}
+      {{- if .Values.proxy.chp.extraPodSpec }}
+      {{ toYaml .Values.proxy.chp.extraPodSpec | nindent 6 }}
+      {{- end }}

@@ -136,6 +136,7 @@ hub:
   existingSecret:
   serviceAccount:
     annotations: {}
+  extraPodSpec: {}
 
 rbac:
   enabled: true
@@ -224,6 +225,7 @@ proxy:
       enabled: false
       maxUnavailable:
       minAvailable: 1
+    extraPodSpec: {}
   # traefik relates to the autohttps pod, which is responsible for TLS
   # termination when proxy.https.type=letsencrypt.
   traefik:
@@ -265,6 +267,7 @@ proxy:
       minAvailable: 1
     serviceAccount:
       annotations: {}
+    extraPodSpec: {}
   secretSync:
     containerSecurityContext:
       runAsUser: 65534 # nobody user
@@ -437,6 +440,7 @@ scheduling:
     resources: {}
     serviceAccount:
       annotations: {}
+    extraPodSpec: {}
   podPriority:
     enabled: false
     globalDefault: false
