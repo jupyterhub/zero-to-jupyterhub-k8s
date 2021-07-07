@@ -1174,7 +1174,17 @@ properties:
           Misusing this setting can break your deployment and/or compromise
           your system security.
 
-          One use of this setting is to configure the hub pod with host networking:
+          This is one of four related settings for inserting arbitrary pod
+          specification:
+
+          1. hub.extraPodSpec
+          2. proxy.chp.extraPodSpec
+          3. proxy.traefik.extraPodSpec
+          4. scheduling.userScheduler.extraPodSpec
+
+          One real-world use of these settings is to enable host networking. For
+          example, to configure host networking for the hub pod, add the
+          following to your helm configuration values:
 
           ```yaml
           hub:
@@ -1183,7 +1193,8 @@ properties:
               dnsPolicy: ClusterFirstWithHostNet
           ```
 
-          To configure the proxy pod with host networking:
+          Likewise, to configure host networking for the proxy pod, add the
+          following:
 
           ```yaml
           proxy:
@@ -1193,10 +1204,11 @@ properties:
                 dnsPolicy: ClusterFirstWithHostNet
           ```
 
-          and so on...
+          N.B. Host networking has special security implications and can easily
+          break your deployment. This is an example—not an endorsement.
 
           See [PodSpec](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#PodSpec)
-          for the latest, complete definition of the pod specification.
+          for the latest pod resource specification.
 
   proxy:
     type: object
