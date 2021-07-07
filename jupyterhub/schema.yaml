@@ -1168,14 +1168,13 @@ properties:
           value of this setting is an empty object, i.e. no extra configuration.
           The value of this property is merged into the pod specification as-is.
 
-          This is a powerful tool for _expert_ k8s administrators with advanced
+          This is a powerful tool for expert k8s administrators with advanced
           configuration requirements. This setting should only be used for
-          configuration that cannot be accomplished through the other settings
-          in your values.yaml. Misusing this setting can break your deployment
-          and/or compromise your system security.
+          configuration that cannot be accomplished through the other settings.
+          Misusing this setting can break your deployment and/or compromise
+          your system security.
 
-          For example, to configure the hub pod with host networking, you could
-          include the following in your chart values:
+          One use of this setting is to configure the hub pod with host networking:
 
           ```yaml
           hub:
@@ -1196,7 +1195,7 @@ properties:
 
           and so on...
 
-          See https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#PodSpec
+          See [PodSpec](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#PodSpec)
           for the latest, complete definition of the pod specification.
 
   proxy:
