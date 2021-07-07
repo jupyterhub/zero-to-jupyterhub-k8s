@@ -230,3 +230,6 @@ spec:
               path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
               port: http
           {{- end }}
+      {{- with .Values.hub.extraPodSpec }}
+      {{- . | toYaml | trimSuffix "\n" | nindent 6 }}
+      {{- end }}

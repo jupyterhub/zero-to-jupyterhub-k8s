@@ -79,4 +79,7 @@ spec:
           securityContext:
             {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
           {{- end }}
+      {{- with .Values.scheduling.userScheduler.extraPodSpec }}
+      {{- . | toYaml | trimSuffix "\n" | nindent 6 }}
+      {{- end }}
 {{- end }}
