@@ -88,40 +88,24 @@ There are four properties you can set in your `config.yaml` to do this.
 
 ### `hub.extraConfig`
 
-The value specified for `hub.extraConfig` is evaluated as python code at the end
-of `jupyterhub_config.py`. You can do anything here since it is arbitrary Python
-Code. Some examples of things you can do:
+The value specified for `hub.extraConfig` is evaluated as Python code at the end
+of the `jupyterhub_config.py` file JupyterHub loads. You can do anything in
+`hub.extraConfig` since it is arbitrary Python code, while
+[`hub.config`](schema_hub.config) only allows you to specify fixed configuration
+values.
+
+Some examples of things you can do:
 
 1. Override various methods in the Spawner / Authenticator by subclassing them.
    For example, you can use this to pass authentication credentials for the user
-   (such as GitHub OAuth tokens) to the environment. See
-   [the JupyterHub docs](https://jupyterhub.readthedocs.io/en/latest/reference/authenticators.html#authentication-state) for
-   an example.
+   (such as GitHub OAuth tokens) to the environment.
 2. Specify traitlets that take callables as values, allowing dynamic per-user
    configuration.
 3. Set traitlets for JupyterHub / Spawner / Authenticator that are not currently
-   supported in the helm chart
+   supported in the Helm chart.
 
-Unfortunately, you have to write your python _in_ your YAML file. There's no way
-to include a file in `config.yaml`.
-
-You can specify `hub.extraConfig` as a raw string (remember to use the `|` for multi-line
-YAML strings):
-
-```yaml
-hub:
-  extraConfig: |
-    import time
-    c.KubeSpawner.environment.update(
-        {
-            "CURRENT_TIME": str(time.time())
-        }
-    )
-```
-
-You can also specify `hub.extraConfig` as a dictionary, if you want to logically
-split your customizations. The code will be evaluated in alphabetical sorted
-order of the key.
+You should specify `hub.extraConfig` as a dictionary. The code will be evaluated
+in alphabetical sorted order of the key.
 
 ```yaml
 hub:
@@ -130,12 +114,15 @@ hub:
       import time
       c.KubeSpawner.environment.update(
           {
-              "CURRENT_TIME": str(time.time())
+              "JUPYTERHUB_START_TIME": str(time.time())
           }
       )
     10-second-config: |
       # some other code
 ```
+
+For more information about this configuration, see [the configuration reference
+entry about `hub.extraConfig`](schema_hub.extraConfig).
 
 ### `custom` configuration
 
