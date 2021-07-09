@@ -89,9 +89,9 @@ There are four properties you can set in your `config.yaml` to do this.
 ### `hub.extraConfig`
 
 The value specified for `hub.extraConfig` is evaluated as Python code at the end
-of a `jupyterhub_config.py` file JupyterHub loads. You can do anything in
+of the `jupyterhub_config.py` file JupyterHub loads. You can do anything in
 `hub.extraConfig` since it is arbitrary Python code, while
-[`hub.config`](schema_hub.config) only allow you to specify fixed configuration
+[`hub.config`](schema_hub.config) only allows you to specify fixed configuration
 values.
 
 Some examples of things you can do:
