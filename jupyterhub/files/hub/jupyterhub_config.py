@@ -367,7 +367,7 @@ for key, service in get_config("hub.services", {}).items():
     # As the api_token could be exposed in hub.existingSecret, we need to read
     # it it from there or fall back to the chart managed k8s Secret's value.
     service.pop("apiToken", None)
-    service["api_token"] = get_secret_value(f"hub.services.{service['name']}.apiToken")
+    service["api_token"] = get_secret_value(f"hub.services.{key}.apiToken")
 
     c.JupyterHub.services.append(service)
 
