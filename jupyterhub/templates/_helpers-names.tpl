@@ -37,8 +37,10 @@
     {{- $fullname_override := .Values.fullnameOverride }}
     {{- $name_override := .Values.nameOverride }}
     {{- if ne .Chart.Name "jupyterhub" }}
-        {{- $fullname_override = .Values.jupyterhub.fullnameOverride }}
-        {{- $name_override = .Values.jupyterhub.nameOverride }}
+        {{- if .Values.jupyterhub }}
+            {{- $fullname_override = .Values.jupyterhub.fullnameOverride }}
+            {{- $name_override = .Values.jupyterhub.nameOverride }}
+        {{- end }}
     {{- end }}
 
     {{- if eq (typeOf $fullname_override) "string" }}
