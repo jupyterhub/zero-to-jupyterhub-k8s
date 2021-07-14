@@ -1133,15 +1133,95 @@ properties:
             additionalProperties: true
       services:
         type: object
-        additionalProperties: true
+        additionalProperties: false
         description: |
-          You can refer to the [JupyterHub
-          documentation](https://jupyterhub.readthedocs.io/en/stable/api/app.html)
-          except that you need to pass the services as a dictionary instead of a
-          list.
+          This is where you register JupyterHub services. For details on how to
+          configure these services in this Helm chart just keep reading but for
+          details on services themselves instead read [JupyterHub's
+          documentation](https://jupyterhub.readthedocs.io/en/stable/api/service.html).
 
-          The `name` field can be filled in by the dictionary keys, and a
-          camelCase formatting of api_token is also accepted.
+          JupyterHub's native configuration accepts a list of service objects,
+          this Helm chart only accept a dictionary where each key represents the
+          name of a service and the value is the actual service objects.
+
+          When configuring JupyterHub services via this Helm chart, the `name`
+          field can be omitted as it can be implied by the dictionary key.
+          Further, the `api_token` field can be omitted as it will be
+          automatically generated as of version 1.1.0 of this Helm chart.
+
+          If you have an external service that needs to access the automatically
+          generated api_token for the service, you can access it from the `hub`
+          k8s Secret part of this Helm chart under the key
+          `hub.services.my-service-config-key.apiToken`.
+
+          Here is an example configuration of two services where the first
+          explicitly sets a name and api_token, while the second omits those and
+          lets the name be implied from the key name and the api_token be
+          automatically generated.
+
+          ```yaml
+          hub:
+            services:
+              my-service-1:
+                admin: true
+                name: my-explicitly-set-service-name
+                api_token: my-explicitly-set-api_token
+
+              # the name of the following service will be my-service-2
+              # the api_token of the following service will be generated
+              my-service-2: {}
+          ```
+
+          If you develop a Helm chart depending on the JupyterHub Helm chart and
+          want to let some Pod's environment variable be populated with the
+          api_token of a service registered like above, then do something along
+          these lines.
+
+          ```yaml
+          # ... container specification of a pod ...
+          env:
+            - name: MY_SERVICE_1_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  # Don't hardcode the name, use the globally accessible
+                  # named templates part of the JupyterHub Helm chart.
+                  name: {{ include "jupyterhub.hub.fullname" . }}
+                  # Note below the use of the configuration key my-service-1
+                  # rather than the explicitly set service name.
+                  key: hub.services.my-service-1.apiToken
+          ```
+        patternProperties:
+          ".*":
+            type: object
+            additionalProperties: false
+            properties:
+              name:
+                type: string
+                description: |
+                  The name can be implied via the key name under which this
+                  service is configured, and is due to that allowed to be
+                  omitted in this Helm chart configuration of JupyterHub.
+              admin:
+                type: boolean
+              command:
+                type: [string, array]
+              url:
+                type: string
+              api_token:
+                type: [string, "null"]
+                description: |
+                  The api_token will be automatically generated if not
+                  explicitly set. It will also be exposed in via a k8s Secret
+                  part of this Helm chart under a specific key.
+
+                  See the documentation under
+                  [`hub.services`](schema_hub.services) for details about this.
+              apiToken:
+                type: [string, "null"]
+                description: |
+                  An alias for api_token provided for backward compatibility by
+                  the JupyterHub Helm chart that will be transformed to
+                  api_token.
       shutdownOnLogout:
         type: [boolean, "null"]
         description: *jupyterhub-native-config-description
