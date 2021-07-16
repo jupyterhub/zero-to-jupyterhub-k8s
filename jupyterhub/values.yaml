@@ -193,7 +193,7 @@ proxy:
       allowPrivilegeEscalation: false
     image:
       name: jupyterhub/configurable-http-proxy
-      tag: 4.4.0
+      tag: 4.4.0 # https://github.com/jupyterhub/configurable-http-proxy/releases
       pullPolicy:
       pullSecrets: []
     extraCommandLineFlags: []
@@ -235,7 +235,7 @@ proxy:
       allowPrivilegeEscalation: false
     image:
       name: traefik
-      tag: v2.4.9 # ref: https://hub.docker.com/_/traefik?tab=tags
+      tag: v2.4.11 # ref: https://hub.docker.com/_/traefik?tab=tags
       pullPolicy:
       pullSecrets: []
     hsts:
