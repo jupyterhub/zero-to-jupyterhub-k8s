@@ -10,10 +10,12 @@ FROM jupyter/base-notebook:latest
 # Example install of git and nbgitpuller.
 # NOTE: git is already available in the jupyter/minimal-notebook image.
 USER root
-RUN apt-get update && apt-get install --yes --no-install-recommends \
-    dnsutils \
-    git \
-    iputils-ping \
+RUN apt-get update \
+ && apt-get upgrade -y \
+ && apt-get install -y --no-install-recommends \
+        dnsutils \
+        git \
+        iputils-ping \
  && rm -rf /var/lib/apt/lists/*
 USER $NB_USER
 
