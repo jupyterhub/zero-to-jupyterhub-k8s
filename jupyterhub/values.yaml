@@ -450,7 +450,11 @@ scheduling:
     enabled: true
     image:
       name: k8s.gcr.io/pause
-      tag: "3.2" # https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/pause?gcrImageListsize=30
+      # tag's can be updated by inspecting the output of the command:
+      # gcloud container images list-tags k8s.gcr.io/pause --sort-by=~tags
+      #
+      # If you update this, also update prePuller.pause.image.tag
+      tag: "3.5"
       pullPolicy:
       pullSecrets: []
     replicas: 0
@@ -524,7 +528,11 @@ prePuller:
       allowPrivilegeEscalation: false
     image:
       name: k8s.gcr.io/pause
-      tag: "3.2" # https://console.cloud.google.com/gcr/images/google-containers/GLOBAL/pause?gcrImageListsize=30
+      # tag's can be updated by inspecting the output of the command:
+      # gcloud container images list-tags k8s.gcr.io/pause --sort-by=~tags
+      #
+      # If you update this, also update scheduling.userPlaceholder.image.tag
+      tag: "3.5"
       pullPolicy:
       pullSecrets: []
 
