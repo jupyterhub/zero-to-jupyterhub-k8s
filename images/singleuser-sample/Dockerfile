@@ -1,4 +1,4 @@
-FROM jupyter/base-notebook:5211732116f7
+FROM jupyter/base-notebook:latest
 # Built from... https://hub.docker.com/r/jupyter/base-notebook/
 #               https://github.com/jupyter/docker-stacks/blob/HEAD/base-notebook/Dockerfile
 # Built from... Ubuntu 20.04
