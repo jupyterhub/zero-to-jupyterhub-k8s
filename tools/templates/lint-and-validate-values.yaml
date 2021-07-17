@@ -222,9 +222,6 @@ proxy:
       minAvailable: 1
     extraPodSpec: *extraPodSpec
   traefik:
-    extraPorts:
-      - name: ssh
-        containerPort: 8022
     labels: *labels
     resources: *resources
     extraEnv: *extraEnv
@@ -242,13 +239,33 @@ proxy:
             - ipBlock:
                 cidr: 0.0.0.0/0
       interNamespaceAccessLabels: accept
-      allowedIngressPorts: [http, https]
+      allowedIngressPorts: [http, https, ssh]
     pdb:
       enabled: true
       maxUnavailable: null
       minAvailable: 1
     serviceAccount: *serviceAccount
     extraPodSpec: *extraPodSpec
+    extraPorts:
+      - name: ssh
+        containerPort: 8022
+    extraStaticConfig:
+      entryPoints:
+        ssh:
+          address: ":8022"
+    extraDynamicConfig:
+      tcp:
+        services:
+          ssh:
+            loadBalancer:
+              servers:
+                - address: jupyterhub-ssh:22
+        routers:
+          ssh-router:
+            entrypoints:
+              - ssh
+            rule: "HostSNI(`*`)"
+            service: ssh
   secretSync:
     resources: *resources
   labels: *labels
