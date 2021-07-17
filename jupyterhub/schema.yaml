@@ -1584,7 +1584,7 @@ properties:
           containerSecurityContext: *containerSecurityContext-spec
           extraDynamicConfig:
             type: object
-            additionalProperties: false
+            additionalProperties: true
             description: |
               This refers to traefik's post-startup configuration.
 
@@ -1600,7 +1600,7 @@ properties:
               that you would like to expose, formatted in a k8s native way.
           extraStaticConfig:
             type: object
-            additionalProperties: false
+            additionalProperties: true
             description: |
               This refers to traefik's startup configuration.
 
