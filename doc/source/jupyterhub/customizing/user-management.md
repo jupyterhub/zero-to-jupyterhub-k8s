@@ -23,10 +23,6 @@ folder and will typically not cause work to be lost.
 For more details on how the `jupyterhub-idle-culler` works and additional
 configurations you may want to set on the user servers, see the [How it works
 documentation](https://github.com/jupyterhub/jupyterhub-idle-culler#how-it-works).
-
-If you want to configure the culling of kernels that can help stop long running
-code on the user servers, it can be useful to use
-[`singleuser.extraFiles`](schema_singleuser.extraFiles).
 ```
 
 To disable `jupyterhub-idle-culler`, put the following into `config.yaml`:
@@ -44,6 +40,38 @@ file. The Helm chart's configuration corresponds to flags in the
 package. Full documentation of these and additional flags can be found in
 [jupyterhub-idle-culler's
 documentation](https://github.com/jupyterhub/jupyterhub-idle-culler#as-a-standalone-script).
+
+To help `jupyterhub-idle-culler` cull user servers, you should consider
+configuring the user servers' _kernel manager_ to cull idle kernels that would
+otherwise make the user servers report themselves as active which is what
+`jupyterhub-idle-culler` considers. To do so, you can mount a configuration file
+to the user servers via [`singleuser.extraFiles`](schema_singleuser.extraFiles).
+
+```yaml
+singleuser:
+  extraFiles:
+    # jupyter_notebook_config reference: https://jupyter-notebook.readthedocs.io/en/stable/config.html
+    jupyter_notebook_config.json:
+      mountPath: /etc/jupyter/jupyter_notebook_config.json
+      # data is a YAML structure here but will be rendered to JSON file as our
+      # file extension is .json.
+      data:
+        MappingKernelManager:
+          # cull_idle_timeout: timeout (in seconds) after which an idle kernel is
+          # considered ready to be culled.
+          cull_idle_timeout: 1200 # default: 0
+
+          # cull_interval: the interval (in seconds) on which to check for idle
+          # kernels exceeding the cull timeout value.
+          cull_interval: 120 # default: 300
+
+          # cull_connected: whether to consider culling kernels which have one
+          # or more connections.
+          cull_connected: true # default: false
+
+          # cull_busy: whether to consider culling kernels which are busy.
+          cull_busy: false # default: false
+```
 
 ```{note}
 While JupyterHub automatically runs the culling process, it is not a
