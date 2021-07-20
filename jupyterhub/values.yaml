@@ -193,7 +193,7 @@ proxy:
       allowPrivilegeEscalation: false
     image:
       name: jupyterhub/configurable-http-proxy
-      tag: 4.4.0 # https://github.com/jupyterhub/configurable-http-proxy/releases
+      tag: 4.5.0 # https://github.com/jupyterhub/configurable-http-proxy/releases
       pullPolicy:
       pullSecrets: []
     extraCommandLineFlags: []
