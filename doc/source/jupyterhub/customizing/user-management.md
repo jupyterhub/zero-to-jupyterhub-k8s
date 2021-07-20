@@ -32,20 +32,21 @@ cull:
   enabled: false
 ```
 
-The default Helm chart configuration of `jupyterhub-idle-culler` can be
-inspected in the Helm chart's [values.yaml (Helm chart version
-1.0.0)](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/1.0.0/jupyterhub/values.yaml#L529-L536)
-file. The Helm chart's configuration corresponds to command-line flags passed to the
-[jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler)
-package. Full documentation of these and additional flags can be found in
+The default culling configuration can be inspected in the Helm chart's
+[values.yaml](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/values.yaml)
+file under `cull`. The Helm chart's configuration corresponds to command-line
+flags passed to
+[jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler).
+Full documentation of these and additional flags can be found in
 [jupyterhub-idle-culler's
 documentation](https://github.com/jupyterhub/jupyterhub-idle-culler#as-a-standalone-script).
 
 To help `jupyterhub-idle-culler` cull user servers, you should consider
 configuring the user servers' _kernel manager_ to cull idle kernels that would
-otherwise make the user servers report themselves as active which is what
-`jupyterhub-idle-culler` considers. To do so, you can mount a configuration file
-to the user servers via [`singleuser.extraFiles`](schema_singleuser.extraFiles).
+otherwise make the user servers report themselves as active which is part of
+what `jupyterhub-idle-culler` considers. To do so, you can mount a configuration
+file to the user servers via
+[`singleuser.extraFiles`](schema_singleuser.extraFiles).
 
 ```yaml
 singleuser:
@@ -54,22 +55,23 @@ singleuser:
     jupyter_notebook_config.json:
       mountPath: /etc/jupyter/jupyter_notebook_config.json
       # data is a YAML structure here but will be rendered to JSON file as our
-      # file extension is .json.
+      # file extension is ".json".
       data:
         MappingKernelManager:
           # cull_idle_timeout: timeout (in seconds) after which an idle kernel is
-          # considered ready to be culled.
+          # considered ready to be culled
           cull_idle_timeout: 1200 # default: 0
 
           # cull_interval: the interval (in seconds) on which to check for idle
-          # kernels exceeding the cull timeout value.
+          # kernels exceeding the cull timeout value
           cull_interval: 120 # default: 300
 
           # cull_connected: whether to consider culling kernels which have one
-          # or more connections.
+          # or more connections
           cull_connected: true # default: false
 
-          # cull_busy: whether to consider culling kernels which are currently busy running some code.
+          # cull_busy: whether to consider culling kernels which are currently
+          # busy running some code
           cull_busy: false # default: false
 ```
 
