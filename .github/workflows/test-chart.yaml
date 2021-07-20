@@ -152,16 +152,20 @@ jobs:
           - k3s-channel: v1.19
             test: upgrade
             upgrade-from: stable
+            # FIXME: After z2jh 1.1.0 release, remove the proxy tag pin
             upgrade-from-extra-args: >-
               --set proxy.secretToken=aaaa1111
               --set hub.cookieSecret=bbbb2222
               --set hub.config.CryptKeeper.keys[0]=cccc3333
+              --set proxy.chp.image.tag=4.5.0
             create-k8s-test-resources: true
           - k3s-channel: v1.19
             test: upgrade
             upgrade-from: dev
+            # FIXME: After z2jh 1.1.0 release, remove the proxy tag pin
             upgrade-from-extra-args: >-
               --set proxy.secretToken=aaaa1111
+              --set proxy.chp.image.tag=4.5.0
 
     steps:
       - uses: actions/checkout@v2
