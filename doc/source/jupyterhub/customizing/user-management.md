@@ -25,7 +25,7 @@ configurations you may want to set on the user servers, see the [How it works
 documentation](https://github.com/jupyterhub/jupyterhub-idle-culler#how-it-works).
 ```
 
-To disable `jupyterhub-idle-culler`, put the following into `config.yaml`:
+To disable culling, put the following into `config.yaml`:
 
 ```yaml
 cull:
@@ -35,7 +35,7 @@ cull:
 The default Helm chart configuration of `jupyterhub-idle-culler` can be
 inspected in the Helm chart's [values.yaml (Helm chart version
 1.0.0)](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/1.0.0/jupyterhub/values.yaml#L529-L536)
-file. The Helm chart's configuration corresponds to flags in the
+file. The Helm chart's configuration corresponds to command-line flags passed to the
 [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler)
 package. Full documentation of these and additional flags can be found in
 [jupyterhub-idle-culler's
@@ -69,7 +69,7 @@ singleuser:
           # or more connections.
           cull_connected: true # default: false
 
-          # cull_busy: whether to consider culling kernels which are busy.
+          # cull_busy: whether to consider culling kernels which are currently busy running some code.
           cull_busy: false # default: false
 ```
 
