@@ -8,6 +8,22 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ### [1.1.0]
 
+#### Highlights
+
+- **hub.services api tokens are now generated**
+
+  The Helm chart now automatically seeds registered services under
+  `hub.services` with an api token. This is especially helpful for Helm charts
+  depending on this Helm chart such as `binderhub` or `daskhub`, for more
+  details see the
+  [`hub.services`](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#hub-services)
+  entry in the configuration reference.
+
+- **Full arm64 compatebility**
+
+  The Helm chart is fully arm64 compatible, even the `singleuser.image` that
+  previously wasn't.
+
 ### Breaking changes
 
 This breaking change only concerns someone that has configured
@@ -15,6 +31,23 @@ This breaking change only concerns someone that has configured
 from `<some-name>`. In that case, the key in the k8s Secret exposing the
 registered service's api token is now named `hub.services.<some-key>.apiToken`
 instead of `hub.services.<some-name>.apiToken`.
+
+#### Notable dependencies updated
+
+| Dependency                                                                       | Version in 0.11.0 | Version in 1.0.0 | Changelog link                                                                            | Note                               |
+| -------------------------------------------------------------------------------- | ----------------- | ---------------- | ----------------------------------------------------------------------------------------- | ---------------------------------- |
+| [jupyterhub](https://github.com/jupyterhub/jupyterhub)                           | 1.4.1             | 1.4.2            | [Changelog](https://jupyterhub.readthedocs.io/en/stable/changelog.html)                   | Run in the `hub` pod               |
+| [kubespawner](https://github.com/jupyterhub/kubespawner)                         | 1.0.0             | 1.1.0            | [Changelog](https://jupyterhub-kubespawner.readthedocs.io/en/latest/changelog.html)       | Run in the `hub` pod               |
+| [oauthenticator](https://github.com/jupyterhub/oauthenticator)                   | 14.0.0            | 14.1.0           | [Changelog](https://oauthenticator.readthedocs.io/en/latest/changelog.html)               | Run in the `hub` pod               |
+| [ldapauthenticator](https://github.com/jupyterhub/ldapauthenticator)             | 1.3.2             | 1.3.2            | [Changelog](https://github.com/jupyterhub/ldapauthenticator/blob/HEAD/CHANGELOG.md)       | Run in the `hub` pod               |
+| [ltiauthenticator](https://github.com/jupyterhub/ltiauthenticator)               | 1.0.0             | 1.0.0            | [Changelog](https://github.com/jupyterhub/ltiauthenticator/blob/HEAD/CHANGELOG.md)        | Run in the `hub` pod               |
+| [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 0.0.7             | 0.0.7            | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/HEAD/CHANGELOG.md)     | Run in the `hub` pod               |
+| [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler)   | 1.1               | 1.1              | -                                                                                         | Run in the `hub` pod               |
+| [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy) | 4.4.0             | 4.5.0            | [Changelog](https://github.com/jupyterhub/configurable-http-proxy/blob/HEAD/CHANGELOG.md) | Run in the `proxy` pod             |
+| [traefik](https://github.com/traefik/traefik)                                    | v2.4.8            | v2.4.11          | [Changelog](https://github.com/traefik/traefik/blob/HEAD/CHANGELOG.md)                    | Run in the `autohttps` pod         |
+| [kube-scheduler](https://github.com/kubernetes/kube-scheduler)                   | v1.19.11          | v1.19.13         | -                                                                                         | Run in the `user-scheduler` pod(s) |
+
+For a detailed list of how Python dependencies have change in the `hub` Pod's Docker image, inspect the [images/hub/requirements.txt](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/images/hub/requirements.txt) file.
 
 #### New features added
 
