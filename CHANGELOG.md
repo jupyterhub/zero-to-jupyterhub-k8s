@@ -4,9 +4,60 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ## UNRELEASED
 
-### Breaking change
+## [1.1]
 
-- In the rare case that you have configured `hub.services.<some-key>.name=<some-other-name>`, so that the key is different form the name, you should be aware of the rename of the k8s Secret's key containing an api token for the service is now accessible at `hub.services.<some-key>.apiToken` instead of `hub.services.<some-other-name>.apiToken`. This was a change introduced in [#2312](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2312).
+### [1.1.0]
+
+### Breaking changes
+
+This breaking change only concerns someone that has configured
+`hub.services.<some-key>.name=<some-name>` so that `<some-key>` is different
+from `<some-name>`. In that case, the key in the k8s Secret exposing the
+registered service's api token is now named `hub.services.<some-key>.apiToken`
+instead of `hub.services.<some-name>.apiToken`.
+
+#### New features added
+
+- Add configuration for arbitrary extra pod spec [#2306](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2306) ([@mallman](https://github.com/mallman))
+
+#### Enhancements made
+
+- Add support for arm64 in singleuser-sample image [#2316](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2316) ([@consideRatio](https://github.com/consideRatio))
+- Seed hub.services' apiTokens [#2312](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2312) ([@consideRatio](https://github.com/consideRatio))
+- Add ingress.pathType config [#2305](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2305) ([@jtrouth](https://github.com/jtrouth))
+
+#### Bugs fixed
+
+- Allow CHP to function in a IPv4 only and/or IPv6 only context [#2318](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2318) ([@consideRatio](https://github.com/consideRatio))
+- fix schema: accept proxy.traefik.extra[Static|Dynamic]Config [#2317](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2317) ([@consideRatio](https://github.com/consideRatio))
+- fix: bug if z2jh is used as a dependency with an alias [#2310](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2310) ([@consideRatio](https://github.com/consideRatio))
+- Fix failure to set imagePullSecrets for user-placeholder pods (scheduling.userPlaceholder.image config added) [#2293](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2293) ([@michaellzc](https://github.com/michaellzc))
+
+#### Maintenance and upkeep improvements
+
+- build(deps): bump jupyterhub-kubespawner from 1.0.0 to 1.1.0 in /images/hub [#2324](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2324) ([@dependabot](https://github.com/dependabot))
+- Bump CHP version to 4.5.0 [#2321](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2321) ([@consideRatio](https://github.com/consideRatio))
+- build(deps): bump oauthenticator from 14.0.0 to 14.1.0 in /images/hub [#2320](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2320) ([@dependabot](https://github.com/dependabot))
+- Bump patch version of: traefik, kube-scheduler, pause [#2315](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2315) ([@consideRatio](https://github.com/consideRatio))
+- build(deps): bump jupyterhub from 1.4.1 to 1.4.2 in /images/hub [#2314](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2314) ([@dependabot](https://github.com/dependabot))
+- Remove deprecation logic for hub.extraConfig as a string [#2307](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2307) ([@consideRatio](https://github.com/consideRatio))
+- hub image: run apt-get upgrade by default to patch known vulns [#2304](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2304) ([@consideRatio](https://github.com/consideRatio))
+
+#### Documentation improvements
+
+- Add changelog for 1.0.1 [#2287](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2287) ([@consideRatio](https://github.com/consideRatio))
+- Docs clarification culling behavior and configs [#2267](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2267) ([@cdibble](https://github.com/cdibble))
+
+#### Continuous integration improvements
+
+- ci: improve lint-and-validate-values.yaml coverage [#2309](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2309) ([@consideRatio](https://github.com/consideRatio))
+- ci: Arm64 circleci test [#2302](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2302) ([@manics](https://github.com/manics))
+
+#### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2021-06-25&to=2021-07-21&type=c))
+
+[@cdibble](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Acdibble+updated%3A2021-06-25..2021-07-21&type=Issues) | [@consideRatio](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2021-06-25..2021-07-21&type=Issues) | [@jtrouth](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajtrouth+updated%3A2021-06-25..2021-07-21&type=Issues) | [@mallman](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amallman+updated%3A2021-06-25..2021-07-21&type=Issues) | [@manics](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2021-06-25..2021-07-21&type=Issues) | [@michaellzc](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amichaellzc+updated%3A2021-06-25..2021-07-21&type=Issues) | [@minrk](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aminrk+updated%3A2021-06-25..2021-07-21&type=Issues) | [@yuvipanda](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ayuvipanda+updated%3A2021-06-25..2021-07-21&type=Issues)
 
 ## [1.0]
 
