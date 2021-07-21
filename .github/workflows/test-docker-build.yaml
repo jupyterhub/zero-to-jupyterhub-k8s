@@ -35,11 +35,7 @@ jobs:
           python-version: "3.8"
 
       - name: Install chartpress
-        run: |
-          # FIXME: six is required by docker 5.0.0 but isn't explicitly required
-          #        https://github.com/docker/docker-py/issues/2807
-          #
-          pip install chartpress six
+        run: pip install chartpress
 
       - name: Set up QEMU (for docker buildx)
         uses: docker/setup-qemu-action@27d0a4f181a40b142cce983c5393082c365d1480 # dependabot updates to latest release

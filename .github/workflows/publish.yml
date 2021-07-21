@@ -77,15 +77,10 @@ jobs:
 
       - name: Install chart publishing dependencies (chartpress, helm)
         run: |
-          . ./ci/common
-          setup_helm
-          helm version
-
-          # FIXME: six is required by docker 5.0.0 but isn't explicitly required
-          #        https://github.com/docker/docker-py/issues/2807
-          #
-          pip install chartpress pyyaml six
+          pip install chartpress pyyaml
           pip list
+
+          helm version
 
       - name: Setup push rights to jupyterhub/helm-chart
         # This was setup by...
