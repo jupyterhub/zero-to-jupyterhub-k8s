@@ -149,6 +149,12 @@ hub:
       name: test-service-2-name
       apiToken: mocked-api-token
     test-service-3: {}
+    test-service-4:
+      admin: true
+      oauth_no_confirm: true
+      oauth_roles: [dummy]
+      info:
+        key1: value1
   pdb:
     enabled: true
     maxUnavailable: 1
