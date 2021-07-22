@@ -6,7 +6,17 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ## [1.1]
 
-### [1.1.0]
+### [1.1.1] - 2021-07-22
+
+#### Bugs fixed
+
+- fix hub.services schema regression from 1.1.0 [#2327](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2327) ([@consideRatio](https://github.com/consideRatio))
+
+#### Continuous integration improvements
+
+- ci: misc fixes post 1.1.0 [#2326](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2326) ([@consideRatio](https://github.com/consideRatio))
+
+### [1.1.0] - 2021-07-21
 
 #### Highlights
 
