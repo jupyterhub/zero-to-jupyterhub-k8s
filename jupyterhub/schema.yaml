@@ -1140,6 +1140,12 @@ properties:
           details on services themselves instead read [JupyterHub's
           documentation](https://jupyterhub.readthedocs.io/en/stable/api/service.html).
 
+          ```{note}
+          Only a selection of JupyterHub's configuration options that can be
+          configured for a service are documented below. All configuration set
+          here will be applied even if this Helm chart doesn't recognize it.
+          ```
+
           JupyterHub's native configuration accepts a list of service objects,
           this Helm chart only accept a dictionary where each key represents the
           name of a service and the value is the actual service objects.
