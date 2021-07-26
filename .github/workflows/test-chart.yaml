@@ -117,6 +117,7 @@ jobs:
         include:
           - k3s-channel: v1.21
             test: install
+            debuggable: debuggable
           - k3s-channel: v1.20
             test: install
           - k3s-channel: v1.19
@@ -163,7 +164,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          # chartpress requires the full history
+          # chartpress requires git history to set chart version and image tags
+          # correctly
           fetch-depth: 0
 
       # Starts a k8s cluster with NetworkPolicy enforcement and installs both
@@ -315,3 +317,11 @@ jobs:
         if: always()
         with:
           important-workloads: deploy/hub deploy/proxy
+
+      # WARNING: Only allow this for pull_request runs that doesn't contain
+      #          sensitive information.
+      #
+      # action reference: https://github.com/mxschmitt/action-tmate@v3
+      - name: To enter a SSH debugging session, read these logs
+        if: failure() && github.event_name == 'pull_request' && matrix.debuggable == 'debuggable'
+        uses: mxschmitt/action-tmate@v3

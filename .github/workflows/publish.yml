@@ -35,7 +35,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          # chartpress requires the full history
+          # chartpress requires git history to set chart version and image tags
+          # correctly
           fetch-depth: 0
 
       - uses: actions/setup-python@v2

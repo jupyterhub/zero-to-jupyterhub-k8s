@@ -26,9 +26,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          # chartpress is used by doc/conf.py,
-          # and requires information about the latest tagged commit, which
-          # requires the git history.
+          # chartpress, used by doc/conf.py, requires git history to set
+          # chart version and image tags correctly
           fetch-depth: 0
       - uses: actions/setup-python@v2
         with:
