@@ -20,6 +20,7 @@ redhat/step-zero-openshift
 ibm/step-zero-ibm
 digital-ocean/step-zero-digital-ocean
 ovh/step-zero-ovh
+other-infrastructure/step-zero-microk8s
 ```
 
 ```{note}
