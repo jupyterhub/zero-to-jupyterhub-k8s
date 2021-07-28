@@ -66,10 +66,10 @@ To run the upgrade:
 helm upgrade --cleanup-on-fail <helm-release-name> jupyterhub/jupyterhub --version=<chart-version> --values config.yaml --namespace <k8s-namespace>
 ```
 
-For example, to upgrade to v0.6, enter and substituting `<helm-release-name>` and version v0.6:
+For example, to upgrade to version `v0.6` with a helm release name of `jhub` in the k8s namespace of `jhub`:
 
 ```
-helm upgrade --cleanup-on-fail <helm-release-name> jupyterhub/jupyterhub --version=v0.6 --values config.yaml --namespace <k8s-namespace>
+helm upgrade --cleanup-on-fail jhub jupyterhub/jupyterhub --version=v0.6 --values config.yaml --namespace jhub
 ```
 
 ### Database
