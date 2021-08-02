@@ -40,6 +40,6 @@ repos:
 
   # Reset Chart.yaml version and values.yaml image tags
   - repo: https://github.com/jupyterhub/chartpress
-    rev: 1.2.2
+    rev: 1.3.0
     hooks:
       - id: chartpress
