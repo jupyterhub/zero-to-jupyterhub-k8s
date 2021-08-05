@@ -1232,7 +1232,7 @@ properties:
         description: *jupyterhub-native-config-description
       templateVars:
         type: object
-        additionalProperties: false
+        additionalProperties: true
         description: *jupyterhub-native-config-description
       imagePullSecret: &deprecated-imagePullSecret
         type: object
