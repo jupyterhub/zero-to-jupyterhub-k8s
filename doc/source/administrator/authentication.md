@@ -364,7 +364,7 @@ can configure the GenericOAuthenticator class to authenticate against a KeyCloak
 server.
 
 To configure an OpenID Connect client, see [KeyCloak's own
-documentation](https://www.keycloak.org/docs/latest/server_admin/index.html#oidc-clients).
+documentation](https://www.keycloak.org/docs/latest/server_admin/index.html#_oidc_clients).
 
 ```yaml
 hub:
