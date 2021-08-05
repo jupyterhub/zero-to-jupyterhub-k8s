@@ -122,6 +122,11 @@ hub:
   extraContainers: []
   extraVolumes: []
   extraVolumeMounts: []
+  templatePaths:
+    - /etc/jupyterhub/templates
+  templateVars:
+    announcement: 'Some text'
+    another_announcement: 'Some more text'
   resources: &resources
     requests:
       cpu: 100m
