@@ -6,6 +6,22 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ## [1.1]
 
+### [1.1.2] - 2021-08-05
+
+#### Bugs fixed
+
+- fix schema: hub.templateVars didn't accept configuration [#2343](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2343) ([@MridulS](https://github.com/MridulS))
+
+#### Documentation improvements
+
+- docs: fix weird helm upgrade example [#2331](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2331) ([@hiroki-sawano](https://github.com/hiroki-sawano))
+
+#### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2021-07-22&to=2021-08-05&type=c))
+
+[@consideRatio](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2021-07-22..2021-08-05&type=Issues) | [@hiroki-sawano](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ahiroki-sawano+updated%3A2021-07-22..2021-08-05&type=Issues) | [@manics](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2021-07-22..2021-08-05&type=Issues) | [@MridulS](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AMridulS+updated%3A2021-07-22..2021-08-05&type=Issues)
+
 ### [1.1.1] - 2021-07-22
 
 #### Bugs fixed
