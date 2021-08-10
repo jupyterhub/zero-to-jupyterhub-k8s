@@ -178,10 +178,27 @@ hub:
         - read:user
 ```
 
-```{admonition} Alternative scopes
-While you can set other scopes than `read:user` as described in [GitHub OAuth scopes documentation](https://docs.github.com/en/developers/apps/scopes-for-oauth-apps), we recommend `read:user`.
+If you would like to restrict access to a specific team within a GitHub organization, use
+the following syntax:
 
-With `read:user`, the user will be requested to permit JupyterHub to read their profile data. The benefit of this choice is that it won't require configuration by the GitHub organizations' admins by by its members.
+```yaml
+hub:
+  config:
+    GitHubOAuthenticator:
+      allowed_organizations:
+        - my-github-organization:my-team
+      scope:
+        - read:org
+```
+
+```{admonition} GitHub OAuth Scope Choice
+The `read:user` scope is sufficient for checking membership of organisations where the user's visibility is set to public.
+
+With `read:user`, the user will be requested to permit JupyterHub to read their profile data. The benefit of `read:user`
+is that it won't require configuration by the GitHub organizations' admins by its members. However, `read:org` is
+required for when a user's membership is set to private, or for when checking team membership.
+
+For more info, check the [GitHub OAuth scopes documentation](https://docs.github.com/en/developers/apps/scopes-for-oauth-apps)
 ```
 
 #### Google
