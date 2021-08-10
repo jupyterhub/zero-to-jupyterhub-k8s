@@ -119,7 +119,7 @@ pyasn1-modules==0.2.8
     # via google-auth
 pycparser==2.20
     # via cffi
-pycurl==7.43.0.6
+pycurl==7.44.0
     # via -r requirements.in
 pyjwt==1.7.1
     # via
