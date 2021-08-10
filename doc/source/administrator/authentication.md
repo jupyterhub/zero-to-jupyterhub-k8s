@@ -191,14 +191,12 @@ hub:
         - read:org
 ```
 
-```{admonition} GitHub OAuth Scope Choice
-The `read:user` scope is sufficient for checking membership of organisations where the user's visibility is set to public.
+```{admonition} About the choice of scope
+The narrower scope `read:user` is sufficient for a configuration of `allowed_organizations` to function if you both list only entire organizations rather than specific teams, and if the users [make their organization membership public](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/managing-your-membership-in-organizations/publicizing-or-hiding-organization-membership).
 
-With `read:user`, the user will be requested to permit JupyterHub to read their profile data. The benefit of `read:user`
-is that it won't require configuration by the GitHub organizations' admins by its members. However, `read:org` is
-required for when a user's membership is set to private, or for when checking team membership.
+The broader scope `read:org` doesn't have the limitations of `read:user`, but will require a one-off approval by the admins of the GitHub organizations' listed in `allowed_organizations`. This kind of approval can be requested by organization users [as documented on GitHub](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/managing-your-membership-in-organizations/requesting-organization-approval-for-oauth-apps).
 
-For more info, check the [GitHub OAuth scopes documentation](https://docs.github.com/en/developers/apps/scopes-for-oauth-apps)
+For details about GitHub scopes, see [GitHub's documentation](https://docs.github.com/en/developers/apps/scopes-for-oauth-apps).
 ```
 
 #### Google
