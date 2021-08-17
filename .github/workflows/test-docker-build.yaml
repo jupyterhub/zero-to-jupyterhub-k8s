@@ -26,7 +26,13 @@ jobs:
   # - https://github.com/docker/build-push-action/blob/v2.3.0/docs/advanced/local-registry.md
   # - https://github.com/docker/build-push-action/blob/v2.3.0/docs/advanced/multi-platform.md
   build_images:
-    runs-on: ubuntu-20.04
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-20.04
+          - runner: self-hosted
     steps:
       - uses: actions/checkout@v2
         with:
