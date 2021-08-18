@@ -26,7 +26,7 @@ jobs:
   # - https://github.com/docker/build-push-action/blob/v2.3.0/docs/advanced/local-registry.md
   # - https://github.com/docker/build-push-action/blob/v2.3.0/docs/advanced/multi-platform.md
   build_images:
-    runs-on: ${{ matrix.runner }}
+    runs-on: self-hosted
     strategy:
       fail-fast: false
       matrix:
