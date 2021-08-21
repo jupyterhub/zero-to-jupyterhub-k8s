@@ -73,13 +73,13 @@ spec:
               port: 10251
           {{- with .Values.scheduling.userScheduler.resources }}
           resources:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
           {{- with .Values.scheduling.userScheduler.containerSecurityContext }}
           securityContext:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
       {{- with .Values.scheduling.userScheduler.extraPodSpec }}
-      {{- . | toYaml | trimSuffix "\n" | nindent 6 }}
+      {{- . | toYaml | nindent 6 }}
       {{- end }}
 {{- end }}

@@ -59,7 +59,7 @@ spec:
 
     {{- with .Values.proxy.traefik.networkPolicy.ingress}}
     # depends, but default is nothing --> proxy
-    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- . | toYaml | nindent 4 }}
     {{- end }}
 
   egress:
@@ -81,6 +81,6 @@ spec:
 
     {{- with .Values.proxy.traefik.networkPolicy.egress }}
     # autohttps --> depends, but the default is everything
-    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- . | toYaml | nindent 4 }}
     {{- end }}
 {{- end }}

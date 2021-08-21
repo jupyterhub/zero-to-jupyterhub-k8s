@@ -12,7 +12,7 @@ spec:
     matchLabels:
       {{- include "jupyterhub.matchLabels" . | nindent 6 }}
   strategy:
-    {{- .Values.proxy.deploymentStrategy | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- .Values.proxy.deploymentStrategy | toYaml | nindent 4 }}
   template:
     metadata:
       labels:
@@ -21,7 +21,7 @@ spec:
         hub.jupyter.org/network-access-hub: "true"
         hub.jupyter.org/network-access-singleuser: "true"
         {{- with .Values.proxy.labels }}
-        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- . | toYaml | nindent 8 }}
         {{- end }}
       annotations:
         # We want to restart proxy only if the auth token changes
@@ -37,7 +37,7 @@ spec:
         checksum/auth-token: {{ include "jupyterhub.hub.config.ConfigurableHTTPProxy.auth_token" . | sha256sum | trunc 4 | quote }}
         checksum/proxy-secret: {{ include (print $.Template.BasePath "/proxy/secret.yaml") . | sha256sum | quote }}
         {{- with .Values.proxy.annotations }}
-        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- . | toYaml | nindent 8 }}
         {{- end }}
     spec:
       terminationGracePeriodSeconds: 60
@@ -105,7 +105,7 @@ spec:
           {{- end }}
           {{- with .Values.proxy.chp.resources }}
           resources:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
           env:
             - name: CONFIGPROXY_AUTH_TOKEN
@@ -161,8 +161,8 @@ spec:
           {{- end }}
           {{- with .Values.proxy.chp.containerSecurityContext }}
           securityContext:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
       {{- with .Values.proxy.chp.extraPodSpec }}
-      {{- . | toYaml | trimSuffix "\n" | nindent 6 }}
+      {{- . | toYaml | nindent 6 }}
       {{- end }}

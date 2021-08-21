@@ -11,7 +11,7 @@ metadata:
     {{- include "jupyterhub.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
-    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- . | toYaml | nindent 4 }}
   {{- end }}
 spec:
   rules:
@@ -37,6 +37,6 @@ spec:
     {{- end }}
   {{- with .Values.ingress.tls }}
   tls:
-    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- . | toYaml | nindent 4 }}
   {{- end }}
 {{- end }}

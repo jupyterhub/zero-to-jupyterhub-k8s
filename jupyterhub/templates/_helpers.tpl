@@ -322,9 +322,9 @@ limits:
         {{- if $file_details.data }}
             {{- $file_key | quote }}: |
               {{- if or (eq (ext $file_name) ".yaml") (eq (ext $file_name) ".yml") }}
-              {{- $file_details.data | toYaml | trimSuffix "\n" | nindent 2 }}{{ println }}
+              {{- $file_details.data | toYaml | nindent 2 }}{{ println }}
               {{- else if eq (ext $file_name) ".json" }}
-              {{- $file_details.data | toJson | trimSuffix "\n" | nindent 2 }}{{ println }}
+              {{- $file_details.data | toJson | nindent 2 }}{{ println }}
               {{- else if eq (ext $file_name) ".toml" }}
               {{- $file_details.data | toToml | trimSuffix "\n" | nindent 2 }}{{ println }}
               {{- else }}

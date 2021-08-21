@@ -27,11 +27,11 @@ metadata:
     {{- $_ := merge (dict "componentSuffix" "-public") . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}
     {{- with .Values.proxy.service.labels }}
-    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- . | toYaml | nindent 4 }}
     {{- end }}
   {{- with .Values.proxy.service.annotations }}
   annotations:
-    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- . | toYaml | nindent 4 }}
   {{- end }}
 spec:
   selector:
@@ -66,7 +66,7 @@ spec:
       {{- end }}
     {{- end }}
     {{- with .Values.proxy.service.extraPorts }}
-    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- . | toYaml | nindent 4 }}
     {{- end }}
   type: {{ .Values.proxy.service.type }}
   {{- with .Values.proxy.service.loadBalancerIP }}
@@ -75,6 +75,6 @@ spec:
   {{- if eq .Values.proxy.service.type "LoadBalancer" }}
   {{- with .Values.proxy.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
-    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- . | toYaml | nindent 4 }}
   {{- end }}
   {{- end }}
