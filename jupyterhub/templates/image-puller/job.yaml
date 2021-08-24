@@ -30,7 +30,7 @@ spec:
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
       {{- with .Values.prePuller.annotations }}
       annotations:
-        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- . | toYaml | nindent 8 }}
       {{- end }}
     spec:
       restartPolicy: Never
@@ -61,10 +61,10 @@ spec:
             - -pod-scheduling-wait-duration={{ .Values.prePuller.hook.podSchedulingWaitDuration }}
           {{- with .Values.prePuller.hook.containerSecurityContext }}
           securityContext:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
           {{- with .Values.prePuller.hook.resources }}
           resources:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
 {{- end }}

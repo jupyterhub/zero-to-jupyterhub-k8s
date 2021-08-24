@@ -57,7 +57,7 @@ spec:
 
     {{- with .Values.singleuser.networkPolicy.ingress }}
     # depends, but default is nothing --> singleuser-server
-    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- . | toYaml | nindent 4 }}
     {{- end }}
 
   egress:
@@ -79,6 +79,6 @@ spec:
 
     {{- with .Values.singleuser.networkPolicy.egress }}
     # singleuser-server --> depends, but the default is everything
-    {{- . | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- . | toYaml | nindent 4 }}
     {{- end }}
 {{- end }}

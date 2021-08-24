@@ -52,7 +52,7 @@ spec:
           image: {{ .Values.scheduling.userPlaceholder.image.name }}:{{ .Values.scheduling.userPlaceholder.image.tag }}
           {{- if .Values.scheduling.userPlaceholder.resources }}
           resources:
-            {{- .Values.scheduling.userPlaceholder.resources | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- .Values.scheduling.userPlaceholder.resources | toYaml | nindent 12 }}
           {{- else if (include "jupyterhub.singleuser.resources" .) }}
           resources:
             {{- include "jupyterhub.singleuser.resources" . | nindent 12 }}
@@ -62,6 +62,6 @@ spec:
           {{- end }}
           {{- with .Values.scheduling.userPlaceholder.containerSecurityContext }}
           securityContext:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
 {{- end }}

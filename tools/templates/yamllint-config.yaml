@@ -62,6 +62,6 @@ rules:
 #
 # # template.yaml
 # myList:
-#   {{- .Values.list | toYaml | trimSuffix "\n" | nindent 0 }}
+#   {{- .Values.list | toYaml | nindent 0 }}
 # myDict:
-#   {{- .Values.dict | toYaml | trimSuffix "\n" | nindent 2 }}
+#   {{- .Values.dict | toYaml | nindent 2 }}

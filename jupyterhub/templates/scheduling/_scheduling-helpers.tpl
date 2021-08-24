@@ -6,7 +6,7 @@
     values: [user]
 {{- end }}
 {{- with .Values.singleuser.extraNodeAffinity.required }}
-{{- . | toYaml | trimSuffix "\n" | nindent 0 }}
+{{- . | toYaml | nindent 0 }}
 {{- end }}
 {{- end }}
 
@@ -20,31 +20,31 @@
         values: [user]
 {{- end }}
 {{- with .Values.singleuser.extraNodeAffinity.preferred }}
-{{- . | toYaml | trimSuffix "\n" | nindent 0 }}
+{{- . | toYaml | nindent 0 }}
 {{- end }}
 {{- end }}
 
 {{- define "jupyterhub.userPodAffinityRequired" -}}
 {{- with .Values.singleuser.extraPodAffinity.required -}}
-{{ . | toYaml | trimSuffix "\n" }}
+{{ . | toYaml }}
 {{- end }}
 {{- end }}
 
 {{- define "jupyterhub.userPodAffinityPreferred" -}}
 {{- with .Values.singleuser.extraPodAffinity.preferred -}}
-{{ . | toYaml | trimSuffix "\n" }}
+{{ . | toYaml }}
 {{- end }}
 {{- end }}
 
 {{- define "jupyterhub.userPodAntiAffinityRequired" -}}
 {{- with .Values.singleuser.extraPodAntiAffinity.required -}}
-{{ . | toYaml | trimSuffix "\n" }}
+{{ . | toYaml }}
 {{- end }}
 {{- end }}
 
 {{- define "jupyterhub.userPodAntiAffinityPreferred" -}}
 {{- with .Values.singleuser.extraPodAntiAffinity.preferred -}}
-{{ . | toYaml | trimSuffix "\n" }}
+{{ . | toYaml }}
 {{- end }}
 {{- end }}
 

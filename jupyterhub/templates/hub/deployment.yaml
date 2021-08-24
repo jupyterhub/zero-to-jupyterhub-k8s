@@ -10,7 +10,7 @@ spec:
     matchLabels:
       {{- include "jupyterhub.matchLabels" . | nindent 6 }}
   strategy:
-    {{- .Values.hub.deploymentStrategy | toYaml | trimSuffix "\n" | nindent 4 }}
+    {{- .Values.hub.deploymentStrategy | toYaml | nindent 4 }}
   template:
     metadata:
       labels:
@@ -20,14 +20,14 @@ spec:
         hub.jupyter.org/network-access-proxy-http: "true"
         hub.jupyter.org/network-access-singleuser: "true"
         {{- with .Values.hub.labels }}
-        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- . | toYaml | nindent 8 }}
         {{- end }}
       annotations:
         {{- /* This lets us autorestart when the secret changes! */}}
         checksum/config-map: {{ include (print .Template.BasePath "/hub/configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print .Template.BasePath "/hub/secret.yaml") . | sha256sum }}
         {{- with .Values.hub.annotations }}
-        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- . | toYaml | nindent 8 }}
         {{- end }}
     spec:
       {{- if .Values.scheduling.podPriority.enabled }}
@@ -65,7 +65,7 @@ spec:
               {{- end }}
         {{- end }}
         {{- with .Values.hub.extraVolumes }}
-        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- . | toYaml | nindent 8 }}
         {{- end }}
         {{- if eq .Values.hub.db.type "sqlite-pvc" }}
         - name: pvc
@@ -82,11 +82,11 @@ spec:
       {{- end }}
       {{- with .Values.hub.initContainers }}
       initContainers:
-        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- . | toYaml | nindent 8 }}
       {{- end }}
       containers:
         {{- with .Values.hub.extraContainers }}
-        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- . | toYaml | nindent 8 }}
         {{- end }}
         - name: hub
           image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
@@ -153,7 +153,7 @@ spec:
               name: files
             {{- end }}
             {{- with .Values.hub.extraVolumeMounts }}
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
             {{- end }}
             {{- if eq .Values.hub.db.type "sqlite-pvc" }}
             - mountPath: /srv/jupyterhub
@@ -164,18 +164,18 @@ spec:
             {{- end }}
           {{- with .Values.hub.resources }}
           resources:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
           {{- with .Values.hub.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
           {{- with .Values.hub.containerSecurityContext }}
           securityContext:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
           {{- with .Values.hub.lifecycle }}
           lifecycle:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
           env:
             - name: PYTHONUNBUFFERED
@@ -231,5 +231,5 @@ spec:
               port: http
           {{- end }}
       {{- with .Values.hub.extraPodSpec }}
-      {{- . | toYaml | trimSuffix "\n" | nindent 6 }}
+      {{- . | toYaml | nindent 6 }}
       {{- end }}

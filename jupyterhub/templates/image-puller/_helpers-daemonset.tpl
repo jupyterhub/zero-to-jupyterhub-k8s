@@ -40,7 +40,7 @@ spec:
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
       {{- with .Values.prePuller.annotations }}
       annotations:
-        {{- . | toYaml | trimSuffix "\n" | nindent 8 }}
+        {{- . | toYaml | nindent 8 }}
       {{- end }}
     spec:
       {{- /*
@@ -82,11 +82,11 @@ spec:
             - echo "Pulling complete"
           {{- with .Values.prePuller.resources }}
           resources:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
           {{- with .Values.prePuller.containerSecurityContext }}
           securityContext:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
         {{- end }}
 
@@ -99,11 +99,11 @@ spec:
             - echo "Pulling complete"
           {{- with .Values.prePuller.resources }}
           resources:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
           {{- with .Values.prePuller.containerSecurityContext }}
           securityContext:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
 
         {{- /* --- Pull extra containers' images --- */}}
@@ -116,11 +116,11 @@ spec:
             - echo "Pulling complete"
           {{- with $.Values.prePuller.resources }}
           resources:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
           {{- with $.Values.prePuller.containerSecurityContext }}
           securityContext:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
         {{- end }}
 
@@ -137,11 +137,11 @@ spec:
             - echo "Pulling complete"
           {{- with $.Values.prePuller.resources }}
           resources:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
           {{- with $.Values.prePuller.containerSecurityContext }}
           securityContext:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- end }}
@@ -158,11 +158,11 @@ spec:
             - echo "Pulling complete"
           {{- with $.Values.prePuller.resources }}
           resources:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
           {{- with $.Values.prePuller.containerSecurityContext }}
           securityContext:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
         {{- end }}
       containers:
@@ -170,11 +170,11 @@ spec:
           image: {{ .Values.prePuller.pause.image.name }}:{{ .Values.prePuller.pause.image.tag }}
           {{- with .Values.prePuller.resources }}
           resources:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
           {{- with .Values.prePuller.pause.containerSecurityContext }}
           securityContext:
-            {{- . | toYaml | trimSuffix "\n" | nindent 12 }}
+            {{- . | toYaml | nindent 12 }}
           {{- end }}
 {{- end }}
 
