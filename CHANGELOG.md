@@ -6,6 +6,25 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ## [1.1]
 
+### [1.1.3] - 2021-08-25
+
+## Maintenance and upkeep improvements
+
+- refactor: remove redundant trimSuffix of new lines after toYaml [#2358](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2358) ([@consideRatio](https://github.com/consideRatio))
+- build(deps): bump pycurl from 7.44.0 to 7.44.1 in /images/hub [#2352](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2352) ([@dependabot](https://github.com/dependabot))
+- build(deps): bump oauthenticator from 14.1.0 to 14.2.0 in /images/hub [#2350](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2350) ([@dependabot](https://github.com/dependabot))
+- build(deps): bump pycurl from 7.43.0.6 to 7.44.0 in /images/hub [#2347](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2347) ([@dependabot](https://github.com/dependabot))
+
+## Documentation improvements
+
+- Add docs on GitHub team authentication [#2349](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2349) ([@j0nnyr0berts](https://github.com/j0nnyr0berts))
+
+## Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2021-08-05&to=2021-08-24&type=c))
+
+[@consideRatio](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2021-08-05..2021-08-24&type=Issues) | [@j0nnyr0berts](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aj0nnyr0berts+updated%3A2021-08-05..2021-08-24&type=Issues) | [@manics](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2021-08-05..2021-08-24&type=Issues)
+
 ### [1.1.2] - 2021-08-05
 
 #### Bugs fixed
