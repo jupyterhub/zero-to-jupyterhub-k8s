@@ -2,8 +2,3 @@
 proxy:
   https:
     enabled: false
-
-singleuser:
-  image:
-    name: sakuraiyuta/base-notebook
-    tag: latest
