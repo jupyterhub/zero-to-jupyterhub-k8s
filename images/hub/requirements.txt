@@ -68,7 +68,7 @@ jupyterhub-firstuseauthenticator==0.14.1
     # via -r requirements.in
 jupyterhub-hmacauthenticator==1.0
     # via -r requirements.in
-jupyterhub-idle-culler==1.1
+jupyterhub-idle-culler==1.2
     # via -r requirements.in
 jupyterhub-kubespawner==1.1.0
     # via -r requirements.in
