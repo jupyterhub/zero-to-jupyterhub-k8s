@@ -323,8 +323,24 @@ c.KubeSpawner.volume_mounts.extend(
 )
 
 c.JupyterHub.services = []
+c.JupyterHub.load_roles = []
 
+# jupyterhub-idle-culler's permissions are scoped to what it needs only, see
+# https://github.com/jupyterhub/jupyterhub-idle-culler#permissions.
+#
 if get_config("cull.enabled", False):
+    jupyterhub_idle_culler_role = {
+        "name": "jupyterhub-idle-culler",
+        "scopes": [
+            "list:users",
+            "read:users:activity",
+            "servers",
+            # "admin:users", # dynamically added if --cull-users is passed
+        ],
+        # assign the role to a jupyterhub service, so it gains these permissions
+        "services": ["jupyterhub-idle-culler"],
+    }
+
     cull_cmd = ["python3", "-m", "jupyterhub_idle_culler"]
     base_url = c.JupyterHub.get("base_url", "/")
     cull_cmd.append("--url=http://localhost:8081" + url_path_join(base_url, "hub/api"))
@@ -343,6 +359,7 @@ if get_config("cull.enabled", False):
 
     if get_config("cull.users"):
         cull_cmd.append("--cull-users")
+        jupyterhub_idle_culler_role["scopes"].append("admin:users")
 
     if get_config("cull.removeNamedServers"):
         cull_cmd.append("--remove-named-servers")
@@ -353,11 +370,11 @@ if get_config("cull.enabled", False):
 
     c.JupyterHub.services.append(
         {
-            "name": "cull-idle",
-            "admin": True,
+            "name": "jupyterhub-idle-culler",
             "command": cull_cmd,
         }
     )
+    c.JupyterHub.load_roles.append(jupyterhub_idle_culler_role)
 
 for key, service in get_config("hub.services", {}).items():
     # c.JupyterHub.services is a list of dicts, but
