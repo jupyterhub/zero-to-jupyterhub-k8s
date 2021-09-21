@@ -870,22 +870,6 @@ properties:
           extra configuration logic.
           ```
 
-      uid:
-        type: [integer, "null"]
-        minimum: 0
-        deprecated: true
-        description: |
-          Deprecated since chart version 0.11.0. Use
-          [`hub.containerSecurityContext`](schema_hub.containerSecurityContext)
-          instead.
-
-          The UID the hub process should be running as.
-
-          Use this only if you are building your own image & know that a user with this uid
-          exists inside the hub container! Advanced feature, handle with care!
-
-          Defaults to 1000, which is the uid of the `jovyan` user that is present in the
-          default hub image.
       fsGid:
         type: [integer, "null"]
         minimum: 0
@@ -1069,13 +1053,6 @@ properties:
             description: |
               JupyterHub does not support running in parallel, due to this we
               default to using a deployment strategy of Recreate.
-      extraConfigMap:
-        type: object
-        additionalProperties: true
-        deprecated: true
-        description: |
-          Deprecated since chart version 0.8. Use [`custom`](schema_custom)
-          instead.
       extraContainers: &extraContainers-spec
         type: array
         description: |
@@ -1234,12 +1211,6 @@ properties:
         type: object
         additionalProperties: true
         description: *jupyterhub-native-config-description
-      imagePullSecret: &deprecated-imagePullSecret
-        type: object
-        additionalProperties: true
-        deprecated: true
-        description: |
-          DEPRECATED: Use [`imagePullSecret`](schema_imagePullSecret) instead.
       serviceAccount: &serviceAccount
         type: object
         additionalProperties: false
@@ -1757,21 +1728,6 @@ properties:
               both receive updates from JupyterHub regarding how it should route
               traffic. Due to this we default to using a deployment strategy of
               Recreate instead of RollingUpdate.
-      containerSecurityContext:
-        type: object
-        additionalProperties: true
-        deprecated: true
-        description: |
-          Deprecated since chart version 0.11.0. Use
-          [`proxy.chp.containerSecurityContext`](schema_proxy.chp.containerSecurityContext)
-          instead.
-      networkPolicy:
-        type: object
-        additionalProperties: true
-        deprecated: true
-        description: |
-          Deprecated since chart version 0.11.0. Use
-          [`proxy.chp.networkPolicy`](schema_proxy.chp.networkPolicy) instead.
       secretSync:
         type: object
         additionalProperties: false
@@ -1788,12 +1744,6 @@ properties:
           containerSecurityContext: *containerSecurityContext-spec
           image: *image-spec
           resources: *resources-spec
-      pdb:
-        type: object
-        additionalProperties: true
-        deprecated: true
-        description: |
-          DEPRECATED: Use [`proxy.chp.pdb`](schema_proxy.chp.pdb) instead.
 
   singleuser:
     type: object
@@ -1992,13 +1942,6 @@ properties:
             type: boolean
           ip:
             type: string
-          enabled:
-            type: boolean
-            deprecated: true
-            description: |
-              Deprecated since chart version 0.11.0. Use
-              [`singleuser.cloudMetadata.blockWithIptables`](schema_singleuser.cloudMetadata.blockWithIptables)
-              instead.
 
       cmd:
         type: [array, string, "null"]
@@ -2173,7 +2116,6 @@ properties:
           sudo rights for some of your users. This can be done by starting up as
           root, enabling it from the container in a startup script, and then
           transitioning to the normal user.
-      imagePullSecret: *deprecated-imagePullSecret
 
   scheduling:
     type: object
@@ -2672,10 +2614,3 @@ properties:
           A flag that should only be set to true temporarily when experiencing a
           deprecation message that contain censored content that you wish to
           reveal.
-
-  auth:
-    type: object
-    additionalProperties: true
-    deprecated: true
-    description: |
-      DEPRECATED: The Authenticator should be configured using [`hub.config`](schema_hub.config) instead.
