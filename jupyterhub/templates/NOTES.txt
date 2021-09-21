@@ -101,53 +101,14 @@ If you have questions, please:
 {{- $breaking_title = print $breaking_title "\n#################################################################################" }}
 
 
-{{- if hasKey .Values.hub "extraConfigMap" }}
-{{- $breaking = print $breaking "\n\nRENAMED: hub.extraConfigMap has been renamed to custom" }}
-{{- end }}
+{{- /*
+  This is an example (in a helm template comment) on how to detect and
+  communicate with regards to a breaking chart config change.
 
-
-{{- if hasKey .Values "auth" }}
-{{- if .Values.auth }}
-{{- $breaking = print $breaking (include "jupyterhub.authDep.remapOldToNew" .) }}
-{{- else }}
-{{- $breaking = print $breaking "\n\nREMOVED: Please remove the empty 'auth' config" }}
-{{- end }}
-{{- end }}
-
-
-{{- if hasKey .Values.proxy "containerSecurityContext" }}
-{{- $breaking = print $breaking "\n\nRENAMED: proxy.containerSecurityContext has been renamed to proxy.chp.containerSecurityContext" }}
-{{- end }}
-
-
-{{- if hasKey .Values.proxy "pdb" }}
-{{- $breaking = print $breaking "\n\nRENAMED: proxy.pdb has renamed to proxy.chp.pdb" }}
-{{- end }}
-
-
-{{- if hasKey .Values.proxy "networkPolicy" }}
-{{- $breaking = print $breaking "\n\nRENAMED: proxy.networkPolicy has been renamed to proxy.chp.networkPolicy" }}
-{{- end }}
-
-
-{{- if hasKey .Values.hub "uid" }}
-{{- $breaking = print $breaking "\n\nRENAMED: hub.uid must as of 1.0.0 be configured using hub.containerSecurityContext.runAsUser" }}
-{{- end }}
-
-
-{{- if hasKey .Values.hub "imagePullSecret" }}
-{{- $breaking = print $breaking "\n\nREMOVED: hub.imagePullSecret has been removed, but there is now a chart wide wide configuration named imagePullSecret" }}
-{{- end }}
-
-
-{{- if hasKey .Values.singleuser "imagePullSecret" }}
-{{- $breaking = print $breaking "\n\nREMOVED: singleuser.imagePullSecret has been removed, but there is now a chart wide wide configuration named imagePullSecret" }}
-{{- end }}
-
-
-{{- if hasKey .Values.singleuser.cloudMetadata "enabled" }}
-{{- $breaking = print $breaking "\n\nCHANGED: singleuser.cloudMetadata.enabled must as of 1.0.0 be configured using singleuser.cloudMetadata.blockWithIptables with the opposite value." }}
-{{- end }}
+  {{- if hasKey .Values.singleuser.cloudMetadata "enabled" }}
+  {{- $breaking = print $breaking "\n\nCHANGED: singleuser.cloudMetadata.enabled must as of 1.0.0 be configured using singleuser.cloudMetadata.blockWithIptables with the opposite value." }}
+  {{- end }}
+*/}}
 
 
 {{- if $breaking }}
