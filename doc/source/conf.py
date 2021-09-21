@@ -55,7 +55,7 @@ def _get_git_ref_from_chartpress_based_version(version):
     Get a git ref from a chartpress set version of format like
     1.2.3-beta.1.n123.h1234567, 1.2.3-n123.h1234567, or 1.2.3.
     """
-    tag_hash_split = re.split("[\.|-]n\d\d\d\.h", version)
+    tag_hash_split = re.split(r"[\.|-]n\d\d\d\.h", version)
     if len(tag_hash_split) == 2:
         return tag_hash_split[1]
     else:
@@ -200,13 +200,13 @@ rediraffe_redirects = {
 # -- Generate the Helm chart configuration reference from a schema file ------
 
 # header
-with open("resources/reference.txt", "r") as f:
+with open("resources/reference.txt") as f:
     header_md = f.readlines()
 header_md = header_md[1:]
 header_md = [ln.strip("\n") for ln in header_md]
 
 # schema
-with open("../../jupyterhub/schema.yaml", "r") as f:
+with open("../../jupyterhub/schema.yaml") as f:
     data = yaml.safe_load(f)
 
 
@@ -230,7 +230,7 @@ def parse_schema(d, md=[], depth=0, pre=""):
                     md.append(ln)
                 md.append("")
 
-            parse_schema(val, md, depth, pre + "{}.".format(key))
+            parse_schema(val, md, depth, pre + f"{key}.")
         depth -= 1
     return md
 

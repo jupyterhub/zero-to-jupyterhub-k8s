@@ -175,7 +175,7 @@ image = get_config("singleuser.image.name")
 if image:
     tag = get_config("singleuser.image.tag")
     if tag:
-        image = "{}:{}".format(image, tag)
+        image = f"{image}:{tag}"
 
     c.KubeSpawner.image = image
 
