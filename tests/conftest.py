@@ -70,7 +70,7 @@ def pebble_acme_ca_cert():
     return cert_path
 
 
-class JupyterRequest(object):
+class JupyterRequest:
     def __init__(self, request_data, pebble_acme_ca_cert):
         self.request_data = request_data
         self.pebble_acme_ca_cert = pebble_acme_ca_cert
