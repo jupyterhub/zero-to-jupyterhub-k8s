@@ -69,26 +69,155 @@ If you'd like users to select an environment from **multiple docker images**,
 see {ref}`multiple-profiles`.
 ```
 
+(user-interfaces)=
+
+## Selecting a user interface
+
+[JupyterLab][] is the new user interface for Jupyter,
+which is meant to replace the classic notebook user interface (UI).
+While users already can interchange `/tree` and `/lab` in the URL to switch between
+the classic UI and JupyterLab if both are installed,
+Deployments using JupyterHub 1.x and earlier default to the classic UI,
+while 2.0 will make JupyterLab the default.
+
+[jupyterlab]: https://jupyterlab.readthedocs.io
+
+There are two things to customize, when picking the user interface to launch for users:
+
+1. the user interface (UI)
+2. the server program to launch
+
+There are two main Jupyter server implementations.
+_Most_ deployments will not see a difference,
+but there can be issues for certain server extensions.
+
+1. the modern `jupyter server`,
+   which is launched when you use `jupyter lab` or other recent Jupyter applications, and
+2. the 'classic' legacy notebook server (`jupyter notebook`)
+
+In general, the default UI is selected in {term}`config.yaml` by
+
+```yaml
+singleuser:
+  defaultUrl: ...
+```
+
+and the default server by:
+
+```yaml
+singleuser:
+  extraEnv:
+    JUPYTERHUB_SINGLEUSER_APP: "..."
+```
+
+To select the modern server:
+
+```yaml
+# this is the default with JupyterHub 2.0
+singleuser:
+  extraEnv:
+    JUPYTERHUB_SINGLEUSER_APP: "jupyter_server.serverapp.ServerApp"
+```
+
+or the classic notebook server:
+
+```yaml
+# the default with JupyterHub 1.x
+singleuser:
+  extraEnv:
+    JUPYTERHUB_SINGLEUSER_APP: "notebook.notebookapp.NotebookApp"
+```
+
+You only need the above configuration when it is different from the default.
+JupyterHub 2.0 changes the default server from `NotebookApp` to `ServerApp`,
+so here we make the choice explicit in each example,
+so the same configuration produces the same result with JupyterHub 1.x and 2.x.
+That way, your choice will be preserved across upgrades.
+
 (jupyterlab-by-default)=
 
 ## Use JupyterLab by default
 
-[JupyterLab](https://jupyterlab.readthedocs.io/en/stable/index.html) is a new
-user interface for Jupyter about to replace the classic user interface (UI).
-While users already can interchange `/tree` and `/lab` in the URL to switch between
-the classic UI and JupyterLab, they will default to use the classic UI.
+:::{note}
+This will be the default in JupyterHub 2.0 and helm chart 2.0.
+:::
 
-The classic Jupyter Notebook UI is the default provided, but you can change it to
-JupyterLab with the following config in your {term}`config.yaml`:
+You can choose JupyterLab as the default UI with the following config in your {term}`config.yaml`:
 
 ```yaml
 singleuser:
   defaultUrl: "/lab"
+  extraEnv:
+    JUPYERHUB_SINGLEUSER_APP: "jupyter_server.serverapp.ServerApp"
 ```
 
-```{note}
+You can also make JupyterLab the default UI _without_ upgrading to the newer server implementation.
+This may help users who need to stick to the legacy UI with extensions that may not work on the new server.
+
+```yaml
+singleuser:
+  defaultUrl: "/lab"
+  extraEnv:
+    JUPYERHUB_SINGLEUSER_APP: "notebook.notebookapp.NotebookApp"
+```
+
+````{note}
 You need the `jupyterlab` package (installable via `pip` or `conda`)
 for this to work. All images in the [jupyter/docker-stacks repository](https://github.com/jupyter/docker-stacks/) come pre-installed with it.
+```
+
+(classic-by-default)=
+
+### Use classic notebook by default
+
+:::{note}
+This is the default in JupyterHub 1.x and helm chart 1.x.
+:::
+
+If you aren't ready to upgrade to JupyterLab,
+especially for those who depend on custom notebook extensions without an equivalent in JupyterLab,
+you can always stick with the legacy notebook server (`jupyter notebook`):
+
+```yaml
+# the default with JupyterHub 1.x
+singleuser:
+  extraEnv:
+    JUPYTERHUB_SINGLEUSER_APP: "notebook.notebookapp.NotebookApp"
+````
+
+This will start the exact same server and UI as before.
+
+If you install the `nbclassic` package,
+you can also default to the classic UI, running on the new server:
+This may be the best way to support users on both classic and new environments.
+
+```yaml
+singleuser:
+  defaultUrl: /tree/
+  extraEnv:
+    JUPYTERHUB_SINGLEUSER_APP: "jupyter_server.serverapp.ServerApp"
+```
+
+### Alternative interfaces
+
+There are more Jupyter server extensions providing alternate UI choices,
+which can be used with JupyterHub.
+
+For example, [retrolab][] is a different, built on JupyterLab,
+but which may be more comfortable for those coming from the classic Jupyter UI.
+
+[retrolab]: https://blog.jupyter.org/retrolab-a-jupyterlab-distribution-with-a-retro-look-and-feel-8096b8b223d0
+
+To install such an extension:
+
+1. install the package (`pip install retrolab` or `conda install retrolab`) in your user image
+2. configure the default URL, and make sure ServerApp is used:
+
+```yaml
+singleuser:
+  defaultUrl: /retro/
+  extraEnv:
+    JUPYTERHUB_SINGLEUSER_APP: jupyter_server.serverapp.ServerApp
 ```
 
 (custom-docker-image)=
