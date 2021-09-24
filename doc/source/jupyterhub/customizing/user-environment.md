@@ -75,10 +75,10 @@ see {ref}`multiple-profiles`.
 
 [JupyterLab][] is the new user interface for Jupyter,
 which is meant to replace the classic notebook user interface (UI).
-While users already can interchange `/tree` and `/lab` in the URL to switch between
-the classic UI and JupyterLab if both are installed,
+Users can already interchange `/tree` and `/lab` in the URL to switch between
+the classic UI and JupyterLab if both are installed.
 Deployments using JupyterHub 1.x and earlier default to the classic UI,
-while 2.0 will make JupyterLab the default.
+while JupyterHub 2.0 makes JupyterLab the default.
 
 [jupyterlab]: https://jupyterlab.readthedocs.io
 
@@ -139,7 +139,7 @@ That way, your choice will be preserved across upgrades.
 ## Use JupyterLab by default
 
 :::{note}
-This will be the default in JupyterHub 2.0 and helm chart 2.0.
+This is the default in JupyterHub 2.0 and Helm chart 2.0.
 :::
 
 You can choose JupyterLab as the default UI with the following config in your {term}`config.yaml`:
@@ -203,14 +203,14 @@ singleuser:
 There are more Jupyter server extensions providing alternate UI choices,
 which can be used with JupyterHub.
 
-For example, [retrolab][] is a different, built on JupyterLab,
+For example, [retrolab][] is a different notebook interface, built on JupyterLab,
 but which may be more comfortable for those coming from the classic Jupyter UI.
 
 [retrolab]: https://blog.jupyter.org/retrolab-a-jupyterlab-distribution-with-a-retro-look-and-feel-8096b8b223d0
 
 To install such an extension:
 
-1. install the package (`pip install retrolab` or `conda install retrolab`) in your user image
+1. install the package (`pip install retrolab` or `conda install retrolab`) in your user container image
 2. configure the default URL, and make sure ServerApp is used:
 
 ```yaml
