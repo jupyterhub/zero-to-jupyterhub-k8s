@@ -136,6 +136,10 @@ jobs:
               --set proxy.secretToken=aaaa1111
               --set hub.cookieSecret=bbbb2222
               --set hub.config.CryptKeeper.keys[0]=cccc3333
+            # ingress.ingressClassName requires k8s 1.18 and above, don't
+            # validate setting it against the k8s api-server on k8s 1.17.
+            helm-template-validate-extra-args: >-
+              --set ingress.ingressClassName=""
             create-k8s-test-resources: true
 
           # We run two upgrade tests where we first install an already released
@@ -219,7 +223,7 @@ jobs:
       # dedicated lint-and-validate-values.yaml config.
       - name: "Helm template --validate (with lint and validate config)"
         run: |
-          helm template --validate jupyterhub ./jupyterhub --values tools/templates/lint-and-validate-values.yaml
+          helm template --validate jupyterhub ./jupyterhub --values tools/templates/lint-and-validate-values.yaml ${{ matrix.helm-template-validate-extra-args }}
 
       # It is only needed at this point forward as this is when we install
       # jupyterhub and the autohttps pod is about to start, so for CI
