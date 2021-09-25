@@ -1201,6 +1201,40 @@ properties:
               An alias for api_token provided for backward compatibility by
               the JupyterHub Helm chart that will be transformed to
               api_token.
+      loadRoles:
+        type: object
+        additionalProperties: true
+        description: |
+          This is where you should define JupyterHub roles and apply them to
+          JupyterHub users, groups, and services to grant them additional
+          permissions as defined in JupyterHub's RBAC system.
+
+          Complement this documentation with [JupyterHub's
+          documentation](https://jupyterhub.readthedocs.io/en/latest/rbac/roles.html#defining-roles)
+          about `load_roles`.
+
+          Note that while JupyterHub's native configuration `load_roles` accepts
+          a list of role objects, this Helm chart only accept a dictionary where
+          each key represents the name of a role and the value is the actual
+          role object.
+
+          ```yaml
+          hub:
+            loadRoles:
+              teacher:
+                description: Access to users' information and group membership
+
+                # this role provides permissions to...
+                scopes: [users, groups]
+
+                # this role will be assigned to...
+                users: [erik]
+                services: [grading-service]
+                groups: [teachers]
+          ```
+
+          When configuring JupyterHub roles via this Helm chart, the `name`
+          field can be omitted as it can be implied by the dictionary key.
       shutdownOnLogout:
         type: [boolean, "null"]
         description: *jupyterhub-native-config-description

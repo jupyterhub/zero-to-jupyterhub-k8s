@@ -1,0 +1,26 @@
+# This config file is useful in the upgrade tests, where we upgrade from
+# either the latest stable chart or the latest dev release of the chart. This
+# config is only applied to the chart we upgrade to. It helps us handle
+# situations when we add new configuration options that would fail with a schema
+# validation error in the previous chart versions.
+#
+# Note that one could think that it would be possible to have dev-config.yaml
+# include this config and then pass --set hub.some-option=null to null it out
+# when it must not be passed, but that still triggers schema validation errors.
+#
+hub:
+  # FIXME: move loadRoles to dev-config.yaml after 2.0.0 is released.
+  loadRoles:
+    test-role-1:
+      description: Access to users' information and group membership
+      scopes: [users, groups]
+      users: [cyclops, gandalf]
+      services: [test]
+      groups: []
+    test-role-2-explicit-name:
+      name: test-role-2
+      description: Access to users' information and group membership
+      scopes: [users, groups]
+      users: [cyclops, gandalf]
+      services: [test]
+      groups: []

@@ -160,6 +160,14 @@ hub:
       oauth_roles: [dummy]
       info:
         key1: value1
+  loadRoles:
+    test-role-1:
+      name: test-role-1
+      description: Access to users' information and group membership
+      scopes: [users, groups]
+      users: [cyclops, gandalf]
+      services: [test-service-1]
+      groups: [test-group-1]
   pdb:
     enabled: true
     maxUnavailable: 1
