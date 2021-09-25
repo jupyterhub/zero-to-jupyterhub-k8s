@@ -1,54 +1,90 @@
-Thank you for installing JupyterHub!
+{{- $proxy_service := include "jupyterhub.proxy-public.fullname" . -}}
 
-Your release is named "{{ .Release.Name }}" and installed into the namespace "{{ .Release.Namespace }}".
+.      __                             __                   __  __            __
+      / /  __  __    ____    __  __  / /_  ___    _____   / / / /  __  __   / /_
+ __  / /  / / / /   / __ \  / / / / / __/ / _ \  / ___/  / /_/ /  / / / /  / __ \
+/ /_/ /  / /_/ /   / /_/ / / /_/ / / /_  /  __/ / /     / __  /  / /_/ /  / /_/ /
+\____/   \__,_/   / .___/  \__, /  \__/  \___/ /_/     /_/ /_/   \__,_/  /_.___/
+                 /_/      /____/
 
-You can check whether the hub and proxy are ready by running:
+       You have successfully installed the official JupyterHub Helm chart!
 
- kubectl --namespace={{ .Release.Namespace }} get pod
+### Installation info
 
-and watching for both those pods to be in status 'Running'.{{ println }}
+  - Kubernetes namespace: {{ .Release.Namespace }}
+  - Helm release name:    {{ .Release.Name }}
+  - Helm chart version:   {{ .Chart.Version }}
+  - JupyterHub version:   {{ .Chart.AppVersion }}
+  - Hub pod software:     See https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/{{ include "jupyterhub.chart-version-to-git-ref" .Chart.Version }}/images/hub/requirements.txt
 
-{{- if eq .Values.proxy.service.type "LoadBalancer" }}
-You can find the public (load-balancer) IP of JupyterHub by running:
+### Followup links
 
-  kubectl -n {{ .Release.Namespace }} get svc {{ include "jupyterhub.proxy-public.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[].ip}'
+  - Documentation:  https://z2jh.jupyter.org
+  - Help forum:     https://discourse.jupyter.org
+  - Social chat:    https://gitter.im/jupyterhub/jupyterhub
+  - Issue tracking: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
 
-It might take a few minutes for it to appear!
-{{- end }}
-{{- if eq .Values.proxy.service.type "ClusterIP" }}
-You can find the internal (cluster) IP of JupyterHub by running:
+### Post-installation checklist
 
-  kubectl get -n {{ .Release.Namespace }} svc {{ include "jupyterhub.proxy-public.fullname" . }} -o jsonpath='{.spec.clusterIP}'
-{{- end }}
-{{- if eq .Values.proxy.service.type "NodePort" }}
-You can find the NodePorts of JupyterHub by running:
+  - Verify that created Pods enter a Running state:
 
-  kubectl --namespace={{ .Release.Namespace }} get svc {{ include "jupyterhub.proxy-public.fullname" . }} -o jsonpath='{range .spec.ports[*]} {.name}: {.port}{"\n"} {end}'
-{{- end }}
+      kubectl --namespace={{ .Release.Namespace }} get pod
 
-{{- if .Values.ingress.enabled }}
+    If a pod is stuck with a Pending or ContainerCreating status, diagnose with:
 
-You should be able to access JupyterHub using your configured ingress at:
-{{ range $host := .Values.ingress.hosts }}
-  http://{{ $host }}{{ $.Values.hub.baseUrl | trimSuffix "/" }}/
-{{- end }}
-{{- range $tls := .Values.ingress.tls }}
-  {{- range $host := $tls.hosts }}
-  https://{{ $host }}{{ $.Values.hub.baseUrl | trimSuffix "/" }}/
+      kubectl --namespace={{ .Release.Namespace }} describe pod <name of pod>
+
+    If a pod keeps restarting, diagnose with:
+
+      kubectl --namespace={{ .Release.Namespace }} logs --previous <name of pod>
+  {{- println }}
+
+  {{- if eq .Values.proxy.service.type "LoadBalancer" }}
+  - Verify an external IP is provided for the k8s Service {{ $proxy_service }}.
+
+      kubectl --namespace={{ .Release.Namespace }} get service {{ $proxy_service }}
+
+    If the external ip remains <pending>, diagnose with:
+
+      kubectl --namespace={{ .Release.Namespace }} describe service {{ $proxy_service }}
   {{- end }}
-{{- end }}
 
-{{- end }}
+  - Verify web based access:
+  {{- println }}
+  {{- if .Values.ingress.enabled }}
+    {{- range $host := .Values.ingress.hosts }}
+    Try insecure HTTP access: http://{{ $host }}{{ $.Values.hub.baseUrl | trimSuffix "/" }}/
+    {{- end }}
 
-To get full information about the JupyterHub proxy service run:
+    {{- range $tls := .Values.ingress.tls }}
+    {{- range $host := $tls.hosts }}
+    Try secure HTTPS access: https://{{ $host }}{{ $.Values.hub.baseUrl | trimSuffix "/" }}/
+    {{- end }}
+    {{- end }}
+  {{- else }}
+    You have not configured a k8s Ingress resource so you need to access the k8s
+    Service {{ $proxy_service }} directly.
+    {{- println }}
 
-  kubectl --namespace={{ .Release.Namespace }} get svc {{ include "jupyterhub.proxy-public.fullname" . }}
+    {{- if eq .Values.proxy.service.type "NodePort" }}
+    The k8s Service {{ $proxy_service }} is exposed via NodePorts. That means
+    that all the k8s cluster's nodes are exposing the k8s Service via those
+    ports.
 
-If you have questions, please:
+    Try insecure HTTP access: http://<any k8s nodes ip>:{{ .Values.proxy.service.nodePorts.http | default "no-http-nodeport-set"}}
+    Try secure HTTPS access: https://<any k8s nodes address>:{{ .Values.proxy.service.nodePorts.https | default "no-https-nodeport-set" }}
 
-  1. Read the guide at https://z2jh.jupyter.org
-  2. Ask for help or chat to us on https://discourse.jupyter.org/
-  3. If you find a bug please report it at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
+    {{- else }}
+    If your computer is outside the k8s cluster, you can port-forward traffic to
+    the k8s Service {{ $proxy_service }} with kubectl to access it from your
+    computer.
+
+      kubectl --namespace={{ .Release.Namespace }} port-forward service/{{ $proxy_service }} 8080:http
+
+    Try insecure HTTP access: http://localhost:8080
+    {{- end }}
+  {{- end }}
+  {{- println }}
 
 
 
@@ -58,7 +94,7 @@ If you have questions, please:
   Warnings for likely misconfiguration
 */}}
 
-{{- if and (not .Values.scheduling.podPriority.enabled) (and .Values.scheduling.userPlaceholder.enabled .Values.scheduling.userPlaceholder.replicas) }}{{ println }}
+{{- if and (not .Values.scheduling.podPriority.enabled) (and .Values.scheduling.userPlaceholder.enabled .Values.scheduling.userPlaceholder.replicas) }}
 #################################################################################
 ######   WARNING: You are using user placeholders without pod priority      #####
 ######            enabled*, either enable pod priority or stop using the    #####
@@ -69,16 +105,18 @@ If you have questions, please:
 ######            **scheduling.userPlaceholder.enabled                      #####
 ######            **scheduling.userPlaceholder.replicas                     #####
 #################################################################################
+{{- println }}
 {{- end }}
 
 
 {{- if eq .Values.proxy.https.enabled false }}
-{{- if or (not (eq .Values.proxy.https.type "letsencrypt")) (not (eq (.Values.proxy.https.letsencrypt.contactEmail | default "") "")) }}{{ println }}
+{{- if or (not (eq .Values.proxy.https.type "letsencrypt")) (not (eq (.Values.proxy.https.letsencrypt.contactEmail | default "") "")) }}
 #################################################################################
 ######   WARNING: proxy.https.enabled is set to false by default since      #####
 ######            version 0.10.0. It is now set to false but proxy.https    #####
 ######            has been modified indicating you may want it enabled.     #####
 #################################################################################
+{{- println }}
 {{- end }}
 {{- end }}
 
@@ -112,5 +150,5 @@ If you have questions, please:
 
 
 {{- if $breaking }}
-{{- fail (print $breaking_title $breaking) }}
+{{- fail (print $breaking_title $breaking "\n\n") }}
 {{- end }}
