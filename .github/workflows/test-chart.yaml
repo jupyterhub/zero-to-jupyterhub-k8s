@@ -154,12 +154,22 @@ jobs:
               --set proxy.secretToken=aaaa1111
               --set hub.cookieSecret=bbbb2222
               --set hub.config.CryptKeeper.keys[0]=cccc3333
+              --set hub.db.type=sqlite-pvc
+              --set singleuser.storage.type=dynamic
+            local-chart-extra-args: >-
+              --set hub.db.type=sqlite-pvc
+              --set singleuser.storage.type=dynamic
             create-k8s-test-resources: true
           - k3s-channel: v1.19
             test: upgrade
             upgrade-from: dev
             upgrade-from-extra-args: >-
               --set proxy.secretToken=aaaa1111
+              --set hub.db.type=sqlite-pvc
+              --set singleuser.storage.type=dynamic
+            local-chart-extra-args: >-
+              --set hub.db.type=sqlite-pvc
+              --set singleuser.storage.type=dynamic
 
     steps:
       - uses: actions/checkout@v2
@@ -218,15 +228,6 @@ jobs:
           timeout: 150
           max-restarts: 1
 
-      - name: Set matrix dependent Helm arguments
-        run: |
-          if [ "${{ matrix.test }}" = "upgrade" ]; then
-            HELM_EXTRA_ARGS="--set hub.db.type=sqlite-pvc --set singleuser.storage.type=dynamic"
-          else
-            HELM_EXTRA_ARGS=""
-          fi
-          echo HELM_EXTRA_ARGS="$HELM_EXTRA_ARGS" >> $GITHUB_ENV
-
       - name: "(Upgrade) Install ${{ matrix.upgrade-from }} chart"
         if: matrix.test == 'upgrade'
         run: |
@@ -242,7 +243,7 @@ jobs:
           #
           #        https://github.com/helm/helm/issues/9244
           cd ci
-          helm install jupyterhub --repo https://jupyterhub.github.io/helm-chart/ jupyterhub --values ../dev-config.yaml --version=$UPGRADE_FROM_VERSION ${{ matrix.upgrade-from-extra-args }} $HELM_EXTRA_ARGS
+          helm install jupyterhub --repo https://jupyterhub.github.io/helm-chart/ jupyterhub --values ../dev-config.yaml --version=$UPGRADE_FROM_VERSION ${{ matrix.upgrade-from-extra-args }}
 
       - name: "(Upgrade) Install helm diff"
         if: matrix.test == 'upgrade'
@@ -275,7 +276,7 @@ jobs:
           echo
 
           helm diff upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml \
-              $HELM_EXTRA_ARGS \
+              ${{ matrix.local-chart-extra-args }} \
               --show-secrets \
               --context=3 \
               --post-renderer=ci/string-replacer.sh
@@ -301,7 +302,7 @@ jobs:
 
       - name: "Install local chart"
         run: |
-          helm upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml ${{ matrix.local-chart-extra-args }} $HELM_EXTRA_ARGS
+          helm upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml ${{ matrix.local-chart-extra-args }}
 
       - name: "Await local chart"
         uses: jupyterhub/action-k8s-await-workloads@v1
