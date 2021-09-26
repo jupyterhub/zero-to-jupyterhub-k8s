@@ -222,15 +222,15 @@ def parse_schema(d, md=[], depth=0, pre=""):
         depth += 1
         # Create markdown headers for each schema level
         for key, val in d["properties"].items():
-            md.append("(schema_%s)=" % (pre + key))
-            md.append("#" * (depth + 1) + " " + pre + key)
+            md.append(f"(schema_{pre}{key})=")
+            md.append("#" * (depth + 1) + f" {pre}{key}")
             md.append("")
             if "description" in val:
                 for ln in val["description"].split("\n"):
                     md.append(ln)
                 md.append("")
 
-            parse_schema(val, md, depth, pre + f"{key}.")
+            parse_schema(val, md, depth, f"{pre}{key}.")
         depth -= 1
     return md
 
