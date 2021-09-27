@@ -1,5 +1,5 @@
 # This is a GitHub workflow defining a set of jobs with a set of steps.
-# ref: https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions
+# ref: https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions
 #
 name: Publish
 
