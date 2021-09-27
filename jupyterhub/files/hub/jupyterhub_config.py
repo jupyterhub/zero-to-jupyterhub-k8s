@@ -224,7 +224,7 @@ if match_node_purpose:
         pass
     else:
         raise ValueError(
-            "Unrecognized value for matchNodePurpose: %r" % match_node_purpose
+            f"Unrecognized value for matchNodePurpose: {match_node_purpose}"
         )
 
 # Combine the common tolerations for user pods with singleuser tolerations
@@ -347,15 +347,15 @@ if get_config("cull.enabled", False):
 
     cull_timeout = get_config("cull.timeout")
     if cull_timeout:
-        cull_cmd.append("--timeout=%s" % cull_timeout)
+        cull_cmd.append(f"--timeout={cull_timeout}")
 
     cull_every = get_config("cull.every")
     if cull_every:
-        cull_cmd.append("--cull-every=%s" % cull_every)
+        cull_cmd.append(f"--cull-every={cull_every}")
 
     cull_concurrency = get_config("cull.concurrency")
     if cull_concurrency:
-        cull_cmd.append("--concurrency=%s" % cull_concurrency)
+        cull_cmd.append(f"--concurrency={cull_concurrency}")
 
     if get_config("cull.users"):
         cull_cmd.append("--cull-users")
@@ -366,7 +366,7 @@ if get_config("cull.enabled", False):
 
     cull_max_age = get_config("cull.maxAge")
     if cull_max_age:
-        cull_cmd.append("--max-age=%s" % cull_max_age)
+        cull_cmd.append(f"--max-age={cull_max_age}")
 
     c.JupyterHub.services.append(
         {
@@ -459,5 +459,5 @@ for app, cfg in get_config("hub.config", {}).items():
 
 # execute hub.extraConfig entries
 for key, config_py in sorted(get_config("hub.extraConfig", {}).items()):
-    print("Loading extra config: %s" % key)
+    print(f"Loading extra config: {key}")
     exec(config_py)
