@@ -82,14 +82,14 @@ while JupyterHub 2.0 makes JupyterLab the default.
 
 [jupyterlab]: https://jupyterlab.readthedocs.io
 
-There are two things to customize, when picking the user interface to launch for users:
+To pick a user interface to launch by default for users, two customization items need to be set:
 
-1. the user interface (UI)
+1. the preferred default user interface (UI)
 2. the server program to launch
 
-There are two main Jupyter server implementations.
-_Most_ deployments will not see a difference,
-but there can be issues for certain server extensions.
+There are two main Jupyter server implementations
+(_Most deployments will not see a difference,
+but there can be issues for certain server extensions. If unsure, new applications should choose `jupyter_server`._):
 
 1. the modern `jupyter server`,
    which is launched when you use `jupyter lab` or other recent Jupyter applications, and
@@ -110,7 +110,7 @@ singleuser:
     JUPYTERHUB_SINGLEUSER_APP: "..."
 ```
 
-To select the modern server:
+Specifically, use one of these options to select the modern server:
 
 ```yaml
 # this is the default with JupyterHub 2.0
