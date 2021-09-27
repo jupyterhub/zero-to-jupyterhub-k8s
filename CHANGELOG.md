@@ -784,6 +784,17 @@ the Helm chart to easier comply with PodSecurityPolicies by default.
 
 #### Breaking changes:
 
+- KubeSpawner was updated to include a breaking change influencing users of
+  named servers.
+
+  > Security fix: CVE-2020-15110 / GHSA-v7m9-9497-p9gr. When named-servers are
+  > enabled, certain username patterns, depending on authenticator, could allow
+  > collisions. The default named-server template is changed to prevent
+  > collisions, meaning that upgrading will lose associations of named-servers
+  > with their PVCs if the default templates are used. Data should not be lost
+  > (old PVCs will be ignored, not deleted), but will need manual migration to
+  > new PVCs prior to deletion of old PVCs.
+
 - Anyone relying on configuration in the `proxy.https` section are now
   explicitly required to set `proxy.https.enabled` to `true`.
 
