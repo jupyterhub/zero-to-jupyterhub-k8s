@@ -118,7 +118,7 @@ jobs:
           - k3s-channel: v1.22
             test: install
             debuggable: debuggable
-          - k3s-channel: v1.20
+          - k3s-channel: v1.21
             test: install
           - k3s-channel: v1.20
             test: install
