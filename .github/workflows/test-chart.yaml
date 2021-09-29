@@ -310,7 +310,10 @@ jobs:
 
       - name: "Install local chart"
         run: |
-          helm upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml --values dev-config-local-chart-extra-config.yaml ${{ matrix.local-chart-extra-args }}
+          helm upgrade --install jupyterhub ./jupyterhub \
+              --values dev-config.yaml \
+              --values dev-config-local-chart-extra-config.yaml \
+              ${{ matrix.local-chart-extra-args }}
 
       - name: "Await local chart"
         uses: jupyterhub/action-k8s-await-workloads@v1

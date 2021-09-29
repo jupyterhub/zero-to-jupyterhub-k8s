@@ -41,6 +41,8 @@ hub:
     test:
       admin: true
       apiToken: give-pytest-control
+    test-with-scoped-access:
+      apiToken: give-pytest-scoped-control
     test-hub-existing-secret:
       apiToken: dddd4444
     test-explicit-name:
