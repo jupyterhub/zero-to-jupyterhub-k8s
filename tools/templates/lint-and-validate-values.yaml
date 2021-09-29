@@ -497,6 +497,7 @@ prePuller:
 ingress:
   enabled: true
   annotations: *annotations
+  ingressClassName: mock-ingress-class-name
   hosts:
     - mocked1.domain.name
     - mocked2.domain.name
