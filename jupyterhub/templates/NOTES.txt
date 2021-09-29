@@ -1,5 +1,6 @@
 {{- $proxy_service := include "jupyterhub.proxy-public.fullname" . -}}
 
+{{- /* Generated with https://patorjk.com/software/taag/#p=display&h=0&f=Slant&t=JupyterHub */}}
 .      __                             __                   __  __            __
       / /  __  __    ____    __  __  / /_  ___    _____   / / / /  __  __   / /_
  __  / /  / / / /   / __ \  / / / / / __/ / _ \  / ___/  / /_/ /  / / / /  / __ \
@@ -15,7 +16,7 @@
   - Helm release name:    {{ .Release.Name }}
   - Helm chart version:   {{ .Chart.Version }}
   - JupyterHub version:   {{ .Chart.AppVersion }}
-  - Hub pod software:     See https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/{{ include "jupyterhub.chart-version-to-git-ref" .Chart.Version }}/images/hub/requirements.txt
+  - Hub pod packages:     See https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/{{ include "jupyterhub.chart-version-to-git-ref" .Chart.Version }}/images/hub/requirements.txt
 
 ### Followup links
 
