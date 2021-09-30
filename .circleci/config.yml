@@ -40,14 +40,9 @@ jobs:
             pip3 install --no-cache-dir -r dev-requirements.txt
           name: Install dependencies
 
-      # TODO: test 'docker build' instead of buildx
-      # Ideally we'd use standard docker build since we're building for the native
-      # platform. Unfortunately the singleuser image can't be built on arm64, and the
-      # easiest way to skip this image is to use chartpress's --platform option,
-      # which is only supported with docker-buildx engine
       - run:
           command: |
-            chartpress --builder docker-buildx --platform linux/arm64
+            chartpress
           name: Run chartpress
 
       - run:
