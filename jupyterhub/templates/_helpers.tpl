@@ -361,3 +361,21 @@ limits:
         {{- print "\n\nextraFiles entries (" $file_key ") must only contain one of the fields: 'data', 'stringData', and 'binaryData'." | fail }}
     {{- end }}
 {{- end }}
+
+{{- /*
+  jupyterhub.chart-version-to-git-ref:
+    Renders a valid git reference from a chartpress generated version string.
+    In practice, either a git tag or a git commit hash will be returned.
+
+    - The version string will follow a chartpress pattern, see
+      https://github.com/jupyterhub/chartpress#examples-chart-versions-and-image-tags.
+
+    - The regexReplaceAll function is a sprig library function, see
+      http://masterminds.github.io/sprig/strings.html.
+
+    - The regular expression is in golang syntax, but \d had to become \\d for
+      example.
+*/}}
+{{- define "jupyterhub.chart-version-to-git-ref" -}}
+{{- regexReplaceAll ".*[.-]n\\d+[.]h(.*)" . "${1}" }}
+{{- end }}
