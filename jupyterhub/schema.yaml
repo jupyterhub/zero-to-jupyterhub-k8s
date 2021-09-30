@@ -1214,7 +1214,7 @@ properties:
           about `load_roles`.
 
           Note that while JupyterHub's native configuration `load_roles` accepts
-          a list of role objects, this Helm chart only accept a dictionary where
+          a list of role objects, this Helm chart only accepts a dictionary where
           each key represents the name of a role and the value is the actual
           role object.
 
