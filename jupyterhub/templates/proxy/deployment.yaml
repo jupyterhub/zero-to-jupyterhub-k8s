@@ -135,6 +135,8 @@ spec:
           livenessProbe:
             initialDelaySeconds: {{ .Values.proxy.chp.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.proxy.chp.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.proxy.chp.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.proxy.chp.livenessProbe.failureThreshold }}
             httpGet:
               path: /_chp_healthz
               {{- if or $manualHTTPS $manualHTTPSwithsecret }}
@@ -149,6 +151,8 @@ spec:
           readinessProbe:
             initialDelaySeconds: {{ .Values.proxy.chp.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.proxy.chp.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.proxy.chp.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.proxy.chp.readinessProbe.failureThreshold }}
             httpGet:
               path: /_chp_healthz
               {{- if or $manualHTTPS $manualHTTPSwithsecret }}
