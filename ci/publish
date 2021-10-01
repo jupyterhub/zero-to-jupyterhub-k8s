@@ -31,10 +31,14 @@ if [[ $GITHUB_REF != refs/tags/* ]]; then
     PR_OR_HASH=$(git log -1 --pretty=%h-%B | head -n1 | sed 's/^.*\(#[0-9]*\).*/\1/' | sed 's/^\([0-9a-f]*\)-.*/@\1/')
     LATEST_COMMIT_TITLE=$(git log -1 --pretty=%B | head -n1)
     EXTRA_MESSAGE="${GITHUB_REPOSITORY}${PR_OR_HASH} ${LATEST_COMMIT_TITLE}"
+
+    # shellcheck disable=SC2086
     chartpress $PUBLISH_ARGS --extra-message "${EXTRA_MESSAGE}"
 else
     # Setting a tag explicitly enforces a rebuild if this tag had already been
     # built and we wanted to override it.
+
+    # shellcheck disable=SC2086
     chartpress $PUBLISH_ARGS --tag "${GITHUB_REF:10}"
 fi
 
