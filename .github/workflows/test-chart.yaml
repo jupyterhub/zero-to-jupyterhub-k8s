@@ -25,6 +25,16 @@ on:
   workflow_dispatch:
 
 jobs:
+  lint_shell_scripts:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - uses: pre-commit/action@v2.0.3
+        name: Run shellcheck linter
+        with:
+          extra_args: --config .pre-commit-config-shellcheck.yaml
+
   lint_and_validate_rendered_templates:
     runs-on: ubuntu-20.04
     steps:
@@ -35,10 +45,6 @@ jobs:
 
       - name: Install dependencies
         run: pip install chartpress yamllint
-
-      - uses: pre-commit/action@v2.0.3
-        with:
-          extra_args: --config .pre-commit-config-shellcheck.yaml
 
       - name: Lint and validate
         run: tools/templates/lint-and-validate.py
