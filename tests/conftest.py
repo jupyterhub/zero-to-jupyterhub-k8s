@@ -28,16 +28,31 @@ def pytest_configure(config):
 
 
 @pytest.fixture(scope="module")
-def request_data():
+def admin_api_token():
     base_dir = os.path.dirname(os.path.dirname(__file__))
     with open(os.path.join(base_dir, "dev-config.yaml")) as f:
         y = yaml.safe_load(f)
     token = y["hub"]["services"]["test"]["apiToken"]
+    return token
+
+
+@pytest.fixture(scope="module")
+def scoped_api_token():
+    """This token is granted a limited scope"""
+    base_dir = os.path.dirname(os.path.dirname(__file__))
+    with open(os.path.join(base_dir, "dev-config.yaml")) as f:
+        y = yaml.safe_load(f)
+    token = y["hub"]["services"]["test-with-scoped-access"]["apiToken"]
+    return token
+
+
+@pytest.fixture(scope="module")
+def request_data(admin_api_token):
     hub_url = os.environ.get("HUB_URL", "https://local.jovyan.org:30443")
     return {
-        "token": token,
+        "token": admin_api_token,
         "hub_url": f'{hub_url.rstrip("/")}/hub/api',
-        "headers": {"Authorization": f"token {token}"},
+        "headers": {"Authorization": f"token {admin_api_token}"},
         "test_timeout": 60,
         "request_timeout": 25,
     }

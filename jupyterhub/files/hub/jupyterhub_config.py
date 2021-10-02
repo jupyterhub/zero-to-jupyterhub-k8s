@@ -388,6 +388,13 @@ for key, service in get_config("hub.services", {}).items():
 
     c.JupyterHub.services.append(service)
 
+for key, role in get_config("hub.loadRoles", {}).items():
+    # c.JupyterHub.load_roles is a list of dicts, but
+    # hub.loadRoles is a dict of dicts to make the config mergable
+    role.setdefault("name", key)
+
+    c.JupyterHub.load_roles.append(role)
+
 
 set_config_if_not_none(c.Spawner, "cmd", "singleuser.cmd")
 set_config_if_not_none(c.Spawner, "default_url", "singleuser.defaultUrl")

@@ -153,6 +153,7 @@ jobs:
           #
           # The upgrade-from input should match the version information from
           # https://jupyterhub.github.io/helm-chart/info.json
+          #
           - k3s-channel: v1.19
             test: upgrade
             upgrade-from: stable
@@ -282,6 +283,7 @@ jobs:
           echo
 
           helm diff upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml \
+              --values dev-config-local-chart-extra-config.yaml \
               ${{ matrix.local-chart-extra-args }} \
               --show-secrets \
               --context=3 \
@@ -308,7 +310,10 @@ jobs:
 
       - name: "Install local chart"
         run: |
-          helm upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml ${{ matrix.local-chart-extra-args }}
+          helm upgrade --install jupyterhub ./jupyterhub \
+              --values dev-config.yaml \
+              --values dev-config-local-chart-extra-config.yaml \
+              ${{ matrix.local-chart-extra-args }}
 
       - name: "Await local chart"
         uses: jupyterhub/action-k8s-await-workloads@v1

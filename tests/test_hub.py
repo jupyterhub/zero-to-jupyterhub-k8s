@@ -53,6 +53,22 @@ def test_api_info(api_request):
     assert result["spawner"]["class"] == "kubespawner.spawner.KubeSpawner"
 
 
+def test_api_info_with_scoped_token(api_request, scoped_api_token):
+    """
+    Test access to the hub api's /info endpoint with an hub api token defined
+    via hub.services and that is granted the permissions of a role via
+    hub.loadRoles chart configuration.
+
+    A typical jupyterhub logging response to this test:
+
+        [I 2019-09-25 12:03:12.086 JupyterHub log:174] 200 GET /hub/api/info (test@127.0.0.1) 10.21ms
+    """
+
+    print("asking for the hub information using a dedicated token with read:hub scope")
+    r = api_request.get("/info", headers={"Authorization": f"token {scoped_api_token}"})
+    assert r.status_code == 200
+
+
 def test_api_create_and_get_user(api_request, jupyter_user):
     """
     Tests the hub api's /users/:user endpoint, both POST and GET.
