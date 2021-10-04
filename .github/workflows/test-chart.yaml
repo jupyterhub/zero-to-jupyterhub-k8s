@@ -30,10 +30,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
-      - uses: pre-commit/action@v2.0.3
-        name: Run shellcheck linter
-        with:
-          extra_args: --config .pre-commit-config-shellcheck.yaml
+
+      - name: Install dependencies
+        run: pip install pre-commit
+
+      - name: Run shellcheck linter
+        run: pre-commit run --all --config .pre-commit-config-shellcheck.yaml
 
   lint_and_validate_rendered_templates:
     runs-on: ubuntu-20.04
