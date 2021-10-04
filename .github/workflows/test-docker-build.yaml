@@ -19,6 +19,7 @@ on:
       - ".github/workflows/test-docker-build.yaml"
     branches-ignore:
       - "dependabot/**"
+      - "pre-commit-ci-update-config"
   workflow_dispatch:
 
 jobs:

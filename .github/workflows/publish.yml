@@ -19,6 +19,7 @@ on:
       - "!.github/workflows/publish.yaml"
     branches-ignore:
       - "dependabot/**"
+      - "pre-commit-ci-update-config"
     tags:
       - "**"
 
