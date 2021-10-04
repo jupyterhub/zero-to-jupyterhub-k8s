@@ -1075,7 +1075,7 @@ properties:
               const: true
         then:
           description: |
-            This config option is exactly like the k8s native specification of a
+            This config option is like the k8s native specification of a
             container probe, except that it also supports an `enabled` boolean
             flag.
 

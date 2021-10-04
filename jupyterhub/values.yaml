@@ -202,11 +202,14 @@ proxy:
       enabled: true
       initialDelaySeconds: 60
       periodSeconds: 10
+      failureThreshold: 30
+      timeoutSeconds: 3
     readinessProbe:
       enabled: true
       initialDelaySeconds: 0
       periodSeconds: 2
       failureThreshold: 1000
+      timeoutSeconds: 1
     resources: {}
     defaultTarget:
     errorTarget:
