@@ -248,6 +248,10 @@ proxy:
       maxAge: 15724800 # About 6 months
     resources: {}
     labels: {}
+    livenessProbe:
+      enabled: false
+      initialDelaySeconds: 30
+      periodSeconds: 15
     extraEnv: {}
     extraVolumes: []
     extraVolumeMounts: []

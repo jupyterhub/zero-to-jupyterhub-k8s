@@ -1725,6 +1725,34 @@ properties:
           resources: *resources-spec
           serviceAccount: *serviceAccount
           extraPodSpec: *extraPodSpec-spec
+          livenessProbe:
+            type: object
+            additionalProperties: true
+            properties:
+              enabled:
+                type: [boolean, "false"]
+              initialDelaySeconds:
+                type: [integer, 30]
+              periodSeconds:
+                type: [integer, 15]
+            description: |
+              This `livenessProbe` is provided to check for a successful certificate issuance from Let's Encrypt.
+              You can enable this if you are having issues with race conditions in your infrastructure or 
+              cloud provider's networking being ready before traefik starts the challenge process.
+              
+              It will poll traefik's local certificate store for a certificate value matching the *first* value listed in `proxy.https.hosts[]`.
+              It does not currently check any other hostnames.
+
+              The default values are conservative here to respect Let's Encrypt's rate limits. 
+              If you are having issues with or troubleshooting certificate issuance, it's histly recommended to change 
+              `proxy.https.letsencrypt.acmeServer` to the staging server.
+
+              ```yaml
+              livenessProbe:
+                enabled: false
+                initialDelaySeconds: 30
+                periodSeconds: 15
+              ```   
       labels:
         type: object
         additionalProperties: false

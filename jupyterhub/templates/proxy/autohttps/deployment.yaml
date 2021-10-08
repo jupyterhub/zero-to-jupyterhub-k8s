@@ -94,6 +94,15 @@ spec:
             {{- with .Values.proxy.traefik.extraPorts }}
             {{- . | toYaml | nindent 12 }}
             {{- end }}
+          {{- if .Values.proxy.traefik.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              command:
+              - ash
+              - /etc/traefik/tls_livenessprobe.sh
+            initialDelaySeconds: {{ .Values.proxy.traefik.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.proxy.traefik.livenessProbe.periodSeconds }}
+          {{- end }}
           volumeMounts:
             - name: traefik-config
               mountPath: /etc/traefik

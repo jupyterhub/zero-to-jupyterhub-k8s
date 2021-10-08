@@ -24,5 +24,15 @@ data:
     {{- include "jupyterhub.traefik.yaml" . | fromYaml | merge .Values.proxy.traefik.extraStaticConfig | toYaml | nindent 4 }}
   dynamic.yaml: |
     {{- include "jupyterhub.dynamic.yaml" . | fromYaml | merge .Values.proxy.traefik.extraDynamicConfig | toYaml | nindent 4 }}
+  tls_livenessprobe.sh: |
+    #!/bin/ash
+    set -eo pipefail
 
+    # Install JSON.sh
+    wget -qO /tmp/json.sh https://raw.githubusercontent.com/dominictarr/JSON.sh/0d5e5c77365f63809bf6e77ef44a1f34b0e05840/JSON.sh
+    chmod +x /tmp/json.sh
+
+    # Grep for a certificate value for the first TLS hostname
+    hostname=$(echo "{{ first .Values.proxy.https.hosts }}" | sed -e 's/\./\\\./g')
+    cat /etc/acme/acme.json | /tmp/json.sh | egrep "\[\"default\",\"Certificates\",[0-9]+\]\s+\{\"domain\":\{\"main\":\"${hostname}\"\},\"certificate\":\".+$" > /dev/null
 {{- end }}
