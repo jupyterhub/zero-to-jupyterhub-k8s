@@ -1739,7 +1739,7 @@ properties:
               This `livenessProbe` is provided to check for a successful certificate issuance from Let's Encrypt.
               You can enable this if you are having issues with race conditions in your infrastructure or 
               cloud provider's networking being ready before traefik starts the challenge process.
-              
+
               It will poll traefik's local certificate store for a certificate value matching the *first* value listed in `proxy.https.hosts[]`.
               It does not currently check any other hostnames.
 
@@ -1752,7 +1752,7 @@ properties:
                 enabled: false
                 initialDelaySeconds: 30
                 periodSeconds: 15
-              ```   
+              ```
       labels:
         type: object
         additionalProperties: false
