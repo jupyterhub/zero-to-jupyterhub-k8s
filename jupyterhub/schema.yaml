@@ -1727,14 +1727,14 @@ properties:
           extraPodSpec: *extraPodSpec-spec
           livenessProbe:
             type: object
-            additionalProperties: true
+            additionalProperties: false
             properties:
               enabled:
-                type: [boolean, "false"]
+                type: boolean
               initialDelaySeconds:
-                type: [integer, 30]
+                type: integer
               periodSeconds:
-                type: [integer, 15]
+                type: integer
             description: |
               This `livenessProbe` is provided to check for a successful certificate issuance from Let's Encrypt.
               You can enable this if you are having issues with race conditions in your infrastructure or 
