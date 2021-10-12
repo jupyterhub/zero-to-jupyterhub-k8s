@@ -332,6 +332,7 @@ if get_config("cull.enabled", False):
     jupyterhub_idle_culler_role = {
         "name": "jupyterhub-idle-culler",
         "scopes": [
+            "read:hub",
             "list:users",
             "read:users:activity",
             "servers",
