@@ -335,7 +335,7 @@ if get_config("cull.enabled", False):
             "read:hub",
             "list:users",
             "read:users:activity",
-            "servers",
+            "delete:servers",
             # "admin:users", # dynamically added if --cull-users is passed
         ],
         # assign the role to a jupyterhub service, so it gains these permissions
