@@ -332,9 +332,10 @@ if get_config("cull.enabled", False):
     jupyterhub_idle_culler_role = {
         "name": "jupyterhub-idle-culler",
         "scopes": [
+            "read:hub",
             "list:users",
             "read:users:activity",
-            "servers",
+            "delete:servers",
             # "admin:users", # dynamically added if --cull-users is passed
         ],
         # assign the role to a jupyterhub service, so it gains these permissions
