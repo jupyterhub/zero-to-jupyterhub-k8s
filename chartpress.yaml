@@ -48,4 +48,7 @@ charts:
       # singleuser-sample, a primitive user container to start with.
       singleuser-sample:
         valuesPath: singleuser.image
-        PIP_OVERRIDES: jupyterhub==1.4.2
+        # Dev: buildArgs can help you try the Helm chart against unreleased
+        #      versions of JupyterHub.
+        # buildArgs:
+        #   PIP_OVERRIDES: "git+https://github.com/your-username-here/jupyterhub.git"
