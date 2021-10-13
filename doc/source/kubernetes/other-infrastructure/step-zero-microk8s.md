@@ -5,7 +5,7 @@
 If you have server hardware available and a small enough user base it's possible to use [Canonical's MicroK8s](https://microk8s.io/) in place of a cloud vendor.
 
 ```{warning}
-With no ability to scale users will not be able to access their notebooks when memory and CPU resources are exhausted. Read the section on resource planning and set resource limits accordingly.
+With no ability to scale, users will not be able to access their notebooks when memory and CPU resources are exhausted. Read the section on resource planning and set resource limits accordingly.
 ```
 
 This guide describes how to configure MicroK8s to work with Zero to Juptyerhub for Kubernetes.
