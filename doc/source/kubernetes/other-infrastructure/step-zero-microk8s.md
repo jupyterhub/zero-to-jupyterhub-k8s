@@ -48,7 +48,7 @@ This guide describes how to configure MicroK8s to work with Zero to Juptyerhub f
        hosts:
          - jupyter.myschool.edu
        letsencrypt:
-       contactEmail: me@myschool.edu
+         contactEmail: me@myschool.edu
      service:
        loadBalancerIP: 10.0.0.150
    ```
