@@ -93,20 +93,22 @@ perform all these actions.
 You can specify a list of admin users in your `config.yaml`:
 
 ```yaml
-auth:
-  admin:
-    users:
-      - adminuser1
-      - adminuser2
+hub:
+  config:
+    Authenticator:
+      admin_users:
+        - adminuser1
+        - adminuser2
 ```
 
 By default, admins can access user's notebooks. If you wish to disable this, use
 this in your `config.yaml`:
 
 ```yaml
-auth:
-  admin:
-    access: false
+hub:
+  config:
+    JupyterHub:
+      admin_access: false
 ```
 
 ## Authenticating Users
