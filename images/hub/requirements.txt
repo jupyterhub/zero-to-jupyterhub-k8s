@@ -178,7 +178,7 @@ sqlalchemy==1.4.23
     #   alembic
     #   jupyterhub
     #   sqlalchemy-cockroachdb
-sqlalchemy-cockroachdb==1.4.0
+sqlalchemy-cockroachdb==1.4.1
     # via -r requirements.in
 statsd==3.3.0
     # via -r requirements.in
