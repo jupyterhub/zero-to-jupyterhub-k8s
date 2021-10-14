@@ -406,6 +406,7 @@ if cloud_metadata.get("blockWithIptables") == True:
     # Use iptables to block access to cloud metadata by default
     network_tools_image_name = get_config("singleuser.networkTools.image.name")
     network_tools_image_tag = get_config("singleuser.networkTools.image.tag")
+    network_tools_resources = get_config("singleuser.networkTools.resources")
     ip_block_container = client.V1Container(
         name="block-cloud-metadata",
         image=f"{network_tools_image_name}:{network_tools_image_tag}",
@@ -423,6 +424,7 @@ if cloud_metadata.get("blockWithIptables") == True:
             run_as_user=0,
             capabilities=client.V1Capabilities(add=["NET_ADMIN"]),
         ),
+        resources=network_tools_resources,
     )
 
     c.KubeSpawner.init_containers.append(ip_block_container)
