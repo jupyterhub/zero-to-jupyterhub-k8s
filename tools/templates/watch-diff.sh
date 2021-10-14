@@ -17,10 +17,10 @@ rm -rf $TMP_DIFF_DIR
 mkdir $TMP_DIFF_DIR
 git init $TMP_DIFF_DIR
 
-helm template jupyterhub --values $HERE_DIR/lint-and-validate-values.yaml --output-dir $TMP_DIFF_DIR
+helm template jupyterhub --values "$HERE_DIR/lint-and-validate-values.yaml" --output-dir $TMP_DIFF_DIR
 
 # create a point of comparison
 (cd $TMP_DIFF_DIR && git add . && git commit -m "Comparision point")
 
 # watch "git diff" every second (-n1), in color (-c), without watch header (-t)
-watch -n1 -ct "helm template jupyterhub --values $HERE_DIR/lint-and-validate-values.yaml --output-dir $TMP_DIFF_DIR > /dev/null && (cd $TMP_DIFF_DIR && git diff --unified=1 --color=always)"
+watch -n1 -ct "helm template jupyterhub --values \"$HERE_DIR/lint-and-validate-values.yaml\" --output-dir $TMP_DIFF_DIR > /dev/null && (cd $TMP_DIFF_DIR && git diff --unified=1 --color=always)"
