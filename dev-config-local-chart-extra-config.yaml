@@ -22,3 +22,11 @@ hub:
       users: [cyclops, gandalf]
       services: [test]
       groups: []
+
+singleuser:
+  networkTools:
+    # FIXME: move resources to dev-config.yaml after 2.0.0 is released.
+    resources:
+      requests:
+        memory: 0
+        cpu: 0
