@@ -74,14 +74,14 @@ This guide describes how to configure MicroK8s to work with Zero to Juptyerhub f
    apiVersion: storage.k8s.io/v1
    kind: StorageClass
    metadata:
-   name: local-storage-dir
-   annotations:
+     name: local-storage-dir
+     annotations:
        storageclass.kubernetes.io/is-default-class: "true"
        openebs.io/cas-type: local
        cas.openebs.io/config: |
-       - name: StorageType
+         - name: StorageType
            value: hostpath
-       - name: BasePath
+         - name: BasePath
            value: /path/to/your/storage
    provisioner: openebs.io/local
    reclaimPolicy: Delete
