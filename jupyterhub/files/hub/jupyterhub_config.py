@@ -334,6 +334,7 @@ if get_config("cull.enabled", False):
         "scopes": [
             "list:users",
             "read:users:activity",
+            "read:servers",
             "delete:servers",
             # "admin:users", # dynamically added if --cull-users is passed
         ],
