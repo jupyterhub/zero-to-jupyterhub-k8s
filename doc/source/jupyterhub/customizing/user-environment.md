@@ -242,6 +242,12 @@ FROM jupyter/minimal-notebook:177037d09156
 
 # install additional package...
 RUN pip install --no-cache-dir astropy
+
+# set the default command of the image,
+# if the parent image will not launch a jupyterhub singleuser server.
+# The JupyterHub "Docker stacks" do not need to be overridden.
+# Set either here or in `singleuser.cmd` in your values.yaml
+# CMD ["jupyterhub-singleuser"]
 ```
 
 ```{note}
@@ -501,3 +507,37 @@ using the Kubespawner `profile_form_template` configuration. See the
 [Kubespawner configuration reference](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html)
 for more information.
 ```
+
+(set-cmd)=
+
+## Set command to launch
+
+Ultimately, a single-user server should launch the `jupyterhub-singleuser` command.
+However, an image may have a custom CMD that does this,
+with some preparation steps, or adding additional command-line arguments,
+or launching a custom wrapper command, etc.
+
+:::{note}
+If you have environment preparation at startup in your image,
+this is best done in the ENTRYPOINT of the image,
+and not in the CMD, so that overriding the command does not skip your preparation.
+:::
+
+By default, zero-to-jupyterhub will launch the default CMD that is specified in your chosen image,
+respecting any startup customization that image may have.
+If the image doesn't launch `jupyterhub-singleuser` by default,
+you will additionally need to specify `singleuser.cmd`
+in your `values.yaml` as the command to launch,
+so that it ultimately launches `jupyterhub-singleuser`.
+The simplest version:
+
+```yaml
+singleuser:
+  cmd: jupyterhub-singleuser
+```
+
+:::{versionchanged} 2.0
+Prior to 2.0, the default behavior of zero-to-jupyterhub was to launch `jupyterhub-singleuser` explicitly,
+ignoring what was in the image.
+The default command is now whatever the image runs by default.
+:::
