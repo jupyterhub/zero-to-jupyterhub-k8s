@@ -6,6 +6,13 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ## [1.1]
 
+### [1.1.4] - 2021-10-28
+
+Security release! 1.1.4 release fixes a [critical security vulnerability][ghsa-5xvc-vgmp-jgc3] in jupyterhub-firstuse authenticator.
+If you are not using firstuseauthenticator, you are not affected.
+
+[ghsa-5xvc-vgmp-jgc3]: https://github.com/jupyterhub/firstuseauthenticator/security/advisories/GHSA-5xvc-vgmp-jgc3
+
 ### [1.1.3] - 2021-08-25
 
 ## Maintenance and upkeep improvements
