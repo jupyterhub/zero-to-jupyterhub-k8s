@@ -434,17 +434,6 @@ if get_config("debug.enabled", False):
     c.JupyterHub.log_level = "DEBUG"
     c.Spawner.debug = True
 
-# load /usr/local/etc/jupyterhub/jupyterhub_config.d config files
-config_dir = "/usr/local/etc/jupyterhub/jupyterhub_config.d"
-if os.path.isdir(config_dir):
-    for file_path in sorted(glob.glob(f"{config_dir}/*.py")):
-        file_name = os.path.basename(file_path)
-        print(f"Loading {config_dir} config: {file_name}")
-        with open(file_path) as f:
-            file_content = f.read()
-        # compiling makes debugging easier: https://stackoverflow.com/a/437857
-        exec(compile(source=file_content, filename=file_name, mode="exec"))
-
 # load potentially seeded secrets
 #
 # NOTE: ConfigurableHTTPProxy.auth_token is set through an environment variable
@@ -466,6 +455,17 @@ for app, cfg in get_config("hub.config", {}).items():
     elif app == "CryptKeeper":
         cfg.pop("keys", None)
     c[app].update(cfg)
+
+# load /usr/local/etc/jupyterhub/jupyterhub_config.d config files
+config_dir = "/usr/local/etc/jupyterhub/jupyterhub_config.d"
+if os.path.isdir(config_dir):
+    for file_path in sorted(glob.glob(f"{config_dir}/*.py")):
+        file_name = os.path.basename(file_path)
+        print(f"Loading {config_dir} config: {file_name}")
+        with open(file_path) as f:
+            file_content = f.read()
+        # compiling makes debugging easier: https://stackoverflow.com/a/437857
+        exec(compile(source=file_content, filename=file_name, mode="exec"))
 
 # execute hub.extraConfig entries
 for key, config_py in sorted(get_config("hub.extraConfig", {}).items()):
