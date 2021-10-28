@@ -8,7 +8,7 @@
 jupyterhub
 
 ## Authenticators
-jupyterhub-firstuseauthenticator
+jupyterhub-firstuseauthenticator>=1
 jupyterhub-hmacauthenticator
 jupyterhub-ldapauthenticator
 jupyterhub-ltiauthenticator
