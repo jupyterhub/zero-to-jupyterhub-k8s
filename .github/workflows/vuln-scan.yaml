@@ -40,7 +40,7 @@ jobs:
           - image_ref: image-awaiter
             accept_failure: false
           - image_ref: singleuser-sample
-            accept_failure: true
+            accept_failure: false
 
     steps:
       - uses: actions/checkout@v2
