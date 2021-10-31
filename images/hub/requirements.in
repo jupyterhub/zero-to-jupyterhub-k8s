@@ -5,7 +5,7 @@
 #
 
 # JupyterHub itself
-jupyterhub==2.0.0b3
+jupyterhub==2.0.0rc2
 
 ## Authenticators
 jupyterhub-firstuseauthenticator>=1
