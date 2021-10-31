@@ -9,6 +9,9 @@
 name: Vuln. scan
 
 on:
+  pull_request:
+    paths:
+      - ".github/workflows/vuln-scan.yaml"
   schedule:
     # At 00:00 - https://crontab.guru
     - cron: "0 0 * * *"
@@ -37,7 +40,7 @@ jobs:
           - image_ref: image-awaiter
             accept_failure: false
           - image_ref: singleuser-sample
-            accept_failure: true
+            accept_failure: false
 
     steps:
       - uses: actions/checkout@v2
@@ -120,7 +123,7 @@ jobs:
 
           json_to_misc() {
               # Count vulnerabilities
-              VULNERABILITY_COUNT="$(cat tmp/scan_$1.json | jq -r '[.[].Vulnerabilities | select(type != null)] | add | select(. != null) | length')"
+              VULNERABILITY_COUNT="$(cat tmp/scan_$1.json | jq -r '[.Results[].Vulnerabilities | select(type != null)] | add | select(. != null) | length')"
               echo "VULNERABILITY_COUNT_$1=$VULNERABILITY_COUNT" >> $GITHUB_ENV
 
               # Construct a markdown summary
@@ -129,7 +132,7 @@ jobs:
               else
                   echo "Target | Vuln. ID | Package Name | Installed v. | Fixed v." >> tmp/md_summary_$1.md
                   echo "-|-|-|-|-" >> tmp/md_summary_$1.md
-                  cat tmp/scan_$1.json | jq -r '.[] | select(.Vulnerabilities != null) | .Type + " | " + (.Vulnerabilities[] | .VulnerabilityID + " | " + .PkgName + " | " + .InstalledVersion + " | " + .FixedVersion)' | sort >> tmp/md_summary_$1.md
+                  cat tmp/scan_$1.json | jq -r '.Results[] | select(.Vulnerabilities != null) | .Type + " | " + (.Vulnerabilities[] | .VulnerabilityID + " | " + .PkgName + " | " + .InstalledVersion + " | " + .FixedVersion)' | sort >> tmp/md_summary_$1.md
               fi
 
               # Use hack to set a multiline string output
@@ -186,13 +189,15 @@ jobs:
           file_to_update="images/${{ matrix.image_ref }}/Dockerfile"
           sed --in-place "s/\(#.*VULN_SCAN_TIME=\)\(.*\)/\1${value_to_set}/" "$file_to_update"
 
+          git --no-pager diff --color=always
+
       # The create-pull-request action is smart enough to only create/update a
       # PR if there is a change to anything not .gitignored. A change will be
       # made only if the analyze steps outputted hash is changed.
       #
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create or update a PR
-        if: steps.analyze.outputs.proceed == 'yes'
+        if: steps.analyze.outputs.proceed == 'yes' && github.event_name != 'pull_request'
         uses: peter-evans/create-pull-request@7380612b49221684fefa025244f2ef4008ae50ad
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
