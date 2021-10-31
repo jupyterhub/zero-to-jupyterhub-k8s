@@ -9,6 +9,9 @@
 name: Vuln. scan
 
 on:
+  pull_request:
+    paths:
+      - ".github/workflows/vuln-scan.yaml"
   schedule:
     # At 00:00 - https://crontab.guru
     - cron: "0 0 * * *"
@@ -186,13 +189,15 @@ jobs:
           file_to_update="images/${{ matrix.image_ref }}/Dockerfile"
           sed --in-place "s/\(#.*VULN_SCAN_TIME=\)\(.*\)/\1${value_to_set}/" "$file_to_update"
 
+          git --no-pager diff --color=always
+
       # The create-pull-request action is smart enough to only create/update a
       # PR if there is a change to anything not .gitignored. A change will be
       # made only if the analyze steps outputted hash is changed.
       #
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create or update a PR
-        if: steps.analyze.outputs.proceed == 'yes'
+        if: steps.analyze.outputs.proceed == 'yes' && github.event_name != 'pull_request'
         uses: peter-evans/create-pull-request@7380612b49221684fefa025244f2ef4008ae50ad
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
