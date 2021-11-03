@@ -68,7 +68,7 @@ jupyterhub-hmacauthenticator==1.0
     # via -r requirements.in
 jupyterhub-idle-culler==1.2.1
     # via -r requirements.in
-jupyterhub-kubespawner==1.1.1
+jupyterhub-kubespawner==1.1.2
     # via -r requirements.in
 jupyterhub-ldapauthenticator==1.3.2
     # via -r requirements.in
@@ -162,8 +162,6 @@ rsa==4.7.2
     # via google-auth
 ruamel.yaml==0.17.16
     # via jupyter-telemetry
-ruamel.yaml.clib==0.2.6
-    # via ruamel.yaml
 six==1.16.0
     # via
     #   bcrypt
