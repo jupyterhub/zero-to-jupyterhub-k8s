@@ -35,21 +35,6 @@ def setup(app):
 # -- Referencable variables --------------------------------------------------
 
 
-def _get_latest_tag():
-    """Get the latest tag on a commit in branch or return None."""
-    try:
-        # If the git command output is my-tag-14-g0aed65e,
-        # then the return value will become my-tag.
-        return (
-            subprocess.check_output(["git", "describe", "--tags", "--long"])
-            .decode("utf-8")
-            .strip()
-            .rsplit("-", maxsplit=2)[0]
-        )
-    except subprocess.CalledProcessError:
-        return None
-
-
 def _get_git_ref_from_chartpress_based_version(version):
     """
     Get a git ref from a chartpress set version of format like
@@ -71,28 +56,19 @@ with open("../../jupyterhub/Chart.yaml") as f:
     chart = yaml.safe_load(f)
 subprocess.run(["chartpress", "--reset"], cwd=os.path.abspath("../.."))
 
-latest_tag = _get_latest_tag()
-chart_version = chart["version"]
-chart_version_git_ref = _get_git_ref_from_chartpress_based_version(chart_version)
-jupyterhub_version = chart["appVersion"]
-# FIXME: kubeVersion contain >=, but by having > in the string we substitute we
-#        run into this issue:
-#        https://github.com/executablebooks/MyST-Parser/issues/282
-kube_version = chart["kubeVersion"].split("-", 1)[0][2:]
-helm_version = "3.5"  # minimum helm cli version
-
 # These substitution variables only work in markdown contexts, and does not work
 # within links etc. Reference using {{ variable_name }}
 #
 # myst_substitutions ref: https://myst-parser.readthedocs.io/en/latest/using/syntax-optional.html#substitutions-with-jinja2
 myst_substitutions = {
-    "latest_tag": latest_tag,
-    "chart_version": chart_version,
-    "chart_version_git_ref": chart_version_git_ref,
-    "jupyterhub_version": jupyterhub_version,
-    "kube_version": kube_version,
-    "helm_version": helm_version,
-    "requirements": f"[hub/images/requirements.txt](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/{chart_version_git_ref}/images/hub/requirements.txt)",
+    "chart_version": chart["version"],
+    "jupyterhub_version": chart["appVersion"],
+    # FIXME: kubeVersion contain >=, but by having > in the string we substitute
+    #        we run into this issue:
+    #        https://github.com/executablebooks/MyST-Parser/issues/282
+    "kube_version": chart["kubeVersion"].split("-", 1)[0][2:],
+    "helm_version": "3.5",
+    "requirements": f"[hub/images/requirements.txt](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/{_get_git_ref_from_chartpress_based_version(chart['version'])}/images/hub/requirements.txt)",
 }
 
 
