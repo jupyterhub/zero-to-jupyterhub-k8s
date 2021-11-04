@@ -48,4 +48,4 @@ charts:
       # singleuser-sample, a primitive user container to start with.
       singleuser-sample:
         valuesPath: singleuser.image
-        PIP_OVERRIDES: jupyterhub==1.4.2
+        PIP_OVERRIDES: jupyterhub==1.5.0
