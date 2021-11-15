@@ -108,7 +108,7 @@ pamela==1.0.0
     # via jupyterhub
 prometheus-client==0.11.0
     # via jupyterhub
-psycopg2-binary==2.9.1
+psycopg2-binary==2.9.2
     # via -r requirements.in
 py-spy==0.3.10
     # via -r requirements.in
