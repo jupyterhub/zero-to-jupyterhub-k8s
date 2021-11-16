@@ -1473,7 +1473,7 @@ properties:
               Object to set NodePorts to expose the service on for http and https.
 
               See [the Kubernetes
-              documentation](https://kubernetes.io/docs/concepts/services-networking/service/#nodeport)
+              documentation](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport)
               for more details about NodePorts.
             properties:
               http:
