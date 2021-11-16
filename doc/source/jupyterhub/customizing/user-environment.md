@@ -148,7 +148,7 @@ You can choose JupyterLab as the default UI with the following config in your {t
 singleuser:
   defaultUrl: "/lab"
   extraEnv:
-    JUPYERHUB_SINGLEUSER_APP: "jupyter_server.serverapp.ServerApp"
+    JUPYTERHUB_SINGLEUSER_APP: "jupyter_server.serverapp.ServerApp"
 ```
 
 You can also make JupyterLab the default UI _without_ upgrading to the newer server implementation.
@@ -158,7 +158,7 @@ This may help users who need to stick to the legacy UI with extensions that may 
 singleuser:
   defaultUrl: "/lab"
   extraEnv:
-    JUPYERHUB_SINGLEUSER_APP: "notebook.notebookapp.NotebookApp"
+    JUPYTERHUB_SINGLEUSER_APP: "notebook.notebookapp.NotebookApp"
 ```
 
 ```{note}
@@ -217,7 +217,7 @@ To install such an extension:
 singleuser:
   defaultUrl: /retro/
   extraEnv:
-    JUPYTERHUB_SINGLEUSER_APP: jupyter_server.serverapp.ServerApp
+    JUPYTERHUB_SINGLEUSER_APP: "jupyter_server.serverapp.ServerApp"
 ```
 
 (custom-docker-image)=
