@@ -4,6 +4,29 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 
 ## UNRELEASED
 
+## 1.2
+
+### 1.2.0 - 2021-11-04
+
+Security release! Updates JupyterHub to 1.5 to address a [moderate security vulnerability][ghsa-cw7p-q79f-m2v7]
+affecting JupyterLab users,
+where logout may not always fully clear credentials from the browser if multiple sessions are open at the time.
+
+[ghsa-cw7p-q79f-m2v7]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-cw7p-q79f-m2v7
+
+A few small features are backported from the upcoming 2.0 release as well.
+See [the release notes][juptyerhub-1.5-changelog] for more.
+
+[juptyerhub-1.5-changelog]: https://jupyterhub.readthedocs.io/en/1.5.0/changelog.html#id1
+
+Because the vulnerability is in the single-user environment,
+you can get the fix in existing deployments by upgrading JupyterHub to 1.5 in your _user_ environment
+without updating the rest of your chart.
+
+Similarly, upgrading the chart without also upgrading JupyterHub to 1.5 in your user environment **will not** fix the vulnerability.
+
+JupyterHub 1.5 in the user environment is fully compatible with a Hub running 1.4, and _vice versa_.
+
 ## [1.1]
 
 ### [1.1.4] - 2021-10-28
