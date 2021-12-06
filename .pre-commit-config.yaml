@@ -29,7 +29,7 @@ repos:
 
   # Autoformat: Python code
   - repo: https://github.com/psf/black
-    rev: 21.11b1
+    rev: 21.12b0
     hooks:
       - id: black
         args: [--target-version=py36]
@@ -42,7 +42,7 @@ repos:
 
   # Autoformat: markdown, yaml (but not helm templates)
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v2.5.0
+    rev: v2.5.1
     hooks:
       - id: prettier
 
