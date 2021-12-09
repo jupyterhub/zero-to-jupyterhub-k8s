@@ -77,6 +77,24 @@ spec:
         - protocol: TCP
           port: 53
 
+    {{- if .Values.singleuser.networkPolicy.noPrivateIPAccess }}
+    # Allow broad access to the external internet, but block all
+    # access to private IPs. This means users can access the internet but not
+    # (say) an unsecured prometheus server running in the same cluster. Given
+    # that not all charts have proper NetworkPolicies setup, this is a defense
+    # in depth measure that restricts the amount of damage someone could do if
+    # they get an unauthorized login into the hub system.
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              # Don't allow network access to private IP ranges
+              # Listed in https://datatracker.ietf.org/doc/html/rfc1918
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+    {{- end }}
+
     {{- with .Values.singleuser.networkPolicy.egress }}
     # singleuser-server --> depends, but the default is everything
     {{- . | toYaml | nindent 4 }}

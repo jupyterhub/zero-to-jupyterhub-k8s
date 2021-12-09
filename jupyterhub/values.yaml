@@ -331,6 +331,7 @@ singleuser:
   networkPolicy:
     enabled: true
     ingress: []
+    noPrivateIPAccess: true
     egress:
       # Required egress to communicate with the hub and DNS servers will be
       # augmented to these egress rules.
