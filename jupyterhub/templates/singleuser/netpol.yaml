@@ -77,6 +77,29 @@ spec:
         - protocol: TCP
           port: 53
 
+    # User code should *always* be able to access the public facing URL
+    # of the hub. When internal network access is blocked, NetworkPolicy
+    # will not allow code to request https://<hub-externaal-url> from
+    # user code. This can break hub services.
+    # We explicitly allow this outbound access regardless of wether
+    # we are using autohttps to provide HTTPS or not.
+    - to:
+        - podSelector:
+            matchLabels:
+              app: jupyterhub
+              component: autohttps
+
+        # Library code (such as dask-gateway) often wants a way to refer
+        # to hub services without the user having to supply the domain the
+        # hub is hosted at. Since the CHP proxy pod will always be running
+        # and routing hub services, they use http://proxy-public as a URL
+        # to route to hub services. This NetworkPolicy rule explicitly
+        # allows that.
+        - podSelector:
+            matchLabels:
+              app: jupyterhub
+              component: proxy
+
     {{- if .Values.singleuser.networkPolicy.noPrivateIPAccess }}
     # Allow broad access to the external internet, but block all
     # access to private IPs. This means users can access the internet but not
