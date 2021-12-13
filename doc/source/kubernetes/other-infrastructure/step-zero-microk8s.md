@@ -35,7 +35,7 @@ This guide describes how to configure MicroK8s to work with Zero to Juptyerhub f
    MetalLB has two modes: [Layer 2 Mode](https://metallb.universe.tf/concepts/layer2/), the default and recommended mode, and [BGP Mode](https://metallb.universe.tf/concepts/bgp/). In Layer 2 mode, MetalLB needs a range of IP addresses that are on the same network as the host running MicroK8s. If the host has multiple interfaces you can choose addresses from of _any_ of the interfaces. The range you give MetalLB can have as few as one IP address. When a `LoadBalancer` resource is requested MetalLB automatically adds one of its IP addresses to the interface of your host and passes the traffic into your Kubernetes system. This example shows how to enable a pool of addresses from `10.0.0.100` to `10.0.0.200`:
 
    ```
-   microk8s enable metallb:10.0.0.100-200
+   microk8s enable metallb:10.0.0.100-10.0.0.200
    ```
 
    If you give MetalLB a range of IP addresses you can choose one in your JupyterHub configuration. This is particularly important if you need TLS because you will have to setup a DNS entry for your server that has a fixed IP address. Here's an example proxy configuration with a fixed IP address request:
