@@ -86,9 +86,8 @@ spec:
     - to:
         - podSelector:
             matchLabels:
-              app: jupyterhub
-              component: autohttps
-
+              {{- $_ := merge (dict "componentLabel" "autohttps") . }}
+              {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
         # Library code (such as dask-gateway) often wants a way to refer
         # to hub services without the user having to supply the domain the
         # hub is hosted at. Since the CHP proxy pod will always be running
@@ -97,8 +96,8 @@ spec:
         # allows that.
         - podSelector:
             matchLabels:
-              app: jupyterhub
-              component: proxy
+              {{- $_ := merge (dict "componentLabel" "proxy") . }}
+              {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
 
     {{- if .Values.singleuser.networkPolicy.noPrivateIPAccess }}
     # Allow broad access to the external internet, but block all
