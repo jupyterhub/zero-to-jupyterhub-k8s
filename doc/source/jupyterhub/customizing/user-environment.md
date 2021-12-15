@@ -541,3 +541,43 @@ Prior to 2.0, the default behavior of zero-to-jupyterhub was to launch `jupyterh
 ignoring what was in the image.
 The default command is now whatever the image runs by default.
 ```
+
+## Disable specific JupyterLab extensions
+
+Sometimes you want to temporarily disable a JupyterLab extension on a JupyterHub
+by default, without having to rebuild your docker image. This can be very
+easily done with [`singleuser.extraFiles`](schema_singleuser.extraFiles).
+and JupyterLab's [page_config.json](https://jupyterlab.readthedocs.io/en/stable/user/directories.html#labconfig-directories)
+
+JupyterLab's `page_config.json` lets you set page configuration by dropping JSON files
+under a `labconfig` directory inside any of the directories listed when you run `jupyter --paths`.
+We just use `singleuser.extraFiles` to provide this file!
+
+```yaml
+singleuser:
+  extraFiles:
+    lab-config:
+      mountPath: /etc/jupyter/labconfig/page_config.json
+      data:
+        disabledExtensions:
+          jupyterlab-link-share: true
+```
+
+This will disable the [link-share](https://github.com/jupyterlab-contrib/jupyterlab-link-share)
+labextension, both in JupyterLab and RetroLab. You can find the name of the
+extension, as well as its current status, with `jupyter labextension list`.
+
+```
+jovyan@jupyter-yuvipanda:~$ jupyter labextension list
+JupyterLab v3.2.4
+/opt/conda/share/jupyter/labextensions
+        jupyterlab-plotly v5.4.0 enabled OK
+        jupyter-matplotlib v0.9.0 enabled OK
+        jupyterlab-link-share v0.2.4 disabled OK (python, jupyterlab-link-share)
+        @jupyter-widgets/jupyterlab-manager v3.0.1 enabled OK (python, jupyterlab_widgets)
+        @jupyter-server/resource-usage v0.6.0 enabled OK (python, jupyter-resource-usage)
+        @retrolab/lab-extension v0.3.13 enabled OK
+```
+
+This is extremely helpful if the same image is being shared across hubs, and
+you want some of the hubs to have some of the extensions disabled.
