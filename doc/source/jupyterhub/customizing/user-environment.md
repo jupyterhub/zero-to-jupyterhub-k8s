@@ -556,11 +556,11 @@ We just use `singleuser.extraFiles` to provide this file!
 ```yaml
 singleuser:
   extraFiles:
-  lab-config:
-    mountPath: /etc/jupyter/labconfig/page_config.json
-    data:
-      disabledExtensions:
-        jupyterlab-link-share: true
+    lab-config:
+      mountPath: /etc/jupyter/labconfig/page_config.json
+      data:
+        disabledExtensions:
+          jupyterlab-link-share: true
 ```
 
 This will disable the [link-share](https://github.com/jupyterlab-contrib/jupyterlab-link-share)
