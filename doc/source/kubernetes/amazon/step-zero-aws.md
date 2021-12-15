@@ -14,7 +14,9 @@ template you will use to setup and shape your cluster.
 1. Create an IAM Role
 
    This role will be used to give your CI host permission to create and destroy
-   resources on AWS
+   resources on AWS. Instructions for creating a role can be found
+   [here](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html).
+   The following policies are required:
 
    - AmazonEC2FullAccess
    - IAMFullAccess
