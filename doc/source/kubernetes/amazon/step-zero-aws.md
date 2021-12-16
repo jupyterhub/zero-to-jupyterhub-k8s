@@ -31,9 +31,18 @@ template you will use to setup and shape your cluster.
 
    When creating it, assign the IAM role created in step 1.
 
-   Once created, download ssh keys.
+   Once created, download ssh keys (.pem file). Ensure permissions are restrictive on the file:
+   
+   ```
+   chmod 400 name.pem
+   ```
 
-3. SSH to your CI host
+3. SSH to your CI host as:
+
+   ```
+   ssh -i /path/name.pem ec2-user@my-instance-Private-IPv4-address
+   ```
+
 4. Install kops and kubectl on your CI host
 
    - Follow the instructions here: <https://github.com/kubernetes/kops/blob/HEAD/docs/install.md>
