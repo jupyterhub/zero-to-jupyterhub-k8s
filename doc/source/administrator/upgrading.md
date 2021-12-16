@@ -9,7 +9,7 @@ changes to your deployment. Check the [CHANGELOG](https://github.com/jupyterhub/
 for each release to find out if there are any breaking changes in the newest version.
 
 For additional help, feel free to reach out to us on [gitter](https://gitter.im/jupyterhub/jupyterhub)
-or the [mailing list](https://groups.google.com/forum/#!forum/jupyter)!
+or the [Discourse forum](https://discourse.jupyter.org/).
 
 ## Major helm-chart upgrades
 
