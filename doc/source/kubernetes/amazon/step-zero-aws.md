@@ -32,7 +32,7 @@ template you will use to setup and shape your cluster.
    When creating it, assign the IAM role created in step 1.
 
    Once created, download ssh keys (.pem file). Ensure permissions are restrictive on the file:
-   
+
    ```
    chmod 400 name.pem
    ```
