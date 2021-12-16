@@ -38,7 +38,7 @@ template you will use to setup and shape your cluster.
    ```
 
 3. SSH to your CI host. Instructions on how to do this are given
-   [here](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html)
+   [here](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html).
 
 4. Install kops and kubectl on your CI host
 
