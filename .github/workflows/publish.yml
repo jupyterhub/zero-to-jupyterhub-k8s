@@ -7,13 +7,13 @@ name: Publish
 on:
   pull_request:
     paths-ignore:
-      - "doc/**"
+      - "docs/**"
       - "**.md"
       - ".github/workflows/*"
       - "!.github/workflows/publish.yaml"
   push:
     paths-ignore:
-      - "doc/**"
+      - "docs/**"
       - "**.md"
       - ".github/workflows/*"
       - "!.github/workflows/publish.yaml"

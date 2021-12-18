@@ -8,7 +8,7 @@ in the `readthedocs.yml` file, and made available on
 ## Local documentation development
 
 ```shell
-cd doc
+cd docs
 pip install -r requirements.txt
 ```
 

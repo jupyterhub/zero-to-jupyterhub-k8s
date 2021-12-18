@@ -254,7 +254,7 @@ html_context = {
     "github_user": "jupyterhub",
     "github_repo": "zero-to-jupyterhub-k8s",
     "github_version": "main",
-    "doc_path": "doc/source",
+    "doc_path": "docs/source",
 }
 
 html_favicon = "_static/images/logo/favicon.ico"

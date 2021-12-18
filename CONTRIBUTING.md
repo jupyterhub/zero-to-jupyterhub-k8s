@@ -16,7 +16,7 @@ git clone https://github.com/jupyterhub/zero-to-jupyterhub-k8s
 
 # Setting up for documentation development
 
-See [doc/README.md](doc/README.md).
+See [docs/README.md](docs/README.md).
 
 # Setting up for Helm chart development
 
@@ -30,7 +30,7 @@ This needs to be installed:
 - Python 3.6+ (install at [Anaconda.com](https://www.anaconda.com/distribution/) or [Python.org](https://www.python.org/downloads/)) and dependencies:
   ```shell
   pip install -r dev-requirements.txt
-  pip install -r doc/requirements.txt
+  pip install -r docs/requirements.txt
   ```
 
 You can check if you have it all like this:
