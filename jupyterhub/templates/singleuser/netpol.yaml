@@ -62,50 +62,69 @@ spec:
 
   egress:
     # singleuser-server --> hub
-    - ports:
-        - port: 8081
-      to:
+    - to:
         - podSelector:
             matchLabels:
               {{- $_ := merge (dict "componentLabel" "hub") . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
+      ports:
+        - port: 8081
 
-    # singleuser-server --> Kubernetes internal DNS
-    - ports:
-        - protocol: UDP
-          port: 53
-        - protocol: TCP
-          port: 53
-
-    # User code should *always* be able to access the public facing URL
-    # of the hub. When internal network access is blocked, NetworkPolicy
-    # will not allow code to request https://<hub-externaal-url> from
-    # user code. This can break hub services.
-    # We explicitly allow this outbound access regardless of wether
-    # we are using autohttps to provide HTTPS or not.
+    # singleuser-server --> proxy
+    # singleuser-server --> autohttps
+    #
+    # While not critical for core functionality, a user or library code may rely
+    # on communicating with the proxy or autohttps pods via a k8s Service it can
+    # detected from well known environment variables.
+    #
+    - to:
+        - podSelector:
+            matchLabels:
+              {{- $_ := merge (dict "componentLabel" "proxy") . }}
+              {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
+      ports:
+        - port: 8000
     - to:
         - podSelector:
             matchLabels:
               {{- $_ := merge (dict "componentLabel" "autohttps") . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
-        # Library code (such as dask-gateway) often wants a way to refer
-        # to hub services without the user having to supply the domain the
-        # hub is hosted at. Since the CHP proxy pod will always be running
-        # and routing hub services, they use http://proxy-public as a URL
-        # to route to hub services. This NetworkPolicy rule explicitly
-        # allows that.
-        - podSelector:
-            matchLabels:
-              {{- $_ := merge (dict "componentLabel" "proxy") . }}
-              {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
+      ports:
+        - port: 8080
+        - port: 8443
 
-    {{- if .Values.singleuser.networkPolicy.noPrivateIPAccess }}
-    # Allow broad access to the external internet, but block all
-    # access to private IPs. This means users can access the internet but not
-    # (say) an unsecured prometheus server running in the same cluster. Given
-    # that not all charts have proper NetworkPolicies setup, this is a defense
-    # in depth measure that restricts the amount of damage someone could do if
-    # they get an unauthorized login into the hub system.
+    {{- if .Values.singleuser.networkPolicy.egressAllowRules.dnsPorts }}
+    # singleuser-server --> DNS ports
+    #
+    # We can't reliably identify the Kubernetes internal DNS server because that
+    # varies too much between k8s clusters. Due to that, we allow all
+    # connections to port 53.
+    #
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    {{- end }}
+
+    {{- if .Values.singleuser.networkPolicy.egressAllowRules.cloudMetadataServer }}
+    # singleuser-server --> cloud metadata server
+    - to:
+        - ipBlock:
+            cidr: {{ .Values.cloudMetadata.ip }}/32
+    {{- end }}
+
+    {{- if .Values.singleuser.networkPolicy.egressAllowRules.publicIPs }}
+    # singleuser-server --> public IPs (but not the cloud metadata server)
+    #
+    # Allow access to the external internet, but don't allow access to private
+    # IPs or the cloud metadata server. This means users can access the internet
+    # but not (say) an unsecured prometheus server running in the same cluster.
+    #
+    # Given that not all charts have proper NetworkPolicies setup, this is a
+    # defense in depth measure that restricts the amount of damage someone could
+    # do if they get an unauthorized login into the hub system.
+    #
     - to:
         - ipBlock:
             cidr: 0.0.0.0/0
@@ -115,6 +134,8 @@ spec:
               - 10.0.0.0/8
               - 172.16.0.0/12
               - 192.168.0.0/16
+              # Don't allow access to the cloud metadata server
+              - {{ .Values.cloudMetadata.ip }}/32
     {{- end }}
 
     {{- with .Values.singleuser.networkPolicy.egress }}

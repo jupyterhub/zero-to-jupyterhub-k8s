@@ -331,19 +331,11 @@ singleuser:
   networkPolicy:
     enabled: true
     ingress: []
-    noPrivateIPAccess: true
-    egress:
-      # Required egress to communicate with the hub and DNS servers will be
-      # augmented to these egress rules.
-      #
-      # This default rule explicitly allows all outbound traffic from singleuser
-      # pods, except to a typical IP used to return metadata that can be used by
-      # someone with malicious intent.
-      - to:
-          - ipBlock:
-              cidr: 0.0.0.0/0
-              except:
-                - 169.254.169.254/32
+    egressAllowRules:
+      cloudMetadataServer: false
+      dnsPorts: true
+      publicIPs: true
+    egress: []
     interNamespaceAccessLabels: ignore
     allowedIngressPorts: []
   events: true
