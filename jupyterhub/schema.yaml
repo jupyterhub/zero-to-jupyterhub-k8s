@@ -583,11 +583,86 @@ properties:
           egress:
             type: array
             description: |
-              Additional egress rules to add except those that is known to be needed by  the respective pods in the Helm chart.
+              Additional egress rules to add except those that is known to be needed by the respective pods in the Helm chart.
 
               The default value of this egress is to allow all traffic, except for the `singleuser.networkPolicy.egress`, which is also limiting access to a metadata server that can be exploited.
 
               If you want to restrict egress, you can override this permissive default to be an empty list.
+          egressAllowRules:
+            type: object
+            additionalProperties: false
+            description: |
+              This is a set of predefined rules that when enabled will be added
+              to the NetworkPolicy list of egress rules.
+
+              The resulting egress rules will be a composition of:
+              - rules specific for the respective pod(s) function within the
+                Helm chart
+              - rules based on enabled `egressAllowRules` flags
+              - rules explicitly specified by the user
+
+              ```{note}
+              Each flag under this configuration will not render into a
+              dedicated rule in the NetworkPolicy resource, but instead combine
+              with the other flags to a reduced set of rules to avoid a
+              performance penalty.
+              ```
+            properties:
+              cloudMetadataServer:
+                type: boolean
+                description: |
+                  Defaults to `false` for singleuser servers, but to `true` for
+                  all other network policies.
+
+                  When enabled this rule allows the respective pod(s) to
+                  establish outbound connections to the cloud metadata server.
+
+                  Note that the `nonPrivateIPs` rule is allowing all non Private
+                  IP ranges but makes an exception for the cloud metadata
+                  server, leaving this as the definitive configuration to allow
+                  access to the cloud metadata server.
+              dnsPortsPrivateIPs:
+                type: boolean
+                description: |
+                  Defaults to `true` for all network policies.
+
+                  When enabled this rule allows the respective pod(s) to
+                  establish outbound connections to private IPs via port 53.
+
+                  Note that we can't reliably identify the k8s internal DNS
+                  server due to variations between k8s clusters. Due to that,
+                  this rule which is critical for core functionality, can be
+                  disabled for a more refined custom rule.
+              nonPrivateIPs:
+                type: boolean
+                description: |
+                  Defaults to `true` for all network policies.
+
+                  When enabled this rule allows the respective pod(s) to
+                  establish outbound connections to the non-private IP ranges
+                  with the exception of the cloud metadata server. This means
+                  respective pod(s) can establish connections to the internet
+                  but not (say) an unsecured prometheus server running in the
+                  same cluster.
+              privateIPs:
+                type: boolean
+                description: |
+                  Defaults to `false` for singleuser servers, but to `true` for
+                  all other network policies.
+
+                  Private IPs refer to the IP ranges `10.0.0.0/8`,
+                  `172.16.0.0/12`, `192.168.0.0/16`.
+
+                  When enabled this rule allows the respective pod(s) to
+                  establish outbound connections to the internal k8s cluster.
+                  This means users can access the internet but not (say) an
+                  unsecured prometheus server running in the same cluster.
+
+                  Since not all workloads in the k8s cluster may have
+                  NetworkPolicies setup to restrict their incoming connections,
+                  having this set to false can be a good defence against
+                  malicious intent from someone in control of software in these
+                  pods.
           interNamespaceAccessLabels:
             enum: [accept, ignore]
             description: |

@@ -93,53 +93,7 @@ spec:
         - port: 8080
         - port: 8443
 
-    {{- if .Values.singleuser.networkPolicy.egressAllowRules.dnsPorts }}
-    # singleuser-server --> DNS ports
-    #
-    # We can't reliably identify the Kubernetes internal DNS server because that
-    # varies too much between k8s clusters. Due to that, we allow all
-    # connections to port 53.
-    #
-    - ports:
-        - protocol: UDP
-          port: 53
-        - protocol: TCP
-          port: 53
-    {{- end }}
-
-    {{- if .Values.singleuser.networkPolicy.egressAllowRules.cloudMetadataServer }}
-    # singleuser-server --> cloud metadata server
-    - to:
-        - ipBlock:
-            cidr: {{ .Values.cloudMetadata.ip }}/32
-    {{- end }}
-
-    {{- if .Values.singleuser.networkPolicy.egressAllowRules.publicIPs }}
-    # singleuser-server --> public IPs (but not the cloud metadata server)
-    #
-    # Allow access to the external internet, but don't allow access to private
-    # IPs or the cloud metadata server. This means users can access the internet
-    # but not (say) an unsecured prometheus server running in the same cluster.
-    #
-    # Given that not all charts have proper NetworkPolicies setup, this is a
-    # defense in depth measure that restricts the amount of damage someone could
-    # do if they get an unauthorized login into the hub system.
-    #
-    - to:
-        - ipBlock:
-            cidr: 0.0.0.0/0
-            except:
-              # Don't allow network access to private IP ranges
-              # Listed in https://datatracker.ietf.org/doc/html/rfc1918
-              - 10.0.0.0/8
-              - 172.16.0.0/12
-              - 192.168.0.0/16
-              # Don't allow access to the cloud metadata server
-              - {{ .Values.cloudMetadata.ip }}/32
-    {{- end }}
-
-    {{- with .Values.singleuser.networkPolicy.egress }}
-    # singleuser-server --> depends, but the default is everything
-    {{- . | toYaml | nindent 4 }}
+    {{- with (include "jupyterhub.networkPolicy.standardEgressConfiguration" (list . .Values.singleuser.networkPolicy)) }}
+    {{ . | nindent 4 }}
     {{- end }}
 {{- end }}

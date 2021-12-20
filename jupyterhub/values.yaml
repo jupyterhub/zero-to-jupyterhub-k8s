@@ -97,16 +97,12 @@ hub:
   networkPolicy:
     enabled: true
     ingress: []
-    ## egress for JupyterHub already includes Kubernetes internal DNS and
-    ## access to the proxy, but can be restricted further, but ensure to allow
-    ## access to the Kubernetes API server that couldn't be pinned ahead of
-    ## time.
-    ##
-    ## ref: https://stackoverflow.com/a/59016417/2220152
-    egress:
-      - to:
-          - ipBlock:
-              cidr: 0.0.0.0/0
+    egress: []
+    egressAllowRules:
+      cloudMetadataServer: true
+      dnsPortsPrivateIPs: true
+      nonPrivateIPs: true
+      privateIPs: true
     interNamespaceAccessLabels: ignore
     allowedIngressPorts: []
   allowNamedServers: false
@@ -219,10 +215,12 @@ proxy:
     networkPolicy:
       enabled: true
       ingress: []
-      egress:
-        - to:
-            - ipBlock:
-                cidr: 0.0.0.0/0
+      egress: []
+      egressAllowRules:
+        cloudMetadataServer: true
+        dnsPortsPrivateIPs: true
+        nonPrivateIPs: true
+        privateIPs: true
       interNamespaceAccessLabels: ignore
       allowedIngressPorts: [http, https]
     pdb:
@@ -259,10 +257,12 @@ proxy:
     networkPolicy:
       enabled: true
       ingress: []
-      egress:
-        - to:
-            - ipBlock:
-                cidr: 0.0.0.0/0
+      egress: []
+      egressAllowRules:
+        cloudMetadataServer: true
+        dnsPortsPrivateIPs: true
+        nonPrivateIPs: true
+        privateIPs: true
       interNamespaceAccessLabels: ignore
       allowedIngressPorts: [http, https]
     pdb:
@@ -333,8 +333,9 @@ singleuser:
     ingress: []
     egressAllowRules:
       cloudMetadataServer: false
-      dnsPorts: true
-      publicIPs: true
+      dnsPortsPrivateIPs: true
+      nonPrivateIPs: true
+      privateIPs: false
     egress: []
     interNamespaceAccessLabels: ignore
     allowedIngressPorts: []
