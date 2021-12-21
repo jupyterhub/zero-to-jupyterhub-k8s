@@ -72,7 +72,7 @@ spec:
       ports:
         - port: 8000
 
-    {{- with (include "jupyterhub.networkPolicy.standardEgressConfiguration" (list . .Values.proxy.traefik.networkPolicy)) }}
+    {{- with (include "jupyterhub.networkPolicy.renderEgressRules" (list . .Values.proxy.traefik.networkPolicy)) }}
     {{- . | nindent 4 }}
     {{- end }}
 {{- end }}

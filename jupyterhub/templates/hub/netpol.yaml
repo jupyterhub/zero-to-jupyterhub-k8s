@@ -78,7 +78,7 @@ spec:
       ports:
         - port: 8888
 
-    {{- with (include "jupyterhub.networkPolicy.standardEgressConfiguration" (list . .Values.hub.networkPolicy)) }}
+    {{- with (include "jupyterhub.networkPolicy.renderEgressRules" (list . .Values.hub.networkPolicy)) }}
     {{- . | nindent 4 }}
     {{- end }}
 {{- end }}

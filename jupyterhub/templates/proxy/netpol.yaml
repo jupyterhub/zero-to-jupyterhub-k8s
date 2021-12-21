@@ -102,7 +102,7 @@ spec:
       ports:
         - port: 8888
 
-    {{- with (include "jupyterhub.networkPolicy.standardEgressConfiguration" (list . .Values.proxy.chp.networkPolicy)) }}
+    {{- with (include "jupyterhub.networkPolicy.renderEgressRules" (list . .Values.proxy.chp.networkPolicy)) }}
     {{- . | nindent 4 }}
     {{- end }}
 {{- end }}

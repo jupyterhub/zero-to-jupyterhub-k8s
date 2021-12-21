@@ -93,7 +93,7 @@ spec:
         - port: 8080
         - port: 8443
 
-    {{- with (include "jupyterhub.networkPolicy.standardEgressConfiguration" (list . .Values.singleuser.networkPolicy)) }}
+    {{- with (include "jupyterhub.networkPolicy.renderEgressRules" (list . .Values.singleuser.networkPolicy)) }}
     {{ . | nindent 4 }}
     {{- end }}
 {{- end }}
