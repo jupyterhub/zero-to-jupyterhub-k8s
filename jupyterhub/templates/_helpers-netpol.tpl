@@ -29,7 +29,6 @@
 {{- $root := index . 0 }}
 {{- $netpol := index . 1 }}
 {{- if and ($netpol.egressAllowRules.dnsPortsPrivateIPs) (not $netpol.egressAllowRules.privateIPs) }}
-
 # Allow outbound connections to the DNS port in the private IP ranges
 - ports:
     - protocol: UDP
@@ -46,7 +45,6 @@
 {{- end }}
 
 {{- if $netpol.egressAllowRules.nonPrivateIPs }}
-
 # Allow outbound connections to non-private IP ranges
 {{- if $netpol.egressAllowRules.privateIPs }}
 # Allow outbound connections to private IP ranges (and their DNS ports)
@@ -74,7 +72,6 @@
 {{- end }}
 
 {{- if and ($netpol.egressAllowRules.privateIPs) (not $netpol.egressAllowRules.nonPrivateIPs) }}
-
 # Allow outbound connections to private IP ranges (and their DNS ports)
 - to:
     - ipBlock:
@@ -86,7 +83,6 @@
 {{- end }}
 
 {{- if and ($netpol.egressAllowRules.cloudMetadataServer) (not $netpol.egressAllowRules.nonPrivateIPs) }}
-
 # Allow outbound connections to cloud metadata server
 - to:
     - ipBlock:
@@ -94,8 +90,7 @@
 {{- end }}
 
 {{- with $netpol.egress }}
-
 # Allow outbound connections based on user specified rules
-{{- . | toYaml }}
+{{ . | toYaml }}
 {{- end }}
 {{- end }}

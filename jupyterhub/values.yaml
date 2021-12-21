@@ -331,12 +331,12 @@ singleuser:
   networkPolicy:
     enabled: true
     ingress: []
+    egress: []
     egressAllowRules:
       cloudMetadataServer: false
       dnsPortsPrivateIPs: true
       nonPrivateIPs: true
       privateIPs: false
-    egress: []
     interNamespaceAccessLabels: ignore
     allowedIngressPorts: []
   events: true

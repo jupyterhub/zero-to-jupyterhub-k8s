@@ -94,6 +94,6 @@ spec:
         - port: 8443
 
     {{- with (include "jupyterhub.networkPolicy.renderEgressRules" (list . .Values.singleuser.networkPolicy)) }}
-    {{ . | nindent 4 }}
+    {{- . | nindent 4 }}
     {{- end }}
 {{- end }}
