@@ -234,8 +234,8 @@ image. This file can be built to a {term}`Docker image`, and pushed to a
 by the Helm chart.
 
 ```Dockerfile
-FROM jupyter/minimal-notebook:177037d09156
-# Get the latest image tag at:
+FROM jupyter/minimal-notebook:latest
+# Replace `latest` with an image tag from to ensure reproducible builds:
 # https://hub.docker.com/r/jupyter/minimal-notebook/tags/
 # Inspect the Dockerfile at:
 # https://github.com/jupyter/docker-stacks/tree/HEAD/minimal-notebook/Dockerfile
