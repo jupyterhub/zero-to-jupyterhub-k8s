@@ -174,6 +174,11 @@ hub:
     minAvailable: null
   networkPolicy:
     enabled: true
+    egressAllowRules:
+      cloudMetadataServer: true
+      dnsPortsPrivateIPs: true
+      nonPrivateIPs: true
+      privateIPs: false
     egress:
       - to:
           - ipBlock:
@@ -233,6 +238,11 @@ proxy:
         effect: NoSchedule
     networkPolicy:
       enabled: true
+      egressAllowRules:
+        cloudMetadataServer: false
+        dnsPortsPrivateIPs: false
+        nonPrivateIPs: false
+        privateIPs: true
       egress:
         - to:
             - ipBlock:
@@ -257,6 +267,11 @@ proxy:
         effect: NoSchedule
     networkPolicy:
       enabled: true
+      egressAllowRules:
+        cloudMetadataServer: false
+        dnsPortsPrivateIPs: false
+        nonPrivateIPs: true
+        privateIPs: true
       egress:
         - to:
             - ipBlock:
@@ -377,6 +392,11 @@ singleuser:
     ip: 169.254.169.254
   networkPolicy:
     enabled: true
+    egressAllowRules:
+      cloudMetadataServer: true
+      dnsPortsPrivateIPs: true
+      nonPrivateIPs: false
+      privateIPs: false
     egress:
       - to:
           - ipBlock:
