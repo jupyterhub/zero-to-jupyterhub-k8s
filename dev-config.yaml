@@ -147,9 +147,8 @@ singleuser:
   memory:
     guarantee: null
   networkPolicy:
-    # For testing purposes in test_spawn_netpol, we override egress and egressAllowRules.nonPrivateIPs
-    egressAllowRules:
-      nonPrivateIPs: false
+    # For testing purposes in the test_spawn_netpol test, we override egress and
+    # egressAllowRules.nonPrivateIPs to slim the egress rules to a minimum.
     egress:
       - to:
           # jupyter.org has multiple IPs associated with it, among them are these
