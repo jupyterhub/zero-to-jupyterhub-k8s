@@ -9,13 +9,13 @@ name: Test chart
 on:
   pull_request:
     paths-ignore:
-      - "doc/**"
+      - "docs/**"
       - "**.md"
       - ".github/workflows/*"
       - "!.github/workflows/test-chart.yaml"
   push:
     paths-ignore:
-      - "doc/**"
+      - "docs/**"
       - "**.md"
       - ".github/workflows/*"
       - "!.github/workflows/test-chart.yaml"

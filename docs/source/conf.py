@@ -109,8 +109,8 @@ extensions = [
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
-# The master toctree document.
-master_doc = "index"
+# The root toctree document.
+root_doc = master_doc = "index"
 
 # The suffix(es) of source filenames.
 source_suffix = [".md", ".rst"]
@@ -254,7 +254,7 @@ html_context = {
     "github_user": "jupyterhub",
     "github_repo": "zero-to-jupyterhub-k8s",
     "github_version": "main",
-    "doc_path": "doc/source",
+    "doc_path": "docs/source",
 }
 
 html_favicon = "_static/images/logo/favicon.ico"

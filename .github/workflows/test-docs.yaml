@@ -8,12 +8,12 @@ name: Test docs
 on:
   pull_request:
     paths:
-      - "doc/**"
+      - "docs/**"
       - "**/schema.yaml"
       - "**/test-docs.yaml"
   push:
     paths:
-      - "doc/**"
+      - "docs/**"
       - "**/schema.yaml"
       - "**/test-docs.yaml"
     branches-ignore:
@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          # chartpress, used by doc/conf.py, requires git history to set
+          # chartpress, used by docs/conf.py, requires git history to set
           # chart version and image tags correctly
           fetch-depth: 0
       - uses: actions/setup-python@v2
@@ -35,9 +35,9 @@ jobs:
           python-version: "3.8"
 
       - name: Install deps
-        run: pip install -r doc/requirements.txt
+        run: pip install -r docs/requirements.txt
 
       - name: make linkcheck
         run: |
-          cd doc
+          cd docs
           make linkcheck SPHINXOPTS='--color -W --keep-going'
