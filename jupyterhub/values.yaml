@@ -239,7 +239,7 @@ proxy:
       allowPrivilegeEscalation: false
     image:
       name: traefik
-      tag: v2.4.11 # ref: https://hub.docker.com/_/traefik?tab=tags
+      tag: v2.5.6 # ref: https://hub.docker.com/_/traefik?tab=tags
       pullPolicy:
       pullSecrets: []
     hsts:
@@ -433,7 +433,7 @@ scheduling:
       #            hand with an inspection of the user-scheduelrs RBAC resources
       #            that we have forked.
       name: k8s.gcr.io/kube-scheduler
-      tag: v1.19.13 # ref: https://github.com/kubernetes/website/blob/main/content/en/releases/patch-releases.md
+      tag: v1.19.16 # ref: https://github.com/kubernetes/website/blob/main/content/en/releases/patch-releases.md
       pullPolicy:
       pullSecrets: []
     nodeSelector: {}
@@ -459,7 +459,7 @@ scheduling:
       # gcloud container images list-tags k8s.gcr.io/pause --sort-by=~tags
       #
       # If you update this, also update prePuller.pause.image.tag
-      tag: "3.5"
+      tag: "3.6"
       pullPolicy:
       pullSecrets: []
     replicas: 0
@@ -537,7 +537,7 @@ prePuller:
       # gcloud container images list-tags k8s.gcr.io/pause --sort-by=~tags
       #
       # If you update this, also update scheduling.userPlaceholder.image.tag
-      tag: "3.5"
+      tag: "3.6"
       pullPolicy:
       pullSecrets: []
 
