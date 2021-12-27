@@ -55,10 +55,7 @@ jobs:
 
       - name: Install chartpress
         run: |
-          # FIXME: six is required by docker 5.0.0 but isn't explicitly required
-          #        https://github.com/docker/docker-py/issues/2807
-          #
-          pip install chartpress six
+          pip install chartpress
 
       # charpress --list-images output lines of name:tag format. We use it with
       # a search string in matrix.image_ref to find the specific image to scan
