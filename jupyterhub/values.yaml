@@ -459,7 +459,7 @@ scheduling:
       # gcloud container images list-tags k8s.gcr.io/pause --sort-by=~tags
       #
       # If you update this, also update prePuller.pause.image.tag
-      tag: "3.5"
+      tag: "3.6"
       pullPolicy:
       pullSecrets: []
     replicas: 0
@@ -537,7 +537,7 @@ prePuller:
       # gcloud container images list-tags k8s.gcr.io/pause --sort-by=~tags
       #
       # If you update this, also update scheduling.userPlaceholder.image.tag
-      tag: "3.5"
+      tag: "3.6"
       pullPolicy:
       pullSecrets: []
 
