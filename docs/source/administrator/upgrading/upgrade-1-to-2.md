@@ -3,6 +3,8 @@
 Z2JH 2 contains several breaking changes, including some that affect the security of your deployment.
 This guide will help you upgrade from 1.\* to 2.\*.
 
+(upgrade-1-2-security-breaking-change)=
+
 ## Security: breaking change to `*.networkPolicy.egress`
 
 NetworkPolicy egress rules have been extended with a new property.
@@ -49,18 +51,24 @@ and the configuration reference entries under
 
 Z2JH 2.0.0 upgrades JupyterHub to the 2.\* series, and also upgrades all hub components.
 If you are using any custom JupyterHub services, addons, API integrations, or extra configuration, you should review the breaking changes in the
-[JupyterHub 2.0.0 changelog](https://github.com/jupyterhub/jupyterhub/blob/2.3.1/docs/source/changelog.md#200).
+[JupyterHub 2.x changelog](https://jupyterhub.readthedocs.io/en/2.3.1/changelog.html).
 
-JupyterHub 2 uses an updated database schema.
-Z2JH 2.0.0 automatically handles the upgrade for SQLite databases (the default), but if you use an external database you need to configure [`hub.db.upgrade`](schema_hub.db.upgrade) to true when upgrading. It will not be possible to downgrade to older releases after this without also using a backup or resetting the database.
+JupyterHub 2 updates the database schema, which means a migration takes place when you upgrade JupyterHub.
+Z2JH automatically handles the upgrade if you are using sqlite (`hub.db.type = 'sqlite-pvc'`, the default), but it may not be possible to downgrade to older releases after this.
+When using sqlite, JupyterHub automatically creates a backup in the `hub-db` volume,
+which can be restored manually if you need to downgrade.
+If you use an external database you need to configure [`hub.db.upgrade`](schema_hub.db.upgrade) to `true` when upgrading.
 
 JupyterHub 2 adds RBAC for managing permissions in JupyterHub.
-The old permissions model of admin/non-admin still works but you should use
-[RBAC to assign the required privileges to users or services in future](https://jupyterhub.readthedocs.io/en/stable/rbac/index.html)
+The old permissions model of admin/non-admin still works, but we recommend using [RBAC to assign only the required privileges to users or services in future](https://jupyterhub.readthedocs.io/en/stable/rbac/index.html).
+Default permissions are mostly unchanged, but a few have:
+
+- Servers' own API tokens have limited permissions by default, which can be expanded by defining the `server` role. The previous behavior was the maximum permission of `inherit`.
+- `admin_access` as a concept is removed, so disabling it has no effect. In 2.0, admins by definition can do everything, including access servers. To limit user permissions, assign them to roles which have only the needed permissions.
 
 See
-`TODO: link to Notable dependencies updated`
-in the changelog for more information on other upgraded hub components.
+[Notable dependencies updated](notable-dependencies-200)
+for more information on other upgraded hub components.
 
 ## JupyterLab and Jupyter Server
 
@@ -69,7 +77,7 @@ To switch back to Jupyter Notebook either configure/rebuild your singleuser imag
 
 ## Default to using the container image's command instead of `jupyterhub-singleuser` [#2449](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2449)
 
-Z2JH now launches the container's default command (equivalent to setting `CMD` in a `Dockerfile`) instead of overriding it.
+Z2JH now launches the container's default command (as set e.g. by `CMD` in a `Dockerfile`) instead of overriding it.
 This ensures that containers that use a custom start command to configure their environment, such as some
 [Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/)
 images, will work without any changes.
@@ -78,6 +86,16 @@ To restore the old behaviour set:
 ```yaml
 singleuser:
   cmd: jupyterhub-singleuser
+```
+
+If you want to add custom arguments to the command, you must specify the full command and any arguments in `singleuser.cmd`, for example:
+
+```yaml
+singleuser:
+  cmd:
+    - jupyterhub-singleuser
+    - "--collaborative"
+    - "--debug"
 ```
 
 ## Configuration in `jupyterhub_config.d` has a higher priority than `hub.config` [#2457](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2457)
