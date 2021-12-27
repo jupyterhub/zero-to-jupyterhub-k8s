@@ -433,7 +433,7 @@ scheduling:
       #            hand with an inspection of the user-scheduelrs RBAC resources
       #            that we have forked.
       name: k8s.gcr.io/kube-scheduler
-      tag: v1.19.13 # ref: https://github.com/kubernetes/website/blob/main/content/en/releases/patch-releases.md
+      tag: v1.19.16 # ref: https://github.com/kubernetes/website/blob/main/content/en/releases/patch-releases.md
       pullPolicy:
       pullSecrets: []
     nodeSelector: {}
