@@ -544,7 +544,7 @@ prePuller:
 ingress:
   enabled: false
   annotations: {}
-  ingressClassName:
+# ingressClassName: "nginx"
   hosts: []
   pathSuffix:
   pathType: Prefix
