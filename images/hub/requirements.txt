@@ -123,7 +123,7 @@ pem==21.2.0
     # via jupyterhub-ltiauthenticator
 prometheus-client==0.11.0
     # via jupyterhub
-psycopg2-binary==2.9.2
+psycopg2-binary==2.9.3
     # via -r requirements.in
 py-spy==0.3.11
     # via -r requirements.in
