@@ -11,7 +11,7 @@ template you will use to setup and shape your cluster.
 
 ## The Procedure
 
-1. Create an IAM Role
+1. Create an IAM (Identity and Access Management) Role.
 
    This role will be used to give your CI host permission to create and destroy
    resources on AWS. Instructions for creating a role can be found
