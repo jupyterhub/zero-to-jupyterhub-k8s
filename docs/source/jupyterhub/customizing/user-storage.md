@@ -139,10 +139,10 @@ provisioner: kubernetes.io/gce-pd
 parameters:
   type: pd-ssd
 allowedTopologies:
-- matchLabelExpressions:
-  - key: failure-domain.beta.kubernetes.io/zone
-    values:
-    - <your-cluster-zone>
+  - matchLabelExpressions:
+      - key: failure-domain.beta.kubernetes.io/zone
+        values:
+          - <your-cluster-zone>
 ```
 
 Replace `<your-cluster-zone>` with the Zone in which you created your cluster (you can find
