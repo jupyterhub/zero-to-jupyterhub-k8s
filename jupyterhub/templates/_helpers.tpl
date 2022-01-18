@@ -201,30 +201,30 @@ component: {{ include "jupyterhub.componentLabel" . }}
         {{- end }}
     {{- end }}
 
-{{- /* Populate $_.list with all relevant entries */}}
-{{- $_ := dict "list" (concat .image.pullSecrets $jupyterhub_values.imagePullSecrets | uniq) }}
-{{- if and $jupyterhub_values.imagePullSecret.create $jupyterhub_values.imagePullSecret.automaticReferenceInjection }}
-{{- $__ := set $_ "list" (append $_.list (include "jupyterhub.image-pull-secret.fullname" .root) | uniq) }}
-{{- end }}
+    {{- /* Populate $_.list with all relevant entries */}}
+    {{- $_ := dict "list" (concat .image.pullSecrets $jupyterhub_values.imagePullSecrets | uniq) }}
+    {{- if and $jupyterhub_values.imagePullSecret.create $jupyterhub_values.imagePullSecret.automaticReferenceInjection }}
+        {{- $__ := set $_ "list" (append $_.list (include "jupyterhub.image-pull-secret.fullname" .root) | uniq) }}
+    {{- end }}
 
-{{- /* Decide if something should be written */}}
-{{- if not (eq ($_.list | toJson) "[]") }}
+    {{- /* Decide if something should be written */}}
+    {{- if not (eq ($_.list | toJson) "[]") }}
 
-{{- /* Process the $_.list where strings become dicts with a name key and the
-strings become the name keys' values into $_.res */}}
-{{- $_ := set $_ "res" list }}
-{{- range $_.list }}
-{{- if eq (typeOf .) "string" }}
-{{- $__ := set $_ "res" (append $_.res (dict "name" .)) }}
-{{- else }}
-{{- $__ := set $_ "res" (append $_.res .) }}
-{{- end }}
-{{- end }}
+        {{- /* Process the $_.list where strings become dicts with a name key and the
+        strings become the name keys' values into $_.res */}}
+        {{- $_ := set $_ "res" list }}
+        {{- range $_.list }}
+            {{- if eq (typeOf .) "string" }}
+                {{- $__ := set $_ "res" (append $_.res (dict "name" .)) }}
+            {{- else }}
+                {{- $__ := set $_ "res" (append $_.res .) }}
+            {{- end }}
+        {{- end }}
 
-{{- /* Write the results */}}
-{{- $_.res | toJson }}
+        {{- /* Write the results */}}
+        {{- $_.res | toJson }}
 
-{{- end }}
+    {{- end }}
 {{- end }}
 
 {{- /*
