@@ -429,7 +429,7 @@ properties:
           some custom way.
 
           For more details, see the [Kubernetes
-          documentation](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container).
+          documentation](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
       args:
         type: array
         description: |
@@ -472,7 +472,7 @@ properties:
           ```
 
           For more details, see the [Kubernetes
-          documentation](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container).
+          documentation](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/).
       cookieSecret:
         type: [string, "null"]
         description: |

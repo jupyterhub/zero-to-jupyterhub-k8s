@@ -61,7 +61,7 @@ jsonschema==3.2.0
     # via jupyter-telemetry
 jupyter-telemetry==0.1.0
     # via jupyterhub
-jupyterhub==2.0.1
+jupyterhub==2.0.2
     # via
     #   -r requirements.in
     #   jupyterhub-firstuseauthenticator
