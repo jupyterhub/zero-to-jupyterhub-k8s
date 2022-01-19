@@ -180,30 +180,51 @@ component: {{ include "jupyterhub.componentLabel" . }}
     Augments passed .pullSecrets with $.Values.imagePullSecrets
 */}}
 {{- define "jupyterhub.imagePullSecrets" -}}
-{{- /* Populate $_.list with all relevant entries */}}
-{{- $_ := dict "list" (concat .image.pullSecrets .root.Values.imagePullSecrets | uniq) }}
-{{- if and .root.Values.imagePullSecret.create .root.Values.imagePullSecret.automaticReferenceInjection }}
-{{- $__ := set $_ "list" (append $_.list (include "jupyterhub.image-pull-secret.fullname" .root) | uniq) }}
-{{- end }}
+    {{- /*
+        We have implemented a trick to allow a parent chart depending on this
+        chart to call this named templates.
 
-{{- /* Decide if something should be written */}}
-{{- if not (eq ($_.list | toJson) "[]") }}
+        Caveats and notes:
 
-{{- /* Process the $_.list where strings become dicts with a name key and the
-strings become the name keys' values into $_.res */}}
-{{- $_ := set $_ "res" list }}
-{{- range $_.list }}
-{{- if eq (typeOf .) "string" }}
-{{- $__ := set $_ "res" (append $_.res (dict "name" .)) }}
-{{- else }}
-{{- $__ := set $_ "res" (append $_.res .) }}
-{{- end }}
-{{- end }}
+            1. While parent charts can reference these, grandparent charts can't.
+            2. Parent charts must not use an alias for this chart.
+            3. There is no failsafe workaround to above due to
+                https://github.com/helm/helm/issues/9214.
+            4. .Chart is of its own type (*chart.Metadata) and needs to be casted
+                using "toYaml | fromYaml" in order to be able to use normal helm
+                template functions on it.
+    */}}
+    {{- $jupyterhub_values := .root.Values }}
+    {{- if ne .root.Chart.Name "jupyterhub" }}
+        {{- if .root.Values.jupyterhub }}
+            {{- $jupyterhub_values = .root.Values.jupyterhub }}
+        {{- end }}
+    {{- end }}
 
-{{- /* Write the results */}}
-{{- $_.res | toJson }}
+    {{- /* Populate $_.list with all relevant entries */}}
+    {{- $_ := dict "list" (concat .image.pullSecrets $jupyterhub_values.imagePullSecrets | uniq) }}
+    {{- if and $jupyterhub_values.imagePullSecret.create $jupyterhub_values.imagePullSecret.automaticReferenceInjection }}
+        {{- $__ := set $_ "list" (append $_.list (include "jupyterhub.image-pull-secret.fullname" .root) | uniq) }}
+    {{- end }}
 
-{{- end }}
+    {{- /* Decide if something should be written */}}
+    {{- if not (eq ($_.list | toJson) "[]") }}
+
+        {{- /* Process the $_.list where strings become dicts with a name key and the
+        strings become the name keys' values into $_.res */}}
+        {{- $_ := set $_ "res" list }}
+        {{- range $_.list }}
+            {{- if eq (typeOf .) "string" }}
+                {{- $__ := set $_ "res" (append $_.res (dict "name" .)) }}
+            {{- else }}
+                {{- $__ := set $_ "res" (append $_.res .) }}
+            {{- end }}
+        {{- end }}
+
+        {{- /* Write the results */}}
+        {{- $_.res | toJson }}
+
+    {{- end }}
 {{- end }}
 
 {{- /*
