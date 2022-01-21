@@ -400,3 +400,19 @@ limits:
 {{- define "jupyterhub.chart-version-to-git-ref" -}}
 {{- regexReplaceAll ".*[.-]n\\d+[.]h(.*)" . "${1}" }}
 {{- end }}
+
+{{- /*
+  jupyterhub.image.fullname:
+    Used to generate image names even with a missing tag.
+    The delimiter is a semicolon.
+
+    - Allows to transfer custom images to the chart using werf, see
+      https://werf.io/documentation/v1.2/advanced/helm/configuration/chart_dependencies.html.
+*/}}
+{{- define "jupyterhub.image.fullname" -}}
+    {{- if .tag }}
+        {{- printf "%s:%s" .name .tag }}
+    {{- else }}
+        {{- .name }}
+    {{- end }}
+{{- end }}
