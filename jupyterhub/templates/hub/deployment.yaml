@@ -89,7 +89,7 @@ spec:
         {{- . | toYaml | nindent 8 }}
         {{- end }}
         - name: hub
-          image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
+          image: {{ include "jupyterhub.image.fullname" .Values.hub.image }}
           {{- with .Values.hub.command }}
           command:
             {{- range . }}
