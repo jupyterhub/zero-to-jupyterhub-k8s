@@ -72,7 +72,7 @@ spec:
         {{- $blockWithIptables := hasKey .Values.singleuser.cloudMetadata "enabled" | ternary (not .Values.singleuser.cloudMetadata.enabled) .Values.singleuser.cloudMetadata.blockWithIptables }}
         {{- if $blockWithIptables }}
         - name: image-pull-metadata-block
-          image: {{ .Values.singleuser.networkTools.image.name }}:{{ .Values.singleuser.networkTools.image.tag }}
+          image: {{ include "jupyterhub.image.fullname" .Values.singleuser.networkTools.image }}
           {{- with .Values.singleuser.networkTools.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
@@ -92,7 +92,7 @@ spec:
 
         {{- /* --- Pull default image --- */}}
         - name: image-pull-singleuser
-          image: {{ .Values.singleuser.image.name }}:{{ .Values.singleuser.image.tag }}
+          image: {{ include "jupyterhub.image.fullname" .Values.singleuser.image }}
           command:
             - /bin/sh
             - -c
