@@ -37,7 +37,10 @@ spec:
       {{- if .Values.rbac.enabled }}
       serviceAccountName: {{ include "jupyterhub.hook-image-awaiter.fullname" . }}
       {{- end }}
-      nodeSelector: {{ toJson .Values.prePuller.hook.nodeSelector }}
+      {{- with .Values.prePuller.hook.nodeSelector }}
+      nodeSelector:
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
       {{- with concat .Values.scheduling.corePods.tolerations .Values.prePuller.hook.tolerations }}
       tolerations:
         {{- . | toYaml | nindent 8 }}

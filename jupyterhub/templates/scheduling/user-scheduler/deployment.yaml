@@ -23,7 +23,10 @@ spec:
       {{- if .Values.scheduling.podPriority.enabled }}
       priorityClassName: {{ include "jupyterhub.priority.fullname" . }}
       {{- end }}
-      nodeSelector: {{ toJson .Values.scheduling.userScheduler.nodeSelector }}
+      {{- with .Values.scheduling.userScheduler.nodeSelector }}
+      nodeSelector:
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
       {{- with concat .Values.scheduling.corePods.tolerations .Values.scheduling.userScheduler.tolerations }}
       tolerations:
         {{- . | toYaml | nindent 8 }}
