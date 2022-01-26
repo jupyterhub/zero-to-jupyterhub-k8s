@@ -50,7 +50,10 @@ spec:
       {{- if and (not .hook) .Values.scheduling.podPriority.enabled }}
       priorityClassName: {{ include "jupyterhub.user-placeholder-priority.fullname" . }}
       {{- end }}
-      nodeSelector: {{ toJson .Values.singleuser.nodeSelector }}
+      {{- with .Values.singleuser.nodeSelector }}
+      nodeSelector:
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
       {{- with concat .Values.scheduling.userPods.tolerations .Values.singleuser.extraTolerations .Values.prePuller.extraTolerations }}
       tolerations:
         {{- . | toYaml | nindent 8 }}

@@ -33,7 +33,10 @@ spec:
       {{- if .Values.scheduling.userScheduler.enabled }}
       schedulerName: {{ include "jupyterhub.user-scheduler.fullname" . }}
       {{- end }}
-      nodeSelector: {{ toJson .Values.singleuser.nodeSelector }}
+      {{- with .Values.singleuser.nodeSelector }}
+      nodeSelector:
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
       {{- with concat .Values.scheduling.userPods.tolerations .Values.singleuser.extraTolerations }}
       tolerations:
         {{- . | toYaml | nindent 8 }}

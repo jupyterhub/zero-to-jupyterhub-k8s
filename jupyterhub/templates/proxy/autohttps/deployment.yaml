@@ -33,7 +33,10 @@ spec:
       {{- if .Values.scheduling.podPriority.enabled }}
       priorityClassName: {{ include "jupyterhub.priority.fullname" . }}
       {{- end }}
-      nodeSelector: {{ toJson .Values.proxy.traefik.nodeSelector }}
+      {{- with .Values.proxy.traefik.nodeSelector }}
+      nodeSelector:
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
       {{- with concat .Values.scheduling.corePods.tolerations .Values.proxy.traefik.tolerations }}
       tolerations:
         {{- . | toYaml | nindent 8 }}
