@@ -31,7 +31,7 @@ to choose a suitable image](https://jupyter-docker-stacks.readthedocs.io/en/late
 If you wish to use another image from jupyter/docker-stacks than the
 [base-notebook](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-base-notebook)
 used by default, such as the [datascience-notebook](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-datascience-notebook)
-image containing useful tools and libraries for datascience, complete these steps:
+image containing useful tools and libraries for Data Science, complete these steps:
 
 1. Modify your `config.yaml` file to specify the image. For example:
 
