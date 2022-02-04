@@ -517,11 +517,11 @@ However, an image may have a custom CMD that does this,
 with some preparation steps, or adding additional command-line arguments,
 or launching a custom wrapper command, etc.
 
-:::{note}
+```{note}
 If you have environment preparation at startup in your image,
 this is best done in the ENTRYPOINT of the image,
 and not in the CMD, so that overriding the command does not skip your preparation.
-:::
+```
 
 By default, zero-to-jupyterhub will launch the default CMD that is specified in your chosen image,
 respecting any startup customization that image may have.
