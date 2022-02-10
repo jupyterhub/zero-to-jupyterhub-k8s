@@ -507,6 +507,7 @@ scheduling:
     enabled: false
     globalDefault: false
     defaultPriority: 0
+    continuousImagePullerPriority: -5
     userPlaceholderPriority: -10
   userPlaceholder:
     enabled: true

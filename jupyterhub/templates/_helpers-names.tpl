@@ -210,6 +210,15 @@
     {{- end }}
 {{- end }}
 
+{{- /* continuous-image-puller.fullname Priority */}}
+{{- define "jupyterhub.continuous-image-puller-priority.fullname" -}}
+    {{- if (include "jupyterhub.fullname" .) }}
+        {{- include "jupyterhub.continuous-image-puller.fullname" . }}
+    {{- else }}
+        {{- .Release.Name }}-continuous-image-puller-priority
+    {{- end }}
+{{- end }}
+
 {{- /* user-scheduler's registered name */}}
 {{- define "jupyterhub.user-scheduler.fullname" -}}
     {{- if (include "jupyterhub.fullname" .) }}
