@@ -48,7 +48,7 @@ spec:
         per node limit all k8s clusters have.
       */}}
       {{- if and (not .hook) .Values.scheduling.podPriority.enabled }}
-      priorityClassName: {{ include "jupyterhub.user-placeholder-priority.fullname" . }}
+      priorityClassName: {{ include "jupyterhub.continuous-image-puller-priority.fullname" . }}
       {{- end }}
       {{- with .Values.singleuser.nodeSelector }}
       nodeSelector:

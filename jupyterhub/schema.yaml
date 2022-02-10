@@ -2237,6 +2237,11 @@ properties:
           4. Normal user pods have a higher priority than the user-placeholder
              pods
 
+          Additionally, continuous image puller pods should get a priority
+          between normal user pods and placeholder pods. Otherwise, continuous
+          image puller pods may block normal user pods to spawn, and placeholder
+          pods may block continuous image puller pods.
+
           Note that if the default priority cutoff if not configured on cluster
           autoscaler, it will currently default to 0, and that in the future
           this is meant to be lowered. If your cloud provider is installing the
@@ -2251,6 +2256,7 @@ properties:
             enabled: true
             globalDefault: false
             defaultPriority: 0
+            continuousImagePullerPriority: -5
             userPlaceholderPriority: -10
           ```
 
@@ -2261,6 +2267,7 @@ properties:
             enabled: true
             globalDefault: true
             defaultPriority: 10
+            continuousImagePullerPriority: 5
             userPlaceholderPriority: 0
           ```
         properties:
@@ -2279,6 +2286,10 @@ properties:
             type: integer
             description: |
               The actual value for the default pod priority.
+          continuousImagePullerPriority:
+            type: integer
+            description: |
+              The actual value for the continuous-image-puller pods' priority.
           userPlaceholderPriority:
             type: integer
             description: |
