@@ -2611,6 +2611,9 @@ properties:
       users:
         type: [boolean, "null"]
         description: See the `--cull-users` flag.
+      adminUsers:
+        type: [boolean, "null"]
+        description: See the `--cull-admin-users` flag.
       removeNamedServers:
         type: [boolean, "null"]
         description: See the `--remove-named-servers` flag.
