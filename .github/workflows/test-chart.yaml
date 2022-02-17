@@ -342,11 +342,3 @@ jobs:
         if: always()
         with:
           important-workloads: deploy/hub deploy/proxy
-
-      # WARNING: Only allow this for pull_request runs that doesn't contain
-      #          sensitive information.
-      #
-      # action reference: https://github.com/mxschmitt/action-tmate@v3
-      - name: To enter a SSH debugging session, read these logs
-        if: failure() && github.event_name == 'pull_request' && matrix.debuggable == 'debuggable'
-        uses: mxschmitt/action-tmate@v3
