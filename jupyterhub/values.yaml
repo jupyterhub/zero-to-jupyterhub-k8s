@@ -431,9 +431,22 @@ scheduling:
     image:
       # IMPORTANT: Bumping the minor version of this binary should go hand in
       #            hand with an inspection of the user-scheduelrs RBAC resources
-      #            that we have forked.
+      #            that we have forked in
+      #            templates/scheduling/user-scheduler/rbac.yaml.
+      #
+      #            If failures are observed, it may also be that our
+      #            configuration of kube-scheduler is broken in
+      #            templates/scheduling/user-scheduler/configmap.yaml.
+      #
+      #            If failures are observed, it could also be that we are
+      #            stretching the kube-scheduler binary's compatebility to work
+      #            against a k8s api-server that is too new or too old.
+      #
+      #            Inspecting the user-scheduler pod's logs with a semi-high log
+      #            level is a good strategy to debug.
+      #
       name: k8s.gcr.io/kube-scheduler
-      tag: v1.19.16 # ref: https://github.com/kubernetes/website/blob/main/content/en/releases/patch-releases.md
+      tag: v1.22.7 # ref: https://github.com/kubernetes/website/blob/main/content/en/releases/patch-releases.md
       pullPolicy:
       pullSecrets: []
     nodeSelector: {}
