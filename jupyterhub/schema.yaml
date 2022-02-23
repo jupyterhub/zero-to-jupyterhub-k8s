@@ -2162,7 +2162,7 @@ properties:
       userScheduler:
         type: object
         additionalProperties: false
-        required: [enabled, plugins, logLevel]
+        required: [enabled, plugins, pluginConfig, logLevel]
         description: |
           The user scheduler is making sure that user pods are scheduled
           tight on nodes, this is useful for autoscaling of user node pools.
@@ -2219,6 +2219,10 @@ properties:
                           type: string
                         weight:
                           type: integer
+          pluginConfig:
+            type: array
+            description: |
+              Individually activated plugins can be configured further.
           resources: *resources-spec
           serviceAccount: *serviceAccount
           extraPodSpec: *extraPodSpec-spec

@@ -398,32 +398,63 @@ scheduling:
     enabled: true
     replicas: 2
     logLevel: 4
+    # plugins are configured on the user-scheduler to make us score how we
+    # schedule user pods in a way to help us schedule on the most busy node. By
+    # doing this, we help scale down more effectively. It isn't obvious how to
+    # enable/disable scoring plugins, and configure them, to accomplish this.
+    #
     # plugins ref: https://kubernetes.io/docs/reference/scheduling/config/#scheduling-plugins-1
+    # migration ref: https://kubernetes.io/docs/reference/scheduling/config/#scheduler-configuration-migrations
+    #
     plugins:
       score:
+        # These scoring plugins are enabled by default according to
+        # https://kubernetes.io/docs/reference/scheduling/config/#scheduling-plugins
+        # 2022-02-22.
+        #
+        # Enabled with high priority:
+        # - NodeAffinity
+        # - InterPodAffinity
+        # - NodeResourcesFit
+        # - ImageLocality
+        # Remains enabled with low default priority:
+        # - TaintToleration
+        # - PodTopologySpread
+        # - VolumeBinding
+        # Disabled for scoring:
+        # - NodeResourcesBalancedAllocation
+        #
         disabled:
-          - name: SelectorSpread
-          - name: TaintToleration
-          - name: PodTopologySpread
+          # We disable these plugins (with regards to scoring) to not interfere
+          # or complicate our use of NodeResourcesFit.
           - name: NodeResourcesBalancedAllocation
-          - name: NodeResourcesLeastAllocated
           # Disable plugins to be allowed to enable them again with a different
           # weight and avoid an error.
-          - name: NodePreferAvoidPods
           - name: NodeAffinity
           - name: InterPodAffinity
+          - name: NodeResourcesFit
           - name: ImageLocality
         enabled:
-          - name: NodePreferAvoidPods
-            weight: 161051
           - name: NodeAffinity
             weight: 14631
           - name: InterPodAffinity
             weight: 1331
-          - name: NodeResourcesMostAllocated
+          - name: NodeResourcesFit
             weight: 121
           - name: ImageLocality
             weight: 11
+    pluginConfig:
+      # Here we declare that we should optimize pods to fit based on a
+      # MostAllocated strategy instead of the default LeastAllocated.
+      - name: NodeResourcesFit
+        args:
+          scoringStrategy:
+            resources:
+              - name: cpu
+                weight: 1
+              - name: memory
+                weight: 1
+            type: MostAllocated
     containerSecurityContext:
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
@@ -431,9 +462,34 @@ scheduling:
     image:
       # IMPORTANT: Bumping the minor version of this binary should go hand in
       #            hand with an inspection of the user-scheduelrs RBAC resources
-      #            that we have forked.
+      #            that we have forked in
+      #            templates/scheduling/user-scheduler/rbac.yaml.
+      #
+      #            Debugging advice:
+      #
+      #            - Is configuration of kube-scheduler broken in
+      #              templates/scheduling/user-scheduler/configmap.yaml?
+      #
+      #            - Is the kube-scheduler binary's compatebility to work
+      #              against a k8s api-server that is too new or too old?
+      #
+      #            - You can update the GitHub workflow that runs tests to
+      #              include "deploy/user-scheduler" in the k8s namespace report
+      #              and reduce the user-scheduler deployments replicas to 1 in
+      #              dev-config.yaml to get relevant logs from the user-scheduler
+      #              pods. Inspect the "Kubernetes namespace report" action!
+      #
+      #            - Typical failures are that kube-scheduler fail to search for
+      #              resources via its "informers", and won't start trying to
+      #              schedule pods before they succeed which may require
+      #              additional RBAC permissions or that the k8s api-server is
+      #              aware of the resources.
+      #
+      #            - If "successfully acquired lease" can be seen in the logs, it
+      #              is a good sign kube-scheduler is ready to schedule pods.
+      #
       name: k8s.gcr.io/kube-scheduler
-      tag: v1.19.16 # ref: https://github.com/kubernetes/website/blob/main/content/en/releases/patch-releases.md
+      tag: v1.23.4 # ref: https://github.com/kubernetes/website/blob/main/content/en/releases/patch-releases.md
       pullPolicy:
       pullSecrets: []
     nodeSelector: {}

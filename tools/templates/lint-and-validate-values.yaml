@@ -451,6 +451,14 @@ scheduling:
           - name: NodePreferAvoidPods
             weight: 161051
           - name: NodeAffinity
+    pluginConfig:
+      - name: NodeResourcesFit
+        args:
+          scoringStrategy:
+            resources:
+              - name: cpu
+                weight: 1
+            type: MostAllocated
     serviceAccount: *serviceAccount
     extraPodSpec: *extraPodSpec
   podPriority:
