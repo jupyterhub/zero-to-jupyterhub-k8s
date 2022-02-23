@@ -126,7 +126,6 @@ jobs:
         include:
           - k3s-channel: v1.23
             test: install
-            debuggable: debuggable
           - k3s-channel: v1.22
             test: install
           - k3s-channel: v1.21
