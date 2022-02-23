@@ -47,13 +47,6 @@ spec:
           {{- end }}
           command:
             - /usr/local/bin/kube-scheduler
-            # NOTE: --leader-elect-... (new) and --lock-object-... (deprecated)
-            #       flags are silently ignored in favor of whats defined in the
-            #       passed KubeSchedulerConfiguration whenever --config is
-            #       passed.
-            #
-            # ref: https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/
-            #
             # NOTE: --authentication-skip-lookup=true is used to avoid a
             #       seemingly harmless error, if we need to not skip
             #       "authentication lookup" in the future, see the linked issue.
