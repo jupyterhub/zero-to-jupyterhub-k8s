@@ -61,12 +61,14 @@ spec:
           livenessProbe:
             httpGet:
               path: /healthz
-              port: 10251
+              scheme: HTTPS
+              port: 10259
             initialDelaySeconds: 15
           readinessProbe:
             httpGet:
               path: /healthz
-              port: 10251
+              scheme: HTTPS
+              port: 10259
           {{- with .Values.scheduling.userScheduler.resources }}
           resources:
             {{- . | toYaml | nindent 12 }}
