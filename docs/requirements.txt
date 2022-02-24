@@ -1,12 +1,11 @@
-# Order matters:
-# - myst-parser depends on "sphinx>=2,<4"
-# - pydata-sphinx-theme depends on "sphinx"
-# - sphinx-copybutton depends on "sphinx>=1.8"
+# The ordering of these requirements can matter. It matters if we install them
+# in an environment where a dependency to them (such as sphinx) is
+# pre-installed, such as it can be on RTD. For example, if a top-ordered package
+# declares it needs sphinx>=1 and then a later package declares it needs
+# sphinx<4 - the latter may be ignored.
 #
-# Listing either pydata-sphinx-theme or sphinx-copybutton first will make the
-# myst-parser constraints on sphinx be ignored, so myst-parser should go
-# first. This is only relevant if sphinx==1.* is already installed in the
-# environment, which it is on ReadTheDocs.
+# As long as we have myst-parser ordered before other sphinx depending packages,
+# we should be good.
 #
 chartpress
 myst-parser
