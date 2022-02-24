@@ -6,7 +6,7 @@ import sys
 from binascii import a2b_hex
 
 from tornado.httpclient import AsyncHTTPClient
-from kubernetes import client
+from kubernetes_asyncio import client
 from jupyterhub.utils import url_path_join
 
 # Make sure that modules placed in the same directory as the jupyterhub config are added to the pythonpath
