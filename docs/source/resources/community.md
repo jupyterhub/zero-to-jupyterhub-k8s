@@ -19,7 +19,7 @@ JupyterHub guide, please see the [issues page](https://github.com/jupyterhub/zer
 
 We hope that you will use this section to share deployments with on a variety
 of infrastructure and for different use cases.
-There is also a [community maintained list](#users-list) of users of this
+There is also a [community maintained list](users-list) of users of this
 Guide and the JupyterHub Helm Chart.
 
 Please submit an [issue/pull request](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues) to add to this section. Thanks.

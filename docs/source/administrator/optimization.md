@@ -120,7 +120,7 @@ situations:
    generally fail to do so. This is because it will only add a node if one or
    more pods won't fit on the current nodes but would fit more if a node is
    added, but at that point users are already waiting. To scale up nodes ahead
-   of time we can use [user-placeholders](#scaling-up-in-time-user-placeholders).
+   of time we can use [user-placeholders](scaling-up-in-time-user-placeholders).
 
 (images-that-will-be-pulled)=
 
@@ -178,6 +178,8 @@ Autoscaler_](https://github.com/kubernetes/autoscaler/tree/HEAD/cluster-autoscal
 (CA) will help you add and remove nodes from the cluster. But the CA needs some
 help to function well. Without help, it will both fail to scale up before users
 arrive and scale down nodes aggressively enough without disrupting users.
+
+(scaling-up-in-time-user-placeholders)=
 
 ### Scaling up in time (user placeholders)
 
