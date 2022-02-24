@@ -80,6 +80,31 @@ your google cloud account.
      - They also increase control plane uptime to 99.95%.
      - To avoid tripling the number of nodes while still having HA kubernetes, the `--node-locations` flag can be used to specify a single zone to use.
 
+
+   A High Availability (HA) cluster can be specified as such: 
+
+   ```
+   gcloud container clusters create \
+     --machine-type n1-standard-2 \
+     --num-nodes 2 \
+     --region <gcp compute region> \
+     --node-location <compute zone from the list linked below> \
+     --cluster-version latest \
+     <CLUSTERNAME>
+   ```
+   
+   For example, specifying one for scandinavia:
+   
+   ```
+   gcloud container clusters create \
+     --machine-type n1-standard-2 \
+     --num-nodes 2 \
+     --region europe-north1 \
+     --node-locations europe-north1-a \
+     --cluster-version latest \
+     jhub-cluster-1
+   ```
+
 5. To test if your cluster is initialized, run:
 
    ```
@@ -121,9 +146,14 @@ your google cloud account.
    with a _toleration_ for this taint can schedule on the node pool's nodes.
    This is done in order to ensure the autoscaler will be able to scale down
    when the user pods have stopped.
+   
+   Note: You will receive an error running this if you specified HA clusters above.
+   The error looks like this: 
+   ERROR: (gcloud.container.node-pools.create) ResponseError: code=404, message=Not found: projects/<PROJECT NAME>/zones/<ZONE>/clusters/<CLUSTER NAME>
+   See below for specifying node-pools for HA clusters.
 
    ```
-   gcloud beta container node-pools create user-pool \
+   gcloud container node-pools create user-pool \
      --machine-type n1-standard-2 \
      --num-nodes 0 \
      --enable-autoscaling \
@@ -134,6 +164,39 @@ your google cloud account.
      --zone us-central1-b \
      --cluster <CLUSTERNAME>
    ```
+   
+   HA cluster node-pool specification below.
+   Use the same flags as for your HA clusters.
+   
+   ```
+   gcloud container node-pools create user-pool \
+     --machine-type n1-standard-2 \
+     --num-nodes 0 \
+     --enable-autoscaling \
+     --min-nodes 0 \
+     --max-nodes 3 \
+     --node-labels hub.jupyter.org/node-purpose=user \
+     --node-taints hub.jupyter.org_dedicated=user:NoSchedule \
+     --region <COMPUTE REGION> \
+     --node-locations <COMPUTE ZONE> \
+     --cluster <CLUSTER NAME>
+   ```
+   
+   A practical example for scandinavia relating to the above example:
+   
+   gcloud container node-pools create user-pool \
+     --machine-type n1-standard-2 \
+     --num-nodes 0 \
+     --enable-autoscaling \
+     --min-nodes 0 \
+     --max-nodes 3 \
+     --node-labels hub.jupyter.org/node-purpose=user \
+     --node-taints hub.jupyter.org_dedicated=user:NoSchedule \
+     --region europe-north1 \
+     --node-locations europe-north1-a \
+     --cluster jhub-cluster-1
+  
+   
 
    <!---
    preemptible node recommendation not included
