@@ -48,6 +48,8 @@ This section covers upgrade information specific to the following:
 - RBAC (Role Based Access Control)
 - Custom Docker images
 
+(helm-upgrade-command)=
+
 ### `helm upgrade` command
 
 After modifying your `config.yaml` file according to the CHANGELOG, you will need
@@ -79,7 +81,7 @@ you are using the default database provider (SQLite), then the required db upgra
 will be performed automatically when you do a `helm upgrade`.
 
 **Default (SQLite)**: The database upgrade will be performed automatically when you
-[perform the upgrade](#upgrade-command)
+[perform the upgrade](helm-upgrade-command)
 
 **MySQL / PostgreSQL**: You will execute the following steps, which includes a manual update of your database:
 
@@ -94,8 +96,8 @@ will be performed automatically when you do a `helm upgrade`.
        upgrade: true
    ```
 
-4. Do a [`helm upgrade`](#upgrade-command). This should perform the database upgrade needed.
-5. Remove the lines added in step 3, and do another [`helm upgrade`](#upgrade-command).
+4. Do a [`helm upgrade`](helm-upgrade-command). This should perform the database upgrade needed.
+5. Remove the lines added in step 3, and do another [`helm upgrade`](helm-upgrade-command).
 
 ### Custom Docker Images: JupyterHub version match
 
