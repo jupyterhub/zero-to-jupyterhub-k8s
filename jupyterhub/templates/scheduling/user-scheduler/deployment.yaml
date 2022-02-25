@@ -41,19 +41,22 @@ spec:
       {{- end }}
       containers:
         - name: kube-scheduler
+          {{- if ge (atoi .Capabilities.KubeVersion.Minor) 21 }}
           image: {{ .Values.scheduling.userScheduler.image.name }}:{{ .Values.scheduling.userScheduler.image.tag }}
+          {{- else }}
+          # WARNING: The tag of this image is hardcoded, and the
+          #          "scheduling.userScheduler.image.tag" configuration of the
+          #          Helm chart that generated this resource manifest isn't
+          #          respected. If you install the Helm chart in a k8s cluster
+          #          versioned 1.21 or higher, your configuration will be
+          #          respected.
+          image: {{ .Values.scheduling.userScheduler.image.name }}:v1.20.15
+          {{- end }}
           {{- with .Values.scheduling.userScheduler.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
           command:
             - /usr/local/bin/kube-scheduler
-            # NOTE: --leader-elect-... (new) and --lock-object-... (deprecated)
-            #       flags are silently ignored in favor of whats defined in the
-            #       passed KubeSchedulerConfiguration whenever --config is
-            #       passed.
-            #
-            # ref: https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/
-            #
             # NOTE: --authentication-skip-lookup=true is used to avoid a
             #       seemingly harmless error, if we need to not skip
             #       "authentication lookup" in the future, see the linked issue.
@@ -68,12 +71,14 @@ spec:
           livenessProbe:
             httpGet:
               path: /healthz
-              port: 10251
+              scheme: HTTPS
+              port: 10259
             initialDelaySeconds: 15
           readinessProbe:
             httpGet:
               path: /healthz
-              port: 10251
+              scheme: HTTPS
+              port: 10259
           {{- with .Values.scheduling.userScheduler.resources }}
           resources:
             {{- . | toYaml | nindent 12 }}
