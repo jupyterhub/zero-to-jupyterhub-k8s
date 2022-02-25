@@ -46,7 +46,7 @@ spec:
           {{- else }}
           # WARNING: The tag of this image is hardcoded, and the
           #          "scheduling.userScheduler.image.tag" configuration of the
-          #          Helm chart that generated this resource manifest wasn't
+          #          Helm chart that generated this resource manifest isn't
           #          respected. If you install the Helm chart in a k8s cluster
           #          versioned 1.21 or higher, your configuration will be
           #          respected.

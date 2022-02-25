@@ -470,7 +470,7 @@ scheduling:
       #            - Is configuration of kube-scheduler broken in
       #              templates/scheduling/user-scheduler/configmap.yaml?
       #
-      #            - Is the kube-scheduler binary's compatebility to work
+      #            - Is the kube-scheduler binary's compatibility to work
       #              against a k8s api-server that is too new or too old?
       #
       #            - You can update the GitHub workflow that runs tests to
@@ -479,7 +479,7 @@ scheduling:
       #              dev-config.yaml to get relevant logs from the user-scheduler
       #              pods. Inspect the "Kubernetes namespace report" action!
       #
-      #            - Typical failures are that kube-scheduler fail to search for
+      #            - Typical failures are that kube-scheduler fails to search for
       #              resources via its "informers", and won't start trying to
       #              schedule pods before they succeed which may require
       #              additional RBAC permissions or that the k8s api-server is
