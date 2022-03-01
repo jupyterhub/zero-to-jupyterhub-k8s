@@ -30,7 +30,7 @@ jobs:
           # chartpress, used by docs/conf.py, requires git history to set
           # chart version and image tags correctly
           fetch-depth: 0
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v3
         with:
           python-version: "3.8"
 
