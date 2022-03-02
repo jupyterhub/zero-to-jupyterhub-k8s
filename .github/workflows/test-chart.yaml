@@ -28,7 +28,7 @@ jobs:
   lint_shell_scripts:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
 
       - name: Install dependencies
@@ -40,7 +40,7 @@ jobs:
   lint_and_validate_rendered_templates:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
         with:
           python-version: "3.8"
@@ -73,7 +73,7 @@ jobs:
           - helm-version: v3.5.0 # minimal required version
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
         with:
           python-version: "3.8"
@@ -189,7 +189,7 @@ jobs:
               --set singleuser.storage.type=dynamic
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           # chartpress requires git history to set chart version and image tags
           # correctly
