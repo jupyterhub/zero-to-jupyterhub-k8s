@@ -140,7 +140,7 @@ pycryptodome==3.11.0
     # via jupyterhub-ltiauthenticator
 pycryptodomex==3.11.0
     # via pyjwkest
-pycurl==7.44.1
+pycurl==7.45.0
     # via -r requirements.in
 pyjwkest==1.4.2
     # via jupyterhub-ltiauthenticator
