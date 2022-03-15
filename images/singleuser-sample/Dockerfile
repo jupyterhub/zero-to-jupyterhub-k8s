@@ -3,7 +3,7 @@ FROM jupyter/base-notebook:latest
 #               https://github.com/jupyter/docker-stacks/blob/HEAD/base-notebook/Dockerfile
 # Built from... Ubuntu 20.04
 
-# VULN_SCAN_TIME=2022-03-11_01:24:01
+# VULN_SCAN_TIME=2022-03-15_01:23:00
 
 # The jupyter/docker-stacks images contains jupyterhub and jupyterlab already.
 
