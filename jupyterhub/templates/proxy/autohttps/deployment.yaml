@@ -118,6 +118,10 @@ spec:
           {{- with .Values.proxy.secretSync.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
+          {{- with .Values.proxy.secretSync.resources }}
+          resources:
+            {{- . | toYaml | nindent 12 }}
+          {{- end }}
           args:
             - watch-save
             - --label=app={{ include "jupyterhub.appLabel" . }}
