@@ -1,9 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
 apiVersion: networking.k8s.io/v1
-{{- else }}
-apiVersion: networking.k8s.io/v1beta1
-{{- end }}
 kind: Ingress
 metadata:
   name: {{ include "jupyterhub.ingress.fullname" . }}
@@ -22,18 +18,12 @@ spec:
     - http:
         paths:
           - path: {{ $.Values.hub.baseUrl | trimSuffix "/" }}/{{ $.Values.ingress.pathSuffix }}
-            {{- if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
             pathType: {{ $.Values.ingress.pathType }}
             backend:
               service:
                 name: {{ include "jupyterhub.proxy-public.fullname" $ }}
                 port:
                   name: http
-            {{- else }}
-            backend:
-              serviceName: {{ include "jupyterhub.proxy-public.fullname" $ }}
-              servicePort: 80
-            {{- end }}
       {{- if $host }}
       host: {{ $host | quote }}
       {{- end }}

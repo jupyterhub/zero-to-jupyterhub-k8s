@@ -126,5 +126,5 @@ Additions to the glossary are welcomed. Please add in alphabetical order.
       A spawner is a separate process created for each active user by
       JupyterHub. They are each responsible for one user. This Helm chart relies
       on `KubeSpawner
-      <https://jupyterhub-kubespawner.readthedocs.io/en/latest/overview.html>`_.
+      <https://jupyterhub-kubespawner.readthedocs.io/en/latest/>`_.
 ```
