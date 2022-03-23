@@ -824,7 +824,7 @@ properties:
           ```
 
           For more information, see the [Kubernetes EnvVar
-          specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core).
+          specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#envvar-v1-core).
       extraConfig:
         type: object
         additionalProperties: true
@@ -1005,7 +1005,7 @@ properties:
           [scheduling.userPods.tolerations](schema_scheduling.userPods.tolerations)).
 
           Pass this field an array of
-          [`Toleration`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#toleration-v1-core)
+          [`Toleration`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#toleration-v1-core)
           objects.
 
           See the [Kubernetes
@@ -1040,7 +1040,7 @@ properties:
         additionalProperties: true
         description: |
           A k8s native specification of the container's security context, see [the
-          documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#securitycontext-v1-core)
+          documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#securitycontext-v1-core)
           for details.
       deploymentStrategy:
         type: object
@@ -1080,7 +1080,7 @@ properties:
             flag.
 
             See [the k8s
-            documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#probe-v1-core)
+            documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#probe-v1-core)
             for more details.
       readinessProbe: *probe-spec
       namedServerLimitPerUser:
@@ -1094,13 +1094,13 @@ properties:
         additionalProperties: true
         description: |
           A k8s native specification of resources, see [the
-          documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#resourcerequirements-v1-core).
+          documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#resourcerequirements-v1-core).
       lifecycle: &lifecycle-spec
         type: object
         additionalProperties: false
         description: |
           A k8s native specification of lifecycle hooks on the container, see [the
-          documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#lifecycle-v1-core).
+          documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#lifecycle-v1-core).
         properties:
           postStart:
             type: object
@@ -1378,7 +1378,7 @@ properties:
               ```
 
               For more information, see the [Kubernetes EnvVar
-              specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core).
+              specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#envvar-v1-core).
           pdb: *pdb-spec
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
@@ -1498,7 +1498,7 @@ properties:
               or the `proxy` pod (chp).
 
               See [the Kubernetes
-              documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#serviceport-v1-core)
+              documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#serviceport-v1-core)
               for the structure of the items in this list.
           loadBalancerIP:
             type: [string, "null"]
@@ -1664,7 +1664,7 @@ properties:
               ```
 
               For more information, see the [Kubernetes EnvVar
-              specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core).
+              specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#envvar-v1-core).
           pdb: *pdb-spec
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
@@ -1899,7 +1899,7 @@ properties:
           ```
 
           For more information, see the [Kubernetes EnvVar
-          specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core).
+          specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#envvar-v1-core).
       nodeSelector: *nodeSelector-spec
       extraTolerations: *tolerations-spec
       extraNodeAffinity:
@@ -1920,13 +1920,13 @@ properties:
             type: array
             description: |
               Pass this field an array of
-              [`NodeSelectorTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#nodeselectorterm-v1-core)
+              [`NodeSelectorTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#nodeselectorterm-v1-core)
               objects.
           preferred:
             type: array
             description: |
               Pass this field an array of
-              [`PreferredSchedulingTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#preferredschedulingterm-v1-core)
+              [`PreferredSchedulingTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#preferredschedulingterm-v1-core)
               objects.
       extraPodAffinity:
         type: object
@@ -1938,13 +1938,13 @@ properties:
             type: array
             description: |
               Pass this field an array of
-              [`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#podaffinityterm-v1-core)
+              [`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#podaffinityterm-v1-core)
               objects.
           preferred:
             type: array
             description: |
               Pass this field an array of
-              [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#weightedpodaffinityterm-v1-core)
+              [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#weightedpodaffinityterm-v1-core)
               objects.
       extraPodAntiAffinity:
         type: object
@@ -1956,13 +1956,13 @@ properties:
             type: array
             description: |
               Pass this field an array of
-              [`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#podaffinityterm-v1-core)
+              [`PodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#podaffinityterm-v1-core)
               objects.
           preferred:
             type: array
             description: |
               Pass this field an array of
-              [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#weightedpodaffinityterm-v1-core)
+              [`WeightedPodAffinityTerm`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#weightedpodaffinityterm-v1-core)
               objects.
       cloudMetadata:
         type: object
@@ -2421,8 +2421,7 @@ properties:
       ingressClassName:
         type: [string, "null"]
         description: |
-          Maps directly to the Ingress resource's spec.ingressClassName. To
-          configure this, your k8s cluster must have version 1.18+ or above.
+          Maps directly to the Ingress resource's `spec.ingressClassName``.
 
           See [the Kubernetes
           documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class)
@@ -2440,7 +2439,7 @@ properties:
       pathType:
         enum: [Prefix, Exact, ImplementationSpecific]
         description: |
-          The path type to use. The default value is 'Prefix'. Only applies on Kubernetes v1.18+.
+          The path type to use. The default value is 'Prefix'.
 
           See [the Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types) 
           for more details about path types.
