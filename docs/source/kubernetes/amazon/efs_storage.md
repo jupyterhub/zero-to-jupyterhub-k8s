@@ -104,21 +104,27 @@ Procedure:
        type: "static"
        static:
          pvcName: "efs-persist"
-         subPath: "home/{username}"
+         subPath: "home/{username}"  extraEnv:
+     extraEnv:
+       CHOWN_HOME: "yes"
      uid: 0
      fsGid: 0
      cmd: "start-singleuser.sh"
    ```
 
+   The image setting overrides the default pinned jh base image since it has not yet been updated
+   to include the CHOWN_HOME setting.
+
    type static tells jh not to use a storage class and instead use a PVC defined below.
 
    pvcName matches the claim name we specified before
-
    subPath tells where on the supplied storage the mount point should be. In this case it will
    be "$EFS_ROOT/home/{username}"
-
    It turns out there is a bug in jupyterhub where the default subPath does not work, and setting the
    subPath to "{username}" breaks in the same way.
+
+   The extraEnv section set's environmental variables before trying to start jupyterhub inside of the user's
+   container. CHOWN_HOME is needed to force the ownership change of the home directory.
 
    Kubernetes is still conflicted if a uid and a gid should be passed in to change how the directory is mounted
    inside of the container. What we do for now is auto-chown the directory before jupyterhub has been started.
