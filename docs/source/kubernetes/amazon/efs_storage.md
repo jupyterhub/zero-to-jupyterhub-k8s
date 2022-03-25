@@ -118,10 +118,10 @@ Procedure:
    type static tells jh not to use a storage class and instead use a PVC defined below.
 
    pvcName matches the claim name we specified before
-   
+
    subPath tells where on the supplied storage the mount point should be. In this case it will
    be "$EFS_ROOT/home/{username}"
-   
+
    It turns out there is a bug in jupyterhub where the default subPath does not work, and setting the
    subPath to "{username}" breaks in the same way.
 
