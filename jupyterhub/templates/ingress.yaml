@@ -23,7 +23,7 @@ spec:
               service:
                 name: {{ include "jupyterhub.proxy-public.fullname" $ }}
                 port:
-                  {{- if ne .Values.proxy.service.disableHttpPort true }}
+                  {{- if ne $.Values.proxy.service.disableHttpPort true }}
                   name: http
                   {{ else }}
                   name: https
