@@ -146,7 +146,7 @@ jobs:
         run: helm package jupyterhub
 
       # ref: https://github.com/actions/upload-artifact
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: steps.publishing.outputs.publishing == ''
         with:
           name: jupyterhub-${{ github.sha }}
