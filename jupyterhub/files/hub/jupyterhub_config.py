@@ -166,6 +166,7 @@ for trait, cfg_key in (
     ("environment", "extraEnv"),
     ("profile_list", None),
     ("extra_pod_config", None),
+    ("allow_privilege_escalation", None),
 ):
     if cfg_key is None:
         cfg_key = camelCaseify(trait)
