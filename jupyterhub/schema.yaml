@@ -1628,6 +1628,22 @@ properties:
               See the [Kubernetes docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
               to learn more about labels.
           networkPolicy: *networkPolicy-spec
+          extraInitContainers:
+            type: array
+            description: |
+              list of extraInitContainers to be run with traefik pod, after the containers set in the chart. See [Kubernetes Docs](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/)
+
+              ```yaml
+              proxy:
+                traefik:
+                  extraInitContainers:
+                    - name: init-myservice
+                      image: busybox:1.28
+                      command: ['sh', '-c', 'command1']
+                    - name: init-mydb
+                      image: busybox:1.28
+                      command: ['sh', '-c', 'command2']
+              ```
           extraEnv:
             type: [object, array]
             additionalProperties: true
