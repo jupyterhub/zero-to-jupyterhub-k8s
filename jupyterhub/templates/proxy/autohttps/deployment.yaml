@@ -79,7 +79,7 @@ spec:
           securityContext:
             {{- . | toYaml | nindent 12 }}
           {{- end }}
-      {{- with .Values.proxy.traefik.initContainers }}
+      {{- with .Values.proxy.traefik.extraInitContainers }}
         {{- . | toYaml | nindent 8 }}
       {{- end }}
       containers:
