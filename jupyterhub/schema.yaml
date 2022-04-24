@@ -1446,7 +1446,9 @@ properties:
           type:
             enum: [ClusterIP, NodePort, LoadBalancer, ExternalName]
             description: |
-              Default `LoadBalancer`. See `hub.service.type` for supported values.
+              Default `LoadBalancer`.
+              See the [Kubernetes docs](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
+              to learn more about service types.
           labels:
             type: object
             additionalProperties: false
