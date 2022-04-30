@@ -23,6 +23,9 @@ on:
     tags:
       - "**"
 
+permissions:
+  contents: read
+
 jobs:
   # Builds and pushes docker images to DockerHub and package the Helm chart and
   # pushes it to jupyterhub/helm-chart@gh-pages where index.yaml represents the

@@ -21,6 +21,9 @@ on:
       - "pre-commit-ci-update-config"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   linkcheck:
     runs-on: ubuntu-20.04

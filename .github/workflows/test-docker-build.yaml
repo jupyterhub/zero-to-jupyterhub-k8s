@@ -22,6 +22,9 @@ on:
       - "pre-commit-ci-update-config"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   # This is a quick test to check the arm64 docker images based on:
   # - https://github.com/docker/build-push-action/blob/v2.3.0/docs/advanced/local-registry.md
