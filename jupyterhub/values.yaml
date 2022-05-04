@@ -248,6 +248,7 @@ proxy:
       maxAge: 15724800 # About 6 months
     resources: {}
     labels: {}
+    extraInitContainers: []
     extraEnv: {}
     extraVolumes: []
     extraVolumeMounts: []
