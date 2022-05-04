@@ -113,7 +113,7 @@ Procedure:
    ```
 
    The image setting overrides the default pinned jh base image since it has not yet been updated
-   to include the CHOWN_HOME setting. This will be fixed in Z2JH 0.7.
+   to include the CHOWN_HOME setting.
 
    type static tells jh not to use a storage class and instead use a PVC defined below.
 
