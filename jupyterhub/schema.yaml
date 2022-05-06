@@ -2248,16 +2248,22 @@ properties:
         type: object
         additionalProperties: false
         description: |
-          Pod Priority is used to allow real users evict placeholder pods that
-          in turn triggers a scale up by a cluster autoscaler. So, enabling this
-          option will only make sense if the following conditions are met:
+          Pod Priority is used to allow real users evict user placeholder pods
+          that in turn by entering a Pending state can trigger a scale up by a
+          cluster autoscaler.
 
-          1. Your Kubernetes cluster has at least version 1.11
-          2. A cluster autoscaler is installed
-          3. user-placeholer pods is configured to get a priority equal or
-             higher than the cluster autoscaler's priority cutoff
-          4. Normal user pods have a higher priority than the user-placeholder
-             pods
+          Having this option enabled only make sense if the following conditions
+          are met:
+
+          1. A cluster autoscaler is installed.
+          2. user-placeholer pods are configured to have a priority equal or
+             higher than the cluster autoscaler's "priority cutoff" so that the
+             cluster autoscaler scales up a node in advance for a pending user
+             placeholder pod.
+          3. Normal user pods have a higher priority than the user-placeholder
+             pods.
+          4. Image puller pods have a priority between normal user pods and
+             user-placeholder pods.
 
           Note that if the default priority cutoff if not configured on cluster
           autoscaler, it will currently default to 0, and that in the future
@@ -2273,6 +2279,7 @@ properties:
             enabled: true
             globalDefault: false
             defaultPriority: 0
+            imagePullerPriority: -5
             userPlaceholderPriority: -10
           ```
 
@@ -2283,6 +2290,7 @@ properties:
             enabled: true
             globalDefault: true
             defaultPriority: 10
+            imagePullerPriority: 5
             userPlaceholderPriority: 0
           ```
         properties:
@@ -2301,6 +2309,10 @@ properties:
             type: integer
             description: |
               The actual value for the default pod priority.
+          imagePullerPriority:
+            type: integer
+            description: |
+              The actual value for the [hook|continuous]-image-puller pods' priority.
           userPlaceholderPriority:
             type: integer
             description: |

@@ -210,6 +210,15 @@
     {{- end }}
 {{- end }}
 
+{{- /* image-puller Priority */}}
+{{- define "jupyterhub.image-puller-priority.fullname" -}}
+    {{- if (include "jupyterhub.fullname" .) }}
+        {{- include "jupyterhub.fullname.dash" . }}image-puller
+    {{- else }}
+        {{- .Release.Name }}-image-puller-priority
+    {{- end }}
+{{- end }}
+
 {{- /* user-scheduler's registered name */}}
 {{- define "jupyterhub.user-scheduler.fullname" -}}
     {{- if (include "jupyterhub.fullname" .) }}
@@ -244,6 +253,7 @@ autohttps: {{ include "jupyterhub.autohttps.fullname" . | quote }}
 user-scheduler-deploy: {{ include "jupyterhub.user-scheduler-deploy.fullname" . | quote }}
 user-scheduler-lock: {{ include "jupyterhub.user-scheduler-lock.fullname" . | quote }}
 user-placeholder: {{ include "jupyterhub.user-placeholder.fullname" . | quote }}
+image-puller-priority: {{ include "jupyterhub.image-puller-priority.fullname" . | quote }}
 hook-image-awaiter: {{ include "jupyterhub.hook-image-awaiter.fullname" . | quote }}
 hook-image-puller: {{ include "jupyterhub.hook-image-puller.fullname" . | quote }}
 continuous-image-puller: {{ include "jupyterhub.continuous-image-puller.fullname" . | quote }}

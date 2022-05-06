@@ -44,11 +44,12 @@ spec:
       {{- end }}
     spec:
       {{- /*
-        continuous-image-puller pods are made evictable to save on the k8s pods
-        per node limit all k8s clusters have.
+        image-puller pods are made evictable to save on the k8s pods
+        per node limit all k8s clusters have and have a higher priority
+        than user-placeholder pods that could block an entire node.
       */}}
-      {{- if and (not .hook) .Values.scheduling.podPriority.enabled }}
-      priorityClassName: {{ include "jupyterhub.user-placeholder-priority.fullname" . }}
+      {{- if .Values.scheduling.podPriority.enabled }}
+      priorityClassName: {{ include "jupyterhub.image-puller-priority.fullname" . }}
       {{- end }}
       {{- with .Values.singleuser.nodeSelector }}
       nodeSelector:
