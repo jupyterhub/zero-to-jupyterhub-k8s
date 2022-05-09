@@ -2,7 +2,7 @@
 apiVersion: v2
 name: jupyterhub
 version: 0.0.1-set.by.chartpress
-appVersion: "2.2.0"
+appVersion: "2.3.0"
 description: Multi-user Jupyter installation
 keywords: [jupyter, jupyterhub, z2jh]
 home: https://z2jh.jupyter.org
