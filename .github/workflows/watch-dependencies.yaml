@@ -7,6 +7,10 @@
 # - Watch the proxy.traefik.image.tag field of values.yaml to match the latest
 #   traefik image tag.
 #
+# - Watch the jupyterhub pinning in images/hub/requirements.in to match the
+#   latest jupyterhub version available on PyPI, and if doing this, also
+#   refreeze images/hub/requirements.txt.
+#
 name: Watch dependencies
 
 on:
@@ -64,13 +68,16 @@ jobs:
           echo "::set-output name=tag::$latest_tag"
 
       - name: Update values.yaml pinned tag
+        if: steps.local.outputs.tag != steps.latest.outputs.tag
         run: sed --in-place 's/${{ steps.local.outputs.tag }}/${{ steps.latest.outputs.tag }}/g' jupyterhub/values.yaml
 
       - name: git diff
+        if: steps.local.outputs.tag != steps.latest.outputs.tag
         run: git --no-pager diff --color=always
 
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create a PR
+        if: steps.local.outputs.tag != steps.latest.outputs.tag
         uses: peter-evans/create-pull-request@v4.0.3
         with:
           token: "${{ secrets.github_token }}"
@@ -101,6 +108,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
 
       - name: Get images/hub/requirements.in pinned version of jupyterhub
         id: local
@@ -118,17 +126,28 @@ jobs:
           echo "::set-output name=version::$latest_version"
 
       - name: Update pinned version of jupyterhub
+        if: steps.local.outputs.version != steps.latest.outputs.version
         run: |
           sed --in-place 's/jupyterhub==${{ steps.local.outputs.version }}/jupyterhub==${{ steps.latest.outputs.version }}/g' images/hub/requirements.in
-          sed --in-place 's/jupyterhub==${{ steps.local.outputs.version }}/jupyterhub==${{ steps.latest.outputs.version }}/g' images/hub/requirements.txt
           sed --in-place 's/jupyterhub==${{ steps.local.outputs.version }}/jupyterhub==${{ steps.latest.outputs.version }}/g' images/singleuser-sample/requirements.txt
           sed --in-place 's/appVersion: "${{ steps.local.outputs.version }}"/appVersion: "${{ steps.latest.outputs.version }}"/g' jupyterhub/Chart.yaml
 
+      - name: Install dependencies for images/hub/dependencies script
+        run: pip install click ruamel.yaml
+
+      - name: Refreeze images/hub/requirements.txt based on images/hub/requirements.in
+        if: steps.local.outputs.version != steps.latest.outputs.version
+        run: |
+          cd images/hub
+          ./dependencies freeze --upgrade
+
       - name: git diff
+        if: steps.local.outputs.version != steps.latest.outputs.version
         run: git --no-pager diff --color=always
 
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create a PR
+        if: steps.local.outputs.version != steps.latest.outputs.version
         uses: peter-evans/create-pull-request@v4.0.3
         with:
           token: "${{ secrets.github_token }}"
