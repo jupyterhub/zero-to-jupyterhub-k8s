@@ -87,3 +87,61 @@ jobs:
             opened with a `secrets.github_token` and will therefore not trigger
             other workflows to run. This can be resolved if we create a bot
             account and use its personal access token instead.
+
+  update-jupyterhub-dependencies:
+    # Don't run this job on forks
+    if: github.repository == 'jupyterhub/zero-to-jupyterhub-k8s'
+    runs-on: ubuntu-20.04
+
+    # Write permissions granted for the peter-evans/create-pull-request action
+    # to push to a branch and create/update a PR
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get images/hub/requirements.in pinned version of jupyterhub
+        id: local
+        run: |
+          local_version=$(cat images/hub/requirements.in | grep 'jupyterhub==' | sed 's/jupyterhub==//')
+          echo "::set-output name=version::$local_version"
+
+      - name: Get latest version of jupyterhub
+        id: latest
+        run: |
+          latest_version=$(
+              curl -s https://pypi.org/pypi/jupyterhub/json \
+            | jq -r .info.version
+          )
+          echo "::set-output name=version::$latest_version"
+
+      - name: Update pinned version of jupyterhub
+        run: |
+          sed --in-place 's/jupyterhub==${{ steps.local.outputs.version }}/jupyterhub==${{ steps.latest.outputs.version }}/g' images/hub/requirements.in
+          sed --in-place 's/jupyterhub==${{ steps.local.outputs.version }}/jupyterhub==${{ steps.latest.outputs.version }}/g' images/hub/requirements.txt
+          sed --in-place 's/jupyterhub==${{ steps.local.outputs.version }}/jupyterhub==${{ steps.latest.outputs.version }}/g' images/singleuser-sample/requirements.txt
+          sed --in-place 's/appVersion: "${{ steps.local.outputs.version }}"/appVersion: "${{ steps.latest.outputs.version }}"/g' jupyterhub/Chart.yaml
+
+      - name: git diff
+        run: git --no-pager diff --color=always
+
+      # ref: https://github.com/peter-evans/create-pull-request
+      - name: Create a PR
+        uses: peter-evans/create-pull-request@v4.0.3
+        with:
+          token: "${{ secrets.github_token }}"
+          branch: update-jupyterhub
+          labels: maintenance,dependencies
+          commit-message: Update jupyterhub version to ${{ steps.latest.outputs.version }}
+          title: Update jupyterhub version to ${{ steps.latest.outputs.version }}
+          body: >-
+            A new jupyterhub image version has been detected, version
+            `${{ steps.latest.outputs.version }}`.
+
+
+            Please close and reopen this PR to run tests for now. This PR was
+            opened with a `secrets.github_token` and will therefore not trigger
+            other workflows to run. This can be resolved if we create a bot
+            account and use its personal access token instead.
