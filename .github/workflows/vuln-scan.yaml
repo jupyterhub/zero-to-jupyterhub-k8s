@@ -1,5 +1,5 @@
 # This is a GitHub workflow defining a set of jobs with a set of steps.
-# ref: https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions
+# ref: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
 #
 # This workflow use aquasecurity/trivy to scan the images we have published for
 # known vulnerabilities. If there are such that can be patched, we let this
