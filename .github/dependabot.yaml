@@ -9,7 +9,6 @@
 # - We explicitly set the "maintenance" label to help our changelog generator
 #   tool github-activity to categorize PRs.
 #
-
 version: 2
 updates:
   # Maintain Python dependencies for the jupyterhub/k8s-hub image
@@ -17,7 +16,7 @@ updates:
     directory: "/images/hub"
     schedule:
       interval: daily
-      time: "00:00"
+      time: "05:00"
       timezone: "Etc/UTC"
     versioning-strategy: lockfile-only
     labels:
@@ -31,12 +30,18 @@ updates:
       interval: daily
       time: "05:00"
       timezone: "Etc/UTC"
+    # ignore is applied as we need to bump this version in multiple locations,
+    # and not just in the singleuser-sample image, for which we have a dedicated
+    # job in the watch-dependencies.yaml workflow file.
+    #
+    ignore:
+      - jupyterhub
     labels:
       - maintenance
       - dependencies
 
   # Maintain dependencies in our GitHub Workflows
-  - package-ecosystem: "github-actions"
+  - package-ecosystem: github-actions
     directory: "/" # This should be / rather than .github/workflows
     schedule:
       interval: daily
