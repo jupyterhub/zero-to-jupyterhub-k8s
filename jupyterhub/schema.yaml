@@ -2020,11 +2020,7 @@ properties:
             description: *kubespawner-native-config-description
       fsGid:
         type: [integer, "null"]
-        description: |
-          The GID of the group that should own any volumes that are created and mounted.
-          You’ll have to set this if you are using auto-provisioned volumes with most cloud providers.
-          See `fs_gid` in the [KubeSpawner
-          documentation](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html).
+        description: *kubespawner-native-config-description
       lifecycleHooks:
         type: object
         additionalProperties: false
