@@ -7,7 +7,7 @@
 # - Watch the proxy.traefik.image.tag field of values.yaml to match the latest
 #   traefik image tag.
 #
-name: Watch image dependencies
+name: Watch dependencies
 
 on:
   schedule:
