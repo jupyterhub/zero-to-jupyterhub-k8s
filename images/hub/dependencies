@@ -32,7 +32,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 chartpress_yaml = os.path.join(here, os.pardir, os.pardir, "chartpress.yaml")
 values_yaml = os.path.join(here, os.pardir, os.pardir, "jupyterhub", "values.yaml")
 dependencies_image = "hub-dependencies"
-pip_tools_version = "5.*"
+pip_tools_version = "6.*"
 
 
 @lru_cache()
@@ -117,13 +117,10 @@ def freeze(build, upgrade, upgrade_package):
             "docker",
             "run",
             "--rm",
-            "-it",
-            "-e",
-            "CUSTOM_COMPILE_COMMAND=./dependencies freeze --upgrade",
-            "--volume",
-            f"{here}:/io",
-            "--workdir",
-            "/io",
+            "--env=CUSTOM_COMPILE_COMMAND=./dependencies freeze --upgrade",
+            "--user=root",
+            f"--volume={here}:/io",
+            "--workdir=/io",
             dependencies_image,
             "pip-compile",
         ]
@@ -153,7 +150,6 @@ def outdated(build):
             "docker",
             "run",
             "--rm",
-            "-it",
             dependencies_image,
             "pip",
             "list",

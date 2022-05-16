@@ -14,6 +14,7 @@
 name: Watch dependencies
 
 on:
+  push:
   schedule:
     # Run at 05:00 every day, ref: https://crontab.guru/#0_5_*_*_*
     - cron: "0 5 * * *"
@@ -137,9 +138,7 @@ jobs:
 
       - name: Refreeze images/hub/requirements.txt based on images/hub/requirements.in
         if: steps.local.outputs.version != steps.latest.outputs.version
-        run: |
-          cd images/hub
-          ./dependencies freeze --upgrade
+        run: images/hub/dependencies freeze --upgrade
 
       - name: git diff
         if: steps.local.outputs.version != steps.latest.outputs.version
