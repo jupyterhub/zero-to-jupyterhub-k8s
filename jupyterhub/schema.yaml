@@ -1788,10 +1788,9 @@ properties:
       networkPolicy: *networkPolicy-spec
       podNameTemplate:
         type: [string, "null"]
-        description: &kubespawner-native-config-description |
-          KubeSpawner native configuration, see the [KubeSpawner
-          documentation](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html)
-          for more information.
+        description: |
+          Passthrough configuration for
+          [KubeSpawner.pod_name_template](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.pod_name_template).
       cpu:
         type: object
         additionalProperties: false
@@ -1979,31 +1978,45 @@ properties:
 
       cmd:
         type: [array, string, "null"]
-        description: *kubespawner-native-config-description
+        description: |
+          Passthrough configuration for
+          [KubeSpawner.cmd](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.cmd).
       defaultUrl:
         type: [string, "null"]
-        description: *kubespawner-native-config-description
+        description: |
+          Passthrough configuration for
+          [KubeSpawner.default_url](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.default_url).
       # FIXME: name mismatch, named events_enabled in kubespawner
       events:
         type: [boolean, "null"]
-        description: *kubespawner-native-config-description
+        description: |
+          Passthrough configuration for
+          [KubeSpawner.events_enabled](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.events_enabled).
       extraAnnotations:
         type: object
         additionalProperties: false
         patternProperties: *labels-and-annotations-patternProperties
-        description: *kubespawner-native-config-description
+        description: |
+          Passthrough configuration for
+          [KubeSpawner.extra_annotations](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.extra_annotations).
       extraContainers:
         type: array
-        description: *kubespawner-native-config-description
+        description: |
+          Passthrough configuration for
+          [KubeSpawner.extra_containers](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.extra_containers).
       extraLabels:
         type: object
         additionalProperties: false
         patternProperties: *labels-and-annotations-patternProperties
-        description: *kubespawner-native-config-description
+        description: |
+          Passthrough configuration for
+          [KubeSpawner.extra_labels](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.extra_labels).
       extraPodConfig:
         type: object
         additionalProperties: true
-        description: *kubespawner-native-config-description
+        description: |
+          Passthrough configuration for
+          [KubeSpawner.extra_pod_config](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.extra_pod_config).
       extraResource:
         type: object
         additionalProperties: false
@@ -2012,19 +2025,27 @@ properties:
           guarantees:
             type: object
             additionalProperties: true
-            description: *kubespawner-native-config-description
+            description: |
+              Passthrough configuration for
+              [KubeSpawner.extra_resource_guarantees](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.extra_resource_guarantees).
           # FIXME: name mismatch, named extra_resource_limits in kubespawner
           limits:
             type: object
             additionalProperties: true
-            description: *kubespawner-native-config-description
+            description: |
+              Passthrough configuration for
+              [KubeSpawner.extra_resource_limits](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.extra_resource_limits).
       fsGid:
         type: [integer, "null"]
-        description: *kubespawner-native-config-description
+        description: |
+          Passthrough configuration for
+          [KubeSpawner.fs_gid](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.fs_gid).
       lifecycleHooks:
         type: object
         additionalProperties: false
-        description: *kubespawner-native-config-description
+        description: |
+          Passthrough configuration for
+          [KubeSpawner.lifecycle_hooks](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.lifecycle_hooks).
         properties:
           postStart:
             type: object
@@ -2049,10 +2070,14 @@ properties:
       # FIXME: name mismatch, named service_account in kubespawner
       serviceAccountName:
         type: [string, "null"]
-        description: *kubespawner-native-config-description
+        description: |
+          Passthrough configuration for
+          [KubeSpawner.service_account](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.service_account).
       startTimeout:
         type: [integer, "null"]
-        description: *kubespawner-native-config-description
+        description: |
+          Passthrough configuration for
+          [KubeSpawner.start_timeout](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.start_timeout).
       storage:
         type: object
         additionalProperties: false
