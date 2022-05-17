@@ -40,10 +40,22 @@ jobs:
             registry: registry.hub.docker.com
             repository: jupyterhub/configurable-http-proxy
             values_path: proxy.chp.image.tag
+            version_startswith: ""
           - name: traefik
             registry: registry.hub.docker.com
             repository: library/traefik
             values_path: proxy.traefik.image.tag
+            version_startswith: ""
+          - name: kube-scheduler
+            registry: k8s.gcr.io
+            repository: kube-scheduler
+            values_path: scheduling.userScheduler.image.tag
+            version_startswith: "v1.23"
+          - name: pause
+            registry: k8s.gcr.io
+            repository: pause
+            values_path: scheduling.userPlaceholder.image.tag
+            version_startswith: ""
 
     steps:
       - uses: actions/checkout@v3
@@ -57,20 +69,22 @@ jobs:
       - name: Get latest tag of ${{ matrix.registry }}/${{ matrix.repository }}
         id: latest
         # The skopeo image helps us list tags consistently from different docker
-        # registries. We use jq to filter out tags of the x.y.z format with the
-        # optional v prefix, and then sort based on the numerical x, y, and z
-        # values. Finally, we pick the last value in the list.
+        # registries. We use jq to filter out tags of the x.y or x.y.z format
+        # with the optional v prefix or version_startswith filter, and then sort
+        # based on the numerical x, y, and z values. Finally, we pick the last
+        # value in the list.
         #
         run: |
           latest_tag=$(
               docker run --rm quay.io/skopeo/stable list-tags docker://${{ matrix.registry }}/${{ matrix.repository }} \
-            | jq -r '[.Tags[] | select(. | test("^v?\\d+\\.\\d+\\.\\d+$"))] | sort_by(split(".") | map(tonumber? // (.[1:] | tonumber))) | last'
+            | jq -r '[.Tags[] | select(. | match("^v?\\d+\\.\\d+(\\.\\d+)?$") | .string | startswith("${{ matrix.version_startswith }}"))] | sort_by(split(".") | map(tonumber? // (.[1:] | tonumber))) | last'
           )
           echo "::set-output name=tag::$latest_tag"
 
       - name: Update values.yaml pinned tag
         if: steps.local.outputs.tag != steps.latest.outputs.tag
-        run: sed --in-place 's/${{ steps.local.outputs.tag }}/${{ steps.latest.outputs.tag }}/g' jupyterhub/values.yaml
+        run: |
+          sed --in-place 's/tag: "${{ steps.local.outputs.tag }}"/tag: "${{ steps.latest.outputs.tag }}"/g' jupyterhub/values.yaml
 
       - name: git diff
         if: steps.local.outputs.tag != steps.latest.outputs.tag
@@ -84,8 +98,8 @@ jobs:
           token: "${{ secrets.github_token }}"
           branch: update-image-${{ matrix.name }}
           labels: maintenance,dependencies
-          commit-message: Update ${{ matrix.repository }} version to ${{ steps.latest.outputs.tag }}
-          title: Update ${{ matrix.repository }} version to ${{ steps.latest.outputs.tag }}
+          commit-message: Update ${{ matrix.repository }} version from ${{ steps.local.outputs.tag }} to ${{ steps.latest.outputs.tag }}
+          title: Update ${{ matrix.repository }} version from ${{ steps.local.outputs.tag }} to ${{ steps.latest.outputs.tag }}
           body: >-
             A new ${{ matrix.repository }} image version has been detected, version
             `${{ steps.latest.outputs.tag }}`.
@@ -152,10 +166,10 @@ jobs:
           token: "${{ secrets.github_token }}"
           branch: update-jupyterhub
           labels: maintenance,dependencies
-          commit-message: Update jupyterhub version to ${{ steps.latest.outputs.version }}
-          title: Update jupyterhub version to ${{ steps.latest.outputs.version }}
+          commit-message: Update jupyterhub from ${{ steps.local.outputs.version }} to ${{ steps.latest.outputs.version }}
+          title: Update jupyterhub from ${{ steps.local.outputs.version }} to ${{ steps.latest.outputs.version }}
           body: >-
-            A new jupyterhub image version has been detected, version
+            A new jupyterhub version has been detected, version
             `${{ steps.latest.outputs.version }}`.
 
 

@@ -194,7 +194,10 @@ proxy:
       allowPrivilegeEscalation: false
     image:
       name: jupyterhub/configurable-http-proxy
-      tag: 4.5.1 # https://github.com/jupyterhub/configurable-http-proxy/releases
+      # tag is automatically bumped to new patch versions by the
+      # watch-dependencies.yaml workflow.
+      #
+      tag: "4.5.1" # https://github.com/jupyterhub/configurable-http-proxy/releases
       pullPolicy:
       pullSecrets: []
     extraCommandLineFlags: []
@@ -239,7 +242,10 @@ proxy:
       allowPrivilegeEscalation: false
     image:
       name: traefik
-      tag: v2.6.6 # ref: https://hub.docker.com/_/traefik?tab=tags
+      # tag is automatically bumped to new patch versions by the
+      # watch-dependencies.yaml workflow.
+      #
+      tag: "v2.6.6" # ref: https://hub.docker.com/_/traefik?tab=tags
       pullPolicy:
       pullSecrets: []
     hsts:
@@ -490,7 +496,12 @@ scheduling:
       #              is a good sign kube-scheduler is ready to schedule pods.
       #
       name: k8s.gcr.io/kube-scheduler
-      tag: v1.23.4 # ref: https://github.com/kubernetes/website/blob/main/content/en/releases/patch-releases.md
+      # tag is automatically bumped to new patch versions by the
+      # watch-dependencies.yaml workflow. The minor version is pinned in the
+      # workflow, and should be updated there if a minor version bump is done
+      # here.
+      #
+      tag: "v1.23.4" # ref: https://github.com/kubernetes/website/blob/main/content/en/releases/patch-releases.md
       pullPolicy:
       pullSecrets: []
     nodeSelector: {}
@@ -513,10 +524,11 @@ scheduling:
     enabled: true
     image:
       name: k8s.gcr.io/pause
-      # tag's can be updated by inspecting the output of the command:
-      # gcloud container images list-tags k8s.gcr.io/pause --sort-by=~tags
+      # tag is automatically bumped to new patch versions by the
+      # watch-dependencies.yaml workflow.
       #
       # If you update this, also update prePuller.pause.image.tag
+      #
       tag: "3.6"
       pullPolicy:
       pullSecrets: []
@@ -591,10 +603,11 @@ prePuller:
       allowPrivilegeEscalation: false
     image:
       name: k8s.gcr.io/pause
-      # tag's can be updated by inspecting the output of the command:
-      # gcloud container images list-tags k8s.gcr.io/pause --sort-by=~tags
+      # tag is automatically bumped to new patch versions by the
+      # watch-dependencies.yaml workflow.
       #
       # If you update this, also update scheduling.userPlaceholder.image.tag
+      #
       tag: "3.6"
       pullPolicy:
       pullSecrets: []
