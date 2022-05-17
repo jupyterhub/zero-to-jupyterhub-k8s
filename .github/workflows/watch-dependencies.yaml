@@ -12,6 +12,8 @@ name: Watch dependencies
 
 on:
   push:
+    paths:
+      - ".github/workflows/watch-dependencies.yaml"
   schedule:
     # Run at 05:00 every day, ref: https://crontab.guru/#0_5_*_*_*
     - cron: "0 5 * * *"
