@@ -1,11 +1,8 @@
 # This is a GitHub workflow defining a set of jobs with a set of steps.
 # ref: https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions
 #
-# - Watch the proxy.chp.image.tag field of values.yaml to match the latest
-#   jupyterhub/configurable-http-proxy image tag.
-#
-# - Watch the proxy.traefik.image.tag field of values.yaml to match the latest
-#   traefik image tag.
+# - Watch multiple images tags referenced in values.yaml to match the latest
+#   image tag.
 #
 # - Watch the jupyterhub pinning in images/hub/requirements.in to match the
 #   latest jupyterhub version available on PyPI, and if doing this, also
