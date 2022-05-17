@@ -98,8 +98,8 @@ jobs:
           token: "${{ secrets.github_token }}"
           branch: update-image-${{ matrix.name }}
           labels: maintenance,dependencies
-          commit-message: Update ${{ matrix.repository }} version to ${{ steps.latest.outputs.tag }}
-          title: Update ${{ matrix.repository }} version to ${{ steps.latest.outputs.tag }}
+          commit-message: Update ${{ matrix.repository }} version from ${{ steps.local.outputs.tag }} to ${{ steps.latest.outputs.tag }}
+          title: Update ${{ matrix.repository }} version from ${{ steps.local.outputs.tag }} to ${{ steps.latest.outputs.tag }}
           body: >-
             A new ${{ matrix.repository }} image version has been detected, version
             `${{ steps.latest.outputs.tag }}`.
@@ -166,10 +166,10 @@ jobs:
           token: "${{ secrets.github_token }}"
           branch: update-jupyterhub
           labels: maintenance,dependencies
-          commit-message: Update jupyterhub version to ${{ steps.latest.outputs.version }}
-          title: Update jupyterhub version to ${{ steps.latest.outputs.version }}
+          commit-message: Update jupyterhub from ${{ steps.local.outputs.version }} to ${{ steps.latest.outputs.version }}
+          title: Update jupyterhub from ${{ steps.local.outputs.version }} to ${{ steps.latest.outputs.version }}
           body: >-
-            A new jupyterhub image version has been detected, version
+            A new jupyterhub version has been detected, version
             `${{ steps.latest.outputs.version }}`.
 
 
