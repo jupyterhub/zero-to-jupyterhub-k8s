@@ -40,21 +40,39 @@ jobs:
             repository: jupyterhub/configurable-http-proxy
             values_path: proxy.chp.image.tag
             version_startswith: ""
+            version_patch_regexp_group_suffix: ""
+
+          # traefik made us need to introduce version_patch_regexp_group_suffix
+          # to control if we accept omitting the patch version. The traefik
+          # image provides tags like 2.7 even though 2.7.0 hasn't been released,
+          # which makes bumping to it something we don't want to do. We still
+          # need to accept major.minor formatted tags though as the pause image
+          # has them.
+          #
           - name: traefik
             registry: registry.hub.docker.com
             repository: library/traefik
             values_path: proxy.traefik.image.tag
             version_startswith: ""
+            version_patch_regexp_group_suffix: ""
+
+          # kube-scheduler should be pinned to its minor version as bumping it
+          # will require manual interventions sometimes, see the notes in
+          # values.yaml about bumping its version.
+          #
           - name: kube-scheduler
             registry: k8s.gcr.io
             repository: kube-scheduler
             values_path: scheduling.userScheduler.image.tag
             version_startswith: "v1.23"
+            version_patch_regexp_group_suffix: ""
+
           - name: pause
             registry: k8s.gcr.io
             repository: pause
             values_path: scheduling.userPlaceholder.image.tag
             version_startswith: ""
+            version_patch_regexp_group_suffix: "?"
 
     steps:
       - uses: actions/checkout@v3
@@ -76,7 +94,7 @@ jobs:
         run: |
           latest_tag=$(
               docker run --rm quay.io/skopeo/stable list-tags docker://${{ matrix.registry }}/${{ matrix.repository }} \
-            | jq -r '[.Tags[] | select(. | match("^v?\\d+\\.\\d+(\\.\\d+)?$") | .string | startswith("${{ matrix.version_startswith }}"))] | sort_by(split(".") | map(tonumber? // (.[1:] | tonumber))) | last'
+            | jq -r '[.Tags[] | select(. | match("^v?\\d+\\.\\d+(\\.\\d+)${{ matrix.version_patch_regexp_group_suffix }}$") | .string | startswith("${{ matrix.version_startswith }}"))] | sort_by(split(".") | map(tonumber? // (.[1:] | tonumber))) | last'
           )
           echo "::set-output name=tag::$latest_tag"
 
