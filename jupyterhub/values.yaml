@@ -529,7 +529,7 @@ scheduling:
       #
       # If you update this, also update prePuller.pause.image.tag
       #
-      tag: "3.6"
+      tag: "3.7"
       pullPolicy:
       pullSecrets: []
     replicas: 0
@@ -608,7 +608,7 @@ prePuller:
       #
       # If you update this, also update scheduling.userPlaceholder.image.tag
       #
-      tag: "3.6"
+      tag: "3.7"
       pullPolicy:
       pullSecrets: []
 
