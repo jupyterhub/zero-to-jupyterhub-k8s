@@ -142,6 +142,7 @@ for trait, cfg_key in (
     ("events_enabled", "events"),
     ("extra_labels", None),
     ("extra_annotations", None),
+    # ("allow_privilege_escalation", None), # Managed manually below
     ("uid", None),
     ("fs_gid", None),
     ("service_account", "serviceAccountName"),
@@ -166,7 +167,6 @@ for trait, cfg_key in (
     ("environment", "extraEnv"),
     ("profile_list", None),
     ("extra_pod_config", None),
-    ("allow_privilege_escalation", None),
 ):
     if cfg_key is None:
         cfg_key = camelCaseify(trait)
@@ -179,6 +179,15 @@ if image:
         image = f"{image}:{tag}"
 
     c.KubeSpawner.image = image
+
+# allow_privilege_escalation defaults to False in KubeSpawner 2+. Since its a
+# property where None, False, and True all are valid values that users of the
+# Helm chart may want to set, we can't use the set_config_if_not_none helper
+# function as someone may want to override the default False value to None.
+#
+c.KubeSpawner.allow_privilege_escalation = get_config(
+    "singleuser.allowPrivilegeEscalation"
+)
 
 # Combine imagePullSecret.create (single), imagePullSecrets (list), and
 # singleuser.image.pullSecrets (list).
