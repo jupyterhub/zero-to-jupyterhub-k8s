@@ -35,7 +35,7 @@ updates:
     # job in the watch-dependencies.yaml workflow file.
     #
     ignore:
-      - jupyterhub
+      - dependency-name: jupyterhub
     labels:
       - maintenance
       - dependencies
