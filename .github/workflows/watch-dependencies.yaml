@@ -107,6 +107,8 @@ jobs:
         uses: peter-evans/create-pull-request@v4.0.3
         with:
           token: "${{ secrets.jupyterhub_bot_pat }}"
+          author: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
+          committer: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
           branch: update-image-${{ matrix.name }}
           labels: maintenance,dependencies
           commit-message: Update ${{ matrix.repository }} version from ${{ steps.local.outputs.tag }} to ${{ steps.latest.outputs.tag }}
@@ -163,6 +165,8 @@ jobs:
         uses: peter-evans/create-pull-request@v4.0.3
         with:
           token: "${{ secrets.jupyterhub_bot_pat }}"
+          author: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
+          committer: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
           branch: update-jupyterhub
           labels: maintenance,dependencies
           commit-message: Update jupyterhub from ${{ steps.local.outputs.version }} to ${{ steps.latest.outputs.version }}
