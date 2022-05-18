@@ -397,6 +397,7 @@ singleuser:
     - name: mock-extra-container-name
       image: mock-extra-container-image
       imagePullPolicy: IfNotPresent
+  allowPrivilegeEscalation: false
   uid: 1000
   fsGid: 100
   serviceAccountName:

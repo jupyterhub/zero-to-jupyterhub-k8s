@@ -2185,9 +2185,17 @@ properties:
               Decide if you want storage to be provisioned dynamically
               (dynamic), or if you want to attach existing storage (static), or
               don't want any storage to be attached (none).
+      allowPrivilegeEscalation:
+        type: [boolean, "null"]
+        description: |
+          Passthrough configuration for
+          [KubeSpawner.allow_privilege_escalation](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.allow_privilege_escalation).
       uid:
         type: [integer, "null"]
         description: |
+          Passthrough configuration for
+          [KubeSpawner.uid](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.uid).
+
           This dictates as what user the main container will start up as.
 
           As an example of when this is needed, consider if you want to enable
