@@ -501,10 +501,11 @@ hooks in `kubespawner_override`, the configuration is for `lifecycle_hooks` (sna
 how it is used directly under the `singleuser` configuration section.
 [A further explanation for this can be found in this github issue.](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1242#issuecomment-484895216)
 
-```{note}
-It is also possible to configure the profile choices presented to the user depending on the user. For now, this is documented in [this discourse post](https://discourse.jupyter.org/t/tailoring-spawn-options-and-server-configuration-to-certain-users/8449).
-```
+### User-dependent profile options
 
+It is also possible to configure the profile choices presented to the user depending on the user.
+You can do this by defining a custom **pre-spawn hook** that populates the profile list based on user identity.
+See [this discourse post](https://discourse.jupyter.org/t/tailoring-spawn-options-and-server-configuration-to-certain-users/8449) for some examples of how this works.
 ```{note}
 You can also **control the HTML used for the profile selection page** by
 using the Kubespawner `profile_form_template` configuration. See the
