@@ -507,6 +507,7 @@ It is also possible to configure the profile choices presented to the user depen
 You can do this by defining a custom **pre-spawn hook** that populates the profile list based on user identity.
 See [this discourse post](https://discourse.jupyter.org/t/tailoring-spawn-options-and-server-configuration-to-certain-users/8449) for some examples of how this works.
 
+
 ```{note}
 You can also **control the HTML used for the profile selection page** by
 using the Kubespawner `profile_form_template` configuration. See the
