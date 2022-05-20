@@ -3,6 +3,10 @@
 fullnameOverride: ""
 nameOverride:
 
+# securityContext will allow you to turn off all the securityContext (useful for the deployment on openshift)
+securityContext:
+  enabled: true
+
 # custom can contain anything you want to pass to the hub pod, as all passed
 # Helm template values will be made available there.
 custom: {}

@@ -78,6 +78,17 @@ properties:
     description: |
       See the documentation under [`fullnameOverride`](schema_fullnameOverride).
 
+  securityContext:
+    type: object
+    required: [enabled]
+    description: |
+      This is the configuration to enable the securityContext for all the workloads. Useful for openshift.
+    properties:
+        enabled:
+          type: boolean
+          description: |
+            This is the configuration to enable the securityContext for all the workloads. Useful for openshift.
+
   imagePullSecret:
     type: object
     required: [create]

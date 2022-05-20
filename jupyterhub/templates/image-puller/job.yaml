@@ -62,9 +62,11 @@ spec:
             - -namespace={{ .Release.Namespace }}
             - -daemonset={{ include "jupyterhub.hook-image-puller.fullname" . }}
             - -pod-scheduling-wait-duration={{ .Values.prePuller.hook.podSchedulingWaitDuration }}
+          {{- if .Values.securityContext.enabled }}
           {{- with .Values.prePuller.hook.containerSecurityContext }}
           securityContext:
             {{- . | toYaml | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- with .Values.prePuller.hook.resources }}
           resources:

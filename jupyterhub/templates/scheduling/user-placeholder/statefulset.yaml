@@ -63,8 +63,10 @@ spec:
           {{- with .Values.scheduling.userPlaceholder.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
+          {{- if .Values.securityContext.enabled }}
           {{- with .Values.scheduling.userPlaceholder.containerSecurityContext }}
           securityContext:
             {{- . | toYaml | nindent 12 }}
+          {{- end }}
           {{- end }}
 {{- end }}

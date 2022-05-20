@@ -166,9 +166,11 @@ spec:
               scheme: HTTP
               {{- end }}
           {{- end }}
+          {{- if .Values.securityContext.enabled }}
           {{- with .Values.proxy.chp.containerSecurityContext }}
           securityContext:
             {{- . | toYaml | nindent 12 }}
+          {{- end }}
           {{- end }}
       {{- with .Values.proxy.chp.extraPodSpec }}
       {{- . | toYaml | nindent 6 }}

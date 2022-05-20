@@ -78,8 +78,10 @@ spec:
       {{- if .Values.rbac.enabled }}
       serviceAccountName: {{ include "jupyterhub.hub.fullname" . }}
       {{- end }}
+      {{- if .Values.securityContext.enabled }}
       securityContext:
         fsGroup: {{ .Values.hub.fsGid }}
+      {{- end }}
       {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.hub.image) }}
       imagePullSecrets: {{ . }}
       {{- end }}
