@@ -84,10 +84,10 @@ properties:
     description: |
       This is the configuration to enable the securityContext for all the workloads. Useful for openshift.
     properties:
-        enabled:
-          type: boolean
-          description: |
-            This is the configuration to enable the securityContext for all the workloads. Useful for openshift.
+      enabled:
+        type: boolean
+        description: |
+          This is the configuration to enable the securityContext for all the workloads. Useful for openshift.
 
   imagePullSecret:
     type: object
