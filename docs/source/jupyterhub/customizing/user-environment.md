@@ -432,10 +432,10 @@ of configuration options that override your JupyterHub's default configuration
 Docker images, to select the hardware on which they want their jobs to run,
 or to configure default interfaces such as Jupyter Lab vs. RStudio.
 
-Each configuration is a set of options for [Kubespawner](https://github.com/jupyterhub/kubespawner),
+Each configuration is a set of options for [KubeSpawner](https://github.com/jupyterhub/kubespawner),
 which defines how Kubernetes should launch a new user server pod. Any
 configuration options passed to the `profileList` configuration will
-overwrite the defaults in Kubespawner (or any configuration you've
+overwrite the defaults in KubeSpawner (or any configuration you've
 added elsewhere in your helm chart).
 
 Profiles are stored under `singleuser.profileList`, and are defined as
@@ -500,6 +500,12 @@ For instance, when overriding the lifecycle
 hooks in `kubespawner_override`, the configuration is for `lifecycle_hooks` (snake_case) rather than `lifecycleHooks` (camelCase) which is
 how it is used directly under the `singleuser` configuration section.
 [A further explanation for this can be found in this github issue.](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/1242#issuecomment-484895216)
+
+### User-dependent profile options
+
+It is also possible to configure the profile choices presented to the user depending on the user.
+You can do this by defining a custom **pre-spawn hook** that populates the profile list based on user identity.
+See [this discourse post](https://discourse.jupyter.org/t/tailoring-spawn-options-and-server-configuration-to-certain-users/8449) for some examples of how this works.
 
 ```{note}
 You can also **control the HTML used for the profile selection page** by
