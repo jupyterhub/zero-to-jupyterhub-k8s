@@ -102,6 +102,7 @@ extensions = [
     "sphinx_copybutton",
     "myst_parser",
     "sphinxext.rediraffe",
+    "sphinxext.opengraph",
 ]
 
 # List of patterns, relative to source directory, that match files and
