@@ -40,7 +40,6 @@ hub:
   baseUrl: /
   cookieSecret:
   initContainers: []
-  fsGid: 1000
   nodeSelector: {}
   tolerations: []
   concurrentSpawnLimit: 64
@@ -83,6 +82,8 @@ hub:
     pullPolicy:
     pullSecrets: []
   resources: {}
+  podSecurityContext:
+    fsGroup: 1000
   containerSecurityContext:
     runAsUser: 1000
     runAsGroup: 1000
