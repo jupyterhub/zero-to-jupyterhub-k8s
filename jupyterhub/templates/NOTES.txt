@@ -150,6 +150,11 @@
 */}}
 
 
+{{- if hasKey .Values.hub "fsGid" }}
+{{- $breaking = print $breaking "\n\nCHANGED: hub.fsGid must as of version 2.0.0 be configured via hub.podSecurityContext.fsGroup." }}
+{{- end }}
+
+
 {{- if $breaking }}
 {{- fail (print $breaking_title $breaking "\n\n") }}
 {{- end }}

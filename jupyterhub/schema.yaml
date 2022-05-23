@@ -873,14 +873,15 @@ properties:
       fsGid:
         type: [integer, "null"]
         minimum: 0
-        description:
-          The gid the hub process should be using when touching any volumes mounted.
-
-          Use this only if you are building your own image & know that a group with this gid
-          exists inside the hub container! Advanced feature, handle with care!
-
-          Defaults to 1000, which is the gid of the `jovyan` user that is present in the
-          default hub image.
+        # This schema entry is needed to help us print a more helpful error
+        # message in NOTES.txt if hub.fsGid is set.
+        #
+        description: |
+          ```{note}
+          Removed in version 2.0.0. Use
+          [`hub.podSecurityContext`](schema_hub.podSecurityContext) and specify
+          `fsGroup` instead.
+          ```
       service:
         type: object
         additionalProperties: false
@@ -1035,6 +1036,12 @@ properties:
       consecutiveFailureLimit:
         type: [integer, "null"]
         description: *jupyterhub-native-config-description
+      podSecurityContext: &podSecurityContext-spec
+        additionalProperties: true
+        description: |
+          A k8s native specification of the pod's security context, see [the
+          documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#podsecuritycontext-v1-core)
+          for details.
       containerSecurityContext: &containerSecurityContext-spec
         type: object
         additionalProperties: true
