@@ -113,7 +113,7 @@ multidict==6.0.2
     # via
     #   aiohttp
     #   yarl
-mwoauth==0.3.7
+mwoauth==0.3.8
     # via -r requirements.in
 nullauthenticator==1.0.0
     # via -r requirements.in
