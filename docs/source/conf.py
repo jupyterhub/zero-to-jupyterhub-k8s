@@ -102,6 +102,7 @@ extensions = [
     "sphinx_copybutton",
     "myst_parser",
     "sphinxext.rediraffe",
+    "sphinxext.opengraph",
 ]
 
 # List of patterns, relative to source directory, that match files and
@@ -172,6 +173,10 @@ rediraffe_redirects = {
     "advanced": "administrator/advanced",
 }
 
+# opengraph configuration
+# ogp_site_url/prefix is set automatically by RTD
+ogp_image = "_static/logo.png"
+ogp_use_first_image = True
 
 # -- Generate the Helm chart configuration reference from a schema file ------
 
