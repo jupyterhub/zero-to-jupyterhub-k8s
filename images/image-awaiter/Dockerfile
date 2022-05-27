@@ -1,5 +1,5 @@
 # compile the code to an executable using an intermediary image
-FROM golang:1.17
+FROM golang:1.18
 
 # VULN_SCAN_TIME=
 
