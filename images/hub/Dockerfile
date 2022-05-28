@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 # VULN_SCAN_TIME=2022-05-15_02:03:57
 
