@@ -1,5 +1,5 @@
 {{- if .Values.proxy.chp.pdb.enabled -}}
-{{- if .Capabilities.APIVersions.Has "policy/v1" -}}
+{{- if .Capabilities.APIVersions.Has "policy/v1/PodDisruptionBudget" -}}
 {{- /* k8s 1.21+ required */ -}}
 apiVersion: policy/v1
 {{- else }}
