@@ -6,8 +6,6 @@
 # - YAML anchors are not supported here or in GitHub Workflows.
 # - versioning-strategy: lockfile-only must not be used if you only have a plain
 #   requirements.txt like we do in images/singleuser-sample.
-# - We explicitly set the "maintenance" label to help our changelog generator
-#   tool github-activity to categorize PRs.
 #
 version: 2
 updates:
@@ -20,7 +18,6 @@ updates:
       timezone: "Etc/UTC"
     versioning-strategy: lockfile-only
     labels:
-      - maintenance
       - dependencies
 
   # Maintain Python dependencies for the jupyterhub/k8s-singleuser-sample image
@@ -37,16 +34,14 @@ updates:
     ignore:
       - dependency-name: jupyterhub
     labels:
-      - maintenance
       - dependencies
 
   # Maintain dependencies in our GitHub Workflows
   - package-ecosystem: github-actions
     directory: "/" # This should be / rather than .github/workflows
     schedule:
-      interval: daily
+      interval: weekly
       time: "05:00"
       timezone: "Etc/UTC"
     labels:
-      - maintenance
       - dependencies
