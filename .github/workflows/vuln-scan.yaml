@@ -13,8 +13,8 @@ on:
     paths:
       - ".github/workflows/vuln-scan.yaml"
   schedule:
-    # At 00:00 - https://crontab.guru
-    - cron: "0 0 * * *"
+    # At 05:00 on Monday - https://crontab.guru
+    - cron: "0 5 * * 1"
   workflow_dispatch:
 
 jobs:
