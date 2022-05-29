@@ -1,7 +1,6 @@
 # This file is automatically maintained by Dependabot, as configured in
-# .github/dependabot.yaml. It can also be updated by...
-#
-#    ./dependencies freeze --upgrade
+# .github/dependabot.yaml. It can also be updated by a command described in the
+# README.md file.
 #
 
 # JupyterHub itself
