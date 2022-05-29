@@ -22,10 +22,6 @@ charts:
       # Authenticator are running.
       hub:
         valuesPath: hub.image
-        # Dev: buildArgs can help you try the Helm chart against unreleased
-        #      versions of JupyterHub or KubeSpawner.
-        # buildArgs:
-        #   PIP_OVERRIDES: "jupyterhub==1.3.0 git+https://github.com/your-username-here/kubespawner.git"
 
       # secret-sync, a sidecar container running in the autohttps pod to next to
       # Traefik meant to sync a TLS certificate with a k8s Secret.
@@ -48,7 +44,3 @@ charts:
       # singleuser-sample, a primitive user container to start with.
       singleuser-sample:
         valuesPath: singleuser.image
-        # Dev: buildArgs can help you try the Helm chart against unreleased
-        #      versions of JupyterHub.
-        # buildArgs:
-        #   PIP_OVERRIDES: "git+https://github.com/your-username-here/jupyterhub.git"

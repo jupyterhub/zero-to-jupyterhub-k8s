@@ -50,13 +50,6 @@ RUN PYCURL_SSL_LIBRARY=openssl \
     pip install --no-cache-dir \
         -r /tmp/requirements.txt
 
-# Support overriding a package or two through passed docker --build-args.
-# ARG PIP_OVERRIDES="jupyterhub==1.3.0 git+https://github.com/consideratio/kubespawner.git"
-ARG PIP_OVERRIDES=
-RUN if test -n "$PIP_OVERRIDES"; then \
-        pip install --no-cache-dir $PIP_OVERRIDES; \
-    fi
-
 WORKDIR /srv/jupyterhub
 
 # So we can actually write a db file here
