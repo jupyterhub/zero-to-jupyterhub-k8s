@@ -25,14 +25,17 @@ repos:
     hooks:
       - id: pyupgrade
         args:
-          - --py36-plus
+          - --py38-plus
 
   # Autoformat: Python code
   - repo: https://github.com/psf/black
     rev: 22.3.0
     hooks:
       - id: black
-        args: [--target-version=py36]
+        args:
+          - --target-version=py38
+          - --target-version=py39
+          - --target-version=py310
 
   # Autoformat: Bash scripts
   - repo: https://github.com/lovesegfault/beautysh
