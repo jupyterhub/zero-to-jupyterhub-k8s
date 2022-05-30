@@ -137,6 +137,7 @@ set_config_if_not_none(
 for trait, cfg_key in (
     ("pod_name_template", None),
     ("start_timeout", None),
+    ("k8s_api_request_timeout", None),
     ("image_pull_policy", "image.pullPolicy"),
     # ('image_pull_secrets', 'image.pullSecrets'), # Managed manually below
     ("events_enabled", "events"),

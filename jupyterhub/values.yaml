@@ -387,6 +387,7 @@ singleuser:
     pullPolicy:
     pullSecrets: []
   startTimeout: 300
+  k8sApiRequestTimeout: 3
   cpu:
     limit:
     guarantee:

@@ -2065,6 +2065,11 @@ properties:
         description: |
           Passthrough configuration for
           [KubeSpawner.fs_gid](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.fs_gid).
+      k8sApiRequestTimeout:
+        type: [integer, "null"]
+        description: |
+          Passthrough configuration for
+          [KubeSpawner.k8s_api_request_timeout](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.k8s_api_request_timeout).
       lifecycleHooks:
         type: object
         additionalProperties: false
