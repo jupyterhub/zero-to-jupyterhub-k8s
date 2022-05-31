@@ -14,7 +14,8 @@ The JupyterHub Helm chart relies on many dependent projects, and when we make a 
 
 ### Dependent Python packages
 
-Update JupyterHub's Python dependencies in `images/hub/requirements.txt` by going to the folder and running `./dependencies freeze --upgrade`.
+Update JupyterHub's Python dependencies in `images/hub/requirements.txt` by
+following the instructions in `images/hub/README.md`.
 
 Also consider nudging dependent projects in the JupyterHub GitHub organization for a release.
 

@@ -148,12 +148,20 @@ jobs:
           sed --in-place 's/jupyterhub==${{ steps.local.outputs.version }}/jupyterhub==${{ steps.latest.outputs.version }}/g' images/singleuser-sample/requirements.txt
           sed --in-place 's/appVersion: "${{ steps.local.outputs.version }}"/appVersion: "${{ steps.latest.outputs.version }}"/g' jupyterhub/Chart.yaml
 
-      - name: Install dependencies for images/hub/dependencies script
-        run: pip install click ruamel.yaml
-
       - name: Refreeze images/hub/requirements.txt based on images/hub/requirements.in
         if: steps.local.outputs.version != steps.latest.outputs.version
-        run: images/hub/dependencies freeze --upgrade
+        # NOTE: If you make an update to this script, also update the
+        #       images/hub/README.md file.
+        #
+        run: |
+          cd images/hub
+          docker run --rm \
+              --env=CUSTOM_COMPILE_COMMAND="see README.md" \
+              --volume=$PWD:/io \
+              --workdir=/io \
+              --user=root \
+              python:3.9-bullseye \
+              sh -c 'pip install pip-tools==6.* && pip-compile --upgrade'
 
       - name: git diff
         if: steps.local.outputs.version != steps.latest.outputs.version
