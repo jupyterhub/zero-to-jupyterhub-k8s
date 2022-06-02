@@ -6,10 +6,11 @@ Permissions to be used by the hook-image-awaiter job
 {{- /*
 This service account...
 */ -}}
+{{- if .Values.prePuller.hook.serviceAccount.create }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: {{ include "jupyterhub.hook-image-awaiter.fullname" . }}
+  name: {{ include "jupyterhub.hook-image-awaiter.serviceAccountName" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
     hub.jupyter.org/deletable: "true"
@@ -20,6 +21,7 @@ metadata:
     {{- with .Values.prePuller.hook.serviceAccount.annotations }}
     {{- . | toYaml | nindent 4 }}
     {{- end }}
+{{- end }}
 ---
 {{- /*
 ... will be used by this role...
@@ -56,7 +58,7 @@ metadata:
     "helm.sh/hook-weight": "0"
 subjects:
   - kind: ServiceAccount
-    name: {{ include "jupyterhub.hook-image-awaiter.fullname" . }}
+    name: {{ include "jupyterhub.hook-image-awaiter.serviceAccountName" . }}
     namespace: "{{ .Release.Namespace }}"
 roleRef:
   kind: Role

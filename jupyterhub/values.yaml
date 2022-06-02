@@ -137,7 +137,9 @@ hub:
     timeoutSeconds: 1
   existingSecret:
   serviceAccount:
+    create: true
     annotations: {}
+    name:
   extraPodSpec: {}
 
 rbac:
@@ -278,7 +280,9 @@ proxy:
       maxUnavailable:
       minAvailable: 1
     serviceAccount:
+      create: true
       annotations: {}
+      name:
     extraPodSpec: {}
   secretSync:
     containerSecurityContext:
@@ -514,7 +518,9 @@ scheduling:
       minAvailable:
     resources: {}
     serviceAccount:
+      create: true
       annotations: {}
+      name:
     extraPodSpec: {}
   podPriority:
     enabled: false
@@ -593,7 +599,9 @@ prePuller:
     tolerations: []
     resources: {}
     serviceAccount:
+      create: true
       annotations: {}
+      name:
   continuous:
     enabled: true
   pullProfileListImages: true

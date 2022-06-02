@@ -1,3 +1,11 @@
+{{- define "jupyterhub.user-scheduler-deploy.serviceAccountName" -}}
+{{- if .Values.scheduling.userScheduler.serviceAccount.create -}}
+    {{ default (include "jupyterhub.user-scheduler-deploy.fullname" .) .Values.scheduling.userScheduler.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.scheduling.userScheduler.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
 {{- define "jupyterhub.userNodeAffinityRequired" -}}
 {{- if eq .Values.scheduling.userPods.nodeAffinity.matchNodePurpose "require" -}}
 - matchExpressions:

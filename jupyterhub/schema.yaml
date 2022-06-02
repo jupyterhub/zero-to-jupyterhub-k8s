@@ -1259,12 +1259,25 @@ properties:
           Configuration for a k8s ServiceAccount dedicated for use by the
           specific pod which this configuration is nested under.
         properties:
+          create:
+            type: boolean
+            additionalProperties: false
+            description: |
+              Specifies whether a k8s ServiceAccount should be created.
           annotations:
             type: object
             additionalProperties: false
             patternProperties: *labels-and-annotations-patternProperties
             description: |
               Kubernetes annotations to apply to the k8s ServiceAccount.
+          name:
+            type: string
+            additionalProperties: false
+            description: |
+              Name of the k8s ServiceAccount to use.
+
+              If not set and create is true, a name is generated using the
+              component fullname template.
       extraPodSpec: &extraPodSpec-spec
         type: object
         additionalProperties: true
