@@ -22,6 +22,9 @@
       {{- with (include "jupyterhub.networkPolicy.renderEgressRules" (list . .Values.hub.networkPolicy)) }}
       {{- . | nindent 4 }}
       {{- end }}
+
+  Note that the reference to privateIPs and nonPrivateIPs relate to
+  https://en.wikipedia.org/wiki/Private_network#Private_IPv4_addresses.
 */}}
 
 {{- define "jupyterhub.networkPolicy.renderEgressRules" -}}
