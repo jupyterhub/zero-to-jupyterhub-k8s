@@ -667,6 +667,12 @@ properties:
                   having this set to false can be a good defence against
                   malicious intent from someone in control of software in these
                   pods.
+
+                  To improve security we recommend only allowing the private IP CIDRs required
+                  <TODO: insert example>
+                  or namespaces
+                  <TODO: insert example>
+                  instead of enabling this.
           interNamespaceAccessLabels:
             enum: [accept, ignore]
             description: |
