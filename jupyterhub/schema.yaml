@@ -1259,6 +1259,10 @@ properties:
           Configuration for a k8s ServiceAccount dedicated for use by the
           specific pod which this configuration is nested under.
         properties:
+          create:
+            type: boolean
+            description: |
+              Whether or not to create the `ServiceAccount` resource
           annotations:
             type: object
             additionalProperties: false

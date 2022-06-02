@@ -75,7 +75,7 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "jupyterhub.hub-pvc.fullname" . }}
         {{- end }}
-      {{- if .Values.rbac.enabled }}
+      {{- if .Values.hub.serviceAccount.create }}
       serviceAccountName: {{ include "jupyterhub.hub.fullname" . }}
       {{- end }}
       {{- with .Values.hub.podSecurityContext }}

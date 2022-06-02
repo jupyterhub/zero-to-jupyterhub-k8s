@@ -1,11 +1,12 @@
 {{- /*
 Permissions to be used by the hook-image-awaiter job
 */}}
-{{- if .Values.rbac.enabled }}
+{{- if .Values.prePuller.hook.serviceAccount.create }}
 {{- if (include "jupyterhub.imagePuller.daemonset.hook.install" .) }}
 {{- /*
 This service account...
 */ -}}
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -20,6 +21,8 @@ metadata:
     {{- with .Values.prePuller.hook.serviceAccount.annotations }}
     {{- . | toYaml | nindent 4 }}
     {{- end }}
+{{- end }}
+{{- if .Values.rbac.enabled }}
 ---
 {{- /*
 ... will be used by this role...

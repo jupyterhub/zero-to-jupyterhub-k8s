@@ -1,4 +1,5 @@
-{{- if .Values.rbac.enabled -}}
+{{- if .Values.hub.serviceAccount.create -}}
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -9,6 +10,8 @@ metadata:
   {{- end }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
+{{- end }}
+{{- if .Values.rbac.enabled -}}
 ---
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
