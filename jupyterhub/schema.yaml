@@ -607,6 +607,10 @@ properties:
               with the other flags to a reduced set of rules to avoid a
               performance penalty.
               ```
+
+              ```{versionadded} 2.0.0
+              All `egressAllowRules` are new in JupyterHub Helm chart 2.0.0.
+              ```
             properties:
               cloudMetadataServer:
                 type: boolean
