@@ -18,7 +18,7 @@ spec:
         checksum/config-map: {{ include (print $.Template.BasePath "/scheduling/user-scheduler/configmap.yaml") . | sha256sum }}
     spec:
       {{- if .Values.scheduling.userScheduler.serviceAccount.create }}
-      serviceAccountName: {{ include "jupyterhub.user-scheduler-deploy.fullname" . }}
+      serviceAccountName: {{ include "jupyterhub.user-scheduler-serviceaccount.fullname" . }}
       {{- end }}
       {{- if .Values.scheduling.podPriority.enabled }}
       priorityClassName: {{ include "jupyterhub.priority.fullname" . }}

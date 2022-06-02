@@ -26,7 +26,7 @@ metadata:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 subjects:
 - kind: ServiceAccount
-  name: {{ include "jupyterhub.autohttps.fullname" . }}
+  name: {{ include "jupyterhub.autohttps-serviceaccount.fullname" . }}
   apiGroup:
 roleRef:
   kind: Role

@@ -76,6 +76,11 @@
     {{- include "jupyterhub.fullname.dash" . }}hub
 {{- end }}
 
+{{- /* hub-serviceaccount ServiceAccount */}}
+{{- define "jupyterhub.hub-serviceaccount.fullname" -}}
+    {{- .Values.hub.serviceAccount.name | default (include "jupyterhub.hub.fullname" .) }}
+{{- end }}
+
 {{- /* hub-existing-secret Secret */}}
 {{- define "jupyterhub.hub-existing-secret.fullname" -}}
     {{- /* A hack to avoid issues from invoking this from a parent Helm chart. */}}
@@ -133,9 +138,19 @@
     {{- include "jupyterhub.fullname.dash" . }}autohttps
 {{- end }}
 
+{{- /* autohttps-serviceaccount ServiceAccount */}}
+{{- define "jupyterhub.autohttps-serviceaccount.fullname" -}}
+    {{- .Values.proxy.traefik.serviceAccount.name | default (include "jupyterhub.autohttps.fullname" .) }}
+{{- end }}
+
 {{- /* user-scheduler Deployment */}}
 {{- define "jupyterhub.user-scheduler-deploy.fullname" -}}
     {{- include "jupyterhub.fullname.dash" . }}user-scheduler
+{{- end }}
+
+{{- /* user-scheduler-serviceaccount ServiceAccount */}}
+{{- define "jupyterhub.user-scheduler-serviceaccount.fullname" -}}
+    {{- .Values.scheduling.userScheduler.serviceAccount.name | default (include "jupyterhub.user-scheduler-deploy.fullname" .) }}
 {{- end }}
 
 {{- /* user-scheduler leader election lock resource */}}
@@ -151,6 +166,11 @@
 {{- /* image-awaiter Job */}}
 {{- define "jupyterhub.hook-image-awaiter.fullname" -}}
     {{- include "jupyterhub.fullname.dash" . }}hook-image-awaiter
+{{- end }}
+
+{{- /* image-awaiter-serviceaccount ServiceAccount */}}
+{{- define "jupyterhub.hook-image-awaiter-serviceaccount.fullname" -}}
+    {{- .Values.prePuller.hook.serviceAccount.name | default (include "jupyterhub.hook-image-awaiter.fullname" .) }}
 {{- end }}
 
 {{- /* hook-image-puller DaemonSet */}}

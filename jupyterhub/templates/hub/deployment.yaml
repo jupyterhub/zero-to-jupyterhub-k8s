@@ -76,7 +76,7 @@ spec:
             claimName: {{ include "jupyterhub.hub-pvc.fullname" . }}
         {{- end }}
       {{- if .Values.hub.serviceAccount.create }}
-      serviceAccountName: {{ include "jupyterhub.hub.fullname" . }}
+      serviceAccountName: {{ include "jupyterhub.hub-serviceaccount.fullname" . }}
       {{- end }}
       {{- with .Values.hub.podSecurityContext }}
       securityContext:

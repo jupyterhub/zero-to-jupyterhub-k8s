@@ -22,7 +22,7 @@ metadata:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 subjects:
   - kind: ServiceAccount
-    name: {{ include "jupyterhub.hub.fullname" . }}
+    name: {{ include "jupyterhub.hub-serviceaccount.fullname" . }}
     namespace: "{{ .Release.Namespace }}"
 roleRef:
   kind: Role
