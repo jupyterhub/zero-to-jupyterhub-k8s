@@ -189,6 +189,8 @@ hub:
       value: mock-taint-value-hub
       effect: NoSchedule
   serviceAccount: &serviceAccount
+    create: true
+    name: mock-serviceaccount-name
     annotations: *annotations
   extraPodSpec: &extraPodSpec
     hostNetwork: true
