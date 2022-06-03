@@ -1366,6 +1366,7 @@ properties:
         description: *jupyterhub-native-config-description
       serviceAccount: &serviceAccount
         type: object
+        required: [create]
         additionalProperties: false
         description: |
           Configuration for a k8s ServiceAccount dedicated for use by the
@@ -1374,14 +1375,16 @@ properties:
           create:
             type: boolean
             description: |
-              Whether or not to create the `ServiceAccount` resource
+              Whether or not to create the `ServiceAccount` resource.
           name:
             type: ["string", "null"]
             description: |
               This configuration serves multiple purposes:
+
               - It will be the `serviceAccountName` referenced by related Pods.
               - If `create` is set, the created ServiceAccount resource will be named like this.
-              - If [`rbac.enabled`](schema_rbac.enabled) is set, the associated (Cluster)RoleBindings will bind to this name.
+              - If [`rbac.create`](schema_rbac.create) is set, the associated (Cluster)RoleBindings will bind to this name.
+
               If not explicitly provided, a default name will be used.
           annotations:
             type: object
@@ -2837,13 +2840,43 @@ properties:
   rbac:
     type: object
     additionalProperties: false
-    required: [enabled]
+    required: [create]
     properties:
       enabled:
         type: boolean
+        # This schema entry is needed to help us print a more helpful error
+        # message in NOTES.txt if hub.fsGid is set.
+        #
         description: |
-          Decides if RBAC resources are to be created and referenced by the the
-          Helm chart's workloads.
+          ````{note}
+          Removed in version 2.0.0. If you have been using `rbac.enable=false`
+          (strongly discouraged), then the equivalent configuration would be:
+
+          ```yaml
+          rbac:
+            create: false
+          hub:
+            serviceAccount:
+              create: false
+          proxy:
+            traefik:
+              serviceAccount:
+                create: false
+          scheduling:
+            userScheduler:
+              serviceAccount:
+                create: false
+          prePuller:
+            hook:
+              serviceAccount:
+                create: false
+          ```
+          ````
+      create:
+        type: boolean
+        description: |
+          Decides if (Cluster)Role and (Cluster)RoleBinding resources are
+          created and bound to the configured serviceAccounts.
 
   global:
     type: object

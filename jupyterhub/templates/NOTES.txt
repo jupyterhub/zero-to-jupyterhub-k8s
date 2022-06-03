@@ -138,6 +138,11 @@
 */}}
 
 
+{{- if hasKey .Values.rbac "enabled" }}
+{{- $breaking = print $breaking "\n\nCHANGED: rbac.enabled must as of version 2.0.0 be configured via rbac.create and <hub|proxy.traefik|scheduling.userScheduler|prePuller.hook>.serviceAccount.create." }}
+{{- end }}
+
+
 {{- if hasKey .Values.hub "fsGid" }}
 {{- $breaking = print $breaking "\n\nCHANGED: hub.fsGid must as of version 2.0.0 be configured via hub.podSecurityContext.fsGroup." }}
 {{- end }}

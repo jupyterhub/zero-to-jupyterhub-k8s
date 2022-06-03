@@ -205,7 +205,7 @@ If you want to disable the RBAC rules, for whatever reason, you can do so with t
 
 ```yaml
 rbac:
-  enabled: false
+  create: false
 ```
 
 We strongly **discourage disabling** the RBAC rules and remind you that this

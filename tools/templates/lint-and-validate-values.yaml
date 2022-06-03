@@ -206,7 +206,7 @@ hub:
     dnsPolicy: ClusterFirstWithHostNet
 
 rbac:
-  enabled: true
+  create: true
 
 proxy:
   service:

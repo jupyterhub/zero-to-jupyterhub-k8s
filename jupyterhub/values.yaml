@@ -139,7 +139,7 @@ hub:
   extraPodSpec: {}
 
 rbac:
-  enabled: true
+  create: true
 
 # proxy relates to the proxy pod, the proxy-public service, and the autohttps
 # pod and proxy-http service.
