@@ -37,6 +37,14 @@ repos:
           - --target-version=py39
           - --target-version=py310
 
+  # Autoformat: Python code
+  - repo: https://github.com/pycqa/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
+        args:
+          - --profile=black
+
   # Autoformat: Bash scripts
   - repo: https://github.com/lovesegfault/beautysh
     rev: v6.2.1
