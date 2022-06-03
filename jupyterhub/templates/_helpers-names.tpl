@@ -78,7 +78,11 @@
 
 {{- /* hub-serviceaccount ServiceAccount */}}
 {{- define "jupyterhub.hub-serviceaccount.fullname" -}}
-    {{- .Values.hub.serviceAccount.name | default (include "jupyterhub.hub.fullname" .) }}
+    {{- if .Values.hub.serviceAccount.name }}
+        {{- .Values.hub.serviceAccount.name }}
+    {{- else if .Values.hub.serviceAccount.create }}
+        {{- include "jupyterhub.hub.fullname" . }}
+    {{- end }}
 {{- end }}
 
 {{- /* hub-existing-secret Secret */}}
@@ -140,7 +144,11 @@
 
 {{- /* autohttps-serviceaccount ServiceAccount */}}
 {{- define "jupyterhub.autohttps-serviceaccount.fullname" -}}
-    {{- .Values.proxy.traefik.serviceAccount.name | default (include "jupyterhub.autohttps.fullname" .) }}
+    {{- if .Values.proxy.traefik.serviceAccount.name }}
+        {{- .Values.proxy.traefik.serviceAccount.name }}
+    {{- else if .Values.proxy.traefik.serviceAccount.create }}
+        {{- include "jupyterhub.autohttps.fullname" . }}
+    {{- end }}
 {{- end }}
 
 {{- /* user-scheduler Deployment */}}
@@ -150,7 +158,11 @@
 
 {{- /* user-scheduler-serviceaccount ServiceAccount */}}
 {{- define "jupyterhub.user-scheduler-serviceaccount.fullname" -}}
-    {{- .Values.scheduling.userScheduler.serviceAccount.name | default (include "jupyterhub.user-scheduler-deploy.fullname" .) }}
+    {{- if .Values.scheduling.userScheduler.serviceAccount.name }}
+        {{- .Values.scheduling.userScheduler.serviceAccount.name }}
+    {{- else if .Values.scheduling.userScheduler.serviceAccount.create }}
+        {{- include "jupyterhub.user-scheduler-deploy.fullname" . }}
+    {{- end }}
 {{- end }}
 
 {{- /* user-scheduler leader election lock resource */}}
@@ -170,7 +182,11 @@
 
 {{- /* image-awaiter-serviceaccount ServiceAccount */}}
 {{- define "jupyterhub.hook-image-awaiter-serviceaccount.fullname" -}}
-    {{- .Values.prePuller.hook.serviceAccount.name | default (include "jupyterhub.hook-image-awaiter.fullname" .) }}
+    {{- if .Values.prePuller.hook.serviceAccount.name }}
+        {{- .Values.prePuller.hook.serviceAccount.name }}
+    {{- else if .Values.prePuller.hook.serviceAccount.create }}
+        {{- include "jupyterhub.hook-image-awaiter.fullname" . }}
+    {{- end }}
 {{- end }}
 
 {{- /* hook-image-puller DaemonSet */}}
