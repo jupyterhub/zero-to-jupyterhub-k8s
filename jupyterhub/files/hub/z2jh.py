@@ -3,14 +3,15 @@ Utility methods for use in jupyterhub_config.py and dynamic subconfigs.
 
 Methods here can be imported by extraConfig in values.yaml
 """
+import os
 from collections.abc import Mapping
 from functools import lru_cache
-import os
 
 import yaml
 
+
 # memoize so we only load config once
-@lru_cache()
+@lru_cache
 def _load_config():
     """Load the Helm chart configuration used to render the Helm templates of
     the chart from a mounted k8s Secret, and merge in values from an optionally
@@ -29,7 +30,7 @@ def _load_config():
     return cfg
 
 
-@lru_cache()
+@lru_cache
 def _get_config_value(key):
     """Load value from the k8s ConfigMap given a key."""
 
@@ -41,7 +42,7 @@ def _get_config_value(key):
         raise Exception(f"{path} not found!")
 
 
-@lru_cache()
+@lru_cache
 def get_secret_value(key, default="never-explicitly-set"):
     """Load value from the user managed k8s Secret or the default k8s Secret
     given a key."""

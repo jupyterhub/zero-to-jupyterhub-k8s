@@ -12,7 +12,6 @@ we trim away everything that isn't needed.
 import json
 import os
 import sys
-
 from collections.abc import MutableMapping
 
 import yaml

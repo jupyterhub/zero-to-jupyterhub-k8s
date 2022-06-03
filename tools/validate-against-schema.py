@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-import jsonschema
 import os
 import sys
+
+import jsonschema
 import yaml
 
 here_dir = os.path.abspath(os.path.dirname(__file__))

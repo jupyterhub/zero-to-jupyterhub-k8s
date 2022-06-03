@@ -14,12 +14,12 @@ yamllint: https://github.com/adrienverge/yamllint
   pip install yamllint
 """
 
-import os
-import sys
 import argparse
 import glob
+import os
 import pipes
 import subprocess
+import sys
 
 os.chdir(os.path.dirname(sys.argv[0]))
 
