@@ -78,10 +78,10 @@
 
 {{- /* hub-serviceaccount ServiceAccount */}}
 {{- define "jupyterhub.hub-serviceaccount.fullname" -}}
-    {{- if .Values.hub.serviceAccount.name }}
-        {{- .Values.hub.serviceAccount.name }}
-    {{- else if .Values.hub.serviceAccount.create }}
-        {{- include "jupyterhub.hub.fullname" . }}
+    {{- if .Values.hub.serviceAccount.create }}
+        {{- .Values.hub.serviceAccount.name | default (include "jupyterhub.hub.fullname" . ) }}
+    {{- else }}
+        {{- .Values.hub.serviceAccount.name | default "default"}}
     {{- end }}
 {{- end }}
 
@@ -144,10 +144,10 @@
 
 {{- /* autohttps-serviceaccount ServiceAccount */}}
 {{- define "jupyterhub.autohttps-serviceaccount.fullname" -}}
-    {{- if .Values.proxy.traefik.serviceAccount.name }}
-        {{- .Values.proxy.traefik.serviceAccount.name }}
-    {{- else if .Values.proxy.traefik.serviceAccount.create }}
-        {{- include "jupyterhub.autohttps.fullname" . }}
+    {{- if .Values.proxy.traefik.serviceAccount.create }}
+        {{- .Values.proxy.traefik.serviceAccount.name | default (include "jupyterhub.autohttps.fullname" . ) }}
+    {{- else }}
+        {{- .Values.proxy.traefik.serviceAccount.name | default "default"}}
     {{- end }}
 {{- end }}
 
@@ -158,10 +158,10 @@
 
 {{- /* user-scheduler-serviceaccount ServiceAccount */}}
 {{- define "jupyterhub.user-scheduler-serviceaccount.fullname" -}}
-    {{- if .Values.scheduling.userScheduler.serviceAccount.name }}
-        {{- .Values.scheduling.userScheduler.serviceAccount.name }}
-    {{- else if .Values.scheduling.userScheduler.serviceAccount.create }}
-        {{- include "jupyterhub.user-scheduler-deploy.fullname" . }}
+    {{- if .Values.scheduling.userScheduler.serviceAccount.create }}
+        {{- .Values.scheduling.userScheduler.serviceAccount.name | default (include "jupyterhub.user-scheduler-deploy.fullname" . ) }}
+    {{- else }}
+        {{- .Values.scheduling.userScheduler.serviceAccount.name | default "default"}}
     {{- end }}
 {{- end }}
 
@@ -182,10 +182,10 @@
 
 {{- /* image-awaiter-serviceaccount ServiceAccount */}}
 {{- define "jupyterhub.hook-image-awaiter-serviceaccount.fullname" -}}
-    {{- if .Values.prePuller.hook.serviceAccount.name }}
-        {{- .Values.prePuller.hook.serviceAccount.name }}
-    {{- else if .Values.prePuller.hook.serviceAccount.create }}
-        {{- include "jupyterhub.hook-image-awaiter.fullname" . }}
+    {{- if .Values.prePuller.hook.serviceAccount.create }}
+        {{- .Values.prePuller.hook.serviceAccount.name | default (include "jupyterhub.hook-image-awaiter.fullname" . ) }}
+    {{- else }}
+        {{- .Values.prePuller.hook.serviceAccount.name | default "default"}}
     {{- end }}
 {{- end }}
 
