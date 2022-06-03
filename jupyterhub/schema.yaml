@@ -575,19 +575,48 @@ properties:
           enabled:
             type: boolean
             description: |
-              Toggle the creation of the NetworkPolicy resource for this pod.
+              Toggle the creation of the NetworkPolicy resource targeting this
+              pod, and by doing so, restricting its communication to only what
+              is explicitly allowed in the NetworkPolicy.
           ingress:
             type: array
             description: |
-              Additional ingress rules to add except those that is known to be needed by the respective pods in the Helm chart.
+              Additional ingress rules to add besides those that are required
+              for core functionality.
           egress:
             type: array
             description: |
-              Additional egress rules to add except those that is known to be needed by the respective pods in the Helm chart.
+              Additional egress rules to add besides those that are required for
+              core functionality and those added via
+              [`.egressAllowRules`](schema_hub.networkPolicy.egressAllowRules).
 
-              The default value of this egress is to allow all traffic, except for the `singleuser.networkPolicy.egress`, which is also limiting access to a metadata server that can be exploited.
+              ```{versionchanged} 2.0.0
+              The default value changed from providing one very permissive rule
+              allowing all egress to providing no rule. The permissive rule is
+              still provided via
+              [`.egressAllowRules`](schema_hub.networkPolicy.egressAllowRules)
+              set to true though.
+              ```
 
-              If you want to restrict egress, you can override this permissive default to be an empty list.
+              As an example, below is a configuration that disables the more
+              broadly permissive `.privateIPs` egress allow rule for the hub
+              pod, and instead provides tightly scoped permissions to access a
+              specific k8s local service as identified by pod labels.
+
+              ```yaml
+              hub:
+                networkPolicy:
+                  egressAllowRules:
+                    privateIPs: false
+                  egress:
+                    - to:
+                        - podSelector:
+                            matchLabels:
+                              app: my-k8s-local-service
+                      ports:
+                        - protocol: TCP
+                          port: 5978
+              ```
           egressAllowRules:
             type: object
             additionalProperties: false
