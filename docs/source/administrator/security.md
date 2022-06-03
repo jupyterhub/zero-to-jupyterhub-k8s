@@ -285,117 +285,156 @@ singleuser:
 
 ## Kubernetes Network Policies
 
-**Important**: When using network policies, you should be aware
-that a Kubernetes cluster may have partial, full, or no support for network policies.
-Kubernetes will **silently ignore** policies that aren't supported.
-Please use **caution** before relying on network policy enforcement
-and verify the policies behave as expected,
-especially if you rely on them to restrict what users can access.
+```{warning}
+Your Kubernetes cluster may silently ignore the network rules described in the
+NetworkPolicy resources that this Helm chart can create. NetworkPolicy rules are
+enforced by an optional NetworkPolicy controller that often isn't setup as part
+of setting up a Kubernetes cluster.
+```
 
-Kubernetes has optional support for [network
-policies](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
-which lets you restrict how pods can communicate with each other and the outside
-world. This can provide additional security within JupyterHub, and can also be
-used to limit network access for users of JupyterHub.
+By default this Helm chart creates four different
+[NetworkPolicy](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
+resources describing what incoming/ingress and outgoing/egress connections are
+to be allowed for the pods they target.
 
-By default, the JupyterHub helm chart **enables** network policies in 0.10 or later.
-They are **disabled** by default in 0.9 and earlier.
+A critical point to understand is that if a pod's ingress or egress connections
+respectively aren't targeted by a NetworkPolicy, they won't be constrained by
+them at all. If they are though, only what is explicitly allowed for them will
+be accepted. In other words, the act of defining a NetworkPolicy targeting a pod
+is what is constraining it, but all the rules in the NetworkPolicy are allow
+rules.
 
-The JupyterHub chart has three network policies,
-one for each component (hub, proxy, single-user servers),
-which can be enabled and configured separately.
+### Introduction to the chart's four network policies
+
+The four network policies declare rules for four kinds of pods created by the
+Helm chart. Below are some tables describing what the four network policy do to
+some extent.
+
+| NetworkPolicy | Associated Helm chart config  | Influenced pods      | Notable software in pods                                             |
+| ------------- | ----------------------------- | -------------------- | -------------------------------------------------------------------- |
+| `hub`         | `hub.networkPolicy`           | `hub`                | `jupyterhub`, `kubespawner`, `jupyterhub-idle-culler`, Authenticator |
+| `proxy`       | `proxy.chp.networkPolicy`     | `proxy`              | `configurable-http-proxy`                                            |
+| `autohttps`   | `proxy.traefik.networkPolicy` | `autohttps`          | `traefik`, `lego`                                                    |
+| `singleuser`  | `singleuser.networkPolicy`    | `jupyter-<username>` | `jupyter_server`                                                     |
+
+| NetworkPolicy | Always allowed outbound connections (egress) for core functionality                                              |
+| ------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `hub`         | To `proxy` pod's REST API port (8001), user pods' only port (8888)                                               |
+| `proxy`       | To `hub` pod's only port (8081), user pods' only port (8888)                                                     |
+| `autohttps`   | To `proxy` pod's http proxy port (8000)                                                                          |
+| `singleuser`  | To `hub` pod's only port (8081), `proxy` pod's proxy port (8000), `autohttps` pod's http (8080) and https (8443) |
+
+| NetworkPolicy | Always allowed inbound connections (ingress) for core functionality, ingress is allowed for specific ports from pods with certain labels                                       |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `hub`         | From pods labelled `hub.jupyter.org/network-access-hub=true`                                                                                                                   |
+| `proxy`       | From pods labelled `hub.jupyter.org/network-access-proxy-http=true` (http proxy port) or `hub.jupyter.org/network-access-proxy-api=true` (REST API port) in the same namespace |
+| `autohttps`   | From pods labelled `hub.jupyter.org/network-access-proxy-http=true` (http(s) proxy ports)                                                                                      |
+| `singleuser`  | From pods labelled `hub.jupyter.org/network-access-singleuser=true` (notebook-port)                                                                                            |
+
+````{warning} Not all functionality summarized above
+It has been tricky to document the full behavior of these network policies. For
+in depth details, please for now refer to inspecting the Helm chart's templates
+and the rendered result given your configuration.
+
+Below are links to the Helm chart's templates.
+
+- [`hub` template](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/templates/hub/netpol.yaml)
+- [`proxy` template](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/templates/proxy/netpol.yaml)
+- [`autohttps` template](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/templates/proxy/autohttps/netpol.yaml)
+- [`singleuser` template](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/templates/singleuser/netpol.yaml)
+
+Below are commands you can use to render the specific template.
+
+```shell
+# These four commands renders the four NetworkPolicy resource templates of the
+# latest release of the JupyterHub Helm chart, with default values.
+#
+# You can pass `--values <your config file>` or `--version <version here>` to
+# these commands to inspect the rendered NetworkPolicy resources given your
+# specific version and configuration.
+#
+helm template --repo https://jupyterhub.github.io/helm-chart jupyterhub --show-only templates/hub/netpol.yaml
+helm template --repo https://jupyterhub.github.io/helm-chart jupyterhub --show-only templates/proxy/netpol.yaml
+helm template --repo https://jupyterhub.github.io/helm-chart jupyterhub --show-only templates/proxy/autohttps/netpol.yaml
+helm template --repo https://jupyterhub.github.io/helm-chart jupyterhub --show-only templates/singleuser/netpol.yaml
+```
+````
 
 ### Enabling and disabling network policies
 
-By default, the JupyterHub helm chart **enables** network policies in 0.10 or later.
-They are **disabled** by default in 0.9 and earlier.
-
-You can enable or disable enforcement of each network policy in config.yaml:
+NetworkPolicy resources are created by default, and with their creation they
+restrict inbound and outbound network connections to those explicitly allowed in
+the NetworkPolicy resource. To opt-out of creating NetworkPolicy resources, use
+configuration like below.
 
 ```yaml
+# Example configuration on how to disable the creation of all the Helm chart's
+# NetworkPolicy resources.
 hub:
   networkPolicy:
-    enabled: true # or false to disable
+    enabled: false
 proxy:
-  networkPolicy:
-    enabled: true
+  chp:
+    networkPolicy:
+      enabled: false
+  traefik:
+    networkPolicy:
+      enabled: false
 singleuser:
   networkPolicy:
-    enabled: true
+    enabled: false
 ```
 
-### Granting network access to jupyterhub pods (ingress)
+### Allowing additional inbound network connections (ingress)
 
-The chart's network policy default behavior ensures that all of the jupyterhub components can talk to each other,
-so all of the following connections are allowed:
+While you can add allow arbitrary allow rules with the
+[`<hub|proxy.chp|proxy.traefik|singleuser>.networkPolicy.ingress`](schema_hub.networkPolicy.ingress)
+configuration besides the rules ensuring core functionality, you can also label
+the pods you want to be allowed to establish connections to the Helm chart's
+various pods.
 
-- proxy ⇨ hub
-- proxy ⇨ singleuser
-- hub ⇨ proxy api
-- hub ⬄ singleuser
-- everything ⇨ DNS
+For example, to access the hub pod from another pod in the same namespace, just
+add the label `hub.jupyter.org/network-access-hub: "true"` to the pod that
+should be able to establish a connection to the hub pod.
 
-and by default do not allow any other pods to talk to the jupyterhub components.
+The available access labels are:
 
-The network policies use label selectors that look like:
+- `hub.jupyter.org/network-access-hub: "true"`, access the hub api
+- `hub.jupyter.org/network-access-proxy-http: "true"`, access proxy public http endpoint
+- `hub.jupyter.org/network-access-proxy-api: "true"`, access proxy api
+- `hub.jupyter.org/network-access-singleuser: "true"`, access singleuser servers directly
 
-```yaml
-ingress:
-  # allowed pods (hub.jupyter.org/network-access-hub) --> hub
-  - from:
-      - podSelector:
-          matchLabels:
-            hub.jupyter.org/network-access-hub: "true"
+If you wish to access the pod from another namespace with these labels, then
+read about
+[`<hub|proxy.chp|proxy.traefik|singleuser>.networkPolicy.interNamespaceAccessLabels`](schema_hub.networkPolicy.interNamespaceAccessLabels).
+
+Finally, the option
+[`<hub|proxy.chp|proxy.traefik|singleuser>.networkPolicy.allowedIngressPorts`](schema_hub.networkPolicy.allowedIngressPorts)
+enable you to allow incoming connections on certain pods.
+
+### Allowing additional outbound network connections (egress)
+
+While you can add allow arbitrary allow rules with the
+[`<hub|proxy.chp|proxy.traefik|singleuser>.networkPolicy.egress`](schema_hub.networkPolicy.egress)
+configuration besides the rules ensuring core functionality, you can also toggle
+some pre-defined allow rules on or off. They are documented in the configuration
+reference under
+[`<hub|proxy.chp|proxy.traefik|singleuser>.networkPolicy.egressAllowRules`](schema_hub.networkPolicy.egressAllowRules).
+
+By default, all egress allow rules are enabled for `hub`, `proxy.chp`, and
+`proxy.traefik`, but
+`singleuser.networkPolicy.egressAllowRules.cloudMetadataServer` and
+`singleuser.networkPolicy.egressAllowRules.privateIPs` default to false. In
+practice, this can mean no rule allows the user pods to communicate with some
+k8s local service with [Private IPv4
+addresses](https://en.wikipedia.org/wiki/Private_network#Private_IPv4_addresses).
+
+```{versionchanged} 2.0.0
+Before JupyterHub Helm chart 2.0.0 the default configuration was to allow
+singleuser pods to establish outbound connections to anything. After 2.0.0
+`singleuser.networkPolicy.egressAllowRules.privateIPs=true` must be explicitly
+set for this.
 ```
-
-So if you are creating additional pods that want to talk to these,
-you can grant them access to jupyterhub components one by one by adding the right labels.
-Here is an example set of labels granting access to all jupyterhub components
-(i.e. the same behavior as without network policies):
-
-```yaml
-metadata:
-  name: my-service
-  labels:
-    hub.jupyter.org/network-access-hub: "true" # access the hub api
-    hub.jupyter.org/network-access-proxy-http: "true" # access proxy public http endpoint
-    hub.jupyter.org/network-access-proxy-api: "true" # access proxy api
-    hub.jupyter.org/network-access-singleuser: "true" # access single-user servers directly
-```
-
-You can also add additional `ingress` rules to each network policy in your `config.yaml`.
-See the [Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
-for how to define ingress rules.
-
-### Limiting network access from pods (egress)
-
-By default, all of the pods allow all `egress` traffic,
-which means that code in each of the pods may make connections to anywhere in the cluster or on the Internet
-(unless that would be blocked by the ingress rules of the destination).
-This is very permissive.
-The default policy for all components allows all outbound (egress) network traffic,
-meaning JupyterHub users are able to connect to all resources inside and outside your network.
-You can override the `egress` configuration of each policy
-to make it more restrictive.
-For example, to restrict user outbound traffic to DNS, HTTP, and HTTPS:
-
-```yaml
-singleuser:
-  networkPolicy:
-    enabled: true
-    egress:
-      - ports:
-          - port: 53
-            protocol: UDP
-      - ports:
-          - port: 80
-      - ports:
-          - port: 443
-```
-
-See the [Kubernetes
-documentation](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
-for further information on defining policies.
 
 ## Restricting Load Balancer Access
 

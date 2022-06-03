@@ -24,6 +24,10 @@ hub:
       groups: []
 
 singleuser:
+  # FIXME: move resources to dev-config.yaml after 2.0.0 is released.
+  networkPolicy:
+    egressAllowRules:
+      nonPrivateIPs: false
   networkTools:
     # FIXME: move resources to dev-config.yaml after 2.0.0 is released.
     resources:

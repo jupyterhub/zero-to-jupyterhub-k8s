@@ -62,23 +62,38 @@ spec:
 
   egress:
     # singleuser-server --> hub
-    - ports:
-        - port: 8081
-      to:
+    - to:
         - podSelector:
             matchLabels:
               {{- $_ := merge (dict "componentLabel" "hub") . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
+      ports:
+        - port: 8081
 
-    # singleuser-server --> Kubernetes internal DNS
-    - ports:
-        - protocol: UDP
-          port: 53
-        - protocol: TCP
-          port: 53
+    # singleuser-server --> proxy
+    # singleuser-server --> autohttps
+    #
+    # While not critical for core functionality, a user or library code may rely
+    # on communicating with the proxy or autohttps pods via a k8s Service it can
+    # detected from well known environment variables.
+    #
+    - to:
+        - podSelector:
+            matchLabels:
+              {{- $_ := merge (dict "componentLabel" "proxy") . }}
+              {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
+      ports:
+        - port: 8000
+    - to:
+        - podSelector:
+            matchLabels:
+              {{- $_ := merge (dict "componentLabel" "autohttps") . }}
+              {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
+      ports:
+        - port: 8080
+        - port: 8443
 
-    {{- with .Values.singleuser.networkPolicy.egress }}
-    # singleuser-server --> depends, but the default is everything
-    {{- . | toYaml | nindent 4 }}
+    {{- with (include "jupyterhub.networkPolicy.renderEgressRules" (list . .Values.singleuser.networkPolicy)) }}
+    {{- . | nindent 4 }}
     {{- end }}
 {{- end }}

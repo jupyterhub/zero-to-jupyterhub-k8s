@@ -64,23 +64,15 @@ spec:
 
   egress:
     # autohttps --> proxy (http port)
-    - ports:
-        - port: 8000
-      to:
+    - to:
         - podSelector:
             matchLabels:
               {{- $_ := merge (dict "componentLabel" "proxy") . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
+      ports:
+        - port: 8000
 
-    # autohttps --> Kubernetes internal DNS
-    - ports:
-      - protocol: UDP
-        port: 53
-      - protocol: TCP
-        port: 53
-
-    {{- with .Values.proxy.traefik.networkPolicy.egress }}
-    # autohttps --> depends, but the default is everything
-    {{- . | toYaml | nindent 4 }}
+    {{- with (include "jupyterhub.networkPolicy.renderEgressRules" (list . .Values.proxy.traefik.networkPolicy)) }}
+    {{- . | nindent 4 }}
     {{- end }}
 {{- end }}

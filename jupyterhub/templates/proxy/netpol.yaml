@@ -85,32 +85,24 @@ spec:
 
   egress:
     # proxy --> hub
-    - ports:
-        - port: 8081
-      to:
+    - to:
         - podSelector:
             matchLabels:
               {{- $_ := merge (dict "componentLabel" "hub") . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
+      ports:
+        - port: 8081
 
     # proxy --> singleuser-server
-    - ports:
-        - port: 8888
-      to:
+    - to:
         - podSelector:
             matchLabels:
               {{- $_ := merge (dict "componentLabel" "singleuser-server") . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
+      ports:
+        - port: 8888
 
-    # proxy --> Kubernetes internal DNS
-    - ports:
-      - protocol: UDP
-        port: 53
-      - protocol: TCP
-        port: 53
-
-    {{- with .Values.proxy.chp.networkPolicy.egress }}
-    # proxy --> depends, but the default is everything
-    {{- . | toYaml | nindent 4 }}
+    {{- with (include "jupyterhub.networkPolicy.renderEgressRules" (list . .Values.proxy.chp.networkPolicy)) }}
+    {{- . | nindent 4 }}
     {{- end }}
 {{- end }}

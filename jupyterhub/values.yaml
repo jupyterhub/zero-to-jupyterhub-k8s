@@ -98,16 +98,12 @@ hub:
   networkPolicy:
     enabled: true
     ingress: []
-    ## egress for JupyterHub already includes Kubernetes internal DNS and
-    ## access to the proxy, but can be restricted further, but ensure to allow
-    ## access to the Kubernetes API server that couldn't be pinned ahead of
-    ## time.
-    ##
-    ## ref: https://stackoverflow.com/a/59016417/2220152
-    egress:
-      - to:
-          - ipBlock:
-              cidr: 0.0.0.0/0
+    egress: []
+    egressAllowRules:
+      cloudMetadataServer: true
+      dnsPortsPrivateIPs: true
+      nonPrivateIPs: true
+      privateIPs: true
     interNamespaceAccessLabels: ignore
     allowedIngressPorts: []
   allowNamedServers: false
@@ -223,10 +219,12 @@ proxy:
     networkPolicy:
       enabled: true
       ingress: []
-      egress:
-        - to:
-            - ipBlock:
-                cidr: 0.0.0.0/0
+      egress: []
+      egressAllowRules:
+        cloudMetadataServer: true
+        dnsPortsPrivateIPs: true
+        nonPrivateIPs: true
+        privateIPs: true
       interNamespaceAccessLabels: ignore
       allowedIngressPorts: [http, https]
     pdb:
@@ -267,10 +265,12 @@ proxy:
     networkPolicy:
       enabled: true
       ingress: []
-      egress:
-        - to:
-            - ipBlock:
-                cidr: 0.0.0.0/0
+      egress: []
+      egressAllowRules:
+        cloudMetadataServer: true
+        dnsPortsPrivateIPs: true
+        nonPrivateIPs: true
+        privateIPs: true
       interNamespaceAccessLabels: ignore
       allowedIngressPorts: [http, https]
     pdb:
@@ -339,18 +339,12 @@ singleuser:
   networkPolicy:
     enabled: true
     ingress: []
-    egress:
-      # Required egress to communicate with the hub and DNS servers will be
-      # augmented to these egress rules.
-      #
-      # This default rule explicitly allows all outbound traffic from singleuser
-      # pods, except to a typical IP used to return metadata that can be used by
-      # someone with malicious intent.
-      - to:
-          - ipBlock:
-              cidr: 0.0.0.0/0
-              except:
-                - 169.254.169.254/32
+    egress: []
+    egressAllowRules:
+      cloudMetadataServer: false
+      dnsPortsPrivateIPs: true
+      nonPrivateIPs: true
+      privateIPs: false
     interNamespaceAccessLabels: ignore
     allowedIngressPorts: []
   events: true
