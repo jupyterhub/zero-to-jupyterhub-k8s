@@ -3,7 +3,6 @@ Permissions to be used by the hook-image-awaiter job
 */}}
 {{- if .Values.rbac.enabled -}}
 {{- if (include "jupyterhub.imagePuller.daemonset.hook.install" .) -}}
----
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:

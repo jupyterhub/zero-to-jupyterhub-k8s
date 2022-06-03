@@ -2,7 +2,6 @@
 {{- $autoHTTPS := (and $HTTPS (eq .Values.proxy.https.type "letsencrypt")) -}}
 {{- if $autoHTTPS -}}
 {{- if .Values.rbac.enabled -}}
----
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
