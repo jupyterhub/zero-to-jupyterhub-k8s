@@ -371,6 +371,9 @@ if get_config("cull.enabled", False):
         cull_cmd.append("--cull-users")
         jupyterhub_idle_culler_role["scopes"].append("admin:users")
 
+    if not get_config("cull.adminUsers"):
+        cull_cmd.append("--cull-admin-users=false")
+
     if get_config("cull.removeNamedServers"):
         cull_cmd.append("--remove-named-servers")
 

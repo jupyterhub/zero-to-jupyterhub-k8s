@@ -635,6 +635,7 @@ ingress:
 cull:
   enabled: true
   users: false # --cull-users
+  adminUsers: true # --cull-admin-users
   removeNamedServers: false # --remove-named-servers
   timeout: 3600 # --timeout
   every: 600 # --cull-every
