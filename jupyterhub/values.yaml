@@ -133,6 +133,8 @@ hub:
     timeoutSeconds: 1
   existingSecret:
   serviceAccount:
+    create: true
+    name:
     annotations: {}
   extraPodSpec: {}
 
@@ -278,6 +280,8 @@ proxy:
       maxUnavailable:
       minAvailable: 1
     serviceAccount:
+      create: true
+      name:
       annotations: {}
     extraPodSpec: {}
   secretSync:
@@ -508,6 +512,8 @@ scheduling:
       minAvailable:
     resources: {}
     serviceAccount:
+      create: true
+      name:
       annotations: {}
     extraPodSpec: {}
   podPriority:
@@ -587,6 +593,8 @@ prePuller:
     tolerations: []
     resources: {}
     serviceAccount:
+      create: true
+      name:
       annotations: {}
   continuous:
     enabled: true

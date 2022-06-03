@@ -34,8 +34,8 @@ spec:
       {{- end }}
     spec:
       restartPolicy: Never
-      {{- if .Values.rbac.enabled }}
-      serviceAccountName: {{ include "jupyterhub.hook-image-awaiter.fullname" . }}
+      {{- with include "jupyterhub.hook-image-awaiter-serviceaccount.fullname" . }}
+      serviceAccountName: {{ . }}
       {{- end }}
       {{- with .Values.prePuller.hook.nodeSelector }}
       nodeSelector:
