@@ -15,12 +15,11 @@ FIXME: It would be nice to run this as part of our CI pipeline to report if
        containerSecurityContext, readiness- and livenessProbe's, and hub.config.
 """
 
-import jsonschema
 import os
 import sys
-
 from collections.abc import MutableMapping
 
+import jsonschema
 import yaml
 
 here_dir = os.path.abspath(os.path.dirname(__file__))

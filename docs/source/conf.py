@@ -23,7 +23,6 @@ import subprocess
 
 import yaml
 
-
 # -- Sphinx setup function ---------------------------------------------------
 # ref: http://www.sphinx-doc.org/en/latest/extdev/tutorial.html#the-setup-function
 

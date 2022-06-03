@@ -12,7 +12,6 @@ FIXME: This implementation is done quick and dirty by appending to Chart.yaml
 
 import os
 import textwrap
-
 from collections.abc import MutableMapping
 
 import yaml

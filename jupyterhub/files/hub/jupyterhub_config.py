@@ -2,12 +2,11 @@ import glob
 import os
 import re
 import sys
-
 from binascii import a2b_hex
 
-from tornado.httpclient import AsyncHTTPClient
-from kubernetes_asyncio import client
 from jupyterhub.utils import url_path_join
+from kubernetes_asyncio import client
+from tornado.httpclient import AsyncHTTPClient
 
 # Make sure that modules placed in the same directory as the jupyterhub config are added to the pythonpath
 configuration_directory = os.path.dirname(os.path.realpath(__file__))
@@ -15,10 +14,10 @@ sys.path.insert(0, configuration_directory)
 
 from z2jh import (
     get_config,
-    set_config_if_not_none,
     get_name,
     get_name_env,
     get_secret_value,
+    set_config_if_not_none,
 )
 
 
