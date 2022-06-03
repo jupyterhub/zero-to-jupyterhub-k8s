@@ -664,15 +664,13 @@ properties:
 
                   Since not all workloads in the k8s cluster may have
                   NetworkPolicies setup to restrict their incoming connections,
-                  having this set to false can be a good defence against
+                  having this set to false can be a good defense against
                   malicious intent from someone in control of software in these
                   pods.
 
-                  To improve security we recommend only allowing the private IP CIDRs required
-                  <TODO: insert example>
-                  or namespaces
-                  <TODO: insert example>
-                  instead of enabling this.
+                  If possible, try to avoid setting this to true as it gives
+                  broad permissions that could be specified more directly via
+                  the [`.egress`](schema_singleuser.networkPolicy.egress).
           interNamespaceAccessLabels:
             enum: [accept, ignore]
             description: |
