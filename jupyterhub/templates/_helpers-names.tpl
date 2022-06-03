@@ -276,6 +276,7 @@
 fullname: {{ include "jupyterhub.fullname" . | quote }}
 fullname-dash: {{ include "jupyterhub.fullname.dash" . | quote }}
 hub: {{ include "jupyterhub.hub.fullname" . | quote }}
+hub-serviceaccount: {{ include "jupyterhub.hub-serviceaccount.fullname" . | quote }}
 hub-existing-secret: {{ include "jupyterhub.hub-existing-secret.fullname" . | quote }}
 hub-existing-secret-or-default: {{ include "jupyterhub.hub-existing-secret-or-default.fullname" . | quote }}
 hub-pvc: {{ include "jupyterhub.hub-pvc.fullname" . | quote }}
@@ -286,11 +287,14 @@ proxy-public: {{ include "jupyterhub.proxy-public.fullname" . | quote }}
 proxy-public-tls: {{ include "jupyterhub.proxy-public-tls.fullname" . | quote }}
 proxy-public-manual-tls: {{ include "jupyterhub.proxy-public-manual-tls.fullname" . | quote }}
 autohttps: {{ include "jupyterhub.autohttps.fullname" . | quote }}
+autohttps-serviceaccount: {{ include "jupyterhub.autohttps-serviceaccount.fullname" . | quote }}
 user-scheduler-deploy: {{ include "jupyterhub.user-scheduler-deploy.fullname" . | quote }}
+user-scheduler-serviceaccount: {{ include "jupyterhub.user-scheduler-serviceaccount.fullname" . | quote }}
 user-scheduler-lock: {{ include "jupyterhub.user-scheduler-lock.fullname" . | quote }}
 user-placeholder: {{ include "jupyterhub.user-placeholder.fullname" . | quote }}
 image-puller-priority: {{ include "jupyterhub.image-puller-priority.fullname" . | quote }}
 hook-image-awaiter: {{ include "jupyterhub.hook-image-awaiter.fullname" . | quote }}
+hook-image-awaiter-serviceaccount: {{ include "jupyterhub.hook-image-awaiter-serviceaccount.fullname" . | quote }}
 hook-image-puller: {{ include "jupyterhub.hook-image-puller.fullname" . | quote }}
 continuous-image-puller: {{ include "jupyterhub.continuous-image-puller.fullname" . | quote }}
 singleuser: {{ include "jupyterhub.singleuser.fullname" . | quote }}
