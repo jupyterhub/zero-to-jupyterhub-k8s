@@ -114,4 +114,4 @@ hub:
 ## Authenticating Users
 
 For information on authenticating users in JupyterHub, see
-[the Authentication guide](../../administrator/authentication).
+[the Authentication guide](../../administrator/authentication.md).
