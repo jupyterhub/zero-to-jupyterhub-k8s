@@ -6,9 +6,21 @@ FROM python:3.9-bullseye as build-stage
 
 WORKDIR /build-stage
 
-# Build wheels for packages that requires gcc and other build dependencies and
-# lack wheels either for amd64 or aarch64. If you find a dependency here no
-# longer listed in requirements.txt, remove it from here as well.
+# Build wheels for packages that require gcc or other build dependencies and
+# lack wheels either for amd64 or aarch64.
+#
+#   - https://pypi.org/project/pycryptodomex/#files, no aarch64 wheels available
+#     as of 3.14.1. See https://github.com/Legrandin/pycryptodome/issues/628.
+#   - https://pypi.org/project/pycurl/#files, no wheels available as of 7.45.1.
+#     See https://github.com/pycurl/pycurl/issues/738.
+#   - https://pypi.org/project/ruamel.yaml.clib/#files, no aarch64 wheels
+#     available as of 0.2.6. See
+#     https://sourceforge.net/p/ruamel-yaml-clib/tickets/4/.
+#
+# If you find a dependency here no longer listed in requirements.txt, remove it
+# from here as well. The more wheels we build here and copy and then install,
+# where the copy and install are separate steps, the larger the final image
+# becomes.
 #
 COPY requirements.txt requirements.txt
 RUN pip install build \
