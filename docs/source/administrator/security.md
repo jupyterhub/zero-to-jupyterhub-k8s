@@ -197,7 +197,7 @@ kubectl --namespace=kube-system delete rc kubernetes-dashboard
 Kubernetes supports, and often requires, using [Role Based Access Control (RBAC)](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)
 to secure which pods / users can perform what kinds of actions on the cluster. RBAC rules can be set to provide users with minimal necessary access based on their administrative needs.
 
-It is **critical** to understand that if RBAC is disabled, all pods are given `root` equivalent permission on the Kubernetes cluster and all the nodes in it. This opens up very bad vulnerabilites for your security.
+It is **critical** to understand that if RBAC is disabled, all pods are given `root` equivalent permission on the Kubernetes cluster and all the nodes in it. This opens up very bad vulnerabilities for your security.
 
 As of the Helm chart v0.5 used with JupyterHub and BinderHub, the helm chart can natively work with RBAC enabled clusters. To provide sensible security defaults, we ship appropriate minimal RBAC rules for the various components we use. We **highly recommend** using these minimal or more restrictive RBAC rules.
 
@@ -205,7 +205,7 @@ If you want to disable the RBAC rules, for whatever reason, you can do so with t
 
 ```yaml
 rbac:
-  enabled: false
+  create: false
 ```
 
 We strongly **discourage disabling** the RBAC rules and remind you that this
