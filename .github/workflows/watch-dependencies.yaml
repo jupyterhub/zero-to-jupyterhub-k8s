@@ -104,7 +104,7 @@ jobs:
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create a PR
         if: steps.local.outputs.tag != steps.latest.outputs.tag
-        uses: peter-evans/create-pull-request@v4.0.3
+        uses: peter-evans/create-pull-request@923ad837f191474af6b1721408744feb989a4c27
         with:
           token: "${{ secrets.jupyterhub_bot_pat }}"
           author: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
@@ -170,7 +170,7 @@ jobs:
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create a PR
         if: steps.local.outputs.version != steps.latest.outputs.version
-        uses: peter-evans/create-pull-request@v4.0.3
+        uses: peter-evans/create-pull-request@923ad837f191474af6b1721408744feb989a4c27
         with:
           token: "${{ secrets.jupyterhub_bot_pat }}"
           author: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
