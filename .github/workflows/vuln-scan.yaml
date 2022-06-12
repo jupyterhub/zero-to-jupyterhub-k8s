@@ -6,12 +6,24 @@
 # workflow fail to signal that unless we make an exception, which we do for the
 # singleuser-sample image only.
 #
+#
+# About environment: watch-dependencies
+#
+# To reduce the exposure of the secrets.jupyterhub_bot_pat token that was setup
+# for the environment watch-dependencies, we have setup a dedicated environment
+# according to steps in
+# https://github.com/jupyterhub/team-compass/issues/516#issuecomment-1129961954.
+#
 name: Vuln. scan
 
 on:
   pull_request:
     paths:
       - ".github/workflows/vuln-scan.yaml"
+  push:
+    paths:
+      - ".github/workflows/vuln-scan.yaml"
+    branches: ["main"]
   schedule:
     # At 05:00 on Monday - https://crontab.guru
     - cron: "0 5 * * 1"
