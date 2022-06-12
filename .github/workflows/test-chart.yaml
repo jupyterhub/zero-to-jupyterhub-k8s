@@ -31,7 +31,9 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
 
       - name: Install dependencies
         run: pip install pre-commit
@@ -43,9 +45,9 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
         with:
-          python-version: "3.8"
+          python-version: "3.9"
 
       - name: Install dependencies
         run: pip install chartpress yamllint
@@ -76,9 +78,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
         with:
-          python-version: "3.8"
+          python-version: "3.9"
 
       - name: Install dependencies
         run: |
@@ -198,11 +200,9 @@ jobs:
           traefik-enabled: false
           docker-enabled: true
 
-      # NOTE: actions/setup-python@v3 make use of a cache within the GitHub base
-      #       environment and setup in a fraction of a second.
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
         with:
-          python-version: "3.8"
+          python-version: "3.9"
 
       # Install a local ACME server to fill the role of Let's Encrypt (LE). We
       # do this as the HTTP challenge sent out by an ACME server must be able to
