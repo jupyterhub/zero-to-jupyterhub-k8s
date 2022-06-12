@@ -138,6 +138,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
 
       - name: Get images/hub/requirements.in pinned version of jupyterhub
         id: local
