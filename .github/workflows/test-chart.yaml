@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
 
       - name: Install dependencies
         run: pip install pre-commit
@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
         with:
           python-version: "3.8"
 
@@ -76,7 +76,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
         with:
           python-version: "3.8"
 
@@ -198,9 +198,9 @@ jobs:
           traefik-enabled: false
           docker-enabled: true
 
-      # NOTE: actions/setup-python@v3 make use of a cache within the GitHub base
+      # NOTE: actions/setup-python@v4 make use of a cache within the GitHub base
       #       environment and setup in a fraction of a second.
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
         with:
           python-version: "3.8"
 
