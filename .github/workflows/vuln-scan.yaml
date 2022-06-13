@@ -33,6 +33,7 @@ jobs:
   trivy_image_scan:
     if: github.repository == 'jupyterhub/zero-to-jupyterhub-k8s'
     runs-on: ubuntu-20.04
+    environment: watch-dependencies
 
     strategy:
       fail-fast: false
