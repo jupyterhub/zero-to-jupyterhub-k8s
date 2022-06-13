@@ -332,5 +332,4 @@ jobs:
         uses: jupyterhub/action-k8s-namespace-report@v1
         if: always()
         with:
-          namespace: kube-system
-          important-workloads: deployment/calico-kube-controllers
+          important-workloads: deploy/hub deploy/proxy
