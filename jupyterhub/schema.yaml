@@ -2365,6 +2365,12 @@ properties:
           pdb: *pdb-spec
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
+          annotations:
+            type: object
+            additionalProperties: false
+            patternProperties: *labels-and-annotations-patternProperties
+            description: |
+              Extra annotations to add to the user-scheduler pods.
           containerSecurityContext: *containerSecurityContext-spec
           logLevel:
             type: integer

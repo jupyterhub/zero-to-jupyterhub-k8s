@@ -506,6 +506,7 @@ scheduling:
       pullSecrets: []
     nodeSelector: {}
     tolerations: []
+    annotations: {}
     pdb:
       enabled: true
       maxUnavailable: 1
