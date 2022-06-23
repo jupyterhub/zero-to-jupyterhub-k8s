@@ -9,8 +9,6 @@ WORKDIR /build-stage
 # Build wheels for packages that require gcc or other build dependencies and
 # lack wheels either for amd64 or aarch64.
 #
-#   - https://pypi.org/project/pycryptodomex/#files, no aarch64 wheels available
-#     as of 3.14.1. See https://github.com/Legrandin/pycryptodome/issues/628.
 #   - https://pypi.org/project/pycurl/#files, no wheels available as of 7.45.1.
 #     See https://github.com/pycurl/pycurl/issues/738.
 #   - https://pypi.org/project/ruamel.yaml.clib/#files, no aarch64 wheels
@@ -25,7 +23,6 @@ WORKDIR /build-stage
 COPY requirements.txt requirements.txt
 RUN pip install build \
  && pip wheel \
-        $(cat requirements.txt | grep "pycryptodomex==") \
         $(cat requirements.txt | grep "pycurl==") \
         $(cat requirements.txt | grep "ruamel-yaml-clib==")
 
