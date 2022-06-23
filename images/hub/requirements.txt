@@ -22,7 +22,7 @@ bcrypt==3.2.2
     # via
     #   jupyterhub-firstuseauthenticator
     #   jupyterhub-nativeauthenticator
-certifi==2022.5.18.1
+certifi==2022.6.15
     # via
     #   kubernetes-asyncio
     #   requests
@@ -90,7 +90,7 @@ jupyterhub-nativeauthenticator==1.0.5
     # via -r requirements.in
 jupyterhub-tmpauthenticator==0.6
     # via -r requirements.in
-kubernetes-asyncio==22.6.5
+kubernetes-asyncio==23.6.0
     # via jupyterhub-kubespawner
 ldap3==2.9.1
     # via jupyterhub-ldapauthenticator
@@ -195,7 +195,7 @@ tornado==6.1
     #   jupyterhub
     #   jupyterhub-idle-culler
     #   jupyterhub-ldapauthenticator
-traitlets==5.2.2.post1
+traitlets==5.3.0
     # via
     #   jupyter-telemetry
     #   jupyterhub
