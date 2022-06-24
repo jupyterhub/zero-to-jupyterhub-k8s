@@ -2509,6 +2509,12 @@ properties:
             type: integer
             description: |
               How many placeholder pods would you like to have?
+          annotations:
+            type: object
+            additionalProperties: false
+            patternProperties: *labels-and-annotations-patternProperties
+            description: |
+              Extra annotations to add to the placeholder pods.
           resources:
             type: object
             additionalProperties: true

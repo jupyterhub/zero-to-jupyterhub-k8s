@@ -535,6 +535,7 @@ scheduling:
       pullPolicy:
       pullSecrets: []
     replicas: 0
+    annotations: {}
     containerSecurityContext:
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group

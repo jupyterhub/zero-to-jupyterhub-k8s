@@ -23,6 +23,10 @@ spec:
   serviceName: {{ include "jupyterhub.user-placeholder.fullname" . }}
   template:
     metadata:
+      {{- with .Values.scheduling.userPlaceholder.annotations }}
+      annotations:
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
       labels:
         {{- /* Changes here will cause the Deployment to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
