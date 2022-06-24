@@ -179,7 +179,7 @@ six==1.16.0
     #   mwoauth
     #   onetimepass
     #   python-dateutil
-sqlalchemy==1.4.37
+sqlalchemy==1.4.39
     # via
     #   alembic
     #   jupyterhub
