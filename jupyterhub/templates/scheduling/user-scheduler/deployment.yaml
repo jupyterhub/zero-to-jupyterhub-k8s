@@ -16,6 +16,9 @@ spec:
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
       annotations:
         checksum/config-map: {{ include (print $.Template.BasePath "/scheduling/user-scheduler/configmap.yaml") . | sha256sum }}
+        {{- with .Values.scheduling.userScheduler.annotations }}
+        {{- . | toYaml | nindent 8 }}
+        {{- end }}
     spec:
       {{ with include "jupyterhub.user-scheduler-serviceaccount.fullname" . }}
       serviceAccountName: {{ . }}
