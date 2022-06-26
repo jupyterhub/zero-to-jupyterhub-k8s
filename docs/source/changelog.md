@@ -4,7 +4,13 @@
 
 Here you can find upgrade changes in between releases and upgrade instructions.
 
-## UNRELEASED
+## Unreleased breaking changes
+
+This Helm chart provides [development
+releases](https://jupyterhub.github.io/helm-chart/#development-releases-jupyterhub),
+and as we merge [breaking changes in pull
+requests](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pulls?q=is%3Apr+is%3Aclosed+label%3Abreaking),
+this list should be updated.
 
 ## 1.2
 
