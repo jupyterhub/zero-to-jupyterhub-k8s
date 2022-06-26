@@ -228,6 +228,9 @@ with open("resources/reference.md", "w") as f:
 linkcheck_ignore = [
     r"(.*)github\.com(.*)#",  # javascript based anchors
     r"(.*)/#%21(.*)/(.*)",  # /#!forum/jupyter - encoded anchor edge case
+    r"https://github.com/[^/]*$",  # too many github usernames / searches in changelog
+    "https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/",  # too many PRs in changelog
+    "https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/",  # too many comparisons in changelog
     "https://your-domain.com",  # example
     "https://your-domain-name.com",  # example
     "https://kubernetes.io/docs/tutorials/kubernetes-basics/",  # works
