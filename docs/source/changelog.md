@@ -1,3 +1,5 @@
+(changelog)=
+
 # Changelog
 
 Here you can find upgrade changes in between releases and upgrade instructions.
