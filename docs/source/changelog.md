@@ -38,18 +38,18 @@ If you are not using firstuseauthenticator, you are not affected.
 
 ### [1.1.3] - 2021-08-25
 
-## Maintenance and upkeep improvements
+#### Maintenance and upkeep improvements
 
 - refactor: remove redundant trimSuffix of new lines after toYaml [#2358](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2358) ([@consideRatio](https://github.com/consideRatio))
 - build(deps): bump pycurl from 7.44.0 to 7.44.1 in /images/hub [#2352](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2352) ([@dependabot](https://github.com/dependabot))
 - build(deps): bump oauthenticator from 14.1.0 to 14.2.0 in /images/hub [#2350](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2350) ([@dependabot](https://github.com/dependabot))
 - build(deps): bump pycurl from 7.43.0.6 to 7.44.0 in /images/hub [#2347](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2347) ([@dependabot](https://github.com/dependabot))
 
-## Documentation improvements
+#### Documentation improvements
 
 - Add docs on GitHub team authentication [#2349](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2349) ([@j0nnyr0berts](https://github.com/j0nnyr0berts))
 
-## Contributors to this release
+#### Contributors to this release
 
 ([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2021-08-05&to=2021-08-24&type=c))
 
@@ -691,7 +691,7 @@ This release bumps the JupyterHub version from 1.2.1 to 1.2.2. See [JupyterHub's
 changelog](https://jupyterhub.readthedocs.io/en/stable/changelog.html?highlight=changelog)
 for more information.
 
-## Bugs fixed
+#### Bugs fixed
 
 - image: bump JupyterHub to 1.2.2 from 1.2.1 for bugfixes [#1924](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1924) ([@consideRatio](https://github.com/consideRatio))
 
@@ -738,7 +738,7 @@ rely on Helm 3 features.
 - Allow exposing extra ports in autohttps/traefik deployment [#1901](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1901) ([@yuvipanda](https://github.com/yuvipanda))
 - prePuller.extraTolerations added for the image-puller daemonsets [#1883](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1883) ([@jerkern](https://github.com/jerkern))
 
-## Bugs fixed
+#### Bugs fixed
 
 - hub image: kubernetes 12.0.1, nativeauth 0.0.6, tornado 6.1 [#1912](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/1912) ([@consideRatio](https://github.com/consideRatio))
 
@@ -3192,7 +3192,7 @@ In alphabetical order,
 - [Zhenwen Zhang](https://github.com/zhangzhenwen)
 - [Zoltan Fedor](https://github.com/zoltan-fedor)
 
-## [0.4] - [Akram](#akram) - 2017-06-23
+## [0.4] - Akram - 2017-06-23
 
 Stability, HTTPS & breaking changes.
 
