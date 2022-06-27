@@ -111,13 +111,7 @@ properties:
         ```
 
         If you just want to let all Pods reference an existing secret, use the
-        `imagePullSecrets` configuration instead.
-
-        To learn the username and password fields to access a gcr.io registry from
-        a Kubernetes cluster not associated with the same google cloud
-        credentials, look into [this
-        guide](http://docs.heptio.com/content/private-registries/pr-gcr.html) and
-        read the notes about the password.
+        [`imagePullSecrets`](schema_imagePullSecrets) configuration instead.
       properties:
         create:
           type: boolean
@@ -172,9 +166,6 @@ properties:
                 ...
               }
             ```
-
-            Learn more in [this
-            guide](http://docs.heptio.com/content/private-registries/pr-gcr.html).
         email:
           type: [string, "null"]
           description: |

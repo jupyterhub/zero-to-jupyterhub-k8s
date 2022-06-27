@@ -164,7 +164,7 @@ certificates. One options is to use the [Qualys SSL Labs](https://www.ssllabs.co
 security report generator. Use the following URL structure to test your domain:
 
 ```
-http://ssllabs.com/ssltest/analyze.html?d=<YOUR-DOMAIN>
+https://ssllabs.com/ssltest/analyze.html?d=<YOUR-DOMAIN>
 ```
 
 ## Secure access to Helm

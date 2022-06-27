@@ -24,14 +24,14 @@ import subprocess
 import yaml
 
 # -- Sphinx setup function ---------------------------------------------------
-# ref: http://www.sphinx-doc.org/en/latest/extdev/tutorial.html#the-setup-function
+# ref: https://www.sphinx-doc.org/en/master/extdev/appapi.html#sphinx-core-events
 
 
 def setup(app):
     app.add_css_file("custom.css")
 
 
-# -- Referencable variables --------------------------------------------------
+# -- Referenceable variables --------------------------------------------------
 
 
 def _get_git_ref_from_chartpress_based_version(version):
@@ -224,7 +224,7 @@ with open("resources/reference.md", "w") as f:
 
 
 # -- Options for linkcheck builder -------------------------------------------
-# ref: http://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-the-linkcheck-builder
+# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-the-linkcheck-builder
 linkcheck_ignore = [
     r"(.*)github\.com(.*)#",  # javascript based anchors
     r"(.*)/#%21(.*)/(.*)",  # /#!forum/jupyter - encoded anchor edge case
@@ -243,7 +243,7 @@ linkcheck_anchors_ignore = [
 
 
 # -- Options for HTML output -------------------------------------------------
-# ref: http://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
+# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
