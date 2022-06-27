@@ -99,7 +99,7 @@ If you are not using firstuseauthenticator, you are not affected.
   `hub.services` with an api token. This is especially helpful for Helm charts
   depending on this Helm chart such as `binderhub` or `daskhub`, for more
   details see the
-  [`hub.services`](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#hub-services)
+  [`hub.services`](schema_hub.services)
   entry in the configuration reference.
 
 - **Full arm64 compatebility**
@@ -241,7 +241,7 @@ and small bugfixes will increment the three version numbers.
   dedicated ConfigMap that was mounted etc before, you don't need to go through
   that trouble.
 
-  Read more in [the configuration reference](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#hub-extrafiles).
+  Read more in [the configuration reference](schema_hub.extraFiles).
 
 - **Automatic secret generation**
 
@@ -267,7 +267,7 @@ and small bugfixes will increment the three version numbers.
   Helm chart, but should _not be used_ unless you install from scratch.
 
   Read more in [the configuration
-  reference](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#fullnameOverride).
+  reference](schema_fullnameOverride).
 
 - **Referencing resources from a parent Helm chart's templates**
 
@@ -394,7 +394,7 @@ followed these instructions between `0.7.0-beta.1` and `0.11.1`, please see the
 - **hub.existingSecret is reworked** ([#2042](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2042))
 
   See [the
-  documentation](http://z2jh.jupyter.org/en/latest/resources/reference.html#hub-existingsecret)
+  documentation](schema_hub.existingSecret)
   and [pull request
   #2042](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2042) for
   more details.
@@ -840,7 +840,7 @@ the Helm chart to easier comply with PodSecurityPolicies by default.
   instead use the chart wide `imagePullSecret` with the same syntax which will
   be helping all the JupyterHub pod's get images from a private image registry.
   For more information, see [the configuration
-  reference](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#imagepullsecret).
+  reference](schema_imagePullSecret).
 
 - Predefined Kubernetes
   [NetworkPolicies](https://kubernetes.io/docs/concepts/services-networking/network-policies/)
@@ -860,7 +860,7 @@ the Helm chart to easier comply with PodSecurityPolicies by default.
   See the [security
   documentation](https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/security.html#kubernetes-network-policies)
   and the [configuration
-  reference](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#proxy-chp-networkpolicy)
+  reference](schema_proxy.chp.networkPolicy)
   for more details.
 
 - The Helm chart configuration `proxy.networkPolicy` has been removed,
@@ -879,13 +879,13 @@ the Helm chart to easier comply with PodSecurityPolicies by default.
 - **Environment variables in pods with K8S config**. An ability to configure environment variables in pods with a k8s native syntax
   has been added. This allows you to reference and mount a field in a k8s Secret
   as an environment variable for example. For more information, read [about
-  extraEnv](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#singleuser-extraenv)
+  extraEnv](schema_singleuser.extraEnv)
   in the configuration reference.
 - **Configure secrets for all pods via the helm chart**. imagePullSecrets for all the pods in the Helm chart can now be configured
   chart wide. See the configuration reference about
-  [imagePullSecret](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#imagepullsecret)
+  [imagePullSecret](schema_imagePullSecret)
   and
-  [imagePullSecrets](https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#imagepullsecrets)
+  [imagePullSecrets](schema_imagePullSecrets)
   for more details.
 - **Pod security is easier to use and configure**. Deploying the Helm chart in a cluster with a PodSecurityPolicy active is now
   easier, because the pods' containers now have `securityContext` set on them to
