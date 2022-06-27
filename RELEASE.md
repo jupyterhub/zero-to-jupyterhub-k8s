@@ -48,7 +48,7 @@ Also the images we build are based on some image specified in the `FROM` stateme
 
 ## Pre-release iteration
 
-- Update `CHANGELOG.md`
+- Update `docs/source/changelog.md`
 
   - [ ] Generate a list of PRs using [executablebooks/github-activity](https://github.com/executablebooks/github-activity)
     ```bash
@@ -74,7 +74,7 @@ Also the images we build are based on some image specified in the `FROM` stateme
 
 ## Final release
 
-- Update `CHANGELOG.md`
+- Update `docs/source/changelog.md`
 
   - [ ] Generate a list of merged PRs and a list of contributors and update the changelog.
     ```bash

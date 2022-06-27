@@ -1,3 +1,5 @@
+(upgrading)=
+
 # Upgrading your Helm chart
 
 This page covers best-practices in upgrading your JupyterHub deployment via updates
@@ -5,7 +7,7 @@ to the Helm Chart.
 
 Upgrading from one version of the Helm Chart to the
 next should be as seamless as possible, and generally shouldn't require major
-changes to your deployment. Check the [CHANGELOG](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/CHANGELOG.md)
+changes to your deployment. Check the [CHANGELOG](changelog)
 for each release to find out if there are any breaking changes in the newest version.
 
 For additional help, feel free to reach out to us on [gitter](https://gitter.im/jupyterhub/jupyterhub)
@@ -16,7 +18,7 @@ or the [Discourse forum](https://discourse.jupyter.org/).
 These steps are **critical** before performing a major upgrade.
 
 1. Always backup your database!
-2. Review the [CHANGELOG](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/CHANGELOG.md) for incompatible changes and upgrade instructions.
+2. Review the [CHANGELOG](changelog) for incompatible changes and upgrade instructions.
 3. Update your configuration accordingly.
 4. User servers may need be stopped prior to the upgrade,
    or restarted after it.
@@ -26,7 +28,7 @@ These steps are **critical** before performing a major upgrade.
 
 ### v0.5 to v0.6
 
-See the [CHANGELOG](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/CHANGELOG.md#06---ellyse-perry---2017-01-29).
+See the [CHANGELOG](changelog).
 
 ### v0.4 to v0.5
 
@@ -35,9 +37,8 @@ Since it is a major upgrade of JupyterHub that changes how authentication is
 implemented, user servers must be stopped during the upgrade.
 The database schema has also changed, so a database upgrade must be performed.
 
-See the [documentation for v0.5 for the upgrade process](https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/upgrading.html#v0-4-to-v0-5)
-as well as the [CHANGELOG](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/CHANGELOG.md#05---hamid-hassan---2017-12-05)
-for this release for more information about changes.
+See the [CHANGELOG](changelog) for this release for more information about
+changes.
 
 ## Subtopics
 
