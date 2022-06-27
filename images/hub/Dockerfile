@@ -2,7 +2,7 @@
 # ---------------
 FROM python:3.9-bullseye as build-stage
 
-# VULN_SCAN_TIME=2022-05-30_05:27:26
+# VULN_SCAN_TIME=2022-06-27_06:14:10
 
 WORKDIR /build-stage
 
