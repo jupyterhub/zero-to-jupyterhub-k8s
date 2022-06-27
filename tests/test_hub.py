@@ -1,6 +1,6 @@
 """
-These tests commonl use JupyterHub's REST API:
-http://petstore.swagger.io/?url=https://raw.githubusercontent.com/jupyterhub/jupyterhub/HEAD/docs/rest-api.yml
+These tests common use JupyterHub's REST API:
+https://jupyterhub.readthedocs.io/en/stable/reference/rest-api.html
 """
 
 import os
