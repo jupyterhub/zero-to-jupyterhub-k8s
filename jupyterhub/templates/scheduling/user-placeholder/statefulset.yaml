@@ -30,6 +30,9 @@ spec:
       labels:
         {{- /* Changes here will cause the Deployment to restart the pods. */}}
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
+        {{- with .Values.scheduling.userPlaceholder.labels }}
+        {{- . | toYaml | nindent 8 }}
+        {{- end }}
     spec:
       {{- if .Values.scheduling.podPriority.enabled }}
       priorityClassName: {{ include "jupyterhub.user-placeholder-priority.fullname" . }}
