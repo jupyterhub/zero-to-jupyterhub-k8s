@@ -85,7 +85,6 @@ singleuser:
 Previously if `hub.config` was used to configure some JupyterHub traitlets it would override any custom configuration files mounted into `jupyterhub_config.d` in the hub container.
 In 2.0.0 all extra customisations (e.g. using `hub.extraConfig` to provide in-line configuration, or `hub.extraFiles` to mount files into `jupyterhub_config.d`) will always take precedence over any Helm chart values.
 
-
 ## User scheduler plugin configuration has changed to match `kubescheduler.config.k8s.io/v1beta3` [#2590](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2590)
 
 Advanced customisation of the user scheduler using plugins now requires Kubernetes 1.21+, and the configuration must follow `kubescheduler.config.k8s.io/v1beta3`.
@@ -115,7 +114,7 @@ The hub container base image has switched from `ubuntu:20.04` to `python:3.9-sli
 If you have extended the Z2JH hub image please review the [hub Dockerfile](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/2.0.0/images/hub/Dockerfile).
 Note the singleuser image is not affected.
 
-## Disabling RBAC requires setting multiple properties,`rbac.enable` is removed [#2736](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2736) [#2739](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2739)
+## Disabling RBAC requires setting multiple properties, `rbac.enable` is removed [#2736](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2736) [#2739](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2739)
 
 If you previously disabled RBAC using `rbac.enable: False` you should set
 
@@ -139,4 +138,4 @@ prePuller:
       create: false
 ```
 
-When you have updated your configuration follow the rest of the [upgrade guide](upgrading).
+When you have updated your configuration follow the rest of the [upgrade guide](upgrading-major-upgrades).

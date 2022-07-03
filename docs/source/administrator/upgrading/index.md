@@ -1,37 +1,39 @@
-# Upgrading your Helm chart
+# Upgrading JupyterHub for Kubernetes
 
-This page covers best-practices in upgrading your JupyterHub deployment via updates
+This section covers best-practices in upgrading your JupyterHub deployment via updates
 to the Helm Chart.
 
-```{toctree}
-:maxdepth: 1
-:caption: Upgrade Guide
+Z2JH follows [semantic versioning](https://semver.org/), with each version taking the form `MAJOR.MINOR.PATCH`.
+Minor and patch releases should be backwards compatible, and shouldn't require changes to your deployment.
+Review the [CHANGELOG](changelog) to find out about new features or bug fixes that affect your deployment,
+then follow [](helm-upgrade-command).
 
-upgrade-1-to-2
-```
-
-Upgrading from one version of the Helm Chart to the
-next should be as seamless as possible, and generally shouldn't require major
-changes to your deployment. Check the [CHANGELOG](changelog)
-for each release to find out if there are any breaking changes in the newest version.
+Major releases may contain breaking changes, and will often require changes to your configuration.
+They have dedicated instructions for upgrading your deployment in addition to the general instructions on this page.
 
 For additional help, feel free to reach out to us on [gitter](https://gitter.im/jupyterhub/jupyterhub)
 or the [Discourse forum](https://discourse.jupyter.org/).
 
+(upgrading-major-upgrades)=
+
 ## Major helm-chart upgrades
 
+```{toctree}
+:maxdepth: 1
+:caption: Major releases guides
+
+upgrade-1-to-2
+```
+
 These steps are **critical** before performing a major upgrade.
-Z2JH follows semantic versioning, so major upgrades are indicated by an increase in the first component of the version.
 
 1. Always backup your database!
-2. Review the [CHANGELOG](changelog) and [2.0.0 upgrade guide](upgrade-1-to-2) for incompatible changes and upgrade instructions.
+2. Review the appropriate upgrade guide, and/or the [CHANGELOG](changelog) for incompatible changes and upgrade instructions.
 3. Update your configuration accordingly.
-4. User servers may need be stopped prior to the upgrade,
-   or restarted after it.
+4. User servers may need be stopped prior to the upgrade, or restarted after it.
 5. If you are planning an upgrade of a critical major installation,
    we recommend you test the upgrade out on a staging cluster first
    before applying it to production.
-
 
 (helm-upgrade-command)=
 
@@ -95,9 +97,11 @@ you would use:
 ```Dockerfile
 RUN pip install --no-cache-dir jupyterhub==2.3.1
 ```
+
 If you are using conda or mamba:
+
 ```Dockerfile
-RUN conda install -y jupyterhub-base=2.3.1
+RUN conda install --channel=conda-forge -y jupyterhub-base=2.3.1
 ```
 
 Update the configuration to use this new image, which is typically done via
@@ -118,4 +122,4 @@ deleting the helm chart using:
 helm delete <helm-release-name> --namespace <k8s-namespace>
 ```
 
-`helm list --namespace <k8s-namespace>` may be used to find <helm-release-name>.
+`helm list --namespace <k8s-namespace>` may be used to find `<helm-release-name>`.
