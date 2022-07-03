@@ -3,6 +3,13 @@
 This page covers best-practices in upgrading your JupyterHub deployment via updates
 to the Helm Chart.
 
+```{toctree}
+:maxdepth: 1
+:caption: Upgrade Guide
+
+upgrade-1-to-2
+```
+
 Upgrading from one version of the Helm Chart to the
 next should be as seamless as possible, and generally shouldn't require major
 changes to your deployment. Check the [CHANGELOG](changelog)
