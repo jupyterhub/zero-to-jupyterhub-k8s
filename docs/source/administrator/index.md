@@ -15,6 +15,7 @@ services
 optimization
 security
 upgrading
+upgrade-1-to-2
 ../../jupyterhub/customization
 troubleshooting
 advanced
