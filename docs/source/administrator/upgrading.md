@@ -1,5 +1,3 @@
-(upgrading)=
-
 # Upgrading your Helm chart
 
 This page covers best-practices in upgrading your JupyterHub deployment via updates
