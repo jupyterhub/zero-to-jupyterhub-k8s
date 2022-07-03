@@ -14,15 +14,15 @@ If you have configured any of:
 - `singleuser.networkPolicy.egress`
 
 you must review your configuration as additional default egress routes have been added.
-Previously `...networkPolicy.egress` controlled all egress but a new properties `...networkPolicy.egressAllowRules` add additional egress rules by default.
+Previously `*.networkPolicy.egress` controlled all egress but a new properties `*.networkPolicy.egressAllowRules` add additional egress rules by default.
 
-If you have configured `...networkPolicy.egress` for `hub`, `proxy.chp`,
+If you have configured `*.networkPolicy.egress` for `hub`, `proxy.chp`,
 `proxy.traefik` or `singleuser` to restrict the permissions to establish
 outbound network connections, then this upgrade is likely to _escalate those
 permissions unless you revise your configuration_. The new configuration
-`...networkPolicy.egressAllowRules` are by default granting most of the egress
-permissions previously granted by default via the `...networkPolicy.egress`
-configuration, and `...networkPolicy.egress` are now by default not providing
+`*.networkPolicy.egressAllowRules` are by default granting most of the egress
+permissions previously granted by default via the `*.networkPolicy.egress`
+configuration, and `*.networkPolicy.egress` are now by default not providing
 any permissions.
 
 If you for example had overridden the previously very permissive default value
@@ -42,8 +42,8 @@ singleuser:
 
 For more details, see the documentation on [Kubernetes Network Policies](netpol)
 and the configuration reference entries under
-[`...networkPolicy.egress`](schema_hub.networkPolicy.egress) and
-[`...networkPolicy.egressAllowRules`](schema_hub.networkPolicy.egressAllowRules).
+[`*.networkPolicy.egress`](schema_hub.networkPolicy.egress) and
+[`*.networkPolicy.egressAllowRules`](schema_hub.networkPolicy.egressAllowRules).
 
 ## JupyterHub 2 and related hub components
 
