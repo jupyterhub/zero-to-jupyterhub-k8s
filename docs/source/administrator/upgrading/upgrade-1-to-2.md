@@ -52,7 +52,7 @@ If you are using any custom JupyterHub services, addons, API integrations, or ex
 [JupyterHub 2.0.0 changelog](https://github.com/jupyterhub/jupyterhub/blob/2.3.1/docs/source/changelog.md#200).
 
 JupyterHub 2 uses an updated database schema.
-Z2JH 2.0.0 automatically handles the upgrade, but it will not be possible to downgrade to older releases after this.
+Z2JH 2.0.0 automatically handles the upgrade for SQLite databases (the default), but it will not be possible to downgrade to older releases after this.
 
 JupyterHub 2 adds RBAC for managing permissions in JupyterHub.
 The old permissions model of admin/non-admin still works but you should use
