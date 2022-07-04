@@ -14,7 +14,7 @@ If you have configured any of:
 - `singleuser.networkPolicy.egress`
 
 you must review your configuration as additional default egress routes have been added.
-Previously `*.networkPolicy.egress` controlled all egress but a new properties `*.networkPolicy.egressAllowRules` add additional egress rules by default.
+Previously `*.networkPolicy.egress` controlled all egress but a new property `*.networkPolicy.egressAllowRules` add additional egress rules by default.
 
 If you have configured `*.networkPolicy.egress` for `hub`, `proxy.chp`,
 `proxy.traefik` or `singleuser` to restrict the permissions to establish
@@ -52,7 +52,7 @@ If you are using any custom JupyterHub services, addons, API integrations, or ex
 [JupyterHub 2.0.0 changelog](https://github.com/jupyterhub/jupyterhub/blob/2.3.1/docs/source/changelog.md#200).
 
 JupyterHub 2 uses an updated database schema.
-Z2JH 2.0.0 automatically handles the upgrade for SQLite databases (the default), but it will not be possible to downgrade to older releases after this.
+Z2JH 2.0.0 automatically handles the upgrade for SQLite databases (the default), but if you use an external database you need to configure [`hub.db.upgrade`](schema_hub.db.upgrade) to true when upgrading. It will not be possible to downgrade to older releases after this without also using a backup or resetting the database.
 
 JupyterHub 2 adds RBAC for managing permissions in JupyterHub.
 The old permissions model of admin/non-admin still works but you should use
