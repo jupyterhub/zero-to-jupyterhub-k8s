@@ -146,16 +146,18 @@ jobs:
               --set hub.config.CryptKeeper.keys[0]=cccc3333
             create-k8s-test-resources: true
 
-          # We run two upgrade tests where we first install an already released
-          # Helm chart version and then upgrades to the version we are now
-          # testing. We test upgrading from the latest stable version (like
-          # 1.2.3), and one from the latest dev version (like
-          # 1.2.3-n012.h1234abc).
+          # We run three upgrade tests where we first install an already released
+          # Helm chart version and then upgrade to the version we are now
+          # testing:
+          # - latest stable version (like 1.2.3)
+          # - latest dev version (like 1.2.3-n012.h1234abc),
+          # - and an old version that requires a JupyterHub DB upgrade
           #
           # It can be very useful to see the "Helm diff" step's output from the
           # latest dev version.
           #
-          # The upgrade-from input should match the version information from
+          # The upgrade-from input should be a chart version, or match the version
+          # information from
           # https://jupyterhub.github.io/helm-chart/info.json
           #
           - k3s-channel: v1.23
@@ -181,6 +183,34 @@ jobs:
             local-chart-extra-args: >-
               --set hub.db.type=sqlite-pvc
               --set singleuser.storage.type=dynamic
+          - k3s-channel: v1.24
+            test: upgrade
+            # We're testing hub.db.upgrade with PostgreSQL so this version must be old
+            # enough to require a DB upgrade
+            upgrade-from: 1.2.0
+            upgrade-from-extra-args: >-
+              --set proxy.secretToken=aaaa1111
+              --set hub.cookieSecret=bbbb2222
+              --set hub.config.CryptKeeper.keys[0]=cccc3333
+              --set hub.db.type=postgres
+              --set hub.db.url=postgresql+psycopg2://postgres:postgres@postgresql:5432/jupyterhub
+              --set singleuser.storage.type=dynamic
+            local-chart-extra-args: >-
+              --set hub.db.type=postgres
+              --set hub.db.url=postgresql+psycopg2://postgres:postgres@postgresql:5432/jupyterhub
+              --set singleuser.storage.type=dynamic
+              --set hub.db.upgrade=true
+            create-k8s-test-resources: true
+            # https://artifacthub.io/packages/helm/bitnami/postgresql
+            setup-postgresql-args: >-
+              --version=11.6.13
+              --set auth.enablePostgresUser=true
+              --set auth.postgresPassword=postgres
+              --set auth.database=jupyterhub
+              --set audit.logHostname=true
+              --set audit.logConnections=true
+              --set audit.logDisconnections=true
+              --set audit.clientMinMessages=debug
 
     steps:
       - uses: actions/checkout@v3
@@ -237,11 +267,23 @@ jobs:
           timeout: 150
           max-restarts: 1
 
+      - name: "(Upgrade) Install PostgreSQL server chart"
+        if: matrix.setup-postgresql-args
+        run: |
+          . ./ci/common
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm install postgresql bitnami/postgresql ${{ matrix.setup-postgresql-args }}
+          await_kubectl_rollout statefulset/postgresql
+
       - name: "(Upgrade) Install ${{ matrix.upgrade-from }} chart"
         if: matrix.test == 'upgrade'
         run: |
           . ./ci/common
-          UPGRADE_FROM_VERSION=$(curl -sS https://jupyterhub.github.io/helm-chart/info.json | jq -er '.jupyterhub.${{ matrix.upgrade-from }}')
+          if [ ${{ matrix.upgrade-from }} = stable -o ${{ matrix.upgrade-from }} = dev ]; then
+            UPGRADE_FROM_VERSION=$(curl -sS https://jupyterhub.github.io/helm-chart/info.json | jq -er '.jupyterhub.${{ matrix.upgrade-from }}')
+          else
+            UPGRADE_FROM_VERSION=${{ matrix.upgrade-from }}
+          fi
           echo "UPGRADE_FROM_VERSION=$UPGRADE_FROM_VERSION" >> $GITHUB_ENV
 
           echo ""
@@ -333,3 +375,8 @@ jobs:
         if: always()
         with:
           important-workloads: deploy/hub deploy/proxy
+
+      - name: Debug PostgreSQL logs on failure
+        if: failure() && matrix.setup-postgresql-args
+        run: |
+          kubectl logs statefulset/postgresql
