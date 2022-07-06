@@ -271,8 +271,7 @@ jobs:
         if: matrix.setup-postgresql-args
         run: |
           . ./ci/common
-          helm repo add bitnami https://charts.bitnami.com/bitnami
-          helm install postgresql bitnami/postgresql ${{ matrix.setup-postgresql-args }}
+          helm install postgresql postgresql --repo=https://charts.bitnami.com/bitnami ${{ matrix.setup-postgresql-args }}
           await_kubectl_rollout statefulset/postgresql
 
       - name: "(Upgrade) Install ${{ matrix.upgrade-from }} chart"
