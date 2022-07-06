@@ -48,7 +48,7 @@ Procedure:
    Or, if you prefer, create the cluster using the [IBM Cloud CLI tools](https://cloud.ibm.com/docs/containers?topic=containers-cs_cli_install))
 
 2. Configure kubectl
-   [kubectl](https://kubernetes.io/docs/reference/kubectl/overview/) is a CLI tool to interact with a Kubernetes cluster. In this occasion, you will use it to point forward to the created Kubernetes cluster.
+   [kubectl](https://kubernetes.io/docs/reference/kubectl/) is a CLI tool to interact with a Kubernetes cluster. In this occasion, you will use it to point forward to the created Kubernetes cluster.
 
    1. Use `ibmcloud login` to log in interactively into the IBM Cloud. Provide the organization (org), location and space under which the cluster is created. You can reconfirm the details by running `ibmcloud target` command.
    2. When the cluster is ready, retrieve the cluster configuration by using the cluster's name:

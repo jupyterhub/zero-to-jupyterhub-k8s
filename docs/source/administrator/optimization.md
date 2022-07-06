@@ -189,7 +189,7 @@ waiting time for the pod, and as a pod can represent a user, it can lead to a
 long waiting time for a user. There are now options to address this.
 
 With Kubernetes 1.11+ (that requires Helm 2.11+), [Pod Priority and
-Preemption](https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/)
+Preemption](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/)
 was introduced. This allows pods with higher priority to preempt / evict pods
 with lower priority if that would help the higher priority pod fit on a node.
 
