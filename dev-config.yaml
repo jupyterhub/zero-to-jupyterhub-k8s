@@ -51,10 +51,13 @@ hub:
     test-generation-of-apiToken: {}
   networkPolicy:
     egress: # overrides allowance of 0.0.0.0/0
-      # In kind/k3s clusters the Kubernetes API server is exposing this port
       - ports:
+          # In kind/k3s clusters the Kubernetes API server is exposing this port
           - protocol: TCP
             port: 6443
+          # For testing postgres
+          - protocol: TCP
+            port: 5432
   resources:
     requests:
       memory: 0
