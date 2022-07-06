@@ -66,6 +66,9 @@ helm upgrade --cleanup-on-fail jhub jupyterhub/jupyterhub --version=1.1.1 --valu
 Major releases of Z2JH may include a major release of JupyterHub that requires an upgrade of the database schema.
 If you are using the default database provider (SQLite), then the required db upgrades
 will be performed automatically when you do a `helm upgrade`.
+A backup of the old database is automatically created on the hub volume.
+
+It is not possible to automatically backup other database providers, so the upgrade is not done automatically.
 
 **Default (SQLite)**: The database upgrade will be performed automatically when you
 [perform the upgrade](helm-upgrade-command)
@@ -84,7 +87,7 @@ will be performed automatically when you do a `helm upgrade`.
    ```
 
 4. Do a [`helm upgrade`](helm-upgrade-command). This should perform the database upgrade needed.
-5. Remove the lines added in step 3, and do another [`helm upgrade`](helm-upgrade-command).
+5. Remove the lines added in step 3, and do another [`helm upgrade`](helm-upgrade-command) so that future JupyterHub upgrades don't inadvertently upgrade the schema.
 
 ## Custom Docker Images: JupyterHub version match
 
