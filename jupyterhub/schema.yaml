@@ -2356,6 +2356,15 @@ properties:
           pdb: *pdb-spec
           nodeSelector: *nodeSelector-spec
           tolerations: *tolerations-spec
+          labels:
+            type: object
+            additionalProperties: false
+            patternProperties: *labels-and-annotations-patternProperties
+            description: |
+              Extra labels to add to the userScheduler pods.
+
+              See the [Kubernetes docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+              to learn more about labels.
           annotations:
             type: object
             additionalProperties: false
@@ -2506,6 +2515,15 @@ properties:
             type: integer
             description: |
               How many placeholder pods would you like to have?
+          labels:
+            type: object
+            additionalProperties: false
+            patternProperties: *labels-and-annotations-patternProperties
+            description: |
+              Extra labels to add to the userPlaceholder pods.
+
+              See the [Kubernetes docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+              to learn more about labels.
           annotations:
             type: object
             additionalProperties: false
@@ -2657,6 +2675,15 @@ properties:
     additionalProperties: false
     required: [hook, continuous]
     properties:
+      labels:
+        type: object
+        additionalProperties: false
+        patternProperties: *labels-and-annotations-patternProperties
+        description: |
+          Extra labels to add to the pre puller job pods.
+
+          See the [Kubernetes docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+          to learn more about labels.
       annotations:
         type: object
         additionalProperties: false

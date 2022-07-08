@@ -506,6 +506,7 @@ scheduling:
       pullSecrets: []
     nodeSelector: {}
     tolerations: []
+    labels: {}
     annotations: {}
     pdb:
       enabled: true
@@ -536,6 +537,7 @@ scheduling:
       pullPolicy:
       pullSecrets: []
     replicas: 0
+    labels: {}
     annotations: {}
     containerSecurityContext:
       runAsUser: 65534 # nobody user
@@ -569,6 +571,7 @@ scheduling:
 
 # prePuller relates to the hook|continuous-image-puller DaemonsSets
 prePuller:
+  labels: {}
   annotations: {}
   resources: {}
   containerSecurityContext:
