@@ -13,22 +13,26 @@ setup_helm () {
     curl -sf https://raw.githubusercontent.com/helm/helm/HEAD/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
 }
 
+await_kubectl_rollout() {
+    kubectl rollout status --watch --timeout 300s "$1"
+}
+
 await_pebble() {
-    kubectl rollout status --watch --timeout 300s deployment/pebble \
-        && kubectl rollout status --watch --timeout 300s deployment/pebble-coredns
+    await_kubectl_rollout deployment/pebble \
+        && await_kubectl_rollout deployment/pebble-coredns
 }
 
 await_jupyterhub() {
-    kubectl rollout status --watch --timeout 300s deployment/proxy \
-        && kubectl rollout status --watch --timeout 300s deployment/hub \
+    await_kubectl_rollout deployment/proxy \
+        && await_kubectl_rollout deployment/hub \
         && (
         if kubectl get deploy/autohttps &> /dev/null; then
-            kubectl rollout status --watch --timeout 300s deployment/autohttps
+            await_kubectl_rollout deployment/autohttps
         fi
     ) \
         && (
         if kubectl get deploy/user-scheduler &> /dev/null; then
-            kubectl rollout status --watch --timeout 300s deployment/user-scheduler
+            await_kubectl_rollout deployment/user-scheduler
         fi
     )
 }

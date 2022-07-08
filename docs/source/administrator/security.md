@@ -283,6 +283,8 @@ singleuser:
     ip: 169.254.169.254
 ```
 
+(netpol)=
+
 ## Kubernetes Network Policies
 
 ```{warning}

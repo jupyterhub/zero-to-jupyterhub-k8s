@@ -160,7 +160,7 @@ rediraffe_redirects = {
     "tips": "community/tips",
     "index-community-resources": "resources/community",
     "additional-resources": "resources/community",
-    "upgrading": "administrator/upgrading",
+    "upgrading": "administrator/upgrading/index",
     "troubleshooting": "administrator/troubleshooting",
     "security": "administrator/security",
     "optimization": "administrator/optimization",

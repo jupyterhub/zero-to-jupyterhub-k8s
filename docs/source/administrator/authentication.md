@@ -192,11 +192,11 @@ hub:
 ```
 
 ```{admonition} About the choice of scope
-The narrower scope `read:user` is sufficient for a configuration of `allowed_organizations` to function if you both list only entire organizations rather than specific teams, and if the users [make their organization membership public](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/managing-your-membership-in-organizations/publicizing-or-hiding-organization-membership).
+The narrower scope `read:user` is sufficient for a configuration of `allowed_organizations` to function if you both list only entire organizations rather than specific teams, and if the users [make their organization membership public](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-your-membership-in-organizations/publicizing-or-hiding-organization-membership).
 
-The broader scope `read:org` doesn't have the limitations of `read:user`, but will require a one-off approval by the admins of the GitHub organizations' listed in `allowed_organizations`. This kind of approval can be requested by organization users [as documented on GitHub](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/managing-your-membership-in-organizations/requesting-organization-approval-for-oauth-apps).
+The broader scope `read:org` doesn't have the limitations of `read:user`, but will require a one-off approval by the admins of the GitHub organizations' listed in `allowed_organizations`. This kind of approval can be requested by organization users [as documented on GitHub](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-your-membership-in-organizations/requesting-organization-approval-for-oauth-apps).
 
-For details about GitHub scopes, see [GitHub's documentation](https://docs.github.com/en/developers/apps/scopes-for-oauth-apps).
+For details about GitHub scopes, see [GitHub's documentation](https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps).
 ```
 
 #### Google

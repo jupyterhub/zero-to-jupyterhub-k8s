@@ -14,7 +14,7 @@ authentication
 services
 optimization
 security
-upgrading
+upgrading/index
 ../../jupyterhub/customization
 troubleshooting
 advanced
