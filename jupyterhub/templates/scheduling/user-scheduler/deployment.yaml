@@ -14,6 +14,9 @@ spec:
     metadata:
       labels:
         {{- include "jupyterhub.matchLabels" . | nindent 8 }}
+        {{- with .Values.scheduling.userScheduler.labels }}
+        {{- . | toYaml | nindent 8 }}
+        {{- end }}
       annotations:
         checksum/config-map: {{ include (print $.Template.BasePath "/scheduling/user-scheduler/configmap.yaml") . | sha256sum }}
         {{- with .Values.scheduling.userScheduler.annotations }}
