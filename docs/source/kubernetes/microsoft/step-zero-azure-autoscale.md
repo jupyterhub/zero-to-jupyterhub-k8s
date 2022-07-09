@@ -9,7 +9,7 @@ These instructions involve parts of the Azure command line that are in preview, 
 You can create a Kubernetes cluster [either through the Azure portal website, or using the Azure command line tools](https://docs.microsoft.com/en-us/azure/aks/).
 
 This page describes the commands required to setup a Kubernetes cluster using the command line.
-If you prefer to use the Azure portal see the [Azure Kubernetes Service quickstart](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough-portal).
+If you prefer to use the Azure portal see the [Azure Kubernetes Service quickstart](https://docs.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal).
 
 1. Prepare your Azure shell environment. You have two options, one is to use
    the Azure interactive shell, the other is to install the Azure command-line
@@ -157,7 +157,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 
    To enable this in Azure, we must first create a [Virtual Network](https://docs.microsoft.com/en-gb/azure/virtual-network/virtual-networks-overview) with Azure's own network policies enabled.
 
-   This section of the documentation is following the Microsoft Azure tutorial on [creating an AKS cluster and enabling network policy](https://docs.microsoft.com/en-us/azure/aks/use-network-policies#create-an-aks-cluster-and-enable-network-policy), which includes information on using [Calico](https://docs.projectcalico.org) network policies.
+   This section of the documentation is following the Microsoft Azure tutorial on [creating an AKS cluster and enabling network policy](https://docs.microsoft.com/en-us/azure/aks/use-network-policies#create-an-aks-cluster-and-enable-network-policy), which includes information on using [Calico](https://projectcalico.docs.tigera.io/about/about-calico) network policies.
 
    ```
    az network vnet create \

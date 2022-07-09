@@ -29,4 +29,4 @@ This image available tags can be found [here](https://hub.docker.com/r/jupyterhu
 
 - Ubuntu Linux - v18.04 aka. Bionic
 - JupyterHub - required by with Helm chart since KubeSpawner requires it
-- [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) and [JupyterLab-Hub extension](https://jupyterlab.readthedocs.io/en/stable/user/jupyterhub.html) - to activate it over the classical UI by default, see [the guide's instructions](https://z2jh.jupyter.org/en/latest/user-environment.html#use-jupyterlab-by-default).
+- [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) and [JupyterLab-Hub extension](https://jupyterlab.readthedocs.io/en/stable/user/jupyterhub.html) - to activate it over the classical UI by default, see [the guide's instructions](https://z2jh.jupyter.org/en/latest/jupyterhub/customizing/user-environment.html#use-jupyterlab-by-default).

@@ -282,7 +282,7 @@ and small bugfixes will increment the three version numbers.
 The documentation for how to setup a Amazon EKS cluster included an insecure
 step that would give anyone access to the Kubernetes cluster. If you have
 followed these instructions between `0.7.0-beta.1` and `0.11.1`, please see the
-[this post in the Jupyter forum](https://discourse.jupyter.org/t/-/9372).
+[this post in the Jupyter forum](https://discourse.jupyter.org/t/critical-security-vulnerability-in-instructions-on-z2jh-jupyter-org-to-set-up-a-amazon-eks-based-k8s-cluster/9372).
 
 #### Breaking changes
 
@@ -1421,7 +1421,7 @@ which are forbidden otherwise.
 If you encounter issues with upgrades, check for changed configuration in this document, and make sure your config is up to date.
 
 If you aren't able to get the upgrade to work,
-you can [rollback](https://docs.helm.sh/helm/#helm-rollback)
+you can [rollback](https://helm.sh/docs/helm/helm_rollback/)
 to a previous version with:
 
     helm rollback $RELEASE
@@ -1434,7 +1434,7 @@ if you have problems or questions.
 ##### Easier user-selectable profiles upon login
 
 Profile information is now passed through to KubeSpawner. This means you can
-[specify multiple user profiles that users can select from](https://zero-to-jupyterhub.readthedocs.io/en/latest/user-environment.html?highlight=profile#allow-users-to-create-their-own-conda-environments)
+[specify multiple user profiles that users can select from](schema_singleuser.profileList)
 when they log in. ([#402](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/402))
 
 ##### Configurable image pull secrets
@@ -1456,7 +1456,7 @@ Want to make your autoscheduler work efficiently? Then you should schedule pods 
 
 - **Pod priority and User placeholders** - #929
 
-Want to scale up before users arrive so they don't end up waiting for the node to pull an image of several gigabytes in size? By adding a configurable fixed amount of user placeholder pods with a lower [pod priority](https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/) than real user pods, we can accomplish this. It requires k8s v1.11 though.
+Want to scale up before users arrive so they don't end up waiting for the node to pull an image of several gigabytes in size? By adding a configurable fixed amount of user placeholder pods with a lower [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/) than real user pods, we can accomplish this. It requires k8s v1.11 though.
 
 - **preferScheduleNextToRealUsers - improves autoscaling** - #930
   This setting slightly improves the ability for a cluster autoscaler to scale down by increasing the likelihood of user placeholders being left alone on a node rather than real users. Real users can't be moved around while user placeholder pods can
@@ -2792,7 +2792,7 @@ prePuller:
     enabled: false
 ```
 
-See the [pre-puller docs](http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html#pre-pulling-images-for-faster-startup) for more info!
+See the [pre-puller docs](pulling-images-before-users-arrive) for more info!
 
 #### Upgrading from 0.5
 
@@ -2806,7 +2806,7 @@ by running `helm list`.
 ##### Troubleshooting
 
 If your helm upgrade fails due to the error `no Ingress with the name "jupyterhub-internal" found`,
-you may be experiencing a [helm bug](https://github.com/kubernetes/helm/issues/3275). To work
+you may be experiencing a [helm bug](https://github.com/helm/helm/issues/3275). To work
 around this, run `kubectl --namespace=<YOUR-NAMESPACE> delete ingress jupyterhub-internal` and
 re-run the `helm upgrade` command. Note that this will cause a short unavailability of your hub
 over HTTPS, which will resume normal availability once the deployment upgrade completes.
@@ -2819,7 +2819,7 @@ z2jh is more secure by default with 0.6. We now
 block access to cloud security metadata endpoints by
 default.
 
-See the [security documentation](http://zero-to-jupyterhub.readthedocs.io/en/latest/security.html) for more details. It has seen a number of improvements, and we recommend
+See the [security documentation](security) for more details. It has seen a number of improvements, and we recommend
 you read through it!
 
 ##### Autoscaling improvements
@@ -2829,9 +2829,9 @@ which can add / remove nodes depending on how much your
 cluster is being used. In this release, we made a few
 changes to let z2jh interact better with the autoscaler!
 
-- Configure z2jh to ['pack' your users](http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html#picking-a-scheduler-strategy)
+- Configure z2jh to ['pack' your users](optimization)
   onto nodes, rather than 'spread' them across nodes.
-- A ['continuous' pre-puller](http://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html?highlight=prepull#pre-pulling-images-for-faster-startup)
+- A ['continuous' pre-puller](pulling-images-before-users-arrive)
   that allows user images to
   be pulled on new nodes easily, leading to faster startup
   times for users on new nodes. ([link])
@@ -2854,7 +2854,7 @@ better supported by this version!
 Azure AKS is still in preview mode, so be aware of that
 before using it in any production workloads!
 
-See the [setting up Kubernetes on Microsoft AKS](http://zero-to-jupyterhub.readthedocs.io/en/latest/create-k8s-cluster.html#setting-up-kubernetes-on-microsoft-azure-container-service-aks) section for more information.
+See the [setting up Kubernetes on Microsoft AKS](microsoft-azure) section for more information.
 
 ##### Better configurability
 
@@ -2863,13 +2863,13 @@ We now have better documentation and bug fixes for configurability!
 - `extraConfig` can be a dictionary instead of just a
   string. This helps when you have to split your `config.yaml`
   into multiple files for complex deployments
-- How user storage works by default is [better documented](http://zero-to-jupyterhub.readthedocs.io/en/latest/user-storage.html)
+- How user storage works by default is [better documented](user-storage)
 - Reading config in `extraConfig` from `extraConfigMap` now actually works!
 - You can configure the URL that users are directed to after they log in.
-  This allows [defaulting users to JupyterLab](http://zero-to-jupyterhub.readthedocs.io/en/latest/user-environment.html#use-jupyterlab-by-default)
+  This allows [defaulting users to JupyterLab](jupyterlab-by-default)
 - You can pre-pull multiple images now, for custom configuration that needs multiple images
-- [Better instructions](http://zero-to-jupyterhub.readthedocs.io/en/latest/user-environment.html#pre-populating-user-s-home-directory-with-files)
-  on pre-populating your user's filesystem using [nbgitpuller](https://github.com/data-8/nbgitpuller)
+- [Better instructions](use-nbgitpuller)
+  on pre-populating your user's filesystem using [nbgitpuller](https://github.com/jupyterhub/nbgitpuller)
 
 #### [Ellyse Perry](https://en.wikipedia.org/wiki/Ellyse_Perry)
 
@@ -2902,7 +2902,7 @@ her take home the Player of the Match award.
 Perry featured prominently in Australia's three-peat of World T20 victories,
 selected for the Team of the Tournament in 2012 and 2014.
 
-She was named [ICC Female Cricketer of the Year](http://www.abc.net.au/news/2017-12-22/ellyse-perry-named-iccs-womens-cricketer-of-the-year/9280538) in 2017.
+She was named [ICC Female Cricketer of the Year](https://www.abc.net.au/news/2017-12-22/ellyse-perry-named-iccs-womens-cricketer-of-the-year/9280538) in 2017.
 
 #### Contributors
 
@@ -2942,7 +2942,7 @@ In alphabetical order,
 
 ## 0.5
 
-### 0.5 - [Hamid Hassan](http://www.espncricinfo.com/afghanistan/content/player/311427.html) - 2017-12-05
+### 0.5 - [Hamid Hassan](https://www.espncricinfo.com/player/hamid-hassan-311427) - 2017-12-05
 
 JupyterHub 0.8, HTTPS & scalability.
 
@@ -2975,7 +2975,7 @@ And lots more!
 
 It is our responsibility as software authors to make it very easy for admins to set up
 HTTPS for their users. v0.5 makes this much easier than v0.4. You can find the new
-instructions [here](http://zero-to-jupyterhub.readthedocs.io/en/latest/extending-jupyterhub.html#setting-up-https) and
+instructions [here](https) and
 they are much simpler!
 
 You can also now use your own HTTPS certificates & keys rather than using Let's Encrypt.
@@ -3001,7 +3001,7 @@ ways that's not yet possible with config.yaml.
 
 ##### Hub Services support
 
-You can also add [external JupyterHub Services](http://jupyterhub.readthedocs.io/en/latest/reference/services.html)
+You can also add [external JupyterHub Services](https://jupyterhub.readthedocs.io/en/latest/reference/services.html)
 by adding them to `hub.services`. Note that you are still responsible for actually
 running the service somewhere (perhaps as a deployment object).
 
@@ -3018,10 +3018,10 @@ and `singleuser.fsGid`, mount extra volumes with `singleuser.storage.extraVolume
 Hamid Hassan is a fast bowler who currently plays for the Afghanistan National
 Cricket Team. With nicknames ranging from
 ["Afghanistan's David Beckham"](https://www.rferl.org/a/interview-afghan-cricketer-living-the-dream/24752618.html) to
-["Rambo"](http://www.nzherald.co.nz/nz/news/article.cfm?c_id=1&objectid=11413633),
+["Rambo"](https://www.nzherald.co.nz/nz/cricket-world-cup-rambo-ready-to-rumble/QAORUQEH6BHMOLRDABVXISQPPA/?c_id=1&objectid=11413633),
 he is considered by many to be Afghanistan's first Cricket Superhero. Currently
 known for fast (145km/h+) deliveries, cartwheeling celebrations, war painted
-face and having had to flee Afghanistan as a child to escape from war. He [says](http://www.nzherald.co.nz/nz/news/article.cfm?c_id=1&objectid=11413633)
+face and having had to flee Afghanistan as a child to escape from war. He [says](https://www.nzherald.co.nz/nz/cricket-world-cup-rambo-ready-to-rumble/QAORUQEH6BHMOLRDABVXISQPPA/?c_id=1&objectid=11413633)
 he plays because "We are ambassadors for our country and we want to show the
 world that Afghanistan is not like people recognise it by terrorists and these
 things. We want them to know that we have a lot of talent as well"
@@ -3029,9 +3029,9 @@ things. We want them to know that we have a lot of talent as well"
 #### Contributors
 
 This release wouldn't have been possible without the wonderful contributors
-to the [zero-to-jupyterhub](https://github.com/jupyterhub/zero-to-jupyterhub-k8s),
+to the [zero-to-jupyterhub-k8s](https://github.com/jupyterhub/zero-to-jupyterhub-k8s),
 [JupyterHub](https://github.com/jupyterhub/jupyterhub), [KubeSpawner](https://github.com/jupyterhub/kubespawner)
-and [OAuthenticator](http://github.com/jupyterhub/oauthenticator) repos.
+and [OAuthenticator](https://github.com/jupyterhub/oauthenticator) repos.
 We'd like to thank everyone who contributed in any form - Issues, commenting
 on issues, PRs and reviews since the last Zero to JupyterHub release.
 
@@ -3230,7 +3230,7 @@ installation.
   See [PR #56](https://github.com/jupyterhub/kubespawner/pull/56) on
   what needs to change.
 
-- A **[StorageClass](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#storageclasses)**
+- A **[StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/)**
   is no longer created by default. This shouldn't affect most new installs,
   since most cloud provider installations have a default (as of Kubernetes 1.6).
   If you are using an older version of Kubernetes, the easiest thing to do is to
@@ -3266,13 +3266,13 @@ installation.
 
 #### Changed
 
-- We now use the official [configurable http proxy](http://github.com/jupyterhub/configurable-http-proxy)
+- We now use the official [configurable http proxy](https://github.com/jupyterhub/configurable-http-proxy)
   (CHP) as the proxy, rather than the unofficial
   [nchp](https://github.com/yuvipanda/jupyterhub-nginx-chp). This should be a
   no-op (or require no changes) for the most part. JupyterHub errors might
   display a nicer error page.
 - The version of KubeSpawner uses the official Kubernetes
-  [python client](https://github.com/kubernetes-incubator/client-python/) rather
+  [python client](https://github.com/kubernetes-client/python) rather
   than [pycurl](http://pycurl.io/). This helps with scalability a little.
 
 #### Removed
