@@ -27,92 +27,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint_shell_scripts:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.9"
-
-      - name: Install dependencies
-        run: pip install pre-commit
-
-      - name: Run shellcheck linter
-        run: pre-commit run --all --config .pre-commit-config-shellcheck.yaml
-
-  lint_and_validate_rendered_templates:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.9"
-
-      - name: Install dependencies
-        run: pip install chartpress yamllint
-
-      - name: Lint and validate
-        run: tools/templates/lint-and-validate.py
-
-      - name: Lint and validate (--strict, accept failure)
-        run: tools/templates/lint-and-validate.py --strict
-        continue-on-error: true
-
-  lint_and_validate_templates_with_schema:
-    runs-on: ubuntu-20.04
-
-    strategy:
-      fail-fast: false
-      matrix:
-        # We run this job with the latest lowest helm version we support.
-        #
-        # helm version 3.4.X is known to cause the following error in the named
-        # template "jupyterhub.imagePuller.daemonset.hook.checksum":
-        #
-        #     error calling merge: reflect: call of reflect.Value.MapKeys on ptr Value
-        #
-        include:
-          - helm-version: "" # latest
-          - helm-version: v3.5.0 # minimal required version
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.9"
-
-      - name: Install dependencies
-        run: |
-          . ci/common
-          setup_helm
-          pip install pyyaml
-        env:
-          HELM_VERSION: "${{ matrix.helm-version }}"
-
-      - name: Generate values.schema.json
-        run: tools/generate-json-schema.py
-
-      - name: Helm lint (values.yaml)
-        run: helm lint ./jupyterhub
-
-      - name: Helm lint (lint-and-validate-values.yaml)
-        run: helm lint ./jupyterhub --values tools/templates/lint-and-validate-values.yaml
-
-      # FIXME: We can probably emit a GitHub workflow warning if these fail
-      #        instead having them show as green without a warning or similar
-      #
-      # NOTE: --strict means that any warning is considered an error, and there
-      #       are several warnings that we should ignore.
-      #
-      - name: Helm lint --strict (values.yaml)
-        run: helm lint --strict ./jupyterhub
-        continue-on-error: true
-
-      - name: Helm lint --strict (lint-and-validate-values.yaml)
-        run: helm lint --strict ./jupyterhub
-        continue-on-error: true
-
   test:
     runs-on: ubuntu-20.04
     timeout-minutes: 20
@@ -128,97 +42,37 @@ jobs:
         # k3s-version: https://github.com/rancher/k3s/tags
         # k3s-channel: https://update.k3s.io/v1-release/channels
         #
-        # NOTE: we workaround a bug for k3s 1.22+ by passing `extra-setup-args: --egress-selector-mode=disabled`
-        #
         include:
-          - k3s-channel: latest
-            k3s-extra-setup-args: --egress-selector-mode=disabled
-            test: install
-          - k3s-channel: stable
-            k3s-extra-setup-args: --egress-selector-mode=disabled
-            test: install
-          - k3s-channel: v1.21 # also test prePuller.hook
-            test: install
-            local-chart-extra-args: >-
-              --set prePuller.hook.enabled=true
-              --set prePuller.hook.pullOnlyOnChanges=true
-          - k3s-channel: v1.20 # also test hub.existingSecret
-            test: install
-            local-chart-extra-args: >-
-              --set hub.existingSecret=test-hub-existing-secret
-              --set proxy.secretToken=aaaa1111
-              --set hub.cookieSecret=bbbb2222
-              --set hub.config.CryptKeeper.keys[0]=cccc3333
-            create-k8s-test-resources: true
-
-          # We run three upgrade tests where we first install an already released
-          # Helm chart version and then upgrade to the version we are now
-          # testing:
-          # - latest stable version (like 1.2.3)
-          # - latest dev version (like 1.2.3-n012.h1234abc),
-          # - and an old version that requires a JupyterHub DB upgrade
-          #
-          # It can be very useful to see the "Helm diff" step's output from the
-          # latest dev version.
-          #
-          # The upgrade-from input should be a chart version, or match the version
-          # information from
-          # https://jupyterhub.github.io/helm-chart/info.json
-          #
+          - k3s-channel: v1.24
+            extra-setup-args: --debug
+          - k3s-channel: v1.24
+            extra-setup-args: --debug
+          - k3s-channel: v1.24
+            extra-setup-args: --debug
+          - k3s-channel: v1.24
+            extra-setup-args: --debug
+          - k3s-channel: v1.24
+            extra-setup-args: --debug
           - k3s-channel: v1.23
-            k3s-extra-setup-args: --egress-selector-mode=disabled
-            test: upgrade
-            upgrade-from: stable
-            upgrade-from-extra-args: >-
-              --set proxy.secretToken=aaaa1111
-              --set hub.cookieSecret=bbbb2222
-              --set hub.config.CryptKeeper.keys[0]=cccc3333
-              --set hub.db.type=sqlite-pvc
-              --set singleuser.storage.type=dynamic
-            local-chart-extra-args: >-
-              --set hub.db.type=sqlite-pvc
-              --set singleuser.storage.type=dynamic
-            create-k8s-test-resources: true
+            extra-setup-args: --debug
           - k3s-channel: v1.23
-            k3s-extra-setup-args: --egress-selector-mode=disabled
-            test: upgrade
-            upgrade-from: dev
-            upgrade-from-extra-args: >-
-              --set proxy.secretToken=aaaa1111
-              --set hub.db.type=sqlite-pvc
-              --set singleuser.storage.type=dynamic
-            local-chart-extra-args: >-
-              --set hub.db.type=sqlite-pvc
-              --set singleuser.storage.type=dynamic
+            extra-setup-args: --debug
+          - k3s-channel: v1.23
+            extra-setup-args: --debug
+          - k3s-channel: v1.23
+            extra-setup-args: --debug
+          - k3s-channel: v1.23
+            extra-setup-args: --debug
           - k3s-channel: v1.22
-            k3s-extra-setup-args: --egress-selector-mode=disabled
-            test: upgrade
-            # We're testing hub.db.upgrade with PostgreSQL so this version must be old
-            # enough to require a DB upgrade
-            upgrade-from: 1.2.0
-            upgrade-from-extra-args: >-
-              --set proxy.secretToken=aaaa1111
-              --set hub.cookieSecret=bbbb2222
-              --set hub.config.CryptKeeper.keys[0]=cccc3333
-              --set hub.db.type=postgres
-              --set hub.db.url=postgresql+psycopg2://postgres:postgres@postgresql:5432/jupyterhub
-              --set singleuser.storage.type=dynamic
-            local-chart-extra-args: >-
-              --set hub.db.type=postgres
-              --set hub.db.url=postgresql+psycopg2://postgres:postgres@postgresql:5432/jupyterhub
-              --set singleuser.storage.type=dynamic
-              --set hub.db.upgrade=true
-            create-k8s-test-resources: true
-            # https://artifacthub.io/packages/helm/bitnami/postgresql
-            setup-postgresql-args: >-
-              --version=11.6.13
-              --set auth.enablePostgresUser=true
-              --set auth.postgresPassword=postgres
-              --set auth.database=jupyterhub
-              --set audit.logHostname=true
-              --set audit.logConnections=true
-              --set audit.logDisconnections=true
-              --set audit.clientMinMessages=debug
+            extra-setup-args: --debug
+          - k3s-channel: v1.22
+            extra-setup-args: --debug
+          - k3s-channel: v1.22
+            extra-setup-args: --debug
+          - k3s-channel: v1.22
+            extra-setup-args: --debug
+          - k3s-channel: v1.22
+            extra-setup-args: --debug
 
     steps:
       - uses: actions/checkout@v3
@@ -232,12 +86,18 @@ jobs:
       #
       # ref: https://github.com/jupyterhub/action-k3s-helm/
       - uses: jupyterhub/action-k3s-helm@v3
+        id: k3s
         with:
           k3s-channel: ${{ matrix.k3s-channel }}
           metrics-enabled: false
           traefik-enabled: false
-          docker-enabled: true
+          docker-enabled: false
           extra-setup-args: "${{ matrix.k3s-extra-setup-args }}"
+        
+      - name: "Version info (k3s: ${{ steps.k3s.outputs.k3s-version }}, calico: ${{ steps.k3s.outputs.calico-version }})"
+        run: |
+          echo k3s version installed is ${{ steps.k3s.outputs.k3s-version }}
+          echo calico version installed is ${{ steps.k3s.outputs.calico-version }}
 
       - uses: actions/setup-python@v4
         with:
@@ -276,82 +136,6 @@ jobs:
           timeout: 150
           max-restarts: 1
 
-      - name: "(Upgrade) Install PostgreSQL server chart"
-        if: matrix.setup-postgresql-args
-        run: |
-          . ./ci/common
-          helm install postgresql postgresql --repo=https://charts.bitnami.com/bitnami ${{ matrix.setup-postgresql-args }}
-          await_kubectl_rollout statefulset/postgresql
-
-      - name: "(Upgrade) Install ${{ matrix.upgrade-from }} chart"
-        if: matrix.test == 'upgrade'
-        run: |
-          . ./ci/common
-          if [ ${{ matrix.upgrade-from }} = stable -o ${{ matrix.upgrade-from }} = dev ]; then
-            UPGRADE_FROM_VERSION=$(curl -sS https://jupyterhub.github.io/helm-chart/info.json | jq -er '.jupyterhub.${{ matrix.upgrade-from }}')
-          else
-            UPGRADE_FROM_VERSION=${{ matrix.upgrade-from }}
-          fi
-          echo "UPGRADE_FROM_VERSION=$UPGRADE_FROM_VERSION" >> $GITHUB_ENV
-
-          echo ""
-          echo "Installing already released jupyterhub version $UPGRADE_FROM_VERSION"
-
-          # FIXME: We change the directory so jupyterhub the chart name won't be
-          #        misunderstood as the local folder name.
-          #
-          #        https://github.com/helm/helm/issues/9244
-          cd ci
-          helm install jupyterhub --repo https://jupyterhub.github.io/helm-chart/ jupyterhub --values ../dev-config.yaml --version=$UPGRADE_FROM_VERSION ${{ matrix.upgrade-from-extra-args }}
-
-      - name: "(Upgrade) Install helm diff"
-        if: matrix.test == 'upgrade'
-        run: |
-          helm plugin install https://github.com/databus23/helm-diff
-
-      - name: "(Upgrade) Helm diff ${{ matrix.upgrade-from }} chart with local chart"
-        if: matrix.test == 'upgrade'
-        run: |
-          LOCAL_CHART_VERSION=$(cat jupyterhub/Chart.yaml | yq e '.version' -)
-          export STRING_REPLACER_A=$LOCAL_CHART_VERSION
-          export STRING_REPLACER_B=$UPGRADE_FROM_VERSION
-
-          echo "NOTE: Helm diff upgrade won't trigger lookup functions, so it"
-          echo "      will look like we seed new passwords all the time."
-          echo
-          echo "NOTE: For the helm diff only, we have replaced the new chart"
-          echo "      version with the old chart version to reduce clutter."
-          echo
-          echo "      Old version: $UPGRADE_FROM_VERSION"
-          echo "      New version: $LOCAL_CHART_VERSION (replaced)"
-          echo
-
-          helm diff upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml \
-              --values dev-config-local-chart-extra-config.yaml \
-              ${{ matrix.local-chart-extra-args }} \
-              --show-secrets \
-              --context=3 \
-              --post-renderer=ci/string-replacer.sh
-
-      - name: "(Upgrade) Await ${{ matrix.upgrade-from }} chart"
-        if: matrix.test == 'upgrade'
-        uses: jupyterhub/action-k8s-await-workloads@v1
-        with:
-          timeout: 150
-          max-restarts: 1
-
-      - name: "(Upgrade) Await ${{ matrix.upgrade-from }} chart cert acquisition"
-        if: matrix.test == 'upgrade'
-        run: |
-          . ./ci/common
-          await_autohttps_tls_cert_acquisition
-          await_autohttps_tls_cert_save
-
-      - name: Create k8s test resources
-        if: matrix.create-k8s-test-resources
-        run: |
-          kubectl apply -f ci/test-hub-existing-secret.yaml
-
       - name: "Install local chart"
         run: |
           helm upgrade --install jupyterhub ./jupyterhub \
@@ -384,7 +168,8 @@ jobs:
         with:
           important-workloads: deploy/hub deploy/proxy
 
-      - name: Debug PostgreSQL logs on failure
-        if: failure() && matrix.setup-postgresql-args
-        run: |
-          kubectl logs statefulset/postgresql
+      - if: always()
+        run: systemctl status k3s.service
+
+      - if: always()
+        run: journalctl -xe
