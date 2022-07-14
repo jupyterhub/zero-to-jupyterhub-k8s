@@ -190,6 +190,14 @@ properties:
     additionalProperties: false
     required: [baseUrl]
     properties:
+      revisionHistoryLimit: &revisionHistoryLimit
+        type: [integer, "null"]
+        minimum: 0
+        description: |
+          Configures the Deployment's `spec.revisionHistoryLimit`.
+
+          See the [Kubernetes docs](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#revision-history-limit)
+          for more info.
       config:
         type: object
         additionalProperties: true
@@ -1437,6 +1445,7 @@ properties:
     type: object
     additionalProperties: false
     properties:
+      revisionHistoryLimit: *revisionHistoryLimit
       chp:
         type: object
         additionalProperties: false
@@ -2347,6 +2356,7 @@ properties:
             type: boolean
             description: |
               Enables the user scheduler.
+          revisionHistoryLimit: *revisionHistoryLimit
           replicas:
             type: integer
             description: |

@@ -6,6 +6,9 @@ metadata:
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
+  {{- if not (eq nil .Values.scheduling.userScheduler.revisionHistoryLimit) }}
+  revisionHistoryLimit: {{ .Values.scheduling.userScheduler.revisionHistoryLimit }}
+  {{- end }}
   replicas: {{ .Values.scheduling.userScheduler.replicas }}
   selector:
     matchLabels:

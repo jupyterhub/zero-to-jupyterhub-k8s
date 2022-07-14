@@ -26,6 +26,7 @@ imagePullSecrets: []
 # ConfigurableHTTPProxy speaks with the actual ConfigurableHTTPProxy server in
 # the proxy pod.
 hub:
+  revisionHistoryLimit:
   config:
     JupyterHub:
       admin_access: true
@@ -144,6 +145,7 @@ rbac:
 # proxy relates to the proxy pod, the proxy-public service, and the autohttps
 # pod and proxy-http service.
 proxy:
+  revisionHistoryLimit:
   secretToken:
   annotations: {}
   deploymentStrategy:
@@ -403,6 +405,7 @@ singleuser:
 scheduling:
   userScheduler:
     enabled: true
+    revisionHistoryLimit:
     replicas: 2
     logLevel: 4
     # plugins are configured on the user-scheduler to make us score how we
