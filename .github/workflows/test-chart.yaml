@@ -43,35 +43,41 @@ jobs:
         # k3s-channel: https://update.k3s.io/v1-release/channels
         #
         include:
-          - k3s-channel: v1.24
+          - k3s-version: v1.24.3-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-channel: v1.24
+          - k3s-version: v1.24.3-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-channel: v1.24
+          - k3s-version: v1.24.3-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-channel: v1.24
+          - k3s-version: v1.24.3-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-channel: v1.24
+          - k3s-version: v1.24.3-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-channel: v1.23
+          - k3s-version: v1.24.3-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-channel: v1.23
+          - k3s-version: v1.23.9-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-channel: v1.23
+          - k3s-version: v1.23.9-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-channel: v1.23
+          - k3s-version: v1.23.9-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-channel: v1.23
+          - k3s-version: v1.23.9-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-channel: v1.22
+          - k3s-version: v1.23.9-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-channel: v1.22
+          - k3s-version: v1.23.9-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-channel: v1.22
+          - k3s-version: v1.22.12-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-channel: v1.22
+          - k3s-version: v1.22.12-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-channel: v1.22
+          - k3s-version: v1.22.12-rc1+k3s1
+            extra-setup-args: --debug
+          - k3s-version: v1.22.12-rc1+k3s1
+            extra-setup-args: --debug
+          - k3s-version: v1.22.12-rc1+k3s1
+            extra-setup-args: --debug
+          - k3s-version: v1.22.12-rc1+k3s1
             extra-setup-args: --debug
 
     steps:
@@ -88,12 +94,12 @@ jobs:
       - uses: jupyterhub/action-k3s-helm@v3
         id: k3s
         with:
-          k3s-channel: ${{ matrix.k3s-channel }}
+          k3s-version: ${{ matrix.k3s-version }}
           metrics-enabled: false
           traefik-enabled: false
           docker-enabled: false
           extra-setup-args: "${{ matrix.k3s-extra-setup-args }}"
-        
+
       - name: "Version info (k3s: ${{ steps.k3s.outputs.k3s-version }}, calico: ${{ steps.k3s.outputs.calico-version }})"
         run: |
           echo k3s version installed is ${{ steps.k3s.outputs.k3s-version }}
