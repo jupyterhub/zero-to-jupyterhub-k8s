@@ -395,6 +395,8 @@ singleuser:
     limits: {}
     guarantees: {}
   cmd:
+  args:
+    - jupyterhub-singleuser
   defaultUrl:
   extraPodConfig: {}
   profileList: []
