@@ -174,19 +174,64 @@ def test_spawn_netpol(api_request, jupyter_user, request_data):
                 f"Network issue: access to '{allowed_jupyter_org_ip}' was supposed to be allowed"
             )
 
-        # check blocked jupyter.org ip connectivity
+        # check allowed jupyter.org ip connectivity
         c = subprocess.run(
-            cmd_check_blocked_ip,
+            cmd_check_allowed_ip,
             text=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
         )
-        if c.returncode == 0:
+        if c.returncode != 0:
             print(f"Return code: {c.returncode}")
             print("---")
             print(c.stdout)
             raise AssertionError(
-                f"Network issue: access to '{blocked_jupyter_org_ip}' was supposed to be denied"
+                f"Network issue: access to '{allowed_jupyter_org_ip}' was supposed to be allowed"
+            )
+
+        # check allowed jupyter.org ip connectivity
+        c = subprocess.run(
+            cmd_check_allowed_ip,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        if c.returncode != 0:
+            print(f"Return code: {c.returncode}")
+            print("---")
+            print(c.stdout)
+            raise AssertionError(
+                f"Network issue: access to '{allowed_jupyter_org_ip}' was supposed to be allowed"
+            )
+
+        # check allowed jupyter.org ip connectivity
+        c = subprocess.run(
+            cmd_check_allowed_ip,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        if c.returncode != 0:
+            print(f"Return code: {c.returncode}")
+            print("---")
+            print(c.stdout)
+            raise AssertionError(
+                f"Network issue: access to '{allowed_jupyter_org_ip}' was supposed to be allowed"
+            )
+
+        # check allowed jupyter.org ip connectivity
+        c = subprocess.run(
+            cmd_check_allowed_ip,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        if c.returncode != 0:
+            print(f"Return code: {c.returncode}")
+            print("---")
+            print(c.stdout)
+            raise AssertionError(
+                f"Network issue: access to '{allowed_jupyter_org_ip}' was supposed to be allowed"
             )
 
     finally:
