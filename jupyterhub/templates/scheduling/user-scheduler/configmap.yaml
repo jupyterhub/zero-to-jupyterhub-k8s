@@ -28,7 +28,7 @@ data:
        and configuration (v1beta1) of kube-scheduler.
   */}}
   config.yaml: |
-    {{- if ge (atoi .Capabilities.KubeVersion.Minor) 21 }}
+    {{- if ge (atoi ( .Capabilities.KubeVersion.Minor | replace "+" "" )) 21 }}
     apiVersion: kubescheduler.config.k8s.io/v1beta3
     kind: KubeSchedulerConfiguration
     leaderElection:

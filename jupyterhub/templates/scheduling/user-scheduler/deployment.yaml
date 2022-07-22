@@ -47,7 +47,7 @@ spec:
       {{- end }}
       containers:
         - name: kube-scheduler
-          {{- if ge (atoi .Capabilities.KubeVersion.Minor) 21 }}
+          {{- if ge (atoi ( .Capabilities.KubeVersion.Minor | replace "+" "" )) 21 }}
           image: {{ .Values.scheduling.userScheduler.image.name }}:{{ .Values.scheduling.userScheduler.image.tag }}
           {{- else }}
           # WARNING: The tag of this image is hardcoded, and the
