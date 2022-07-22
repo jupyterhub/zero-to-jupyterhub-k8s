@@ -47,7 +47,14 @@ spec:
       {{- end }}
       containers:
         - name: kube-scheduler
-          {{- if ge (atoi ( .Capabilities.KubeVersion.Minor | replace "+" "" )) 21 }}
+          {{- /*
+            FIXME: We have added a workaround for EKS where
+                  .Capabilities.KubeVersion.Minor can return a
+                  string like "22+" instead of just "22".
+
+                  See https://github.com/aws/eks-distro/issues/1128.
+          */}}
+          {{- if ge (atoi (.Capabilities.KubeVersion.Minor | replace "+" "")) 21 }}
           image: {{ .Values.scheduling.userScheduler.image.name }}:{{ .Values.scheduling.userScheduler.image.tag }}
           {{- else }}
           # WARNING: The tag of this image is hardcoded, and the
