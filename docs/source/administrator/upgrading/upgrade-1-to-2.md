@@ -58,6 +58,9 @@ JupyterHub 2 adds RBAC for managing permissions in JupyterHub.
 The old permissions model of admin/non-admin still works but you should use
 [RBAC to assign the required privileges to users or services in future](https://jupyterhub.readthedocs.io/en/stable/rbac/index.html)
 
+KubeSpawner has replaced the [`kubernetes`] library with [`kubernetes_asyncio`](https://github.com/tomplus/kubernetes_asyncio).
+If you have extended the JupyterHub image and you rely on the kubernetes library you will need to modify your extensions.
+
 See
 `TODO: link to Notable dependencies updated`
 in the changelog for more information on other upgraded hub components.
@@ -66,6 +69,20 @@ in the changelog for more information on other upgraded hub components.
 
 The default singleuser server is [JupyterLab](https://jupyterlab.readthedocs.io/), running on [Jupyter server](https://jupyter-server.readthedocs.io/en/latest/).
 To switch back to Jupyter Notebook either configure/rebuild your singleuser image to default to notebook, or see [the documentation on user interfaces](user-interfaces)
+
+## KubeSpawner disallows root users by default
+
+KubeSpawner will prevent processes executing as root in the singleuser container by default.
+You must set `singleuser.allowPrivilegeEscalation: true` to enable root users.
+For example, if you are using a [docker-stacks](https://jupyter-docker-stacks.readthedocs.io/) image and want to enable sudo:
+
+```yaml
+singleuser:
+  allowPrivilegeEscalation: true
+  uid: 0
+  extraEnv:
+    GRANT_SUDO: "1"
+```
 
 ## Default to using the container image's command instead of `jupyterhub-singleuser` [#2449](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2449)
 
