@@ -2379,7 +2379,7 @@ properties:
               kube-scheduler binary running within the user-scheduler pod.
           plugins:
             type: object
-            additionalProperties: false
+            additionalProperties: true
             description: |
               These plugins refers to kube-scheduler plugins as documented
               [here](https://kubernetes.io/docs/reference/scheduling/config/).
@@ -2387,29 +2387,6 @@ properties:
               The user-scheduler is really just a kube-scheduler configured in a
               way to pack users tight on nodes using these plugins. See
               values.yaml for information about the default plugins.
-            properties:
-              score:
-                type: object
-                additionalProperties: false
-                properties:
-                  disabled:
-                    type: array
-                    items:
-                      type: object
-                      additionalProperties: false
-                      properties:
-                        name:
-                          type: string
-                  enabled:
-                    type: array
-                    items:
-                      type: object
-                      additionalProperties: false
-                      properties:
-                        name:
-                          type: string
-                        weight:
-                          type: integer
           pluginConfig:
             type: array
             description: |
