@@ -107,7 +107,7 @@ can try with `nano config.yaml`.
    a different terminal:
 
    ```
-   kubectl get pod --namespace jhub
+   kubectl get pod --namespace <k8s-namespace>
    ```
 
    To remain sane we recommend that you enable autocompletion for kubectl
