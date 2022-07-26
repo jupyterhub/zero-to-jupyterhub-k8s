@@ -1,8 +1,8 @@
 (ovh)=
 
-# Kubernetes on [OVHcloud](https://www.ovhcloud.com/en-ie/) (OVH)
+# Kubernetes on [OVHcloud](https://www.ovhcloud.com/) (OVH)
 
-[OVHcloud](https://www.ovhcloud.com/en-ie/) is a leader in the hosted private cloud services space in Europe.
+[OVHcloud](https://www.ovhcloud.com/) is a leader in the hosted private cloud services space in Europe.
 
 They offer a managed Kubernetes service as well as a managed private registry for Docker images.
 
