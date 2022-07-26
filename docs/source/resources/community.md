@@ -111,7 +111,7 @@ kubectl --namespace=<NAMESPACE> get pod -o <json|yaml|wide|name...>
 ```
 
 You can find more information on what kinds of output you can generate at
-[the kubectl information page](https://kubernetes.io/docs/reference/kubectl/overview/).
+[the kubectl information page](https://kubernetes.io/docs/reference/kubectl/).
 (click and search for the text "Output Options")
 
 This is a community maintained list of organizations / people using the Zero to
