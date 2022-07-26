@@ -70,9 +70,10 @@ in the changelog for more information on other upgraded hub components.
 The default singleuser server is [JupyterLab](https://jupyterlab.readthedocs.io/), running on [Jupyter server](https://jupyter-server.readthedocs.io/en/latest/).
 To switch back to Jupyter Notebook either configure/rebuild your singleuser image to default to notebook, or see [the documentation on user interfaces](user-interfaces)
 
-## KubeSpawner disallows root users by default
+## KubeSpawner prevents privilege escalation such as sudo by default
 
-KubeSpawner will prevent processes executing as root in the singleuser container by default.
+By default processes cannot escalate their privileges.
+For example, a user cannot use sudo to switch to root.
 If you have configured sudo or some other privilege escalation method inside your singleuser image you must set `singleuser.allowPrivilegeEscalation: true`.
 
 ```yaml
