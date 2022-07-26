@@ -73,15 +73,11 @@ To switch back to Jupyter Notebook either configure/rebuild your singleuser imag
 ## KubeSpawner disallows root users by default
 
 KubeSpawner will prevent processes executing as root in the singleuser container by default.
-You must set `singleuser.allowPrivilegeEscalation: true` to enable root users.
-For example, if you are using a [docker-stacks](https://jupyter-docker-stacks.readthedocs.io/) image and want to enable sudo:
+If you have configured sudo or some other privilege escalation method inside your singleuser image you must set `singleuser.allowPrivilegeEscalation: true`.
 
 ```yaml
 singleuser:
   allowPrivilegeEscalation: true
-  uid: 0
-  extraEnv:
-    GRANT_SUDO: "1"
 ```
 
 ## Default to using the container image's command instead of `jupyterhub-singleuser` [#2449](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2449)
