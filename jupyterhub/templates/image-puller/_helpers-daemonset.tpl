@@ -34,6 +34,9 @@ spec:
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: 100%
+  {{- if not (eq nil .Values.prePuller.revisionHistoryLimit) }}
+  revisionHistoryLimit: {{ .Values.prePuller.revisionHistoryLimit }}
+  {{- end }}
   template:
     metadata:
       labels:

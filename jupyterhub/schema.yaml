@@ -1445,7 +1445,6 @@ properties:
     type: object
     additionalProperties: false
     properties:
-      revisionHistoryLimit: *revisionHistoryLimit
       chp:
         type: object
         additionalProperties: false
@@ -1453,6 +1452,7 @@ properties:
           Configure the configurable-http-proxy (chp) pod managed by jupyterhub to route traffic
           both to itself and to user pods.
         properties:
+          revisionHistoryLimit: *revisionHistoryLimit
           networkPolicy: *networkPolicy-spec
           extraCommandLineFlags:
             type: array
@@ -1754,6 +1754,7 @@ properties:
         description: |
           Configure the traefik proxy used to terminate TLS when 'autohttps' is enabled
         properties:
+          revisionHistoryLimit: *revisionHistoryLimit
           labels:
             type: object
             additionalProperties: false
@@ -2521,6 +2522,7 @@ properties:
           enabled:
             type: boolean
           image: *image-spec
+          revisionHistoryLimit: *revisionHistoryLimit
           replicas:
             type: integer
             description: |
@@ -2685,6 +2687,7 @@ properties:
     additionalProperties: false
     required: [hook, continuous]
     properties:
+      revisionHistoryLimit: *revisionHistoryLimit
       labels:
         type: object
         additionalProperties: false

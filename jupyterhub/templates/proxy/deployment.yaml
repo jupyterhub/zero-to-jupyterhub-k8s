@@ -7,8 +7,8 @@ metadata:
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
-  {{- if not (eq nil .Values.proxy.revisionHistoryLimit) }}
-  revisionHistoryLimit: {{ .Values.proxy.revisionHistoryLimit }}
+  {{- if not (eq nil .Values.proxy.chp.revisionHistoryLimit) }}
+  revisionHistoryLimit: {{ .Values.proxy.chp.revisionHistoryLimit }}
   {{- end }}
   replicas: 1
   selector:

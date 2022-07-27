@@ -8,6 +8,7 @@ imagePullSecret:
 imagePullSecrets: [a, b]
 
 hub:
+  revisionHistoryLimit: 1
   config:
     # We pin these to avoid generating changes which cause diffs
     ConfigurableHTTPProxy:
@@ -221,6 +222,7 @@ proxy:
       http:
       https:
   chp:
+    revisionHistoryLimit: 1
     extraCommandLineFlags:
       - "--auto-rewrite"
       - "--mock-flag {{ .Values.proxy.chp.resources.requests.memory }}"
@@ -261,6 +263,7 @@ proxy:
       minAvailable: 1
     extraPodSpec: *extraPodSpec
   traefik:
+    revisionHistoryLimit: 1
     labels: *labels
     resources: *resources
     extraEnv: *extraEnv
@@ -460,6 +463,7 @@ singleuser:
 scheduling:
   userScheduler:
     enabled: true
+    revisionHistoryLimit: 1
     replicas: 1
     logLevel: 10
     image: *image
@@ -492,6 +496,7 @@ scheduling:
     enabled: true
   userPlaceholder:
     enabled: true
+    revisionHistoryLimit: 1
     replicas: 1
     resources: *resources
   corePods:
@@ -512,6 +517,7 @@ scheduling:
       matchNodePurpose: require
 
 prePuller:
+  revisionHistoryLimit: 1
   extraTolerations:
     - key: mock-taint-key-prePuller
       operator: Equal

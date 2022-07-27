@@ -145,7 +145,6 @@ rbac:
 # proxy relates to the proxy pod, the proxy-public service, and the autohttps
 # pod and proxy-http service.
 proxy:
-  revisionHistoryLimit:
   secretToken:
   annotations: {}
   deploymentStrategy:
@@ -189,6 +188,7 @@ proxy:
   # chp relates to the proxy pod, which is responsible for routing traffic based
   # on dynamic configuration sent from JupyterHub to CHP's REST API.
   chp:
+    revisionHistoryLimit:
     containerSecurityContext:
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
@@ -239,6 +239,7 @@ proxy:
   # traefik relates to the autohttps pod, which is responsible for TLS
   # termination when proxy.https.type=letsencrypt.
   traefik:
+    revisionHistoryLimit:
     containerSecurityContext:
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
@@ -539,6 +540,7 @@ scheduling:
       tag: "3.7"
       pullPolicy:
       pullSecrets: []
+    revisionHistoryLimit:
     replicas: 0
     labels: {}
     annotations: {}
@@ -574,6 +576,7 @@ scheduling:
 
 # prePuller relates to the hook|continuous-image-puller DaemonsSets
 prePuller:
+  revisionHistoryLimit:
   labels: {}
   annotations: {}
   resources: {}
