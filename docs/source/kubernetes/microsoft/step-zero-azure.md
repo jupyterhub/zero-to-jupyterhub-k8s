@@ -227,7 +227,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 
    This should take a few minutes and provide you with a working Kubernetes cluster!
 
-8. If you're using the Azure CLI locally, install [kubectl](https://kubernetes.io/docs/reference/kubectl/overview/), a tool
+8. If you're using the Azure CLI locally, install [kubectl](https://kubernetes.io/docs/reference/kubectl/), a tool
    for accessing the Kubernetes API from the commandline:
 
    ```
