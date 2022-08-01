@@ -408,8 +408,13 @@ for key, role in get_config("hub.loadRoles", {}).items():
 
     c.JupyterHub.load_roles.append(role)
 
+# respect explicit null command (distinct from unspecified)
+# this avoids relying on KubeSpawner.cmd's default being None
+_unspecified = object()
+specified_cmd = get_config("singleuser.cmd", _unspecified)
+if specified_cmd is not _unspecified:
+    c.Spawner.cmd = specified_cmd
 
-set_config_if_not_none(c.Spawner, "cmd", "singleuser.cmd")
 set_config_if_not_none(c.Spawner, "default_url", "singleuser.defaultUrl")
 
 cloud_metadata = get_config("singleuser.cloudMetadata", {})
