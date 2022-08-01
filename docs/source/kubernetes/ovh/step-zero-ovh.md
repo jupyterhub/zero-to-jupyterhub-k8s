@@ -9,7 +9,7 @@ They offer a managed Kubernetes service as well as a managed private registry fo
 This page describes how to create a Kubernetes cluster using the OVH Control Panel,
 and how to access the cluster using the command line with `kubectl`.
 
-1. Log in to the [OVH Control Panel](https://www.ovhcloud.com/en-ie/auth/).
+1. Log in to the [OVH Control Panel](https://www.ovh.com/auth/).
    ```{note}
    You first need to create an OVH account if you don't have one already.
    ```
