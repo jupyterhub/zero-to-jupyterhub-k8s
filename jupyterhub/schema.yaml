@@ -2126,7 +2126,7 @@ properties:
           [KubeSpawner.cmd](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.cmd).
           The default is "jupyterhub-singleuser".
           Use `cmd: null` to launch a custom CMD from the image,
-          which must launch jupyterhub-singleuser eventually.
+          which must launch jupyterhub-singleuser or an equivalent process eventually.
           For example: Jupyter's docker-stacks images.
       defaultUrl:
         type: [string, "null"]
