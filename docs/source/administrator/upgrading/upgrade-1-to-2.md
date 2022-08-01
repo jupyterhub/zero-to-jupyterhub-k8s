@@ -81,19 +81,6 @@ singleuser:
   allowPrivilegeEscalation: true
 ```
 
-## Default to using the container image's command instead of `jupyterhub-singleuser` [#2449](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2449)
-
-Z2JH now launches the container's default command (equivalent to setting `CMD` in a `Dockerfile`) instead of overriding it.
-This ensures that containers that use a custom start command to configure their environment, such as some
-[Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/)
-images, will work without any changes.
-To restore the old behaviour set:
-
-```yaml
-singleuser:
-  cmd: jupyterhub-singleuser
-```
-
 ## Configuration in `jupyterhub_config.d` has a higher priority than `hub.config` [#2457](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2457)
 
 Previously if `hub.config` was used to configure some JupyterHub traitlets it would override any custom configuration files mounted into `jupyterhub_config.d` in the hub container.
