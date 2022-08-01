@@ -44,6 +44,9 @@ image containing useful tools and libraries for data science, complete these ste
        # https://github.com/jupyter/docker-stacks/tree/HEAD/datascience-notebook/Dockerfile
        name: jupyter/datascience-notebook
        tag: latest
+       # `cmd: null` allows the custom CMD of the Jupyter docker-stacks to be used
+       # which performs further customization on startup.
+       cmd: null
    ```
 
    ```{note}
@@ -244,10 +247,9 @@ FROM jupyter/minimal-notebook:latest
 RUN pip install --no-cache-dir astropy
 
 # set the default command of the image,
-# if the parent image will not launch a jupyterhub singleuser server.
-# The JupyterHub "Docker stacks" do not need to be overridden.
-# Set either here or in `singleuser.cmd` in your values.yaml
-# CMD ["jupyterhub-singleuser"]
+# if you want to launch more complex startup than the default `juptyerhub-singleuser`.
+# To launch an image's custom CMD instead of the default `jupyterhub-singleuser`
+# set `singleuser.cmd: null` in your config.yaml.
 ```
 
 ```{note}
@@ -529,24 +531,32 @@ this is best done in the ENTRYPOINT of the image,
 and not in the CMD, so that overriding the command does not skip your preparation.
 ```
 
-By default, zero-to-jupyterhub will launch the default CMD that is specified in your chosen image,
-respecting any startup customization that image may have.
-If the image doesn't launch `jupyterhub-singleuser` by default,
-you will additionally need to specify `singleuser.cmd`
-in your `values.yaml` as the command to launch,
-so that it ultimately launches `jupyterhub-singleuser`.
-The simplest version:
+By default, zero-to-jupyterhub will launch the command `jupyterhub-singleuser`.
+If you have an image (such as `jupyter/scipy-notebook` and other Jupyter Docker stacks)
+that defines a CMD with startup customization and ultimately launches `jupyterhub-singleuser`,
+you can chose to launch the image's default CMD instead by setting:
 
 ```yaml
 singleuser:
-  cmd: jupyterhub-singleuser
+  cmd: null
 ```
 
-```{versionchanged} 2.0
-Prior to 2.0, the default behavior of zero-to-jupyterhub was to launch `jupyterhub-singleuser` explicitly,
-ignoring what was in the image.
-The default command is now whatever the image runs by default.
+Alternately, you can specify an explicit custom command as a string or list of strings:
+
+```yaml
+singleuser:
+  cmd:
+    - /usr/local/bin/custom-command
+    - "--flag"
+    - "--other-flag"
 ```
+
+:::{note}
+Docker has `ENTRYPOINT` and `CMD`,
+which k8s calls `command` and `args`.
+zero-to-jupyterhub always respects the ENTRYPOINT of the image,
+and setting `singleuser.cmd` only overrides the CMD.
+:::
 
 ## Disable specific JupyterLab extensions
 
