@@ -170,9 +170,9 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
       --scopes $VNET_ID \
       --query password \
       --output tsv)
-   SP_ID=$(az ad sp show \
-      --id http://<SERVICE-PRINCIPAL-NAME> \
-      --query appId \
+   SP_ID=$(az ad app list \
+      --filter "displayname eq '<SERVICE-PRINCIPAL-NAME>'" \
+      --query [0].appId \
       --output tsv)
    ```
 
