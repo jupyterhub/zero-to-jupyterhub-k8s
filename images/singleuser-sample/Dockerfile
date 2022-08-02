@@ -3,7 +3,7 @@ FROM jupyter/base-notebook:latest
 #               https://github.com/jupyter/docker-stacks/blob/HEAD/base-notebook/Dockerfile
 # Built from... Ubuntu 20.04
 
-# VULN_SCAN_TIME=2022-07-04_05:28:29
+# VULN_SCAN_TIME=2022-07-18_05:31:38
 
 USER root
 RUN apt-get update \

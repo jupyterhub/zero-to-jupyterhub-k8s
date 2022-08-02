@@ -66,6 +66,9 @@ Default permissions are mostly unchanged, but a few have:
 - Servers' own API tokens have limited permissions by default, which can be expanded by defining the `server` role. The previous behavior was the maximum permission of `inherit`.
 - `admin_access` as a concept is removed, so disabling it has no effect. In 2.0, admins by definition can do everything, including access servers. To limit user permissions, assign them to roles which have only the needed permissions.
 
+KubeSpawner has replaced the [`kubernetes`] library with [`kubernetes_asyncio`](https://github.com/tomplus/kubernetes_asyncio).
+If you have extended the JupyterHub image and you rely on the kubernetes library you will need to modify your extensions.
+
 See
 [Notable dependencies updated](notable-dependencies-200)
 for more information on other upgraded hub components.
@@ -75,17 +78,15 @@ for more information on other upgraded hub components.
 The default singleuser server is [JupyterLab](https://jupyterlab.readthedocs.io/), running on [Jupyter server](https://jupyter-server.readthedocs.io/en/latest/).
 To switch back to Jupyter Notebook either configure/rebuild your singleuser image to default to notebook, or see [the documentation on user interfaces](user-interfaces)
 
-## Default to using the container image's command instead of `jupyterhub-singleuser` [#2449](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2449)
+## KubeSpawner prevents privilege escalation such as sudo by default
 
-Z2JH now launches the container's default command (as set e.g. by `CMD` in a `Dockerfile`) instead of overriding it.
-This ensures that containers that use a custom start command to configure their environment, such as some
-[Jupyter Docker Stacks](https://jupyter-docker-stacks.readthedocs.io/en/latest/)
-images, will work without any changes.
-To restore the old behaviour set:
+By default processes cannot escalate their privileges.
+For example, a user cannot use sudo to switch to root.
+If you have configured sudo or some other privilege escalation method inside your singleuser image you must set `singleuser.allowPrivilegeEscalation: true`.
 
 ```yaml
 singleuser:
-  cmd: jupyterhub-singleuser
+  allowPrivilegeEscalation: true
 ```
 
 If you want to add custom arguments to the command, you must specify the full command and any arguments in `singleuser.cmd`, for example:

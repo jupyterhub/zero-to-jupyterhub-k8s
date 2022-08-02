@@ -1019,7 +1019,7 @@ properties:
           extraPorts:
             type: array
             description: |
-              Extra ports to add to the Hub Service object besides `hub` / `8081`.  
+              Extra ports to add to the Hub Service object besides `hub` / `8081`.
               This should be an array that includes `name`, `port`, and `targetPort`.
               See [Multi-port Services](https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services) for more details.
           loadBalancerIP:
@@ -2124,6 +2124,10 @@ properties:
         description: |
           Passthrough configuration for
           [KubeSpawner.cmd](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.cmd).
+          The default is "jupyterhub-singleuser".
+          Use `cmd: null` to launch a custom CMD from the image,
+          which must launch jupyterhub-singleuser or an equivalent process eventually.
+          For example: Jupyter's docker-stacks images.
       defaultUrl:
         type: [string, "null"]
         description: |
@@ -2379,7 +2383,7 @@ properties:
               kube-scheduler binary running within the user-scheduler pod.
           plugins:
             type: object
-            additionalProperties: false
+            additionalProperties: true
             description: |
               These plugins refers to kube-scheduler plugins as documented
               [here](https://kubernetes.io/docs/reference/scheduling/config/).
@@ -2387,29 +2391,6 @@ properties:
               The user-scheduler is really just a kube-scheduler configured in a
               way to pack users tight on nodes using these plugins. See
               values.yaml for information about the default plugins.
-            properties:
-              score:
-                type: object
-                additionalProperties: false
-                properties:
-                  disabled:
-                    type: array
-                    items:
-                      type: object
-                      additionalProperties: false
-                      properties:
-                        name:
-                          type: string
-                  enabled:
-                    type: array
-                    items:
-                      type: object
-                      additionalProperties: false
-                      properties:
-                        name:
-                          type: string
-                        weight:
-                          type: integer
           pluginConfig:
             type: array
             description: |
@@ -2659,7 +2640,7 @@ properties:
         description: |
           The path type to use. The default value is 'Prefix'.
 
-          See [the Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types) 
+          See [the Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types)
           for more details about path types.
       tls:
         type: array
