@@ -78,6 +78,9 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    - `--location` specifies the location of the data center you want your resource to be in.
      In this case, we used the `centralus` location. For other options, see the
      [Azure list of locations that support AKS](https://docs.microsoft.com/en-us/azure/aks/quotas-skus-regions#region-availability).
+     Note that not all locations offer all VM sizes. To see a list of recommended locations, go to
+     [Azure Portal > Virtual Machines](https://portal.azure.com/#view/HubsExtension/BrowseResource/resourceType/Microsoft.Compute%2FVirtualMachines),
+     click on "create.." and see the list of recommended locations in the drop down list for `Region`.
    - `--output table` specifies that the output should be in human readable
      format, rather than the default JSON output. We shall use this with most
      commands when executing them by hand.
