@@ -13,7 +13,6 @@ Choose one option and proceed.
 
 google/step-zero-gcp
 microsoft/step-zero-azure
-microsoft/step-zero-azure-autoscale
 amazon/step-zero-aws
 amazon/step-zero-aws-eks
 redhat/step-zero-openshift
