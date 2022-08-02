@@ -8,13 +8,13 @@ aiohttp==3.8.1
     # via kubernetes-asyncio
 aiosignal==1.2.0
     # via aiohttp
-alembic==1.8.0
+alembic==1.8.1
     # via jupyterhub
 async-generator==1.10
     # via jupyterhub
 async-timeout==4.0.2
     # via aiohttp
-attrs==21.4.0
+attrs==22.1.0
     # via
     #   aiohttp
     #   jsonschema
@@ -58,7 +58,7 @@ jinja2==3.1.2
     # via
     #   jupyterhub
     #   jupyterhub-kubespawner
-jsonschema==4.7.2
+jsonschema==4.9.0
     # via
     #   jupyter-telemetry
     #   oauthenticator
@@ -90,7 +90,7 @@ jupyterhub-nativeauthenticator==1.0.5
     # via -r requirements.in
 jupyterhub-tmpauthenticator==0.6
     # via -r requirements.in
-kubernetes-asyncio==23.6.0
+kubernetes-asyncio==24.2.0
     # via jupyterhub-kubespawner
 ldap3==2.9.1
     # via jupyterhub-ldapauthenticator
@@ -200,12 +200,12 @@ traitlets==5.3.0
     #   jupyter-telemetry
     #   jupyterhub
     #   jupyterhub-ldapauthenticator
-urllib3==1.26.10
+urllib3==1.26.11
     # via
     #   jupyterhub-kubespawner
     #   kubernetes-asyncio
     #   requests
-yarl==1.7.2
+yarl==1.8.1
     # via aiohttp
 
 # The following packages are considered to be unsafe in a requirements file:
