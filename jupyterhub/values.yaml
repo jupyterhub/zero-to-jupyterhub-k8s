@@ -26,6 +26,7 @@ imagePullSecrets: []
 # ConfigurableHTTPProxy speaks with the actual ConfigurableHTTPProxy server in
 # the proxy pod.
 hub:
+  revisionHistoryLimit:
   config:
     JupyterHub:
       admin_access: true
@@ -187,6 +188,7 @@ proxy:
   # chp relates to the proxy pod, which is responsible for routing traffic based
   # on dynamic configuration sent from JupyterHub to CHP's REST API.
   chp:
+    revisionHistoryLimit:
     containerSecurityContext:
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
@@ -237,6 +239,7 @@ proxy:
   # traefik relates to the autohttps pod, which is responsible for TLS
   # termination when proxy.https.type=letsencrypt.
   traefik:
+    revisionHistoryLimit:
     containerSecurityContext:
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
@@ -403,6 +406,7 @@ singleuser:
 scheduling:
   userScheduler:
     enabled: true
+    revisionHistoryLimit:
     replicas: 2
     logLevel: 4
     # plugins are configured on the user-scheduler to make us score how we
@@ -536,6 +540,7 @@ scheduling:
       tag: "3.8"
       pullPolicy:
       pullSecrets: []
+    revisionHistoryLimit:
     replicas: 0
     labels: {}
     annotations: {}
@@ -571,6 +576,7 @@ scheduling:
 
 # prePuller relates to the hook|continuous-image-puller DaemonsSets
 prePuller:
+  revisionHistoryLimit:
   labels: {}
   annotations: {}
   resources: {}

@@ -8,6 +8,9 @@ metadata:
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
+  {{- if typeIs "int" .Values.proxy.traefik.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.proxy.traefik.revisionHistoryLimit }}
+  {{- end }}
   replicas: 1
   selector:
     matchLabels:

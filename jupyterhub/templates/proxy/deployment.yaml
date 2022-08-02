@@ -7,6 +7,9 @@ metadata:
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
+  {{- if typeIs "int" .Values.proxy.chp.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.proxy.chp.revisionHistoryLimit }}
+  {{- end }}
   replicas: 1
   selector:
     matchLabels:

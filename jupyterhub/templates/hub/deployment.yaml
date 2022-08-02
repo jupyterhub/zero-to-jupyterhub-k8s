@@ -5,6 +5,9 @@ metadata:
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
+  {{- if typeIs "int" .Values.hub.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ .Values.hub.revisionHistoryLimit }}
+  {{- end }}
   replicas: 1
   selector:
     matchLabels:

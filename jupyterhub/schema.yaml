@@ -190,6 +190,15 @@ properties:
     additionalProperties: false
     required: [baseUrl]
     properties:
+      revisionHistoryLimit: &revisionHistoryLimit
+        type: [integer, "null"]
+        minimum: 0
+        description: |
+          Configures the resource's `spec.revisionHistoryLimit`. This is
+          available for Deployment, StatefulSet, and DaemonSet resources.
+
+          See the [Kubernetes docs](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#revision-history-limit)
+          for more info.
       config:
         type: object
         additionalProperties: true
@@ -1444,6 +1453,7 @@ properties:
           Configure the configurable-http-proxy (chp) pod managed by jupyterhub to route traffic
           both to itself and to user pods.
         properties:
+          revisionHistoryLimit: *revisionHistoryLimit
           networkPolicy: *networkPolicy-spec
           extraCommandLineFlags:
             type: array
@@ -1745,6 +1755,7 @@ properties:
         description: |
           Configure the traefik proxy used to terminate TLS when 'autohttps' is enabled
         properties:
+          revisionHistoryLimit: *revisionHistoryLimit
           labels:
             type: object
             additionalProperties: false
@@ -2351,6 +2362,7 @@ properties:
             type: boolean
             description: |
               Enables the user scheduler.
+          revisionHistoryLimit: *revisionHistoryLimit
           replicas:
             type: integer
             description: |
@@ -2492,6 +2504,7 @@ properties:
           enabled:
             type: boolean
           image: *image-spec
+          revisionHistoryLimit: *revisionHistoryLimit
           replicas:
             type: integer
             description: |
@@ -2656,6 +2669,7 @@ properties:
     additionalProperties: false
     required: [hook, continuous]
     properties:
+      revisionHistoryLimit: *revisionHistoryLimit
       labels:
         type: object
         additionalProperties: false
