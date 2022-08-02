@@ -1,10 +1,11 @@
-# This file is automatically maintained by Dependabot, as configured in
-# .github/dependabot.yaml. It can also be updated by a command described in the
+# This file is the input to requirements.txt,
+# which is is automatically maintained by Dependabot,
+# as configured in .github/dependabot.yaml.
+# It can also be updated by a command described in the
 # README.md file.
-#
 
 # JupyterHub itself
-jupyterhub==2.3.1
+jupyterhub==3.0.0b1
 
 ## Authenticators
 jupyterhub-firstuseauthenticator>=1
