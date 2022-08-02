@@ -232,27 +232,28 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 
 Optionally, enable autoscaling:
 
-   where:
-   - `--enable-cluster-autoscaler` enables autoscaling feature for your cluster
-   - `--min-count 1` is the minimum node count
-   - `--max-count 4` is the maximum node count
+where:
+
+- `--enable-cluster-autoscaler` enables autoscaling feature for your cluster
+- `--min-count 1` is the minimum node count
+- `--max-count 4` is the maximum node count
 
 You can also enable autoscaling feature later, with:
 
-   ```
-   SP_POOLNAME=$(az aks nodepool list \
-      --resource-group <RESOURCE-GROUP-NAME> \
-      --cluster-name <CLUSTER-NAME> \
-      --query [0].name \
-      --output tsv)
-   az aks nodepool update \
-   --name $SP_POOLNAME \
-   --cluster-name <CLUSTER-NAME> \
+```
+SP_POOLNAME=$(az aks nodepool list \
    --resource-group <RESOURCE-GROUP-NAME> \
-   --enable-cluster-autoscaler \
-   --min-count 1 \
-   --max-count 3
-   ```
+   --cluster-name <CLUSTER-NAME> \
+   --query [0].name \
+   --output tsv)
+az aks nodepool update \
+--name $SP_POOLNAME \
+--cluster-name <CLUSTER-NAME> \
+--resource-group <RESOURCE-GROUP-NAME> \
+--enable-cluster-autoscaler \
+--min-count 1 \
+--max-count 3
+```
 
 or update the parameters with `az aks --update-cluster-autoscaler`.
 
