@@ -194,7 +194,8 @@ properties:
         type: [integer, "null"]
         minimum: 0
         description: |
-          Configures the Deployment's `spec.revisionHistoryLimit`.
+          Configures the resource's `spec.revisionHistoryLimit`. This is
+          available for Deployment, StatefulSet, and DaemonSet resources.
 
           See the [Kubernetes docs](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#revision-history-limit)
           for more info.
