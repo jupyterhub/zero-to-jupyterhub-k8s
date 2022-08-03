@@ -236,8 +236,8 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 
    - `--vm-set-type VirtualMachineScaleSets` deploys the cluster as a scale set.
    - `--enable-cluster-autoscaler` enables autoscaling feature for your cluster
-   - `--min-count 1` is the minimum node count
-   - `--max-count 4` is the maximum node count
+   - `--min-count 3` is the minimum node count
+   - `--max-count 6` is the maximum node count
 
    You can also enable autoscaling feature later, with:
 
