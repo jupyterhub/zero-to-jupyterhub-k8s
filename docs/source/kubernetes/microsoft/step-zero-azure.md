@@ -251,7 +251,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    --resource-group <RESOURCE-GROUP-NAME> \
    --enable-cluster-autoscaler \
    --min-count <DESIRED-MINIMUM-COUNT> \
-   --max-count 3<DESIRED-MAXIMUM-COUNT>
+   --max-count <DESIRED-MAXIMUM-COUNT>
    ```
 
    or update the parameters with `--update-cluster-autoscaler`.
