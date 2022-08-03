@@ -129,8 +129,8 @@ can try with `nano config.yaml`.
    ```
 
 5. Find the IP we can use to access the JupyterHub. Run the following command
-   until the `EXTERNAL-IP` of the `proxy-public` [service](https://kubernetes.io/docs/concepts/services-networking/service/) is
-   available like in the example output.
+   until the external IP of the `proxy-public` [service](https://kubernetes.io/docs/concepts/services-networking/service/) is
+   available.
 
    ```
    kubectl -n <k8s-namespace> get svc proxy-public -o jsonpath='{.status.loadBalancer.ingress[].ip}'
