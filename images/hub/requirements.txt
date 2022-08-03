@@ -38,8 +38,6 @@ charset-normalizer==2.1.0
     #   requests
 cryptography==37.0.4
     # via pyopenssl
-entrypoints==0.4
-    # via jupyterhub
 escapism==1.0.1
     # via
     #   jupyterhub-kubespawner
@@ -54,6 +52,8 @@ idna==3.3
     # via
     #   requests
     #   yarl
+importlib-metadata==4.12.0
+    # via jupyterhub
 jinja2==3.1.2
     # via
     #   jupyterhub
@@ -64,7 +64,7 @@ jsonschema==4.9.0
     #   oauthenticator
 jupyter-telemetry==0.1.0
     # via jupyterhub
-jupyterhub==2.3.1
+jupyterhub==3.0.0b1
     # via
     #   -r requirements.in
     #   jupyterhub-firstuseauthenticator
@@ -207,6 +207,8 @@ urllib3==1.26.11
     #   requests
 yarl==1.8.1
     # via aiohttp
+zipp==3.8.1
+    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
