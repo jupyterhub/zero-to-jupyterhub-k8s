@@ -133,21 +133,7 @@ can try with `nano config.yaml`.
    available like in the example output.
 
    ```
-   kubectl get service --namespace <k8s-namespace>
-   ```
-
-   ```
-   NAME           TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)        AGE
-   hub            ClusterIP      10.51.243.14    <none>          8081/TCP       1m
-   proxy-api      ClusterIP      10.51.247.198   <none>          8001/TCP       1m
-   proxy-public   LoadBalancer   10.51.248.230   104.196.41.97   80:31916/TCP   1m
-   ```
-
-   If the IP for `proxy-public` is too long to fit into the window, you
-   can find the longer version by calling:
-
-   ```
-   kubectl describe service proxy-public --namespace <k8s-namespace>
+   kubectl -n <k8s-namespace> get svc proxy-public -o jsonpath='{.status.loadBalancer.ingress[].ip}'
    ```
 
 6. To use JupyterHub, enter the external IP for the `proxy-public` service in
