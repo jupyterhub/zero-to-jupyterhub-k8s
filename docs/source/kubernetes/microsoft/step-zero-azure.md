@@ -230,32 +230,41 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 
    This should take a few minutes and provide you with a working Kubernetes cluster!
 
-Optionally, enable autoscaling:
-
-where:
-
-- `--enable-cluster-autoscaler` enables autoscaling feature for your cluster
-- `--min-count 1` is the minimum node count
-- `--max-count 4` is the maximum node count
-
-You can also enable autoscaling feature later, with:
-
-```
-SP_POOLNAME=$(az aks nodepool list \
-   --resource-group <RESOURCE-GROUP-NAME> \
+   Optionally, enable autoscaling:
+   
+   where:
+   
+   - `--enable-cluster-autoscaler` enables autoscaling feature for your cluster
+   - `--min-count 1` is the minimum node count
+   - `--max-count 4` is the maximum node count
+   
+   You can also enable autoscaling feature later, with:
+   
+   ```bash
+   SP_POOLNAME=$(az aks nodepool list \
+      --resource-group <RESOURCE-GROUP-NAME> \
+      --cluster-name <CLUSTER-NAME> \
+      --query [0].name \
+      --output tsv)
+   az aks nodepool update \
+   --name $SP_POOLNAME \
    --cluster-name <CLUSTER-NAME> \
-   --query [0].name \
-   --output tsv)
-az aks nodepool update \
---name $SP_POOLNAME \
---cluster-name <CLUSTER-NAME> \
---resource-group <RESOURCE-GROUP-NAME> \
---enable-cluster-autoscaler \
---min-count 1 \
---max-count 3
-```
-
-or update the parameters with `az aks --update-cluster-autoscaler`.
+   --resource-group <RESOURCE-GROUP-NAME> \
+   --enable-cluster-autoscaler \
+   --min-count 1 \
+   --max-count 3
+   ```
+   
+   or update the parameters with `--update-cluster-autoscaler`.
+   
+   ```bash
+   az aks update \
+      --name <CLUSTER-NAME> \
+      --resource-group <RESOURCE-GROUP-NAME> \
+      --update-cluster-autoscaler \
+      --min-count 1 \
+      --max-count 5
+   ```
 
 8. If you're using the Azure CLI locally, install [kubectl](https://kubernetes.io/docs/reference/kubectl/), a tool
    for accessing the Kubernetes API from the commandline:
