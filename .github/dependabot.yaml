@@ -9,17 +9,6 @@
 #
 version: 2
 updates:
-  # Maintain Python dependencies for the jupyterhub/k8s-hub image
-  - package-ecosystem: pip
-    directory: "/images/hub"
-    schedule:
-      interval: daily
-      time: "05:00"
-      timezone: "Etc/UTC"
-    versioning-strategy: lockfile-only
-    labels:
-      - dependencies
-
   # Maintain Python dependencies for the jupyterhub/k8s-singleuser-sample image
   - package-ecosystem: pip
     directory: "/images/singleuser-sample"
