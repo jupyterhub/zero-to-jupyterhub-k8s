@@ -1,7 +1,8 @@
 # This file is the input to requirements.txt,
-# which is automatically maintained by Dependabot,
-# as configured in .github/dependabot.yaml.
-# It can also be updated by a command described in the
+# which is a frozen version of this. To update
+# requirements.txt, use the "Run workflow" button at
+# https://github.com/jupyterhub/zero-to-jupyterhub-k8s/actions/workflows/watch-dependencies.yaml
+# that will also update the jupyterhub version if needed.
 # README.md file.
 
 # JupyterHub itself
