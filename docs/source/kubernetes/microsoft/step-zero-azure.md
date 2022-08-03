@@ -230,9 +230,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 
    This should take a few minutes and provide you with a working Kubernetes cluster!
 
-   Optionally, enable autoscaling:
-
-   where:
+   Optionally, prepare autoscaling, where:
 
    - `--vm-set-type VirtualMachineScaleSets` deploys the cluster as a scale set.
    - `--enable-cluster-autoscaler` enables autoscaling feature for your cluster
@@ -263,9 +261,12 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
       --name <CLUSTER-NAME> \
       --resource-group <RESOURCE-GROUP-NAME> \
       --update-cluster-autoscaler \
-      --min-count 1 \
-      --max-count 5
+      --min-count <DESIRED-MINIMUM-COUNT> \
+      --max-count <DESIRED-MAXIMUM-COUNT> \
+      --output table
    ```
+
+   **Both** `--min-count` and `--max-count` must be defined.
 
    Read more about available options for the autoscaler [here](https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/aks/cluster-autoscaler.md).
 
