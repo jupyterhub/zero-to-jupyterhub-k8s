@@ -6,7 +6,7 @@
 # README.md file.
 
 # JupyterHub itself
-jupyterhub==3.0.0b1
+jupyterhub==2.3.1
 
 ## Authenticators
 jupyterhub-firstuseauthenticator>=1
