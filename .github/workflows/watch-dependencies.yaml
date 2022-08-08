@@ -141,6 +141,9 @@ jobs:
         with:
           python-version: "3.9"
 
+      - name: Install Python dependencies
+        run: pip install packaging requests
+
       - name: Get images/hub/requirements.in pinned version of jupyterhub
         id: local
         run: |
@@ -149,12 +152,17 @@ jobs:
 
       - name: Get latest version of jupyterhub
         id: latest
+        shell: python
         run: |
-          latest_version=$(
-              curl -s https://pypi.org/pypi/jupyterhub/json \
-            | jq -r .info.version
-          )
-          echo "::set-output name=version::$latest_version"
+          import packaging.version
+          import requests
+
+          request = requests.get("https://pypi.org/pypi/jupyterhub/json")
+          data = request.json()
+          releases = data["releases"]
+          latest_version = sorted(releases.keys(), key=packaging.version.Version)[-1]
+
+          print(f"::set-output name=version::{latest_version}")
 
       - name: Update pinned version of jupyterhub
         if: steps.local.outputs.version != steps.latest.outputs.version
@@ -162,6 +170,22 @@ jobs:
           sed --in-place 's/jupyterhub==${{ steps.local.outputs.version }}/jupyterhub==${{ steps.latest.outputs.version }}/g' images/hub/requirements.in
           sed --in-place 's/jupyterhub==${{ steps.local.outputs.version }}/jupyterhub==${{ steps.latest.outputs.version }}/g' images/singleuser-sample/requirements.txt
           sed --in-place 's/appVersion: "${{ steps.local.outputs.version }}"/appVersion: "${{ steps.latest.outputs.version }}"/g' jupyterhub/Chart.yaml
+
+      - name: Refreeze images/hub/requirements.txt based on images/hub/requirements.in
+        if: steps.local.outputs.version != steps.latest.outputs.version
+        # IMPORTANT: This run segment is duplicated in this workflow file across
+        #            two separate jobs, any update here should be made in the
+        #            other job as well.
+        #
+        run: |
+          cd images/hub
+          docker run --rm \
+              --env=CUSTOM_COMPILE_COMMAND='Use the "Run workflow" button at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/actions/workflows/watch-dependencies.yaml' \
+              --volume=$PWD:/io \
+              --workdir=/io \
+              --user=root \
+              python:3.9-bullseye \
+              sh -c 'pip install pip-tools==6.* && pip-compile --upgrade'
 
       - name: git diff
         if: steps.local.outputs.version != steps.latest.outputs.version
@@ -203,6 +227,10 @@ jobs:
         # Note that as of 2022-05-29, `pip-compile` has issues with `pycurl`,
         # but we workaround them by by omitting the `-slim` part from the image
         # in the command below.
+        #
+        # IMPORTANT: This run segment is duplicated in this workflow file across
+        #            two separate jobs, any update here should be made in the
+        #            other job as well.
         #
         run: |
           cd images/hub
