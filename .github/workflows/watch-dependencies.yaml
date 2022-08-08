@@ -142,7 +142,7 @@ jobs:
           python-version: "3.9"
 
       - name: Install Python dependencies
-        run: pip install requests
+        run: pip install packaging requests
 
       - name: Get images/hub/requirements.in pinned version of jupyterhub
         id: local
@@ -154,12 +154,13 @@ jobs:
         id: latest
         shell: python
         run: |
+          import packaging.version
           import requests
 
           request = requests.get("https://pypi.org/pypi/jupyterhub/json")
           data = request.json()
           releases = data["releases"]
-          latest_version = list(releases.keys())[-1]
+          latest_version = sorted(releases.keys(), key=packaging.version.Version)[-1]
 
           print(f"::set-output name=version::{latest_version}")
 
