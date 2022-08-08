@@ -5,7 +5,8 @@
 # that will also update the jupyterhub version if needed.
 # README.md file.
 
-# JupyterHub itself
+# JupyterHub itself, update this version pinning by running the workflow
+# mentioned above.
 jupyterhub==3.0.0b1
 
 ## Authenticators
