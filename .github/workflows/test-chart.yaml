@@ -128,14 +128,10 @@ jobs:
         # k3s-version: https://github.com/rancher/k3s/tags
         # k3s-channel: https://update.k3s.io/v1-release/channels
         #
-        # NOTE: we workaround a bug for k3s 1.22+ by passing `extra-setup-args: --egress-selector-mode=disabled`
-        #
         include:
           - k3s-channel: latest
-            k3s-extra-setup-args: --egress-selector-mode=disabled
             test: install
           - k3s-channel: stable
-            k3s-extra-setup-args: --egress-selector-mode=disabled
             test: install
           - k3s-channel: v1.21 # also test prePuller.hook
             test: install
@@ -166,7 +162,6 @@ jobs:
           # https://jupyterhub.github.io/helm-chart/info.json
           #
           - k3s-channel: v1.23
-            k3s-extra-setup-args: --egress-selector-mode=disabled
             test: upgrade
             upgrade-from: stable
             upgrade-from-extra-args: >-
@@ -180,7 +175,6 @@ jobs:
               --set singleuser.storage.type=dynamic
             create-k8s-test-resources: true
           - k3s-channel: v1.23
-            k3s-extra-setup-args: --egress-selector-mode=disabled
             test: upgrade
             upgrade-from: dev
             upgrade-from-extra-args: >-
@@ -191,7 +185,6 @@ jobs:
               --set hub.db.type=sqlite-pvc
               --set singleuser.storage.type=dynamic
           - k3s-channel: v1.22
-            k3s-extra-setup-args: --egress-selector-mode=disabled
             test: upgrade
             # We're testing hub.db.upgrade with PostgreSQL so this version must be old
             # enough to require a DB upgrade
@@ -237,7 +230,6 @@ jobs:
           metrics-enabled: false
           traefik-enabled: false
           docker-enabled: true
-          extra-setup-args: "${{ matrix.k3s-extra-setup-args }}"
 
       - uses: actions/setup-python@v4
         with:
