@@ -43,41 +43,41 @@ jobs:
         # k3s-channel: https://update.k3s.io/v1-release/channels
         #
         include:
-          - k3s-version: v1.24.3+k3s1
+          - k3s-version: v1.23.7-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-version: v1.24.3+k3s1
+          - k3s-version: v1.23.7-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-version: v1.24.3+k3s1
+          - k3s-version: v1.23.7-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-version: v1.24.3+k3s1
+          - k3s-version: v1.23.7-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-version: v1.24.3+k3s1
+          - k3s-version: v1.23.7-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-version: v1.24.3+k3s1
+          - k3s-version: v1.23.7-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-version: v1.23.9+k3s1
+          - k3s-version: v1.23.7-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-version: v1.23.9+k3s1
+          - k3s-version: v1.23.7-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-version: v1.23.9+k3s1
+          - k3s-version: v1.23.7-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-version: v1.23.9+k3s1
+          - k3s-version: v1.23.7-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-version: v1.23.9+k3s1
+          - k3s-version: v1.23.7-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-version: v1.23.9+k3s1
+          - k3s-version: v1.23.7-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-version: v1.22.12+k3s1
+          - k3s-version: v1.23.7-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-version: v1.22.12+k3s1
+          - k3s-version: v1.23.7-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-version: v1.22.12+k3s1
+          - k3s-version: v1.23.7-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-version: v1.22.12+k3s1
+          - k3s-version: v1.23.7-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-version: v1.22.12+k3s1
+          - k3s-version: v1.23.7-rc1+k3s1
             extra-setup-args: --debug
-          - k3s-version: v1.22.12+k3s1
+          - k3s-version: v1.23.7-rc1+k3s1
             extra-setup-args: --debug
 
     steps:
