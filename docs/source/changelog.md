@@ -65,15 +65,6 @@ These breaking changes have been made relative to the 1.\* series of Z2JH releas
 
 For information on how to update your configuration see the [](administrator/upgrading/upgrade-1-to-2) guide.
 
-#### TODO: link out to relevant informational posts
-
-TODO: Write a discourse forum post about the following and highlight that via
-the changelog.
-
-- 100+ user-placeholder pods -> node-placeholder pods
-- autohttps acme acquisition issues on GKE mitigation
-  (notable-dependencies-200)=
-
 #### Notable dependencies updated
 
 | Dependency                                                                       | Version in 1.2.0 | Version in 2.0.0 | Changelog link                                                                            | Note                               |
