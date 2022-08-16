@@ -23,9 +23,9 @@ Ensure you backup your system and test any upgrades if you plan to use this in p
 
 #### Highlights
 
-Z2JH 2.0.0 is the first major release since 1.0.0 was released in June 2021, and contains major upgrades to all JupyterHub components.
+Z2JH 2.0.0 is the first major release since 1.0.0 was released in June 2021, and contains major upgrades to all JupyterHub components, including a jump directly from JupyterHub 1 to JupyterHub 3.
 
-JupyterHub 3.x includes new RBAC support allowing fine-grained access control to hub services and servers.
+JupyterHub 2 and 3 includes new RBAC support allowing fine-grained access control to hub services and servers.
 
 JupyterLab, the next-generation Notebook interface, is now the default interface seen by users. This brings a full development environment with a large number of extensions developed by the Jupyter community.
 

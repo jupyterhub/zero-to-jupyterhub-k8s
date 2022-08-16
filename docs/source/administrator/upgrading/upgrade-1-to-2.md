@@ -49,11 +49,11 @@ and the configuration reference entries under
 
 ## JupyterHub 2 and related hub components
 
-Z2JH 2.0.0 upgrades JupyterHub to the 2.\* series, and also upgrades all hub components.
+Z2JH 2.0.0 upgrades from JupyterHub 1 directly to JupyterHub 3, and also upgrades all hub components.
 If you are using any custom JupyterHub services, addons, API integrations, or extra configuration, you should review the breaking changes in the
-[JupyterHub 2.x changelog](https://jupyterhub.readthedocs.io/en/2.3.1/changelog.html).
+major releases of JupyterHub 2 and 3 in the [JupyterHub changelog](https://jupyterhub.readthedocs.io/en/latest/changelog.html).
 
-JupyterHub 2 updates the database schema, which means a migration takes place when you upgrade JupyterHub.
+JupyterHub 2 and 3 updates the database schema, which means a migration takes place when you upgrade JupyterHub.
 Z2JH automatically handles the upgrade if you are using sqlite (`hub.db.type = 'sqlite-pvc'`, the default), but it may not be possible to downgrade to older releases after this.
 When using sqlite, JupyterHub automatically creates a backup in the `hub-db` volume,
 which can be restored manually if you need to downgrade.
