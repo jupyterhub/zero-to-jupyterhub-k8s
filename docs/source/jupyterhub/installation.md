@@ -133,7 +133,7 @@ can try with `nano config.yaml`.
    is available like in the example output.
 
    ```
-   kubectl --namespace=<k8s-namespace> get svc proxy-public
+   kubectl --namespace <k8s-namespace> get service proxy-public
    ```
 
    ```
@@ -144,7 +144,7 @@ can try with `nano config.yaml`.
    Or, use the short form:
 
    ```
-   kubectl -n <k8s-namespace> get svc proxy-public -o jsonpath='{.status.loadBalancer.ingress[].ip}'
+   kubectl --namespace <k8s-namespace> get service proxy-public --output jsonpath='{.status.loadBalancer.ingress[].ip}'
    ```
 
 6. To use JupyterHub, enter the external IP for the `proxy-public` service in

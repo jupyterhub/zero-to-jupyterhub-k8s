@@ -246,12 +246,12 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
       --query [0].name \
       --output tsv)
    az aks nodepool update \
-   --name $SP_POOLNAME \
-   --cluster-name <CLUSTER-NAME> \
-   --resource-group <RESOURCE-GROUP-NAME> \
-   --enable-cluster-autoscaler \
-   --min-count <DESIRED-MINIMUM-COUNT> \
-   --max-count <DESIRED-MAXIMUM-COUNT>
+      --name $SP_POOLNAME \
+      --cluster-name <CLUSTER-NAME> \
+      --resource-group <RESOURCE-GROUP-NAME> \
+      --enable-cluster-autoscaler \
+      --min-count <DESIRED-MINIMUM-COUNT> \
+      --max-count <DESIRED-MAXIMUM-COUNT>
    ```
 
    or update the parameters with `--update-cluster-autoscaler`.
