@@ -128,26 +128,23 @@ can try with `nano config.yaml`.
    proxy-7cb9bc4cc-9bdlp   1/1       Running   0          37s
    ```
 
-5. Find the IP we can use to access the JupyterHub. Run the following command
-   until the `EXTERNAL-IP` of the `proxy-public` [service](https://kubernetes.io/docs/concepts/services-networking/service/) is
-   available like in the example output.
+5. Find the IP we can use to access the JupyterHub. Run the following
+   command until the `EXTERNAL-IP` of the `proxy-public` [service](https://kubernetes.io/docs/concepts/services-networking/service/)
+   is available like in the example output.
 
    ```
-   kubectl get service --namespace <k8s-namespace>
+   kubectl --namespace <k8s-namespace> get service proxy-public
    ```
 
    ```
-   NAME           TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)        AGE
-   hub            ClusterIP      10.51.243.14    <none>          8081/TCP       1m
-   proxy-api      ClusterIP      10.51.247.198   <none>          8001/TCP       1m
+   NAME           TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)        AGE
    proxy-public   LoadBalancer   10.51.248.230   104.196.41.97   80:31916/TCP   1m
    ```
 
-   If the IP for `proxy-public` is too long to fit into the window, you
-   can find the longer version by calling:
+   Or, use the short form:
 
    ```
-   kubectl describe service proxy-public --namespace <k8s-namespace>
+   kubectl --namespace <k8s-namespace> get service proxy-public --output jsonpath='{.status.loadBalancer.ingress[].ip}'
    ```
 
 6. To use JupyterHub, enter the external IP for the `proxy-public` service in
