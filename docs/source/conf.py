@@ -138,7 +138,7 @@ rediraffe_redirects = {
     "redhat/step-zero-openshift": "kubernetes/redhat/step-zero-openshift",
     "amazon/step-zero-aws-eks": "kubernetes/amazon/step-zero-aws-eks",
     "amazon/step-zero-aws": "kubernetes/amazon/step-zero-aws",
-    "microsoft/step-zero-azure-autoscale": "kubernetes/microsoft/step-zero-azure-autoscale",
+    "microsoft/step-zero-azure-autoscale": "kubernetes/microsoft/step-zero-azure",
     "microsoft/step-zero-azure": "kubernetes/microsoft/step-zero-azure",
     "google/step-zero-gcp": "kubernetes/google/step-zero-gcp",
     "create-k8s-cluster": "kubernetes/setup-kubernetes",
