@@ -8,7 +8,7 @@ jobs:
   # https://circleci.com/docs/2.0/arm-resources/#using-arm-resources
   test-arm:
     machine:
-      image: ubuntu-2004:202101-01
+      image: ubuntu-2004:2022.04.1
     resource_class: arm.medium
     steps:
       - checkout
@@ -18,12 +18,22 @@ jobs:
           name: Check architecture
 
       - run:
+          # NOTE: we can't use k3s 1.24 and --docker unless we also install for
+          #       example cri-dockerd as done in
+          #       https://github.com/jupyterhub/action-k3s-helm.
+          #
+          # NOTE: we declare --egress-selector-mode=disabled to workaround
+          #       intermittent issues in k3s introduced as a regression in k3s
+          #       1.22.10, 1.23.7, and 1.24.0. This is tracked in
+          #       https://github.com/k3s-io/k3s/issues/5633.
+          #
           command: >-
             curl -sfL https://get.k3s.io |
-            INSTALL_K3S_CHANNEL=v1.22 sh -s -
+            INSTALL_K3S_CHANNEL=v1.23 sh -s -
             --disable metrics-server
             --disable traefik
             --docker
+            --egress-selector-mode=disabled
           name: Install K3S
 
       - run:
