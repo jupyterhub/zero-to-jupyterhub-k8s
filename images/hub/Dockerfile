@@ -11,9 +11,6 @@ WORKDIR /build-stage
 #
 #   - https://pypi.org/project/pycurl/#files, no wheels available as of 7.45.1.
 #     See https://github.com/pycurl/pycurl/issues/738.
-#   - https://pypi.org/project/ruamel.yaml.clib/#files, no aarch64 wheels
-#     available as of 0.2.6. See
-#     https://sourceforge.net/p/ruamel-yaml-clib/tickets/4/.
 #
 # If you find a dependency here no longer listed in requirements.txt, remove it
 # from here as well. The more wheels we build here and copy and then install,
@@ -23,8 +20,7 @@ WORKDIR /build-stage
 COPY requirements.txt requirements.txt
 RUN pip install build \
  && pip wheel \
-        $(cat requirements.txt | grep "pycurl==") \
-        $(cat requirements.txt | grep "ruamel-yaml-clib==")
+        $(cat requirements.txt | grep "pycurl==")
 
 
 # The final stage
