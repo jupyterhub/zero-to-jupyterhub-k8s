@@ -85,6 +85,7 @@ jobs:
           name: k8s namespace report
           when: on_fail
           command: |
+            export KUBECONFIG="$HOME/.kube/config"
             wget https://raw.githubusercontent.com/jupyterhub/action-k8s-namespace-report/v1.1.0/k8s-namespace-report
             bash k8s-namespace-report
           environment:
