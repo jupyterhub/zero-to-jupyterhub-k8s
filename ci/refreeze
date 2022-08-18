@@ -1,0 +1,19 @@
+#!/bin/bash
+set -xeuo pipefail
+IMAGES=${1:-images/hub images/singleuser-sample}
+
+# Because `pip-compile` resolves `requirements.txt` with the current
+# Python for the current platform, it should be run on the same Python
+# version and platform as our Dockerfile.
+
+for img in ${IMAGES}; do
+    pushd "$img"
+    docker run --rm \
+        --env=CUSTOM_COMPILE_COMMAND='Use the "Run workflow" button at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/actions/workflows/watch-dependencies.yaml' \
+        --volume="$PWD:/io" \
+        --workdir=/io \
+        --user=root \
+        python:3.9-bullseye \
+        sh -c 'pip install pip-tools==6.* && pip-compile --upgrade'
+    popd
+done

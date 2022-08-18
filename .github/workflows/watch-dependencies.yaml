@@ -4,9 +4,9 @@
 # - Watch multiple images tags referenced in values.yaml to match the latest
 #   image tag.
 #
-# - Watch the jupyterhub pinning in images/hub/requirements.in to match the
+# - Watch the jupyterhub pinning in images/*/requirements.in to match the
 #   latest jupyterhub version available on PyPI, and if doing this, also
-#   refreeze images/hub/requirements.txt.
+#   refreeze images/*/requirements.txt.
 #
 # About environment: watch-dependencies
 #
@@ -20,9 +20,7 @@ name: Watch dependencies
 on:
   push:
     paths:
-      - "images/hub/Dockerfile"
-      - "images/hub/requirements.in"
-      - "images/hub/requirements.txt"
+      - "images/*/requirements.in"
       - ".github/workflows/watch-dependencies.yaml"
     branches: ["main"]
   schedule:
@@ -167,25 +165,14 @@ jobs:
       - name: Update pinned version of jupyterhub
         if: steps.local.outputs.version != steps.latest.outputs.version
         run: |
-          sed --in-place 's/jupyterhub==${{ steps.local.outputs.version }}/jupyterhub==${{ steps.latest.outputs.version }}/g' images/hub/requirements.in
-          sed --in-place 's/jupyterhub==${{ steps.local.outputs.version }}/jupyterhub==${{ steps.latest.outputs.version }}/g' images/singleuser-sample/requirements.txt
+          for img in hub singleuser-sample; do
+            sed --in-place 's/jupyterhub==${{ steps.local.outputs.version }}/jupyterhub==${{ steps.latest.outputs.version }}/g' images/$img/requirements.in
+          done
           sed --in-place 's/appVersion: "${{ steps.local.outputs.version }}"/appVersion: "${{ steps.latest.outputs.version }}"/g' jupyterhub/Chart.yaml
 
-      - name: Refreeze images/hub/requirements.txt based on images/hub/requirements.in
+      - name: Refreeze images/*/requirements.txt based on images/*/requirements.in
         if: steps.local.outputs.version != steps.latest.outputs.version
-        # IMPORTANT: This run segment is duplicated in this workflow file across
-        #            two separate jobs, any update here should be made in the
-        #            other job as well.
-        #
-        run: |
-          cd images/hub
-          docker run --rm \
-              --env=CUSTOM_COMPILE_COMMAND='Use the "Run workflow" button at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/actions/workflows/watch-dependencies.yaml' \
-              --volume=$PWD:/io \
-              --workdir=/io \
-              --user=root \
-              python:3.9-bullseye \
-              sh -c 'pip install pip-tools==6.* && pip-compile --upgrade'
+        run: ci/refreeze
 
       - name: git diff
         if: steps.local.outputs.version != steps.latest.outputs.version
@@ -219,28 +206,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Refreeze images/hub/requirements.txt based on images/hub/requirements.in
-        # Because `pip-compile` resolves `requirements.txt` with the current
-        # Python for the current platform, it should be run on the same Python
-        # version and platform as our Dockerfile.
-        #
-        # Note that as of 2022-05-29, `pip-compile` has issues with `pycurl`,
-        # but we workaround them by by omitting the `-slim` part from the image
-        # in the command below.
-        #
-        # IMPORTANT: This run segment is duplicated in this workflow file across
-        #            two separate jobs, any update here should be made in the
-        #            other job as well.
-        #
-        run: |
-          cd images/hub
-          docker run --rm \
-              --env=CUSTOM_COMPILE_COMMAND='Use the "Run workflow" button at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/actions/workflows/watch-dependencies.yaml' \
-              --volume=$PWD:/io \
-              --workdir=/io \
-              --user=root \
-              python:3.9-bullseye \
-              sh -c 'pip install pip-tools==6.* && pip-compile --upgrade'
+      - name: Refreeze images/*/requirements.txt based on images/*/requirements.in
+        run: ci/refreeze
 
       - name: git diff
         run: git --no-pager diff --color=always
