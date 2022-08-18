@@ -73,6 +73,17 @@ jobs:
             pytest --verbose --color=yes ./tests -m 'not netpol'
           name: Run tests
 
+      - run:
+          name: k8s namespace report
+          when: on_fail
+          command: |
+            wget https://raw.githubusercontent.com/jupyterhub/action-k8s-namespace-report/v1.1.0/k8s-namespace-report
+            bash k8s-namespace-report
+          environment:
+            NAMESPACE: ""
+            POD_SELECTOR: ""
+            IMPORTANT_WORKLOADS: ""
+
 workflows:
   main:
     jobs:
