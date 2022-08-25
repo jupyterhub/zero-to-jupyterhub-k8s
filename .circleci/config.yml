@@ -51,14 +51,6 @@ jobs:
           name: Install dependencies
 
       - run:
-          name: fix singleuser base image for aarch64
-          # Jupyter docker-stacks don't have multi-arch images
-          # see https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/2844
-          command: |
-            sed -i -E s@base-notebook:latest@base-notebook:aarch64-latest@ images/singleuser-sample/Dockerfile
-            git diff
-
-      - run:
           command: |
             chartpress
           name: Run chartpress
