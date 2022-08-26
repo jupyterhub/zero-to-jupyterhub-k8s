@@ -44,9 +44,9 @@ image containing useful tools and libraries for data science, complete these ste
        # https://github.com/jupyter/docker-stacks/tree/HEAD/datascience-notebook/Dockerfile
        name: jupyter/datascience-notebook
        tag: latest
-       # `cmd: null` allows the custom CMD of the Jupyter docker-stacks to be used
-       # which performs further customization on startup.
-       cmd: null
+     # `cmd: null` allows the custom CMD of the Jupyter docker-stacks to be used
+     # which performs further customization on startup.
+     cmd: null
    ```
 
    ```{note}
