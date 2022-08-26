@@ -30,8 +30,7 @@ FROM python:3.9-slim-bullseye
 ARG NB_USER=jovyan
 ARG NB_UID=1000
 ARG HOME=/home/jovyan
-ENV DEBIAN_FRONTEND=noninteractive \
-    LANG=C.UTF-8
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN adduser --disabled-password \
         --gecos "Default user" \
