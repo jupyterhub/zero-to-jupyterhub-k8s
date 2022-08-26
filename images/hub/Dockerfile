@@ -30,8 +30,7 @@ FROM python:3.9-slim-bullseye
 ARG NB_USER=jovyan
 ARG NB_UID=1000
 ARG HOME=/home/jovyan
-ENV DEBIAN_FRONTEND=noninteractive \
-    LANG=C.UTF-8
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN adduser --disabled-password \
         --gecos "Default user" \
@@ -54,12 +53,8 @@ RUN apt-get update && \
         libcurl4 \
         # requirement for using a local sqlite database
         sqlite3 \
+        tini \
  && rm -rf /var/lib/apt/lists/*
-
-RUN if [ "$(uname -m)" = x86_64 ]; then ARCH=amd64; fi; \
-    if [ "$(uname -m)" = aarch64 ]; then ARCH=arm64; fi; \
-    curl -sSLo /tini "https://github.com/krallin/tini/releases/download/v0.19.0/tini-$ARCH" \
- && chmod +x /tini
 
 COPY --from=build-stage /build-stage/*.whl /tmp/pre-built-wheels/
 COPY requirements.txt /tmp/requirements.txt
@@ -72,5 +67,5 @@ RUN chown ${NB_USER}:${NB_USER} /srv/jupyterhub
 USER ${NB_USER}
 
 EXPOSE 8081
-ENTRYPOINT ["/tini", "--"]
+ENTRYPOINT ["tini", "--"]
 CMD ["jupyterhub", "--config", "/usr/local/etc/jupyterhub/jupyterhub_config.py"]
