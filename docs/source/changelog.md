@@ -14,12 +14,7 @@ this list should be updated.
 
 ## 2.0
 
-### 2.0.0 (currently beta.1)
-
-WARNING: This is a beta release of the JupyterHub Helm chart.
-
-We do not expect to make any significant changes between this and the final 2.0.0 release unless major bugs are found.
-Ensure you backup your system and test any upgrades if you plan to use this in production.
+### 2.0.0 - 2022-09-09
 
 #### Highlights
 
@@ -53,7 +48,7 @@ Please read through all breaking changes, then follow the [upgrading guide](admi
 These breaking changes have been made relative to the 1.\* series of Z2JH releases:
 
 - Security: breaking change to `*.networkPolicy.egress`
-- JupyterHub upgraded to 2.x along with related hub components
+- JupyterHub upgraded from 1.x to 3.x along with related hub components
 - JupyterLab and Jupyter Server is now the default singleuser application
 - Default to using the container image's command instead of `jupyterhub-singleuser` [#2449](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2449)
 - Configuration in `jupyterhub_config.d` has a higher priority than `hub.config` [#2457](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2457)
@@ -65,20 +60,22 @@ These breaking changes have been made relative to the 1.\* series of Z2JH releas
 
 For information on how to update your configuration see the [](administrator/upgrading/upgrade-1-to-2) guide.
 
+(notable-dependencies-200)=
+
 #### Notable dependencies updated
 
 | Dependency                                                                       | Version in 1.2.0 | Version in 2.0.0 | Changelog link                                                                            | Note                               |
 | -------------------------------------------------------------------------------- | ---------------- | ---------------- | ----------------------------------------------------------------------------------------- | ---------------------------------- |
-| [jupyterhub](https://github.com/jupyterhub/jupyterhub)                           | 1.4.2            | 3.0.0b1          | [Changelog](https://jupyterhub.readthedocs.io/en/stable/changelog.html)                   | Run in the `hub` pod               |
-| [kubespawner](https://github.com/jupyterhub/kubespawner)                         | 1.1.0            | 4.1.0            | [Changelog](https://jupyterhub-kubespawner.readthedocs.io/en/latest/changelog.html)       | Run in the `hub` pod               |
-| [oauthenticator](https://github.com/jupyterhub/oauthenticator)                   | 14.2.0           | 15.0.1           | [Changelog](https://oauthenticator.readthedocs.io/en/latest/changelog.html)               | Run in the `hub` pod               |
+| [jupyterhub](https://github.com/jupyterhub/jupyterhub)                           | 1.4.2            | 3.0.0            | [Changelog](https://jupyterhub.readthedocs.io/en/stable/changelog.html)                   | Run in the `hub` pod               |
+| [kubespawner](https://github.com/jupyterhub/kubespawner)                         | 1.1.0            | 4.2.0            | [Changelog](https://jupyterhub-kubespawner.readthedocs.io/en/latest/changelog.html)       | Run in the `hub` pod               |
+| [oauthenticator](https://github.com/jupyterhub/oauthenticator)                   | 14.2.0           | 15.1.0           | [Changelog](https://oauthenticator.readthedocs.io/en/latest/changelog.html)               | Run in the `hub` pod               |
 | [ldapauthenticator](https://github.com/jupyterhub/ldapauthenticator)             | 1.3.2            | 1.3.2            | [Changelog](https://github.com/jupyterhub/ldapauthenticator/blob/HEAD/CHANGELOG.md)       | Run in the `hub` pod               |
 | [ltiauthenticator](https://github.com/jupyterhub/ltiauthenticator)               | 1.0.0            | 1.2.0            | [Changelog](https://github.com/jupyterhub/ltiauthenticator/blob/HEAD/CHANGELOG.md)        | Run in the `hub` pod               |
-| [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 0.0.7            | 1.0.5            | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/HEAD/CHANGELOG.md)     | Run in the `hub` pod               |
+| [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 0.0.7            | 1.1.0            | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/HEAD/CHANGELOG.md)     | Run in the `hub` pod               |
 | [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler)   | 1.1              | 1.2.1            | [Changelog](https://github.com/jupyterhub/jupyterhub-idle-culler/blob/main/CHANGELOG.md)  | Run in the `hub` pod               |
-| [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy) | 4.5.0            | 4.5.1            | [Changelog](https://github.com/jupyterhub/configurable-http-proxy/blob/HEAD/CHANGELOG.md) | Run in the `proxy` pod             |
-| [traefik](https://github.com/traefik/traefik)                                    | v2.4.11          | v2.8.3           | [Changelog](https://github.com/traefik/traefik/blob/HEAD/CHANGELOG.md)                    | Run in the `autohttps` pod         |
-| [kube-scheduler](https://github.com/kubernetes/kube-scheduler)                   | v1.19.13         | v1.23.9          | -                                                                                         | Run in the `user-scheduler` pod(s) |
+| [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy) | 4.5.0            | 4.5.3            | [Changelog](https://github.com/jupyterhub/configurable-http-proxy/blob/HEAD/CHANGELOG.md) | Run in the `proxy` pod             |
+| [traefik](https://github.com/traefik/traefik)                                    | v2.4.11          | v2.8.4           | [Changelog](https://github.com/traefik/traefik/blob/HEAD/CHANGELOG.md)                    | Run in the `autohttps` pod         |
+| [kube-scheduler](https://github.com/kubernetes/kube-scheduler)                   | v1.19.13         | v1.23.10         | -                                                                                         | Run in the `user-scheduler` pod(s) |
 
 For a detailed list of Python dependencies in the `hub` Pod's Docker image, inspect the [images/hub/requirements.txt](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/images/hub/requirements.txt) file and use its git history to see what changes between tagged versions.
 
@@ -115,6 +112,8 @@ For a detailed list of Python dependencies in the `hub` Pod's Docker image, insp
 
 #### Maintenance and upkeep improvements
 
+- hub image: remove workaround for ruamel.yaml.clib on aarch64 [#2846](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2846) ([@consideRatio](https://github.com/consideRatio))
+- Make the singleuser-sample image use python:3.9-slim-bullseye as a base image to retain arm64 support [#2845](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2845) ([@minrk](https://github.com/minrk))
 - Restore jupyterhub-singleuser as the default command [#2820](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2820) ([@minrk](https://github.com/minrk))
 - Adjust kerning on large JupyterHub in NOTES.txt [#2787](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2787) ([@manics](https://github.com/manics))
 - hub image: remove wheel building aarch64 workaround for pycryptodomex [#2766](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2766) ([@consideRatio](https://github.com/consideRatio))
