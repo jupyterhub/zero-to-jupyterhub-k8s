@@ -7,8 +7,8 @@ FROM python:3.9-bullseye as build-stage
 
 WORKDIR /build-stage
 
-# set env for pip cache,
-# but use ARG to avoid persisting in image
+# set pip's cache directory using this environment variable, and use
+# ARG instead of ENV to ensure its only set when the image is built
 ARG PIP_CACHE_DIR=/tmp/pip-cache
 
 # Build wheels

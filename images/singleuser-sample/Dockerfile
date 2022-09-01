@@ -48,8 +48,8 @@ RUN apt-get update \
         git \
  && rm -rf /var/lib/apt/lists/*
 
-# set env for pip cache,
-# but use ARG to avoid persisting in image
+# set pip's cache directory using this environment variable, and use
+# ARG instead of ENV to ensure its only set when the image is built
 ARG PIP_CACHE_DIR=/tmp/pip-cache
 
 # install wheels built in the build-stage
