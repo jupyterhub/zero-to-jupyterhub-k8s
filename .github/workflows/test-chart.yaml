@@ -247,6 +247,8 @@ jobs:
         run: |
           pip3 install -r dev-requirements.txt
           chartpress
+        env:
+          DOCKER_BUILDKIT: "1"
 
       # Generate values.schema.json from schema.yaml
       - name: Generate values.schema.json from schema.yaml

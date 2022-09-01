@@ -1,3 +1,4 @@
+# syntax = docker/dockerfile:1.3
 # The build stage
 # ---------------
 FROM python:3.9-bullseye as build-stage
@@ -6,21 +7,16 @@ FROM python:3.9-bullseye as build-stage
 
 WORKDIR /build-stage
 
-# Build wheels for packages that require gcc or other build dependencies and
-# lack wheels either for amd64 or aarch64.
-#
-#   - https://pypi.org/project/pycurl/#files, no wheels available as of 7.45.1.
-#     See https://github.com/pycurl/pycurl/issues/738.
-#
-# If you find a dependency here no longer listed in requirements.txt, remove it
-# from here as well. The more wheels we build here and copy and then install,
-# where the copy and install are separate steps, the larger the final image
-# becomes.
-#
+# set pip's cache directory using this environment variable, and use
+# ARG instead of ENV to ensure its only set when the image is built
+ARG PIP_CACHE_DIR=/tmp/pip-cache
+
+# Build wheels
+# These are mounted into the final image for installation
 COPY requirements.txt requirements.txt
-RUN pip install build \
- && pip wheel \
-        $(cat requirements.txt | grep "pycurl==")
+RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
+    pip install build \
+ && pip wheel -r requirements.txt
 
 
 # The final stage
@@ -30,6 +26,7 @@ FROM python:3.9-slim-bullseye
 ARG NB_USER=jovyan
 ARG NB_UID=1000
 ARG HOME=/home/jovyan
+
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN adduser --disabled-password \
@@ -56,10 +53,16 @@ RUN apt-get update && \
         tini \
  && rm -rf /var/lib/apt/lists/*
 
-COPY --from=build-stage /build-stage/*.whl /tmp/pre-built-wheels/
+# set pip's cache directory using this environment variable, and use
+# ARG instead of ENV to ensure its only set when the image is built
+ARG PIP_CACHE_DIR=/tmp/pip-cache
+
+# install wheels built in the build-stage
 COPY requirements.txt /tmp/requirements.txt
-RUN pip install --no-cache-dir \
-        /tmp/pre-built-wheels/*.whl \
+RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
+    --mount=type=cache,from=build-stage,source=/build-stage,target=/tmp/wheels \
+    pip install \
+        --find-links=/tmp/wheels/ \
         -r /tmp/requirements.txt
 
 WORKDIR /srv/jupyterhub
