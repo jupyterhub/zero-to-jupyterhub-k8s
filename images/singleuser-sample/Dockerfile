@@ -57,7 +57,7 @@ COPY requirements.txt /tmp/requirements.txt
 RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
     --mount=type=cache,from=build-stage,source=/build-stage,target=/tmp/wheels \
     pip install \
-        --find-links /tmp/wheels/ \
+        --find-links=/tmp/wheels/ \
         -r /tmp/requirements.txt
 
 WORKDIR ${HOME}
