@@ -1,3 +1,4 @@
+# syntax = docker/dockerfile:1.3
 # The build stage
 # ---------------
 FROM python:3.9-bullseye as build-stage
@@ -6,21 +7,15 @@ FROM python:3.9-bullseye as build-stage
 
 WORKDIR /build-stage
 
-# Build wheels for packages that require gcc or other build dependencies and
-# lack wheels either for amd64 or aarch64.
-#
-#   - https://pypi.org/project/psutil/#files, no wheels available as of 5.9.1
-#     for aarch64. See https://github.com/giampaolo/psutil/pull/2070.
-#
-# If you find a dependency here no longer listed in requirements.txt, remove it
-# from here as well. The more wheels we build here and copy and then install,
-# where the copy and install are separate steps, the larger the final image
-# becomes.
-#
+# set env for pip cache,
+# but use ARG to avoid persisting in image
+ARG PIP_CACHE_DIR=/tmp/pip-cache
+
+# These are mounted into the final image for installation
 COPY requirements.txt requirements.txt
-RUN pip install build \
- && pip wheel \
-        $(cat requirements.txt | grep "psutil==")
+RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
+    pip install build \
+ && pip wheel -r requirements.txt
 
 
 # The final stage
@@ -53,10 +48,16 @@ RUN apt-get update \
         git \
  && rm -rf /var/lib/apt/lists/*
 
-COPY --from=build-stage /build-stage/*.whl /tmp/pre-built-wheels/
+# set env for pip cache,
+# but use ARG to avoid persisting in image
+ARG PIP_CACHE_DIR=/tmp/pip-cache
+
+# install wheels built in the build-stage
 COPY requirements.txt /tmp/requirements.txt
-RUN pip install --no-cache-dir \
-        /tmp/pre-built-wheels/*.whl \
+RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
+    --mount=type=cache,from=build-stage,source=/build-stage,target=/tmp/wheels \
+    pip install \
+        --find-links /tmp/wheels/ \
         -r /tmp/requirements.txt
 
 WORKDIR ${HOME}
