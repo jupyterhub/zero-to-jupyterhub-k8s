@@ -59,11 +59,6 @@ idna==3.3
     # via
     #   anyio
     #   requests
-importlib-metadata==4.12.0
-    # via
-    #   jupyterhub
-    #   jupyterlab-server
-    #   nbconvert
 ipykernel==6.15.2
     # via
     #   nbclassic
@@ -122,7 +117,7 @@ jupyter-telemetry==0.1.0
     # via jupyterhub
 jupyterhub==3.0.0b1
     # via -r requirements.in
-jupyterlab==3.4.5
+jupyterlab==3.4.6
     # via
     #   -r requirements.in
     #   retrolab
@@ -318,8 +313,6 @@ webencodings==0.5.1
     #   tinycss2
 websocket-client==1.4.0
     # via jupyter-server
-zipp==3.8.1
-    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
