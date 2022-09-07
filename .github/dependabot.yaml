@@ -4,27 +4,9 @@
 # - Status and logs from dependabot are provided at
 #   https://github.com/jupyterhub/zero-to-jupyterhub-k8s/network/updates.
 # - YAML anchors are not supported here or in GitHub Workflows.
-# - versioning-strategy: lockfile-only must not be used if you only have a plain
-#   requirements.txt like we do in images/singleuser-sample.
 #
 version: 2
 updates:
-  # Maintain Python dependencies for the jupyterhub/k8s-singleuser-sample image
-  - package-ecosystem: pip
-    directory: "/images/singleuser-sample"
-    schedule:
-      interval: daily
-      time: "05:00"
-      timezone: "Etc/UTC"
-    # ignore is applied as we need to bump this version in multiple locations,
-    # and not just in the singleuser-sample image, for which we have a dedicated
-    # job in the watch-dependencies.yaml workflow file.
-    #
-    ignore:
-      - dependency-name: jupyterhub
-    labels:
-      - dependencies
-
   # Maintain dependencies in our GitHub Workflows
   - package-ecosystem: github-actions
     directory: "/" # This should be / rather than .github/workflows
@@ -32,5 +14,3 @@ updates:
       interval: weekly
       time: "05:00"
       timezone: "Etc/UTC"
-    labels:
-      - dependencies
