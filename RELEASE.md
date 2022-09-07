@@ -93,6 +93,8 @@ Also the images we build are based on some image specified in the `FROM` stateme
     git push --follow-tags <upstream> main
     ```
 
+  - [ ] Update baseVersion in chartpress to the next release (e.g. `2.1.0-0.dev` after 2.0.0)
+
   - [ ] Create a GitHub release.
         Visit the [release page](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/releases) and create a new release referencing the recent tag. Add a brief text like the one below.
 
