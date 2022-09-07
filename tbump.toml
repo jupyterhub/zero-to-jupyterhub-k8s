@@ -1,6 +1,6 @@
 # tbump config sets baseVersion in chartpress.yaml
 [version]
-current = "2.0.0-0.dev"
+current = "2.0.0-beta.1"
 
 # match our prerelease prefixes
 # -alpha.1
