@@ -65,8 +65,7 @@ Also the images we build are based on some image specified in the `FROM` stateme
     ```bash
     git checkout main
     git reset --hard <upstream>/main
-    git tag -a x.y.z-beta.1 -m x.y.z-beta.1 <commit on main>
-    git push --follow-tags <upstream> main
+    tbump x.y.z-beta.1
     ```
 
 - Announce the x.y.z-beta.1 release
@@ -89,11 +88,14 @@ Also the images we build are based on some image specified in the `FROM` stateme
     ```bash
     git checkout main
     git reset --hard <upstream>/main
-    git tag -a x.y.z -m x.y.z HEAD
-    git push --follow-tags <upstream> main
+    tbump x.y.z
     ```
 
-  - [ ] Update baseVersion in chartpress to the next release (e.g. `2.1.0-0.dev` after 2.0.0)
+  - [ ] Set the next prerelease version (don't create a tag).
+
+    ```bash
+    tbump --no-tag x.y+1.z-0.dev
+    ```
 
   - [ ] Create a GitHub release.
         Visit the [release page](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/releases) and create a new release referencing the recent tag. Add a brief text like the one below.

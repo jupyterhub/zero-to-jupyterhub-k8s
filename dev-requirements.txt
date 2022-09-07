@@ -17,3 +17,6 @@ click
 
 # used to formatting and linting
 pre-commit>=2.0.0
+
+# used for tagging releases
+tbump
