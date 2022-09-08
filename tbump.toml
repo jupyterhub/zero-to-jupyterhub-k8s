@@ -1,0 +1,40 @@
+# tbump is a tool to update version fields that we use
+# to update baseVersion in chartpress.yaml as documented
+# in RELEASE.md
+#
+# Config reference: https://github.com/your-tools/tbump#readme
+#
+[version]
+current = "2.0.0-beta.1"
+
+# match our prerelease prefixes
+# -alpha.1
+# -beta.2
+# -0.dev
+
+regex = '''
+  (?P<major>\d+)
+  \.
+  (?P<minor>\d+)
+  \.
+  (?P<patch>\d+)
+  (\-
+    (?P<prelease>
+      (
+       (alpha|beta|rc)\.\d+|
+       0\.dev
+      )
+    )
+  )?
+  '''
+
+[git]
+message_template = "Bump to {new_version}"
+tag_template = "{new_version}"
+
+# For each file to patch, add a [[file]] config
+# section containing the path of the file, relative to the
+# tbump.toml location.
+[[file]]
+src = "chartpress.yaml"
+search = 'baseVersion: "{current_version}"'
