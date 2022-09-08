@@ -94,7 +94,7 @@ Also the images we build are based on some image specified in the `FROM` stateme
   - [ ] Set the next prerelease version (don't create a tag).
 
     ```bash
-    tbump --no-tag x.y+1.z-0.dev
+    tbump --no-tag x.y.z+1-0.dev
     ```
 
   - [ ] Create a GitHub release.

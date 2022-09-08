@@ -1,4 +1,9 @@
-# tbump config sets baseVersion in chartpress.yaml
+# tbump is a tool to update version fields that we use
+# to update baseVersion in chartpress.yaml as documented
+# in RELEASE.md
+#
+# Config reference: https://github.com/your-tools/tbump#readme
+#
 [version]
 current = "2.0.0-beta.1"
 
