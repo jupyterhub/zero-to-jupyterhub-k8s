@@ -175,7 +175,7 @@ hub:
       allowed_organizations:
         - my-github-organization
       scope:
-        - read:user
+        - read:org
 ```
 
 If you would like to restrict access to a specific team within a GitHub organization, use
