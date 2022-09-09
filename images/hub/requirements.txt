@@ -34,7 +34,7 @@ charset-normalizer==2.1.1
     # via
     #   aiohttp
     #   requests
-cryptography==37.0.4
+cryptography==38.0.1
     # via pyopenssl
 escapism==1.0.1
     # via
@@ -56,7 +56,7 @@ jinja2==3.1.2
     # via
     #   jupyterhub
     #   jupyterhub-kubespawner
-jsonschema==4.14.0
+jsonschema==4.15.0
     # via
     #   jupyter-telemetry
     #   oauthenticator
@@ -106,7 +106,7 @@ mwoauth==0.3.8
     # via -r requirements.in
 nullauthenticator==1.0.0
     # via -r requirements.in
-oauthenticator==15.0.1
+oauthenticator==15.1.0
     # via -r requirements.in
 oauthlib==3.2.0
     # via
@@ -124,7 +124,7 @@ prometheus-client==0.14.1
     # via jupyterhub
 psycopg2-binary==2.9.3
     # via -r requirements.in
-py-spy==0.3.12
+py-spy==0.3.14
     # via -r requirements.in
 pyasn1==0.4.8
     # via ldap3
@@ -177,7 +177,7 @@ six==1.16.0
     #   mwoauth
     #   onetimepass
     #   python-dateutil
-sqlalchemy==1.4.40
+sqlalchemy==1.4.41
     # via
     #   alembic
     #   jupyterhub
