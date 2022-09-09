@@ -39,7 +39,7 @@ cffi==1.15.1
     #   cryptography
 charset-normalizer==2.1.1
     # via requests
-cryptography==37.0.4
+cryptography==38.0.1
     # via pyopenssl
 debugpy==1.6.3
     # via ipykernel
@@ -68,7 +68,7 @@ ipykernel==6.15.2
     # via
     #   nbclassic
     #   notebook
-ipython==8.4.0
+ipython==8.5.0
     # via
     #   ipykernel
     #   jupyterlab
@@ -89,7 +89,7 @@ jinja2==3.1.2
     #   notebook
 json5==0.9.10
     # via jupyterlab-server
-jsonschema==4.14.0
+jsonschema==4.15.0
     # via
     #   jupyter-telemetry
     #   jupyterlab-server
@@ -120,9 +120,9 @@ jupyter-server==1.18.1
     #   retrolab
 jupyter-telemetry==0.1.0
     # via jupyterhub
-jupyterhub==3.0.0b1
+jupyterhub==3.0.0
     # via -r requirements.in
-jupyterlab==3.4.5
+jupyterlab==3.4.6
     # via
     #   -r requirements.in
     #   retrolab
@@ -207,9 +207,9 @@ prometheus-client==0.14.1
     #   jupyterhub
     #   nbclassic
     #   notebook
-prompt-toolkit==3.0.30
+prompt-toolkit==3.0.31
     # via ipython
-psutil==5.9.1
+psutil==5.9.2
     # via ipykernel
 ptyprocess==0.7.0
     # via
@@ -264,11 +264,11 @@ six==1.16.0
     #   asttokens
     #   bleach
     #   python-dateutil
-sniffio==1.2.0
+sniffio==1.3.0
     # via anyio
 soupsieve==2.3.2.post1
     # via beautifulsoup4
-sqlalchemy==1.4.40
+sqlalchemy==1.4.41
     # via
     #   alembic
     #   jupyterhub
@@ -316,10 +316,7 @@ webencodings==0.5.1
     # via
     #   bleach
     #   tinycss2
-websocket-client==1.4.0
+websocket-client==1.4.1
     # via jupyter-server
 zipp==3.8.1
     # via importlib-metadata
-
-# The following packages are considered to be unsafe in a requirements file:
-# setuptools
