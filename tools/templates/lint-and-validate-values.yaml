@@ -447,7 +447,7 @@ singleuser:
       storageAccessModes: [ReadWriteOnce]
   startTimeout: 300
   cpu:
-    guarantee: 0.2
+    guarantee: 100m
     limit: 4
   memory:
     guarantee: 1G

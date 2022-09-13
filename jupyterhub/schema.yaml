@@ -1955,9 +1955,9 @@ properties:
           for more info.
         properties:
           limit:
-            type: [number, "null"]
+            type: [number, string, "null"]
           guarantee:
-            type: [number, "null"]
+            type: [number, string, "null"]
       memory:
         type: object
         additionalProperties: false
