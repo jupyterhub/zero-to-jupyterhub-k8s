@@ -67,6 +67,7 @@ Also the images we build are based on some image specified in the `FROM` stateme
     git reset --hard <upstream>/main
     tbump x.y.z-beta.1
     ```
+    This will automatically create a [GitHub prerelease](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/releases).
 
 - Announce the x.y.z-beta.1 release
   - [ ] Write a discourse post
@@ -91,14 +92,13 @@ Also the images we build are based on some image specified in the `FROM` stateme
     tbump x.y.z
     ```
 
+    This will automatically create a [GitHub release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/releases).
+
   - [ ] Set the next prerelease version (don't create a tag).
 
     ```bash
     tbump --no-tag x.y.z+1-0.dev
     ```
-
-  - [ ] Create a GitHub release.
-        Visit the [release page](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/releases) and create a new release referencing the recent tag. Add a brief text like the one below.
 
 - Communicate
   - [ ] Update the beta release's discourse post.
