@@ -13,8 +13,10 @@ Before configuring this, you should have [setup HTTPS](https).
 
 ### Authenticator classes
 
-JupyterHub by default ships with only one source of authentication:
-PAM, the underlying unix authentication of the host system.
+Z2JH defaults to a [DummyAuthenticator](https://jupyterhub.readthedocs.io/en/stable/api/auth.html#jupyterhub.auth.DummyAuthenticator)
+that allows anyone to login with any username and password.
+This should only be used for testing purposes.
+
 To use other sources of authentication, choose _one_ [_authenticator
 class_](https://jupyterhub.readthedocs.io/en/stable/reference/authenticators.html) to use.
 Several such classes are already available in the hub image through [installed
