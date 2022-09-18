@@ -37,13 +37,14 @@ def setup(app):
 def _get_git_ref_from_chartpress_based_version(version):
     """
     Get a git ref from a chartpress set version of format like
-    1.2.3-beta.1.n123.h1234567, 1.2.3-n123.h1234567, or 1.2.3.
+    - 2.0.1-0.dev.git.5810.hf475e7a4 return git hash
+    - 2.0.0-beta.1 return tag
+    - 2.0.0 return tag
     """
-    tag_hash_split = re.split(r"[\.|-]n\d\d\d\.h", version)
-    if len(tag_hash_split) == 2:
-        return tag_hash_split[1]
-    else:
-        return tag_hash_split[0]
+    m = re.match(r"\d+\.\d+\.\d+(-.+\.h([0-9a-f]+))$", version)
+    if m:
+        return m.group(2)
+    return version
 
 
 # FIXME: Stop relying on chartpress to modify Chart.yaml (and values.yaml) by
