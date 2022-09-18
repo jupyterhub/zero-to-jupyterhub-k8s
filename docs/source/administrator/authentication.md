@@ -376,7 +376,7 @@ hub:
 [KeyCloak](https://www.keycloak.org) is an open source based provider of
 identity management that you can host yourself. Below is an example on how you
 can configure the GenericOAuthenticator class to authenticate against a KeyCloak
-server.
+server (version 17 or later).
 
 To configure an OpenID Connect client, see [KeyCloak's own
 documentation](https://www.keycloak.org/docs/latest/server_admin/index.html#_oidc_clients).
@@ -388,9 +388,9 @@ hub:
       client_id: your-client-id
       client_secret: your-client-secret
       oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
-      authorize_url: https://${host}/auth/realms/${realm}/protocol/openid-connect/auth
-      token_url: https://${host}/auth/realms/${realm}/protocol/openid-connect/token
-      userdata_url: https://${host}/auth/realms/${realm}/protocol/openid-connect/userinfo
+      authorize_url: https://${host}/realms/${realm}/protocol/openid-connect/auth
+      token_url: https://${host}/realms/${realm}/protocol/openid-connect/token
+      userdata_url: https://${host}/realms/${realm}/protocol/openid-connect/userinfo
       login_service: keycloak
       username_key: preferred_username
       userdata_params:
