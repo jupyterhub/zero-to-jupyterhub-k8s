@@ -104,6 +104,8 @@ jobs:
       - name: Rebuild image
         id: rebuild
         if: steps.scan_1.outcome == 'failure'
+        env:
+          DOCKER_BUILDKIT: "1"
         run: |
           docker build -t rebuilt-image images/${{ matrix.image_ref }}
 
