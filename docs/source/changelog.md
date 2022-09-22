@@ -3519,20 +3519,56 @@ the greatest pace bowler of all time and a founder of the fine art of
 
 ### 0.3.1 - 2017-05-19
 
-KubeSpawner updates. [Release note](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/releases/tag/v0.3.1)
+KubeSpawner updates.
+
+- KubeSpawner has gained several new features, thanks
+  to the work of Daniel Rodriguez and ktongsc! Specifically,
+  we have support for init containers, node selectors,
+  pod lifecycle hooks, etc. These can be used with the
+  extraConfig override for now
+- Add easy ability to specify pod lifecycle hooks via the
+  helm chart!
 
 ### 0.3 - 2017-05-15
 
-Deployer UX fixes. [Release note](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/releases/tag/v0.3)
+Deployer UX fixes.
+
+- No need to restart hub manually after some changes - it is
+  automatically restarted now. You can disable an automatic
+  restart of hub after an upgrade with the following:
+
+  1. Finding out the current helm release's revision
+  2. Adding '--set revisionOverride=<current-revision>' to your
+     upgrade command.
+
+  Only do this if you know exactly what you are doing :)
+
+- Base images for everything upgraded to ubuntu 17.04. We can
+  define the support lifecycle for the helm chart in the future,
+  and decide on the base images at that point.
+- Add a timestamp to the job name for the pre-puller job. This
+  prevents having to manually delete it when an install fails and
+  has to be tried again. Because the Release Revision hadn't changed
+  when the upgrade fails, trying again will cause it to fail with a
+  'job already exists' error. Adding the Timestamp to job name should
+  hopefully fix that
 
 ## 0.2
 
 ### 0.2 - 2017-05-01
 
-Minor cleanups and features. [Release note](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/releases/tag/v0.2)
+Minor cleanups and features.
+
+- Get rid of cull pod, move it inside the hub pod as a
+  managed service
+- Set a default 1G memory guarantee for user pods
+- Allow setting a static global password for Dummy Authenticator
+- Allow setting extra static environment variables for user pods
+  from the helm config
+- Upgrade kubespawner version (no major functional changes)
 
 ## 0.1
 
 ### 0.1 - 2017-04-10
 
-Initial Public Release. [Release note](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/releases/tag/v0.1)
+Initial Public Release.
