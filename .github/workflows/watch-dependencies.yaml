@@ -114,7 +114,7 @@ jobs:
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create a PR
         if: steps.local.outputs.tag != steps.latest.outputs.tag
-        uses: peter-evans/create-pull-request@18f90432bedd2afd6a825469ffd38aa24712a91d
+        uses: peter-evans/create-pull-request@171dd555b9ab6b18fa02519fdfacbb8bf671e1b4
         with:
           token: "${{ secrets.jupyterhub_bot_pat }}"
           author: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
@@ -181,7 +181,7 @@ jobs:
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create a PR
         if: steps.local.outputs.version != steps.latest.outputs.version
-        uses: peter-evans/create-pull-request@18f90432bedd2afd6a825469ffd38aa24712a91d
+        uses: peter-evans/create-pull-request@171dd555b9ab6b18fa02519fdfacbb8bf671e1b4
         with:
           token: "${{ secrets.jupyterhub_bot_pat }}"
           author: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
@@ -214,7 +214,7 @@ jobs:
 
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create a PR
-        uses: peter-evans/create-pull-request@18f90432bedd2afd6a825469ffd38aa24712a91d
+        uses: peter-evans/create-pull-request@171dd555b9ab6b18fa02519fdfacbb8bf671e1b4
         with:
           token: "${{ secrets.jupyterhub_bot_pat }}"
           author: JupyterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
