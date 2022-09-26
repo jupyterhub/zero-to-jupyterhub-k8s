@@ -22,7 +22,7 @@ bcrypt==4.0.0
     # via
     #   jupyterhub-firstuseauthenticator
     #   jupyterhub-nativeauthenticator
-certifi==2022.9.14
+certifi==2022.9.24
     # via
     #   kubernetes-asyncio
     #   requests
@@ -138,7 +138,7 @@ pyjwt==2.5.0
     #   mwoauth
 pymysql==1.0.2
     # via -r requirements.in
-pyopenssl==22.0.0
+pyopenssl==22.1.0
     # via certipy
 pyparsing==3.0.9
     # via packaging
