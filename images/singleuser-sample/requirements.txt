@@ -59,12 +59,12 @@ idna==3.4
     # via
     #   anyio
     #   requests
-importlib-metadata==4.12.0
+importlib-metadata==5.0.0
     # via
     #   jupyterhub
     #   jupyterlab-server
     #   nbconvert
-ipykernel==6.15.3
+ipykernel==6.16.0
     # via
     #   nbclassic
     #   notebook
@@ -110,7 +110,7 @@ jupyter-core==4.11.1
     #   nbconvert
     #   nbformat
     #   notebook
-jupyter-server==1.18.1
+jupyter-server==1.19.1
     # via
     #   jupyterlab
     #   jupyterlab-server
@@ -128,7 +128,7 @@ jupyterlab==3.4.7
     #   retrolab
 jupyterlab-pygments==0.2.2
     # via nbconvert
-jupyterlab-server==2.15.1
+jupyterlab-server==2.15.2
     # via
     #   jupyterlab
     #   retrolab
@@ -147,7 +147,7 @@ matplotlib-inline==0.1.6
     #   ipython
 mistune==2.0.4
     # via nbconvert
-nbclassic==0.4.3
+nbclassic==0.4.4
     # via
     #   -r requirements.in
     #   jupyterlab
@@ -159,7 +159,7 @@ nbconvert==7.0.0
     #   jupyter-server
     #   nbclassic
     #   notebook
-nbformat==5.6.0
+nbformat==5.6.1
     # via
     #   jupyter-server
     #   nbclassic
@@ -168,7 +168,7 @@ nbformat==5.6.0
     #   notebook
 nbgitpuller==1.1.0
     # via -r requirements.in
-nest-asyncio==1.5.5
+nest-asyncio==1.5.6
     # via
     #   ipykernel
     #   jupyter-client
@@ -235,7 +235,7 @@ python-dateutil==2.8.2
     #   jupyterhub
 python-json-logger==2.0.4
     # via jupyter-telemetry
-pytz==2022.2.1
+pytz==2022.4
     # via babel
 pyzmq==24.0.1
     # via
@@ -274,7 +274,7 @@ sqlalchemy==1.4.41
     #   jupyterhub
 stack-data==0.5.1
     # via ipython
-terminado==0.15.0
+terminado==0.16.0
     # via
     #   jupyter-server
     #   nbclassic
