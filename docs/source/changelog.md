@@ -50,7 +50,6 @@ These breaking changes have been made relative to the 1.\* series of Z2JH releas
 - Security: breaking change to `*.networkPolicy.egress`
 - JupyterHub upgraded from 1.x to 3.x along with related hub components
 - JupyterLab and Jupyter Server is now the default singleuser application
-- Default to using the container image's command instead of `jupyterhub-singleuser` [#2449](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2449)
 - Configuration in `jupyterhub_config.d` has a higher priority than `hub.config` [#2457](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2457)
 - User scheduler plugin configuration has changed to match `kubescheduler.config.k8s.io/v1beta3` [#2590](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2590)
 - Kubernetes version 1.20+ is required [#2635](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2635)
@@ -115,6 +114,7 @@ For a detailed list of Python dependencies in the `hub` Pod's Docker image, insp
 - hub image: remove workaround for ruamel.yaml.clib on aarch64 [#2846](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2846) ([@consideRatio](https://github.com/consideRatio))
 - Make the singleuser-sample image use python:3.9-slim-bullseye as a base image to retain arm64 support [#2845](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2845) ([@minrk](https://github.com/minrk))
 - Restore jupyterhub-singleuser as the default command [#2820](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2820) ([@minrk](https://github.com/minrk))
+  - Reverted unreleased breaking change: Default to using the container image's command instead of `jupyterhub-singleuser` [#2449](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2449)
 - Adjust kerning on large JupyterHub in NOTES.txt [#2787](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2787) ([@manics](https://github.com/manics))
 - hub image: remove wheel building aarch64 workaround for pycryptodomex [#2766](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2766) ([@consideRatio](https://github.com/consideRatio))
 - hub image: downgrade to ltiauthenticator 1.2.0 [#2741](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2741) ([@consideRatio](https://github.com/consideRatio))
