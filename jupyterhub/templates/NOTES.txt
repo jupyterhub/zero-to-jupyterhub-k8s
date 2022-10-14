@@ -40,6 +40,7 @@
       kubectl --namespace={{ .Release.Namespace }} logs --previous <name of pod>
   {{- println }}
 
+  {{- if .Values.proxy.enabled }}
   {{- if eq .Values.proxy.service.type "LoadBalancer" }}
   - Verify an external IP is provided for the k8s Service {{ $proxy_service }}.
 
@@ -84,6 +85,11 @@
 
     Try insecure HTTP access: http://localhost:8080
     {{- end }}
+  {{- end }}
+    You disabled proxy pod and service creation. This means that your proxy should be set up manually.
+
+    Please follow documentation of
+    current proxy class (see c.Jupyterhub.proxy_class setting), e.g. KubeIngressProxy
   {{- end }}
   {{- println }}
 
