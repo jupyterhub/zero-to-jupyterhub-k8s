@@ -2,20 +2,6 @@
 #
 # Configuration reference: https://www.sphinx-doc.org/en/master/usage/configuration.html
 #
-
-# -- Path setup --------------------------------------------------------------
-
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
-
-
-# -- Project specific imports ------------------------------------------------
-
 import datetime
 import os
 import re
@@ -23,17 +9,39 @@ import subprocess
 
 import yaml
 
-# -- Sphinx setup function ---------------------------------------------------
-# ref: https://www.sphinx-doc.org/en/master/extdev/appapi.html#sphinx-core-events
+# -- Project information -----------------------------------------------------
+# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+#
+project = "Zero to JupyterHub with Kubernetes"
+copyright = f"{datetime.date.today().year}, Project Jupyter Contributors"
+author = "Project Jupyter Contributors"
 
 
-def setup(app):
-    app.add_css_file("custom.css")
+# -- General Sphinx configuration ---------------------------------------------------
+# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
+#
+extensions = [
+    "myst_parser",
+    "sphinx_copybutton",
+    "sphinx.ext.mathjax",
+    "sphinxext.opengraph",
+    "sphinxext.rediraffe",
+]
+root_doc = "index"
+source_suffix = [".md"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+
+
+# -- General MyST configuration -----------------------------------------------------
+# ref: https://myst-parser.readthedocs.io/en/latest/configuration.html
+#
+myst_enable_extensions = [
+    "substitution",
+]
 
 
 # -- Referenceable variables --------------------------------------------------
-
-
+#
 def _get_git_ref_from_chartpress_based_version(version):
     """
     Get a git ref from a chartpress set version of format like
@@ -72,51 +80,117 @@ myst_substitutions = {
 }
 
 
-# -- General MyST configuration -----------------------------------------------------
+# -- Generate the Helm chart configuration reference from a schema file ------
+#
+# header
+with open("resources/reference.txt") as f:
+    header_md = f.readlines()
+header_md = header_md[1:]
+header_md = [ln.strip("\n") for ln in header_md]
 
-# myst_enable_extensions ref: https://myst-parser.readthedocs.io/en/latest/using/syntax-optional.html
-myst_enable_extensions = [
-    "substitution",
+# schema
+with open("../../jupyterhub/schema.yaml") as f:
+    data = yaml.safe_load(f)
+
+
+def parse_schema(d, md=[], depth=0, pre=""):
+    """
+    Generate markdown headers from a passed python dictionary created by
+    parsing a schema.yaml file.
+    """
+    if "then" in d:
+        d = d["then"]
+
+    if "properties" in d:
+        depth += 1
+        # Create markdown headers for each schema level
+        for key, val in d["properties"].items():
+            md.append(f"(schema_{pre}{key})=")
+            md.append("#" * (depth + 1) + f" {pre}{key}")
+            md.append("")
+            if "description" in val:
+                for ln in val["description"].split("\n"):
+                    md.append(ln)
+                md.append("")
+
+            parse_schema(val, md, depth, f"{pre}{key}.")
+        depth -= 1
+    return md
+
+
+schema_md = parse_schema(data)
+
+# reference = header + schema
+reference_md = header_md + schema_md
+with open("resources/reference.md", "w") as f:
+    f.write("\n".join(reference_md))
+
+
+# -- Options for HTML output -------------------------------------------------
+# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
+#
+html_logo = "_static/images/logo/logo.png"
+html_favicon = "_static/images/logo/favicon.ico"
+html_static_path = ["_static"]
+html_css_files = ["custom.css"]
+
+# pydata_sphinx_theme reference: https://pydata-sphinx-theme.readthedocs.io/en/latest/
+html_theme = "pydata_sphinx_theme"
+html_theme_options = {
+    "github_url": "https://github.com/jupyterhub/zero-to-jupyterhub-k8s/",
+    "use_edit_page_button": True,
+    "twitter_url": "https://twitter.com/mybinderteam",
+}
+html_context = {
+    "github_user": "jupyterhub",
+    "github_repo": "zero-to-jupyterhub-k8s",
+    "github_version": "main",
+    "doc_path": "docs/source",
+}
+
+
+# -- Options for linkcheck builder -------------------------------------------
+# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-the-linkcheck-builder
+#
+linkcheck_ignore = [
+    r"(.*)github\.com(.*)#",  # javascript based anchors
+    r"(.*)/#%21(.*)/(.*)",  # /#!forum/jupyter - encoded anchor edge case
+    r"https://github.com/[^/]*$",  # too many github usernames / searches in changelog
+    "https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/",  # too many PRs in changelog
+    "https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/",  # too many comparisons in changelog
+    "https://your-domain.com",  # example
+    "https://your-domain-name.com",  # example
+    "https://kubernetes.io/docs/tutorials/kubernetes-basics/",  # works
+    "https://cloud.ibm.com/kubernetes/catalog/create",  # works
+    "https://portal.azure.com",  # sign-in redirect noise
+    "https://console.cloud.google.com",  # sign-in redirect noise
+    "https://console.developers.google.com",  # sign-in redirect noise
+]
+linkcheck_anchors_ignore = [
+    "/#!",
+    "/#%21",
 ]
 
 
-# -- Project information -----------------------------------------------------
-# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+# -- Options for the opengraph extension -------------------------------------
+# ref: https://github.com/wpilibsuite/sphinxext-opengraph#options
+#
+# This extension help others provide better thumbnails and link descriptions
+# when they link to this documentation from other websites, such as
+# https://discourse.jupyter.org.
+#
+# ogp_site_url is set automatically by RTD
+ogp_image = "_static/logo.png"
+ogp_use_first_image = True
 
-project = "Zero to JupyterHub with Kubernetes"
-copyright = f"{datetime.date.today().year}, Project Jupyter Contributors"
-author = "Project Jupyter Contributors"
 
-
-# -- General Sphinx configuration ---------------------------------------------------
-# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
-
-# Set the default role so we can use `foo` instead of ``foo``
-default_role = "literal"
-
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = [
-    "sphinx.ext.mathjax",
-    "sphinx_copybutton",
-    "myst_parser",
-    "sphinxext.rediraffe",
-    "sphinxext.opengraph",
-]
-
-# List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-# This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = []
-
-# The root toctree document.
-root_doc = master_doc = "index"
-
-# The suffix(es) of source filenames.
-source_suffix = [".md", ".rst"]
-
-# Rediraffe redirects to ensure proper redirection
+# -- Options for the rediraffe extension -------------------------------------
+# ref: https://github.com/wpilibsuite/sphinxext-rediraffe#readme
+#
+# This extensions help us relocated content without breaking links. If a
+# document is moved internally, we should configure a redirect like below.
+#
+rediraffe_branch = "main"
 rediraffe_redirects = {
     "customizing/user-management": "jupyterhub/customizing/user-management",
     "customizing/user-storage": "jupyterhub/customizing/user-storage",
@@ -172,103 +246,3 @@ rediraffe_redirects = {
     "architecture": "administrator/architecture",
     "advanced": "administrator/advanced",
 }
-
-# opengraph configuration
-# ogp_site_url/prefix is set automatically by RTD
-ogp_image = "_static/logo.png"
-ogp_use_first_image = True
-
-# -- Generate the Helm chart configuration reference from a schema file ------
-
-# header
-with open("resources/reference.txt") as f:
-    header_md = f.readlines()
-header_md = header_md[1:]
-header_md = [ln.strip("\n") for ln in header_md]
-
-# schema
-with open("../../jupyterhub/schema.yaml") as f:
-    data = yaml.safe_load(f)
-
-
-def parse_schema(d, md=[], depth=0, pre=""):
-    """
-    Generate markdown headers from a passed python dictionary created by
-    parsing a schema.yaml file.
-    """
-    if "then" in d:
-        d = d["then"]
-
-    if "properties" in d:
-        depth += 1
-        # Create markdown headers for each schema level
-        for key, val in d["properties"].items():
-            md.append(f"(schema_{pre}{key})=")
-            md.append("#" * (depth + 1) + f" {pre}{key}")
-            md.append("")
-            if "description" in val:
-                for ln in val["description"].split("\n"):
-                    md.append(ln)
-                md.append("")
-
-            parse_schema(val, md, depth, f"{pre}{key}.")
-        depth -= 1
-    return md
-
-
-schema_md = parse_schema(data)
-
-# reference = header + schema
-reference_md = header_md + schema_md
-with open("resources/reference.md", "w") as f:
-    f.write("\n".join(reference_md))
-
-
-# -- Options for linkcheck builder -------------------------------------------
-# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-the-linkcheck-builder
-linkcheck_ignore = [
-    r"(.*)github\.com(.*)#",  # javascript based anchors
-    r"(.*)/#%21(.*)/(.*)",  # /#!forum/jupyter - encoded anchor edge case
-    r"https://github.com/[^/]*$",  # too many github usernames / searches in changelog
-    "https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/",  # too many PRs in changelog
-    "https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/",  # too many comparisons in changelog
-    "https://your-domain.com",  # example
-    "https://your-domain-name.com",  # example
-    "https://kubernetes.io/docs/tutorials/kubernetes-basics/",  # works
-    "https://cloud.ibm.com/kubernetes/catalog/create",  # works
-    "https://portal.azure.com",  # sign-in redirect noise
-    "https://console.cloud.google.com",  # sign-in redirect noise
-    "https://console.developers.google.com",  # sign-in redirect noise
-]
-linkcheck_anchors_ignore = [
-    "/#!",
-    "/#%21",
-]
-
-
-# -- Options for HTML output -------------------------------------------------
-# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
-
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-
-html_theme = "pydata_sphinx_theme"
-html_theme_options = {
-    "github_url": "https://github.com/jupyterhub/zero-to-jupyterhub-k8s/",
-    "use_edit_page_button": True,
-}
-html_context = {
-    "github_user": "jupyterhub",
-    "github_repo": "zero-to-jupyterhub-k8s",
-    "github_version": "main",
-    "doc_path": "docs/source",
-}
-
-html_favicon = "_static/images/logo/favicon.ico"
-html_logo = "_static/images/logo/logo.png"
-
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ["_static"]
