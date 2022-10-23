@@ -499,7 +499,7 @@ scheduling:
       #            - If "successfully acquired lease" can be seen in the logs, it
       #              is a good sign kube-scheduler is ready to schedule pods.
       #
-      name: k8s.gcr.io/kube-scheduler
+      name: registry.k8s.io/kube-scheduler
       # tag is automatically bumped to new patch versions by the
       # watch-dependencies.yaml workflow. The minor version is pinned in the
       # workflow, and should be updated there if a minor version bump is done
@@ -531,7 +531,7 @@ scheduling:
   userPlaceholder:
     enabled: true
     image:
-      name: k8s.gcr.io/pause
+      name: registry.k8s.io/pause
       # tag is automatically bumped to new patch versions by the
       # watch-dependencies.yaml workflow.
       #
@@ -617,7 +617,7 @@ prePuller:
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
     image:
-      name: k8s.gcr.io/pause
+      name: registry.k8s.io/pause
       # tag is automatically bumped to new patch versions by the
       # watch-dependencies.yaml workflow.
       #

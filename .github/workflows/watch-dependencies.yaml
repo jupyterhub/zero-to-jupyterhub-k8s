@@ -65,14 +65,14 @@ jobs:
           # values.yaml about bumping its version.
           #
           - name: kube-scheduler
-            registry: k8s.gcr.io
+            registry: registry.k8s.io
             repository: kube-scheduler
             values_path: scheduling.userScheduler.image.tag
             version_startswith: "v1.23"
             version_patch_regexp_group_suffix: ""
 
           - name: pause
-            registry: k8s.gcr.io
+            registry: registry.k8s.io
             repository: pause
             values_path: scheduling.userPlaceholder.image.tag
             version_startswith: ""
