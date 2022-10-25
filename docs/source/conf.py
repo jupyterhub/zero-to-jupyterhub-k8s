@@ -139,7 +139,6 @@ html_theme = "pydata_sphinx_theme"
 html_theme_options = {
     "github_url": "https://github.com/jupyterhub/zero-to-jupyterhub-k8s/",
     "use_edit_page_button": True,
-    "twitter_url": "https://twitter.com/mybinderteam",
 }
 html_context = {
     "github_user": "jupyterhub",
