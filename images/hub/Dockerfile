@@ -45,7 +45,7 @@ RUN apt-get update && \
         git \
         # misc other utilities
         less \
-        vim \
+        nano \
         # requirement for pycurl
         libcurl4 \
         # requirement for using a local sqlite database
