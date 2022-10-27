@@ -1,29 +1,45 @@
 # syntax = docker/dockerfile:1.3
-# The build stage
-# ---------------
-FROM python:3.9-bullseye as build-stage
-
 # VULN_SCAN_TIME=2022-08-08_05:22:22
 
-WORKDIR /build-stage
 
-# set pip's cache directory using this environment variable, and use
-# ARG instead of ENV to ensure its only set when the image is built
-ARG PIP_CACHE_DIR=/tmp/pip-cache
+# The build stage
+# ---------------
+# This stage provides a slimmed /opt/python folder with python and dependencies
+# installed.
+#
+FROM buildpack-deps:22.04 as build-stage
 
-# These are mounted into the final image for installation
+ENV PATH=/opt/python/bin:$PATH
+
 COPY requirements.txt requirements.txt
-RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
-    pip install build \
- && pip wheel -r requirements.txt
+RUN arch=$(uname -m) \
+ && if [ "${arch}" = "x86_64" ]; then arch="64"; fi \
+ && wget -qO micromamba.tar.bz2 \
+        "https://micro.mamba.pm/api/micromamba/linux-${arch}/latest" \
+ && tar -xvjf micromamba.tar.bz2 --strip-components=1 bin/micromamba \
+ && rm micromamba.tar.bz2 \
+    # Install Python
+ && ./micromamba install \
+        --root-prefix=/opt/python \
+        --prefix=/opt/python \
+        --channel=conda-forge \
+        --yes \
+        "python=3.10" \
+        "mamba" \
+        "tini" \
+ && rm micromamba \
+    # Install dependencies
+ && pip install --no-cache-dir \
+        -r requirements.txt \
+    # Cleanup in /opt/python
+ && mamba clean --all --force-pkgs-dirs --yes \
+ && find /opt/python -type d -name __pycache__ -prune -exec rm -rf {} \;
 
 
 # The final stage
 # ---------------
-
-FROM python:3.9-slim-bullseye
-
-# VULN_SCAN_TIME=
+#
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive \
     NB_USER=jovyan \
@@ -43,22 +59,12 @@ RUN apt-get update \
         ca-certificates \
         dnsutils \
         iputils-ping \
-        tini \
         # requirement for nbgitpuller
         git \
  && rm -rf /var/lib/apt/lists/*
 
-# set pip's cache directory using this environment variable, and use
-# ARG instead of ENV to ensure its only set when the image is built
-ARG PIP_CACHE_DIR=/tmp/pip-cache
-
-# install wheels built in the build-stage
-COPY requirements.txt /tmp/requirements.txt
-RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
-    --mount=type=cache,from=build-stage,source=/build-stage,target=/tmp/wheels \
-    pip install \
-        --find-links=/tmp/wheels/ \
-        -r /tmp/requirements.txt
+COPY --from=build-stage /opt/python /opt/python
+ENV PATH=/opt/python/bin:$PATH
 
 WORKDIR ${HOME}
 USER ${NB_USER}

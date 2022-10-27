@@ -13,7 +13,7 @@ for img in ${IMAGES}; do
         --volume="$PWD:/io" \
         --workdir=/io \
         --user=root \
-        python:3.9-bullseye \
+        buildpack-deps:22.04 \
         sh -c 'pip install pip-tools==6.* && pip-compile --upgrade'
     popd
 done

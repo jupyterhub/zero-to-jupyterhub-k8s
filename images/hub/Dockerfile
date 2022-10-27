@@ -1,22 +1,39 @@
 # syntax = docker/dockerfile:1.3
-# The build stage
-# ---------------
-FROM python:3.9-bullseye as build-stage
-
 # VULN_SCAN_TIME=2022-08-08_05:22:22
 
-WORKDIR /build-stage
 
-# set pip's cache directory using this environment variable, and use
-# ARG instead of ENV to ensure its only set when the image is built
-ARG PIP_CACHE_DIR=/tmp/pip-cache
+# The build stage
+# ---------------
+# This stage provides a slimmed /opt/python folder with python and dependencies
+# installed.
+#
+FROM buildpack-deps:22.04 as build-stage
 
-# Build wheels
-# These are mounted into the final image for installation
+ENV PATH=/opt/python/bin:$PATH
+
 COPY requirements.txt requirements.txt
-RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
-    pip install build \
- && pip wheel -r requirements.txt
+RUN arch=$(uname -m) \
+ && if [ "${arch}" = "x86_64" ]; then arch="64"; fi \
+ && wget -qO micromamba.tar.bz2 \
+        "https://micro.mamba.pm/api/micromamba/linux-${arch}/latest" \
+ && tar -xvjf micromamba.tar.bz2 --strip-components=1 bin/micromamba \
+ && rm micromamba.tar.bz2 \
+    # Install Python
+ && ./micromamba install \
+        --root-prefix=/opt/python \
+        --prefix=/opt/python \
+        --channel=conda-forge \
+        --yes \
+        "python=3.10" \
+        "mamba" \
+        "tini" \
+ && rm micromamba \
+    # Install dependencies
+ && pip install --no-cache-dir \
+        -r requirements.txt \
+    # Cleanup in /opt/python
+ && mamba clean --all --force-pkgs-dirs --yes \
+ && find /opt/python -type d -name __pycache__ -prune -exec rm -rf {} \;
 
 
 # The final stage - slim version
@@ -24,13 +41,12 @@ RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
 # This stage is built and published as jupyterhub/k8s-hub-slim. It is meant to
 # provide no apt packages besides whats essential.
 #
-FROM python:3.9-slim-bullseye as slim-stage
-
-ARG NB_USER=jovyan
-ARG NB_UID=1000
-ARG HOME=/home/jovyan
+FROM ubuntu:22.04 as slim-stage
 
 ENV DEBIAN_FRONTEND=noninteractive
+ARG NB_USER=jovyan \
+    NB_UID=1000 \
+    HOME=/home/jovyan
 
 RUN adduser --disabled-password \
         --gecos "Default user" \
@@ -39,27 +55,8 @@ RUN adduser --disabled-password \
         --force-badname \
         ${NB_USER}
 
-RUN apt-get update \
- && apt-get upgrade -y \
- && apt-get install -y --no-install-recommends \
-        # requirement for pycurl
-        libcurl4 \
-        # requirement for using a local sqlite database
-        sqlite3 \
-        tini \
- && rm -rf /var/lib/apt/lists/*
-
-# set pip's cache directory using this environment variable, and use
-# ARG instead of ENV to ensure its only set when the image is built
-ARG PIP_CACHE_DIR=/tmp/pip-cache
-
-# install wheels built in the build-stage
-COPY requirements.txt /tmp/requirements.txt
-RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
-    --mount=type=cache,from=build-stage,source=/build-stage,target=/tmp/wheels \
-    pip install \
-        --find-links=/tmp/wheels/ \
-        -r /tmp/requirements.txt
+COPY --from=build-stage /opt/python /opt/python
+ENV PATH=/opt/python/bin:$PATH
 
 WORKDIR /srv/jupyterhub
 RUN chown ${NB_USER}:${NB_USER} /srv/jupyterhub
