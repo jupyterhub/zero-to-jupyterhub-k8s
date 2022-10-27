@@ -23,6 +23,12 @@ charts:
       # Authenticator are running.
       hub:
         valuesPath: hub.image
+      # hub-slim, an alternative hub image that doesn't include some
+      # basic utilities for k8s admins
+      hub-slim:
+        contextPath: images/hub
+        extraBuildCommandOptions:
+          - --target=slim-stage
 
       # secret-sync, a sidecar container running in the autohttps pod to next to
       # Traefik meant to sync a TLS certificate with a k8s Secret.
