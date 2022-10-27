@@ -19,9 +19,12 @@ RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
  && pip wheel -r requirements.txt
 
 
-# The final stage
-# ---------------
-FROM python:3.9-slim-bullseye
+# The final stage - slim version
+# ------------------------------
+# This stage is built and published as jupyterhub/k8s-hub-slim. It is meant to
+# provide no apt packages besides whats essential.
+#
+FROM python:3.9-slim-bullseye as slim-stage
 
 ARG NB_USER=jovyan
 ARG NB_UID=1000
@@ -36,16 +39,9 @@ RUN adduser --disabled-password \
         --force-badname \
         ${NB_USER}
 
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends \
-        # misc network utilities
-        curl \
-        dnsutils \
-        git \
-        # misc other utilities
-        less \
-        vim \
+RUN apt-get update \
+ && apt-get upgrade -y \
+ && apt-get install -y --no-install-recommends \
         # requirement for pycurl
         libcurl4 \
         # requirement for using a local sqlite database
@@ -72,3 +68,24 @@ USER ${NB_USER}
 EXPOSE 8081
 ENTRYPOINT ["tini", "--"]
 CMD ["jupyterhub", "--config", "/usr/local/etc/jupyterhub/jupyterhub_config.py"]
+
+
+# The final stage - default version
+# ---------------------------------
+# We add a few non-critical apt packages on top of the slim version to provide
+# some debugging utility for k8s admins.
+#
+FROM slim-stage
+
+USER root
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+        # misc network utilities
+        curl \
+        dnsutils \
+        git \
+        # misc other utilities
+        less \
+        vim \
+ && rm -rf /var/lib/apt/lists/*
+USER ${NB_USER}
