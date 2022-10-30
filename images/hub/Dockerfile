@@ -20,7 +20,11 @@ RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
     pip install build \
  && pip wheel \
         --wheel-dir=/tmp/wheels \
-        -r requirements.txt
+        -r requirements.txt \
+        # Additional wheels for default-stage. Updates below should be repeated
+        # in default-stage.
+        #
+        py-spy
 
 
 # The final stage - slim version
@@ -78,6 +82,17 @@ CMD ["jupyterhub", "--config", "/usr/local/etc/jupyterhub/jupyterhub_config.py"]
 FROM slim-stage as default-stage
 
 USER root
+
+ARG PIP_CACHE_DIR=/tmp/pip-cache
+RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
+    --mount=type=cache,from=build-stage,source=/tmp/wheels,target=/tmp/wheels \
+    pip install \
+        --find-links=/tmp/wheels/ \
+        # Updates below should be repeated in build-stage.
+        #
+        # py-spy is useful for profiling performance of running hubs
+        py-spy
+
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
         # misc network utilities
@@ -88,4 +103,5 @@ RUN apt-get update \
         less \
         vim \
  && rm -rf /var/lib/apt/lists/*
+
 USER ${NB_USER}
