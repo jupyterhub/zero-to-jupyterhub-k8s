@@ -1,38 +1,41 @@
 # syntax = docker/dockerfile:1.3
-# The build stage
-# ---------------
-FROM python:3.9-bullseye as build-stage
-
 # VULN_SCAN_TIME=2022-08-08_05:22:22
 
-WORKDIR /build-stage
 
-# set pip's cache directory using this environment variable, and use
-# ARG instead of ENV to ensure its only set when the image is built
-ARG PIP_CACHE_DIR=/tmp/pip-cache
+# The build stage
+# ---------------
+# This stage is building Python wheels for use in later stages by using a base
+# image that has more pre-requisites to do so, such as a C++ compiler.
+#
+FROM python:3.9-bullseye as build-stage
 
 # Build wheels
-# These are mounted into the final image for installation
+#
+# We set pip's cache directory and expose it across build stages via an
+# ephemeral docker cache (--mount=type=cache,target=${PIP_CACHE_DIR}).
+#
 COPY requirements.txt requirements.txt
+ARG PIP_CACHE_DIR=/tmp/pip-cache
 RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
     pip install build \
- && pip wheel -r requirements.txt
+ && pip wheel \
+        --wheel-dir=/tmp/wheels \
+        -r requirements.txt
 
 
 # The final stage - slim version
 # ------------------------------
 # This stage is built and published as jupyterhub/k8s-hub-slim. It is meant to
-# provide no apt packages besides whats essential.
+# provide no non-essential packages.
 #
 FROM python:3.9-slim-bullseye as slim-stage
-
-ARG NB_USER=jovyan
-ARG NB_UID=1000
-ARG HOME=/home/jovyan
-
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN adduser --disabled-password \
+ARG NB_USER=jovyan \
+    NB_UID=1000 \
+    HOME=/home/jovyan
+RUN adduser \
+        --disabled-password \
         --gecos "Default user" \
         --uid ${NB_UID} \
         --home ${HOME} \
@@ -49,14 +52,11 @@ RUN apt-get update \
         tini \
  && rm -rf /var/lib/apt/lists/*
 
-# set pip's cache directory using this environment variable, and use
-# ARG instead of ENV to ensure its only set when the image is built
-ARG PIP_CACHE_DIR=/tmp/pip-cache
-
 # install wheels built in the build-stage
 COPY requirements.txt /tmp/requirements.txt
+ARG PIP_CACHE_DIR=/tmp/pip-cache
 RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
-    --mount=type=cache,from=build-stage,source=/build-stage,target=/tmp/wheels \
+    --mount=type=cache,from=build-stage,source=/tmp/wheels,target=/tmp/wheels \
     pip install \
         --find-links=/tmp/wheels/ \
         -r /tmp/requirements.txt
@@ -72,10 +72,10 @@ CMD ["jupyterhub", "--config", "/usr/local/etc/jupyterhub/jupyterhub_config.py"]
 
 # The final stage - default version
 # ---------------------------------
-# We add a few non-critical apt packages on top of the slim version to provide
-# some debugging utility for k8s admins.
+# We add a few non-critical packages on top of the slim version to provide some
+# additional utility.
 #
-FROM slim-stage
+FROM slim-stage as default-stage
 
 USER root
 RUN apt-get update \
