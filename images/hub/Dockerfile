@@ -95,11 +95,9 @@ RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-        # misc network utilities
         curl \
         dnsutils \
         git \
-        # misc other utilities
         less \
         vim \
  && rm -rf /var/lib/apt/lists/*

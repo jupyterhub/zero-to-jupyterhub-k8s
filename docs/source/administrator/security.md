@@ -167,11 +167,10 @@ security report generator. Use the following URL structure to test your domain:
 https://ssllabs.com/ssltest/analyze.html?d=<YOUR-DOMAIN>
 ```
 
-## Minimize hub image
+## Minimal hub image
 
-By excluding non essential tools in the `hub` pod's image, you can avoid
-exposure to vulnerabilities in those tools. You can use the slim version of the
-hub image that we provide for this.
+The default hub image includes some useful debugging tools.
+You can use the slim version of image to minimise your exposure to vulnerabilities in those optional tools.
 
 ```yaml
 hub:
