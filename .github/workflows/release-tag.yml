@@ -1,0 +1,32 @@
+# Create a GitHub release whenever a tag is pushed.
+# Tags that aren't in the form N.N.N are considered pre-releases.
+
+name: release-tag
+on:
+  push:
+    tags:
+      - "**"
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      # https://github.com/actions/github-script
+      # https://octokit.github.io/rest.js/v18#repos-create-release
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            if (!context.ref.startsWith('refs/tags/')) {
+              core.setFailed(`${context.ref} is not in the form refs/tags/$tag`)
+            }
+            const tag = context.ref.slice(10)
+            const prerelease = !tag.match(/\d+\.\d+\.\d+$/)
+            github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: tag,
+              prerelease: prerelease,
+              body: 'Please see the [changelog](https://zero-to-jupyterhub.readthedocs.io/en/latest/changelog.html) for details.'
+            });
