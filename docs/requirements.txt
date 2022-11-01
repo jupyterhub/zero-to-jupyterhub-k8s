@@ -1,12 +1,3 @@
-# The ordering of these requirements can matter. It matters if we install them
-# in an environment where a dependency to them (such as sphinx) is
-# pre-installed, such as it can be on RTD. For example, if a top-ordered package
-# declares it needs sphinx>=1 and then a later package declares it needs
-# sphinx<4 - the latter may be ignored.
-#
-# As long as we have myst-parser ordered before other sphinx depending packages,
-# we should be good.
-#
 chartpress
 myst-parser
 pydata-sphinx-theme
