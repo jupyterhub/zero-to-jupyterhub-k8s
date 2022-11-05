@@ -167,6 +167,28 @@ security report generator. Use the following URL structure to test your domain:
 https://ssllabs.com/ssltest/analyze.html?d=<YOUR-DOMAIN>
 ```
 
+## Minimal hub image
+
+The default hub image includes some useful debugging tools.
+You can use the slim version of image to minimise your exposure to vulnerabilities in those optional tools.
+
+```yaml
+hub:
+  image:
+    # The slim variant excludes a few non-essential packages that are useful
+    # when debugging something from the hub pod. To use it, apply this
+    # configuration.
+    #
+    name: jupyterhub/k8s-hub-slim
+```
+
+```{note}
+We are based on Linux Debian as a base image. There are container
+scanners that pick up known vulnerabilities in Debian that the Debian security
+team has dismissed. For details about this, see [this
+comment](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/2918#issuecomment-1295813128).
+```
+
 ## Secure access to Helm
 
 Helm 3 supports the security, identity, and authorization features of modern Kubernetes. Helm’s permissions are evaluated using your kubeconfig file. Cluster administrators can restrict user permissions at whatever granularity they see fit.

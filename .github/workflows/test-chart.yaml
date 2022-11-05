@@ -131,8 +131,10 @@ jobs:
         include:
           - k3s-channel: latest
             test: install
-          - k3s-channel: stable
+          - k3s-channel: stable # also test hub-slim
             test: install
+            local-chart-extra-args: >-
+              --set hub.image.name=jupyterhub/k8s-hub-slim
           - k3s-channel: v1.21 # also test prePuller.hook
             test: install
             local-chart-extra-args: >-
