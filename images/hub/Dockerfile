@@ -7,7 +7,7 @@
 # This stage is building Python wheels for use in later stages by using a base
 # image that has more pre-requisites to do so, such as a C++ compiler.
 #
-FROM python:3.9-bullseye as build-stage
+FROM python:3.11-bullseye as build-stage
 
 # Build wheels
 #
@@ -32,7 +32,7 @@ RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
 # This stage is built and published as jupyterhub/k8s-hub-slim. It is meant to
 # provide no non-essential packages.
 #
-FROM python:3.9-slim-bullseye as slim-stage
+FROM python:3.11-slim-bullseye as slim-stage
 ENV DEBIAN_FRONTEND=noninteractive
 
 ARG NB_USER=jovyan \

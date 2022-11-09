@@ -7,7 +7,7 @@
 # This stage is building Python wheels for use in later stages by using a base
 # image that has more pre-requisites to do so, such as a C++ compiler.
 #
-FROM python:3.9-bullseye as build-stage
+FROM python:3.11-bullseye as build-stage
 
 # Build wheels
 #
@@ -26,7 +26,7 @@ RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
 # The final stage
 # ---------------
 #
-FROM python:3.9-slim-bullseye
+FROM python:3.11-slim-bullseye
 ENV DEBIAN_FRONTEND=noninteractive
 
 ENV NB_USER=jovyan \
