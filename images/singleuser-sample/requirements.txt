@@ -53,13 +53,13 @@ executing==1.2.0
     # via stack-data
 fastjsonschema==2.16.2
     # via nbformat
-greenlet==2.0.0.post0
+greenlet==2.0.1
     # via sqlalchemy
 idna==3.4
     # via
     #   anyio
     #   requests
-ipykernel==6.17.0
+ipykernel==6.17.1
     # via
     #   nbclassic
     #   notebook
@@ -96,7 +96,7 @@ jupyter-client==7.4.4
     #   nbclassic
     #   nbclient
     #   notebook
-jupyter-core==4.11.2
+jupyter-core==5.0.0
     # via
     #   jupyter-client
     #   jupyter-server
@@ -105,7 +105,7 @@ jupyter-core==4.11.2
     #   nbconvert
     #   nbformat
     #   notebook
-jupyter-server==1.21.0
+jupyter-server==1.23.1
     # via
     #   jupyterlab
     #   jupyterlab-server
@@ -148,7 +148,7 @@ nbclassic==0.4.8
     #   retrolab
 nbclient==0.7.0
     # via nbconvert
-nbconvert==7.2.3
+nbconvert==7.2.4
     # via
     #   jupyter-server
     #   nbclassic
@@ -160,7 +160,7 @@ nbformat==5.7.0
     #   nbclient
     #   nbconvert
     #   notebook
-nbgitpuller==1.1.0
+nbgitpuller==1.1.1
     # via -r requirements.in
 nest-asyncio==1.5.6
     # via
@@ -195,6 +195,8 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
+platformdirs==2.5.3
+    # via jupyter-core
 prometheus-client==0.15.0
     # via
     #   jupyter-server
@@ -203,7 +205,7 @@ prometheus-client==0.15.0
     #   notebook
 prompt-toolkit==3.0.32
     # via ipython
-psutil==5.9.3
+psutil==5.9.4
     # via ipykernel
 ptyprocess==0.7.0
     # via
