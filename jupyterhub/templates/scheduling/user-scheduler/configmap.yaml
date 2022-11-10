@@ -11,31 +11,16 @@ data:
     user-scheduler pod.
 
     ref: https://kubernetes.io/docs/reference/scheduling/config/
-    ref: https://kubernetes.io/docs/reference/config-api/kube-scheduler-config.v1beta2/
     ref: https://kubernetes.io/docs/reference/config-api/kube-scheduler-config.v1beta3/
+    ref: https://kubernetes.io/docs/reference/config-api/kube-scheduler-config.v1/
 
-    v1beta1 can be used with kube-scheduler binary version <=1.21
-    v1beta2 requires kube-scheduler binary version >=1.22
-    v1beta3 requires kube-scheduler binary version >=1.23
+    kubescheduler.config.k8s.io/v1beta3 requires kube-scheduler binary version >=1.23
+    kubescheduler.config.k8s.io/v1 requires kube-scheduler binary version >=1.25
 
-    kube-scheduler binaries versioned >=1.21 will error in k8s clusters
-    versioned <=1.20. To support a modern version of kube-scheduler and k8s
-    versions <=1.20 upwards, we provide two scenarios:
-
-    1. For k8s >= 1.21 we use a modern version of kube-scheduler and Helm chart
-       configuration works as expected.
-    2. For k8s <= 1.20 we use a hardcoded version of kube-scheduler (v1.20.15)
-       and configuration (v1beta1) of kube-scheduler.
+    FIXME: Add logic to transition from v1beta3 to v1 if its supported.
+           v1beta3 is likeley to be removed in k8s 1.27.
   */}}
   config.yaml: |
-    {{- /*
-      FIXME: We have added a workaround for EKS where
-            .Capabilities.KubeVersion.Minor can return a
-            string like "22+" instead of just "22".
-
-            See https://github.com/aws/eks-distro/issues/1128.
-    */}}
-    {{- if ge (atoi (.Capabilities.KubeVersion.Minor | replace "+" "")) 21 }}
     apiVersion: kubescheduler.config.k8s.io/v1beta3
     kind: KubeSchedulerConfiguration
     leaderElection:
@@ -52,44 +37,4 @@ data:
         pluginConfig:
           {{- . | toYaml | nindent 10 }}
         {{- end }}
-    {{- else }}
-    # WARNING: The tag of this image is hardcoded, and the
-    #          "scheduling.userScheduler.plugins" configuration of the Helm
-    #          chart that generated this resource manifest wasn't respected. If
-    #          you install the Helm chart in a k8s cluster versioned 1.21 or
-    #          higher, your configuration will be respected.
-    apiVersion: kubescheduler.config.k8s.io/v1beta1
-    kind: KubeSchedulerConfiguration
-    leaderElection:
-      resourceLock: endpoints
-      resourceName: {{ include "jupyterhub.user-scheduler-lock.fullname" . }}
-      resourceNamespace: "{{ .Release.Namespace }}"
-    profiles:
-      - schedulerName: {{ include "jupyterhub.user-scheduler.fullname" . }}
-        plugins:
-          score:
-            disabled:
-              - name: SelectorSpread
-              - name: TaintToleration
-              - name: PodTopologySpread
-              - name: NodeResourcesBalancedAllocation
-              - name: NodeResourcesLeastAllocated
-              # Disable plugins to be allowed to enable them again with a
-              # different weight and avoid an error.
-              - name: NodePreferAvoidPods
-              - name: NodeAffinity
-              - name: InterPodAffinity
-              - name: ImageLocality
-            enabled:
-              - name: NodePreferAvoidPods
-                weight: 161051
-              - name: NodeAffinity
-                weight: 14631
-              - name: InterPodAffinity
-                weight: 1331
-              - name: NodeResourcesMostAllocated
-                weight: 121
-              - name: ImageLocality
-                weight: 11
-    {{- end }}
 {{- end }}
