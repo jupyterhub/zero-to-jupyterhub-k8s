@@ -477,7 +477,7 @@ scheduling:
     plugins:
       score:
         disabled:
-          - name: SelectorSpread
+          - name: PodTopologySpread
         enabled:
           - name: NodePreferAvoidPods
             weight: 161051
