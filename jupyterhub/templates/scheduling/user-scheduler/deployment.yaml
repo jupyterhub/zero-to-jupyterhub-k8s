@@ -50,24 +50,7 @@ spec:
       {{- end }}
       containers:
         - name: kube-scheduler
-          {{- /*
-            FIXME: We have added a workaround for EKS where
-                  .Capabilities.KubeVersion.Minor can return a
-                  string like "22+" instead of just "22".
-
-                  See https://github.com/aws/eks-distro/issues/1128.
-          */}}
-          {{- if ge (atoi (.Capabilities.KubeVersion.Minor | replace "+" "")) 21 }}
           image: {{ .Values.scheduling.userScheduler.image.name }}:{{ .Values.scheduling.userScheduler.image.tag }}
-          {{- else }}
-          # WARNING: The tag of this image is hardcoded, and the
-          #          "scheduling.userScheduler.image.tag" configuration of the
-          #          Helm chart that generated this resource manifest isn't
-          #          respected. If you install the Helm chart in a k8s cluster
-          #          versioned 1.21 or higher, your configuration will be
-          #          respected.
-          image: {{ .Values.scheduling.userScheduler.image.name }}:v1.20.15
-          {{- end }}
           {{- with .Values.scheduling.userScheduler.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}

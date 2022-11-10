@@ -135,12 +135,12 @@ jobs:
             test: install
             local-chart-extra-args: >-
               --set hub.image.name=jupyterhub/k8s-hub-slim
-          - k3s-channel: v1.21 # also test prePuller.hook
+          - k3s-channel: v1.22 # also test prePuller.hook
             test: install
             local-chart-extra-args: >-
               --set prePuller.hook.enabled=true
               --set prePuller.hook.pullOnlyOnChanges=true
-          - k3s-channel: v1.20 # also test hub.existingSecret
+          - k3s-channel: v1.21 # also test hub.existingSecret
             test: install
             local-chart-extra-args: >-
               --set hub.existingSecret=test-hub-existing-secret
