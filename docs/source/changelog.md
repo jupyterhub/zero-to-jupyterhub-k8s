@@ -12,6 +12,9 @@ and as we merge [breaking changes in pull
 requests](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pulls?q=is%3Apr+is%3Aclosed+label%3Abreaking),
 this list should be updated.
 
+- K8s 1.21 is now required.
+- The Helm chart's provided images now use Python 3.11 instead of Python 3.9.
+
 ## 2.0
 
 ### 2.0.0 - 2022-09-09
