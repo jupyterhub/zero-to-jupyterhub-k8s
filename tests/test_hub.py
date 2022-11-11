@@ -156,7 +156,7 @@ def test_extra_files(extra_files_test_command):
     )
     assert (
         c.returncode == 0
-    ), f"The hub.extraFiles configuration doesn't seem to have been honored!"
+    ), "The hub.extraFiles configuration doesn't seem to have been honored!"
 
 
 def test_load_etc_jupyterhub_d():
@@ -178,7 +178,7 @@ def test_load_etc_jupyterhub_d():
     )
     assert (
         c.returncode == 0
-    ), f"The hub.extraFiles configuration should have mounted a config file to /usr/local/etc/jupyterhub/jupyterhub_config.d which should have been loaded to write a dummy file for us!"
+    ), "The hub.extraFiles configuration should have mounted a config file to /usr/local/etc/jupyterhub/jupyterhub_config.d which should have been loaded to write a dummy file for us!"
 
 
 def test_load_existing_secret():
@@ -231,7 +231,6 @@ def test_load_existing_secret():
     if "hub.existingSecret=None" in hub_logs:
         pytest.skip("hub.existingSecret is None")
     else:
-        k8s_secret_exist = False
         match = re.compile(r".*hub.existingSecret=(?P<ref>[\S]*).*", re.DOTALL).match(
             hub_logs
         )
