@@ -1,67 +1,8 @@
 rules:
-  braces:
-    min-spaces-inside: 0
-    max-spaces-inside: 0
-    min-spaces-inside-empty: -1
-    max-spaces-inside-empty: -1
-  brackets:
-    min-spaces-inside: 0
-    max-spaces-inside: 0
-    min-spaces-inside-empty: -1
-    max-spaces-inside-empty: -1
-  colons:
-    max-spaces-before: 0
-    max-spaces-after: 1
-  commas:
-    max-spaces-before: 0
-    min-spaces-after: 0
-    max-spaces-after: 1
-  comments:
-    require-starting-space: false # Default: true (*)
-    min-spaces-from-content: 2
-  comments-indentation: {}
-  document-end: disable
-  document-start: disable # Default: { present: true }
-  empty-lines:
-    max: 2
-    max-start: 0
-    max-end: 0
-  empty-values:
-    forbid-in-block-mappings: false
-    forbid-in-flow-mappings: false
-  hyphens:
-    max-spaces-after: 1
   indentation:
     spaces: 2 # Default: consistent
-    indent-sequences: whatever # Default true (**)
-    check-multi-line-strings: false
-  key-duplicates: enable
-  key-ordering: disable
+    indent-sequences: whatever # Default true (*)
   line-length: disable # Default: { max: 80, ... }
-  new-line-at-end-of-file: enable
-  new-lines:
-    type: unix
-  octal-values:
-    forbid-implicit-octal: false
-    forbid-explicit-octal: false
-  trailing-spaces: disable
-  truthy:
-    level: warning
-# (*) Until we can use PR: https://github.com/kubernetes/helm/pull/3811
 
-# (**) toYaml forces us to use false and be indent different amounts of spaced
-# depending on importing lists or dicts. For all fields, where we support both
-# lists and dicts, this would be a hassle.
-# Consider this case...
-
-# # values.yaml
-# list:
-# - key1: value1
-# dict:
-#   key1: value1
-#
-# # template.yaml
-# myList:
-#   {{- .Values.list | toYaml | nindent 0 }}
-# myDict:
-#   {{- .Values.dict | toYaml | nindent 2 }}
+# (*) toYaml's emitted sequences/lists will have no indentation and we have no
+# control over it, so we compromise by setting "whatever".
