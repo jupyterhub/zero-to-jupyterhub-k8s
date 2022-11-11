@@ -15,7 +15,6 @@ yamllint: https://github.com/adrienverge/yamllint
 """
 
 import argparse
-import glob
 import os
 import pipes
 import subprocess
@@ -43,30 +42,12 @@ def lint(yamllint_config, values, output_dir, strict, debug):
     """Calls `helm lint`, `helm template`, and `yamllint`."""
 
     print("### Clearing output directory")
-    check_call(
-        [
-            "mkdir",
-            "-p",
-            output_dir,
-        ]
-    )
-    check_call(
-        [
-            "rm",
-            "-rf",
-            output_dir + "/*",
-        ]
-    )
+    check_call(["mkdir", "-p", output_dir])
+    check_call(["rm", "-rf", f"{output_dir}/*"])
 
     print("### Linting started")
     print("### 1/3 - helm lint: lint helm templates")
-    helm_lint_cmd = [
-        "helm",
-        "lint",
-        "../../jupyterhub",
-        "--values",
-        values,
-    ]
+    helm_lint_cmd = ["helm", "lint", "../../jupyterhub", f"--values={values}"]
     if strict:
         helm_lint_cmd.append("--strict")
     if debug:
@@ -78,10 +59,8 @@ def lint(yamllint_config, values, output_dir, strict, debug):
         "helm",
         "template",
         "../../jupyterhub",
-        "--values",
-        values,
-        "--output-dir",
-        output_dir,
+        f"--values={values}",
+        f"--output-dir={output_dir}",
     ]
     if debug:
         helm_template_cmd.append("--debug")
