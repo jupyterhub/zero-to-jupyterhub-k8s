@@ -50,7 +50,17 @@ spec:
       {{- end }}
       containers:
         - name: kube-scheduler
+          {{- if semverCompare ">=1.24.0-0" .Capabilities.KubeVersion.Version }}
           image: {{ .Values.scheduling.userScheduler.image.name }}:{{ .Values.scheduling.userScheduler.image.tag }}
+          {{- else }}
+          # WARNING: The tag of this image is hardcoded, and the
+          #          "scheduling.userScheduler.image.tag" configuration of the
+          #          Helm chart that generated this resource manifest isn't
+          #          respected. If you install the Helm chart in a k8s cluster
+          #          versioned 1.24 or higher, your configuration will be
+          #          respected.
+          image: {{ .Values.scheduling.userScheduler.image.name }}:v1.23.14
+          {{- end }}
           {{- with .Values.scheduling.userScheduler.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
