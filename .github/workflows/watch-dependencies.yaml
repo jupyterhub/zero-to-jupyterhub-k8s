@@ -162,7 +162,7 @@ jobs:
           latest_version = sorted(releases.keys(), key=packaging.version.Version)[-1]
 
           with open(os.environ["GITHUB_OUTPUT"], "a") as f:
-              f.write(f"version={latest_version}")
+              f.write(f"version={latest_version}\n")
 
       - name: Update pinned version of jupyterhub
         if: steps.local.outputs.version != steps.latest.outputs.version
