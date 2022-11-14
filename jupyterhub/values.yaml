@@ -537,7 +537,7 @@ scheduling:
       #
       # If you update this, also update prePuller.pause.image.tag
       #
-      tag: "3.8"
+      tag: "3.9"
       pullPolicy:
       pullSecrets: []
     revisionHistoryLimit:
@@ -623,7 +623,7 @@ prePuller:
       #
       # If you update this, also update scheduling.userPlaceholder.image.tag
       #
-      tag: "3.8"
+      tag: "3.9"
       pullPolicy:
       pullSecrets: []
 
