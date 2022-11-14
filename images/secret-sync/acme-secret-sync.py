@@ -36,13 +36,10 @@ good enough, since traefik can always re-generate certs if needed.
 """
 import argparse
 import base64
-import io
 import json
 import logging
 import os
-import subprocess
 import sys
-import tarfile
 import time
 
 from kubernetes import client, config
@@ -65,7 +62,7 @@ def update_secret(namespace, secret_name, labels, key, value):
             secret = client.V1Secret(
                 metadata=client.V1ObjectMeta(name=secret_name, labels=labels), data={}
             )
-            resp = v1.create_namespaced_secret(namespace=namespace, body=secret)
+            v1.create_namespaced_secret(namespace=namespace, body=secret)
             logging.info(f"Created secret {secret_name} since it does not exist")
         else:
             raise

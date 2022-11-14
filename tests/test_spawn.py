@@ -51,7 +51,7 @@ def test_spawn_basic(
         )
         assert (
             c.returncode == 0
-        ), f"singleuser.extraEnv didn't lead to a mounted environment variable!"
+        ), "singleuser.extraEnv didn't lead to a mounted environment variable!"
 
         # check user pod's extra files
         c = subprocess.run(
@@ -67,7 +67,7 @@ def test_spawn_basic(
         )
         assert (
             c.returncode == 0
-        ), f"The singleuser.extraFiles configuration doesn't seem to have been honored!"
+        ), "The singleuser.extraFiles configuration doesn't seem to have been honored!"
     finally:
         _delete_server(api_request, jupyter_user, request_data["test_timeout"])
 

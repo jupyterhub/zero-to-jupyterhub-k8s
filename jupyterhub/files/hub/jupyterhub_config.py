@@ -2,7 +2,6 @@ import glob
 import os
 import re
 import sys
-from binascii import a2b_hex
 
 from jupyterhub.utils import url_path_join
 from kubernetes_asyncio import client

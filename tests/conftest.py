@@ -6,7 +6,6 @@ ref: https://docs.pytest.org/en/latest/writing_plugins.html#conftest-py-plugins
 import os
 import textwrap
 import uuid
-from urllib.parse import urlparse
 
 import pytest
 import requests

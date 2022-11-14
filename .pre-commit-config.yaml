@@ -62,3 +62,17 @@ repos:
     rev: 2.1.0
     hooks:
       - id: chartpress
+
+  # Linting: Python code (see the file .flake8)
+  - repo: https://github.com/PyCQA/flake8
+    rev: "5.0.4"
+    hooks:
+      - id: flake8
+        # Ignore style and complexity
+        # E: style errors
+        # W: style warnings
+        # C: complexity
+        #
+        args:
+          - --ignore=E,C,W
+          - --builtins=c
