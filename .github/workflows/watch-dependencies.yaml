@@ -85,7 +85,7 @@ jobs:
         id: local
         run: |
           local_tag=$(cat jupyterhub/values.yaml | yq e '.${{ matrix.values_path }}' -)
-          echo "::set-output name=tag::$local_tag"
+          echo "tag=$local_tag" >> $GITHUB_OUTPUT
 
       - name: Get latest tag of ${{ matrix.registry }}/${{ matrix.repository }}
         id: latest
@@ -100,7 +100,7 @@ jobs:
               docker run --rm quay.io/skopeo/stable list-tags docker://${{ matrix.registry }}/${{ matrix.repository }} \
             | jq -r '[.Tags[] | select(. | match("^v?\\d+\\.\\d+(\\.\\d+)${{ matrix.version_patch_regexp_group_suffix }}$") | .string | startswith("${{ matrix.version_startswith }}"))] | sort_by(split(".") | map(tonumber? // (.[1:] | tonumber))) | last'
           )
-          echo "::set-output name=tag::$latest_tag"
+          echo "tag=$latest_tag" >> $GITHUB_OUTPUT
 
       - name: Update values.yaml pinned tag
         if: steps.local.outputs.tag != steps.latest.outputs.tag
@@ -146,12 +146,13 @@ jobs:
         id: local
         run: |
           local_version=$(cat images/hub/requirements.in | grep 'jupyterhub==' | sed 's/jupyterhub==//')
-          echo "::set-output name=version::$local_version"
+          echo "version=$local_version" >> $GITHUB_OUTPUT
 
       - name: Get latest version of jupyterhub
         id: latest
         shell: python
         run: |
+          import os
           import packaging.version
           import requests
 
@@ -160,7 +161,8 @@ jobs:
           releases = data["releases"]
           latest_version = sorted(releases.keys(), key=packaging.version.Version)[-1]
 
-          print(f"::set-output name=version::{latest_version}")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"version={latest_version}\n")
 
       - name: Update pinned version of jupyterhub
         if: steps.local.outputs.version != steps.latest.outputs.version
