@@ -77,9 +77,9 @@ jobs:
           )
           echo "Identified image: $IMAGE_SPEC"
 
-          echo "::set-output name=spec::$IMAGE_SPEC"
-          echo "::set-output name=name::$(echo $IMAGE_SPEC | sed 's/\(.*\):.*/\1/')"
-          echo "::set-output name=tag::$(echo $IMAGE_SPEC | sed 's/.*:\(.*\)/\1/')"
+          echo "spec=$IMAGE_SPEC" >> $GITHUB_OUTPUT
+          echo "name=$(echo $IMAGE_SPEC | sed 's/\(.*\):.*/\1/')" >> $GITHUB_OUTPUT
+          echo "tag=$(echo $IMAGE_SPEC | sed 's/.*:\(.*\)/\1/')" >> $GITHUB_OUTPUT
 
       - name: Create ./tmp dir
         run: mkdir ./tmp
@@ -126,7 +126,7 @@ jobs:
         id: analyze
         if: steps.rebuild.outcome == 'success'
         run: |
-          echo "::set-output name=utc_time::$(date --utc +'%F_%T')"
+          echo "utc_time=$(date --utc +'%F_%T')" >> $GITHUB_OUTPUT
 
           json_to_misc() {
               # Count vulnerabilities
@@ -148,13 +148,13 @@ jobs:
               TMP="${TMP//'%'/'%25'}"
               TMP="${TMP//$'\n'/'%0A'}"
               TMP="${TMP//$'\r'/'%0D'}"
-              echo "::set-output name=md_summary_$1::$TMP"
+              echo "md_summary_$1=$TMP" >> $GITHUB_OUTPUT
 
               # Calculate a hash of the markdown summary
               HASH=$(cat tmp/md_summary_$1.md | sha1sum)
               HASH=${HASH:0:10}
               export HASH_$1=$HASH
-              echo "::set-output name=hash_$1::$HASH"
+              echo "hash_$1=$HASH" >> $GITHUB_OUTPUT
           }
 
           json_to_misc 1
@@ -162,10 +162,10 @@ jobs:
 
           # Did rebuilding the image change anything?
           if [ "$HASH_1" == "$HASH_2" ]; then
-              echo "::set-output name=proceed::no"
+              echo "proceed=no" >> $GITHUB_OUTPUT
               echo "No vulnerabilities were patched by rebuilding the image - won't proceed!"
           else
-              echo "::set-output name=proceed::yes"
+              echo "proceed=yes" >> $GITHUB_OUTPUT
               echo "Vulnerabilities were patched by rebuilding the image - will proceed!"
           fi
 
