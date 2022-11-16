@@ -105,7 +105,7 @@ jupyter-core==5.0.0
     #   nbconvert
     #   nbformat
     #   notebook
-jupyter-server==1.23.1
+jupyter-server==1.23.2
     # via
     #   jupyterlab
     #   jupyterlab-server
@@ -148,7 +148,7 @@ nbclassic==0.4.8
     #   retrolab
 nbclient==0.7.0
     # via nbconvert
-nbconvert==7.2.4
+nbconvert==7.2.5
     # via
     #   jupyter-server
     #   nbclassic
