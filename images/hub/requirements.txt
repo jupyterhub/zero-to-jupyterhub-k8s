@@ -34,7 +34,7 @@ charset-normalizer==2.1.1
     # via
     #   aiohttp
     #   requests
-cryptography==38.0.3
+cryptography==38.0.4
     # via pyopenssl
 escapism==1.0.1
     # via
@@ -54,7 +54,7 @@ jinja2==3.1.2
     # via
     #   jupyterhub
     #   jupyterhub-kubespawner
-jsonschema==4.17.0
+jsonschema==4.17.1
     # via
     #   jupyter-telemetry
     #   oauthenticator
@@ -90,7 +90,7 @@ kubernetes-asyncio==24.2.2
     # via jupyterhub-kubespawner
 ldap3==2.9.1
     # via jupyterhub-ldapauthenticator
-mako==1.2.3
+mako==1.2.4
     # via alembic
 markupsafe==2.1.1
     # via
@@ -147,7 +147,7 @@ python-dateutil==2.8.2
     #   kubernetes-asyncio
 python-json-logger==2.0.4
     # via jupyter-telemetry
-python-slugify==6.1.2
+python-slugify==7.0.0
     # via jupyterhub-kubespawner
 pyyaml==6.0
     # via
@@ -192,7 +192,7 @@ traitlets==5.5.0
     #   jupyter-telemetry
     #   jupyterhub
     #   jupyterhub-ldapauthenticator
-urllib3==1.26.12
+urllib3==1.26.13
     # via
     #   jupyterhub-kubespawner
     #   kubernetes-asyncio

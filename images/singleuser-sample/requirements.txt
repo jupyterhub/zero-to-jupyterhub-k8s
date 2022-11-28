@@ -39,7 +39,7 @@ cffi==1.15.1
     #   cryptography
 charset-normalizer==2.1.1
     # via requests
-cryptography==38.0.3
+cryptography==38.0.4
     # via pyopenssl
 debugpy==1.6.3
     # via ipykernel
@@ -71,7 +71,7 @@ ipython-genutils==0.2.0
     # via
     #   nbclassic
     #   notebook
-jedi==0.18.1
+jedi==0.18.2
     # via ipython
 jinja2==3.1.2
     # via
@@ -84,12 +84,12 @@ jinja2==3.1.2
     #   notebook
 json5==0.9.10
     # via jupyterlab-server
-jsonschema==4.17.0
+jsonschema==4.17.1
     # via
     #   jupyter-telemetry
     #   jupyterlab-server
     #   nbformat
-jupyter-client==7.4.5
+jupyter-client==7.4.7
     # via
     #   ipykernel
     #   jupyter-server
@@ -105,7 +105,7 @@ jupyter-core==5.0.0
     #   nbconvert
     #   nbformat
     #   notebook
-jupyter-server==1.23.2
+jupyter-server==1.23.3
     # via
     #   jupyterlab
     #   jupyterlab-server
@@ -127,7 +127,7 @@ jupyterlab-server==2.16.3
     # via
     #   jupyterlab
     #   retrolab
-mako==1.2.3
+mako==1.2.4
     # via alembic
 markupsafe==2.1.1
     # via
@@ -203,7 +203,7 @@ prometheus-client==0.15.0
     #   jupyterhub
     #   nbclassic
     #   notebook
-prompt-toolkit==3.0.32
+prompt-toolkit==3.0.33
     # via ipython
 psutil==5.9.4
     # via ipykernel
@@ -266,7 +266,7 @@ sqlalchemy==1.4.44
     # via
     #   alembic
     #   jupyterhub
-stack-data==0.6.1
+stack-data==0.6.2
     # via ipython
 terminado==0.17.0
     # via
@@ -304,7 +304,7 @@ traitlets==5.5.0
     #   nbconvert
     #   nbformat
     #   notebook
-urllib3==1.26.12
+urllib3==1.26.13
     # via requests
 wcwidth==0.2.5
     # via prompt-toolkit
