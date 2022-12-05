@@ -205,7 +205,7 @@ jobs:
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create or update a PR
         if: steps.analyze.outputs.proceed == 'yes' && github.event_name != 'pull_request'
-        uses: peter-evans/create-pull-request@331d02c7e2104af23ad5974d4d5cbc58a3e6dc77
+        uses: peter-evans/create-pull-request@2b011faafdcbc9ceb11414d64d0573f37c774b04
         with:
           token: "${{ secrets.jupyterhub_bot_pat }}"
           author: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
