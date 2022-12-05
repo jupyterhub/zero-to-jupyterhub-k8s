@@ -15,7 +15,7 @@ argon2-cffi==21.3.0
     #   notebook
 argon2-cffi-bindings==21.2.0
     # via argon2-cffi
-asttokens==2.2.0
+asttokens==2.2.1
     # via stack-data
 async-generator==1.10
     # via jupyterhub
@@ -89,7 +89,7 @@ jsonschema==4.17.3
     #   jupyter-telemetry
     #   jupyterlab-server
     #   nbformat
-jupyter-client==7.4.7
+jupyter-client==7.4.8
     # via
     #   ipykernel
     #   jupyter-server
@@ -116,7 +116,7 @@ jupyter-server==1.23.3
     #   retrolab
 jupyter-telemetry==0.1.0
     # via jupyterhub
-jupyterhub==3.0.0
+jupyterhub==3.1.0
     # via -r requirements.in
 jupyterlab==3.4.8
     # via
@@ -149,7 +149,7 @@ nbclassic==0.4.8
     #   retrolab
 nbclient==0.7.2
     # via nbconvert
-nbconvert==7.2.5
+nbconvert==7.2.6
     # via
     #   jupyter-server
     #   nbclassic
@@ -268,7 +268,7 @@ sqlalchemy==1.4.44
     #   jupyterhub
 stack-data==0.6.2
     # via ipython
-terminado==0.17.0
+terminado==0.17.1
     # via
     #   jupyter-server
     #   nbclassic
