@@ -505,7 +505,7 @@ scheduling:
       # workflow, and should be updated there if a minor version bump is done
       # here.
       #
-      tag: "v1.25.4" # ref: https://github.com/kubernetes/website/blob/main/content/en/releases/patch-releases.md
+      tag: "v1.25.5" # ref: https://github.com/kubernetes/website/blob/main/content/en/releases/patch-releases.md
       pullPolicy:
       pullSecrets: []
     nodeSelector: {}
