@@ -29,7 +29,7 @@ beautifulsoup4==4.11.1
     # via nbconvert
 bleach==5.0.1
     # via nbconvert
-certifi==2022.9.24
+certifi==2022.12.7
     # via requests
 certipy==0.1.3
     # via jupyterhub
@@ -39,6 +39,8 @@ cffi==1.15.1
     #   cryptography
 charset-normalizer==2.1.1
     # via requests
+comm==0.1.2
+    # via ipykernel
 cryptography==38.0.4
     # via pyopenssl
 debugpy==1.6.4
@@ -59,7 +61,7 @@ idna==3.4
     # via
     #   anyio
     #   requests
-ipykernel==6.17.1
+ipykernel==6.19.2
     # via
     #   nbclassic
     #   notebook
@@ -124,7 +126,7 @@ jupyterlab==3.4.8
     #   retrolab
 jupyterlab-pygments==0.2.2
     # via nbconvert
-jupyterlab-server==2.16.3
+jupyterlab-server==2.16.5
     # via
     #   jupyterlab
     #   retrolab
@@ -177,7 +179,7 @@ notebook-shim==0.2.2
     # via nbclassic
 oauthlib==3.2.2
     # via jupyterhub
-packaging==21.3
+packaging==22.0
     # via
     #   ipykernel
     #   jupyter-server
@@ -195,7 +197,7 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-platformdirs==2.5.4
+platformdirs==2.6.0
     # via jupyter-core
 prometheus-client==0.15.0
     # via
@@ -203,7 +205,7 @@ prometheus-client==0.15.0
     #   jupyterhub
     #   nbclassic
     #   notebook
-prompt-toolkit==3.0.33
+prompt-toolkit==3.0.36
     # via ipython
 psutil==5.9.4
     # via ipykernel
@@ -221,8 +223,6 @@ pygments==2.13.0
     #   nbconvert
 pyopenssl==22.1.0
     # via certipy
-pyparsing==3.0.9
-    # via packaging
 pyrsistent==0.19.2
     # via jsonschema
 python-dateutil==2.8.2
@@ -289,8 +289,9 @@ tornado==6.2
     #   notebook
     #   retrolab
     #   terminado
-traitlets==5.6.0
+traitlets==5.7.0
     # via
+    #   comm
     #   ipykernel
     #   ipython
     #   jupyter-client
