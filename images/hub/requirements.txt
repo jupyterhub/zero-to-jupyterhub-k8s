@@ -22,7 +22,7 @@ bcrypt==4.0.1
     # via
     #   jupyterhub-firstuseauthenticator
     #   jupyterhub-nativeauthenticator
-certifi==2022.9.24
+certifi==2022.12.7
     # via
     #   kubernetes-asyncio
     #   requests
@@ -114,7 +114,7 @@ oauthlib==3.2.2
     #   requests-oauthlib
 onetimepass==1.0.1
     # via jupyterhub-nativeauthenticator
-packaging==21.3
+packaging==22.0
     # via jupyterhub
 pamela==1.0.0
     # via jupyterhub
@@ -136,8 +136,6 @@ pymysql==1.0.2
     # via -r requirements.in
 pyopenssl==22.1.0
     # via certipy
-pyparsing==3.0.9
-    # via packaging
 pyrsistent==0.19.2
     # via jsonschema
 python-dateutil==2.8.2
@@ -187,7 +185,7 @@ tornado==6.2
     #   jupyterhub
     #   jupyterhub-idle-culler
     #   jupyterhub-ldapauthenticator
-traitlets==5.6.0
+traitlets==5.7.0
     # via
     #   jupyter-telemetry
     #   jupyterhub
