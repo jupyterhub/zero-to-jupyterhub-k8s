@@ -20,6 +20,10 @@ imagePullSecret:
 # Helm chart's pods can get credentials from to pull their images.
 imagePullSecrets: []
 
+# labels enables an opportunity to add general labels to the created K8s objects,
+# e.g. DaemonSets or Deployments
+labels: {}
+
 # hub relates to the hub pod, responsible for running JupyterHub, its configured
 # Authenticator class KubeSpawner, and its configured Proxy class
 # ConfigurableHTTPProxy. KubeSpawner creates the user pods, and
