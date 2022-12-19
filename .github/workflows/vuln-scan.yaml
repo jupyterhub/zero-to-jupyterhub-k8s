@@ -142,13 +142,13 @@ jobs:
                   cat tmp/scan_$1.json | jq -r '.Results[] | select(.Vulnerabilities != null) | .Type + " | " + (.Vulnerabilities[] | .VulnerabilityID + " | " + .PkgName + " | " + .InstalledVersion + " | " + .FixedVersion)' | sort >> tmp/md_summary_$1.md
               fi
 
-              # Use hack to set a multiline string output
-              # ref: https://github.com/actions/toolkit/issues/403#issue-593398879
-              TMP=$(cat tmp/md_summary_$1.md)
-              TMP="${TMP//'%'/'%25'}"
-              TMP="${TMP//$'\n'/'%0A'}"
-              TMP="${TMP//$'\r'/'%0D'}"
-              echo "md_summary_$1=$TMP" >> $GITHUB_OUTPUT
+              # Set a multiline string output with the following technique:
+              # ref: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
+              #
+              eof_marker=EOF_$RANDOM
+              echo "md_summary_$1<<$eof_marker" >> $GITHUB_OUTPUT
+              cat tmp/md_summary_$1.md >> $GITHUB_OUTPUT
+              echo "$eof_marker" >> $GITHUB_OUTPUT
 
               # Calculate a hash of the markdown summary
               HASH=$(cat tmp/md_summary_$1.md | sha1sum)
