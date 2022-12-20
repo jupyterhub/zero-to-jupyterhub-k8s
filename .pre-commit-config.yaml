@@ -36,10 +36,11 @@ repos:
           - --target-version=py38
           - --target-version=py39
           - --target-version=py310
+          - --target-version=py311
 
   # Autoformat: Python code
   - repo: https://github.com/pycqa/isort
-    rev: 5.11.1
+    rev: v5.11.3
     hooks:
       - id: isort
         args:
@@ -76,3 +77,7 @@ repos:
         args:
           - --ignore=E,C,W
           - --builtins=c
+
+# pre-commit.ci config reference: https://pre-commit.ci/#configuration
+ci:
+  autoupdate_schedule: monthly
