@@ -551,12 +551,12 @@ singleuser:
     - "--other-flag"
 ```
 
-:::{note}
+```{note}
 Docker has `ENTRYPOINT` and `CMD`,
 which k8s calls `command` and `args`.
 zero-to-jupyterhub always respects the ENTRYPOINT of the image,
 and setting `singleuser.cmd` only overrides the CMD.
-:::
+```
 
 ## Disable specific JupyterLab extensions
 
