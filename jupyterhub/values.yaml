@@ -573,6 +573,9 @@ scheduling:
         operator: Equal
         value: core
         effect: NoSchedule
+      - key: hub.jupyter.org/imagepulling
+        operator: Exists
+        effect: NoExecute
     nodeAffinity:
       matchNodePurpose: prefer
   userPods:
