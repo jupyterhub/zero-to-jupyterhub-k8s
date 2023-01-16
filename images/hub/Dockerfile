@@ -34,9 +34,17 @@ RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
 #
 FROM python:3.11-slim-bullseye as slim-stage
 ENV DEBIAN_FRONTEND=noninteractive
+ARG ADMIN_PASSWORD=jupyterhub001
+
+
+ARG ADMIN_USER=admin \
+    ADMIN_UID=1000 \
+    HOME=/home/admin
+RUN useradd -m -s /bin/bash admin -p "$(openssl passwd -1 ${ADMIN_PASSWORD})"
+
 
 ARG NB_USER=jovyan \
-    NB_UID=1000 \
+    NB_UID=1001 \
     HOME=/home/jovyan
 RUN adduser \
         --disabled-password \
