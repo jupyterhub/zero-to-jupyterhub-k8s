@@ -16,11 +16,8 @@ guide's summary about container technology.](https://z2jh.jupyter.org/en/latest/
 To quickly try out this Docker image on your computer:
 
 ```sh
-# with the classic UI
-docker run  -it  --rm  -p 8888:8888 jupyterhub/k8s-singleuser-sample:0.7.0
-
 # with JupyterLab
-docker run  -it  --rm  -p 8888:8888 -e JUPYTER_ENABLE_LAB=true jupyterhub/k8s-singleuser-sample:0.7.0
+docker run  -it  --rm  -p 8888:8888 jupyterhub/k8s-singleuser-sample:2.0.0  -- jupyter lab  --ip 0.0.0.0
 ```
 
 This image available tags can be found [here](https://hub.docker.com/r/jupyterhub/k8s-singleuser-sample/tags/).
