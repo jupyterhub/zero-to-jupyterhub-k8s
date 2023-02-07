@@ -284,7 +284,7 @@ jobs:
         run: |
           . ./ci/common
           if [ ${{ matrix.upgrade-from }} = stable -o ${{ matrix.upgrade-from }} = dev ]; then
-            UPGRADE_FROM_VERSION=$(curl -sS https://jupyterhub.github.io/helm-chart/info.json | jq -er '.jupyterhub.${{ matrix.upgrade-from }}')
+            UPGRADE_FROM_VERSION=$(curl -sSL https://jupyterhub.github.io/helm-chart/info.json | jq -er '.jupyterhub.${{ matrix.upgrade-from }}')
           else
             UPGRADE_FROM_VERSION=${{ matrix.upgrade-from }}
           fi
