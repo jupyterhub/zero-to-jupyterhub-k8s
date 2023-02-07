@@ -86,8 +86,6 @@ spec:
             - -add
             - {{ $taint.key }}:{{ $taint.effect }}
           env:
-            - name: GODEBUG
-              value: x509sha1=1
             - name: MY_POD_NAME
               valueFrom:
                 fieldRef:
@@ -211,8 +209,6 @@ spec:
             - -remove
             - {{ $taint.key }}:{{ $taint.effect }}
           env:
-            - name: GODEBUG
-              value: x509sha1=1
             - name: MY_POD_NAME
               valueFrom:
                 fieldRef:
