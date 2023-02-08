@@ -4,7 +4,7 @@
 #
 #    Use the "Run workflow" button at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/actions/workflows/watch-dependencies.yaml
 #
-alembic==1.9.2
+alembic==1.9.3
     # via jupyterhub
 anyio==3.6.2
     # via jupyter-server
@@ -25,7 +25,7 @@ babel==2.11.0
     # via jupyterlab-server
 backcall==0.2.0
     # via ipython
-beautifulsoup4==4.11.1
+beautifulsoup4==4.11.2
     # via nbconvert
 bleach==6.0.0
     # via nbconvert
@@ -41,7 +41,7 @@ charset-normalizer==3.0.1
     # via requests
 comm==0.1.2
     # via ipykernel
-cryptography==39.0.0
+cryptography==39.0.1
     # via pyopenssl
 debugpy==1.6.6
     # via ipykernel
@@ -53,13 +53,13 @@ executing==1.2.0
     # via stack-data
 fastjsonschema==2.16.2
     # via nbformat
-greenlet==2.0.1
+greenlet==2.0.2
     # via sqlalchemy
 idna==3.4
     # via
     #   anyio
     #   requests
-ipykernel==6.20.2
+ipykernel==6.21.1
     # via
     #   nbclassic
     #   notebook
@@ -89,15 +89,16 @@ jsonschema==4.17.3
     #   jupyter-telemetry
     #   jupyterlab-server
     #   nbformat
-jupyter-client==8.0.1
+jupyter-client==8.0.2
     # via
     #   ipykernel
     #   jupyter-server
     #   nbclassic
     #   nbclient
     #   notebook
-jupyter-core==5.1.5
+jupyter-core==5.2.0
     # via
+    #   ipykernel
     #   jupyter-client
     #   jupyter-server
     #   jupyterlab
@@ -139,7 +140,7 @@ matplotlib-inline==0.1.6
     # via
     #   ipykernel
     #   ipython
-mistune==2.0.4
+mistune==2.0.5
     # via nbconvert
 nbclassic==0.5.1
     # via
@@ -194,7 +195,7 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-platformdirs==2.6.2
+platformdirs==3.0.0
     # via jupyter-core
 prometheus-client==0.16.0
     # via
@@ -259,7 +260,7 @@ sniffio==1.3.0
     # via anyio
 soupsieve==2.3.2.post1
     # via beautifulsoup4
-sqlalchemy==2.0.0
+sqlalchemy==2.0.2
     # via
     #   alembic
     #   jupyterhub
@@ -286,7 +287,7 @@ tornado==6.2
     #   notebook
     #   retrolab
     #   terminado
-traitlets==5.8.1
+traitlets==5.9.0
     # via
     #   comm
     #   ipykernel
@@ -312,5 +313,5 @@ webencodings==0.5.1
     # via
     #   bleach
     #   tinycss2
-websocket-client==1.5.0
+websocket-client==1.5.1
     # via jupyter-server
