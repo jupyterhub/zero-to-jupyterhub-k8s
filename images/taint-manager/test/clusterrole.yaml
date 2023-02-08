@@ -3,6 +3,6 @@ kind: ClusterRole
 metadata:
   name: taintmanager
 rules:
-- apiGroups: [""] # "" indicates the core API group
-  resources: ["nodes"]
-  verbs: ["get", "update"]
+  - apiGroups: [""] # "" indicates the core API group
+    resources: ["nodes"]
+    verbs: ["get", "update"]

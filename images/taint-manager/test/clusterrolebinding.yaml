@@ -5,10 +5,10 @@ kind: ClusterRoleBinding
 metadata:
   name: taintmanager
 subjects:
-# You can specify more than one "subject"
-- kind: ServiceAccount
-  name: taintmanager
-  namespace: default
+  # You can specify more than one "subject"
+  - kind: ServiceAccount
+    name: taintmanager
+    namespace: default
 roleRef:
   # "roleRef" specifies the binding to a Role / ClusterRole
   kind: ClusterRole #this must be Role or ClusterRole
