@@ -78,7 +78,7 @@ load('ext://restart_process', 'docker_build_with_restart')
 
 # Wrap a docker_build to restart the given entrypoint after a Live Update.
 docker_build(
-    'lthub/' + project_name,
+    'jupyterhub/' + project_name,
     '.',
     dockerfile_contents=dockerfile,
     entrypoint='/go/bin/dlv --listen=0.0.0.0:50100 --api-version=2 --headless=true --only-same-user=false --accept-multiclient --check-go-version=false exec -- /usr/local/bin/taintmanager -remove jupyterhub:NoSchedule',
