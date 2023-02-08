@@ -13,7 +13,7 @@ spec:
         app: taintmanager
     spec:
       containers:
-        - image: lthub/taintmanager
+        - image: jupyterhub/k8s-taint-manager
           imagePullPolicy: IfNotPresent
           name: taintmanager
           env:

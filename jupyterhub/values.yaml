@@ -629,8 +629,8 @@ prePuller:
   taintmanager:
     enabled: true
     image:
-      name: lthub/taintmanager
-      tag: master
+      name: jupyterhub/k8s-taint-manager
+      tag: "set-by-chartpress"
     # taint/tolerations used for preventing user pods being scheduled while user image is being pulled
     # only first element in the list is being used
     tolerations:
