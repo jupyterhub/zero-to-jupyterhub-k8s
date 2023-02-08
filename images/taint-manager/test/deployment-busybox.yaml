@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: taintmanager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: taintmanager
+  template:
+    metadata:
+      labels:
+        app: taintmanager
+    spec:
+      serviceAccountName: taintmanager
+      containers:
+        - image: busybox
+          imagePullPolicy: IfNotPresent
+          name: taintmanager
+          command: ["sleep", "100000"]
+          env:
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MY_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          ports:
+            - containerPort: 8080
+      tolerations:
+        - key: "hub.jupyter.org/dedicated"
+          operator: "Exists"
+          effect: "NoSchedule"
+      restartPolicy: Always
