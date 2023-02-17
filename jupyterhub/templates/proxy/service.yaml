@@ -41,6 +41,7 @@ spec:
     component: proxy
     {{- end }}
     release: {{ .Release.Name }}
+    app: {{ .appLabel | default (include "jupyterhub.appLabel" .) }}
   ports:
     {{- if $HTTPS }}
     - name: https
