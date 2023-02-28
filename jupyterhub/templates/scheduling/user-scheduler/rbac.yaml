@@ -19,9 +19,9 @@ rules:
   #       - unchanged between 1.18 and 1.20
   #       - changed in 1.21: get/list/watch permission for namespace,
   #                          csidrivers, csistoragecapacities was added.
-  #       - unchanged between 1.22 and 1.25
+  #       - unchanged between 1.22 and 1.26
   #
-  # ref: https://github.com/kubernetes/kubernetes/blob/v1.25.0/plugin/pkg/auth/authorizer/rbac/bootstrappolicy/testdata/cluster-roles.yaml#L730-L886
+  # ref: https://github.com/kubernetes/kubernetes/blob/v1.26.0/plugin/pkg/auth/authorizer/rbac/bootstrappolicy/testdata/cluster-roles.yaml#L730-L886
   - apiGroups:
     - ""
     - events.k8s.io
@@ -183,9 +183,9 @@ rules:
   # Copied from the system:volume-scheduler ClusterRole of the k8s version
   # matching the kube-scheduler binary we use.
   #
-  # NOTE: These rules have not changed between 1.12 and 1.25.
+  # NOTE: These rules have not changed between 1.12 and 1.26.
   #
-  # ref: https://github.com/kubernetes/kubernetes/blob/v1.25.0/plugin/pkg/auth/authorizer/rbac/bootstrappolicy/testdata/cluster-roles.yaml#L1305-L1332
+  # ref: https://github.com/kubernetes/kubernetes/blob/v1.26.0/plugin/pkg/auth/authorizer/rbac/bootstrappolicy/testdata/cluster-roles.yaml#L1306-L1333
   - apiGroups:
     - ""
     resources:
