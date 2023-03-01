@@ -7,12 +7,16 @@
 # This stage is building Python wheels for use in later stages by using a base
 # image that has more pre-requisites to do so, such as a C++ compiler.
 #
+# NOTE: If the image version is updated, also update it in ci/refreeze and
+#       singleuser-sample's Dockerfile!
+#
 FROM python:3.11-bullseye as build-stage
 
 # Build wheels
 #
 # We set pip's cache directory and expose it across build stages via an
-# ephemeral docker cache (--mount=type=cache,target=${PIP_CACHE_DIR}).
+# ephemeral docker cache (--mount=type=cache,target=${PIP_CACHE_DIR}). We use
+# the same technique for the directory /tmp/wheels.
 #
 COPY requirements.txt requirements.txt
 ARG PIP_CACHE_DIR=/tmp/pip-cache
@@ -56,7 +60,7 @@ RUN apt-get update \
         tini \
  && rm -rf /var/lib/apt/lists/*
 
-# install wheels built in the build-stage
+# install wheels built in the build stage
 COPY requirements.txt /tmp/requirements.txt
 ARG PIP_CACHE_DIR=/tmp/pip-cache
 RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
