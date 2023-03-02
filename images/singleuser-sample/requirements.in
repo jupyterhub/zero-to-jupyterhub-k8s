@@ -12,7 +12,6 @@ jupyterhub==4.0.0b1
 # UI
 jupyterlab
 nbclassic
-retrolab
 
 # plugins
 nbgitpuller

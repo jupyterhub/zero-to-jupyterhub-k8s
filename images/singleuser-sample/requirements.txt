@@ -4,6 +4,10 @@
 #
 #    Use the "Run workflow" button at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/actions/workflows/watch-dependencies.yaml
 #
+aiofiles==22.1.0
+    # via ypy-websocket
+aiosqlite==0.18.0
+    # via ypy-websocket
 alembic==1.9.4
     # via jupyterhub
 anyio==3.6.2
@@ -15,6 +19,8 @@ argon2-cffi==21.3.0
     #   notebook
 argon2-cffi-bindings==21.2.0
     # via argon2-cffi
+arrow==1.2.3
+    # via isoduration
 asttokens==2.2.1
     # via stack-data
 async-generator==1.10
@@ -53,6 +59,8 @@ executing==1.2.0
     # via stack-data
 fastjsonschema==2.16.3
     # via nbformat
+fqdn==1.5.1
+    # via jsonschema
 greenlet==2.0.2
     # via sqlalchemy
 idna==3.4
@@ -72,6 +80,8 @@ ipython-genutils==0.2.0
     # via
     #   nbclassic
     #   notebook
+isoduration==20.11.0
+    # via jsonschema
 jedi==0.18.2
     # via ipython
 jinja2==3.1.2
@@ -85,8 +95,11 @@ jinja2==3.1.2
     #   notebook
 json5==0.9.11
     # via jupyterlab-server
-jsonschema==4.17.3
+jsonpointer==2.3
+    # via jsonschema
+jsonschema[format-nongpl]==4.17.3
     # via
+    #   jupyter-events
     #   jupyter-telemetry
     #   jupyterlab-server
     #   nbformat
@@ -108,7 +121,11 @@ jupyter-core==5.2.0
     #   nbconvert
     #   nbformat
     #   notebook
-jupyter-server==1.23.6
+jupyter-events==0.6.3
+    # via
+    #   jupyter-server
+    #   jupyter-server-fileid
+jupyter-server==2.3.0
     # via
     #   jupyter-server-fileid
     #   jupyterlab
@@ -116,21 +133,26 @@ jupyter-server==1.23.6
     #   nbclassic
     #   nbgitpuller
     #   notebook-shim
-    #   retrolab
+jupyter-server-fileid==0.8.0
+    # via jupyter-server-ydoc
+jupyter-server-terminals==0.4.4
+    # via jupyter-server
+jupyter-server-ydoc==0.6.1
+    # via jupyterlab
 jupyter-telemetry==0.1.0
     # via jupyterhub
+jupyter-ydoc==0.2.2
+    # via
+    #   jupyter-server-ydoc
+    #   jupyterlab
 jupyterhub==4.0.0b1
     # via -r requirements.in
-jupyterlab==3.4.8
-    # via
-    #   -r requirements.in
-    #   retrolab
+jupyterlab==3.6.1
+    # via -r requirements.in
 jupyterlab-pygments==0.2.2
     # via nbconvert
 jupyterlab-server==2.19.0
-    # via
-    #   jupyterlab
-    #   retrolab
+    # via jupyterlab
 mako==1.2.4
     # via alembic
 markupsafe==2.1.2
@@ -149,7 +171,6 @@ nbclassic==0.5.2
     #   -r requirements.in
     #   jupyterlab
     #   notebook
-    #   retrolab
 nbclient==0.7.2
     # via nbconvert
 nbconvert==7.2.9
@@ -234,6 +255,8 @@ python-json-logger==2.0.7
     # via
     #   jupyter-events
     #   jupyter-telemetry
+pyyaml==6.0
+    # via jupyter-events
 pyzmq==25.0.0
     # via
     #   ipykernel
@@ -245,8 +268,14 @@ requests==2.28.2
     # via
     #   jupyterhub
     #   jupyterlab-server
-retrolab==0.3.21
-    # via -r requirements.in
+rfc3339-validator==0.1.4
+    # via
+    #   jsonschema
+    #   jupyter-events
+rfc3986-validator==0.1.1
+    # via
+    #   jsonschema
+    #   jupyter-events
 ruamel-yaml==0.17.21
     # via jupyter-telemetry
 send2trash==1.8.0
@@ -273,12 +302,11 @@ stack-data==0.6.2
 terminado==0.17.1
     # via
     #   jupyter-server
+    #   jupyter-server-terminals
     #   nbclassic
     #   notebook
 tinycss2==1.2.1
     # via nbconvert
-tomli==2.0.1
-    # via jupyterlab
 tornado==6.2
     # via
     #   ipykernel
@@ -289,7 +317,6 @@ tornado==6.2
     #   nbclassic
     #   nbgitpuller
     #   notebook
-    #   retrolab
     #   terminado
 traitlets==5.9.0
     # via
@@ -310,13 +337,23 @@ traitlets==5.9.0
     #   notebook
 typing-extensions==4.5.0
     # via sqlalchemy
+uri-template==1.2.0
+    # via jsonschema
 urllib3==1.26.14
     # via requests
 wcwidth==0.2.6
     # via prompt-toolkit
+webcolors==1.12
+    # via jsonschema
 webencodings==0.5.1
     # via
     #   bleach
     #   tinycss2
 websocket-client==1.5.1
     # via jupyter-server
+y-py==0.5.9
+    # via
+    #   jupyter-ydoc
+    #   ypy-websocket
+ypy-websocket==0.8.2
+    # via jupyter-server-ydoc
