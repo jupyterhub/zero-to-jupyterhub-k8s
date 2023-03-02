@@ -58,6 +58,7 @@ greenlet==2.0.2
 idna==3.4
     # via
     #   anyio
+    #   jsonschema
     #   requests
 ipykernel==6.21.2
     # via
@@ -109,6 +110,7 @@ jupyter-core==5.2.0
     #   notebook
 jupyter-server==1.23.6
     # via
+    #   jupyter-server-fileid
     #   jupyterlab
     #   jupyterlab-server
     #   nbclassic
@@ -225,10 +227,13 @@ pyrsistent==0.19.3
     # via jsonschema
 python-dateutil==2.8.2
     # via
+    #   arrow
     #   jupyter-client
     #   jupyterhub
 python-json-logger==2.0.7
-    # via jupyter-telemetry
+    # via
+    #   jupyter-events
+    #   jupyter-telemetry
 pyzmq==25.0.0
     # via
     #   ipykernel
@@ -254,6 +259,7 @@ six==1.16.0
     #   asttokens
     #   bleach
     #   python-dateutil
+    #   rfc3339-validator
 sniffio==1.3.0
     # via anyio
 soupsieve==2.4
@@ -292,6 +298,7 @@ traitlets==5.9.0
     #   ipython
     #   jupyter-client
     #   jupyter-core
+    #   jupyter-events
     #   jupyter-server
     #   jupyter-telemetry
     #   jupyterhub
