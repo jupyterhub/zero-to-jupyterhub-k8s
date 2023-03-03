@@ -11,7 +11,7 @@ then follow [](helm-upgrade-command).
 Major releases may contain breaking changes, and will often require changes to your configuration.
 They have dedicated instructions for upgrading your deployment in addition to the general instructions on this page.
 
-For additional help, feel free to reach out to us on [gitter](https://gitter.im/jupyterhub/jupyterhub)
+For additional help, feel free to reach out to us on [gitter](https://app.gitter.im/#/room/#jupyterhub_jupyterhub:gitter.im)
 or the [Discourse forum](https://discourse.jupyter.org/).
 
 (upgrading-major-upgrades)=
@@ -113,7 +113,7 @@ Update the configuration to use this new image, which is typically done via
 ## JupyterHub versions installed in each Helm Chart
 
 Each Helm Chart is packaged with a specific version of JupyterHub (and
-other software as well). See the [Helm Chart repository](https://jupyterhub.github.io/helm-chart/) for
+other software as well). See the [Helm Chart repository](https://hub.jupyter.org/helm-chart/) for
 information about the versions of relevant software packages.
 
 ## Troubleshooting

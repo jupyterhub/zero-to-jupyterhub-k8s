@@ -2,10 +2,10 @@
 
 # Kubernetes on Microsoft Azure Kubernetes Service (AKS)
 
-You can create a Kubernetes cluster [either through the Azure portal website, or using the Azure command line tools](https://docs.microsoft.com/en-us/azure/aks/).
+You can create a Kubernetes cluster [either through the Azure portal website, or using the Azure command line tools](https://learn.microsoft.com/en-us/azure/aks/).
 
 This page describes the commands required to setup a Kubernetes cluster using the command line.
-If you prefer to use the Azure portal see the [Azure Kubernetes Service quickstart](https://docs.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal).
+If you prefer to use the Azure portal see the [Azure Kubernetes Service quickstart](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal).
 
 1. Prepare your Azure shell environment. You have two options, one is to use
    the Azure interactive shell, the other is to install the Azure command-line
@@ -77,7 +77,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
      `<RESOURCE-GROUP-NAME>` of `ucb_2018sp_data100_hub`.
    - `--location` specifies the location of the data center you want your resource to be in.
      In this case, we used the `centralus` location. For other options, see the
-     [Azure list of locations that support AKS](https://docs.microsoft.com/en-us/azure/aks/quotas-skus-regions#region-availability).
+     [Azure list of locations that support AKS](https://learn.microsoft.com/en-us/azure/aks/quotas-skus-regions#region-availability).
      Note that not all locations offer all VM sizes. To see a list of recommended locations, go to
      [Azure Portal > Virtual Machines](https://portal.azure.com/#view/HubsExtension/BrowseResource/resourceType/Microsoft.Compute%2FVirtualMachines),
      click on "create.." and see the list of recommended locations in the drop down list for `Region`.
@@ -123,9 +123,9 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    Kubernetes does not by default come with a controller that enforces `networkpolicy` resources.
    `networkpolicy` resources are important as they define how Kubernetes pods can securely communicate with one another and the outside sources, for example, the internet.
 
-   To enable this in Azure, we must first create a [Virtual Network](https://docs.microsoft.com/en-gb/azure/virtual-network/virtual-networks-overview) with Azure's own network policies enabled.
+   To enable this in Azure, we must first create a [Virtual Network](https://learn.microsoft.com/en-gb/azure/virtual-network/virtual-networks-overview) with Azure's own network policies enabled.
 
-   This section of the documentation is following the Microsoft Azure tutorial on [creating an AKS cluster and enabling network policy](https://docs.microsoft.com/en-us/azure/aks/use-network-policies#create-an-aks-cluster-and-enable-network-policy), which includes information on using [Calico](https://projectcalico.docs.tigera.io/) network policies.
+   This section of the documentation is following the Microsoft Azure tutorial on [creating an AKS cluster and enabling network policy](https://learn.microsoft.com/en-us/azure/aks/use-network-policies#create-an-aks-cluster-and-enable-network-policy), which includes information on using [Calico](https://docs.tigera.io/) network policies.
 
    ```
    az network vnet create \
@@ -160,7 +160,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
       --output tsv)
    ```
 
-   We will create an Azure Active Directory (Azure AD) [service principal](https://docs.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals) for use with the cluster, and assign the [Contributor role](https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#contributor) for use with the VNet.
+   We will create an Azure Active Directory (Azure AD) [service principal](https://learn.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals) for use with the cluster, and assign the [Contributor role](https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#contributor) for use with the VNet.
    Make sure `SERVICE-PRINCIPAL-NAME` is something recognisable, for example, `binderhub-sp`.
 
    ```
@@ -215,7 +215,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    - `--node-count` is the number of nodes you want in your Kubernetes cluster
    - `--node-vm-size` is the size of the nodes you want to use, which varies based on
      what you are using your cluster for and how much RAM/CPU each of your users need.
-     There is a [list of all possible node sizes](https://docs.microsoft.com/en-us/azure/cloud-services/cloud-services-sizes-specs)
+     There is a [list of all possible node sizes](https://learn.microsoft.com/en-us/azure/cloud-services/cloud-services-sizes-specs)
      for you to choose from, but not all might be available in your location.
      If you get an error whilst creating the cluster you can try changing either the region or the node size.
    - `--service-principal` is the application ID of the service principal we created
@@ -354,4 +354,4 @@ RBAC is enabled by default when using the command line tools.
 Congrats. Now that you have your Kubernetes cluster running, it's time to
 begin {ref}`setup-helm`.
 
-[azure resource group]: https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#resource-groups
+[azure resource group]: https://learn.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview#resource-groups

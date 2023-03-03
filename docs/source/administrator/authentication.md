@@ -198,7 +198,7 @@ The narrower scope `read:user` is sufficient for a configuration of `allowed_org
 
 The broader scope `read:org` doesn't have the limitations of `read:user`, but will require a one-off approval by the admins of the GitHub organizations' listed in `allowed_organizations`. This kind of approval can be requested by organization users [as documented on GitHub](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-your-membership-in-organizations/requesting-organization-approval-for-oauth-apps).
 
-For details about GitHub scopes, see [GitHub's documentation](https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps).
+For details about GitHub scopes, see [GitHub's documentation](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps).
 ```
 
 #### Google
@@ -300,7 +300,7 @@ hub:
 
 #### Azure Active Directory
 
-[Azure Active Directory](https://docs.microsoft.com/en-us/azure/active-directory/)
+[Azure Active Directory](https://learn.microsoft.com/en-us/azure/active-directory/)
 is an identity provider from Microsoft Azure. Apart from needing a OAuth2
 _client id_ and _client secret_, you will also need a _tenant id_.
 
