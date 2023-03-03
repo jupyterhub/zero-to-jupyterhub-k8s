@@ -14,6 +14,10 @@ this list should be updated.
 
 - K8s 1.22 is now required.
 - The Helm chart's provided images now use Python 3.11 instead of Python 3.9.
+- JupyterHub 3.0.0 is upgraded to 4.0.0b1.
+  - The upgrade does not require restarts of single-user servers', and they can
+    have either jupyterhub 3 or 4 installed both before and after the upgrade.
+  - Changelog available at https://jupyterhub.readthedocs.io/en/latest/changelog.html
 
 ## 2.0
 
