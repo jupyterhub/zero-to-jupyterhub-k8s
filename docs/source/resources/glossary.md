@@ -78,7 +78,7 @@ Kubernetes
     for that cloud.
 
     - [The Illustrated Children's Guide to Kubernetes](https://www.youtube.com/watch?v=4ht22ReBjno)
-    - [The official "What is Kubernetes?" text](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/)
+    - [The official "What is Kubernetes?" text](https://kubernetes.io/docs/concepts/overview/)
 
 Kubernetes API server
     The [Kubernetes API](https://kubernetes.io/docs/concepts/overview/kubernetes-api/) server,

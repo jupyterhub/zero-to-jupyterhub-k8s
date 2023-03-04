@@ -5,7 +5,7 @@
 [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine/)
 (GKE) is the simplest and most common way of setting
 up a Kubernetes Cluster. You may be able to receive [free credits](https://cloud.google.com/free/) for trying it out (though note that a
-free account [comes with limitations](https://cloud.google.com/free/docs/gcp-free-tier#free-tier-usage-limits)).
+free account [comes with limitations](https://cloud.google.com/free/docs/free-cloud-features#free-tier-usage-limits)).
 Either way, you will need to connect your credit card or other payment method to
 your google cloud account.
 
@@ -68,7 +68,7 @@ your google cloud account.
    - Replace `<CLUSTERNAME>` with a name that can be used to refer to this cluster
      in the future.
    - `--machine-type` specifies the amount of CPU and RAM in each node within
-     this default node pool. There is a [variety of types](https://cloud.google.com/compute/docs/machine-types) to choose from.
+     this default node pool. There is a [variety of types](https://cloud.google.com/compute/docs/machine-resource) to choose from.
    - `--num-nodes` specifies how many nodes to spin up. You can change this
      later through the cloud console or using the `gcloud` command line tool.
    - `--zone` specifies the data center zone where your cluster will be created.
