@@ -19,3 +19,5 @@ if [[ $N_REDIRECTED -gt 0 ]]; then
     printf "\n\033[35;1m%s\033[0m\n" "Redirected links"
     jq -r 'select(.status=="redirected") | "\(.filename):\(.lineno) \(.uri)\n    \(.code) \(.info)"' "$LINKCHECK"
 fi
+
+exit "$N_BROKEN"
