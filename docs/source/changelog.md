@@ -21,7 +21,7 @@ this list should be updated.
     images are upgraded as soon as practical, before or after the JupyterHub
     chart is upgraded. We expect running user servers to be able to keep running
     during the upgrade.
-  - Changelog available at https://jupyterhub.readthedocs.io/en/latest/changelog.html
+  - Changelog available at https://jupyterhub.readthedocs.io/en/stable/changelog.html
 
 ## 2.0
 

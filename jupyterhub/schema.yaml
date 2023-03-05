@@ -1329,7 +1329,7 @@ properties:
           permissions as defined in JupyterHub's RBAC system.
 
           Complement this documentation with [JupyterHub's
-          documentation](https://jupyterhub.readthedocs.io/en/latest/rbac/roles.html#defining-roles)
+          documentation](https://jupyterhub.readthedocs.io/en/stable/rbac/roles.html#defining-roles)
           about `load_roles`.
 
           Note that while JupyterHub's native configuration `load_roles` accepts
