@@ -5,8 +5,8 @@
 set -eu
 LINKCHECK="$1"
 
-N_BROKEN=$(jq -r 'select(.status=="broken") | reduce inputs as $s(0;.+1)' "$LINKCHECK")
-N_REDIRECTED=$(jq -r 'select(.status=="redirected") | reduce inputs as $s(0;.+1)' "$LINKCHECK")
+let N_BROKEN=$(jq -r 'select(.status=="broken") | reduce inputs as $s(0;.+1)' "$LINKCHECK")
+let N_REDIRECTED=$(jq -r 'select(.status=="redirected") | reduce inputs as $s(0;.+1)' "$LINKCHECK")
 
 if [ $N_BROKEN -gt 0 ]; then
     printf "\n\033[31;1m%s\033[0m\n" "Broken links"
