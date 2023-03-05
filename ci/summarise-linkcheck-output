@@ -6,7 +6,7 @@ set -eu
 LINKCHECK="$1"
 
 N_BROKEN=$(jq -r 'select(.status=="broken")' "$LINKCHECK" | jq -s length)
-N_REDIRECTED=$(jq -r 'select(.status=="redirected")' "$LINKCHECK" | jq -s length)
+N_PERMANENT_REDIRECT=$(jq -r 'select(.status=="redirected")' "$LINKCHECK" | jq -s length)
 
 # shellcheck disable=SC2086
 if [[ $N_BROKEN -gt 0 ]]; then
@@ -15,9 +15,9 @@ if [[ $N_BROKEN -gt 0 ]]; then
 fi
 
 # shellcheck disable=SC2086
-if [[ $N_REDIRECTED -gt 0 ]]; then
-    printf "\n\033[35;1m%s\033[0m\n" "Redirected links"
-    jq -r 'select(.status=="redirected") | "\(.filename):\(.lineno) \(.uri)\n    \(.code) \(.info)"' "$LINKCHECK"
+if [[ $N_PERMANENT_REDIRECT -gt 0 ]]; then
+    printf "\n\033[35;1m%s\033[0m\n" "Permanently redirected links"
+    jq -r 'select(.status=="redirected" and .code==301) | "\(.filename):\(.lineno) \(.uri)\n    \(.info)"' "$LINKCHECK"
 fi
 
 exit "$N_BROKEN"
