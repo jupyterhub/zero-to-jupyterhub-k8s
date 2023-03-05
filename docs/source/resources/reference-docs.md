@@ -2,7 +2,7 @@
 
 # Related Projects
 
-- The [JupyterHub Documentation](https://jupyterhub.readthedocs.io/en/latest/)
+- The [JupyterHub Documentation](https://jupyterhub.readthedocs.io/en/stable/)
   provides information about JupyterHub itself (not the Kubernetes deployment).
 - [Binder](https://mybinder.org) allows users to create sharable computational
   environments on-the-fly. It makes heavy use of JupyterHub.
