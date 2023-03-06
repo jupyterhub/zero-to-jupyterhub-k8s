@@ -43,3 +43,8 @@ jobs:
         run: |
           cd docs
           make linkcheck SPHINXOPTS='--color -W --keep-going'
+
+      - name: summarise linkcheck issues
+        if: always()
+        run: |
+          ./ci/summarise-linkcheck-output ./docs/_build/linkcheck/output.json
