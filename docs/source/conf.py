@@ -215,6 +215,7 @@ rediraffe_redirects = {
     "microsoft/step-zero-azure-autoscale": "kubernetes/microsoft/step-zero-azure",
     "microsoft/step-zero-azure": "kubernetes/microsoft/step-zero-azure",
     "google/step-zero-gcp": "kubernetes/google/step-zero-gcp",
+    "kubernetes/other-infrastructure/step-zero-microk8s": "kubernetes/other-infrastructure/step-zero-other",
     "create-k8s-cluster": "kubernetes/setup-kubernetes",
     "turn-off": "jupyterhub/uninstall",
     "setup-jupyterhub": "jupyterhub/index",
