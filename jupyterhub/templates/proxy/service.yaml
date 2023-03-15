@@ -35,12 +35,15 @@ metadata:
   {{- end }}
 spec:
   selector:
+    # This service will target the autohttps pod if autohttps is configured, and
+    # the proxy pod if not. When autohttps is configured, the service proxy-http
+    # will be around to target the proxy pod directly.
     {{- if $autoHTTPS }}
-    component: autohttps
+    {{- $_ := merge (dict "componentLabel" "autohttps") . -}}
+    {{- include "jupyterhub.matchLabels" $_ | nindent 4 }}
     {{- else }}
-    component: proxy
+    {{- include "jupyterhub.matchLabels" . | nindent 4 }}
     {{- end }}
-    release: {{ .Release.Name }}
   ports:
     {{- if $HTTPS }}
     - name: https

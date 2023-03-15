@@ -90,7 +90,9 @@
     {{- /* A hack to avoid issues from invoking this from a parent Helm chart. */}}
     {{- $existing_secret := .Values.hub.existingSecret }}
     {{- if ne .Chart.Name "jupyterhub" }}
-        {{- $existing_secret = .Values.jupyterhub.hub.existingSecret }}
+        {{- if .Values.jupyterhub }}
+            {{- $existing_secret = .Values.jupyterhub.hub.existingSecret }}
+        {{- end }}
     {{- end }}
     {{- if $existing_secret }}
         {{- $existing_secret }}
