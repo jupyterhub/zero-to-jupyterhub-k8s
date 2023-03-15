@@ -8,7 +8,7 @@ aiofiles==22.1.0
     # via ypy-websocket
 aiosqlite==0.18.0
     # via ypy-websocket
-alembic==1.9.4
+alembic==1.10.2
     # via jupyterhub
 anyio==3.6.2
     # via jupyter-server
@@ -43,7 +43,7 @@ cffi==1.15.1
     # via
     #   argon2-cffi-bindings
     #   cryptography
-charset-normalizer==3.0.1
+charset-normalizer==3.1.0
     # via requests
 comm==0.1.2
     # via ipykernel
@@ -68,7 +68,7 @@ idna==3.4
     #   anyio
     #   jsonschema
     #   requests
-ipykernel==6.21.2
+ipykernel==6.21.3
     # via
     #   nbclassic
     #   notebook
@@ -125,7 +125,7 @@ jupyter-events==0.6.3
     # via
     #   jupyter-server
     #   jupyter-server-fileid
-jupyter-server==2.3.0
+jupyter-server==2.4.0
     # via
     #   jupyter-server-fileid
     #   jupyterlab
@@ -141,7 +141,7 @@ jupyter-server-ydoc==0.6.1
     # via jupyterlab
 jupyter-telemetry==0.1.0
     # via jupyterhub
-jupyter-ydoc==0.2.2
+jupyter-ydoc==0.2.3
     # via
     #   jupyter-server-ydoc
     #   jupyterlab
@@ -151,7 +151,7 @@ jupyterlab==3.6.1
     # via -r requirements.in
 jupyterlab-pygments==0.2.2
     # via nbconvert
-jupyterlab-server==2.19.0
+jupyterlab-server==2.20.0
     # via jupyterlab
 mako==1.2.4
     # via alembic
@@ -166,14 +166,14 @@ matplotlib-inline==0.1.6
     #   ipython
 mistune==2.0.5
     # via nbconvert
-nbclassic==0.5.2
+nbclassic==0.5.3
     # via
     #   -r requirements.in
     #   jupyterlab
     #   notebook
 nbclient==0.7.2
     # via nbconvert
-nbconvert==7.2.9
+nbconvert==7.2.10
     # via
     #   jupyter-server
     #   nbclassic
@@ -192,7 +192,7 @@ nest-asyncio==1.5.6
     #   ipykernel
     #   nbclassic
     #   notebook
-notebook==6.5.2
+notebook==6.5.3
     # via
     #   jupyterlab
     #   nbgitpuller
@@ -218,7 +218,7 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-platformdirs==3.1.0
+platformdirs==3.1.1
     # via jupyter-core
 prometheus-client==0.16.0
     # via
@@ -257,7 +257,7 @@ python-json-logger==2.0.7
     #   jupyter-telemetry
 pyyaml==6.0
     # via jupyter-events
-pyzmq==25.0.0
+pyzmq==25.0.1
     # via
     #   ipykernel
     #   jupyter-client
@@ -293,7 +293,7 @@ sniffio==1.3.0
     # via anyio
 soupsieve==2.4
     # via beautifulsoup4
-sqlalchemy==2.0.4
+sqlalchemy==2.0.6
     # via
     #   alembic
     #   jupyterhub
@@ -336,10 +336,12 @@ traitlets==5.9.0
     #   nbformat
     #   notebook
 typing-extensions==4.5.0
-    # via sqlalchemy
+    # via
+    #   alembic
+    #   sqlalchemy
 uri-template==1.2.0
     # via jsonschema
-urllib3==1.26.14
+urllib3==1.26.15
     # via requests
 wcwidth==0.2.6
     # via prompt-toolkit
