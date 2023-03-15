@@ -23,14 +23,15 @@ To get started customizing the user environment, see the topics below.
 
 ## Choose and use an existing Docker image
 
+This chart uses a minimal default singleuser image intended for quick tests.
+You will need to choose a different image or build your own for real use.
+
 Project Jupyter maintains the [jupyter/docker-stacks repository](https://github.com/jupyter/docker-stacks/), which contains ready to use
 Docker images. Each image includes a set of commonly used science and data
 science libraries and tools. They also provide excellent documentation on [how
 to choose a suitable image](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html).
 
-If you wish to use another image from jupyter/docker-stacks than the
-[base-notebook](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-base-notebook)
-used by default, such as the [datascience-notebook](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-datascience-notebook)
+For example, to use the [datascience-notebook](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-datascience-notebook)
 image containing useful tools and libraries for data science, complete these steps:
 
 1. Modify your `config.yaml` file to specify the image. For example:
