@@ -21,7 +21,8 @@ In the following snippet, I'm using a custom image that copies over the applicat
 # 2.0.0 is latest stable release at the time of this writing
 FROM jupyterhub/k8s-hub:2.0.0
 
-# The k8s-hub uses a multi-stage build to modify packages your build steps may need to run as root
+# Depending on version, the k8s-hub image may have installed
+# pip packages as root, forcing you to install as root as well
 USER root
 COPY ./service-fastapi /usr/src/fastapi
 RUN python3 -m pip install -r /usr/src/fastapi/requirements.txt
