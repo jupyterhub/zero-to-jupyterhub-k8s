@@ -18,11 +18,16 @@ In the following snippet, I'm using a custom image that copies over the applicat
 
 ```Dockerfile
 # Dockerfile
-# 0.11.1 is latest stable release at the time of this writing
-FROM jupyterhub/k8s-hub:0.11.1
+# 2.0.0 is latest stable release at the time of this writing
+FROM jupyterhub/k8s-hub:2.0.0
 
+# Depending on version, the k8s-hub image may have installed
+# pip packages as root, forcing you to install as root as well
+USER root
 COPY ./service-fastapi /usr/src/fastapi
 RUN python3 -m pip install -r /usr/src/fastapi/requirements.txt
+
+USER ${NB_USER}
 ```
 
 ```yaml
