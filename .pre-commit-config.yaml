@@ -69,14 +69,6 @@ repos:
     rev: "6.0.0"
     hooks:
       - id: flake8
-        # Ignore style and complexity
-        # E: style errors
-        # W: style warnings
-        # C: complexity
-        #
-        args:
-          - --ignore=E,C,W
-          - --builtins=c
 
 # pre-commit.ci config reference: https://pre-commit.ci/#configuration
 ci:

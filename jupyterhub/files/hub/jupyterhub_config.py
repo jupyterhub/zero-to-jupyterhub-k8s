@@ -1,3 +1,6 @@
+# load the config object (satisfies linters)
+c = get_config()  # noqa
+
 import glob
 import os
 import re
