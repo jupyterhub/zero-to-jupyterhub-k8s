@@ -118,7 +118,7 @@ pamela==1.0.0
     # via jupyterhub
 prometheus-client==0.16.0
     # via jupyterhub
-psycopg2-binary==2.9.5
+psycopg2==2.9.5
     # via -r requirements.in
 pyasn1==0.4.8
     # via ldap3
