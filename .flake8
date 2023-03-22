@@ -1,0 +1,7 @@
+[flake8]
+# Ignore style and complexity
+# E: style errors
+# W: style warnings
+# C: complexity
+# D: docstring warnings (unused pydocstyle extension)
+ignore = E, C, W, D
