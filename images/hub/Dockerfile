@@ -55,6 +55,8 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends \
         # requirement for pycurl
         libcurl4 \
+        # requirement for using postgres database
+        libpq5 \
         # requirement for using a local sqlite database
         sqlite3 \
         tini \
