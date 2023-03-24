@@ -46,26 +46,20 @@ jobs:
         with:
           python-version: "3.8"
 
-      - name: store whether we are publishing the chart
+      - name: Decide to publish or not
         id: publishing
         shell: python
-        env:
-          REPO: ${{ github.repository }}
-          EVENT: ${{ github.event_name }}
-          REF: ${{ github.event.ref }}
         run: |
           import os
-          repo = os.environ["REPO"]
-          event = os.environ["EVENT"]
-          ref = os.environ["REF"]
+          repo = "${{ github.repository }}"
+          event = "${{ github.event_name }}"
+          ref = "${{ github.event.ref }}"
           publishing = ""
           if (
               repo == "jupyterhub/zero-to-jupyterhub-k8s"
               and event == "push"
               and (
-                  # any tag
                   ref.startswith("refs/tags/")
-                  # or default branch
                   or ref == "refs/heads/main"
               )
           ):
