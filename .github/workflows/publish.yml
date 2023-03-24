@@ -34,7 +34,7 @@ jobs:
   # ref: https://hub.docker.com/orgs/jupyterhub
 
   publish:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
         with:
@@ -44,7 +44,7 @@ jobs:
 
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.8"
+          python-version: "3.11"
 
       - name: Decide to publish or not
         id: publishing
