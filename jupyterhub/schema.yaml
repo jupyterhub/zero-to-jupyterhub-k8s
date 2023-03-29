@@ -1080,17 +1080,21 @@ properties:
       existingSecret:
         type: [string, "null"]
         description: |
-          This option allow you to provide the name of an existing k8s Secret to
-          use alongside of the chart managed k8s Secret. The content of this k8s
-          Secret will be merged with the chart managed k8s Secret, giving
-          priority to the self-managed k8s Secret.
+          The name of an existing k8s Secret to use alongside of the chart-
+          managed k8s Secret. This k8s Secret should contain a file,
+          `values.yaml`, which will be merged into the `values.yaml` provided
+          to your chart deployment. The values in this secret will override
+          those from the main chart config file.
 
           ```{warning}
-          1. The self managed k8s Secret must mirror the structure in the chart
+          1. The self-managed k8s Secret must mirror the structure in the chart-
              managed secret.
-          2. [`proxy.secretToken`](schema_proxy.secretToken) (aka.
-             `hub.config.ConfigurableHTTPProxy.auth_token`) is only read from
-             the chart managed k8s Secret.
+
+          2. Several `hub.config` values are only read from the chart-managed
+             k8s secret:
+             - `hub.config.ConfigurableHTTPProxy.auth_token`
+             - `hub.config.JupyterHub.cookie_secret`
+             - `hub.config.CryptKeeper.keys`
           ```
       nodeSelector: &nodeSelector-spec
         type: object
