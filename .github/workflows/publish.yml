@@ -34,7 +34,7 @@ jobs:
   # ref: https://hub.docker.com/orgs/jupyterhub
 
   publish:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
         with:
@@ -44,34 +44,29 @@ jobs:
 
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.8"
+          python-version: "3.11"
 
-      - name: store whether we are publishing the chart
+      - name: Decide to publish or not
         id: publishing
         shell: python
-        env:
-          REPO: ${{ github.repository }}
-          EVENT: ${{ github.event_name }}
-          REF: ${{ github.event.ref }}
         run: |
           import os
-          repo = os.environ["REPO"]
-          event = os.environ["EVENT"]
-          ref = os.environ["REF"]
+          repo = "${{ github.repository }}"
+          event = "${{ github.event_name }}"
+          ref = "${{ github.event.ref }}"
           publishing = ""
           if (
               repo == "jupyterhub/zero-to-jupyterhub-k8s"
               and event == "push"
               and (
-                  # any tag
                   ref.startswith("refs/tags/")
-                  # or default branch
                   or ref == "refs/heads/main"
               )
           ):
               publishing = "true"
               print("Publishing chart")
-          print(f"::set-output name=publishing::{publishing}")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"publishing={publishing}\n")
 
       - name: Set up QEMU (for docker buildx)
         uses: docker/setup-qemu-action@v2
