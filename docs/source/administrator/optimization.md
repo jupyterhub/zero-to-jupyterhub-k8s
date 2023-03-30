@@ -164,7 +164,7 @@ singleuser:
 
 prePuller:
   extraImages:
-    myOtherImageIWantPulled:
+    my-other-image-i-want-pulled:
       name: jupyter/all-spark-notebook
       tag: 2343e33dec46
 ```
