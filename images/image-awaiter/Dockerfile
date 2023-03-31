@@ -3,18 +3,18 @@ FROM golang:1.18
 
 # VULN_SCAN_TIME=
 
-RUN mkdir -p /build/
-COPY *.mod *.go *.sum /build/
 WORKDIR /build
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags '-w -s' -installsuffix cgo -a -o out/image-awaiter
+COPY *.mod \
+     *.go \
+     *.sum \
+     .
 
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags '-w -s' -installsuffix cgo -a -o out/image-awaiter
 
 # present the result within a slimmed image
 FROM scratch
 
 COPY --from=0 /build/out/image-awaiter /image-awaiter
-
-
 
 # To debug / develop this code
 # ----------------------------
