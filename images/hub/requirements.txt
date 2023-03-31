@@ -34,7 +34,7 @@ charset-normalizer==3.1.0
     # via
     #   aiohttp
     #   requests
-cryptography==39.0.2
+cryptography==40.0.1
     # via pyopenssl
 escapism==1.0.1
     # via jupyterhub-kubespawner
@@ -130,9 +130,9 @@ pyjwt==2.6.0
     # via
     #   -r requirements.in
     #   mwoauth
-pymysql==1.0.2
+pymysql==1.0.3
     # via -r requirements.in
-pyopenssl==23.0.0
+pyopenssl==23.1.1
     # via certipy
 pyrsistent==0.19.3
     # via jsonschema
