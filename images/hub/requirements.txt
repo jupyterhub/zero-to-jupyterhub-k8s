@@ -35,9 +35,13 @@ charset-normalizer==3.1.0
     #   aiohttp
     #   requests
 cryptography==40.0.1
-    # via pyopenssl
+    # via
+    #   pyjwt
+    #   pyopenssl
 escapism==1.0.1
-    # via jupyterhub-kubespawner
+    # via
+    #   jupyterhub-kubespawner
+    #   jupyterhub-ltiauthenticator
 frozenlist==1.3.3
     # via
     #   aiohttp
@@ -78,7 +82,7 @@ jupyterhub-kubespawner==4.3.0
     # via -r requirements.in
 jupyterhub-ldapauthenticator==1.3.2
     # via -r requirements.in
-jupyterhub-ltiauthenticator==1.4.0
+jupyterhub-ltiauthenticator==1.5.0
     # via -r requirements.in
 jupyterhub-nativeauthenticator==1.1.0
     # via -r requirements.in
@@ -103,7 +107,9 @@ mwoauth==0.3.8
 nullauthenticator==1.0.0
     # via -r requirements.in
 oauthenticator==15.1.0
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   jupyterhub-ltiauthenticator
 oauthlib==3.2.2
     # via
     #   jupyterhub
@@ -126,9 +132,10 @@ pycparser==2.21
     # via cffi
 pycurl==7.45.2
     # via -r requirements.in
-pyjwt==2.6.0
+pyjwt[crypto]==2.6.0
     # via
     #   -r requirements.in
+    #   jupyterhub-ltiauthenticator
     #   mwoauth
 pymysql==1.0.3
     # via -r requirements.in

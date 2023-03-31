@@ -147,7 +147,7 @@ jupyter-ydoc==0.2.3
     #   jupyterlab
 jupyterhub==4.0.0b2
     # via -r requirements.in
-jupyterlab==3.6.2
+jupyterlab==3.6.3
     # via -r requirements.in
 jupyterlab-pygments==0.2.2
     # via nbconvert
