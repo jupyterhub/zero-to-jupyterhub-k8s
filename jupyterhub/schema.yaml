@@ -2343,6 +2343,8 @@ properties:
           root, enabling it from the container in a startup script, and then
           transitioning to the normal user.
 
+          Default is 1000, set to null to use the container's default.
+
   scheduling:
     type: object
     additionalProperties: false
