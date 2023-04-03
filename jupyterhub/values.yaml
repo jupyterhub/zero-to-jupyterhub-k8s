@@ -198,7 +198,7 @@ proxy:
       # tag is automatically bumped to new patch versions by the
       # watch-dependencies.yaml workflow.
       #
-      tag: "4.5.4" # https://github.com/jupyterhub/configurable-http-proxy/tags
+      tag: "4.5.5" # https://github.com/jupyterhub/configurable-http-proxy/tags
       pullPolicy:
       pullSecrets: []
     extraCommandLineFlags: []
