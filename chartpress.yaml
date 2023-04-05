@@ -13,6 +13,11 @@ charts:
     # Dev: imagePrefix can be useful to override if you want to trial something
     #      locally developed in a remote k8s cluster.
     imagePrefix: jupyterhub/k8s-
+    # baseVersion should be a -0.dev suffixed version, where the version should
+    # be the next major, minor, or patch version depending on what we have
+    # merged so far into the main branch. If for example we have merged a
+    # breaking change it should be the next major version, like 3.0.0-0.dev.
+    #
     baseVersion: "3.0.0-0.dev"
     repo:
       git: jupyterhub/helm-chart
