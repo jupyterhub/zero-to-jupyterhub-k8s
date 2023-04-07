@@ -3,8 +3,8 @@
     parent charts to reference these dynamic resource names.
 
     To avoid duplicating documentation, for more information, please see the the
-    fullnameOverride entry in schema.yaml or the configuration reference that
-    schema.yaml renders to.
+    fullnameOverride entry in values.schema.yaml or the configuration reference
+    that values.schema.yaml renders to.
 
     https://z2jh.jupyter.org/en/latest/resources/reference.html#fullnameOverride
 */}}

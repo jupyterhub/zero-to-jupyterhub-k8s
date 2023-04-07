@@ -89,14 +89,14 @@ header_md = header_md[1:]
 header_md = [ln.strip("\n") for ln in header_md]
 
 # schema
-with open("../../jupyterhub/schema.yaml") as f:
+with open("../../jupyterhub/values.schema.yaml") as f:
     data = yaml.safe_load(f)
 
 
 def parse_schema(d, md=[], depth=0, pre=""):
     """
     Generate markdown headers from a passed python dictionary created by
-    parsing a schema.yaml file.
+    parsing a values.schema.yaml file.
     """
     if "then" in d:
         d = d["then"]
