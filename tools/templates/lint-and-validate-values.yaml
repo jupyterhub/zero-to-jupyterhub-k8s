@@ -210,6 +210,7 @@ rbac:
   create: true
 
 proxy:
+  enabled: true
   service:
     extraPorts:
       - name: ssh

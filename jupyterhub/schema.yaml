@@ -1446,6 +1446,12 @@ properties:
     type: object
     additionalProperties: false
     properties:
+      enabled:
+        type: boolean
+        description: |
+          Default `true`.
+
+          If `false`, disables proxy pod and service creation. Can be used with some existing external proxy, or with kubespawner.proxy.KubeIngressProxy class
       chp:
         type: object
         additionalProperties: false
