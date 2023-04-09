@@ -109,6 +109,18 @@
 {{- end }}
 
 
+{{/*
+helper function for building up labels key value pairs
+*/}}
+{{- define "jupyterhub.determinedLabels" -}}
+  {{- with .Values.labels }}
+    {{- range $key, $value := . }}
+{{ $key }}: {{ $value | quote | trunc 63 | trimSuffix "-" }}
+    {{- end }}
+  {{- end }}
+{{- end -}}
+
+
 {{- /*
   jupyterhub.commonLabels:
     Foundation for "jupyterhub.labels".
@@ -118,6 +130,7 @@
 app: {{ .appLabel | default (include "jupyterhub.appLabel" .) }}
 release: {{ .Release.Name }}
 {{- if not .matchLabels }}
+{{- include "jupyterhub.determinedLabels" . }}
 chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 heritage: {{ .heritageLabel | default .Release.Service }}
 {{- end }}

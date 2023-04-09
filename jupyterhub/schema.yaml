@@ -185,6 +185,16 @@ properties:
       `{"name": "my-secret-name"}`, or you can let list elements be strings
       naming the secrets directly.
 
+  labels:
+    type: object
+    additionalProperties: false
+    patternProperties:
+      ".*":
+        type: string
+    description: |
+      Chart wide ability to add specific labels via values.yaml to K8s
+      objects such as DaemonSets or Deployments
+
   hub:
     type: object
     additionalProperties: false
