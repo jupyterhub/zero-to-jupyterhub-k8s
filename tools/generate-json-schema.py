@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-This script reads schema.yaml and generates a values.schema.json that we can
-package with the Helm chart, allowing helm the CLI perform validation.
+This script reads values.schema.yaml and generates a values.schema.json that we
+can package with the Helm chart, allowing helm the CLI perform validation.
 
-While we can directly generate a values.schema.json from schema.yaml, it
+While we can directly generate a values.schema.json from values.schema.yaml, it
 contains a lot of description text we use to generate our configuration
 reference that isn't helpful to ship along the validation schema. Due to that,
 we trim away everything that isn't needed.
@@ -16,7 +16,7 @@ from collections.abc import MutableMapping
 import yaml
 
 here_dir = os.path.abspath(os.path.dirname(__file__))
-schema_yaml = os.path.join(here_dir, os.pardir, "jupyterhub", "schema.yaml")
+schema_yaml = os.path.join(here_dir, os.pardir, "jupyterhub", "values.schema.yaml")
 values_schema_json = os.path.join(
     here_dir, os.pardir, "jupyterhub", "values.schema.json"
 )

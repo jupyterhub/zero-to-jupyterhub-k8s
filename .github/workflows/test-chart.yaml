@@ -252,8 +252,7 @@ jobs:
         env:
           DOCKER_BUILDKIT: "1"
 
-      # Generate values.schema.json from schema.yaml
-      - name: Generate values.schema.json from schema.yaml
+      - name: Generate values.schema.json from values.schema.yaml
         run: |
           tools/generate-json-schema.py
 

@@ -121,7 +121,7 @@ jobs:
 
       - name: build chart with chartpress
         run: |
-          # Create values.schema.yaml from schema.yaml.
+          # Create values.schema.json from values.schema.yaml.
           ./tools/generate-json-schema.py
 
           # Append annotations to Chart.yaml with current images so that

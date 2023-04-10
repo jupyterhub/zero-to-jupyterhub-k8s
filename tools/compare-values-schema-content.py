@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-This script is meant to help compare the entries in schema.yaml with the entries
-in values.yaml and lint-and-validate-values.yaml.
+This script is meant to help compare the entries in values.schema.yaml with the
+entries in values.yaml and lint-and-validate-values.yaml.
 
 Running this script can result in output like:
 
-    schema.yaml entries not found in values.yaml:
+    values.schema.yaml entries not found in values.yaml:
     - hub.deploymentStrategy.rollingUpdate
     - hub.fsGid
     - rbac.enabled
@@ -17,7 +17,7 @@ from collections.abc import MutableMapping
 import yaml
 
 here_dir = os.path.abspath(os.path.dirname(__file__))
-schema_yaml = os.path.join(here_dir, os.pardir, "jupyterhub", "schema.yaml")
+schema_yaml = os.path.join(here_dir, os.pardir, "jupyterhub", "values.schema.yaml")
 values_yaml = os.path.join(here_dir, os.pardir, "jupyterhub", "values.yaml")
 lint_values_yaml = os.path.join(here_dir, "templates", "lint-and-validate-values.yaml")
 
@@ -96,7 +96,7 @@ def run():
 
     schema_values_diff = get_schema_values_diff(values_yaml, schema, schema_wildcards)
     if schema_values_diff:
-        print("schema.yaml entries not found in values.yaml:")
+        print("values.schema.yaml entries not found in values.yaml:")
         for l in sorted(schema_values_diff):
             print(f"- {l}")
 
@@ -104,7 +104,7 @@ def run():
         lint_values_yaml, schema, schema_wildcards
     )
     if lint_schema_values_diff:
-        print("schema.yaml entries not found in lint-and-validate-values.yaml:"),
+        print("values.schema.yaml entries not found in lint-and-validate-values.yaml:"),
         for l in sorted(lint_schema_values_diff):
             print(f"- {l}")
 

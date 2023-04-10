@@ -1,6 +1,6 @@
 # This schema (a jsonschema in YAML format) is used to generate
 # values.schema.json which is packaged with the Helm chart for client side
-# validation by Helm of values before template rendering.
+# validation by helm of values before template rendering.
 #
 # This schema is also used by our documentation system to build the
 # configuration reference section based on the description fields. See
