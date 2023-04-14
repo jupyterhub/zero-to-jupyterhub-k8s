@@ -12,9 +12,9 @@ and as we merge [breaking changes in pull
 requests](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pulls?q=is%3Apr+is%3Aclosed+label%3Abreaking),
 this list should be updated.
 
-- K8s 1.22 is now required.
+- K8s 1.23 is now required.
 - The Helm chart's provided images now use Python 3.11 instead of Python 3.9.
-- JupyterHub 3.0.0 is upgraded to 4.0.0b1.
+- JupyterHub 3.0.0 is upgraded to 4.0.0b2.
   - Although it is not officially supported to run a JupyterHub server with a
     major version different from the singleuser servers' `jupyterhub-singleuser`
     version, it seems possible during this upgrade. We recommend your singleuser
