@@ -21,7 +21,16 @@ this list should be updated.
     images are upgraded as soon as practical, before or after the JupyterHub
     chart is upgraded. We expect running user servers to be able to keep running
     during the upgrade.
-  - Changelog available at https://jupyterhub.readthedocs.io/en/stable/changelog.html
+  - Please refer to the [JupyterHub changelog] for details
+- KubeSpawner 4.2.0 is upgraded to 5.0.0
+  - Please read to the [KubeSpawner changelog]'s breaking changes and be aware
+    that configuring [`singleuser.extraEnv`](schema_singleuser.extraEnv) is to
+    configure `KubeSpawner.environment`, and to configure
+    [`singleuser.profileList`](schema_singleuser.profileList) is to configure
+    `KubeSpawner.profile_list`.
+
+[jupyterhub changelog]: https://jupyterhub.readthedocs.io/en/stable/changelog.html
+[kubespawner changelog]: https://jupyterhub-kubespawner.readthedocs.io/en/latest/changelog.html
 
 ## 2.0
 
