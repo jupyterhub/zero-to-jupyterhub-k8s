@@ -2853,7 +2853,7 @@ properties:
         required: [enabled]
         description: |
           Manage the taints during the single user image prepulling. It will add
-          sepcified taint before image pulling and remove it after it's done.
+          specified taint before image pulling and remove it after it's done.
           This will prevent user pods being scheduled on the new node that doesn't
           have user image in order to prevent long user wait.
         properties:
