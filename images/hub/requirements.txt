@@ -126,7 +126,7 @@ prometheus-client==0.16.0
     # via jupyterhub
 psycopg2==2.9.6
     # via -r requirements.in
-pyasn1==0.4.8
+pyasn1==0.5.0
     # via ldap3
 pycparser==2.21
     # via cffi
