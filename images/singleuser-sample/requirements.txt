@@ -145,7 +145,7 @@ jupyter-ydoc==0.2.4
     # via
     #   jupyter-server-ydoc
     #   jupyterlab
-jupyterhub==4.0.0b2
+jupyterhub==4.0.0
     # via -r requirements.in
 jupyterlab==3.6.3
     # via -r requirements.in
