@@ -247,6 +247,22 @@ properties:
                   - jovyan2
           ```
 
+          __Example__
+
+          If your kubernetes pods take longer than usual to spawn, the users notebooks
+          may fail to spawn with an error like `<user>'s server failed to start in 30000 
+          seconds, giving up`. In such scenarios, you may need to adjust 
+          [KubeSpawner defaults](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.k8s_api_request_timeout)
+          which can also be done using `hub.config`. For example, 
+
+          ```yaml
+          hub: 
+            config: 
+              KubeSpawner: 
+                k8s_api_request_timeout: 3600
+                ...
+          ```
+
           ```{admonition} YAML limitations
           :class: tip
           You can't represent Python `Bytes` or `Set` objects in YAML directly.
