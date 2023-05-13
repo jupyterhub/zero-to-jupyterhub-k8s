@@ -35,7 +35,7 @@ beautifulsoup4==4.12.2
     # via nbconvert
 bleach==6.0.0
     # via nbconvert
-certifi==2022.12.7
+certifi==2023.5.7
     # via requests
 certipy==0.1.3
     # via jupyterhub
@@ -68,11 +68,11 @@ idna==3.4
     #   anyio
     #   jsonschema
     #   requests
-ipykernel==6.22.0
+ipykernel==6.23.0
     # via
     #   nbclassic
     #   notebook
-ipython==8.12.1
+ipython==8.13.2
     # via
     #   ipykernel
     #   jupyterlab
@@ -166,14 +166,14 @@ matplotlib-inline==0.1.6
     #   ipython
 mistune==2.0.5
     # via nbconvert
-nbclassic==0.5.6
+nbclassic==1.0.0
     # via
     #   -r requirements.in
     #   jupyterlab
     #   notebook
 nbclient==0.7.4
     # via nbconvert
-nbconvert==7.3.1
+nbconvert==7.4.0
     # via
     #   jupyter-server
     #   nbclassic
@@ -218,7 +218,7 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-platformdirs==3.5.0
+platformdirs==3.5.1
     # via jupyter-core
 prometheus-client==0.16.0
     # via
@@ -264,7 +264,7 @@ pyzmq==25.0.2
     #   jupyter-server
     #   nbclassic
     #   notebook
-requests==2.29.0
+requests==2.30.0
     # via
     #   jupyterhub
     #   jupyterlab-server
@@ -276,8 +276,10 @@ rfc3986-validator==0.1.1
     # via
     #   jsonschema
     #   jupyter-events
-ruamel-yaml==0.17.21
+ruamel-yaml==0.17.26
     # via jupyter-telemetry
+ruamel-yaml-clib==0.2.7
+    # via ruamel-yaml
 send2trash==1.8.2
     # via
     #   jupyter-server
@@ -293,7 +295,7 @@ sniffio==1.3.0
     # via anyio
 soupsieve==2.4.1
     # via beautifulsoup4
-sqlalchemy==2.0.11
+sqlalchemy==2.0.13
     # via
     #   alembic
     #   jupyterhub
@@ -341,7 +343,7 @@ typing-extensions==4.5.0
     #   sqlalchemy
 uri-template==1.2.0
     # via jsonschema
-urllib3==1.26.15
+urllib3==2.0.2
     # via requests
 wcwidth==0.2.6
     # via prompt-toolkit
