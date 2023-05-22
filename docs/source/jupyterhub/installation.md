@@ -2,9 +2,9 @@
 
 # Installing JupyterHub
 
-With a {doc}`Kubernetes cluster </kubernetes/setup-kubernetes>` cluster
-available and {doc}`Helm </kubernetes/setup-helm>` installed, we can install
-JupyterHub in the Kubernetes cluster using the JupyterHub Helm chart.
+With a {doc}`Kubernetes cluster </kubernetes/setup-kubernetes>` available
+and {doc}`Helm </kubernetes/setup-helm>` installed, we can install JupyterHub
+in the Kubernetes cluster using the JupyterHub Helm chart.
 
 ## Initialize a Helm chart configuration file
 
