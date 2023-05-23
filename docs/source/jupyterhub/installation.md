@@ -44,11 +44,11 @@ can try with `nano config.yaml`.
 
 ## Install JupyterHub
 
-1. Make Helm aware of the [JupyterHub Helm chart repository](https://jupyterhub.github.io/helm-chart/) so you can install the
+1. Make Helm aware of the [JupyterHub Helm chart repository](https://hub.jupyter.org/helm-chart/) so you can install the
    JupyterHub chart from it without having to use a long URL name.
 
    ```
-   helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+   helm repo add jupyterhub https://hub.jupyter.org/helm-chart/
    helm repo update
    ```
 
