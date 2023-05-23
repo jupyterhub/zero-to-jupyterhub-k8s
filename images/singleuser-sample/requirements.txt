@@ -264,7 +264,7 @@ pyzmq==25.0.2
     #   jupyter-server
     #   nbclassic
     #   notebook
-requests==2.30.0
+requests==2.31.0
     # via
     #   jupyterhub
     #   jupyterlab-server
