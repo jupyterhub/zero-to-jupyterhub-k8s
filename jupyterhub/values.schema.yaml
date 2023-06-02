@@ -233,6 +233,8 @@ properties:
           ```python
           c.JupyterHub.admin_access = true
           c.JupyterHub.admin_users = ["jovyan1", "jovyan2"]
+          c.KubeSpawner.k8s_api_request_timeout = 10
+          c.GitHubOAuthenticator.allowed_organizations = ["jupyterhub"]
           ```
 
           Then, you would be able to represent it with this configuration like:
@@ -245,22 +247,11 @@ properties:
                 admin_users:
                   - jovyan1
                   - jovyan2
-          ```
-
-          __Example__
-
-          If your kubernetes pods take longer than usual to spawn, the users notebooks
-          may fail to spawn with an error like `<user>'s server failed to start in 30000 
-          seconds, giving up`. In such scenarios, you may need to adjust 
-          [KubeSpawner defaults](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.k8s_api_request_timeout)
-          which can also be done using `hub.config`. For example, 
-
-          ```yaml
-          hub: 
-            config: 
-              KubeSpawner: 
-                k8s_api_request_timeout: 3600
-                ...
+              KubeSpawner:
+                k8s_api_request_timeout: 10
+              GitHubOAuthenticator:
+                allowed_organizations:
+                  - jupyterhub
           ```
 
           ```{admonition} YAML limitations
