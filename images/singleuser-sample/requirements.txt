@@ -45,7 +45,7 @@ charset-normalizer==3.1.0
     # via requests
 comm==0.1.3
     # via ipykernel
-cryptography==41.0.0
+cryptography==41.0.1
     # via pyopenssl
 debugpy==1.6.7
     # via ipykernel
@@ -71,7 +71,7 @@ ipykernel==6.23.1
     #   jupyterlab
     #   nbclassic
     #   notebook
-ipython==8.13.2
+ipython==8.14.0
     # via ipykernel
 ipython-genutils==0.2.0
     # via
@@ -144,7 +144,7 @@ jupyterlab-server==2.22.1
     # via jupyterlab
 mako==1.2.4
     # via alembic
-markupsafe==2.1.2
+markupsafe==2.1.3
     # via
     #   jinja2
     #   mako
@@ -166,7 +166,7 @@ nbconvert==7.4.0
     #   jupyter-server
     #   nbclassic
     #   notebook
-nbformat==5.8.0
+nbformat==5.9.0
     # via
     #   jupyter-server
     #   nbclassic
@@ -198,7 +198,7 @@ packaging==23.1
     #   jupyterlab
     #   jupyterlab-server
     #   nbconvert
-pamela==1.0.0
+pamela==1.1.0
     # via jupyterhub
 pandocfilters==1.5.0
     # via nbconvert
@@ -328,7 +328,7 @@ traitlets==5.9.0
     #   nbconvert
     #   nbformat
     #   notebook
-typing-extensions==4.6.2
+typing-extensions==4.6.3
     # via
     #   alembic
     #   async-lru
