@@ -18,6 +18,8 @@ charts:
     # merged so far into the main branch. If for example we have merged a
     # breaking change it should be the next major version, like 3.0.0-0.dev.
     #
+    # baseVersion should be managed via tbump, see RELEASE.md for details
+    #
     baseVersion: "3.0.0-0.dev"
     repo:
       git: jupyterhub/helm-chart
