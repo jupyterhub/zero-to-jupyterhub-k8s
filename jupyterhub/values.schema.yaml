@@ -233,6 +233,8 @@ properties:
           ```python
           c.JupyterHub.admin_access = true
           c.JupyterHub.admin_users = ["jovyan1", "jovyan2"]
+          c.KubeSpawner.k8s_api_request_timeout = 10
+          c.GitHubOAuthenticator.allowed_organizations = ["jupyterhub"]
           ```
 
           Then, you would be able to represent it with this configuration like:
@@ -245,6 +247,11 @@ properties:
                 admin_users:
                   - jovyan1
                   - jovyan2
+              KubeSpawner:
+                k8s_api_request_timeout: 10
+              GitHubOAuthenticator:
+                allowed_organizations:
+                  - jupyterhub
           ```
 
           ```{admonition} YAML limitations
