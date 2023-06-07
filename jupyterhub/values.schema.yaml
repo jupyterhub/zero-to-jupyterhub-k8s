@@ -2926,7 +2926,7 @@ properties:
           deprecation message that contain censored content that you wish to
           reveal.
 
-  extraObjects: 
+  extraObjects:
     type: array
     description: |
       Any additional K8s manifests to deploy with the chart
