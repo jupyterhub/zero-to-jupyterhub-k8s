@@ -62,7 +62,7 @@ jsonschema==4.17.3
     #   oauthenticator
 jupyter-telemetry==0.1.0
     # via jupyterhub
-jupyterhub==4.0.0
+jupyterhub==4.0.1
     # via
     #   -r requirements.in
     #   jupyterhub-firstuseauthenticator
@@ -202,7 +202,7 @@ typing-extensions==4.6.3
     # via
     #   alembic
     #   sqlalchemy
-urllib3==2.0.2
+urllib3==2.0.3
     # via
     #   jupyterhub-kubespawner
     #   kubernetes-asyncio

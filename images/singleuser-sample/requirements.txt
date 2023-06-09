@@ -134,9 +134,9 @@ jupyter-server-terminals==0.4.4
     # via jupyter-server
 jupyter-telemetry==0.1.0
     # via jupyterhub
-jupyterhub==4.0.0
+jupyterhub==4.0.1
     # via -r requirements.in
-jupyterlab==4.0.1
+jupyterlab==4.0.2
     # via -r requirements.in
 jupyterlab-pygments==0.2.2
     # via nbconvert
@@ -335,7 +335,7 @@ typing-extensions==4.6.3
     #   sqlalchemy
 uri-template==1.2.0
     # via jsonschema
-urllib3==2.0.2
+urllib3==2.0.3
     # via requests
 wcwidth==0.2.6
     # via prompt-toolkit
