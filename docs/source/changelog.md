@@ -7,7 +7,7 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 ## Unreleased breaking changes
 
 This Helm chart provides [development
-releases](https://jupyterhub.github.io/helm-chart/#development-releases-jupyterhub),
+releases](https://hub.jupyter.org/helm-chart/#development-releases-jupyterhub),
 and as we merge [breaking changes in pull
 requests](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pulls?q=is%3Apr+is%3Aclosed+label%3Abreaking),
 this list should be updated.
@@ -2392,7 +2392,7 @@ Helm cannot upgrade from the labelling scheme in 0.6 to that in 0.7 without `--f
 RELEASE_NAME=<YOUR-RELEASE-NAME>
 NAMESPACE=<YOUR-NAMESPACE>
 
-helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+helm repo add jupyterhub https://hub.jupyter.org/helm-chart/
 helm repo update
 
 # NOTE: We need the --force flag to allow recreation of resources that can't be
@@ -3182,7 +3182,7 @@ but this is a good start!
 
 ##### Better Azure support
 
-Azure's new managed Kubernetes service ([AKS](https://docs.microsoft.com/en-us/azure/aks/)) is much
+Azure's new managed Kubernetes service ([AKS](https://learn.microsoft.com/en-us/azure/aks/)) is much
 better supported by this version!
 
 - We have much better documentation on using z2jh with Azure!
@@ -3279,7 +3279,7 @@ In alphabetical order,
 
 ## 0.5
 
-### 0.5 - [Hamid Hassan](https://www.espncricinfo.com/player/hamid-hassan-311427) - 2017-12-05
+### 0.5 - [Hamid Hassan](https://www.espncricinfo.com/cricketers/hamid-hassan-311427) - 2017-12-05
 
 JupyterHub 0.8, HTTPS & scalability.
 

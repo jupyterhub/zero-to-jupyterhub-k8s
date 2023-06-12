@@ -1135,7 +1135,7 @@ properties:
         type: [integer, "null"]
         description: &jupyterhub-native-config-description |
           JupyterHub native configuration, see the [JupyterHub
-          documentation](https://jupyterhub.readthedocs.io/en/stable/api/app.html)
+          documentation](https://jupyterhub.readthedocs.io/en/stable/reference/api/app.html)
           for more information.
       allowNamedServers:
         type: [boolean, "null"]
@@ -1241,7 +1241,7 @@ properties:
           This is where you register JupyterHub services. For details on how to
           configure these services in this Helm chart just keep reading but for
           details on services themselves instead read [JupyterHub's
-          documentation](https://jupyterhub.readthedocs.io/en/stable/api/service.html).
+          documentation](https://jupyterhub.readthedocs.io/en/stable/reference/api/service.html).
 
           ```{note}
           Only a selection of JupyterHub's configuration options that can be

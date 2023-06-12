@@ -174,7 +174,7 @@ For more information, see
 **Install Pebble**
 
 ```shell
-helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+helm repo add jupyterhub https://hub.jupyter.org/helm-chart/
 helm repo update
 helm upgrade --install pebble jupyterhub/pebble --cleanup-on-fail --values dev-config-pebble.yaml
 ```

@@ -30,7 +30,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
    - **Install command-line tools locally**. You can access the Azure CLI via
      a package that you can install locally.
 
-     To do so, first follow the [installation instructions](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) in the
+     To do so, first follow the [installation instructions](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) in the
      Azure documentation. Then run the following command to connect your local
      CLI with your account:
 
@@ -85,7 +85,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
      format, rather than the default JSON output. We shall use this with most
      commands when executing them by hand.
 
-   Consider [setting a cloud budget](https://docs.microsoft.com/en-us/partner-center/set-an-azure-spending-budget-for-your-customers)
+   Consider [setting a cloud budget](https://learn.microsoft.com/en-us/partner-center/set-an-azure-spending-budget-for-your-customers)
    for your Azure account in order to make sure you don't accidentally
    spend more than you wish to.
 

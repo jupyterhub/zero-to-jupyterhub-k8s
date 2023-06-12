@@ -35,7 +35,7 @@ just create a `config.yaml` file with some helpful comments.
 # Introduction to YAML:     https://www.youtube.com/watch?v=cdLNKUoMc6c
 # Chart config reference:   https://zero-to-jupyterhub.readthedocs.io/en/stable/resources/reference.html
 # Chart default values:     https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/values.yaml
-# Available chart versions: https://jupyterhub.github.io/helm-chart/
+# Available chart versions: https://hub.jupyter.org/helm-chart/
 #
 ```
 
@@ -101,7 +101,7 @@ can try with `nano config.yaml`.
      Helm chart is paired with a specific version of JupyterHub. E.g.,
      `0.11.1` of the Helm chart runs JupyterHub `1.3.0`.
      For a list of which JupyterHub version is installed in each version
-     of the JupyterHub Helm Chart, see the [Helm Chart repository](https://jupyterhub.github.io/helm-chart/).
+     of the JupyterHub Helm Chart, see the [Helm Chart repository](https://hub.jupyter.org/helm-chart/).
 
 3. While Step 2 is running, you can see the pods being created by entering in
    a different terminal:

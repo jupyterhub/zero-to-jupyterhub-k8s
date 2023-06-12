@@ -158,7 +158,7 @@ jobs:
           #
           # The upgrade-from input should be a chart version, or match the version
           # information from
-          # https://jupyterhub.github.io/helm-chart/info.json
+          # https://hub.jupyter.org/helm-chart/info.json
           #
           - k3s-channel: v1.25
             test: upgrade
@@ -239,7 +239,7 @@ jobs:
       # reach the ACME client in our autohttps pod.
       - name: Install local ACME server
         run: |
-          helm install pebble --repo https://jupyterhub.github.io/helm-chart/ pebble --values dev-config-pebble.yaml
+          helm install pebble --repo https://hub.jupyter.org/helm-chart/ pebble --values dev-config-pebble.yaml
 
       # Build our images if needed and update values.yaml with the tags
       - name: Install and run chartpress
@@ -280,7 +280,7 @@ jobs:
         run: |
           . ./ci/common
           if [ ${{ matrix.upgrade-from }} = stable -o ${{ matrix.upgrade-from }} = dev ]; then
-            UPGRADE_FROM_VERSION=$(curl -sSL https://jupyterhub.github.io/helm-chart/info.json | jq -er '.jupyterhub.${{ matrix.upgrade-from }}')
+            UPGRADE_FROM_VERSION=$(curl -sSL https://hub.jupyter.org/helm-chart/info.json | jq -er '.jupyterhub.${{ matrix.upgrade-from }}')
           else
             UPGRADE_FROM_VERSION=${{ matrix.upgrade-from }}
           fi
@@ -294,7 +294,7 @@ jobs:
           #
           #        https://github.com/helm/helm/issues/9244
           cd ci
-          helm install jupyterhub --repo https://jupyterhub.github.io/helm-chart/ jupyterhub --values ../dev-config.yaml --version=$UPGRADE_FROM_VERSION ${{ matrix.upgrade-from-extra-args }}
+          helm install jupyterhub --repo https://hub.jupyter.org/helm-chart/ jupyterhub --values ../dev-config.yaml --version=$UPGRADE_FROM_VERSION ${{ matrix.upgrade-from-extra-args }}
 
       - name: "(Upgrade) Install helm diff"
         if: matrix.test == 'upgrade'
