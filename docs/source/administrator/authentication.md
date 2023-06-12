@@ -13,7 +13,7 @@ Before configuring this, you should have [setup HTTPS](https).
 
 ### Authenticator classes
 
-Z2JH defaults to a [DummyAuthenticator](https://jupyterhub.readthedocs.io/en/stable/api/auth.html#jupyterhub.auth.DummyAuthenticator)
+Z2JH defaults to a [DummyAuthenticator](https://jupyterhub.readthedocs.io/en/stable/reference/api/auth.html#jupyterhub.auth.DummyAuthenticator)
 that allows anyone to login with any username and password.
 This should only be used for testing purposes.
 
@@ -39,10 +39,10 @@ authenticator class itself through this Helm chart's
 As all authenticator classes derive from the `Authenticator` base class, they
 share some configuration options. Below are some common configuration options,
 but please refer to the official [configuration
-reference](https://jupyterhub.readthedocs.io/en/stable/api/auth.html) for more
+reference](https://jupyterhub.readthedocs.io/en/stable/reference/api/auth.html) for more
 details.
 
-### [allowed_users](https://jupyterhub.readthedocs.io/en/stable/api/auth.html#jupyterhub.auth.Authenticator.allowed_users) / [admin_users](https://jupyterhub.readthedocs.io/en/stable/api/auth.html#jupyterhub.auth.LocalAuthenticator.admin_users)
+### [allowed_users](https://jupyterhub.readthedocs.io/en/stable/reference/api/auth.html#jupyterhub.auth.Authenticator.allowed_users) / [admin_users](https://jupyterhub.readthedocs.io/en/stable/reference/api/auth.html#jupyterhub.auth.LocalAuthenticator.admin_users)
 
 Some authenticator classes may have dedicated logic in addition this this to
 authorize users.
@@ -70,7 +70,7 @@ In the above configuration, we have configured three things:
 2. anyone will be able to login with username `user1-4` and the password `a-shared-secret-password`
 3. `user1` and `user2` will have admin permissions, while `user3` and `user4` will be regular users.
 
-### [auto_login](https://jupyterhub.readthedocs.io/en/stable/api/auth.html#jupyterhub.auth.Authenticator.auto_login)
+### [auto_login](https://jupyterhub.readthedocs.io/en/stable/reference/api/auth.html#jupyterhub.auth.Authenticator.auto_login)
 
 If you have configured authentication with GitHub for example, the page
 `/hub/login` will feature a single orange button that users are to press to
@@ -84,7 +84,7 @@ hub:
       auto_login: true
 ```
 
-### [enable_auth_state](https://jupyterhub.readthedocs.io/en/stable/api/auth.html#jupyterhub.auth.Authenticator.enable_auth_state)
+### [enable_auth_state](https://jupyterhub.readthedocs.io/en/stable/reference/api/auth.html#jupyterhub.auth.Authenticator.enable_auth_state)
 
 If you want JupyterHub to persist often sensitive information received as part
 of logging in, you need to enable it.
@@ -343,7 +343,7 @@ hub:
 
 [OpenID Connect](https://openid.net/connect) is an identity layer on top of the
 OAuth 2.0 protocol, implemented by [various servers and
-services](https://openid.net/developers/certified/#OPServices). While OpenID
+services](https://openid.net/certified-open-id-developer-tools/). While OpenID
 Connect endpoint discovery is not supported by oauthentiator, you can still
 configure JupyterHub to authenticate with OpenID Connect providers by specifying
 all endpoints in the GenericOAuthenticator class.

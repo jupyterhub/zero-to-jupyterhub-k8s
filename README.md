@@ -3,9 +3,9 @@
 [![Documentation build status](https://img.shields.io/readthedocs/zero-to-jupyterhub?logo=read-the-docs)](https://zero-to-jupyterhub.readthedocs.io/en/latest/?badge=latest)
 [![GitHub Workflow Status - Test](https://img.shields.io/github/actions/workflow/status/jupyterhub/zero-to-jupyterhub-k8s/test-chart.yaml?logo=github&label=tests)](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/actions)
 [![GitHub Workflow Status - Vuln. scan](https://img.shields.io/github/actions/workflow/status/jupyterhub/zero-to-jupyterhub-k8s/vuln-scan.yaml?logo=github&label=Vuln.%20scan)](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/actions)
-[![Latest stable release of the Helm chart](https://img.shields.io/badge/dynamic/json.svg?label=stable&url=https://jupyterhub.github.io/helm-chart/info.json&query=$.jupyterhub.stable&colorB=orange&logo=helm)](https://jupyterhub.github.io/helm-chart#jupyterhub)
-[![Latest pre-release of the Helm chart](https://img.shields.io/badge/dynamic/json.svg?label=pre&url=https://jupyterhub.github.io/helm-chart/info.json&query=$.jupyterhub.pre&colorB=orange&logo=helm)](https://jupyterhub.github.io/helm-chart#development-releases-jupyterhub)
-[![Latest development release of the Helm chart](https://img.shields.io/badge/dynamic/json.svg?label=dev&url=https://jupyterhub.github.io/helm-chart/info.json&query=$.jupyterhub.latest&colorB=orange&logo=helm)](https://jupyterhub.github.io/helm-chart#development-releases-jupyterhub)
+[![Latest stable release of the Helm chart](https://img.shields.io/badge/dynamic/json.svg?label=stable&url=https://hub.jupyter.org/helm-chart/info.json&query=$.jupyterhub.stable&colorB=orange&logo=helm)](https://jupyterhub.github.io/helm-chart#jupyterhub)
+[![Latest pre-release of the Helm chart](https://img.shields.io/badge/dynamic/json.svg?label=pre&url=https://hub.jupyter.org/helm-chart/info.json&query=$.jupyterhub.pre&colorB=orange&logo=helm)](https://jupyterhub.github.io/helm-chart#development-releases-jupyterhub)
+[![Latest development release of the Helm chart](https://img.shields.io/badge/dynamic/json.svg?label=dev&url=https://hub.jupyter.org/helm-chart/info.json&query=$.jupyterhub.latest&colorB=orange&logo=helm)](https://jupyterhub.github.io/helm-chart#development-releases-jupyterhub)
 <br/>
 [![GitHub](https://img.shields.io/badge/issue_tracking-github-blue?logo=github)](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues)
 [![Discourse](https://img.shields.io/badge/help_forum-discourse-blue?logo=discourse)](https://discourse.jupyter.org/c/jupyterhub/z2jh-k8s)

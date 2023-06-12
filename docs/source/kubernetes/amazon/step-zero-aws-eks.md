@@ -87,6 +87,5 @@ This guide uses AWS to set up a cluster. This mirrors the steps found at [Gettin
 
 ## Cluster Autoscaler
 
-If you'd like to do some {ref}`optimizations <efficient-cluster-autoscaling>`, you need to deploy Cluster Autoscaler (CA) first.
-
-See <https://archive.eksworkshop.com/beginner/080_scaling/deploy_ca/>
+If you'd like to do some {ref}`optimizations <efficient-cluster-autoscaling>`,
+you need to deploy Cluster Autoscaler (CA) first.

@@ -7,18 +7,17 @@ Here you can find upgrade changes in between releases and upgrade instructions.
 ## Unreleased breaking changes
 
 This Helm chart provides [development
-releases](https://jupyterhub.github.io/helm-chart/#development-releases-jupyterhub),
+releases](https://hub.jupyter.org/helm-chart/#development-releases-jupyterhub),
 and as we merge [breaking changes in pull
 requests](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pulls?q=is%3Apr+is%3Aclosed+label%3Abreaking),
 this list should be updated.
 
 ## 3.0
 
-### 3.0.0-alpha.1 - 2023-06-04
+### 3.0.0-beta.1 - 2023-06-12
 
-This is an alpha release as additional breaking changes are still planned, see
-[this issue](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/3091)
-for details.
+This is a beta release for testing before the 3.0.0 release, no further changes
+are planned.
 
 #### Breaking changes
 
@@ -35,25 +34,21 @@ for details.
     configure `KubeSpawner.environment`, and to configure
     [`singleuser.profileList`](schema_singleuser.profileList) is to configure
     `KubeSpawner.profile_list`.
-- OAuthenticator 15.1.0 _will be_ upgraded to 16.0.0, _but isn't yet in the alpha.1 release_
-  - If you are using an JupyterHub Authenticator class from this package, please
-    read to the [OAuthenticator changelog]'s breaking changes.
 - TmpAuthenticator 0.6 is upgraded to 1.0.0
   - If you are using this JupyterHub Authenticator class, please read to the
     [TmpAuthenticator changelog]'s breaking changes.
 
 [jupyterhub changelog]: https://jupyterhub.readthedocs.io/en/stable/changelog.html
 [kubespawner changelog]: https://jupyterhub-kubespawner.readthedocs.io/en/latest/changelog.html
-[oauthenticator changelog]: https://jupyterhub-kubespawner.readthedocs.io/en/latest/changelog.html
 [tmpauthenticator changelog]: https://jupyterhub-kubespawner.readthedocs.io/en/latest/changelog.html
 
 #### Notable dependencies updated
 
 | Dependency                                                                       | Version in 2.0.0 | Version in 3.0.0 | Changelog link                                                                            | Note                               |
 | -------------------------------------------------------------------------------- | ---------------- | ---------------- | ----------------------------------------------------------------------------------------- | ---------------------------------- |
-| [jupyterhub](https://github.com/jupyterhub/jupyterhub)                           | 3.0.0            | 4.0.0            | [Changelog](https://jupyterhub.readthedocs.io/en/stable/reference/changelog.html)         | Run in the `hub` pod               |
+| [jupyterhub](https://github.com/jupyterhub/jupyterhub)                           | 3.0.0            | 4.0.1            | [Changelog](https://jupyterhub.readthedocs.io/en/stable/reference/changelog.html)         | Run in the `hub` pod               |
 | [kubespawner](https://github.com/jupyterhub/kubespawner)                         | 4.2.0            | 6.0.0            | [Changelog](https://jupyterhub-kubespawner.readthedocs.io/en/latest/changelog.html)       | Run in the `hub` pod               |
-| [oauthenticator](https://github.com/jupyterhub/oauthenticator)                   | 15.1.0           | 15.1.0 (16 soon) | [Changelog](https://oauthenticator.readthedocs.io/en/latest/reference/changelog.html)     | Run in the `hub` pod               |
+| [oauthenticator](https://github.com/jupyterhub/oauthenticator)                   | 15.1.0           | 15.1.0           | [Changelog](https://oauthenticator.readthedocs.io/en/latest/reference/changelog.html)     | Run in the `hub` pod               |
 | [ldapauthenticator](https://github.com/jupyterhub/ldapauthenticator)             | 1.3.2            | 1.3.2            | [Changelog](https://github.com/jupyterhub/ldapauthenticator/blob/HEAD/CHANGELOG.md)       | Run in the `hub` pod               |
 | [ltiauthenticator](https://github.com/jupyterhub/ltiauthenticator)               | 1.2.0            | 1.5.1            | [Changelog](https://github.com/jupyterhub/ltiauthenticator/blob/HEAD/CHANGELOG.md)        | Run in the `hub` pod               |
 | [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 1.1.0            | 1.2.1            | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/HEAD/CHANGELOG.md)     | Run in the `hub` pod               |
@@ -98,6 +93,7 @@ For a detailed list of Python dependencies in the `hub` Pod's Docker image, insp
 
 - Helm chart url has changed [#3122](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3122) ([@manics](https://github.com/manics))
 - Remove double word cluster in installation.md [#3119](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3119) ([@cbowman0](https://github.com/cbowman0))
+- Clarify `hub.config` can configure KubeSpawner and more [#3104](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3104) ([@JunaidChaudry](https://github.com/JunaidChaudry))
 - docs: fix readme badge for tests [#3094](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3094) ([@consideRatio](https://github.com/consideRatio))
 - doc: singleuser.uid default is always 1000 [#3079](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3079) ([@manics](https://github.com/manics))
 - Replace IEC prefixes link [#3073](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3073) ([@manics](https://github.com/manics))
@@ -2396,7 +2392,7 @@ Helm cannot upgrade from the labelling scheme in 0.6 to that in 0.7 without `--f
 RELEASE_NAME=<YOUR-RELEASE-NAME>
 NAMESPACE=<YOUR-NAMESPACE>
 
-helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+helm repo add jupyterhub https://hub.jupyter.org/helm-chart/
 helm repo update
 
 # NOTE: We need the --force flag to allow recreation of resources that can't be
@@ -3186,7 +3182,7 @@ but this is a good start!
 
 ##### Better Azure support
 
-Azure's new managed Kubernetes service ([AKS](https://docs.microsoft.com/en-us/azure/aks/)) is much
+Azure's new managed Kubernetes service ([AKS](https://learn.microsoft.com/en-us/azure/aks/)) is much
 better supported by this version!
 
 - We have much better documentation on using z2jh with Azure!
@@ -3283,7 +3279,7 @@ In alphabetical order,
 
 ## 0.5
 
-### 0.5 - [Hamid Hassan](https://www.espncricinfo.com/player/hamid-hassan-311427) - 2017-12-05
+### 0.5 - [Hamid Hassan](https://www.espncricinfo.com/cricketers/hamid-hassan-311427) - 2017-12-05
 
 JupyterHub 0.8, HTTPS & scalability.
 
