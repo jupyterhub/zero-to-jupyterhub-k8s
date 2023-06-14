@@ -93,6 +93,21 @@ with open("../../jupyterhub/values.schema.yaml") as f:
     data = yaml.safe_load(f)
 
 
+# default_values
+with open("../../jupyterhub/values.yaml") as f:
+    default_values = yaml.safe_load(f)
+
+
+def get_default_value(k):
+    """
+    Get the default value from values.yaml
+    """
+    v = default_values
+    for key in k.split("."):
+        v = v[key]
+    return v
+
+
 def parse_schema(d, md=[], depth=0, pre=""):
     """
     Generate markdown headers from a passed python dictionary created by
@@ -111,7 +126,17 @@ def parse_schema(d, md=[], depth=0, pre=""):
             if "description" in val:
                 for ln in val["description"].split("\n"):
                     md.append(ln)
-                md.append("")
+                try:
+                    def_value = get_default_value(f"{pre}{key}")
+                    if def_value is not None and def_value not in (
+                        "set-by-chartpress",
+                        "",
+                    ):
+                        md.append(f"default: `{def_value}`")
+                        md.append("")
+                except KeyError:
+                    # TODO: Should we error if the property isn't in values.yaml?
+                    pass
 
             parse_schema(val, md, depth, f"{pre}{key}.")
         depth -= 1
