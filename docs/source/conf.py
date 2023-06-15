@@ -3,6 +3,7 @@
 # Configuration reference: https://www.sphinx-doc.org/en/master/usage/configuration.html
 #
 import datetime
+import json
 import os
 import re
 import subprocess
@@ -126,17 +127,23 @@ def parse_schema(d, md=[], depth=0, pre=""):
             if "description" in val:
                 for ln in val["description"].split("\n"):
                     md.append(ln)
-                try:
-                    def_value = get_default_value(f"{pre}{key}")
-                    if def_value is not None and def_value not in (
+            try:
+                def_value = get_default_value(f"{pre}{key}")
+                if (
+                    def_value is not None
+                    and not isinstance(def_value, dict)
+                    and def_value
+                    not in (
                         "set-by-chartpress",
                         "",
-                    ):
-                        md.append(f"default: `{def_value}`")
-                        md.append("")
-                except KeyError:
-                    # TODO: Should we error if the property isn't in values.yaml?
-                    pass
+                    )
+                ):
+                    # Use the JSON string representation instead of Python
+                    md.append(f"_Default:_ `{json.dumps(def_value)}`")
+                    md.append("")
+            except KeyError:
+                # TODO: Should we error if the property isn't in values.yaml?
+                pass
 
             parse_schema(val, md, depth, f"{pre}{key}.")
         depth -= 1
