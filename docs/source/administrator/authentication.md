@@ -397,7 +397,7 @@ hub:
       username_key: preferred_username
       userdata_params:
         state: state
-      # In order to use keycloak client's roles as autorisation layer
+      # In order to use keycloak client's roles as authorization layer
       claim_groups_key: roles
       allowed_groups:
         - user
