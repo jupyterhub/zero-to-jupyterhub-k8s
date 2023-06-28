@@ -397,6 +397,12 @@ hub:
       username_key: preferred_username
       userdata_params:
         state: state
+      # In order to use keycloak client's roles as autorisation layer
+      claim_groups_key: roles
+      allowed_groups:
+        - user
+      admin_groups:
+        - admin
     JupyterHub:
       authenticator_class: generic-oauth
 ```
