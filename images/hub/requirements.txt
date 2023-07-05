@@ -82,7 +82,7 @@ jupyterhub-kubespawner==6.0.0
     # via -r requirements.in
 jupyterhub-ldapauthenticator==1.3.2
     # via -r requirements.in
-jupyterhub-ltiauthenticator==1.5.1
+jupyterhub-ltiauthenticator==1.6.1
     # via -r requirements.in
 jupyterhub-nativeauthenticator==1.2.0
     # via -r requirements.in
@@ -106,10 +106,8 @@ mwoauth==0.3.8
     # via -r requirements.in
 nullauthenticator==1.0.0
     # via -r requirements.in
-oauthenticator==15.1.0
-    # via
-    #   -r requirements.in
-    #   jupyterhub-ltiauthenticator
+oauthenticator==16.0.0
+    # via -r requirements.in
 oauthlib==3.2.2
     # via
     #   jupyterhub
@@ -137,7 +135,7 @@ pyjwt[crypto]==2.7.0
     #   -r requirements.in
     #   jupyterhub-ltiauthenticator
     #   mwoauth
-pymysql==1.0.3
+pymysql==1.1.0
     # via -r requirements.in
 pyopenssl==23.2.0
     # via certipy
@@ -164,7 +162,7 @@ requests==2.31.0
     #   requests-oauthlib
 requests-oauthlib==1.3.1
     # via mwoauth
-ruamel-yaml==0.17.31
+ruamel-yaml==0.17.32
     # via
     #   jupyter-telemetry
     #   oauthenticator
@@ -176,7 +174,7 @@ six==1.16.0
     #   mwoauth
     #   onetimepass
     #   python-dateutil
-sqlalchemy==2.0.15
+sqlalchemy==2.0.17
     # via
     #   alembic
     #   jupyterhub
@@ -192,13 +190,16 @@ tornado==6.3.2
     #   jupyterhub
     #   jupyterhub-idle-culler
     #   jupyterhub-ldapauthenticator
+    #   oauthenticator
 traitlets==5.9.0
     # via
     #   jupyter-telemetry
     #   jupyterhub
     #   jupyterhub-kubespawner
     #   jupyterhub-ldapauthenticator
-typing-extensions==4.6.3
+    #   jupyterhub-ltiauthenticator
+    #   oauthenticator
+typing-extensions==4.7.1
     # via
     #   alembic
     #   sqlalchemy
