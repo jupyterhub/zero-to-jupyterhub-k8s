@@ -24,6 +24,7 @@ author = "Project Jupyter Contributors"
 extensions = [
     "myst_parser",
     "sphinx_copybutton",
+    "sphinx.ext.intersphinx",
     "sphinx.ext.mathjax",
     "sphinxext.opengraph",
     "sphinxext.rediraffe",
@@ -156,6 +157,29 @@ schema_md = parse_schema(data)
 reference_md = header_md + schema_md
 with open("resources/reference.md", "w") as f:
     f.write("\n".join(reference_md))
+
+
+# -- Options for intersphinx extension ---------------------------------------
+# ref: https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html#configuration
+#
+# The extension makes us able to link like to other projects like below.
+#
+#     rST  - :external:py:class:`tornado.httpclient.AsyncHTTPClient`
+#     MyST - {external:py:class}`tornado.httpclient.AsyncHTTPClient`
+#
+# To see what we can link to, do the following where "objects.inv" is appended
+# to the sphinx based website:
+#
+#     python -m sphinx.ext.intersphinx https://jupyterhub.readthedocs.io/en/stable/objects.inv
+#
+intersphinx_mapping = {
+    "jupyterhub": ("https://jupyterhub.readthedocs.io/en/stable/", None),
+    "oauthenticator": ("https://oauthenticator.readthedocs.io/en/stable/", None),
+}
+
+# intersphinx_disabled_reftypes set based on recommendation in
+# https://docs.readthedocs.io/en/stable/guides/intersphinx.html#using-intersphinx
+intersphinx_disabled_reftypes = ["*"]
 
 
 # -- Options for HTML output -------------------------------------------------
