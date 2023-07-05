@@ -136,7 +136,7 @@ require an OAuth2 _client id_ and _client secret_.
 
 For details on how to acquire a client id and client secret, please refer to
 [oauthenticator's
-documentation](https://oauthenticator.readthedocs.io/en/stable/getting-started.html).
+documentation](https://oauthenticator.readthedocs.io/en/stable/tutorials/general-setup.html).
 
 #### GitHub
 
