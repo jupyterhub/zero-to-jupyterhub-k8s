@@ -14,15 +14,14 @@ changes in pull requests], this list should be updated.
 
 ## 3.0
 
-### 3.0.0-beta.2 - 2023-07-05
+### 3.0.0-beta.3 - 2023-07-06
 
 This is a beta release for testing before the 3.0.0 release.
 
 ```{warning}
 Since 3.0.0-beta.1 release 2023-06-12, another breaking change was made by
 upgrading OAuthenticator from version 15.1.0 to 16.0.0. Please read to the
-[OAuthenticator changelog]'s breaking changes before upgrading from 3.0.0-beta.1
-to 3.0.0-beta.2.
+[OAuthenticator changelog]'s breaking changes before upgrading from 3.0.0-beta.1.
 ```
 
 #### Breaking changes
@@ -40,7 +39,7 @@ to 3.0.0-beta.2.
     configure `KubeSpawner.environment`, and to configure
     [`singleuser.profileList`](schema_singleuser.profileList) is to configure
     `KubeSpawner.profile_list`.
-- OAuthenticator 15.1.0 is upgraded to 16.0.0.
+- OAuthenticator 15.1.0 is upgraded to 16.0.2.
   - If you are using a JupyterHub Authenticator class from this project, please
     read to the [OAuthenticator changelog]'s breaking changes before upgrading
     this Helm chart.
@@ -60,7 +59,7 @@ to 3.0.0-beta.2.
 | -------------------------------------------------------------------------------- | ---------------- | ---------------- | ----------------------------------------------------------------------------------------- | ---------------------------------- |
 | [jupyterhub](https://github.com/jupyterhub/jupyterhub)                           | 3.0.0            | 4.0.1            | [Changelog](https://jupyterhub.readthedocs.io/en/stable/reference/changelog.html)         | Run in the `hub` pod               |
 | [kubespawner](https://github.com/jupyterhub/kubespawner)                         | 4.2.0            | 6.0.0            | [Changelog](https://jupyterhub-kubespawner.readthedocs.io/en/stable/changelog.html)       | Run in the `hub` pod               |
-| [oauthenticator](https://github.com/jupyterhub/oauthenticator)                   | 15.1.0           | 16.0.0           | [Changelog](https://oauthenticator.readthedocs.io/en/stable/reference/changelog.html)     | Run in the `hub` pod               |
+| [oauthenticator](https://github.com/jupyterhub/oauthenticator)                   | 15.1.0           | 16.0.2           | [Changelog](https://oauthenticator.readthedocs.io/en/stable/reference/changelog.html)     | Run in the `hub` pod               |
 | [ldapauthenticator](https://github.com/jupyterhub/ldapauthenticator)             | 1.3.2            | 1.3.2            | [Changelog](https://github.com/jupyterhub/ldapauthenticator/blob/HEAD/CHANGELOG.md)       | Run in the `hub` pod               |
 | [ltiauthenticator](https://github.com/jupyterhub/ltiauthenticator)               | 1.2.0            | 1.6.1            | [Changelog](https://github.com/jupyterhub/ltiauthenticator/blob/HEAD/CHANGELOG.md)        | Run in the `hub` pod               |
 | [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 1.1.0            | 1.2.0            | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/HEAD/CHANGELOG.md)     | Run in the `hub` pod               |
@@ -107,6 +106,7 @@ what changes between tagged versions.
 
 #### Documentation improvements
 
+- docs: let auth docs link to authenticator specific docs [#3151](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3151) ([@consideRatio](https://github.com/consideRatio))
 - Enhance keycloak configuration example [#3142](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3142) ([@LucasVanHaaren](https://github.com/LucasVanHaaren))
 - Show default value in configuration reference [#3138](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3138) ([@manics](https://github.com/manics))
 - Helm chart url has changed [#3122](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3122) ([@manics](https://github.com/manics))
