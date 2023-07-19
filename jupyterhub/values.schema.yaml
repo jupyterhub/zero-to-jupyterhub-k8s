@@ -28,7 +28,7 @@ required:
   - global
 properties:
   enabled:
-    type: boolean
+    type: [boolean, "null"]
     description: |
       enabled allows you to enable or disable jupyterhub using the preffered method
       if it is included as a dependency in a parent helm chart
