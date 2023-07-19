@@ -3,6 +3,9 @@
 fullnameOverride: ""
 nameOverride:
 
+# enable or disable jupyterhub if it is included as a dependency in a parent helm chart
+enabled:
+
 # custom can contain anything you want to pass to the hub pod, as all passed
 # Helm template values will be made available there.
 custom: {}
