@@ -217,6 +217,7 @@ linkcheck_ignore = [
     "https://your-domain-name.com",  # example
     "https://kubernetes.io/docs/tutorials/kubernetes-basics/",  # works
     "https://cloud.ibm.com/kubernetes/catalog/create",  # works
+    "https://github.com/traefik/traefik/blob/HEAD/CHANGELOG.md",  # works
     "https://portal.azure.com",  # sign-in redirect noise
     "https://console.cloud.google.com",  # sign-in redirect noise
     "https://console.developers.google.com",  # sign-in redirect noise
