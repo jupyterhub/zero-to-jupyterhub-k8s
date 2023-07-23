@@ -3,6 +3,11 @@
 fullnameOverride: ""
 nameOverride:
 
+# enabled is ignored by the jupyterhub chart itself, but a chart depending on
+# the jupyterhub chart conditionally can make use this config option as the
+# condition.
+enabled:
+
 # custom can contain anything you want to pass to the hub pod, as all passed
 # Helm template values will be made available there.
 custom: {}

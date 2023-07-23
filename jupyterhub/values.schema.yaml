@@ -27,6 +27,12 @@ required:
   - rbac
   - global
 properties:
+  enabled:
+    type: [boolean, "null"]
+    description: |
+      `enabled` is ignored by the jupyterhub chart itself, but a chart depending
+      on the jupyterhub chart conditionally can make use this config option as
+      the condition.
   fullnameOverride:
     type: [string, "null"]
     description: |
