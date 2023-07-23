@@ -38,8 +38,8 @@ jobs:
       - name: Install dependencies
         run: pip install pre-commit
 
-      - name: Run shellcheck linter
-        run: pre-commit run --all --config .pre-commit-config-shellcheck.yaml
+      - name: Run all stages including shellcheck (disabled by default)
+        run: pre-commit run --all --hook-stage manual
 
   lint_and_validate_rendered_templates:
     runs-on: ubuntu-22.04
