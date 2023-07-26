@@ -298,22 +298,28 @@ if extra_files:
     for file_key, file_details in extra_files.items():
         # Make the key RFC 1035 Label Naming compliant
         file_key = file_key.lower().replace("_", "-").replace(".", "-")
-        c.KubeSpawner.volumes.append({
-            "name": file_key,
-            "secret": {
-                "secretName": f"singleuser-{file_key}",
-                "items": [{
-                    "key": file_key,
-                    "path": file_key,
-                    "mode": file_details.get("mode")
-                }]
+        c.KubeSpawner.volumes.append(
+            {
+                "name": file_key,
+                "secret": {
+                    "secretName": f"singleuser-{file_key}",
+                    "items": [
+                        {
+                            "key": file_key,
+                            "path": file_key,
+                            "mode": file_details.get("mode"),
+                        }
+                    ],
+                },
             }
-        })
-        c.KubeSpawner.volume_mounts.append({
-            "mountPath": file_details["mountPath"],
-            "subPath": file_key,
-            "name": file_key,
-        })
+        )
+        c.KubeSpawner.volume_mounts.append(
+            {
+                "mountPath": file_details["mountPath"],
+                "subPath": file_key,
+                "name": file_key,
+            }
+        )
 
 # Inject extraVolumes / extraVolumeMounts
 c.KubeSpawner.volumes.extend(get_config("singleuser.storage.extraVolumes", []))
