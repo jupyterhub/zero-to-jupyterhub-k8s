@@ -1,6 +1,6 @@
 FROM python:3.11-alpine
 
-# VULN_SCAN_TIME=2023-05-29_05:12:47
+# VULN_SCAN_TIME=2023-07-31_05:12:49
 
 # Note that we use tini-static, it embeds dependencies missing in alpine
 RUN ARCH=`uname -m`; \
