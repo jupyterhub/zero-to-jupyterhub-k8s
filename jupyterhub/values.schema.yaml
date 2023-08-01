@@ -651,7 +651,6 @@ properties:
               ```
 
               ```{versionadded} 2.0.0
-              All `egressAllowRules` are new in JupyterHub Helm chart 2.0.0.
               ```
             properties:
               cloudMetadataServer:
@@ -690,6 +689,9 @@ properties:
                   have been setup. Due to that, multiple rules are enabled by
                   default to ensure DNS connectivity.
                   ```
+
+                  ```{versionadded} 3.0.0
+                  ```
               dnsPortsKubeSystemNamespace:
                 type: boolean
                 description: |
@@ -709,6 +711,9 @@ properties:
                   pods will rely on due to variations between how k8s clusters
                   have been setup. Due to that, multiple rules are enabled by
                   default to ensure DNS connectivity.
+                  ```
+
+                  ```{versionadded} 3.0.0
                   ```
               dnsPortsPrivateIPs:
                 type: boolean
