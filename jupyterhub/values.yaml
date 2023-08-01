@@ -107,6 +107,8 @@ hub:
     egress: []
     egressAllowRules:
       cloudMetadataServer: true
+      dnsPortsCloudMetadataServer: true
+      dnsPortsKubeSystemNamespace: true
       dnsPortsPrivateIPs: true
       nonPrivateIPs: true
       privateIPs: true
@@ -231,6 +233,8 @@ proxy:
       egress: []
       egressAllowRules:
         cloudMetadataServer: true
+        dnsPortsCloudMetadataServer: true
+        dnsPortsKubeSystemNamespace: true
         dnsPortsPrivateIPs: true
         nonPrivateIPs: true
         privateIPs: true
@@ -278,6 +282,8 @@ proxy:
       egress: []
       egressAllowRules:
         cloudMetadataServer: true
+        dnsPortsCloudMetadataServer: true
+        dnsPortsKubeSystemNamespace: true
         dnsPortsPrivateIPs: true
         nonPrivateIPs: true
         privateIPs: true
@@ -354,6 +360,8 @@ singleuser:
     egress: []
     egressAllowRules:
       cloudMetadataServer: false
+      dnsPortsCloudMetadataServer: true
+      dnsPortsKubeSystemNamespace: true
       dnsPortsPrivateIPs: true
       nonPrivateIPs: true
       privateIPs: false
