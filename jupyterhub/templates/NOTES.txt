@@ -92,7 +92,7 @@
 
 
 {{- /*
-  Warnings for likely misconfiguration
+  Warnings for likely misconfigurations
 */}}
 
 {{- if and (not .Values.scheduling.podPriority.enabled) (and .Values.scheduling.userPlaceholder.enabled .Values.scheduling.userPlaceholder.replicas) }}
@@ -114,7 +114,7 @@
 
 
 {{- /*
-  Breaking changes.
+  Breaking changes and failures for likely misconfigurations.
 */}}
 
 {{- $breaking := "" }}
@@ -145,6 +145,11 @@
 
 {{- if hasKey .Values.hub "fsGid" }}
 {{- $breaking = print $breaking "\n\nCHANGED: hub.fsGid must as of version 2.0.0 be configured via hub.podSecurityContext.fsGroup." }}
+{{- end }}
+
+
+{{- if and .Values.singleuser.cloudMetadata.blockWithIptables (and .Values.singleuser.networkPolicy.enabled .Values.singleuser.networkPolicy.egressAllowRules.cloudMetadataServer) }}
+{{- $breaking = print $breaking "\n\nCHANGED: singleuser.cloudMetadata.blockWithIptables must as of version 3.0.0 not be configured together with singleuser.networkPolicy.egressAllowRules.cloudMetadataServer as it leads to an ambiguous configuration." }}
 {{- end }}
 
 

@@ -404,7 +404,7 @@ singleuser:
   networkPolicy:
     enabled: true
     egressAllowRules:
-      cloudMetadataServer: true
+      cloudMetadataServer: false
       dnsPortsPrivateIPs: true
       nonPrivateIPs: false
       privateIPs: false
