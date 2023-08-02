@@ -30,20 +30,35 @@
 {{- define "jupyterhub.networkPolicy.renderEgressRules" -}}
 {{- $root := index . 0 }}
 {{- $netpol := index . 1 }}
-{{- if $netpol.egressAllowRules.dnsPortsPrivateIPs }}
-# Allow outbound connections to the DNS port in the private IP ranges
+{{- if or (or $netpol.egressAllowRules.dnsPortsCloudMetadataServer $netpol.egressAllowRules.dnsPortsKubeSystemNamespace) $netpol.egressAllowRules.dnsPortsPrivateIPs }}
 - ports:
-    - protocol: UDP
-      port: 53
-    - protocol: TCP
-      port: 53
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP
   to:
+  {{- if $netpol.egressAllowRules.dnsPortsCloudMetadataServer }}
+    # Allow outbound connections to DNS ports on the cloud metadata server
+    - ipBlock:
+        cidr: {{ $root.Values.singleuser.cloudMetadata.ip }}/32
+  {{- end }}
+  {{- if $netpol.egressAllowRules.dnsPortsKubeSystemNamespace }}
+    # Allow outbound connections to DNS ports on pods in the kube-system
+    # namespace
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+  {{- end }}
+  {{- if $netpol.egressAllowRules.dnsPortsPrivateIPs }}
+    # Allow outbound connections to DNS ports on destinations in the private IP
+    # ranges
     - ipBlock:
         cidr: 10.0.0.0/8
     - ipBlock:
         cidr: 172.16.0.0/12
     - ipBlock:
         cidr: 192.168.0.0/16
+  {{- end }}
 {{- end }}
 
 {{- if $netpol.egressAllowRules.nonPrivateIPs }}
@@ -53,7 +68,7 @@
         cidr: 0.0.0.0/0
         except:
           # As part of this rule, don't:
-          # - allow outbound connections to private IP
+          # - allow outbound connections to private IPs
           - 10.0.0.0/8
           - 172.16.0.0/12
           - 192.168.0.0/16

@@ -177,6 +177,8 @@ hub:
     enabled: true
     egressAllowRules:
       cloudMetadataServer: true
+      dnsPortsCloudMetadataServer: true
+      dnsPortsKubeSystemNamespace: true
       dnsPortsPrivateIPs: true
       nonPrivateIPs: true
       privateIPs: false

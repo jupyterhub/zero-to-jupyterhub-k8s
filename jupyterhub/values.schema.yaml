@@ -651,7 +651,6 @@ properties:
               ```
 
               ```{versionadded} 2.0.0
-              All `egressAllowRules` are new in JupyterHub Helm chart 2.0.0.
               ```
             properties:
               cloudMetadataServer:
@@ -667,6 +666,55 @@ properties:
                   IP ranges but makes an exception for the cloud metadata
                   server, leaving this as the definitive configuration to allow
                   access to the cloud metadata server.
+              dnsPortsCloudMetadataServer:
+                type: boolean
+                description: |
+                  Defaults to `true` for all network policies.
+
+                  When enabled this rule allows the respective pod(s) to
+                  establish outbound connections to the cloud metadata server
+                  via port 53.
+
+                  Relying on this rule should go hand in hand with disabling
+                  [`singleuser.cloudMetadata.blockWithIptables`](schema_singleuser.cloudMetadata.blockWithIptables).
+
+                  Known situations when this rule can be relevant:
+
+                  - In GKE clusters with Cloud DNS that is reached at the
+                    cloud metadata server's non-private IP.
+
+                  ```{note}
+                  This chart doesn't know how to identify the DNS server that
+                  pods will rely on due to variations between how k8s clusters
+                  have been setup. Due to that, multiple rules are enabled by
+                  default to ensure DNS connectivity.
+                  ```
+
+                  ```{versionadded} 3.0.0
+                  ```
+              dnsPortsKubeSystemNamespace:
+                type: boolean
+                description: |
+                  Defaults to `true` for all network policies.
+
+                  When enabled this rule allows the respective pod(s) to
+                  establish outbound connections to pods in the kube-system
+                  namespace via port 53.
+
+                  Known situations when this rule can be relevant:
+
+                  - GKE, EKS, AKS, and other clusters relying directly on
+                    `kube-dns` or `coredns` pods in the `kube-system` namespace.
+
+                  ```{note}
+                  This chart doesn't know how to identify the DNS server that
+                  pods will rely on due to variations between how k8s clusters
+                  have been setup. Due to that, multiple rules are enabled by
+                  default to ensure DNS connectivity.
+                  ```
+
+                  ```{versionadded} 3.0.0
+                  ```
               dnsPortsPrivateIPs:
                 type: boolean
                 description: |
@@ -675,10 +723,23 @@ properties:
                   When enabled this rule allows the respective pod(s) to
                   establish outbound connections to private IPs via port 53.
 
-                  Note that we can't reliably identify the k8s internal DNS
-                  server due to variations between k8s clusters. Due to that,
-                  this rule which is critical for core functionality, can be
-                  disabled for a more refined custom rule.
+                  Known situations when this rule can be relevant:
+
+                  - GKE clusters relying on a DNS server indirectly via a a node
+                    local DNS cache at an unknown private IP.
+
+                  ```{note}
+                  This chart doesn't know how to identify the DNS server that
+                  pods will rely on due to variations between how k8s clusters
+                  have been setup. Due to that, multiple rules are enabled by
+                  default to ensure DNS connectivity.
+
+                  ```{warning}
+                  This rule is not expected to work in clusters relying on
+                  Cilium to enforce the NetworkPolicy rules (includes GKE
+                  clusters with Dataplane v2), this is due to a [known
+                  limitation](https://github.com/cilium/cilium/issues/9209).
+                  ```
               nonPrivateIPs:
                 type: boolean
                 description: |
@@ -713,6 +774,13 @@ properties:
                   If possible, try to avoid setting this to true as it gives
                   broad permissions that could be specified more directly via
                   the [`.egress`](schema_singleuser.networkPolicy.egress).
+
+                  ```{warning}
+                  This rule is not expected to work in clusters relying on
+                  Cilium to enforce the NetworkPolicy rules (includes GKE
+                  clusters with Dataplane v2), this is due to a [known
+                  limitation](https://github.com/cilium/cilium/issues/9209).
+                  ```
           interNamespaceAccessLabels:
             enum: [accept, ignore]
             description: |
