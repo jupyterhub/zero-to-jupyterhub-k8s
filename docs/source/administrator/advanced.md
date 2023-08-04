@@ -44,6 +44,11 @@ ingress:
 
 ### Ingress and Automatic HTTPS with kube-lego & Let's Encrypt
 
+```{warning}
+`kube-lego` has been deprecated in favor of `cert-manager`.
+See [cert-manager](https://github.com/cert-manager/cert-manager).
+```
+
 When using an ingress object, the default automatic HTTPS support does not work.
 To have automatic fetch and renewal of HTTPS certificates, you must set it up
 yourself.
