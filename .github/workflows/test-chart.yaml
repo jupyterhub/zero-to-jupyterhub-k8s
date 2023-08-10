@@ -187,7 +187,7 @@ jobs:
             test: upgrade
             # We're testing hub.db.upgrade with PostgreSQL so this version must be old
             # enough to require a DB upgrade
-            upgrade-from: 1.2.0
+            upgrade-from: 2.0.0
             upgrade-from-extra-args: >-
               --set proxy.secretToken=aaaa1111
               --set hub.cookieSecret=bbbb2222
