@@ -34,6 +34,18 @@ proxy:
 hub:
   db:
     type: sqlite-memory
+  loadRoles:
+    test-scoped-access:
+      description: Used to JupyterHub 2.0.0+ RBAC scoped access, currently to the /hub/api/info endpoint via read:hub.
+      scopes: [read:hub]
+      services: [test-with-scoped-access]
+    test-role-with-explicit-name:
+      name: test-role-2
+      description: Access to users' information and group membership
+      scopes: [users, groups]
+      users: [cyclops, gandalf]
+      services: [test]
+      groups: []
   services:
     # The test service and its apiToken is used to make requests in our pytest
     # suite of tests. Note that it can be overridden by the hub.existingSecret,
@@ -152,6 +164,8 @@ singleuser:
   networkPolicy:
     # For testing purposes in the test_spawn_netpol test, we override egress and
     # egressAllowRules.nonPrivateIPs to slim the egress rules to a minimum.
+    egressAllowRules:
+      nonPrivateIPs: false
     egress:
       - to:
           # jupyter.org has multiple IPs associated with it, among them are these
@@ -160,6 +174,11 @@ singleuser:
               cidr: 104.21.25.233/32
         # - ipBlock:
         #     cidr: 172.67.134.225/32
+  networkTools:
+    resources:
+      requests:
+        memory: 0
+        cpu: 0
 
   extraEnv:
     TEST_ENV_FIELDREF_TO_NAMESPACE:

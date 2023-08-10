@@ -8,29 +8,3 @@
 # include this config and then pass --set hub.some-option=null to null it out
 # when it must not be passed, but that still triggers schema validation errors.
 #
-hub:
-  # FIXME: move loadRoles to dev-config.yaml after 2.0.0 is released.
-  loadRoles:
-    test-scoped-access:
-      description: Used to JupyterHub 2.0.0+ RBAC scoped access, currently to the /hub/api/info endpoint via read:hub.
-      scopes: [read:hub]
-      services: [test-with-scoped-access]
-    test-role-with-explicit-name:
-      name: test-role-2
-      description: Access to users' information and group membership
-      scopes: [users, groups]
-      users: [cyclops, gandalf]
-      services: [test]
-      groups: []
-
-singleuser:
-  # FIXME: move resources to dev-config.yaml after 2.0.0 is released.
-  networkPolicy:
-    egressAllowRules:
-      nonPrivateIPs: false
-  networkTools:
-    # FIXME: move resources to dev-config.yaml after 2.0.0 is released.
-    resources:
-      requests:
-        memory: 0
-        cpu: 0
