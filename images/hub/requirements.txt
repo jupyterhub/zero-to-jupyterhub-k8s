@@ -12,7 +12,7 @@ alembic==1.11.2
     # via jupyterhub
 async-generator==1.10
     # via jupyterhub
-async-timeout==4.0.2
+async-timeout==4.0.3
     # via aiohttp
 attrs==23.1.0
     # via
