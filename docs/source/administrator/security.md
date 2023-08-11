@@ -279,23 +279,29 @@ only need one.
 
 (block-metadata-netpol)=
 
-### Block metadata with a NetworkPolicy enforced by a NetworkPolicy controller
+### Block cloud metadata API with a NetworkPolicy enforced by a NetworkPolicy controller
 
-If you have _NetworkPolicy controller_ such as Calico in the Kubernetes cluster,
-it will enforce the NetworkPolicy resource created by this chart
-(`singleuser.networkPolicy.*`) that blocks user access to the metadata server.
-We recommend relying on this approach if you you had a NetworkPolicy controller,
-and then you can disable the other option.
+If you have _NetworkPolicy controller_ such as Calico or Cilium in the
+Kubernetes cluster, it will enforce the NetworkPolicy resource created by this
+chart (`singleuser.networkPolicy.*`) that by default doesn't allow (and
+therefore blocks) user access to the cloud metadata API exposed on a specific IP
+(`169.254.169.254`).
+
+```{note}
+If you have a NetworkPolicy controller, we recommend relying on it and setting
+`singleuser.cloudMetadata.blockWithIptables` to `false`.
+```
 
 (block-metadata-iptables)=
 
-### Block metadata with a privileged initContainer running `iptables`
+### Block cloud metadata API with a privileged initContainer running `iptables`
 
-If you can't rely on the NetworkPolicy approach to block access to the metadata
-server, we suggest relying on this option. When
+If you can't rely on the NetworkPolicy approach to block access to the cloud
+metadata API, we suggest relying on this option instead. When
 `singleuser.cloudMetadata.blockWithIptables` is true as it is by default, an
 `initContainer` is added to the user pods. It will run with elevated privileges
-and use the `iptables` command line tool to block access to the metadata server.
+and use the `iptables` command line tool to block all network access to the
+cloud metadata server.
 
 ```yaml
 # default configuration
@@ -303,6 +309,12 @@ singleuser:
   cloudMetadata:
     blockWithIptables: true
     ip: 169.254.169.254
+```
+
+```{versionchanged} 3.0.0
+This configuration is not allowed to be configured true at the same time as
+[`singleuser.networkPolicy.egressAllowRules.cloudMetadataServer`](schema_singleuser.networkPolicy.egressAllowRules.cloudMetadataServer)
+to avoid an ambiguous configuration.
 ```
 
 (netpol)=

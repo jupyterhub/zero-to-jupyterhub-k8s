@@ -666,6 +666,13 @@ properties:
                   IP ranges but makes an exception for the cloud metadata
                   server, leaving this as the definitive configuration to allow
                   access to the cloud metadata server.
+
+                  ```{versionchanged} 3.0.0
+                  This configuration is not allowed to be configured true at the
+                  same time as
+                  [`singleuser.cloudMetadata.blockWithIptables`](schema_singleuser.cloudMetadata.blockWithIptables)
+                  to avoid an ambiguous configuration.
+                  ```
               dnsPortsCloudMetadataServer:
                 type: boolean
                 description: |
@@ -675,8 +682,10 @@ properties:
                   establish outbound connections to the cloud metadata server
                   via port 53.
 
-                  Relying on this rule should go hand in hand with disabling
-                  [`singleuser.cloudMetadata.blockWithIptables`](schema_singleuser.cloudMetadata.blockWithIptables).
+                  Relying on this rule for the singleuser config should go hand
+                  in hand with disabling
+                  [`singleuser.cloudMetadata.blockWithIptables`](schema_singleuser.cloudMetadata.blockWithIptables)
+                  to avoid an ambiguous configuration.
 
                   Known situations when this rule can be relevant:
 
@@ -2201,6 +2210,7 @@ properties:
       cloudMetadata:
         type: object
         additionalProperties: false
+        required: [blockWithIptables, ip]
         description: |
           Please refer to dedicated section in [the Helm chart
           documentation](block-metadata-iptables) for more information about

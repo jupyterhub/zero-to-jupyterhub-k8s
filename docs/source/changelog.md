@@ -19,9 +19,14 @@ changes in pull requests], this list should be updated.
 This is a beta release for testing before the 3.0.0 release.
 
 ```{warning}
-Since 3.0.0-beta.1 release 2023-06-12, another breaking change was made by
+Since 3.0.0-beta.1 released 2023-06-12, another breaking change was made by
 upgrading OAuthenticator from version 15.1.0 to 16.0.0. Please read to the
-[OAuthenticator changelog]'s breaking changes before upgrading from 3.0.0-beta.1.
+[OAuthenticator changelog]'s breaking changes before upgrading from
+3.0.0-beta.1.
+
+Since 3.0.0-beta.3 released 2023-07-06, default networking rules related to
+establishing connections to DNS ports has changed slightly as documented in the
+breaking changes below.
 ```
 
 #### Breaking changes
@@ -47,6 +52,11 @@ upgrading OAuthenticator from version 15.1.0 to 16.0.0. Please read to the
   - If you are using this JupyterHub Authenticator class, please read to the
     [TmpAuthenticator changelog]'s breaking changes before upgrading this Helm
     chart.
+- Predefined NetworkPolicy egress allow rules
+  [`dnsPortsCloudMetadataServer`](schema_hub.networkPolicy.egressAllowRules.dnsPortsCloudMetadataServer)
+  and
+  [`dnsPortsKubeSystemNamespace`](schema_hub.networkPolicy.egressAllowRules.dnsPortsKubeSystemNamespace)
+  are introduced and enabled by default for the chart's NetworkPolicy resources.
 
 [jupyterhub changelog]: https://jupyterhub.readthedocs.io/en/stable/changelog.html
 [kubespawner changelog]: https://jupyterhub-kubespawner.readthedocs.io/en/stable/changelog.html

@@ -67,12 +67,12 @@
     - ipBlock:
         cidr: 0.0.0.0/0
         except:
-          # As part of this rule, don't:
-          # - allow outbound connections to private IPs
+          # As part of this rule:
+          # - don't allow outbound connections to private IPs
           - 10.0.0.0/8
           - 172.16.0.0/12
           - 192.168.0.0/16
-          # - allow outbound connections to the cloud metadata server
+          # - don't allow outbound connections to the cloud metadata server
           - {{ $root.Values.singleuser.cloudMetadata.ip }}/32
 {{- end }}
 
