@@ -69,7 +69,11 @@ hub:
         targetPort: 8181
         name: fastapi
 
-# Required if service should be publicly accessible
+# The proxy.chp.networkPolicy.egress configuration below is required if the
+# service should be accessible for users. If it shouldn't be, you should instead
+# set the chart configuration services.fastapi.display to false as otherwise
+# JupyterHub will provide a broken link in the Services menu for users to go to
+# /services/fastapi/.
 proxy:
   chp:
     networkPolicy:
