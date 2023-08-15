@@ -183,9 +183,12 @@ singleuser:
 This will request a `2Gi` volume per user. The default requests a `10Gi`
 volume per user.
 
-We recommend you use the [IEC Prefixes](https://en.wikipedia.org/wiki/Binary_prefix#Adoption_by_IEC,_NIST_and_ISO)
-(Ki, Mi, Gi, etc) for specifying how much storage you want. `2Gi` (IEC Prefix) is
-`(2 * 1024 * 1024 * 1024)` bytes, while `2G` (SI Prefix) is `(2 * 1000 * 1000 * 1000)` bytes.
+We recommend you use the [IEC binary prefixes] (Ki, Mi, Gi, etc) for specifying
+how much storage you want. `2Gi` (IEC binary prefix) is `(2 * 1024 * 1024 *
+1024)` bytes, while `2G` (SI decimal prefix) is `(2 * 1000 * 1000 * 1000)`
+bytes.
+
+[iec binary prefixes]: https://en.wikipedia.org/wiki/Binary_prefix
 
 ## Turn off per-user persistent storage
 
