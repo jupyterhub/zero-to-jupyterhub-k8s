@@ -68,4 +68,17 @@ hub:
       - port: 8181
         targetPort: 8181
         name: fastapi
+
+# Required if service should be publicly accessible
+proxy:
+  chp:
+    networkPolicy:
+      egress:
+        - to:
+            - podSelector:
+                matchLabels:
+                  app: jupyterhub
+                  component: hub
+          ports:
+            - port: 8181
 ```
