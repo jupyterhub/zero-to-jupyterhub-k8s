@@ -14,6 +14,25 @@ changes in pull requests], this list should be updated.
 
 ## 3.0
 
+### 3.0.1 - 2023-08-15
+
+#### Bugs fixed
+
+- Update oauthenticator from 16.0.4 to 16.0.5 and tornado from 6.3.2 to 6.3.3 [#3199](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3199) ([@jupyterhub-bot](https://github.com/jupyterhub-bot), [@consideRatio](https://github.com/consideRatio))
+
+#### Documentation improvements
+
+- docs: fix the jupyterhub managed service example's networking rules [#3200](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3200) ([@Ph0tonic](https://github.com/Ph0tonic), [@consideRatio](https://github.com/consideRatio))
+
+#### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2023-08-11&to=2023-08-15&type=c))
+
+@consideRatio ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2023-08-11..2023-08-15&type=Issues)) | @Ph0tonic ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3APh0tonic+updated%3A2023-08-11..2023-08-15&type=Issues))
+
 ### 3.0.0 - 2023-08-11
 
 This release updates JupyterHub itself and several dependencies to a new major
