@@ -119,7 +119,7 @@ jupyter-events==0.7.0
     # via jupyter-server
 jupyter-lsp==2.2.0
     # via jupyterlab
-jupyter-server==2.7.0
+jupyter-server==2.7.1
     # via
     #   jupyter-lsp
     #   jupyterlab
@@ -133,7 +133,7 @@ jupyter-telemetry==0.1.0
     # via jupyterhub
 jupyterhub==4.0.2
     # via -r requirements.in
-jupyterlab==4.0.4
+jupyterlab==4.0.5
     # via -r requirements.in
 jupyterlab-pygments==0.2.2
     # via nbconvert
@@ -292,7 +292,7 @@ terminado==0.17.1
     #   nbclassic
 tinycss2==1.2.1
     # via nbconvert
-tornado==6.3.2
+tornado==6.3.3
     # via
     #   ipykernel
     #   jupyter-client
