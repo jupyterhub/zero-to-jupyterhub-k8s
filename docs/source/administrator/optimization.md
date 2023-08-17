@@ -438,7 +438,7 @@ relevant:
    harder to debug. Various timeouts can be clues to suspect CPU starvation.
 
 1. When scheduling a Pod on a node, the [_effective
-   requests/limits_](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/#resources)
+   requests/limits_](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/#resource-sharing-within-containers)
    are considered. As a Pod's init containers are run in sequence before the
    Pod's main containers are started, the effective requests/limits are
    calculated as the highest of the init containers requests/limits and the sum

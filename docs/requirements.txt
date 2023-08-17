@@ -1,3 +1,8 @@
+# FIXME: sphinx is pinned below 7.2 until pydata-sphinx-theme has a release
+#        newer than 0.13.3. Check for a new release at
+#        https://github.com/pydata/pydata-sphinx-theme/tags and remove the
+#        sphinx entry in this requirements file when its released.
+sphinx<7.2
 chartpress
 myst-parser
 pydata-sphinx-theme

@@ -14,6 +14,16 @@ changes in pull requests], this list should be updated.
 
 ## 3.0
 
+### 3.0.2 - 2023-08-17
+
+Includes a bugfix from the OAuthenticator project for users that have
+`enable_auth_state` enabled with the Google, Globus, or BitBucket OAuthenticator
+class. See the [oauthenticator changelog] for details.
+
+#### Bugs fixed
+
+- Update oauthenticator from 16.0.5 to 16.0.6 [#3203](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3203) ([@jupyterhub-bot](https://github.com/jupyterhub-bot), [@consideRatio](https://github.com/consideRatio))
+
 ### 3.0.1 - 2023-08-15
 
 #### Bugs fixed
