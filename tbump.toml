@@ -5,7 +5,7 @@
 # Config reference: https://github.com/your-tools/tbump#readme
 #
 [version]
-current = "3.0.3"
+current = "3.0.4-0.dev"
 
 # match our prerelease prefixes
 # -alpha.1
