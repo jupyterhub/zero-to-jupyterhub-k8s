@@ -14,7 +14,7 @@ changes in pull requests], this list should be updated.
 
 ## 3.0
 
-### 3.0.3 - 2023-08-22
+### 3.0.3 - 2023-08-29
 
 Includes a bugfix from the OAuthenticator project for users of
 GoogleOAuthenticator with `hosted_domain` and `admin_users` configured. See the
