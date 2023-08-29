@@ -14,6 +14,16 @@ changes in pull requests], this list should be updated.
 
 ## 3.0
 
+### 3.0.3 - 2023-08-22
+
+Includes a bugfix from the OAuthenticator project for users of
+GoogleOAuthenticator with `hosted_domain` and `admin_users` configured. See the
+[oauthenticator changelog] for details.
+
+#### Bugs fixed
+
+- Update oauthenticator from 16.0.6 to 16.0.7 [#3207](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3207) ([@jupyterhub-bot](https://github.com/jupyterhub-bot), [@consideRatio](https://github.com/consideRatio))
+
 ### 3.0.2 - 2023-08-17
 
 Includes a bugfix from the OAuthenticator project for users that have
