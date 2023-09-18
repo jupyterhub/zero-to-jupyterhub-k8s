@@ -2779,11 +2779,11 @@ properties:
         required: [name, namespace]
         properties:
           name:
-            type: string
+            type: [string, "null"]
             description: |
               The name of your Gateway for this route.
           namespace:
-            type: string
+            type: [string, "null"]
             description: |
               The namespace the Gateway is running in.
 
