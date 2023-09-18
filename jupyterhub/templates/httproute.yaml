@@ -8,7 +8,10 @@ spec:
     - kind: Gateway
       name: {{ .Values.httpRoute.Gateway.Name }}
       namespace: {{ .Values.httpRoute.Gateway.Namespace }}
-  hostnames: {{ .Values.httpRoute.Hostnames }}
+  {{- with .Values.httpRoute.Hostnames }}
+  hostnames:
+    {{- . | toYaml | nindent 4 }}
+  {{- end }}
   rules:
     - backendRefs:
         - name: proxy-public
