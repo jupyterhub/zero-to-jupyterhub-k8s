@@ -2790,6 +2790,36 @@ properties:
           See [the Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types)
           for more details about paths.
 
+  httpRoute:
+    type: object
+    additionalProperties: false
+    required: [enabled]
+    properties:
+      enabled:
+        type: boolean
+        description: |
+          Enable the creation of a Kubernetes HTTPRoute and HealthCheckPolicy to proxy-public service.
+
+          HTTPRoute depends on Gateway API is enabled in your cluster.
+
+          See [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/) for more details.
+      hosts:
+        type: array
+        description: |
+          List of hosts to route requests to the proxy.
+      gateway:
+        type: object
+        required: [name, namespace]
+        properties:
+          name:
+            type: string
+            description: |
+              The name of your Gateway for this route.
+          namespace:
+            type: string
+            description: |
+              The namespace the Gateway is running in.
+
   prePuller:
     type: object
     additionalProperties: false
