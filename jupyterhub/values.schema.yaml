@@ -2809,14 +2809,15 @@ properties:
           List of hosts to route requests to the proxy.
       gateway:
         type: object
+        additionalProperties: false
         required: [name, namespace]
         properties:
           name:
-            type: [string, "null"]
+            type: string
             description: |
               The name of your Gateway for this route.
           namespace:
-            type: [string, "null"]
+            type: string
             description: |
               The namespace the Gateway is running in.
 
