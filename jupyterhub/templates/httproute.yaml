@@ -2,7 +2,9 @@
 kind: HTTPRoute
 apiVersion: gateway.networking.k8s.io/v1beta1
 metadata:
-  name: jupyterhub
+  name: {{ include "jupyterhub.httpRoute.fullname" . }}
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
   parentRefs:
     - kind: Gateway
@@ -21,7 +23,9 @@ spec:
 apiVersion: networking.gke.io/v1
 kind: HealthCheckPolicy
 metadata:
-  name: jupyterhub
+  name: {{ include "jupyterhub.httpRoute.fullname" . }}
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
   default:
     config:
