@@ -2770,7 +2770,7 @@ properties:
           HTTPRoute depends on Gateway API is enabled in your cluster.
 
           See [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/) for more details.
-      hosts:
+      hostnames:
         type: array
         description: |
           List of hosts to route requests to the proxy.
