@@ -91,7 +91,7 @@ jupyterhub-nativeauthenticator==1.2.0
     # via -r requirements.in
 jupyterhub-tmpauthenticator==1.0.0
     # via -r requirements.in
-kubernetes-asyncio==25.11.0
+kubernetes-asyncio==26.9.0
     # via jupyterhub-kubespawner
 ldap3==2.9.1
     # via jupyterhub-ldapauthenticator
