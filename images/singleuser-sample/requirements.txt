@@ -105,7 +105,7 @@ jupyter-client==8.3.1
     #   jupyter-server
     #   nbclassic
     #   nbclient
-jupyter-core==5.3.1
+jupyter-core==5.3.2
     # via
     #   ipykernel
     #   jupyter-client
@@ -261,7 +261,7 @@ rpds-py==0.10.3
     # via
     #   jsonschema
     #   referencing
-ruamel-yaml==0.17.32
+ruamel-yaml==0.17.33
     # via jupyter-telemetry
 ruamel-yaml-clib==0.2.7
     # via ruamel-yaml
@@ -302,7 +302,7 @@ tornado==6.3.3
     #   nbclassic
     #   nbgitpuller
     #   terminado
-traitlets==5.10.0
+traitlets==5.10.1
     # via
     #   comm
     #   ipykernel
