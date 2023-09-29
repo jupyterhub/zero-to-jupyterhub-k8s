@@ -12,6 +12,49 @@ changes in pull requests], this list should be updated.
 [development releases]: https://hub.jupyter.org/helm-chart/#development-releases-jupyterhub
 [breaking changes in pull requests]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pulls?q=is%3Apr+is%3Aclosed+label%3Abreaking
 
+## 3.1
+
+### 3.1.0 - 2023-09-29
+
+```{warning} Post-upgrade action recommended
+A bug in KubeSpawner 5.0-6.0 present in z2jh 3.0.0-3.0.3 made user server pods
+risk be orphaned by JupyterHub, making them run indefinitely and cause
+unnecessary cloud costs.
+
+Read more about how to clean up these user server pods in [this forum post].
+
+[this forum post]: https://discourse.jupyter.org/t/how-to-cleanup-orphaned-user-pods-after-bug-in-z2jh-3-0-and-kubespawner-6-0/21677
+```
+
+#### Notable dependencies updated
+
+| Dependency                                                                       | Version in 3.0.3 | Version in 3.1.0 | Changelog link                                                                            | Note                   |
+| -------------------------------------------------------------------------------- | ---------------- | ---------------- | ----------------------------------------------------------------------------------------- | ---------------------- |
+| [kubespawner](https://github.com/jupyterhub/kubespawner)                         | 6.0.0            | 6.1.0            | [Changelog](https://jupyterhub-kubespawner.readthedocs.io/en/stable/changelog.html)       | Run in the `hub` pod   |
+| [oauthenticator](https://github.com/jupyterhub/oauthenticator)                   | 16.0.7           | 16.1.0           | [Changelog](https://oauthenticator.readthedocs.io/en/stable/reference/changelog.html)     | Run in the `hub` pod   |
+| [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy) | 4.5.6            | 4.6.0            | [Changelog](https://github.com/jupyterhub/configurable-http-proxy/blob/HEAD/CHANGELOG.md) | Run in the `proxy` pod |
+
+#### Dependency updates
+
+- Update jupyterhub/configurable-http-proxy version from 4.5.6 to 4.6.0 [#3224](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3224) ([@jupyterhub-bot](https://github.com/jupyterhub-bot), [@manics](https://github.com/manics))
+- Update kube-scheduler version from v1.26.8 to v1.26.9 [#3220](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3220) ([@jupyterhub-bot](https://github.com/jupyterhub-bot), [@manics](https://github.com/manics))
+- Update oauthenticator from 16.0.7 to 16.1.0, and kubespawner from 6.0.0 to 6.1.0 [#3234](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3234) ([@jupyterhub-bot](https://github.com/jupyterhub-bot), [@consideRatio](https://github.com/consideRatio))
+- Update kubernetes_asyncio from 25.11.0 to 26.9.0 [#3233](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3233) ([@jupyterhub-bot](https://github.com/jupyterhub-bot), [@consideRatio](https://github.com/consideRatio))
+- Update kubernetes_asyncio from 24.2.3 to 25.11.0 [#3228](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3228) ([@jupyterhub-bot](https://github.com/jupyterhub-bot), [@consideRatio](https://github.com/consideRatio))
+
+#### Documentation improvements
+
+- docs: fix changelog date entry for 3.0.3 [#3211](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3211) ([@consideRatio](https://github.com/consideRatio))
+
+#### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2023-08-29&to=2023-09-29&type=c))
+
+@consideRatio ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2023-08-29..2023-09-29&type=Issues)) | @manics ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2023-08-29..2023-09-29&type=Issues)) | @shaneknapp ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ashaneknapp+updated%3A2023-08-29..2023-09-29&type=Issues)) | @yuvipanda ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ayuvipanda+updated%3A2023-08-29..2023-09-29&type=Issues))
+
 ## 3.0
 
 ### 3.0.3 - 2023-08-29
