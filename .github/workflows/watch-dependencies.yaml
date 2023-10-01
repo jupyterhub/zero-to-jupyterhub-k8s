@@ -79,7 +79,7 @@ jobs:
             version_patch_regexp_group_suffix: "?"
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Get values.yaml pinned tag of ${{ matrix.registry }}/${{ matrix.repository }}
         id: local
@@ -134,7 +134,7 @@ jobs:
     environment: watch-dependencies
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
           python-version: "3.11"
@@ -206,7 +206,7 @@ jobs:
     environment: watch-dependencies
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Refreeze images/*/requirements.txt based on images/*/requirements.in
         run: ci/refreeze
