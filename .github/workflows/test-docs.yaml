@@ -27,7 +27,7 @@ jobs:
   linkcheck:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           # chartpress, used by docs/conf.py, requires git history to set
           # chart version and image tags correctly
