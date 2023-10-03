@@ -29,9 +29,9 @@ certifi==2023.7.22
     #   requests
 certipy==0.1.3
     # via jupyterhub
-cffi==1.15.1
+cffi==1.16.0
     # via cryptography
-charset-normalizer==3.2.0
+charset-normalizer==3.3.0
     # via
     #   aiohttp
     #   requests
@@ -47,7 +47,7 @@ frozenlist==1.4.0
     # via
     #   aiohttp
     #   aiosignal
-greenlet==2.0.2
+greenlet==3.0.0
     # via sqlalchemy
 idna==3.4
     # via
@@ -91,7 +91,7 @@ jupyterhub-nativeauthenticator==1.2.0
     # via -r requirements.in
 jupyterhub-tmpauthenticator==1.0.0
     # via -r requirements.in
-kubernetes-asyncio==26.9.0
+kubernetes-asyncio==27.6.0
     # via jupyterhub-kubespawner
 ldap3==2.9.1
     # via jupyterhub-ldapauthenticator
@@ -119,7 +119,7 @@ oauthlib==3.2.2
     #   requests-oauthlib
 onetimepass==1.0.1
     # via jupyterhub-nativeauthenticator
-packaging==23.1
+packaging==23.2
     # via jupyterhub
 pamela==1.1.0
     # via jupyterhub
@@ -212,7 +212,7 @@ typing-extensions==4.8.0
     # via
     #   alembic
     #   sqlalchemy
-urllib3==2.0.5
+urllib3==2.0.6
     # via
     #   jupyterhub-kubespawner
     #   kubernetes-asyncio
