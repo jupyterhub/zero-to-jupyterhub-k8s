@@ -212,7 +212,7 @@ typing-extensions==4.8.0
     # via
     #   alembic
     #   sqlalchemy
-urllib3==2.0.5
+urllib3==2.0.6
     # via
     #   jupyterhub-kubespawner
     #   kubernetes-asyncio
