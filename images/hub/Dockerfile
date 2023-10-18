@@ -33,7 +33,7 @@ RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
 
 # The final stage - slim version
 # ------------------------------
-# This stage is built and published as jupyterhub/k8s-hub-slim. It is meant to
+# This stage is built and published as quay.io/jupyterhub/k8s-hub-slim. It is meant to
 # provide no non-essential packages.
 #
 FROM python:3.11-slim-bullseye as slim-stage

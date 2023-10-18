@@ -31,7 +31,7 @@ jobs:
   # JupyterHub organization Helm chart repository.
   #
   # ref: https://github.com/jupyterhub/helm-chart
-  # ref: https://hub.docker.com/orgs/jupyterhub
+  # ref: https://quay.io/organization/jupyterhub
 
   publish:
     runs-on: ubuntu-22.04

@@ -17,10 +17,10 @@ To quickly try out this Docker image on your computer:
 
 ```sh
 # with JupyterLab
-docker run  -it  --rm  -p 8888:8888 jupyterhub/k8s-singleuser-sample:2.0.0  -- jupyter lab  --ip 0.0.0.0
+docker run  -it  --rm  -p 8888:8888 quay.io/jupyterhub/k8s-singleuser-sample:2.0.0  -- jupyter lab  --ip 0.0.0.0
 ```
 
-This image available tags can be found [here](https://hub.docker.com/r/jupyterhub/k8s-singleuser-sample/tags/).
+This image available tags can be found [here](https://quay.io/repository/jupyterhub/k8s-singleuser-sample?tab=tags).
 
 ## In the base-notebook image
 
