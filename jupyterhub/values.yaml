@@ -344,7 +344,7 @@ singleuser:
     preferred: []
   networkTools:
     image:
-      name: jupyterhub/k8s-network-tools
+      name: quay.io/jupyterhub/k8s-network-tools
       tag: "set-by-chartpress"
       pullPolicy:
       pullSecrets: []
