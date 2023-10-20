@@ -45,8 +45,8 @@ RUN adduser \
         ${NB_USER}
 
 RUN apt-get update \
- && apt-get upgrade -y \
- && apt-get install -y --no-install-recommends \
+ && apt-get upgrade --yes \
+ && apt-get install --yes --no-install-recommends \
         ca-certificates \
         dnsutils \
         iputils-ping \
