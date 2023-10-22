@@ -278,7 +278,6 @@ jobs:
       - name: "(Upgrade) Install ${{ matrix.upgrade-from }} chart"
         if: matrix.test == 'upgrade'
         run: |
-          . ./ci/common
           # NOTE: We change the directory so jupyterhub the chart name won't be
           #       misunderstood as the local folder name.
           #
