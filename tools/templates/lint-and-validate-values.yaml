@@ -364,7 +364,7 @@ singleuser:
             display_name: "image ZZZ tag"
             kubespawner_override:
               image: "ZZZ:{value}"
- nodeSelector:
+  nodeSelector:
     mock-node-selector: mock
   extraTolerations:
     - effect: NoSchedule
