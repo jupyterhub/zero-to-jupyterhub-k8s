@@ -20,7 +20,7 @@ and us maintainers don't have to apply for 'sponsored OSS Project' from docker e
 should have no material impact on your experience.
 
 For the benefit of people running older versions of z2jh and are throttled by dockerhub,
-we have actually copied all our *released* images from dockerhub to quay.io as well.
+we have actually copied all our _released_ images from dockerhub to quay.io as well.
 So you can opt in to using the images from quay.io with the following config:
 
 ```yaml
@@ -33,7 +33,7 @@ proxy:
       name: quay.io/jupyterhub/configurable-http-proxy
   secretSync:
     image:
-        name: quay.io/jupyterhub/k8s-secret-sync
+      name: quay.io/jupyterhub/k8s-secret-sync
 singleuser:
   networkTools:
     image:
@@ -45,8 +45,8 @@ prePuller:
 ```
 
 You don't have to explicitly specify the tag, as the existing tags
-will work. Note that this **only** works for *released* versions of
-z2jh - if you are using a *dev* version of z2jh, this will not work.
+will work. Note that this **only** works for _released_ versions of
+z2jh - if you are using a _dev_ version of z2jh, this will not work.
 
 ## 3.1
 
