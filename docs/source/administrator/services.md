@@ -18,8 +18,9 @@ In the following snippet, I'm using a custom image that copies over the applicat
 
 ```Dockerfile
 # Dockerfile
-# 2.0.0 is latest stable release at the time of this writing
-FROM quay.io/jupyterhub/k8s-hub:2.0.0
+# 3.1.0 is latest stable release at the time of this writing
+# Find all tags in https://quay.io/repository/jupyterhub/k8s-hub?tab=tags
+FROM quay.io/jupyterhub/k8s-hub:3.1.0
 
 # Depending on version, the k8s-hub image may have installed
 # pip packages as root, forcing you to install as root as well
