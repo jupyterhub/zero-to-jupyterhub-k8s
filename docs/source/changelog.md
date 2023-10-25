@@ -19,7 +19,7 @@ to [quay.io](https://quay.io). This move is to ensure our users are not [throttl
 and us maintainers don't have to apply for 'sponsored OSS Project' from docker each year. This
 should have no material impact on your experience.
 
-For the benefit of people running older versions of z2jh and are throttled by DockerHub,
+For the benefit of people running older versions of z2jh and are throttled by dockerhub,
 we have actually copied all our *released* images from dockerhub to quay.io as well.
 So you can opt in to using the images from quay.io with the following config:
 
