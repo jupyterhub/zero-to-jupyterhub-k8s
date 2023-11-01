@@ -278,9 +278,16 @@ jobs:
       - name: "(Upgrade) Install ${{ matrix.upgrade-from }} chart"
         if: matrix.test == 'upgrade'
         run: |
-          . ./ci/common
-          if [ ${{ matrix.upgrade-from }} = stable -o ${{ matrix.upgrade-from }} = dev ]; then
-            UPGRADE_FROM_VERSION=$(curl -sSL https://hub.jupyter.org/helm-chart/info.json | jq -er '.jupyterhub.${{ matrix.upgrade-from }}')
+          # NOTE: We change the directory so jupyterhub the chart name won't be
+          #       misunderstood as the local folder name.
+          #
+          #       https://github.com/helm/helm/issues/9244
+          cd ci
+
+          if [ ${{ matrix.upgrade-from }} = stable ]; then
+            UPGRADE_FROM_VERSION=$(helm show chart --repo=https://hub.jupyter.org/helm-chart/ jupyterhub | yq e '.version' -)
+          elif [ ${{ matrix.upgrade-from }} = dev ]; then
+            UPGRADE_FROM_VERSION=$(helm show chart --devel --repo=https://hub.jupyter.org/helm-chart/ jupyterhub | yq e '.version' -)
           else
             UPGRADE_FROM_VERSION=${{ matrix.upgrade-from }}
           fi
@@ -289,11 +296,6 @@ jobs:
           echo ""
           echo "Installing already released jupyterhub version $UPGRADE_FROM_VERSION"
 
-          # FIXME: We change the directory so jupyterhub the chart name won't be
-          #        misunderstood as the local folder name.
-          #
-          #        https://github.com/helm/helm/issues/9244
-          cd ci
           helm install jupyterhub --repo https://hub.jupyter.org/helm-chart/ jupyterhub --values ../dev-config.yaml --version=$UPGRADE_FROM_VERSION ${{ matrix.upgrade-from-extra-args }}
 
       - name: "(Upgrade) Install helm diff"
