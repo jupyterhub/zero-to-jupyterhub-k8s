@@ -14,14 +14,14 @@ changes in pull requests], this list should be updated.
 
 ### Default image registry moved to [quay.io](https://quay.io)
 
-We have moved the registry where we publish our docker images from [dockerhub](https://hub.docker.com)
-to [quay.io](https://quay.io). This move is to ensure our users are not [throttled by dockerhub](https://docs.docker.com/docker-hub/download-rate-limit/),
+We have moved the registry where we publish our docker images from [Docker Hub](https://hub.docker.com)
+to [Quay.io](https://quay.io). This move is to ensure our users are not [throttled by Docker Hub](https://docs.docker.com/docker-hub/download-rate-limit/),
 and us maintainers don't have to apply for 'sponsored OSS Project' from docker each year. This
 should have no material impact on your experience.
 
 For the benefit of people running older versions of z2jh and are throttled by dockerhub,
-we have actually copied all our _released_ images from dockerhub to quay.io as well.
-So you can opt in to using the images from quay.io with the following config:
+we have actually copied all our _released_ images from Docker Hub to Quay.io as well.
+So you can opt in to using the images from Quay.io with the following config:
 
 ```yaml
 hub:
