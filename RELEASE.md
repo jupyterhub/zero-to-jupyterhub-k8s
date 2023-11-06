@@ -28,7 +28,7 @@ Also consider nudging dependent projects in the JupyterHub GitHub organization f
 These images version/tags are set in [values.yaml](jupyterhub/values.yaml), consider bumping the version of these as well.
 
 - [ ] [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy)
-  - [Available image tags](https://hub.docker.com/r/jupyterhub/configurable-http-proxy/tags)
+  - [Available image tags](https://quay.io/repository/jupyterhub/configurable-http-proxy?tab=tags)
   - values.yaml entry: `proxy.chp.image`
 - [ ] [traefik/traefik](https://github.com/traefik/traefik)
   - [Available image tags](https://hub.docker.com/_/traefik?tab=tags)

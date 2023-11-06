@@ -83,7 +83,7 @@ hub:
   extraVolumes: []
   extraVolumeMounts: []
   image:
-    name: jupyterhub/k8s-hub
+    name: quay.io/jupyterhub/k8s-hub
     tag: "set-by-chartpress"
     pullPolicy:
     pullSecrets: []
@@ -201,7 +201,7 @@ proxy:
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
     image:
-      name: jupyterhub/configurable-http-proxy
+      name: quay.io/jupyterhub/configurable-http-proxy
       # tag is automatically bumped to new patch versions by the
       # watch-dependencies.yaml workflow.
       #
@@ -304,7 +304,7 @@ proxy:
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
     image:
-      name: jupyterhub/k8s-secret-sync
+      name: quay.io/jupyterhub/k8s-secret-sync
       tag: "set-by-chartpress"
       pullPolicy:
       pullSecrets: []
@@ -344,7 +344,7 @@ singleuser:
     preferred: []
   networkTools:
     image:
-      name: jupyterhub/k8s-network-tools
+      name: quay.io/jupyterhub/k8s-network-tools
       tag: "set-by-chartpress"
       pullPolicy:
       pullSecrets: []
@@ -396,7 +396,7 @@ singleuser:
       volumeNameTemplate: volume-{username}{servername}
       storageAccessModes: [ReadWriteOnce]
   image:
-    name: jupyterhub/k8s-singleuser-sample
+    name: quay.io/jupyterhub/k8s-singleuser-sample
     tag: "set-by-chartpress"
     pullPolicy:
     pullSecrets: []
@@ -605,7 +605,7 @@ prePuller:
     pullOnlyOnChanges: true
     # image and the configuration below relates to the hook-image-awaiter Job
     image:
-      name: jupyterhub/k8s-image-awaiter
+      name: quay.io/jupyterhub/k8s-image-awaiter
       tag: "set-by-chartpress"
       pullPolicy:
       pullSecrets: []

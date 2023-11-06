@@ -8,7 +8,7 @@ Services can be run [externally](https://jupyterhub.readthedocs.io/en/stable/get
 
 ## Hub-managed services in z2jh
 
-A Hub-managed service will run in the same container/pod as the Hub itself. First, you'll need to install or copy the appropriate files for the service into your Hub image, either by creating a custom image derived from [`jupyterhub/k8s-hub`](https://hub.docker.com/r/jupyterhub/k8s-hub) or the [hub.extraFiles](schema_hub.extraFiles) configuration. Keep in mind that your Hub container may need to install dependency libraries like flask or fastapi, depending on the service. In those cases, you'll need a custom image.
+A Hub-managed service will run in the same container/pod as the Hub itself. First, you'll need to install or copy the appropriate files for the service into your Hub image, either by creating a custom image derived from [`jupyterhub/k8s-hub`](https://quay.io/repository/jupyterhub/k8s-hub) or the [hub.extraFiles](schema_hub.extraFiles) configuration. Keep in mind that your Hub container may need to install dependency libraries like flask or fastapi, depending on the service. In those cases, you'll need a custom image.
 
 In addition to the code for the service, you need to modify the Hub Kubernetes Service object to include [multiple ports](https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services), and update the Hub Network Policy. If you want to allow access from all sources, you can use [hub.networkPolicy.allowedIngressPorts](schema_hub.networkPolicy.allowedIngressPorts). Otherwise if you want to more precisely control access, you can use [hub.networkPolicy.ingress](schema_hub.networkPolicy.ingress).
 
@@ -18,8 +18,9 @@ In the following snippet, I'm using a custom image that copies over the applicat
 
 ```Dockerfile
 # Dockerfile
-# 2.0.0 is latest stable release at the time of this writing
-FROM jupyterhub/k8s-hub:2.0.0
+# 3.1.0 is latest stable release at the time of this writing
+# Find all tags in https://quay.io/repository/jupyterhub/k8s-hub?tab=tags
+FROM quay.io/jupyterhub/k8s-hub:3.1.0
 
 # Depending on version, the k8s-hub image may have installed
 # pip packages as root, forcing you to install as root as well

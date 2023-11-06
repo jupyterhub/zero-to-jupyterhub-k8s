@@ -72,9 +72,7 @@ to configure JupyterHub to build off of this image:
 4. **Get credentials for a docker repository.**
 
    The image you will build for your JupyterHub must be made available by being
-   published to some container registry. You could for example use [Docker Hub](https://hub.docker.com/) or [Google Container Registry](https://cloud.google.com/artifact-registry).
-
-   <!-- FIXME: We link to "google container registry", but its deprecated and they now redirect and promote artifact registry with small differences -->
+   published to some container registry. You could for example use [quay.io](https://quay.io) or [Docker Hub](https://hub.docker.com/).
 
    In the next step, you need an image reference for you and others to find your
    image with.
@@ -85,10 +83,10 @@ to configure JupyterHub to build off of this image:
    <dockerhub-username>/<image-name>:<image-tag>
    ```
 
-   An image reference on Google Container Registry:
+   An image reference on quay.io:
 
    ```
-   gcr.io/<cloud-project-name>/<image-name>:<image-tag>
+   quay.io/<quay-username>/<image-name>:<image-tag>
    ```
 
    - Your image name can be anything memorable.

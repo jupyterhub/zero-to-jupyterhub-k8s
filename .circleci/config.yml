@@ -71,7 +71,15 @@ jobs:
             export KUBECONFIG="$HOME/.kube/config"
             export HUB_URL=http://localhost:30080
             . ./ci/common
-            pytest --verbose --color=yes ./tests -m 'not netpol'
+            # Print out logs & definition info from all pods if the tests fail
+            pytest --verbose --color=yes ./tests -m 'not netpol' || \
+               kubectl get pod -o name | \
+               xargs -I {} /bin/bash -c \
+                "echo Logs for {} && \
+                 kubectl get {} -o yaml && \
+                 kubectl describe {} && \
+                 kubectl logs --all-containers {} && \
+                 echo --------------------------------"
           name: Run tests
 
       - run:

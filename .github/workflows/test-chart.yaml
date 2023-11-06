@@ -134,7 +134,7 @@ jobs:
           - k3s-channel: stable # also test hub-slim, and prePuller.hook
             test: install
             local-chart-extra-args: >-
-              --set hub.image.name=jupyterhub/k8s-hub-slim
+              --set hub.image.name=quay.io/jupyterhub/k8s-hub-slim
               --set prePuller.hook.enabled=true
               --set prePuller.hook.pullOnlyOnChanges=true
           - k3s-channel: v1.26 # also test hub.existingSecret
