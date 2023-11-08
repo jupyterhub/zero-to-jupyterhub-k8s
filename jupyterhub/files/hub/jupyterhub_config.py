@@ -335,6 +335,7 @@ c.KubeSpawner.volume_mounts.extend(
 
 c.JupyterHub.services = []
 c.JupyterHub.load_roles = []
+c.JupyterHub.custom_scopes = get_config("hub.customScopes", {})
 
 # jupyterhub-idle-culler's permissions are scoped to what it needs only, see
 # https://github.com/jupyterhub/jupyterhub-idle-culler#permissions.

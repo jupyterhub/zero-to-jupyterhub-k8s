@@ -161,6 +161,12 @@ hub:
       oauth_roles: [dummy]
       info:
         key1: value1
+  customScopes:
+    "custom:myservice:read":
+      description: read-only access to myservice
+    "custom:myservice:write":
+      description: write access to myservice
+      subscopes: ["custom:myservice:read"]
   loadRoles:
     test-role-1:
       name: test-role-1

@@ -95,6 +95,7 @@ hub:
     runAsGroup: 1000
     allowPrivilegeEscalation: false
   lifecycle: {}
+  customScopes: {}
   loadRoles: {}
   services: {}
   pdb:

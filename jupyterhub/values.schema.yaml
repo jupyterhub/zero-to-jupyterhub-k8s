@@ -1410,6 +1410,31 @@ properties:
               An alias for api_token provided for backward compatibility by
               the JupyterHub Helm chart that will be transformed to
               api_token.
+      customScopes:
+        type: object
+        additionalProperties: true
+        description: |
+          This is where you should define JupyterHub custom scopes and apply them to
+          JupyterHub users, groups, and services to grant them additional
+          permissions as defined in JupyterHub's RBAC system.
+
+          Complement this documentation with [JupyterHub's
+          documentation](https://jupyterhub.readthedocs.io/en/stable/rbac/scopes.html#custom-scopes)
+          about `custom_scopes`.
+
+          ```yaml
+          hub:
+            customScopes:
+              "custom:myservice:read":
+                description: read-only access to myservice
+
+              "custom:myservice:write":
+                description: write access to myservice 
+                subscopes: ["custom:myservice:read"]
+          ```
+
+          When configuring JupyterHub custom scopes via this Helm chart, the `name`
+          field can be omitted as it can be implied by the dictionary key.
       loadRoles:
         type: object
         additionalProperties: true
