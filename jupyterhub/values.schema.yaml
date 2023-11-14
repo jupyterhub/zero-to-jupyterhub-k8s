@@ -1432,9 +1432,6 @@ properties:
                 description: write access to myservice 
                 subscopes: ["custom:myservice:read"]
           ```
-
-          When configuring JupyterHub custom scopes via this Helm chart, the `name`
-          field can be omitted as it can be implied by the dictionary key.
       loadRoles:
         type: object
         additionalProperties: true
