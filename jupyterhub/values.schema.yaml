@@ -2850,9 +2850,12 @@ properties:
       pullProfileListImages:
         type: boolean
         description: |
-          The singleuser.profileList configuration can let the user choose an
-          image through the selection of a profile. This option determines if
-          those images will be pulled, both by the hook and continuous pullers.
+          The singleuser.profileList configuration can provide a selection of
+          images. This option determines if all images identified there should
+          be pulled, both by the hook and continuous pullers.
+
+          Images are looked for under `kubespawner_override`, and also
+          `profile_options.choices.kubespawner_override` since version 3.2.0.
 
           The reason to disable this, is that if you have for example 10 images
           which start pulling in order from 1 to 10, a user that arrives and

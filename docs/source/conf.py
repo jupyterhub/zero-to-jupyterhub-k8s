@@ -175,6 +175,7 @@ with open("resources/reference.md", "w") as f:
 intersphinx_mapping = {
     "jupyterhub": ("https://jupyterhub.readthedocs.io/en/stable/", None),
     "oauthenticator": ("https://oauthenticator.readthedocs.io/en/stable/", None),
+    "kubespawner": ("https://jupyterhub-kubespawner.readthedocs.io/en/stable/", None),
 }
 
 # intersphinx_disabled_reftypes set based on recommendation in
