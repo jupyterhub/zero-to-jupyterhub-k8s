@@ -1,12 +1,14 @@
 (minikube-k8s)
 
-# Kubernetes on minikube (for trial and development only)
+# Kubernetes on minikube (for learning and development only)
 
-[minikube](minikube) can setup a Kubernetes cluster on a single computer. Using minikube can be suitable trial for new Kubernetes users and for development purposes, but its not meant to be used for production purposes.
+[minikube] can setup a Kubernetes cluster on a single computer. minikube be suitable in order to learn about Kubernetes and to develop and test changes, but its not meant to be used for production purposes.
 
 ```{important}
-The Zero to JupyterHub guide assumes you're using a managed Kubernetes service with one of the main cloud platforms and **[minikube](minikube) is not officially supported**. You may be able to get help on the [Jupyter community forum](https://discourse.jupyter.org/c/jupyterhub/10).
+The Zero to JupyterHub guide assumes you're using a managed Kubernetes service with one of the main cloud platforms and **[minikube] is not officially supported**. You may be able to get help on the [Jupyter community forum](https://discourse.jupyter.org/c/jupyterhub/10).
 ```
+
+[minikube]: https://minikube.sigs.k8s.io/docs/
 
 ## Kubernetes cluster requirements
 
@@ -34,7 +36,7 @@ minikube start \
 
 To test if your cluster is initialized, run:
 
-```
+```bash
 kubectl get node
 ```
 
@@ -42,5 +44,3 @@ The response should list two running nodes (or however many nodes you set with `
 
 Congrats. Now that you have your Kubernetes cluster running, it's time to
 begin {ref}`setup-helm`.
-
-[minikube]: https://minikube.sigs.k8s.io/docs/
