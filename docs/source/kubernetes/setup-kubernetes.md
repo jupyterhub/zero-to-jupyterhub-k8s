@@ -11,7 +11,7 @@ Choose one option and proceed.
 ```{toctree}
 :titlesonly:
 
-step-zero-minikube
+minikube/step-zero-minikube
 google/step-zero-gcp
 microsoft/step-zero-azure
 amazon/step-zero-aws

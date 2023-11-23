@@ -1,8 +1,8 @@
 (minikube-k8s)
 
-# Kubernetes on minikube (for development only)
+# Kubernetes on minikube (for trial and development only)
 
-[minikube](minikube) is a implementation of Kubernetes as a local cluster primarily target to the development of applications.
+[minikube](minikube) can setup a Kubernetes cluster on a single computer. Using minikube can be suitable trial for new Kubernetes users and for development purposes, but its not meant to be used for production purposes.
 
 ```{important}
 The Zero to JupyterHub guide assumes you're using a managed Kubernetes service with one of the main cloud platforms and **[minikube](minikube) is not officially supported**. You may be able to get help on the [Jupyter community forum](https://discourse.jupyter.org/c/jupyterhub/10).
@@ -25,7 +25,7 @@ From a terminal, run
 
 ```bash
 minikube start \
---kubernetes-version v1.26.1 \
+--kubernetes-version stable \
 --nodes 2 \
 --cpus 2 \
 --memory 2000 \
