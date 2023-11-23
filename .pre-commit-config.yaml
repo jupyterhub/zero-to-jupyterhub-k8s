@@ -16,7 +16,7 @@
 #
 #   https://github.com/koalaman/shellcheck#installing
 #
-#   pre-commit run --config .pre-commit-config-shellcheck.yaml --all-files
+#   pre-commit run --hook-stage=manual shellcheck --all-files
 #
 repos:
   # Autoformat: Python code, syntax patterns are modernized
@@ -37,6 +37,7 @@ repos:
           - --target-version=py39
           - --target-version=py310
           - --target-version=py311
+          - --target-version=py312
 
   # Autoformat: Python code
   - repo: https://github.com/pycqa/isort
