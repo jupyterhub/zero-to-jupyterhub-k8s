@@ -344,6 +344,26 @@ singleuser:
         mock description 2
       kubespawner_override:
         image: XYZ:XYZ
+    - display_name: "mock display name 3"
+      description: |
+        mock description 3
+      profile_options:
+        image:
+          display_name: Image
+          choices:
+            image1:
+              display_name: "image 1"
+              kubespawner_override:
+                image: XXX:XXX
+            image2:
+              display_name: "image 2"
+              kubespawner_override:
+                image: YYY:YYY
+          unlisted_choice:
+            enabled: true
+            display_name: "image ZZZ tag"
+            kubespawner_override:
+              image: "ZZZ:{value}"
   nodeSelector:
     mock-node-selector: mock
   extraTolerations:

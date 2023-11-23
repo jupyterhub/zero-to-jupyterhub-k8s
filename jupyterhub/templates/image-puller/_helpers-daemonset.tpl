@@ -134,6 +134,7 @@ spec:
         {{- /* --- Conditionally pull profileList images --- */}}
         {{- if .Values.prePuller.pullProfileListImages }}
         {{- range $k, $container := .Values.singleuser.profileList }}
+        {{- /* profile's kubespawner_override */}}
         {{- if $container.kubespawner_override }}
         {{- if $container.kubespawner_override.image }}
         - name: image-pull-singleuser-profilelist-{{ $k }}
@@ -150,6 +151,33 @@ spec:
           securityContext:
             {{- . | toYaml | nindent 12 }}
           {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- /* kubespawner_override in profile's profile_options */}}
+        {{- if $container.profile_options }}
+        {{- range $option, $option_spec := $container.profile_options }}
+        {{- if $option_spec.choices }}
+        {{- range $choice, $choice_spec := $option_spec.choices }}
+        {{- if $choice_spec.kubespawner_override }}
+        {{- if $choice_spec.kubespawner_override.image }}
+        - name: image-pull-profile-{{ $k }}-option-{{ $option }}-{{ $choice }}
+          image: {{ $choice_spec.kubespawner_override.image }}
+          command:
+            - /bin/sh
+            - -c
+            - echo "Pulling complete"
+          {{- with $.Values.prePuller.resources }}
+          resources:
+            {{- . | toYaml | nindent 12 }}
+          {{- end }}
+          {{- with $.Values.prePuller.containerSecurityContext }}
+          securityContext:
+            {{- . | toYaml | nindent 12 }}
+        {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- end }}
+        {{- end }}
         {{- end }}
         {{- end }}
         {{- end }}
