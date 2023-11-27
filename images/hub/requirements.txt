@@ -105,7 +105,7 @@ mwoauth==0.4.0
     # via -r requirements.in
 nullauthenticator==1.0.0
     # via -r requirements.in
-oauthenticator==16.2.0
+oauthenticator==16.2.1
     # via -r requirements.in
 oauthlib==3.2.2
     # via
