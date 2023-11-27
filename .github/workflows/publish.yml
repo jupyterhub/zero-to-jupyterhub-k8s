@@ -109,6 +109,7 @@ jobs:
         if: steps.publishing.outputs.publishing
         run: |
           docker login -u "${{ secrets.QUAY_USERNAME }}" -p "${{ secrets.QUAY_PASSWORD }}" quay.io
+          docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}" docker.io
 
       - name: Configure a git user
         # Having a user.email and user.name configured with git is required to
