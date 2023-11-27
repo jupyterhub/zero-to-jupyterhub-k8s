@@ -12,7 +12,19 @@ changes in pull requests], this list should be updated.
 [development releases]: https://hub.jupyter.org/helm-chart/#development-releases-jupyterhub
 [breaking changes in pull requests]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pulls?q=is%3Apr+is%3Aclosed+label%3Abreaking
 
-### Default image registry changed to Quay.io
+## 3.2
+
+### 3.2.0 - 2023-11-27
+
+```{warning} If you are upgrading from 3.0.x
+A bug in KubeSpawner 5.0-6.0 present in z2jh 3.0.0-3.0.3 made user server pods
+risk be orphaned by JupyterHub, making them run indefinitely and cause
+unnecessary cloud costs.
+
+Read more about how to clean up these user server pods in [this forum post].
+```
+
+#### Default image registry changed to Quay.io
 
 We now publish the chart's docker images to both [Quay.io] and [Docker Hub] and
 the chart is from now configured to use the images at Quay.io by default.
@@ -27,6 +39,37 @@ by Docker Hub in the future, something we need to apply for each year.
 [docker hub rate limit]: https://docs.docker.com/docker-hub/download-rate-limit/
 [jupyterhub organization on docker hub]: https://hub.docker.com/u/jupyterhub
 [quay.io]: https://quay.io
+
+#### Enhancements made
+
+- Pull images from `singleuser.profileList` found in `profile_options.choices` [#3217](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3217) ([@manfuin](https://github.com/manfuin), [@consideRatio](https://github.com/consideRatio), [@yuvipanda](https://github.com/yuvipanda))
+
+#### Maintenance and upkeep improvements
+
+- Update jupyterhub/configurable-http-proxy version from 4.6.0 to 4.6.1 [#3275](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3275) ([@jupyterhub-bot](https://github.com/jupyterhub-bot), [@consideRatio](https://github.com/consideRatio))
+- Publish to Docker Hub alongside Quay.io [#3272](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3272) ([@consideRatio](https://github.com/consideRatio), [@minrk](https://github.com/minrk))
+- Update oauthenticator from 16.1.1 to 16.2.0, kubespawner from 6.1.0 to 6.2.0, and kubernetes-asyncio from 27.6.0 to 28.2.1 [#3270](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3270) ([@jupyterhub-bot](https://github.com/jupyterhub-bot), [@consideRatio](https://github.com/consideRatio))
+- Update kube-scheduler version from v1.26.9 to v1.26.11 [#3269](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3269), [#3255](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3255) ([@jupyterhub-bot](https://github.com/jupyterhub-bot), [@consideRatio](https://github.com/consideRatio))
+- Use quay.io as source of docker images [#3254](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3254) ([@yuvipanda](https://github.com/yuvipanda), [@minrk](https://github.com/minrk), [@manics](https://github.com/manics), [@mathbunnyru](https://github.com/mathbunnyru))
+- Update library/traefik version from v2.10.4 to v2.10.5 [#3248](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3248) ([@jupyterhub-bot](https://github.com/jupyterhub-bot), [@consideRatio](https://github.com/consideRatio))
+
+#### Documentation improvements
+
+- Document k8s cluster setup using minikube (for learning and development) [#3260](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3260) ([@rgaiacs](https://github.com/rgaiacs), [@consideRatio](https://github.com/consideRatio))
+- Move note box to before list of cloud providers. [#3259](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3259) ([@rgaiacs](https://github.com/rgaiacs), [@consideRatio](https://github.com/consideRatio))
+
+#### Continuous integration improvements
+
+- ci: fetch stable/dev releases using helm show to avoid cache issues [#3256](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3256) ([@consideRatio](https://github.com/consideRatio))
+
+#### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2023-09-29&to=2023-11-27&type=c))
+
+@consideRatio ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2023-09-29..2023-11-27&type=Issues)) | @elferherrera ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aelferherrera+updated%3A2023-09-29..2023-11-27&type=Issues)) | @jupyterhub-bot ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajupyterhub-bot+updated%3A2023-09-29..2023-11-27&type=Issues)) | @manfuin ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanfuin+updated%3A2023-09-29..2023-11-27&type=Issues)) | @manics ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2023-09-29..2023-11-27&type=Issues)) | @mathbunnyru ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amathbunnyru+updated%3A2023-09-29..2023-11-27&type=Issues)) | @minrk ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aminrk+updated%3A2023-09-29..2023-11-27&type=Issues)) | @rgaiacs ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Argaiacs+updated%3A2023-09-29..2023-11-27&type=Issues)) | @vizeit ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Avizeit+updated%3A2023-09-29..2023-11-27&type=Issues)) | @yuvipanda ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ayuvipanda+updated%3A2023-09-29..2023-11-27&type=Issues))
 
 ## 3.1
 
