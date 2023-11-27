@@ -14,6 +14,12 @@ changes in pull requests], this list should be updated.
 
 ## 3.2
 
+### 3.2.1 - 2023-11-27
+
+#### Maintenance and upkeep improvements
+
+- Update oauthenticator from 16.2.0 to 16.2.1 [#3278](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3278) ([@consideRatio](https://github.com/consideRatio))
+
 ### 3.2.0 - 2023-11-27
 
 ```{warning} If you are upgrading from 3.0.x
