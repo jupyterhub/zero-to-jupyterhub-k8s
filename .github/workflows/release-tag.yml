@@ -15,7 +15,7 @@ jobs:
     steps:
       # https://github.com/actions/github-script
       # https://octokit.github.io/rest.js/v18#repos-create-release
-      - uses: actions/github-script@v6
+      - uses: actions/github-script@v7
         with:
           script: |
             if (!context.ref.startsWith('refs/tags/')) {
