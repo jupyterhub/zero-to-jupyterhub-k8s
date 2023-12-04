@@ -29,7 +29,11 @@ data:
     {{- end }}
     kind: KubeSchedulerConfiguration
     leaderElection:
+      {{- if semverCompare ">=1.27.0-0" .Capabilities.KubeVersion.Version }}
+      resourceLock: leases
+      {{- else }}
       resourceLock: endpointsleases
+      {{- end }}
       resourceName: {{ include "jupyterhub.user-scheduler-lock.fullname" . }}
       resourceNamespace: "{{ .Release.Namespace }}"
     profiles:
