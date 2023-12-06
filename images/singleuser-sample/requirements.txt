@@ -44,7 +44,7 @@ charset-normalizer==3.3.2
     # via requests
 comm==0.2.0
     # via ipykernel
-cryptography==41.0.5
+cryptography==41.0.6
     # via pyopenssl
 debugpy==1.8.0
     # via ipykernel
