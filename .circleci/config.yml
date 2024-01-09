@@ -1,62 +1,60 @@
+# We use CircleCI to run a basic test for arm64.
+#
+# To reduce the complexity, we let this test verify our built images works with
+# arm64, but doesn't test the acquisition of HTTPS certificates (because it
+# requires a ACME server) or enforcement of the chart's NetworkPolicy resources
+# (because it requires Calico or similar to do it robustly).
+#
 version: 2.1
 
 orbs:
-  python: circleci/python@0.2.1
+  python: circleci/python@2.1.1
 
 jobs:
-  # Testing on ARM64
-  # https://circleci.com/docs/2.0/arm-resources/#using-arm-resources
+  # Testing on arm64
+  # https://circleci.com/docs/using-arm/#using-arm-resources
   test-arm:
     machine:
-      image: ubuntu-2004:2022.04.1
+      image: ubuntu-2204:current
     resource_class: arm.medium
     steps:
       - checkout
 
+      # The k3s setup should be kept similar to how we do it in
+      # https://github.com/jupyterhub/action-k3s-helm.
       - run:
-          command: uname -a
-          name: Check architecture
-
-      - run:
-          # NOTE: we can't use k3s 1.24 and --docker unless we also install for
-          #       example cri-dockerd as done in
-          #       https://github.com/jupyterhub/action-k3s-helm.
-          #
-          # NOTE: we declare --egress-selector-mode=disabled to workaround
-          #       intermittent issues in k3s introduced as a regression in k3s
-          #       1.22.10, 1.23.7, and 1.24.0. This is tracked in
-          #       https://github.com/k3s-io/k3s/issues/5633.
-          #
+          name: Setup k3s
           command: >-
             curl -sfL https://get.k3s.io |
-            INSTALL_K3S_CHANNEL=v1.23 sh -s -
+            INSTALL_K3S_CHANNEL=latest sh -s -
             --disable metrics-server
             --disable traefik
+            --disable-network-policy
             --docker
             --egress-selector-mode=disabled
-          name: Install K3S
 
       - run:
+          name: Prepare a kubeconfig in ~/.kube/config
           command: |
             mkdir -p ~/.kube
             sudo cat /etc/rancher/k3s/k3s.yaml > "$HOME/.kube/config"
             chmod 600 "$HOME/.kube/config"
-          name: Prepare a kubeconfig in ~/.kube/config
 
       - run:
+          name: Install dependencies
           command: |
             . ci/common
             setup_helm
             pip3 install --no-cache-dir -r dev-requirements.txt
-          name: Install dependencies
 
       - run:
+          name: Run chartpress
           command: |
             export DOCKER_BUILDKIT=1
             chartpress
-          name: Run chartpress
 
       - run:
+          name: Install local chart
           command: |
             export KUBECONFIG="$HOME/.kube/config"
             helm upgrade --install jupyterhub ./jupyterhub \
@@ -64,9 +62,9 @@ jobs:
                 --values dev-config.yaml \
                 --values dev-config-arm.yaml \
                 --values dev-config-local-chart-extra-config.yaml
-          name: Install local chart
 
       - run:
+          name: Run tests
           command: |
             export KUBECONFIG="$HOME/.kube/config"
             export HUB_URL=http://localhost:30080
@@ -80,19 +78,30 @@ jobs:
                  kubectl describe {} && \
                  kubectl logs --all-containers {} && \
                  echo --------------------------------"
-          name: Run tests
+
+      - run:
+          name: k3s.service status
+          when: on_fail
+          command: |
+            systemctl status --no-pager --full k3s.service || true
+
+      - run:
+          name: k3s.service logs
+          when: on_fail
+          command: |
+            journalctl --no-pager -xu k3s.service
 
       - run:
           name: k8s namespace report
           when: on_fail
-          command: |
-            export KUBECONFIG="$HOME/.kube/config"
-            wget https://raw.githubusercontent.com/jupyterhub/action-k8s-namespace-report/v1.1.0/k8s-namespace-report
-            bash k8s-namespace-report
           environment:
             NAMESPACE: ""
             POD_SELECTOR: ""
             IMPORTANT_WORKLOADS: ""
+          command: |
+            export KUBECONFIG="$HOME/.kube/config"
+            wget https://raw.githubusercontent.com/jupyterhub/action-k8s-namespace-report/v1.1.0/k8s-namespace-report
+            bash k8s-namespace-report
 
 workflows:
   main:
