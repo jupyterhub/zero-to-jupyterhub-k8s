@@ -20,8 +20,11 @@ rules:
   #       - changed in 1.21: get/list/watch permission for namespace,
   #                          csidrivers, csistoragecapacities was added.
   #       - unchanged between 1.22 and 1.27
+  #       - changed in 1.28: permissions to get/update lock endpoint resource
+  #                          removed
+  #       - unchanged between 1.28 and 1.29
   #
-  # ref: https://github.com/kubernetes/kubernetes/blob/v1.27.0/plugin/pkg/auth/authorizer/rbac/bootstrappolicy/testdata/cluster-roles.yaml#L736-L892
+  # ref: https://github.com/kubernetes/kubernetes/blob/v1.29.0/plugin/pkg/auth/authorizer/rbac/bootstrappolicy/testdata/cluster-roles.yaml#L721-L862
   - apiGroups:
     - ""
     - events.k8s.io
@@ -43,21 +46,6 @@ rules:
     - {{ include "jupyterhub.user-scheduler-lock.fullname" . }}
     resources:
     - leases
-    verbs:
-    - get
-    - update
-  - apiGroups:
-    - ""
-    resources:
-    - endpoints
-    verbs:
-    - create
-  - apiGroups:
-    - ""
-    resourceNames:
-    - {{ include "jupyterhub.user-scheduler-lock.fullname" . }}
-    resources:
-    - endpoints
     verbs:
     - get
     - update
@@ -183,9 +171,9 @@ rules:
   # Copied from the system:volume-scheduler ClusterRole of the k8s version
   # matching the kube-scheduler binary we use.
   #
-  # NOTE: These rules have not changed between 1.12 and 1.27.
+  # NOTE: These rules have not changed between 1.12 and 1.29.
   #
-  # ref: https://github.com/kubernetes/kubernetes/blob/v1.27.0/plugin/pkg/auth/authorizer/rbac/bootstrappolicy/testdata/cluster-roles.yaml#L1311-L1338
+  # ref: https://github.com/kubernetes/kubernetes/blob/v1.29.0/plugin/pkg/auth/authorizer/rbac/bootstrappolicy/testdata/cluster-roles.yaml#L1283-L1310
   - apiGroups:
     - ""
     resources:

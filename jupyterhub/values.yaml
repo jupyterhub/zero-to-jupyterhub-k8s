@@ -485,8 +485,8 @@ scheduling:
       allowPrivilegeEscalation: false
     image:
       # IMPORTANT: Bumping the minor version of this binary should go hand in
-      #            hand with an inspection of the user-scheduelrs RBAC resources
-      #            that we have forked in
+      #            hand with an inspection of the user-scheduelr's RBAC
+      #            resources that we have forked in
       #            templates/scheduling/user-scheduler/rbac.yaml.
       #
       #            Debugging advice:
@@ -519,7 +519,7 @@ scheduling:
       # here. We aim to stay around 1 minor version behind the latest k8s
       # version.
       #
-      tag: "v1.26.12" # ref: https://github.com/kubernetes/kubernetes/tree/master/CHANGELOG
+      tag: "v1.28.5" # ref: https://github.com/kubernetes/kubernetes/tree/master/CHANGELOG
       pullPolicy:
       pullSecrets: []
     nodeSelector: {}
