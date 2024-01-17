@@ -12,6 +12,8 @@ changes in pull requests], this list should be updated.
 [development releases]: https://hub.jupyter.org/helm-chart/#development-releases-jupyterhub
 [breaking changes in pull requests]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pulls?q=is%3Apr+is%3Aclosed+label%3Abreaking
 
+- K8s 1.25 is now required.
+
 ## 3.2
 
 ### 3.2.1 - 2023-11-27
