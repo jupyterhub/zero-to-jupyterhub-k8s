@@ -65,11 +65,11 @@ idna==3.6
     #   anyio
     #   jsonschema
     #   requests
-ipykernel==6.28.0
+ipykernel==6.29.0
     # via
     #   jupyterlab
     #   nbclassic
-ipython==8.19.0
+ipython==8.20.0
     # via ipykernel
 ipython-genutils==0.2.0
     # via nbclassic
@@ -89,7 +89,7 @@ json5==0.9.14
     # via jupyterlab-server
 jsonpointer==2.4
     # via jsonschema
-jsonschema[format-nongpl]==4.20.0
+jsonschema[format-nongpl]==4.21.0
     # via
     #   jupyter-events
     #   jupyter-telemetry
@@ -103,7 +103,7 @@ jupyter-client==8.6.0
     #   jupyter-server
     #   nbclassic
     #   nbclient
-jupyter-core==5.6.1
+jupyter-core==5.7.1
     # via
     #   ipykernel
     #   jupyter-client
@@ -117,7 +117,7 @@ jupyter-events==0.9.0
     # via jupyter-server
 jupyter-lsp==2.2.1
     # via jupyterlab
-jupyter-server==2.12.1
+jupyter-server==2.12.5
     # via
     #   jupyter-lsp
     #   jupyterlab
@@ -154,7 +154,7 @@ nbclassic==1.0.0
     # via -r requirements.in
 nbclient==0.9.0
     # via nbconvert
-nbconvert==7.14.0
+nbconvert==7.14.2
     # via
     #   jupyter-server
     #   nbclassic
@@ -166,7 +166,7 @@ nbformat==5.9.2
     #   nbconvert
 nbgitpuller==1.2.0
     # via -r requirements.in
-nest-asyncio==1.5.8
+nest-asyncio==1.5.9
     # via
     #   ipykernel
     #   nbclassic
@@ -236,7 +236,7 @@ pyzmq==25.1.2
     #   jupyter-client
     #   jupyter-server
     #   nbclassic
-referencing==0.32.0
+referencing==0.32.1
     # via
     #   jsonschema
     #   jsonschema-specifications
@@ -253,7 +253,7 @@ rfc3986-validator==0.1.1
     # via
     #   jsonschema
     #   jupyter-events
-rpds-py==0.16.2
+rpds-py==0.17.1
     # via
     #   jsonschema
     #   referencing
@@ -315,7 +315,7 @@ traitlets==5.14.1
     #   nbclient
     #   nbconvert
     #   nbformat
-types-python-dateutil==2.8.19.14
+types-python-dateutil==2.8.19.20240106
     # via arrow
 typing-extensions==4.9.0
     # via
@@ -325,7 +325,7 @@ uri-template==1.3.0
     # via jsonschema
 urllib3==2.1.0
     # via requests
-wcwidth==0.2.12
+wcwidth==0.2.13
     # via prompt-toolkit
 webcolors==1.13
     # via jsonschema
