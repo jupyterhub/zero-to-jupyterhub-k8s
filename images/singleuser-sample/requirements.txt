@@ -131,7 +131,7 @@ jupyter-telemetry==0.1.0
     # via jupyterhub
 jupyterhub==4.0.2
     # via -r requirements.in
-jupyterlab==4.0.10
+jupyterlab==4.0.11
     # via -r requirements.in
 jupyterlab-pygments==0.3.0
     # via nbconvert
