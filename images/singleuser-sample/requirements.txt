@@ -28,7 +28,7 @@ attrs==23.2.0
     #   referencing
 babel==2.14.0
     # via jupyterlab-server
-beautifulsoup4==4.12.2
+beautifulsoup4==4.12.3
     # via nbconvert
 bleach==6.1.0
     # via nbconvert
@@ -44,7 +44,7 @@ charset-normalizer==3.3.2
     # via requests
 comm==0.2.1
     # via ipykernel
-cryptography==41.0.7
+cryptography==42.0.1
     # via pyopenssl
 debugpy==1.8.0
     # via ipykernel
@@ -89,7 +89,7 @@ json5==0.9.14
     # via jupyterlab-server
 jsonpointer==2.4
     # via jsonschema
-jsonschema[format-nongpl]==4.21.0
+jsonschema[format-nongpl]==4.21.1
     # via
     #   jupyter-events
     #   jupyter-telemetry
@@ -125,7 +125,7 @@ jupyter-server==2.12.5
     #   nbclassic
     #   nbgitpuller
     #   notebook-shim
-jupyter-server-terminals==0.5.1
+jupyter-server-terminals==0.5.2
     # via jupyter-server
 jupyter-telemetry==0.1.0
     # via jupyterhub
@@ -139,7 +139,7 @@ jupyterlab-server==2.25.2
     # via jupyterlab
 mako==1.3.0
     # via alembic
-markupsafe==2.1.3
+markupsafe==2.1.4
     # via
     #   jinja2
     #   mako
@@ -166,7 +166,7 @@ nbformat==5.9.2
     #   nbconvert
 nbgitpuller==1.2.0
     # via -r requirements.in
-nest-asyncio==1.5.9
+nest-asyncio==1.6.0
     # via
     #   ipykernel
     #   nbclassic
@@ -176,7 +176,7 @@ notebook-shim==0.2.3
     #   nbclassic
 oauthlib==3.2.2
     # via jupyterhub
-overrides==7.4.0
+overrides==7.7.0
     # via jupyter-server
 packaging==23.2
     # via
@@ -188,7 +188,7 @@ packaging==23.2
     #   nbconvert
 pamela==1.1.0
     # via jupyterhub
-pandocfilters==1.5.0
+pandocfilters==1.5.1
     # via nbconvert
 parso==0.8.3
     # via jedi
@@ -203,7 +203,7 @@ prometheus-client==0.19.0
     #   nbclassic
 prompt-toolkit==3.0.43
     # via ipython
-psutil==5.9.7
+psutil==5.9.8
     # via ipykernel
 ptyprocess==0.7.0
     # via
@@ -217,7 +217,7 @@ pygments==2.17.2
     # via
     #   ipython
     #   nbconvert
-pyopenssl==23.3.0
+pyopenssl==24.0.0
     # via certipy
 python-dateutil==2.8.2
     # via
@@ -236,7 +236,7 @@ pyzmq==25.1.2
     #   jupyter-client
     #   jupyter-server
     #   nbclassic
-referencing==0.32.1
+referencing==0.33.0
     # via
     #   jsonschema
     #   jsonschema-specifications
