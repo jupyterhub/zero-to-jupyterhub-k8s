@@ -1559,7 +1559,7 @@ properties:
                 chp:
                   extraCommandLineFlags:
                     - "--auto-rewrite"
-                    - "--custom-header {{ .Values.myCustomStuff }}"
+                    - "--custom-header={{ .Values.custom.myStuff }}"
               ```
 
               Note that these will be appended last, and if you provide the same
