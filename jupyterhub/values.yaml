@@ -258,7 +258,7 @@ proxy:
       # tag is automatically bumped to new patch versions by the
       # watch-dependencies.yaml workflow.
       #
-      tag: "v2.10.7" # ref: https://hub.docker.com/_/traefik?tab=tags
+      tag: "v2.11.0" # ref: https://hub.docker.com/_/traefik?tab=tags
       pullPolicy:
       pullSecrets: []
     hsts:
