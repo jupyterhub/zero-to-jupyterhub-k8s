@@ -56,7 +56,7 @@ changes to your `config.yaml` file:
        extraInitContainers:
          - name: startup-delay
            image: busybox:stable
-           command: [ "sh", "-c", "sleep 20" ]
+           command: ["sh", "-c", "sleep 20"]
    ```
 
 2. Apply the config changes by running `helm upgrade ...`
