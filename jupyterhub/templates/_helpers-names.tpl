@@ -220,7 +220,10 @@
     {{- end }}
 {{- end }}
 
-
+{{- /* exam api name */}}
+{{- define "jupyterhub.examapi.fullname" -}}
+    {{- include "jupyterhub.fullname.dash" . }}exam-api
+{{- end }}
 
 {{- /*
     Cluster wide resources

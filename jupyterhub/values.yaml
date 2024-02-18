@@ -667,6 +667,43 @@ cull:
   concurrency: 10 # --concurrency
   maxAge: 0 # --max-age
 
+examapi:
+  image:
+    name: lthub/jupyterhub-api
+    tag: sha-bc8937e
+    pullPolicy:
+    pullSecrets: []
+  resources: {}
+  #  podSecurityContext:
+  #    fsGroup: 1000
+  #  containerSecurityContext:
+  #    runAsUser: 1000
+  #    runAsGroup: 1000
+  #    allowPrivilegeEscalation: false
+  lifecycle: {}
+  courseCode: example
+  debug: true
+  apiPort: 5000
+  apiHost: 0.0.0.0
+  dataHome: # /mnt/efs/example
+  dataSnap: # /mnt/efs/example-snap
+  dataInternal: # /mnt/efs/example-internal
+  apiKey:
+  # set to true if the StorageClass doesn't exist
+  createStorageClass: false
+  storageClassName: exam-api-sc
+  # EFS identifier in the format of "fs-xxxxxxxxxxxx"
+  efsHandle:
+  service:
+    type: NodePort
+    annotations: {}
+    ports:
+      nodePort:
+    extraPorts: []
+    loadBalancerIP:
+  # the DNS name for exam api. AWS load balance controller uses it for discover SSL cert.
+  host:
+
 debug:
   enabled: false
 

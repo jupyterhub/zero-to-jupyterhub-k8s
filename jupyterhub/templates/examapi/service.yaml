@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "jupyterhub.examapi.fullname" . }}
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+  annotations:
+    {{- if not (index .Values.examapi.service.annotations "prometheus.io/scrape") }}
+    prometheus.io/scrape: "true"
+    {{- end }}
+    {{- if not (index .Values.examapi.service.annotations "prometheus.io/path") }}
+    prometheus.io/path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/metrics
+    {{- end }}
+    {{- if not (index .Values.examapi.service.annotations "prometheus.io/port") }}
+    prometheus.io/port: "8081"
+    {{- end }}
+    {{- with .Values.examapi.service.annotations }}
+    {{- . | toYaml | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.examapi.service.type }}
+  {{- with .Values.examapi.service.loadBalancerIP }}
+  loadBalancerIP: {{ . }}
+  {{- end }}
+  selector:
+    {{- include "jupyterhub.matchLabels" . | nindent 4 }}
+  ports:
+    - name: exam-api
+      port: 5000
+      targetPort: http
+      {{- with .Values.examapi.service.ports.nodePort }}
+      nodePort: {{ . }}
+      {{- end }}

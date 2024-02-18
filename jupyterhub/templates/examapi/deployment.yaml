@@ -1,0 +1,122 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "jupyterhub.examapi.fullname" . }}
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "jupyterhub.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "jupyterhub.matchLabels" . | nindent 8 }}
+        {{- with .Values.examapi.labels }}
+        {{- . | toYaml | nindent 8 }}
+        {{- end }}
+    spec:
+      containers:
+      - image: {{ .Values.examapi.image.name }}:{{ .Values.examapi.image.tag }}
+        name: jupyterhub-exam-api
+        {{- with .Values.examapi.resources }}
+        resources:
+          {{- . | toYaml | nindent 12 }}
+        {{- end }}
+        {{- with .Values.examapi.image.pullPolicy }}
+        imagePullPolicy: {{ . }}
+        {{- end }}
+        {{- with .Values.examapi.containerSecurityContext }}
+        securityContext:
+          {{- . | toYaml | nindent 12 }}
+        {{- end }}
+        {{- with .Values.examapi.lifecycle }}
+        lifecycle:
+          {{- . | toYaml | nindent 12 }}
+        {{- end }}
+        env:
+        - name: JUPYTER_API_KEY
+          valueFrom:
+             secretKeyRef:
+                name: {{ include "jupyterhub.examapi.fullname" . }}-key
+                key: exam-api-key
+        - name: JNOTE_COURSE_CODE
+          value: {{ .Values.examapi.courseCode }}
+        - name: DEBUG
+          value: {{ .Values.examapi.debug | quote }}
+        - name: JUPYTER_API_PORT
+          value: {{ .Values.examapi.apiPort | quote }}
+        - name: JUPYTER_API_HOST
+          value: {{ .Values.examapi.apiHost | quote }}
+        {{- with .Values.examapi.dataHome }}
+        - name: JNOTE_HOME
+          value: {{ . | quote }}
+        {{- end }}
+        {{- with .Values.examapi.dataSnap }}
+        - name: JNOTE_SNAP
+          value: {{ . | quote }}
+        {{- end }}
+        {{- with .Values.examapi.dataInternal }}
+        - name: JNOTE_INTSNAP
+          value: {{ . | quote }}
+        {{- end }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.examapi.apiPort }}
+        volumeMounts:
+        - name: jupyterhub-efs
+          mountPath: /mnt/efs
+      {{- with .Values.hub.nodeSelector }}
+      nodeSelector:
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
+      {{- with concat .Values.scheduling.corePods.tolerations .Values.hub.tolerations }}
+      tolerations:
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
+      {{- include "jupyterhub.coreAffinity" . | nindent 6 }}
+      volumes:
+      - name: jupyterhub-efs
+        persistentVolumeClaim:
+         claimName: {{ include "jupyterhub.examapi.fullname" . }}
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "jupyterhub.examapi.fullname" . }}
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.examapi.storageClassName }}
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: {{ .Values.examapi.efsHandle }}
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "jupyterhub.examapi.fullname" . }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: {{ .Values.examapi.storageClassName }}
+  resources:
+    requests:
+      storage: 5Gi
+
+{{- if .Values.examapi.createStorageClass }}
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: {{ .Values.examapi.storageClassName }}
+provisioner: efs.csi.aws.com
+{{- end }}
