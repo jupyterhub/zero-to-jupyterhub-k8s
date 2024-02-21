@@ -668,6 +668,7 @@ cull:
   maxAge: 0 # --max-age
 
 examapi:
+  enabled: true
   image:
     name: lthub/jupyterhub-api
     tag: sha-bc8937e

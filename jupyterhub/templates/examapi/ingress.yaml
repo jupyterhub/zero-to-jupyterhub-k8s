@@ -1,3 +1,4 @@
+{{- if .Values.examapi.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -25,3 +26,4 @@ spec:
                 name: {{ include "jupyterhub.examapi.fullname" . }}
                 port:
                   number: 5000
+{{- end }}
