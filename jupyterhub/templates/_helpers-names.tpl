@@ -225,6 +225,11 @@
     {{- include "jupyterhub.fullname.dash" . }}exam-api
 {{- end }}
 
+{{- /* EFS name */}}
+{{- define "jupyterhub.efs.fullname" -}}
+    {{- include "jupyterhub.fullname.dash" . }}efs
+{{- end }}
+
 {{- /*
     Cluster wide resources
 

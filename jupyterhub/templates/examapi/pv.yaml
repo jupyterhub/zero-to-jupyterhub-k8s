@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ include "jupyterhub.examapi.fullname" . }}
+  name: {{ include "jupyterhub.efs.fullname" . }}
 spec:
   capacity:
     storage: 5Gi
@@ -20,7 +20,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "jupyterhub.examapi.fullname" . }}
+  name: efs
 spec:
   accessModes:
     - ReadWriteMany
