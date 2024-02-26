@@ -104,7 +104,7 @@ def run():
         lint_values_yaml, schema, schema_wildcards
     )
     if lint_schema_values_diff:
-        print("values.schema.yaml entries not found in lint-and-validate-values.yaml:"),
+        print("values.schema.yaml entries not found in lint-and-validate-values.yaml:")
         for l in sorted(lint_schema_values_diff):
             print(f"- {l}")
 
