@@ -34,7 +34,7 @@ spec:
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: 100%
-  {{- if typeIs "int" .Values.prePuller.revisionHistoryLimit }}
+  {{- if not (typeIs "<nil>" .Values.prePuller.revisionHistoryLimit) }}
   revisionHistoryLimit: {{ .Values.prePuller.revisionHistoryLimit }}
   {{- end }}
   template:

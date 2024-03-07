@@ -16,7 +16,7 @@ metadata:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
   podManagementPolicy: Parallel
-  {{- if typeIs "int" .Values.scheduling.userPlaceholder.revisionHistoryLimit }}
+  {{- if not (typeIs "<nil>" .Values.scheduling.userPlaceholder.revisionHistoryLimit) }}
   revisionHistoryLimit: {{ .Values.scheduling.userPlaceholder.revisionHistoryLimit }}
   {{- end }}
   replicas: {{ .Values.scheduling.userPlaceholder.replicas }}

@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
-  {{- if typeIs "int" .Values.scheduling.userScheduler.revisionHistoryLimit }}
+  {{- if not (typeIs "<nil>" .Values.scheduling.userScheduler.revisionHistoryLimit) }}
   revisionHistoryLimit: {{ .Values.scheduling.userScheduler.revisionHistoryLimit }}
   {{- end }}
   replicas: {{ .Values.scheduling.userScheduler.replicas }}
