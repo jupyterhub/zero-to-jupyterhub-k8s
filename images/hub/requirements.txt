@@ -115,7 +115,7 @@ oauthlib==3.2.2
     #   requests-oauthlib
 onetimepass==1.0.1
     # via jupyterhub-nativeauthenticator
-packaging==23.2
+packaging==24.0
     # via
     #   jupyterhub
     #   jupyterhub-idle-culler
@@ -138,7 +138,7 @@ pyjwt[crypto]==2.8.0
     #   mwoauth
 pymysql==1.1.0
     # via -r requirements.in
-pyopenssl==24.0.0
+pyopenssl==24.1.0
     # via certipy
 python-dateutil==2.9.0.post0
     # via
@@ -153,7 +153,7 @@ pyyaml==6.0.1
     # via
     #   jupyterhub-kubespawner
     #   kubernetes-asyncio
-referencing==0.33.0
+referencing==0.34.0
     # via
     #   jsonschema
     #   jsonschema-specifications
@@ -163,7 +163,7 @@ requests==2.31.0
     #   mwoauth
     #   oauthenticator
     #   requests-oauthlib
-requests-oauthlib==1.3.1
+requests-oauthlib==1.4.0
     # via mwoauth
 rpds-py==0.18.0
     # via
@@ -180,7 +180,7 @@ six==1.16.0
     #   kubernetes-asyncio
     #   onetimepass
     #   python-dateutil
-sqlalchemy==2.0.27
+sqlalchemy==2.0.28
     # via
     #   alembic
     #   jupyterhub
@@ -197,7 +197,7 @@ tornado==6.4
     #   jupyterhub-idle-culler
     #   jupyterhub-ldapauthenticator
     #   oauthenticator
-traitlets==5.14.1
+traitlets==5.14.2
     # via
     #   jupyter-telemetry
     #   jupyterhub
