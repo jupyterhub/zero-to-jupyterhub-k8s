@@ -129,7 +129,7 @@ pyasn1==0.5.1
     # via ldap3
 pycparser==2.21
     # via cffi
-pycurl==7.45.3
+pycurl==7.45.2
     # via -r requirements.in
 pyjwt[crypto]==2.8.0
     # via
