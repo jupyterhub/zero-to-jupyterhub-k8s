@@ -17,6 +17,12 @@ changes in pull requests], this list should be updated.
 
 ## 3.3
 
+### 3.3.1 - 2023-03-20
+
+#### Bugs fixed
+
+- hub image: downgrade to use pycurl with functional wheel [#3365](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3365) ([@consideRatio](https://github.com/consideRatio))
+
 ### 3.3.0 - 2024-03-20
 
 This release updates JupyterHub from 4.0.2 to 4.1.0 and OAuthenticator from
