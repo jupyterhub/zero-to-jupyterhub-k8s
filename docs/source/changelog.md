@@ -17,7 +17,13 @@ changes in pull requests], this list should be updated.
 
 ## 3.3
 
-### 3.3.1 - 2023-03-20
+### 3.3.2 - 2024-03-20
+
+#### Bugs fixed
+
+- network-tools image: pin alpine 3.18 for legacy iptables [#3369](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3369) ([@consideRatio](https://github.com/consideRatio))
+
+### 3.3.1 - 2024-03-20
 
 #### Bugs fixed
 
