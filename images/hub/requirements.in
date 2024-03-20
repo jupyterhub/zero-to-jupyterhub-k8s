@@ -7,7 +7,7 @@
 
 # JupyterHub itself, update this version pinning by running the workflow
 # mentioned above.
-jupyterhub==4.0.2
+jupyterhub==4.1.0
 
 ## Authenticators
 jupyterhub-firstuseauthenticator>=1
