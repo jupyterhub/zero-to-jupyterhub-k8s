@@ -29,8 +29,7 @@ jupyterhub-kubespawner
 ## Other optional dependencies for additional features
 pymysql  # mysql
 psycopg2  # postgres
-# pycurl 7.45.3 is avoided because https://github.com/pycurl/pycurl/issues/834
-pycurl!=7.45.3  # internal http requests handle more load with pycurl
+pycurl  # internal http requests handle more load with pycurl
 sqlalchemy-cockroachdb # cocroachdb
 statsd  # statsd metrics collection (TODO: remove soon, since folks use prometheus)
 
