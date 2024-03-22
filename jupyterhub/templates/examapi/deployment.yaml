@@ -80,5 +80,5 @@ spec:
       volumes:
       - name: jupyterhub-efs
         persistentVolumeClaim:
-         claimName: efs
+         claimName: {{ .Values.examapi.persistentVolumeClaimName }}
 {{- end }}

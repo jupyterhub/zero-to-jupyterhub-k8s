@@ -84,7 +84,7 @@ hub:
   extraVolumeMounts: []
   image:
     name: quay.io/jupyterhub/k8s-hub
-    tag: "set-by-chartpress"
+    tag: "3.2.2-0.dev.git.6509.h23fd6095"
     pullPolicy:
     pullSecrets: []
   resources: {}
@@ -305,7 +305,7 @@ proxy:
       allowPrivilegeEscalation: false
     image:
       name: quay.io/jupyterhub/k8s-secret-sync
-      tag: "set-by-chartpress"
+      tag: "3.2.2-0.dev.git.6499.hcea97c31"
       pullPolicy:
       pullSecrets: []
     resources: {}
@@ -345,7 +345,7 @@ singleuser:
   networkTools:
     image:
       name: quay.io/jupyterhub/k8s-network-tools
-      tag: "set-by-chartpress"
+      tag: "3.2.2-0.dev.git.6499.hf14f2f54"
       pullPolicy:
       pullSecrets: []
     resources: {}
@@ -397,7 +397,7 @@ singleuser:
       storageAccessModes: [ReadWriteOnce]
   image:
     name: quay.io/jupyterhub/k8s-singleuser-sample
-    tag: "set-by-chartpress"
+    tag: "3.2.2-0.dev.git.6509.h23fd6095"
     pullPolicy:
     pullSecrets: []
   startTimeout: 300
@@ -606,7 +606,7 @@ prePuller:
     # image and the configuration below relates to the hook-image-awaiter Job
     image:
       name: quay.io/jupyterhub/k8s-image-awaiter
-      tag: "set-by-chartpress"
+      tag: "3.2.2-0.dev.git.6426.h8ee2752d"
       pullPolicy:
       pullSecrets: []
     containerSecurityContext:
@@ -693,6 +693,12 @@ examapi:
   # set to true if the StorageClass doesn't exist
   createStorageClass: false
   storageClassName: exam-api-sc
+  # set to true if the PersistentVolume doesn't exist
+  createPersistentVolume: false
+  persistentVolumeName: efs
+  # set to true if the PersistentVolumeClaim doesn't exist
+  createPersistentVolumeClaim: false
+  persistentVolumeClaimName: efs
   # EFS identifier in the format of "fs-xxxxxxxxxxxx"
   efsHandle:
   service:

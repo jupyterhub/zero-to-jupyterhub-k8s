@@ -1,8 +1,9 @@
 ---
+{{- if .Values.examapi.createPersistentVolume }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ include "jupyterhub.efs.fullname" . }}
+  name: {{ .Values.examapi.persistentVolumeName }}
 spec:
   capacity:
     storage: 5Gi
@@ -14,13 +15,14 @@ spec:
   csi:
     driver: efs.csi.aws.com
     volumeHandle: {{ .Values.examapi.efsHandle }}
+{{- end }}
 
 ---
-
+{{- if .Values.examapi.createPersistentVolumeClaim }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: efs
+  name: {{ .Values.examapi.persistentVolumeClaimName }}
 spec:
   accessModes:
     - ReadWriteMany
@@ -28,6 +30,7 @@ spec:
   resources:
     requests:
       storage: 5Gi
+{{- end }}
 
 {{- if .Values.examapi.createStorageClass }}
 ---
