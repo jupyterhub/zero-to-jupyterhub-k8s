@@ -141,7 +141,7 @@ jupyter-server-terminals==0.5.3
     # via jupyter-server
 jupyter-telemetry==0.1.0
     # via jupyterhub
-jupyterhub==4.1.0
+jupyterhub==4.1.1
     # via -r requirements.in
 jupyterlab==4.1.5
     # via -r requirements.in
@@ -166,7 +166,7 @@ nbclassic==1.0.0
     # via -r requirements.in
 nbclient==0.10.0
     # via nbconvert
-nbconvert==7.16.2
+nbconvert==7.16.3
     # via
     #   jupyter-server
     #   nbclassic

@@ -61,7 +61,7 @@ jsonschema-specifications==2023.12.1
     # via jsonschema
 jupyter-telemetry==0.1.0
     # via jupyterhub
-jupyterhub==4.1.0
+jupyterhub==4.1.1
     # via
     #   -r requirements.in
     #   jupyterhub-firstuseauthenticator
@@ -164,7 +164,7 @@ requests==2.31.0
     #   mwoauth
     #   oauthenticator
     #   requests-oauthlib
-requests-oauthlib==1.4.0
+requests-oauthlib==2.0.0
     # via mwoauth
 rpds-py==0.18.0
     # via
