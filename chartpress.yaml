@@ -20,7 +20,7 @@ charts:
     #
     # baseVersion should be managed via tbump, see RELEASE.md for details
     #
-    baseVersion: "3.3.2"
+    baseVersion: "3.3.3"
     repo:
       git: jupyterhub/helm-chart
       published: https://jupyterhub.github.io/helm-chart
