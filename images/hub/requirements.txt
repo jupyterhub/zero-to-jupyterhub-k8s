@@ -61,7 +61,7 @@ jsonschema-specifications==2023.12.1
     # via jsonschema
 jupyter-telemetry==0.1.0
     # via jupyterhub
-jupyterhub==4.1.1
+jupyterhub==4.1.2
     # via
     #   -r requirements.in
     #   jupyterhub-firstuseauthenticator
@@ -181,7 +181,7 @@ six==1.16.0
     #   kubernetes-asyncio
     #   onetimepass
     #   python-dateutil
-sqlalchemy==2.0.28
+sqlalchemy==2.0.29
     # via
     #   alembic
     #   jupyterhub
