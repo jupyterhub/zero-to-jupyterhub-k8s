@@ -289,7 +289,7 @@ sniffio==1.3.1
     #   httpx
 soupsieve==2.5
     # via beautifulsoup4
-sqlalchemy==2.0.28
+sqlalchemy==2.0.29
     # via
     #   alembic
     #   jupyterhub

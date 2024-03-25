@@ -181,7 +181,7 @@ six==1.16.0
     #   kubernetes-asyncio
     #   onetimepass
     #   python-dateutil
-sqlalchemy==2.0.28
+sqlalchemy==2.0.29
     # via
     #   alembic
     #   jupyterhub
