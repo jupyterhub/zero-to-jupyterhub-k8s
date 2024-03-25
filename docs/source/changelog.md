@@ -17,6 +17,12 @@ changes in pull requests], this list should be updated.
 
 ## 3.3
 
+### 3.3.4 - 2024-03-25
+
+#### Maintenance and upkeep improvements
+
+- Update jupyterhub from 4.1.1 to 4.1.2 [#3378](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3378) ([@jupyterhub-bot](https://github.com/jupyterhub-bot), [@consideRatio](https://github.com/consideRatio))
+
 ### 3.3.3 - 2024-03-23
 
 #### Maintenance and upkeep improvements
