@@ -50,14 +50,14 @@ changes in pull requests], this list should be updated.
 
 ### 3.3.0 - 2024-03-20
 
-```{warning} If you are upgrading from 3.0.x
+```{admonition} If you are upgrading from 3.0.x
+:class: warning
+
 A bug in KubeSpawner 5.0-6.0 present in z2jh 3.0.0-3.0.3 made user server pods
 risk be orphaned by JupyterHub, making them run indefinitely and cause
 unnecessary cloud costs.
 
 Read more about how to clean up these user server pods in [this forum post].
-
-[this forum post]: https://discourse.jupyter.org/t/how-to-cleanup-orphaned-user-pods-after-bug-in-z2jh-3-0-and-kubespawner-6-0/21677
 ```
 
 This release updates JupyterHub from 4.0.2 to 4.1.0 and OAuthenticator from
@@ -112,14 +112,14 @@ See [our definition of contributors](https://github-activity.readthedocs.io/en/l
 
 ### 3.2.0 - 2023-11-27
 
-```{warning} If you are upgrading from 3.0.x
+```{admonition} If you are upgrading from 3.0.x
+:class: warning
+
 A bug in KubeSpawner 5.0-6.0 present in z2jh 3.0.0-3.0.3 made user server pods
 risk be orphaned by JupyterHub, making them run indefinitely and cause
 unnecessary cloud costs.
 
 Read more about how to clean up these user server pods in [this forum post].
-
-[this forum post]: https://discourse.jupyter.org/t/how-to-cleanup-orphaned-user-pods-after-bug-in-z2jh-3-0-and-kubespawner-6-0/21677
 ```
 
 #### Default image registry changed to Quay.io
@@ -173,15 +173,17 @@ See [our definition of contributors](https://github-activity.readthedocs.io/en/l
 
 ### 3.1.0 - 2023-09-29
 
-```{warning} Post-upgrade action recommended
+```{admonition} Post-upgrade action recommended
+:class: warning
+
 A bug in KubeSpawner 5.0-6.0 present in z2jh 3.0.0-3.0.3 made user server pods
 risk be orphaned by JupyterHub, making them run indefinitely and cause
 unnecessary cloud costs.
 
 Read more about how to clean up these user server pods in [this forum post].
+```
 
 [this forum post]: https://discourse.jupyter.org/t/how-to-cleanup-orphaned-user-pods-after-bug-in-z2jh-3-0-and-kubespawner-6-0/21677
-```
 
 #### Notable dependencies updated
 
@@ -258,7 +260,9 @@ See [our definition of contributors](https://github-activity.readthedocs.io/en/l
 This release updates JupyterHub itself and several dependencies to a new major
 version, please read the breaking changes below before upgrading.
 
-```{warning} Breaking changes since beta releases
+```{admonition} Breaking changes since beta releases
+:class: warning
+
 Since 3.0.0-beta.1 OAuthenticator was upgraded, and since 3.0.0-beta.3 default
 networking rules related to establishing connections to DNS ports changed
 slightly.
