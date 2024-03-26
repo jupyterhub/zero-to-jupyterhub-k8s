@@ -367,7 +367,9 @@ some extent.
 | `autohttps`   | From pods labelled `hub.jupyter.org/network-access-proxy-http=true` (http(s) proxy ports)                                                                                      |
 | `singleuser`  | From pods labelled `hub.jupyter.org/network-access-singleuser=true` (notebook-port)                                                                                            |
 
-````{warning} Not all functionality summarized above
+````{admonition} Not all functionality summarized above
+:class: warning
+
 It has been tricky to document the full behavior of these network policies. For
 in depth details, please for now refer to inspecting the Helm chart's templates
 and the rendered result given your configuration.
