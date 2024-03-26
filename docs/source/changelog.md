@@ -50,6 +50,16 @@ changes in pull requests], this list should be updated.
 
 ### 3.3.0 - 2024-03-20
 
+```{warning} If you are upgrading from 3.0.x
+A bug in KubeSpawner 5.0-6.0 present in z2jh 3.0.0-3.0.3 made user server pods
+risk be orphaned by JupyterHub, making them run indefinitely and cause
+unnecessary cloud costs.
+
+Read more about how to clean up these user server pods in [this forum post].
+
+[this forum post]: https://discourse.jupyter.org/t/how-to-cleanup-orphaned-user-pods-after-bug-in-z2jh-3-0-and-kubespawner-6-0/21677
+```
+
 This release updates JupyterHub from 4.0.2 to 4.1.0 and OAuthenticator from
 16.2.1 to 16.3.0. Both updates provide security patches. For more information,
 see [JupyterHub's changelog] and [OAuthenticator's changelog].
@@ -108,6 +118,8 @@ risk be orphaned by JupyterHub, making them run indefinitely and cause
 unnecessary cloud costs.
 
 Read more about how to clean up these user server pods in [this forum post].
+
+[this forum post]: https://discourse.jupyter.org/t/how-to-cleanup-orphaned-user-pods-after-bug-in-z2jh-3-0-and-kubespawner-6-0/21677
 ```
 
 #### Default image registry changed to Quay.io
