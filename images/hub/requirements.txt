@@ -61,7 +61,7 @@ jsonschema-specifications==2023.12.1
     # via jsonschema
 jupyter-telemetry==0.1.0
     # via jupyterhub
-jupyterhub==4.1.4
+jupyterhub==4.1.5
     # via
     #   -r requirements.in
     #   jupyterhub-firstuseauthenticator
@@ -127,7 +127,7 @@ psycopg2==2.9.9
     # via -r requirements.in
 pyasn1==0.6.0
     # via ldap3
-pycparser==2.21
+pycparser==2.22
     # via cffi
 pycurl==7.45.3
     # via -r requirements.in
