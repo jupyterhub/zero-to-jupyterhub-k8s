@@ -82,8 +82,8 @@ proxy:
         - to:
             - podSelector:
                 matchLabels:
-                  app: jupyterhub
-                  component: hub
+                  app.kubernetes.io/name: jupyterhub
+                  app.kubernetes.io/component: hub
           ports:
             - port: 8181
 ```

@@ -107,28 +107,36 @@ c.JupyterHub.hub_connect_url = (
 )
 
 # implement common labels
-# this duplicates the jupyterhub.commonLabels helper
+# This mimics the jupyterhub.commonLabels helper, but declares managed-by to
+# kubespawner instead of helm.
+#
+# The labels app and release are old labels enabled to be deleted in z2jh 5, but
+# for now retained to avoid a breaking change in z2jh 4 that would force user
+# server restarts. Restarts would be required because NetworkPolicy resources
+# must select old/new pods with labels that then needs to be seen on both
+# old/new pods, and we want these resources to keep functioning for old/new user
+# server pods during an upgrade.
+#
 common_labels = c.KubeSpawner.common_labels = {}
-common_labels["app"] = get_config(
+common_labels["app.kubernetes.io/name"] = common_labels["app"] = get_config(
     "nameOverride",
     default=get_config("Chart.Name", "jupyterhub"),
 )
-common_labels["heritage"] = "jupyterhub"
+release = get_config("Release.Name")
+if release:
+    common_labels["app.kubernetes.io/instance"] = common_labels["release"] = release
 chart_name = get_config("Chart.Name")
 chart_version = get_config("Chart.Version")
 if chart_name and chart_version:
-    common_labels["chart"] = "{}-{}".format(
-        chart_name,
-        chart_version.replace("+", "_"),
-    )
-release = get_config("Release.Name")
-if release:
-    common_labels["release"] = release
+    common_labels["helm.sh/chart"] = f"{chart_name}-{chart_version.replace('+', '_')}"
+chart_app_version = get_config("Chart.AppVersion")
+if chart_app_version:
+    common_labels["app.kubernetes.io/version"] = chart_app_version
+common_labels["app.kubernetes.io/managed-by"] = "kubespawner"
 
 c.KubeSpawner.namespace = os.environ.get("POD_NAMESPACE", "default")
 
 # Max number of consecutive failures before the Hub restarts itself
-# requires jupyterhub 0.9.2
 set_config_if_not_none(
     c.Spawner,
     "consecutive_failure_limit",

@@ -130,10 +130,10 @@ spec:
           {{- end }}
           args:
             - watch-save
-            - --label=app={{ include "jupyterhub.appLabel" . }}
-            - --label=release={{ .Release.Name }}
-            - --label=chart={{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-            - --label=heritage=secret-sync
+            - --label=app.kubernetes.io/name={{ include "jupyterhub.appLabel" . }}
+            - --label=app.kubernetes.io/instance={{ .Release.Name }}
+            - --label=helm.sh/chart={{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+            - --label=app.kubernetes.io/managed-by=secret-sync
             - {{ include "jupyterhub.proxy-public-tls.fullname" . }}
             - acme.json
             - /etc/acme/acme.json

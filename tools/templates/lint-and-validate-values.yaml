@@ -186,7 +186,7 @@ hub:
       - to:
           - podSelector:
               matchLabels:
-                app: my-k8s-local-service
+                app.kubernetes.io/name: my-k8s-local-service
         ports:
           - protocol: TCP
             port: 5978
