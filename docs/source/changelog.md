@@ -13,6 +13,7 @@ changes in pull requests], this list should be updated.
 [breaking changes in pull requests]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pulls?q=is%3Apr+is%3Aclosed+label%3Abreaking
 
 - Drop support for k8s 1.24, require k8s 1.25+ [#3319](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3319) ([@consideRatio](https://github.com/consideRatio), [@manics](https://github.com/manics))
+- Drop support for k8s 1.25, require k8s 1.26+ [#3403](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3403) ([@consideRatio](https://github.com/consideRatio), [@manics](https://github.com/manics))
 - user-scheduler: update to use kube-scheduler 1.28, from 1.26 - require k8s 1.24+ [#3312](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3312) ([@consideRatio](https://github.com/consideRatio), [@manics](https://github.com/manics))
 
 ## 3.3
