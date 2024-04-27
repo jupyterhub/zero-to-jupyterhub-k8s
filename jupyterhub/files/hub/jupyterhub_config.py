@@ -128,7 +128,9 @@ if release:
 chart_name = get_config("Chart.Name")
 chart_version = get_config("Chart.Version")
 if chart_name and chart_version:
-    common_labels["helm.sh/chart"] = f"{chart_name}-{chart_version.replace('+', '_')}"
+    common_labels["helm.sh/chart"] = common_labels["chart"] = (
+        f"{chart_name}-{chart_version.replace('+', '_')}"
+    )
 chart_app_version = get_config("Chart.AppVersion")
 if chart_app_version:
     common_labels["app.kubernetes.io/version"] = chart_app_version
