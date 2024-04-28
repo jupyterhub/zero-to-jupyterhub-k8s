@@ -32,136 +32,126 @@ Before setting up FluxCD and deploying JupyterHub, ensure you have the following
 
    For the base installation of JupyterHub, you can refer to the template FluxCD files located in the `jupyterhub/templates/fluxcd/baseinstall` directory of this repository. These template files provide a starting point for deploying JupyterHub using FluxCD. You can find them [here](../../jupyterhub/templates/fluxcd/baseinstall).
 
-  
+   **Basic Configuration YAMLs for Installing JupyterHub with FluxCD:**
 
-    **Basic Configuration YAMLs for Installing JupyterHub with FluxCD:**
+   1. **HelmRepository YAML:**
 
-    1. **HelmRepository YAML:**
-    -  Defines the Helm chart repository source for JupyterHub.
-    
-    ```yaml
-    apiVersion: source.toolkit.fluxcd.io/v1beta1
-    kind: HelmRepository
-    metadata:
-        name: jupyterhub
-        namespace: flux-system
-    spec:
-        interval: 1m
-        url: "https://jupyterhub.github.io/helm-chart/"
-    ```
+   - Defines the Helm chart repository source for JupyterHub.
 
-    **Where:** This YAML defines a HelmRepository named "jupyterhub" in the "flux-system" namespace. It specifies the URL of the Helm chart repository for JupyterHub and sets the interval for checking for updates to 1 minute.
+   ```yaml
+   apiVersion: source.toolkit.fluxcd.io/v1beta1
+   kind: HelmRepository
+   metadata:
+     name: jupyterhub
+     namespace: flux-system
+   spec:
+     interval: 1m
+     url: "https://jupyterhub.github.io/helm-chart/"
+   ```
 
-    2. **HelmRelease YAML:**
-    -  Deploys JupyterHub using the Helm chart obtained from the HelmRepository.
+   **Where:** This YAML defines a HelmRepository named "jupyterhub" in the "flux-system" namespace. It specifies the URL of the Helm chart repository for JupyterHub and sets the interval for checking for updates to 1 minute.
 
-    ```yaml
-    apiVersion: helm.toolkit.fluxcd.io/v2beta1
-    kind: HelmRelease
-    metadata:
-        name: jupyterhub
-        namespace: flux-system
-    spec:
-        interval: 5m
-        releaseName: jupyterhub
-        targetNamespace: jupyter
-        chart:
-        spec:
-            chart: jupyterhub
-            version: 'X.X.X'
-            sourceRef:
-            kind: HelmRepository
-            name: jupyterhub
-            namespace: flux-system
-    ```
+   2. **HelmRelease YAML:**
 
-    **Where:** This YAML defines a HelmRelease named "jupyterhub" in the "flux-system" namespace. It specifies the Helm chart to be deployed, including its version, obtained from the "jupyterhub" HelmRepository. It sets the interval for checking for updates to 5 minutes and deploys JupyterHub to the "jupyter" namespace.
+   - Deploys JupyterHub using the Helm chart obtained from the HelmRepository.
 
-    3. **Kustomization YAML:**
-    -  Manages the customization of the deployment, including additional configurations or resources.
+   ```yaml
+   apiVersion: helm.toolkit.fluxcd.io/v2beta1
+   kind: HelmRelease
+   metadata:
+     name: jupyterhub
+     namespace: flux-system
+   spec:
+     interval: 5m
+     releaseName: jupyterhub
+     targetNamespace: jupyter
+     chart:
+     spec:
+       chart: jupyterhub
+       version: "X.X.X"
+       sourceRef:
+       kind: HelmRepository
+       name: jupyterhub
+       namespace: flux-system
+   ```
 
-    ```yaml
-    apiVersion: kustomize.config.k8s.io/v1beta1
-    kind: Kustomization
-    resources:
-    - jupyterhub-repo.yaml
-    - jupyterhub-release.yaml
-    ```
+   **Where:** This YAML defines a HelmRelease named "jupyterhub" in the "flux-system" namespace. It specifies the Helm chart to be deployed, including its version, obtained from the "jupyterhub" HelmRepository. It sets the interval for checking for updates to 5 minutes and deploys JupyterHub to the "jupyter" namespace.
 
-    **Where:** This YAML defines a Kustomization resource that includes the YAML files for the HelmRepository and HelmRelease. It specifies the resources to be managed by Kustomize for generating the final set of Kubernetes resources.
+   3. **Kustomization YAML:**
 
-    These YAML files provide the basic configuration for deploying JupyterHub using FluxCD. Customize them as needed for your specific deployment requirements.
+   - Manages the customization of the deployment, including additional configurations or resources.
 
-    **Push to Git Repository:**
-    Once you've configured these YAML files, push them to your Git repository that you have bootstrapped with your Kubernetes cluster. FluxCD will automatically detect and apply changes from the Git repository to your cluster.
+   ```yaml
+   apiVersion: kustomize.config.k8s.io/v1beta1
+   kind: Kustomization
+   resources:
+     - jupyterhub-repo.yaml
+     - jupyterhub-release.yaml
+   ```
 
-    Certainly! Here's the updated section:
+   **Where:** This YAML defines a Kustomization resource that includes the YAML files for the HelmRepository and HelmRelease. It specifies the resources to be managed by Kustomize for generating the final set of Kubernetes resources.
 
+   These YAML files provide the basic configuration for deploying JupyterHub using FluxCD. Customize them as needed for your specific deployment requirements.
 
-    **Post-Deployment Steps:**
+   **Push to Git Repository:**
+   Once you've configured these YAML files, push them to your Git repository that you have bootstrapped with your Kubernetes cluster. FluxCD will automatically detect and apply changes from the Git repository to your cluster.
 
-    After pushing all YAML files to your Git repository that you have bootstrapped with your Kubernetes cluster, you can check the deployment and access JupyterHub using the following steps:
+   Certainly! Here's the updated section:
 
-    1. **Check Pod Status:**
-    Monitor the creation of pods by entering the following command in a separate terminal:
+   **Post-Deployment Steps:**
 
-    ```bash
-    kubectl get pod --namespace <k8s-namespace>
-    ```
+   After pushing all YAML files to your Git repository that you have bootstrapped with your Kubernetes cluster, you can check the deployment and access JupyterHub using the following steps:
 
-    *Replace `<k8s-namespace>` with the namespace you used for the deployment.*
+   1. **Check Pod Status:**
+      Monitor the creation of pods by entering the following command in a separate terminal:
 
-    2. **Enable kubectl Autocompletion:**
-    To remain sane, we recommend enabling autocompletion for kubectl. Follow the kubectl installation instructions for your platform to find the shell autocompletion instructions. Additionally, set a default value for the `--namespace` flag with the following command:
+   ```bash
+   kubectl get pod --namespace <k8s-namespace>
+   ```
 
-    ```bash
-    kubectl config set-context $(kubectl config current-context) --namespace <k8s-namespace>
-    ```
+   _Replace `<k8s-namespace>` with the namespace you used for the deployment._
 
-    3. **Wait for Pods to Enter Running State:**
-    Wait for the hub and proxy pods to enter the Running state. You can use the following command to monitor their status:
+   2. **Enable kubectl Autocompletion:**
+      To remain sane, we recommend enabling autocompletion for kubectl. Follow the kubectl installation instructions for your platform to find the shell autocompletion instructions. Additionally, set a default value for the `--namespace` flag with the following command:
 
-    ```bash
-    kubectl get pod --namespace <k8s-namespace>
-    ```
+   ```bash
+   kubectl config set-context $(kubectl config current-context) --namespace <k8s-namespace>
+   ```
 
-    *Replace `<k8s-namespace>` with the namespace you used for the deployment.*
+   3. **Wait for Pods to Enter Running State:**
+      Wait for the hub and proxy pods to enter the Running state. You can use the following command to monitor their status:
 
-    Example output:
+   ```bash
+   kubectl get pod --namespace <k8s-namespace>
+   ```
 
-    ```
-    NAME                    READY     STATUS    RESTARTS   AGE
-    hub-5d4ffd57cf-k68z8    1/1       Running   0          37s
-    proxy-7cb9bc4cc-9bdlp   1/1       Running   0          37s
-    ```
+   _Replace `<k8s-namespace>` with the namespace you used for the deployment._
 
-    4. **Find External IP:**
-    Once the pods are running, find the external IP that you can use to access JupyterHub. Run the following command until the `EXTERNAL-IP` of the `proxy-public` service is available:
+   Example output:
 
-    ```bash
-    kubectl --namespace <k8s-namespace> get service proxy-public
-    ```
+   ```
+   NAME                    READY     STATUS    RESTARTS   AGE
+   hub-5d4ffd57cf-k68z8    1/1       Running   0          37s
+   proxy-7cb9bc4cc-9bdlp   1/1       Running   0          37s
+   ```
 
-    *Replace `<k8s-namespace>` with the namespace you used for the deployment.*
+   4. **Find External IP:**
+      Once the pods are running, find the external IP that you can use to access JupyterHub. Run the following command until the `EXTERNAL-IP` of the `proxy-public` service is available:
 
-    Or, use the short form:
+   ```bash
+   kubectl --namespace <k8s-namespace> get service proxy-public
+   ```
 
-    ```bash
-    kubectl --namespace <k8s-namespace> get service proxy-public --output jsonpath='{.status.loadBalancer.ingress[].ip}'
-    ```
+   _Replace `<k8s-namespace>` with the namespace you used for the deployment._
 
-    5. **Access JupyterHub:**
-    To use JupyterHub, enter the external IP for the `proxy-public` service into a browser. JupyterHub is running with a default dummy authenticator, so entering any username and password combination will let you enter the hub.
+   Or, use the short form:
 
-    Congratulations! Now that you have basic JupyterHub running, you can {ref}`extend it <extending-jupyterhub>` and {ref}`optimize it <optimization>` in many
-    ways to meet your needs. 
+   ```bash
+   kubectl --namespace <k8s-namespace> get service proxy-public --output jsonpath='{.status.loadBalancer.ingress[].ip}'
+   ```
 
+   5. **Access JupyterHub:**
+      To use JupyterHub, enter the external IP for the `proxy-public` service into a browser. JupyterHub is running with a default dummy authenticator, so entering any username and password combination will let you enter the hub.
 
-
-
-
-
-
-
-
-
+   Congratulations! Now that you have basic JupyterHub running, you can {ref}`extend it <extending-jupyterhub>` and {ref}`optimize it <optimization>` in many
+   ways to meet your needs.
