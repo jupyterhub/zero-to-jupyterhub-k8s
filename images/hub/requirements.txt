@@ -134,9 +134,9 @@ pycparser==2.22
     # via cffi
 pycurl==7.45.3
     # via -r requirements.in
-pydantic==2.7.0
+pydantic==2.7.1
     # via jupyterhub
-pydantic-core==2.18.1
+pydantic-core==2.18.2
     # via pydantic
 pyjwt[crypto]==2.8.0
     # via
@@ -161,7 +161,7 @@ pyyaml==6.0.1
     # via
     #   jupyterhub-kubespawner
     #   kubernetes-asyncio
-referencing==0.34.0
+referencing==0.35.0
     # via
     #   jsonschema
     #   jsonschema-specifications
