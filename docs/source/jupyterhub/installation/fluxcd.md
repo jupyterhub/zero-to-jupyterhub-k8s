@@ -30,7 +30,7 @@ Before setting up FluxCD and deploying JupyterHub, ensure you have the following
 
    ## Install JupyterHub
 
-   For the base installation of JupyterHub, you can refer to the template FluxCD files located in the `jupyterhub/templates/fluxcd/baseinstall` directory of this repository. These template files provide a starting point for deploying JupyterHub using FluxCD. 
+   For the base installation of JupyterHub, you can refer to the template FluxCD files located in the `jupyterhub/templates/fluxcd/baseinstall` directory of this repository. These template files provide a starting point for deploying JupyterHub using FluxCD.
 
    **Basic Configuration YAMLs for Installing JupyterHub with FluxCD:**
 
