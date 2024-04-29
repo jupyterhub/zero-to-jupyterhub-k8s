@@ -169,7 +169,7 @@ nbclassic==1.0.0
     # via -r requirements.in
 nbclient==0.10.0
     # via nbconvert
-nbconvert==7.16.3
+nbconvert==7.16.4
     # via
     #   jupyter-server
     #   nbclassic
