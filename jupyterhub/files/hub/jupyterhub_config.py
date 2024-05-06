@@ -131,9 +131,6 @@ if chart_name and chart_version:
     common_labels["helm.sh/chart"] = common_labels["chart"] = (
         f"{chart_name}-{chart_version.replace('+', '_')}"
     )
-chart_app_version = get_config("Chart.AppVersion")
-if chart_app_version:
-    common_labels["app.kubernetes.io/version"] = chart_app_version
 common_labels["app.kubernetes.io/managed-by"] = "kubespawner"
 
 c.KubeSpawner.namespace = os.environ.get("POD_NAMESPACE", "default")

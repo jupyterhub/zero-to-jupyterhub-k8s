@@ -59,7 +59,6 @@ def test_spawn_basic(
         #        with https://github.com/jupyterhub/kubespawner/pull/835.
         # assert pod_labels["app.kubernetes.io/component"] == "singleuser-server"
         assert pod_labels["helm.sh/chart"].startswith("jupyterhub-")
-        assert "app.kubernetes.io/version" in pod_labels
         assert pod_labels["app.kubernetes.io/managed-by"] == "kubespawner"
 
         # check for legacy labels still meant to be around

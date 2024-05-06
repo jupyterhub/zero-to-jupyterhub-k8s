@@ -119,7 +119,6 @@
       heritage (omitted for matchLabels)
     Provides modern labels (omitted for matchLabels):
       app.kubernetes.io/name ("app")
-      app.kubernetes.io/version
       app.kubernetes.io/instance release ("release")
       helm.sh/chart ("chart")
       app.kubernetes.io/managed-by ("heritage")
@@ -132,7 +131,6 @@ chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 heritage: {{ .Release.Service }}
 app.kubernetes.io/name: {{ .appLabel | default (include "jupyterhub.appLabel" .) | quote }}
 app.kubernetes.io/instance: {{ .Release.Name | quote }}
-app.kubernetes.io/version: {{ .Chart.AppVersion }}
 helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
@@ -150,7 +148,6 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
     Provides modern labels (omitted for matchLabels):
       app.kubernetes.io/component ("component")
       app.kubernetes.io/name ("app")
-      app.kubernetes.io/version
       app.kubernetes.io/instance release ("release")
       helm.sh/chart ("chart")
       app.kubernetes.io/managed-by ("heritage")
