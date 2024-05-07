@@ -30,7 +30,7 @@ attrs==23.2.0
     # via
     #   jsonschema
     #   referencing
-babel==2.14.0
+babel==2.15.0
     # via jupyterlab-server
 beautifulsoup4==4.12.3
     # via nbconvert
@@ -51,7 +51,7 @@ charset-normalizer==3.3.2
     # via requests
 comm==0.2.2
     # via ipykernel
-cryptography==42.0.5
+cryptography==42.0.7
     # via pyopenssl
 debugpy==1.8.1
     # via ipykernel
@@ -92,7 +92,7 @@ isoduration==20.11.0
     # via jsonschema
 jedi==0.19.1
     # via ipython
-jinja2==3.1.3
+jinja2==3.1.4
     # via
     #   jupyter-server
     #   jupyterhub
@@ -104,7 +104,7 @@ json5==0.9.25
     # via jupyterlab-server
 jsonpointer==2.4
     # via jsonschema
-jsonschema[format-nongpl]==4.21.1
+jsonschema[format-nongpl]==4.22.0
     # via
     #   jupyter-events
     #   jupyter-telemetry
@@ -146,7 +146,7 @@ jupyter-telemetry==0.1.0
     # via jupyterhub
 jupyterhub==5.0.0b1
     # via -r requirements.in
-jupyterlab==4.1.8
+jupyterlab==4.2.0
     # via -r requirements.in
 jupyterlab-pygments==0.3.0
     # via nbconvert
@@ -232,7 +232,7 @@ pydantic==2.7.1
     # via jupyterhub
 pydantic-core==2.18.2
     # via pydantic
-pygments==2.17.2
+pygments==2.18.0
     # via
     #   ipython
     #   nbconvert
@@ -249,13 +249,13 @@ python-json-logger==2.0.7
     #   jupyter-telemetry
 pyyaml==6.0.1
     # via jupyter-events
-pyzmq==26.0.2
+pyzmq==26.0.3
     # via
     #   ipykernel
     #   jupyter-client
     #   jupyter-server
     #   nbclassic
-referencing==0.35.0
+referencing==0.35.1
     # via
     #   jsonschema
     #   jsonschema-specifications
@@ -272,7 +272,7 @@ rfc3986-validator==0.1.1
     # via
     #   jsonschema
     #   jupyter-events
-rpds-py==0.18.0
+rpds-py==0.18.1
     # via
     #   jsonschema
     #   referencing
@@ -296,7 +296,7 @@ sniffio==1.3.1
     #   httpx
 soupsieve==2.5
     # via beautifulsoup4
-sqlalchemy==2.0.29
+sqlalchemy==2.0.30
     # via
     #   alembic
     #   jupyterhub
