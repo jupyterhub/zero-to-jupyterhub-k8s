@@ -494,7 +494,7 @@ singleuser:
                   gitpuller https://github.com/data-8/materials-fa17 master materials-fa;
 ```
 
-This allows users to select from three profiles, each with their own
+This allows users to select from four profiles, each with their own
 environment (defined by each Docker image in the configuration above).
 
 The "Learning Data Science" environment in the above example overrides the postStart lifecycle hook. Note that when
