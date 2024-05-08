@@ -119,7 +119,7 @@
       heritage (omitted for matchLabels)
     Provides modern labels (omitted for matchLabels):
       app.kubernetes.io/name ("app")
-      app.kubernetes.io/instance release ("release")
+      app.kubernetes.io/instance ("release")
       helm.sh/chart ("chart")
       app.kubernetes.io/managed-by ("heritage")
 */}}
