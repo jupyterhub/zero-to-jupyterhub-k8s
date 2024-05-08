@@ -50,7 +50,7 @@ await_autohttps_tls_cert_acquisition() {
         kubectl logs deploy/pebble --all-containers # --prefix
         kubectl describe pod -l app.kubernetes.io/name=pebble-coredns
         kubectl logs deploy/pebble-coredns --all-containers # --prefix
-        kubectl describe pod -l component=autohttps
+        kubectl describe pod -l app.kubernetes.io/component=autohttps
         kubectl logs deploy/autohttps --all-containers # --prefix
         exit 1
     fi
@@ -72,7 +72,7 @@ await_autohttps_tls_cert_save() {
         kubectl logs deploy/pebble --all-containers # --prefix
         kubectl describe pod -l app.kubernetes.io/name=pebble-coredns
         kubectl logs deploy/pebble-coredns --all-containers # --prefix
-        kubectl describe pod -l component=autohttps
+        kubectl describe pod -l app.kubernetes.io/component=autohttps
         kubectl logs deploy/autohttps --all-containers # --prefix
         exit 1
     fi

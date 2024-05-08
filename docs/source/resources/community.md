@@ -94,7 +94,7 @@ user pods. You can search for all user pods with the following label query:
 
 ```bash
 kubectl --namespace=<YOUR-NAMESPACE> get pod \
-    -l "component=singleuser-server"
+    -l "app.kubernetes.io/component=singleuser-server"
 ```
 
 For more information, see the [Kubernetes labels and selectors page](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).

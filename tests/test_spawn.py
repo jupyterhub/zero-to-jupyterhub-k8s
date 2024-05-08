@@ -1,3 +1,4 @@
+import json
 import subprocess
 import time
 
@@ -22,7 +23,7 @@ def test_spawn_basic(
     r = api_request.post("/users/" + jupyter_user + "/server")
     assert r.status_code in (201, 202)
     try:
-        # check successfull spawn
+        # check successful spawn
         server_model = _wait_for_user_to_spawn(
             api_request, jupyter_user, request_data["test_timeout"]
         )
@@ -36,8 +37,37 @@ def test_spawn_basic(
         assert r.status_code == 200
         assert "version" in r.json()
 
-        # check user pod's extra environment variable
         pod_name = server_model["state"]["pod_name"]
+
+        # check user pod's labels
+        pod_json = subprocess.check_output(
+            [
+                "kubectl",
+                "get",
+                "pod",
+                "--output=json",
+                pod_name,
+            ]
+        )
+        pod = json.loads(pod_json)
+        pod_labels = pod["metadata"]["labels"]
+
+        # check for modern labels
+        assert pod_labels["app.kubernetes.io/name"] == "jupyterhub"
+        assert "app.kubernetes.io/instance" in pod_labels
+        # FIXME: app.kubernetes.io/component for user pods require kubespawner
+        #        with https://github.com/jupyterhub/kubespawner/pull/835.
+        # assert pod_labels["app.kubernetes.io/component"] == "singleuser-server"
+        assert pod_labels["helm.sh/chart"].startswith("jupyterhub-")
+        assert pod_labels["app.kubernetes.io/managed-by"] == "kubespawner"
+
+        # check for legacy labels still meant to be around
+        assert pod_labels["app"] == "jupyterhub"
+        assert "release" in pod_labels
+        assert pod_labels["chart"].startswith("jupyterhub-")
+        assert pod_labels["component"] == "singleuser-server"
+
+        # check user pod's extra environment variable
         c = subprocess.run(
             [
                 "kubectl",
