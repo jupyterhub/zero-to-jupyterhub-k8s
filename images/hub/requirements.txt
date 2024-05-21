@@ -151,7 +151,7 @@ pyjwt[crypto]==2.8.0
     #   jupyterhub-ltiauthenticator
     #   mwoauth
     #   oauthenticator
-pymysql==1.1.0
+pymysql==1.1.1
     # via -r requirements.in
 pyopenssl==24.1.0
     # via certipy
