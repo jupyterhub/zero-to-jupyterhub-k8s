@@ -104,7 +104,6 @@ jsonpointer==2.4
     # via jsonschema
 jsonschema[format-nongpl]==4.22.0
     # via
-    #   jsonschema
     #   jupyter-events
     #   jupyterlab-server
     #   nbformat
@@ -256,7 +255,7 @@ referencing==0.35.1
     #   jsonschema
     #   jsonschema-specifications
     #   jupyter-events
-requests==2.31.0
+requests==2.32.2
     # via
     #   jupyterhub
     #   jupyterlab-server
