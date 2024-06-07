@@ -101,7 +101,6 @@ jsonpointer==2.4
     # via jsonschema
 jsonschema[format-nongpl]==4.22.0
     # via
-    #   jsonschema
     #   jupyter-events
     #   jupyterlab-server
     #   nbformat
@@ -287,7 +286,7 @@ terminado==0.18.1
     #   jupyter-server-terminals
 tinycss2==1.3.0
     # via nbconvert
-tornado==6.4
+tornado==6.4.1
     # via
     #   ipykernel
     #   jupyter-client
