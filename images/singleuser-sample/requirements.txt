@@ -216,7 +216,7 @@ pure-eval==0.2.2
     # via stack-data
 pycparser==2.22
     # via cffi
-pydantic==2.7.3
+pydantic==2.7.4
     # via jupyterhub
 pydantic-core==2.18.4
     # via pydantic
