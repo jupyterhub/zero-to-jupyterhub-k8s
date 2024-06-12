@@ -141,7 +141,7 @@ pycparser==2.22
     # via cffi
 pycurl==7.45.3
     # via -r requirements.in
-pydantic==2.7.3
+pydantic==2.7.4
     # via jupyterhub
 pydantic-core==2.18.4
     # via pydantic
