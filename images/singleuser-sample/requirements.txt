@@ -101,7 +101,6 @@ jsonpointer==3.0.0
     # via jsonschema
 jsonschema[format-nongpl]==4.22.0
     # via
-    #   jsonschema
     #   jupyter-events
     #   jupyterlab-server
     #   nbformat
@@ -322,7 +321,7 @@ typing-extensions==4.12.2
     #   sqlalchemy
 uri-template==1.3.0
     # via jsonschema
-urllib3==2.2.1
+urllib3==2.2.2
     # via requests
 wcwidth==0.2.13
     # via prompt-toolkit
