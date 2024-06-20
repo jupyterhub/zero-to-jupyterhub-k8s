@@ -22,6 +22,7 @@ metadata:
     {{- /*
     Allows the daemonset to be deleted when the image-awaiter job is completed.
     */}}
+    {{- include "jupyterhub.annotations" . | nindent 4 }}
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
     "helm.sh/hook-weight": "-10"
