@@ -2864,6 +2864,7 @@ properties:
           image: *image-spec
           resources: *resources-spec
           serviceAccount: *serviceAccount
+          serviceAccountImagePuller: *serviceAccount
       continuous:
         type: object
         additionalProperties: false
@@ -2880,6 +2881,7 @@ properties:
         properties:
           enabled:
             type: boolean
+          serviceAccount: *serviceAccount
       pullProfileListImages:
         type: boolean
         description: |
