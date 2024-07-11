@@ -63,7 +63,7 @@ jinja2==3.1.4
     #   jupyterhub-kubespawner
 jsonpointer==3.0.0
     # via jsonschema
-jsonschema[format-nongpl]==4.23.0
+jsonschema==4.23.0
     # via
     #   jupyter-events
     #   oauthenticator
@@ -145,7 +145,7 @@ pydantic==2.8.2
     # via jupyterhub
 pydantic-core==2.20.1
     # via pydantic
-pyjwt[crypto]==2.8.0
+pyjwt==2.8.0
     # via
     #   -r requirements.in
     #   jupyterhub-ltiauthenticator

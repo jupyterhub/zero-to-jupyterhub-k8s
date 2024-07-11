@@ -99,9 +99,8 @@ json5==0.9.25
     # via jupyterlab-server
 jsonpointer==3.0.0
     # via jsonschema
-jsonschema[format-nongpl]==4.23.0
+jsonschema==4.23.0
     # via
-    #   jsonschema
     #   jupyter-events
     #   jupyterlab-server
     #   nbformat
@@ -336,4 +335,5 @@ websocket-client==1.8.0
     # via jupyter-server
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools
+setuptools==70.3.0
+    # via jupyterlab
