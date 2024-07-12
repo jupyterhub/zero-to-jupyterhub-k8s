@@ -13,7 +13,7 @@ for img in ${IMAGES}; do
         --volume="$PWD:/io" \
         --workdir=/io \
         --user=root \
-        python:3.11-bullseye \
+        python:3.11-bookworm \
         sh -c 'pip install pip-tools==7.* && pip-compile --allow-unsafe --strip-extras --upgrade'
     popd
 done
