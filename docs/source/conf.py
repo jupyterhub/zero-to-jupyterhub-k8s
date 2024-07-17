@@ -205,6 +205,14 @@ html_context = {
 }
 
 
+# -- Readthedocs specific configuration -------------------------------------------
+# ref: https://about.readthedocs.com/blog/2024/07/addons-by-default/
+#
+html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "")
+if os.environ.get("READTHEDOCS", "") == "True":
+    html_context["READTHEDOCS"] = True
+
+
 # -- Options for linkcheck builder -------------------------------------------
 # ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-the-linkcheck-builder
 #
