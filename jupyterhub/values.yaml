@@ -91,10 +91,14 @@ hub:
   podSecurityContext:
     runAsNonRoot: true
     fsGroup: 1000
+    seccompProfile:
+      type: "RuntimeDefault"
   containerSecurityContext:
     runAsUser: 1000
     runAsGroup: 1000
     allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
   lifecycle: {}
   loadRoles: {}
   services: {}
@@ -202,6 +206,10 @@ proxy:
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     image:
       name: quay.io/jupyterhub/configurable-http-proxy
       # tag is automatically bumped to new patch versions by the
@@ -256,6 +264,10 @@ proxy:
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     image:
       name: traefik
       # tag is automatically bumped to new patch versions by the
@@ -307,6 +319,10 @@ proxy:
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     image:
       name: quay.io/jupyterhub/k8s-secret-sync
       tag: "set-by-chartpress"
@@ -488,6 +504,10 @@ scheduling:
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     image:
       # IMPORTANT: Bumping the minor version of this binary should go hand in
       #            hand with an inspection of the user-scheduelr's RBAC
@@ -568,6 +588,10 @@ scheduling:
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     resources: {}
   corePods:
     tolerations:
@@ -605,6 +629,10 @@ prePuller:
     runAsUser: 65534 # nobody user
     runAsGroup: 65534 # nobody group
     allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   extraTolerations: []
   # hook relates to the hook-image-awaiter Job and hook-image-puller DaemonSet
   hook:
@@ -621,6 +649,10 @@ prePuller:
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     podSchedulingWaitDuration: 10
     nodeSelector: {}
     tolerations: []
@@ -639,6 +671,10 @@ prePuller:
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     image:
       name: registry.k8s.io/pause
       # tag is automatically bumped to new patch versions by the
