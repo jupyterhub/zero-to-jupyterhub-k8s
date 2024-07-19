@@ -89,6 +89,7 @@ hub:
     pullSecrets: []
   resources: {}
   podSecurityContext:
+    runAsNonRoot: true
     fsGroup: 1000
   containerSecurityContext:
     runAsUser: 1000
@@ -197,6 +198,7 @@ proxy:
   chp:
     revisionHistoryLimit:
     containerSecurityContext:
+      runAsNonRoot: true
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
@@ -250,6 +252,7 @@ proxy:
   traefik:
     revisionHistoryLimit:
     containerSecurityContext:
+      runAsNonRoot: true
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
@@ -300,6 +303,7 @@ proxy:
     extraPodSpec: {}
   secretSync:
     containerSecurityContext:
+      runAsNonRoot: true
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
@@ -480,6 +484,7 @@ scheduling:
                 weight: 1
             type: MostAllocated
     containerSecurityContext:
+      runAsNonRoot: true
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
@@ -559,6 +564,7 @@ scheduling:
     labels: {}
     annotations: {}
     containerSecurityContext:
+      runAsNonRoot: true
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
@@ -595,6 +601,7 @@ prePuller:
   annotations: {}
   resources: {}
   containerSecurityContext:
+    runAsNonRoot: true
     runAsUser: 65534 # nobody user
     runAsGroup: 65534 # nobody group
     allowPrivilegeEscalation: false
@@ -610,6 +617,7 @@ prePuller:
       pullPolicy:
       pullSecrets: []
     containerSecurityContext:
+      runAsNonRoot: true
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
@@ -627,6 +635,7 @@ prePuller:
   extraImages: {}
   pause:
     containerSecurityContext:
+      runAsNonRoot: true
       runAsUser: 65534 # nobody user
       runAsGroup: 65534 # nobody group
       allowPrivilegeEscalation: false
