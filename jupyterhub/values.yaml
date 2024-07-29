@@ -395,6 +395,7 @@ singleuser:
       pvcNameTemplate: claim-{username}{servername}
       volumeNameTemplate: volume-{username}{servername}
       storageAccessModes: [ReadWriteOnce]
+      subPath:
   image:
     name: quay.io/jupyterhub/k8s-singleuser-sample
     tag: "set-by-chartpress"

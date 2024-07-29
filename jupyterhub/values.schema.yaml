@@ -2373,6 +2373,14 @@ properties:
 
                   There is of a default StorageClass available in k8s clusters
                   for use if this is unspecified.
+              subPath: &subPath-spec
+                type: [string, "null"]
+                description: |
+                  Configures the `subPath` field of a
+                  `KubeSpawner.volume_mounts` entry added by the Helm chart.
+
+                  Path within the volume from which the container's volume
+                  should be mounted. Defaults to "" (volume's root).
               volumeNameTemplate:
                 type: [string, "null"]
                 description: |
@@ -2402,14 +2410,7 @@ properties:
                 description: |
                   Configures `KubeSpawner.pvc_claim_name` to reference
                   pre-existing storage.
-              subPath:
-                type: [string, "null"]
-                description: |
-                  Configures the `subPath` field of a
-                  `KubeSpawner.volume_mounts` entry added by the Helm chart.
-
-                  Path within the volume from which the container's volume
-                  should be mounted.
+              subPath: *subPath-spec
           type:
             enum: [dynamic, static, none]
             description: |

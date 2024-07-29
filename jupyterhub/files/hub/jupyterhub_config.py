@@ -276,6 +276,7 @@ if storage_type == "dynamic":
         {
             "name": volume_name_template,
             "persistentVolumeClaim": {"claimName": pvc_name_template},
+            "subPath": get_config("singleuser.storage.dynamic.subPath"),
         }
     ]
     c.KubeSpawner.volume_mounts = [
