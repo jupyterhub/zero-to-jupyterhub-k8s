@@ -282,6 +282,7 @@ if storage_type == "dynamic":
         {
             "mountPath": get_config("singleuser.storage.homeMountPath"),
             "name": volume_name_template,
+            "subPath": get_config("singleuser.storage.dynamic.subPath"),
         }
     ]
 elif storage_type == "static":
