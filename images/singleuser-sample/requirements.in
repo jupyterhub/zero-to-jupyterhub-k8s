@@ -7,7 +7,7 @@
 
 # JupyterHub itself, update this version pinning by running the workflow
 # mentioned above.
-jupyterhub==5.0.0
+jupyterhub==5.1.0
 
 # UI
 jupyterlab
