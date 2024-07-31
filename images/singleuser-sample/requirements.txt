@@ -4,16 +4,14 @@
 #
 #    Use the "Run workflow" button at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/actions/workflows/watch-dependencies.yaml
 #
-alembic==1.13.1
+alembic==1.13.2
     # via jupyterhub
-anyio==4.3.0
+anyio==4.4.0
     # via
     #   httpx
     #   jupyter-server
 argon2-cffi==23.1.0
-    # via
-    #   jupyter-server
-    #   nbclassic
+    # via jupyter-server
 argon2-cffi-bindings==21.2.0
     # via argon2-cffi
 arrow==1.3.0
@@ -28,13 +26,13 @@ attrs==23.2.0
     # via
     #   jsonschema
     #   referencing
-babel==2.14.0
+babel==2.15.0
     # via jupyterlab-server
 beautifulsoup4==4.12.3
     # via nbconvert
 bleach==6.1.0
     # via nbconvert
-certifi==2024.2.2
+certifi==2024.7.4
     # via
     #   httpcore
     #   httpx
@@ -49,9 +47,9 @@ charset-normalizer==3.3.2
     # via requests
 comm==0.2.2
     # via ipykernel
-cryptography==42.0.5
+cryptography==43.0.0
     # via pyopenssl
-debugpy==1.8.1
+debugpy==1.8.2
     # via ipykernel
 decorator==5.1.1
     # via ipython
@@ -59,7 +57,7 @@ defusedxml==0.7.1
     # via nbconvert
 executing==2.0.1
     # via stack-data
-fastjsonschema==2.19.1
+fastjsonschema==2.20.0
     # via nbformat
 fqdn==1.5.1
     # via jsonschema
@@ -71,17 +69,17 @@ httpcore==1.0.5
     # via httpx
 httpx==0.27.0
     # via jupyterlab
-idna==3.6
+idna==3.7
     # via
     #   anyio
     #   httpx
     #   jsonschema
     #   requests
-ipykernel==6.29.4
+ipykernel==6.29.5
     # via
     #   jupyterlab
     #   nbclassic
-ipython==8.23.0
+ipython==8.26.0
     # via ipykernel
 ipython-genutils==0.2.0
     # via nbclassic
@@ -89,19 +87,18 @@ isoduration==20.11.0
     # via jsonschema
 jedi==0.19.1
     # via ipython
-jinja2==3.1.3
+jinja2==3.1.4
     # via
     #   jupyter-server
     #   jupyterhub
     #   jupyterlab
     #   jupyterlab-server
-    #   nbclassic
     #   nbconvert
-json5==0.9.24
+json5==0.9.25
     # via jupyterlab-server
-jsonpointer==2.4
+jsonpointer==3.0.0
     # via jsonschema
-jsonschema[format-nongpl]==4.21.1
+jsonschema[format-nongpl]==4.23.0
     # via
     #   jupyter-events
     #   jupyter-telemetry
@@ -109,11 +106,10 @@ jsonschema[format-nongpl]==4.21.1
     #   nbformat
 jsonschema-specifications==2023.12.1
     # via jsonschema
-jupyter-client==8.6.1
+jupyter-client==8.6.2
     # via
     #   ipykernel
     #   jupyter-server
-    #   nbclassic
     #   nbclient
 jupyter-core==5.7.2
     # via
@@ -121,59 +117,54 @@ jupyter-core==5.7.2
     #   jupyter-client
     #   jupyter-server
     #   jupyterlab
-    #   nbclassic
     #   nbclient
     #   nbconvert
     #   nbformat
 jupyter-events==0.10.0
     # via jupyter-server
-jupyter-lsp==2.2.4
+jupyter-lsp==2.2.5
     # via jupyterlab
-jupyter-server==2.13.0
+jupyter-server==2.14.2
     # via
     #   jupyter-lsp
     #   jupyterlab
     #   jupyterlab-server
-    #   nbclassic
     #   nbgitpuller
     #   notebook-shim
 jupyter-server-terminals==0.5.3
     # via jupyter-server
 jupyter-telemetry==0.1.0
     # via jupyterhub
-jupyterhub==4.1.5
+jupyterhub==4.1.6
     # via -r requirements.in
-jupyterlab==4.1.5
+jupyterlab==4.2.4
     # via -r requirements.in
 jupyterlab-pygments==0.3.0
     # via nbconvert
-jupyterlab-server==2.25.4
+jupyterlab-server==2.27.3
     # via jupyterlab
-mako==1.3.2
+mako==1.3.5
     # via alembic
 markupsafe==2.1.5
     # via
     #   jinja2
     #   mako
     #   nbconvert
-matplotlib-inline==0.1.6
+matplotlib-inline==0.1.7
     # via
     #   ipykernel
     #   ipython
 mistune==3.0.2
     # via nbconvert
-nbclassic==1.0.0
+nbclassic==1.1.0
     # via -r requirements.in
 nbclient==0.10.0
     # via nbconvert
-nbconvert==7.16.3
-    # via
-    #   jupyter-server
-    #   nbclassic
+nbconvert==7.16.4
+    # via jupyter-server
 nbformat==5.10.4
     # via
     #   jupyter-server
-    #   nbclassic
     #   nbclient
     #   nbconvert
 nbgitpuller==1.2.1
@@ -190,7 +181,7 @@ oauthlib==3.2.2
     # via jupyterhub
 overrides==7.7.0
     # via jupyter-server
-packaging==24.0
+packaging==24.1
     # via
     #   ipykernel
     #   jupyter-server
@@ -202,34 +193,33 @@ pamela==1.1.0
     # via jupyterhub
 pandocfilters==1.5.1
     # via nbconvert
-parso==0.8.3
+parso==0.8.4
     # via jedi
 pexpect==4.9.0
     # via ipython
-platformdirs==4.2.0
+platformdirs==4.2.2
     # via jupyter-core
 prometheus-client==0.20.0
     # via
     #   jupyter-server
     #   jupyterhub
-    #   nbclassic
-prompt-toolkit==3.0.43
+prompt-toolkit==3.0.47
     # via ipython
-psutil==5.9.8
+psutil==6.0.0
     # via ipykernel
 ptyprocess==0.7.0
     # via
     #   pexpect
     #   terminado
-pure-eval==0.2.2
+pure-eval==0.2.3
     # via stack-data
 pycparser==2.22
     # via cffi
-pygments==2.17.2
+pygments==2.18.0
     # via
     #   ipython
     #   nbconvert
-pyopenssl==24.1.0
+pyopenssl==24.2.1
     # via certipy
 python-dateutil==2.9.0.post0
     # via
@@ -242,18 +232,17 @@ python-json-logger==2.0.7
     #   jupyter-telemetry
 pyyaml==6.0.1
     # via jupyter-events
-pyzmq==25.1.2
+pyzmq==26.0.3
     # via
     #   ipykernel
     #   jupyter-client
     #   jupyter-server
-    #   nbclassic
-referencing==0.34.0
+referencing==0.35.1
     # via
     #   jsonschema
     #   jsonschema-specifications
     #   jupyter-events
-requests==2.31.0
+requests==2.32.3
     # via
     #   jupyterhub
     #   jupyterlab-server
@@ -265,7 +254,7 @@ rfc3986-validator==0.1.1
     # via
     #   jsonschema
     #   jupyter-events
-rpds-py==0.18.0
+rpds-py==0.19.1
     # via
     #   jsonschema
     #   referencing
@@ -273,10 +262,8 @@ ruamel-yaml==0.18.6
     # via jupyter-telemetry
 ruamel-yaml-clib==0.2.8
     # via ruamel-yaml
-send2trash==1.8.2
-    # via
-    #   jupyter-server
-    #   nbclassic
+send2trash==1.8.3
+    # via jupyter-server
 six==1.16.0
     # via
     #   asttokens
@@ -289,7 +276,7 @@ sniffio==1.3.1
     #   httpx
 soupsieve==2.5
     # via beautifulsoup4
-sqlalchemy==2.0.29
+sqlalchemy==2.0.31
     # via
     #   alembic
     #   jupyterhub
@@ -299,20 +286,18 @@ terminado==0.18.1
     # via
     #   jupyter-server
     #   jupyter-server-terminals
-    #   nbclassic
-tinycss2==1.2.1
+tinycss2==1.3.0
     # via nbconvert
-tornado==6.4
+tornado==6.4.1
     # via
     #   ipykernel
     #   jupyter-client
     #   jupyter-server
     #   jupyterhub
     #   jupyterlab
-    #   nbclassic
     #   nbgitpuller
     #   terminado
-traitlets==5.14.2
+traitlets==5.14.3
     # via
     #   comm
     #   ipykernel
@@ -325,28 +310,30 @@ traitlets==5.14.2
     #   jupyterhub
     #   jupyterlab
     #   matplotlib-inline
-    #   nbclassic
     #   nbclient
     #   nbconvert
     #   nbformat
 types-python-dateutil==2.9.0.20240316
     # via arrow
-typing-extensions==4.10.0
+typing-extensions==4.12.2
     # via
     #   alembic
     #   ipython
     #   sqlalchemy
 uri-template==1.3.0
     # via jsonschema
-urllib3==2.2.1
+urllib3==2.2.2
     # via requests
 wcwidth==0.2.13
     # via prompt-toolkit
-webcolors==1.13
+webcolors==24.6.0
     # via jsonschema
 webencodings==0.5.1
     # via
     #   bleach
     #   tinycss2
-websocket-client==1.7.0
+websocket-client==1.8.0
     # via jupyter-server
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools
