@@ -12,16 +12,37 @@ changes in pull requests], this list should be updated.
 [development releases]: https://hub.jupyter.org/helm-chart/#development-releases-jupyterhub
 [breaking changes in pull requests]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pulls?q=is%3Apr+is%3Aclosed+label%3Abreaking
 
-- Drop support for k8s 1.24, require k8s 1.25+ [#3319](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3319) ([@consideRatio](https://github.com/consideRatio), [@manics](https://github.com/manics))
-- user-scheduler: update to use kube-scheduler 1.28, from 1.26 - require k8s 1.24+ [#3312](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3312) ([@consideRatio](https://github.com/consideRatio), [@manics](https://github.com/manics))
+- Update jupyterhub from 4.1.6 to 5.1.0 [#3405](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3405), [#3416](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3416), [#3425](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3425), [#3472](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3472)
+- Drop support for k8s 1.23, require k8s 1.26+ [#3312](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3312), [#3403](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3403), [#3319](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3319)
+- user-scheduler: update to use kube-scheduler 1.28, from 1.26 [#3312](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3312)
 
 ## 3.3
 
+### 3.3.8 - 2024-07-31
+
+This release updates JupyterHub from 4.1.5 to 4.1.6, which is a security release
+documented in [JupyterHub changelog] like this:
+
+> 4.1.6 is a **security release**, fixing [CVE-2024-41942].
+> All JupyterHub deployments are encouraged to upgrade,
+> but only those with users having the `admin:users` scope are affected.
+> The [full advisory][CVE-2024-41942] will be published 7 days after the release.
+
+[CVE-2024-41942]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-9x4q-3gxw-849f
+
+#### Maintenance and upkeep improvements
+
+- Update jupyterhub from 4.1.5 to 4.1.6 [#3471](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3471) ([@jupyterhub-bot](https://github.com/jupyterhub-bot), [@consideRatio](https://github.com/consideRatio))
+
 ### 3.3.7 - 2024-04-09
+
+#### Maintenance and upkeep improvements
 
 - Update jupyterhub from 4.1.4 to 4.1.5 [#3390](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3390) ([@jupyterhub-bot](https://github.com/jupyterhub-bot), [@consideRatio](https://github.com/consideRatio))
 
 ### 3.3.6 - 2024-03-30
+
+#### Maintenance and upkeep improvements
 
 - Update jupyterhub from 4.1.3 to 4.1.4 [#3384](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3384) ([@jupyterhub-bot](https://github.com/jupyterhub-bot), [@consideRatio](https://github.com/consideRatio))
 
