@@ -267,6 +267,7 @@ hub:
     JupyterHub:
       authenticator_class: google
 ```
+
 For security reasons `client_id` and `client_secret` parameters could be ommited from config
 and passed via Extra environment variables `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` directly
 as they are respected by all oauthenticator based Authenticator classes.
