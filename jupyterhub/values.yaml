@@ -618,8 +618,8 @@ prePuller:
     tolerations: []
     resources: {}
     serviceAccount:
-      create: false
-      name:
+      create: true
+      name: prepuller-hook
       annotations: {}
   continuous:
     enabled: true
