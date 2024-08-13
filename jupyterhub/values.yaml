@@ -618,7 +618,7 @@ prePuller:
     tolerations: []
     resources: {}
     serviceAccount:
-      create: false
+      create: true
       name:
       annotations: {}
   continuous:
