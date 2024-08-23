@@ -75,6 +75,15 @@ spec:
   {{- with .Values.proxy.service.loadBalancerIP }}
   loadBalancerIP: {{ . }}
   {{- end }}
+  {{- with .Values.proxy.service.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ . }}
+  {{- end }}
+  {{- with .Values.proxy.service.ipFamilies }}
+  ipFamilies: 
+    {{- range $family := . }}
+     - {{ $family }}
+    {{- end }}  
+  {{- end }}
   {{- if eq .Values.proxy.service.type "LoadBalancer" }}
   {{- with .Values.proxy.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
