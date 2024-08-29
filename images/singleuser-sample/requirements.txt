@@ -99,7 +99,7 @@ json5==0.9.25
     # via jupyterlab-server
 jsonpointer==3.0.0
     # via jsonschema
-jsonschema==4.23.0
+jsonschema[format-nongpl]==4.23.0
     # via
     #   jupyter-events
     #   jupyterlab-server
@@ -137,7 +137,7 @@ jupyter-server-terminals==0.5.3
     # via jupyter-server
 jupyterhub==5.1.0
     # via -r requirements.in
-jupyterlab==4.2.4
+jupyterlab==4.2.5
     # via -r requirements.in
 jupyterlab-pygments==0.3.0
     # via nbconvert
