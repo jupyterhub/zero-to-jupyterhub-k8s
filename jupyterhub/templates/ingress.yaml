@@ -24,6 +24,15 @@ spec:
                 name: {{ include "jupyterhub.proxy-public.fullname" $ }}
                 port:
                   name: http
+          {{- range $path := $.Values.ingress.customPaths }}
+          - path: {{ $path.path }}
+            pathType: {{ $.Values.ingress.pathType }}
+            backend:
+              service:
+                name: {{ $path.backend.serviceName }}
+                port:
+                  number: {{ $path.backend.servicePort }}
+          {{- end }}
       {{- if $host }}
       host: {{ $host | quote }}
       {{- end }}
