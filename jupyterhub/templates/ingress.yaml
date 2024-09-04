@@ -26,12 +26,16 @@ spec:
                   name: http
           {{- range $path := $.Values.ingress.customPaths }}
           - path: {{ $path.path }}
-            pathType: {{ $.Values.ingress.pathType }}
+            pathType: {{ $path.pathType }}
             backend:
               service:
-                name: {{ $path.backend.serviceName }}
+                name: {{ $path.backend.service.name }}
                 port:
-                  number: {{ $path.backend.servicePort }}
+                  {{- if $path.backend.service.port.number }}
+                  number: {{ $path.backend.service.port.number }}
+                  {{- else if $path.backend.service.port.name }}
+                  name: {{ $path.backend.service.port.name }}
+                  {{- end }}
           {{- end }}
       {{- if $host }}
       host: {{ $host | quote }}
