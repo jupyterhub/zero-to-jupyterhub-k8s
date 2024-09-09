@@ -2761,8 +2761,6 @@ properties:
         type: array
         description: |
           A list of custom paths to be added to the ingress configuration. 
-          Each custom path allows traffic to be routed to a specific backend service.
-          For each path, you can specify the service name, and either a service port number or a service port name.
 
           See [the Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types)
           for more details about paths.
