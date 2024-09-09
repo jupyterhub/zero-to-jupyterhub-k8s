@@ -695,6 +695,7 @@ ingress:
   pathSuffix:
   pathType: Prefix
   tls: []
+  extraPaths: []
 
 # cull relates to the jupyterhub-idle-culler service, responsible for evicting
 # inactive singleuser pods.

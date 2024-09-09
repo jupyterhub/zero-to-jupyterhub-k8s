@@ -2757,6 +2757,13 @@ properties:
           See [the Kubernetes
           documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls)
           for more details about annotations.
+      extraPaths:
+        type: array
+        description: |
+          A list of custom paths to be added to the ingress configuration. 
+
+          See [the Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types)
+          for more details about paths.
 
   prePuller:
     type: object
