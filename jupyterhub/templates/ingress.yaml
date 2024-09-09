@@ -24,7 +24,7 @@ spec:
                 name: {{ include "jupyterhub.proxy-public.fullname" $ }}
                 port:
                   name: http
-          {{- range $path := $.Values.ingress.customPaths }}
+          {{- range $path := $.Values.ingress.extraPaths }}
           - path: {{ $path.path }}
             pathType: {{ $path.pathType }}
             backend:
