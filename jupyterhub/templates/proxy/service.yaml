@@ -79,10 +79,8 @@ spec:
   ipFamilyPolicy: {{ . }}
   {{- end }}
   {{- with .Values.proxy.service.ipFamilies }}
-  ipFamilies: 
-    {{- range $family := . }}
-     - {{ $family }}
-    {{- end }}  
+  ipFamilies:
+    {{- . | toYaml | nindent 4 }}
   {{- end }}
   {{- if eq .Values.proxy.service.type "LoadBalancer" }}
   {{- with .Values.proxy.service.loadBalancerSourceRanges }}

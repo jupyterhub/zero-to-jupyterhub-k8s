@@ -44,6 +44,8 @@ hub:
       appProtocol:
     extraPorts: []
     loadBalancerIP:
+    ipFamilyPolicy: ""
+    ipFamilies: []
   baseUrl: /
   cookieSecret:
   initContainers: []
