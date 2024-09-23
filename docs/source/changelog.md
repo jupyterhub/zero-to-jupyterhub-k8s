@@ -14,7 +14,6 @@ changes in pull requests], this list should be updated.
 
 - Update jupyterhub from 4.1.6 to 5.1.0 [#3405](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3405), [#3416](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3416), [#3425](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3425), [#3472](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3472)
 - Drop support for k8s 1.23-1.27, require k8s 1.28+ [#3312](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3312), [#3403](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3403), [#3319](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3319), [#3508](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3508)
-- user-scheduler: update to use kube-scheduler 1.28, from 1.26 [#3312](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3312)
 
 ## 3.3
 
