@@ -24,7 +24,7 @@ mwoauth
 pyjwt
 
 ## Kubernetes spawner
-jupyterhub-kubespawner
+jupyterhub-kubespawner==7.0.0b1
 
 ## Other optional dependencies for additional features
 pymysql  # mysql

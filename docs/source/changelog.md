@@ -14,9 +14,14 @@ changes in pull requests], this list should be updated.
 
 - Update jupyterhub from 4.1.6 to 5.1.0 [#3405](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3405), [#3416](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3416), [#3425](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3425), [#3472](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3472)
 - Drop support for k8s 1.23-1.27, require k8s 1.28+ [#3312](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3312), [#3403](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3403), [#3319](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3319), [#3508](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3508)
-- `oauthenticator` is upgraded a major version from 16.3.1 to 17.0.0, please
+- `jupyterhub-kubespawner` is upgraded one major version from 6.2.0 to 7.0.0,
+  please read [KubeSpawner's changelog]
+  [#3520](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3520)
+- `oauthenticator` is upgraded one major version from 16.3.1 to 17.0.0, please
   read [OAuthenticator's changelog] if you are using one if its authenticator
   classes [#3519](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3519)
+
+[kubespawner's changelog]: https://jupyterhub-kubespawner.readthedocs.io/en/stable/changelog.html
 
 ## 3.3
 
