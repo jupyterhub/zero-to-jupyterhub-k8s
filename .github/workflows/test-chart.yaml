@@ -137,7 +137,7 @@ jobs:
               --set hub.image.name=quay.io/jupyterhub/k8s-hub-slim
               --set prePuller.hook.enabled=true
               --set prePuller.hook.pullOnlyOnChanges=true
-          - k3s-channel: v1.29 # also test hub.existingSecret
+          - k3s-channel: v1.31 # also test hub.existingSecret
             test: install
             local-chart-extra-args: >-
               --set hub.existingSecret=test-hub-existing-secret
@@ -160,7 +160,7 @@ jobs:
           # information from
           # https://hub.jupyter.org/helm-chart/info.json
           #
-          - k3s-channel: v1.28
+          - k3s-channel: v1.30
             test: upgrade
             upgrade-from: stable
             upgrade-from-extra-args: >-
@@ -173,7 +173,7 @@ jobs:
               --set hub.db.type=sqlite-pvc
               --set singleuser.storage.type=dynamic
             create-k8s-test-resources: true
-          - k3s-channel: v1.27
+          - k3s-channel: v1.29
             test: upgrade
             upgrade-from: dev
             upgrade-from-extra-args: >-
@@ -183,7 +183,7 @@ jobs:
             local-chart-extra-args: >-
               --set hub.db.type=sqlite-pvc
               --set singleuser.storage.type=dynamic
-          - k3s-channel: v1.26
+          - k3s-channel: v1.28
             test: upgrade
             # We're testing hub.db.upgrade with PostgreSQL so this version must be old
             # enough to require a DB upgrade

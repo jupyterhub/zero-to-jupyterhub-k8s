@@ -13,7 +13,7 @@ changes in pull requests], this list should be updated.
 [breaking changes in pull requests]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pulls?q=is%3Apr+is%3Aclosed+label%3Abreaking
 
 - Update jupyterhub from 4.1.6 to 5.1.0 [#3405](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3405), [#3416](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3416), [#3425](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3425), [#3472](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3472)
-- Drop support for k8s 1.23, require k8s 1.26+ [#3312](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3312), [#3403](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3403), [#3319](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3319)
+- Drop support for k8s 1.23-1.27, require k8s 1.28+ [#3312](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3312), [#3403](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3403), [#3319](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3319), [#3508](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3508)
 - user-scheduler: update to use kube-scheduler 1.28, from 1.26 [#3312](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3312)
 
 ## 3.3
