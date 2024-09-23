@@ -453,19 +453,24 @@ scheduling:
     #
     plugins:
       score:
-        # These scoring plugins are enabled by default according to
-        # https://kubernetes.io/docs/reference/scheduling/config/#scheduling-plugins
-        # 2022-02-22.
+        # We make use of the default scoring plugins, but we re-enable some with
+        # a new priority, leave some enabled with their lower default priority,
+        # and disable some.
         #
-        # Enabled with high priority:
+        # Below are the default scoring plugins as of 2024-09-23 according to
+        # https://kubernetes.io/docs/reference/scheduling/config/#scheduling-plugins.
+        #
+        # Re-enabled with high priority:
         # - NodeAffinity
         # - InterPodAffinity
         # - NodeResourcesFit
         # - ImageLocality
+        #
         # Remains enabled with low default priority:
         # - TaintToleration
         # - PodTopologySpread
         # - VolumeBinding
+        #
         # Disabled for scoring:
         # - NodeResourcesBalancedAllocation
         #
@@ -494,12 +499,12 @@ scheduling:
       - name: NodeResourcesFit
         args:
           scoringStrategy:
+            type: MostAllocated
             resources:
               - name: cpu
                 weight: 1
               - name: memory
                 weight: 1
-            type: MostAllocated
     containerSecurityContext:
       runAsNonRoot: true
       runAsUser: 65534 # nobody user
@@ -545,7 +550,7 @@ scheduling:
       # here. We aim to stay around 1 minor version behind the latest k8s
       # version.
       #
-      tag: "v1.28.14" # ref: https://github.com/kubernetes/kubernetes/tree/master/CHANGELOG
+      tag: "v1.30.5" # ref: https://github.com/kubernetes/kubernetes/tree/master/CHANGELOG
       pullPolicy:
       pullSecrets: []
     nodeSelector: {}
