@@ -4,7 +4,7 @@
 #
 #    Use the "Run workflow" button at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/actions/workflows/watch-dependencies.yaml
 #
-alembic==1.13.2
+alembic==1.13.3
     # via jupyterhub
 annotated-types==0.7.0
     # via pydantic
@@ -49,7 +49,7 @@ comm==0.2.2
     # via ipykernel
 cryptography==43.0.1
     # via certipy
-debugpy==1.8.5
+debugpy==1.8.6
     # via ipykernel
 decorator==5.1.1
     # via ipython
@@ -203,7 +203,7 @@ prometheus-client==0.21.0
     # via
     #   jupyter-server
     #   jupyterhub
-prompt-toolkit==3.0.47
+prompt-toolkit==3.0.48
     # via ipython
 psutil==6.0.0
     # via ipykernel
