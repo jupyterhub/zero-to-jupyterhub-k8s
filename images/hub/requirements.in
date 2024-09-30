@@ -16,12 +16,7 @@ jupyterhub-ldapauthenticator
 jupyterhub-ltiauthenticator!=1.3.0
 jupyterhub-nativeauthenticator
 jupyterhub-tmpauthenticator
-nullauthenticator
-oauthenticator
-
-# Authenticator optional dependencies
-mwoauth
-pyjwt
+oauthenticator[googlegroups,mediawiki]
 
 ## Kubernetes spawner
 jupyterhub-kubespawner==7.0.0b1
