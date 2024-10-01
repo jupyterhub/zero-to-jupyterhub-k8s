@@ -1,3 +1,5 @@
+(upgrade-1-to-2)=
+
 # Major upgrade: 1.\* to 2.\*
 
 Z2JH 2 contains several breaking changes, including some that affect the security of your deployment.
