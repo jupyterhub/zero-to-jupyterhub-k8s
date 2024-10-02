@@ -1104,6 +1104,10 @@ properties:
             description: |
               Object to configure the ports the hub service will be deployed on.
             properties:
+              appProtocol:
+                type: [string, "null"]
+                description: |
+                  The application protocol to utilize with the Service port. This may be required when an external application attempts to make calls to the hub service with a protocol the hub does not support.
               nodePort:
                 type: [integer, "null"]
                 minimum: 0
@@ -2760,7 +2764,7 @@ properties:
       extraPaths:
         type: array
         description: |
-          A list of custom paths to be added to the ingress configuration. 
+          A list of custom paths to be added to the ingress configuration.
 
           See [the Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types)
           for more details about paths.

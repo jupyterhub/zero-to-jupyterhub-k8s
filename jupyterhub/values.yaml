@@ -41,6 +41,7 @@ hub:
     annotations: {}
     ports:
       nodePort:
+      appProtocol:
     extraPorts: []
     loadBalancerIP:
   baseUrl: /
