@@ -110,7 +110,7 @@ jupyterhub-hmacauthenticator==1.0
     # via -r requirements.in
 jupyterhub-idle-culler==1.4.0
     # via -r requirements.in
-jupyterhub-kubespawner==7.0.0b1
+jupyterhub-kubespawner==7.0.0b2
     # via -r requirements.in
 jupyterhub-ldapauthenticator==1.3.2
     # via -r requirements.in
