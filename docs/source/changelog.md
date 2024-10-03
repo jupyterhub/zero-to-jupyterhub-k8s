@@ -14,6 +14,29 @@ changes in pull requests], this list should be updated.
 
 ## 4.0
 
+### 4.0.0-beta.3 - 2024-10-03
+
+#### New features added
+
+- add appProtocol to hub service definition [#3534](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3534) ([@colinlodter](https://github.com/colinlodter), [@consideRatio](https://github.com/consideRatio))
+
+#### Bugs fixed
+
+- fix default pvc mounting with kubespawner 7 [#3537](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3537) ([@minrk](https://github.com/minrk), [@consideRatio](https://github.com/consideRatio))
+
+#### Maintenance and upkeep improvements
+
+- Update library/traefik version from v3.1.4 to v3.1.5 [#3535](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3535) ([@jupyterhub-bot](https://github.com/jupyterhub-bot), [@consideRatio](https://github.com/consideRatio))
+
+#### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2024-10-02&to=2024-10-03&type=c))
+
+@colinlodter ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Acolinlodter+updated%3A2024-10-02..2024-10-03&type=Issues)) | @consideRatio ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2024-10-02..2024-10-03&type=Issues)) | @jupyterhub-bot ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajupyterhub-bot+updated%3A2024-10-02..2024-10-03&type=Issues)) | @minrk ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aminrk+updated%3A2024-10-02..2024-10-03&type=Issues))
+
 ### 4.0.0-beta.2 - 2024-10-02
 
 #### Breaking changes
