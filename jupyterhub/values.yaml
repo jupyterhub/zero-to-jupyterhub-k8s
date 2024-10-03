@@ -413,8 +413,8 @@ singleuser:
     homeMountPath: /home/jovyan
     dynamic:
       storageClass:
-      pvcNameTemplate: claim-{username}{servername}
-      volumeNameTemplate: volume-{username}{servername}
+      pvcNameTemplate:
+      volumeNameTemplate: volume-{user_server}
       storageAccessModes: [ReadWriteOnce]
       subPath:
   image:
