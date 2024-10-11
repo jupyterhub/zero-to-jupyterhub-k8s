@@ -51,28 +51,12 @@ frozenlist==1.4.1
     # via
     #   aiohttp
     #   aiosignal
-google-api-core==2.21.0
-    # via google-api-python-client
-google-api-python-client==2.149.0
-    # via oauthenticator
 google-auth==2.35.0
-    # via
-    #   google-api-core
-    #   google-api-python-client
-    #   google-auth-httplib2
-    #   google-auth-oauthlib
-google-auth-httplib2==0.2.0
-    # via google-api-python-client
+    # via google-auth-oauthlib
 google-auth-oauthlib==1.2.1
     # via oauthenticator
-googleapis-common-protos==1.65.0
-    # via google-api-core
 greenlet==3.1.1
     # via sqlalchemy
-httplib2==0.22.0
-    # via
-    #   google-api-python-client
-    #   google-auth-httplib2
 idna==3.10
     # via
     #   jsonschema
@@ -136,7 +120,7 @@ multidict==6.1.0
     #   yarl
 mwoauth==0.4.0
     # via oauthenticator
-oauthenticator==17.0.0
+oauthenticator==17.1.0
     # via -r requirements.in
 oauthlib==3.2.2
     # via
@@ -156,13 +140,6 @@ prometheus-client==0.21.0
     # via jupyterhub
 propcache==0.2.0
     # via yarl
-proto-plus==1.24.0
-    # via google-api-core
-protobuf==5.28.2
-    # via
-    #   google-api-core
-    #   googleapis-common-protos
-    #   proto-plus
 psycopg2==2.9.9
     # via -r requirements.in
 pyasn1==0.6.1
@@ -187,8 +164,6 @@ pyjwt==2.9.0
     #   oauthenticator
 pymysql==1.1.1
     # via -r requirements.in
-pyparsing==3.1.4
-    # via httplib2
 python-dateutil==2.9.0.post0
     # via
     #   arrow
@@ -211,7 +186,6 @@ referencing==0.35.1
     #   jupyter-events
 requests==2.32.3
     # via
-    #   google-api-core
     #   jupyterhub
     #   mwoauth
     #   oauthenticator
@@ -279,8 +253,6 @@ typing-extensions==4.12.2
     #   sqlalchemy
 uri-template==1.3.0
     # via jsonschema
-uritemplate==4.1.1
-    # via google-api-python-client
 urllib3==2.2.3
     # via
     #   jupyterhub-kubespawner
