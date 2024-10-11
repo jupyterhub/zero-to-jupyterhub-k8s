@@ -16,7 +16,7 @@ changes in pull requests], this list should be updated.
 
 ### 4.0.0-beta.4 - 2024-10-11
 
-ldapauthenticator was said to be bumped to version from version 1.3.2 to 2.0.0b2
+ldapauthenticator was said to be bumped from version 1.3.2 to 2.0.0b2
 in the 4.0.0-beta.1 release, but wasn't. With this release, it actually is.
 
 #### Maintenance and upkeep improvements
