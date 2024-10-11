@@ -19,7 +19,7 @@ jupyterhub-tmpauthenticator
 oauthenticator[googlegroups,mediawiki]
 
 ## Kubernetes spawner
-jupyterhub-kubespawner==7.0.0b2
+jupyterhub-kubespawner==7.0.0b3
 
 ## Other optional dependencies for additional features
 pymysql  # mysql
