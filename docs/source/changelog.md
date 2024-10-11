@@ -14,6 +14,27 @@ changes in pull requests], this list should be updated.
 
 ## 4.0
 
+### 4.0.0-beta.4 - 2024-10-11
+
+ldapauthenticator was said to be bumped from version 1.3.2 to 2.0.0b2
+in the 4.0.0-beta.1 release, but wasn't. With this release, it actually is.
+
+#### Maintenance and upkeep improvements
+
+- Update ldapauthenticator from 1.3.2 to 2.0.0.b2 [#3544](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3544) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+- Update oauthenticator from 17.0.0 to 17.1.0 [#3542](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3542) ([@consideRatio](https://github.com/consideRatio), [@jrdnbradford](https://github.com/jrdnbradford))
+- Bump to kubespawner from 7.0.0b2 to 7.0.0b3 [#3541](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3541) ([@consideRatio](https://github.com/consideRatio), [@manics](https://github.com/manics))
+- Update library/traefik version from v3.1.5 to v3.1.6 [#3540](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3540) ([@jupyterhub-bot](https://github.com/jupyterhub-bot), [@manics](https://github.com/manics))
+
+#### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2024-10-03&to=2024-10-11&type=c))
+
+@consideRatio ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2024-10-03..2024-10-11&type=Issues)) | @jrdnbradford ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajrdnbradford+updated%3A2024-10-03..2024-10-11&type=Issues)) | @jupyterhub-bot ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajupyterhub-bot+updated%3A2024-10-03..2024-10-11&type=Issues)) | @manics ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2024-10-03..2024-10-11&type=Issues))
+
 ### 4.0.0-beta.3 - 2024-10-03
 
 #### New features added
