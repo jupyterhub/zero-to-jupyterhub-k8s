@@ -93,9 +93,6 @@ spec:
         {{- . | toYaml | nindent 8 }}
       {{- end }}
       containers:
-        {{- with .Values.hub.extraContainers }}
-        {{- . | toYaml | nindent 8 }}
-        {{- end }}
         - name: hub
           image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
           {{- with .Values.hub.command }}
@@ -238,6 +235,9 @@ spec:
               path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
               port: http
           {{- end }}
+        {{- with .Values.hub.extraContainers }}
+        {{- . | toYaml | nindent 8 }}
+        {{- end }}
       {{- with .Values.hub.extraPodSpec }}
       {{- . | toYaml | nindent 6 }}
       {{- end }}
