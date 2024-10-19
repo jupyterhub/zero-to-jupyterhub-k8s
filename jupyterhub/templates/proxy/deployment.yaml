@@ -100,6 +100,9 @@ spec:
             {{- if .Values.debug.enabled }}
             - --log-level=debug
             {{- end }}
+            {{- if .Values.hub.config.subdomain_host }}
+            - --host-routing
+            {{- end }}
             {{- range .Values.proxy.chp.extraCommandLineFlags }}
             - {{ tpl . $ }}
             {{- end }}
