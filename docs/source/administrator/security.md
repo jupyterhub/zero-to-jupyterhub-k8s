@@ -496,7 +496,7 @@ This would restrict the access to only two IP addresses: `111.111.111.111` and `
 
 You can reduce the chance of cross-origin attacks by giving each user
 their own subdomain `<user>.jupyter.example.org`.
-This requires setting [`hub.config.subdomain_host`](schema_hub.config.subdomain_host), creating a wildcard DNS record `*.jupyter.example.org`, and creating a wildcard SSL certificate.
+This requires setting [`subdomain_host`](schema_hub.config.JupyterHub.subdomain_host), creating a wildcard DNS record `*.jupyter.example.org`, and creating a wildcard SSL certificate.
 
 ```yaml
 hub:

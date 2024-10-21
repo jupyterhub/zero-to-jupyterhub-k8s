@@ -272,15 +272,19 @@ properties:
           dictionaries are updated.
           ```
         properties:
-          subdomain_host:
-            type: string
-            description: |
-              The subdomain to use for hosting singleuser servers.
+          JupyterHub:
+            type: object
+            additionalProperties: true
+            properties:
+              subdomain_host:
+                type: string
+                description: |
+                  The subdomain to use for hosting singleuser servers.
 
-              This helps protect against some cross-origin attacks by giving each user
-              their own subdomain `<user>.jupyter.example.org`.
+                  This helps protect against some cross-origin attacks by giving each user
+                  their own subdomain `<user>.jupyter.example.org`.
 
-              See {ref}`jupyterhub_subdomains`.
+                  See {ref}`jupyterhub_subdomains`.
       extraFiles: &extraFiles
         type: object
         additionalProperties: false
