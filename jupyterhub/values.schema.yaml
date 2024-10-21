@@ -278,17 +278,9 @@ properties:
               The subdomain to use for hosting singleuser servers.
 
               This helps protect against some cross-origin attacks by giving each user
-              their own subdomain `<user>.subdomain.example.org`.
+              their own subdomain `<user>.jupyter.example.org`.
 
-              It requires a wildcard DNS `*.subdomain.example.org` and SSL certificate.
-              If you are using a Kubernetes ingress this must include hosts
-              `subdomain.example.org` and `*.subdomain.example.org`.
-
-              The chart does not support the automatic creation of wildcard HTTPS certificates.
-              Instead you should obtain a certificate from an external source,
-              or install an ACME client such as cert-manager with the DNS-01 challenge.
-
-              See {ref}`jupyterhub:subdomains` in the JupyterHub documentation.
+              See {ref}`jupyterhub_subdomains`.
       extraFiles: &extraFiles
         type: object
         additionalProperties: false
