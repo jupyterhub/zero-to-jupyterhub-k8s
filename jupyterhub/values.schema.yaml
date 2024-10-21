@@ -217,7 +217,7 @@ properties:
           values, you need to use [`hub.extraConfig`](schema_hub.extraConfig)
           instead.
 
-          ```{admonition} Currently intended only for auth config
+          ```{admonition} Some configuration must be set in multiple places
           :class: warning
           This config _currently_ (0.11.0) only influence the software in the
           `hub` Pod, but some Helm chart config options such as
@@ -271,6 +271,24 @@ properties:
           the `--values` or `-f` flag. During merging, lists are replaced while
           dictionaries are updated.
           ```
+        properties:
+          subdomain_host:
+            type: string
+            description: |
+              The subdomain to use for hosting singleuser servers.
+
+              This helps protect against some cross-origin attacks by giving each user
+              their own subdomain `<user>.subdomain.example.org`.
+
+              It requires a wildcard DNS `*.subdomain.example.org` and SSL certificate.
+              If you are using a Kubernetes ingress this must include hosts
+              `subdomain.example.org` and `*.subdomain.example.org`.
+
+              The chart does not support the automatic creation of wildcard HTTPS certificates.
+              Instead you should obtain a certificate from an external source,
+              or install an ACME client such as cert-manager with the DNS-01 challenge.
+
+              See {ref}`jupyterhub:subdomains` in the JupyterHub documentation.
       extraFiles: &extraFiles
         type: object
         additionalProperties: false
