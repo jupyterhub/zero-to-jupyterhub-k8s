@@ -275,6 +275,11 @@ properties:
           JupyterHub:
             type: object
             additionalProperties: true
+            description: |
+              JupyterHub Traitlets configuration.
+
+              See {py:mod}`jupyterhub:jupyterhub.app` for the full list,
+              but take note of the [above warnings](schema_hub.config).
             properties:
               subdomain_host:
                 type: string
