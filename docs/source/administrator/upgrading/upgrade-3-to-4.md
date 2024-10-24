@@ -75,7 +75,7 @@ which _should_ result in no changes for you from previous behavior.
 OAuthenticator is upgraded from 16.3.1 to 17.1.
 The main changes are related to using group information from OAuth providers.
 If you used or would like to use groups for authentication,
-check out the [OAuthenticator changelog](https://oauthenticator.readthedocs.io/en/stable/reference/changelog.html#:~:text=17.1)
+check out the [OAuthenticator changelog](https://oauthenticator.readthedocs.io/en/stable/reference/changelog.html)
 
 ## Other package upgrades
 
