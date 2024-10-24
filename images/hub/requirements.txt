@@ -96,7 +96,7 @@ jupyterhub-idle-culler==1.4.0
     # via -r requirements.in
 jupyterhub-kubespawner==7.0.0b3
     # via -r requirements.in
-jupyterhub-ldapauthenticator==2.0.0b2
+jupyterhub-ldapauthenticator==2.0.0
     # via -r requirements.in
 jupyterhub-ltiauthenticator==1.6.2
     # via -r requirements.in
