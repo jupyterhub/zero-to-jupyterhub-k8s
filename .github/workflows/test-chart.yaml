@@ -137,13 +137,14 @@ jobs:
               --set hub.image.name=quay.io/jupyterhub/k8s-hub-slim
               --set prePuller.hook.enabled=true
               --set prePuller.hook.pullOnlyOnChanges=true
-          - k3s-channel: v1.31 # also test hub.existingSecret
+          - k3s-channel: v1.31 # also test hub.existingSecret and subdomain_host
             test: install
             local-chart-extra-args: >-
               --set hub.existingSecret=test-hub-existing-secret
               --set proxy.secretToken=aaaa1111
               --set hub.cookieSecret=bbbb2222
               --set hub.config.CryptKeeper.keys[0]=cccc3333
+              --set hub.config.JupyterHub.subdomain_host=jupyterhub.example.org
             create-k8s-test-resources: true
 
           # We run three upgrade tests where we first install an already released
@@ -368,6 +369,9 @@ jobs:
         continue-on-error: ${{ matrix.accept-failure == true }}
         run: |
           . ./ci/common
+          if [ "${{ contains(matrix.local-chart-extra-args, 'subdomain_host') }}" = "true" ]; then
+            export CI_SUBDOMAIN_HOST=jupyterhub.example.org
+          fi
           # If you have problems with the tests add '--capture=no' to show stdout
           pytest --verbose --maxfail=2 --color=yes ./tests
 
