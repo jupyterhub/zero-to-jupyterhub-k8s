@@ -80,7 +80,7 @@ ipykernel==6.29.5
     # via
     #   jupyterlab
     #   nbclassic
-ipython==8.28.0
+ipython==8.29.0
     # via ipykernel
 ipython-genutils==0.2.0
     # via nbclassic
@@ -282,7 +282,7 @@ terminado==0.18.1
     # via
     #   jupyter-server
     #   jupyter-server-terminals
-tinycss2==1.3.0
+tinycss2==1.4.0
     # via nbconvert
 tornado==6.4.1
     # via
