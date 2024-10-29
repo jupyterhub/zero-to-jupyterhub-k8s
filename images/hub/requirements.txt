@@ -259,5 +259,5 @@ urllib3==2.2.3
     #   requests
 webcolors==24.8.0
     # via jsonschema
-yarl==1.16.0
+yarl==1.17.0
     # via aiohttp
