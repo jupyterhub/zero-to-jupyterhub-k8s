@@ -25,7 +25,7 @@ Especially if you use features like per-user subdomains or custom page templates
 ### Allowing users
 
 JupyterHub 5 promotes the `allow_all` and `allow_existing_users` configuration used on OAuthenticator to all other Authenticators.
-If you have no explicitly allowed users, the default is now to allow no users (this was already the default if you were using OAuth).
+If you have not explicitly allowed users, the default is to allow no users (this was already the default if you were using OAuth).
 If you are using an Authenticator where all users who can successfully authenticate should have access, set:
 
 ```yaml
