@@ -94,9 +94,9 @@ jupyterhub-hmacauthenticator==1.0
     # via -r requirements.in
 jupyterhub-idle-culler==1.4.0
     # via -r requirements.in
-jupyterhub-kubespawner==7.0.0b3
+jupyterhub-kubespawner==7.0.0
     # via -r requirements.in
-jupyterhub-ldapauthenticator==2.0.0
+jupyterhub-ldapauthenticator==2.0.1
     # via -r requirements.in
 jupyterhub-ltiauthenticator==1.6.2
     # via -r requirements.in
@@ -259,5 +259,5 @@ urllib3==2.2.3
     #   requests
 webcolors==24.8.0
     # via jsonschema
-yarl==1.16.0
+yarl==1.17.1
     # via aiohttp
