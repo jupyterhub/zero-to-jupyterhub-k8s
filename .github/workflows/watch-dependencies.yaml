@@ -4,7 +4,7 @@
 # - Watch multiple images tags referenced in values.yaml to match the latest
 #   image tag.
 #
-# - Watch the jupyterhub pinning in images/*/requirements.in to match the
+# - Watch the jupyterhub pinning in images/*/unfrozen/requirements.txt to match the
 #   latest jupyterhub version available on PyPI, and if doing this, also
 #   refreeze images/*/requirements.txt.
 #
@@ -20,7 +20,7 @@ name: Watch dependencies
 on:
   push:
     paths:
-      - "images/*/requirements.in"
+      - "images/*/unfrozen/requirements.txt"
       - ".github/workflows/watch-dependencies.yaml"
     branches: ["main"]
   schedule:
@@ -142,10 +142,10 @@ jobs:
       - name: Install Python dependencies
         run: pip install packaging requests
 
-      - name: Get images/hub/requirements.in pinned version of jupyterhub
+      - name: Get images/hub/unfrozen/requirements.txt pinned version of jupyterhub
         id: local
         run: |
-          local_version=$(cat images/hub/requirements.in | grep 'jupyterhub==' | sed 's/jupyterhub==//')
+          local_version=$(cat images/hub/unfrozen/requirements.txt | grep 'jupyterhub==' | sed 's/jupyterhub==//')
           echo "version=$local_version" >> $GITHUB_OUTPUT
 
       - name: Get latest version of jupyterhub
@@ -168,11 +168,11 @@ jobs:
         if: steps.local.outputs.version != steps.latest.outputs.version
         run: |
           for img in hub singleuser-sample; do
-            sed --in-place 's/jupyterhub==${{ steps.local.outputs.version }}/jupyterhub==${{ steps.latest.outputs.version }}/g' images/$img/requirements.in
+            sed --in-place 's/jupyterhub==${{ steps.local.outputs.version }}/jupyterhub==${{ steps.latest.outputs.version }}/g' images/$img/unfrozen/requirements.txt
           done
           sed --in-place 's/appVersion: "${{ steps.local.outputs.version }}"/appVersion: "${{ steps.latest.outputs.version }}"/g' jupyterhub/Chart.yaml
 
-      - name: Refreeze images/*/requirements.txt based on images/*/requirements.in
+      - name: Refreeze images/*/requirements.txt based on images/*/unfrozen/requirements.txt
         if: steps.local.outputs.version != steps.latest.outputs.version
         run: ci/refreeze
 
@@ -208,7 +208,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Refreeze images/*/requirements.txt based on images/*/requirements.in
+      - name: Refreeze images/*/requirements.txt based on images/*/unfrozen/requirements.txt
         run: ci/refreeze
 
       - name: git diff
@@ -227,4 +227,4 @@ jobs:
           title: "hub image: refreeze requirements.txt"
           body: >-
             The hub image's requirements.txt has been refrozen based on
-            requirements.in.
+            unfrozen/requirements.txt.
