@@ -136,9 +136,9 @@ jupyter-server==2.14.2
 jupyter-server-terminals==0.5.3
     # via jupyter-server
 jupyterhub==5.2.1
-    # via -r requirements.in
+    # via -r unfrozen/requirements.txt
 jupyterlab==4.3.0
-    # via -r requirements.in
+    # via -r unfrozen/requirements.txt
 jupyterlab-pygments==0.3.0
     # via nbconvert
 jupyterlab-server==2.27.3
@@ -157,7 +157,7 @@ matplotlib-inline==0.1.7
 mistune==3.0.2
     # via nbconvert
 nbclassic==1.1.0
-    # via -r requirements.in
+    # via -r unfrozen/requirements.txt
 nbclient==0.10.0
     # via nbconvert
 nbconvert==7.16.4
@@ -168,7 +168,7 @@ nbformat==5.10.4
     #   nbclient
     #   nbconvert
 nbgitpuller==1.2.1
-    # via -r requirements.in
+    # via -r unfrozen/requirements.txt
 nest-asyncio==1.6.0
     # via
     #   ipykernel
