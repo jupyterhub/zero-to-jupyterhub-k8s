@@ -10,19 +10,27 @@ This Helm chart provides [development releases], and as we merge [breaking
 changes in pull requests], this list should be updated.
 
 [development releases]: https://hub.jupyter.org/helm-chart/#development-releases-jupyterhub
+
 [breaking changes in pull requests]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pulls?q=is%3Apr+is%3Aclosed+label%3Abreaking
+
+(changelog-4.0)=
 
 ## 4.0
 
-### 4.0.0 - 2024-10
+### 4.0.0 - 2024-11
 
 This release updates JupyterHub itself from version 4 to 5, and the dependencies
 `jupyterhub-kubespawner`, `oauthenticator`, and `ldapauthenticator` to a new
 major version.
 
-See the [upgrade guide](upgrade-3-to-4) for specific instructions for upgrading chart version from 3 to 4,
-and check the summary of breaking changes and the linked changelogs below
-if you use any of the upgraded packages.
+:::{seealso}
+
+- the [general upgrade documentation](upgrading-major-upgrades) for upgrade steps to take every time you do a major chart update
+- the [upgrade guide](upgrade-3-to-4) for specific instructions for upgrading chart version from 3 to 4
+- check the summary of breaking changes and the linked changelogs below
+  if you use any of the upgraded packages.
+
+:::
 
 #### Breaking changes
 

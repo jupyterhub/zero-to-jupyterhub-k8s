@@ -6,13 +6,19 @@ zero-to-jupyterhub 4.0 is a major upgrade that may require some changes to your 
 depending on what features you may use.
 This mostly comes in the form of some upgraded packages, described below.
 
-See the [changelog](changelog) for details of upgraded packages.
+:::{seealso}
+
+- the [general upgrade documentation](upgrading-major-upgrades) for upgrade steps to take every time you do a major chart update
+- the [changelog](changelog-4.0) for details of upgraded packages
+
+:::
 
 ## JupyterHub 5
 
 zero-to-jupyterhub 4.0 upgrades the JupyterHub version from 4.1.6 to 5.2.1.
 
 :::{seealso}
+
 For more detailed changes in JupyterHub, see JupyterHub's own documentation on upgrading to version 5:
 
 Especially if you use features like per-user subdomains or custom page templates.
@@ -49,10 +55,12 @@ especially those that have the `{username}` or `{servername}` fields,
 those values are likely to change under the new scheme for some usernames.
 In particular, there are new fields that should make things easier:
 
-- `{user_server}` combines the username and server name, and is equivalent to `{username}{servername}` in the old escape scheme
-- `{pod_name}`, `{pvc_name}`
+- `{user_server}` combines the username and server name, and is equivalent to `{username}{servername}` in the old escape scheme.
+  It is the recommended value when a string should be unique per named server, as opposed to per user.
+- `{pod_name}`, `{pvc_name}` are now available to reference the fully resolved names of these objects
+  and can be used to avoid duplicating templates.
 
-You can opt in to the kubespawner 6 behavior with:
+You can opt in globally to keep the kubespawner 6 behavior with:
 
 ```yaml
 hub:
@@ -63,23 +71,32 @@ hub:
 
 which _should_ result in no changes for you from previous behavior.
 
+One user-facing place where a default template may require administrator action is if you are using:
+
+```yaml
+singleuser:
+  storage:
+    type: static
+```
+
+The default value for `subPath` is `{username}` which may resolve to a different value for some usernames, which could appear like a 'lost' home directory because the mount path changes.
+The data is not lost, but the mount location has changed.
+To ensure this value doesn't change, you can use:
+
+```yaml
+singleuser:
+  storage:
+    type: static
+    static:
+      subPath: "{escaped_username}"
+```
+
+which applies the previous 'escape' scheme to the subPath.
+Alternatively, you can keep the new scheme, and perform a one-time migration to move files for the affected usernames.
+
 :::{seealso}
 
 - [KubeSpawner changelog](https://jupyterhub-kubespawner.readthedocs.io/en/latest/changelog.html)
 - [KubeSpawner docs on templated fields](https://jupyterhub-kubespawner.readthedocs.io/en/latest/templates.html#fields)
 
 :::
-
-## OAuthenticator 17
-
-OAuthenticator is upgraded from 16.3.1 to 17.1.
-The main changes are related to using group information from OAuth providers.
-If you used or would like to use groups for authentication,
-check out the [OAuthenticator changelog](https://oauthenticator.readthedocs.io/en/stable/reference/changelog.html)
-
-## Other package upgrades
-
-- Python is upgraded from 3.11 to 3.12 in the Hub image
-- LDAPAuthenticator is upgraded from 1 to 2 ([changelog](https://github.com/jupyterhub/ldapauthenticator/blob/2.0.0/CHANGELOG.md#200---2024-10-18))
-- FirstUseAuthenticator is upgraded from 1.0 to 1.1 ([changelog](https://github.com/jupyterhub/firstuseauthenticator/blob/1.1.0/CHANGELOG.md))
-- idle culler is upgraded from 1.3.1 to 1.4.0 ([changelog](https://github.com/jupyterhub/jupyterhub-idle-culler/blob/1.4.0/CHANGELOG.md))
