@@ -21,7 +21,7 @@
 repos:
   # Autoformat: Python code, syntax patterns are modernized
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.17.0
+    rev: v3.19.0
     hooks:
       - id: pyupgrade
         args:
@@ -29,7 +29,7 @@ repos:
 
   # Autoformat: Python code
   - repo: https://github.com/psf/black
-    rev: 24.8.0
+    rev: 24.10.0
     hooks:
       - id: black
         args:
@@ -72,7 +72,7 @@ repos:
       - id: flake8
 
   - repo: https://github.com/gruntwork-io/pre-commit
-    rev: v0.1.23
+    rev: v0.1.24
     hooks:
       # This requires shellcheck to be installed manually so is disabled by default
       - id: shellcheck
