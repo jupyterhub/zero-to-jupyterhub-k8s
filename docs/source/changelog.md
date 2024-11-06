@@ -17,7 +17,7 @@ changes in pull requests], this list should be updated.
 
 ## 4.0
 
-### 4.0.0 - 2024-11
+### 4.0.0 - 2024-11-07
 
 This release updates JupyterHub itself from version 4 to 5, and the dependencies
 `jupyterhub-kubespawner`, `oauthenticator`, and `ldapauthenticator` to a new
@@ -42,12 +42,12 @@ major version.
 - JupyterHub 4.1.6 has been upgraded to 5.2.1
   - Refer to the [JupyterHub changelog] for details and pay attention to the
     entries for JupyterHub version 5.0.0.
-- OAuthenticator 16.3.1 has been upgraded to 17.0.0
+- OAuthenticator 16.3.1 has been upgraded to 17.1.0
   - If you are using an OAuthenticator based authenticator class
     (GitHubOAuthenticator, GoogleOAuthenticator, ...), refer to the
     [OAuthenticator changelog] for details and pay attention to the entries for
     JupyterHub version 17.0.0.
-- LDAPAuthenticator 1.3.2 has been upgraded to 2.0.0b2
+- LDAPAuthenticator 1.3.2 has been upgraded to 2.0.2
   - If you are using this authenticator class, refer to the [LDAPAuthenticator
     changelog] for details and pay attention to the entries for
     LDAPAuthenticator version 2.0.0.
@@ -61,12 +61,12 @@ major version.
 | [jupyterhub](https://github.com/jupyterhub/jupyterhub)                           | 4.1.6            | 5.2.1            | [Changelog](https://jupyterhub.readthedocs.io/en/stable/reference/changelog.html)         | Run in the `hub` pod               |
 | [kubespawner](https://github.com/jupyterhub/kubespawner)                         | 6.2.0            | 7.0.0            | [Changelog](https://jupyterhub-kubespawner.readthedocs.io/en/stable/changelog.html)       | Run in the `hub` pod               |
 | [oauthenticator](https://github.com/jupyterhub/oauthenticator)                   | 16.3.1           | 17.1.0           | [Changelog](https://oauthenticator.readthedocs.io/en/stable/reference/changelog.html)     | Run in the `hub` pod               |
-| [ldapauthenticator](https://github.com/jupyterhub/ldapauthenticator)             | 1.3.2            | 2.0.0            | [Changelog](https://github.com/jupyterhub/ldapauthenticator/blob/HEAD/CHANGELOG.md)       | Run in the `hub` pod               |
+| [ldapauthenticator](https://github.com/jupyterhub/ldapauthenticator)             | 1.3.2            | 2.0.2            | [Changelog](https://github.com/jupyterhub/ldapauthenticator/blob/HEAD/CHANGELOG.md)       | Run in the `hub` pod               |
 | [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 1.2.0            | 1.3.0            | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/HEAD/CHANGELOG.md)     | Run in the `hub` pod               |
 | [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler)   | 1.3.1            | 1.4.0            | [Changelog](https://github.com/jupyterhub/jupyterhub-idle-culler/blob/main/CHANGELOG.md)  | Run in the `hub` pod               |
 | [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy) | 4.6.1            | 4.6.2            | [Changelog](https://github.com/jupyterhub/configurable-http-proxy/blob/HEAD/CHANGELOG.md) | Run in the `proxy` pod             |
-| [traefik](https://github.com/traefik/traefik)                                    | v2.11.0          | v3.1.4           | [Changelog](https://github.com/traefik/traefik/blob/HEAD/CHANGELOG.md)                    | Run in the `autohttps` pod         |
-| [kube-scheduler](https://github.com/kubernetes/kube-scheduler)                   | v1.26.15         | v1.30.5          | [Changelog](https://github.com/kubernetes/kubernetes/tree/master/CHANGELOG)               | Run in the `user-scheduler` pod(s) |
+| [traefik](https://github.com/traefik/traefik)                                    | v2.11.0          | v3.2.0           | [Changelog](https://github.com/traefik/traefik/blob/HEAD/CHANGELOG.md)                    | Run in the `autohttps` pod         |
+| [kube-scheduler](https://github.com/kubernetes/kube-scheduler)                   | v1.26.15         | v1.30.6          | [Changelog](https://github.com/kubernetes/kubernetes/tree/master/CHANGELOG)               | Run in the `user-scheduler` pod(s) |
 
 For a detailed list of Python dependencies in the `hub` Pod's Docker image,
 inspect the [images/hub/requirements.txt] file and use its git history to see
@@ -88,10 +88,10 @@ what changes between tagged versions.
 #### Bugs fixed
 
 - fix default pvc mounting with kubespawner 7 [#3537](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3537) ([@minrk](https://github.com/minrk), [@consideRatio](https://github.com/consideRatio))
-- network-tools image: pin alpine 3.18 for legacy iptables [#3369](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3369) ([@consideRatio](https://github.com/consideRatio))
 
 #### Maintenance and upkeep improvements
 
+- Use python 3.12 instead of 3.11 in built images [#3526](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3526) ([@consideRatio](https://github.com/consideRatio), [@manics](https://github.com/manics))
 - user-scheduler: update kube-scheduler binary from 1.28.14 to 1.30.5 [#3514](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3514) ([@consideRatio](https://github.com/consideRatio))
 - Drop support for k8s 1.26-1.27 [#3508](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3508) ([@consideRatio](https://github.com/consideRatio))
 - Bump debian distribution for images [#3457](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3457) ([@SchutteJan](https://github.com/SchutteJan), [@manics](https://github.com/manics))
@@ -100,8 +100,6 @@ what changes between tagged versions.
 
 #### Documentation improvements
 
-- Add changelog for 4.0.0-beta.4 [#3543](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3543) ([@consideRatio](https://github.com/consideRatio), [@manics](https://github.com/manics))
-- Add changelog for 4.0.0-beta.1 [#3522](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3522) ([@consideRatio](https://github.com/consideRatio), [@manics](https://github.com/manics))
 - Add backdated upgrade guide for 2 to 3 [#3521](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3521) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
 - debugging: remove old (now misleading) example [#3487](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3487) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
 - RTD custom domain changes [#3461](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3461) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
@@ -109,23 +107,25 @@ what changes between tagged versions.
 
 #### Continuous integration improvements
 
+- Pin and automate doing isolated bumps of hub image dependencies' major versions [#3565](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3565) ([@consideRatio](https://github.com/consideRatio), [@minrk](https://github.com/minrk), [@manics](https://github.com/manics))
+- remove maintenance label from autobump PRs [#3558](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3558) ([@minrk](https://github.com/minrk), [@manics](https://github.com/manics))
+- ci: Bump postgresql chart [#3554](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3554) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
 - ci: configure automatic bump of kube-scheduler to version 1.30.x [#3517](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3517) ([@consideRatio](https://github.com/consideRatio))
 
 #### Other merged PRs
 
 This changelog entry omits automated PRs, for example those updating
 dependencies in: images, github actions, pre-commit hooks. For a full list of
-changes, see the [full
-comparison](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/3.3.8...4.0.0-beta.1).
+changes, see the [full comparison](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/3.3.8...4.0.0).
 
 #### Contributors to this release
 
 The following people contributed discussions, new ideas, code and documentation contributions, and review.
 See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/#how-does-this-tool-define-contributions-in-the-reports).
 
-([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2024-03-20&to=2024-10-24&type=c))
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2024-07-31&to=2024-11-07&type=c))
 
-@alxyok ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aalxyok+updated%3A2024-03-20..2024-10-24&type=Issues)) | @benz0li ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Abenz0li+updated%3A2024-03-20..2024-10-24&type=Issues)) | @buti1021 ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Abuti1021+updated%3A2024-03-20..2024-10-24&type=Issues)) | @colinlodter ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Acolinlodter+updated%3A2024-03-20..2024-10-24&type=Issues)) | @consideRatio ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2024-03-20..2024-10-24&type=Issues)) | @jash2105 ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajash2105+updated%3A2024-03-20..2024-10-24&type=Issues)) | @jrdnbradford ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajrdnbradford+updated%3A2024-03-20..2024-10-24&type=Issues)) | @jupyterhub-bot ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajupyterhub-bot+updated%3A2024-03-20..2024-10-24&type=Issues)) | @Khoi16 ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AKhoi16+updated%3A2024-03-20..2024-10-24&type=Issues)) | @lahwaacz ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Alahwaacz+updated%3A2024-03-20..2024-10-24&type=Issues)) | @manics ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2024-03-20..2024-10-24&type=Issues)) | @minrk ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aminrk+updated%3A2024-03-20..2024-10-24&type=Issues)) | @samyuh ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Asamyuh+updated%3A2024-03-20..2024-10-24&type=Issues)) | @SchutteJan ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3ASchutteJan+updated%3A2024-03-20..2024-10-24&type=Issues)) | @snickell ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Asnickell+updated%3A2024-03-20..2024-10-24&type=Issues)) | @StefanTheWiz ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AStefanTheWiz+updated%3A2024-03-20..2024-10-24&type=Issues))
+@alxyok ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aalxyok+updated%3A2024-07-31..2024-11-07&type=Issues)) | @colinlodter ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Acolinlodter+updated%3A2024-07-31..2024-11-07&type=Issues)) | @consideRatio ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2024-07-31..2024-11-07&type=Issues)) | @jrdnbradford ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajrdnbradford+updated%3A2024-07-31..2024-11-07&type=Issues)) | @jupyterhub-bot ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajupyterhub-bot+updated%3A2024-07-31..2024-11-07&type=Issues)) | @lahwaacz ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Alahwaacz+updated%3A2024-07-31..2024-11-07&type=Issues)) | @manics ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2024-07-31..2024-11-07&type=Issues)) | @minrk ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aminrk+updated%3A2024-07-31..2024-11-07&type=Issues)) | @samyuh ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Asamyuh+updated%3A2024-07-31..2024-11-07&type=Issues)) | @snickell ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Asnickell+updated%3A2024-07-31..2024-11-07&type=Issues)) | @StefanTheWiz ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AStefanTheWiz+updated%3A2024-07-31..2024-11-07&type=Issues))
 
 ## 3.3
 
