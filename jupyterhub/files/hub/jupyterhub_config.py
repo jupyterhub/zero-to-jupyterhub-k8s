@@ -23,6 +23,24 @@ from z2jh import (
 )
 
 
+def modify_pod_hook(spawner, pod):
+    if containers := pod.spec.containers:
+        values = [e.value for e in containers[0].env if e.name == "JUPYTERHUB_USER"]
+        if not values:
+            return pod
+
+        split_tenant_env = values[0].split("_")[1:]
+        tenant_env = "_".join(split_tenant_env)
+        _volume_mounts = containers[0].volume_mounts
+        if len(_volume_mounts) >= 2 and _volume_mounts[1].name == "jupyterhub-shared-tenant":
+            _volume_mounts[1].sub_path = tenant_env
+
+    return pod
+
+
+c.KubeSpawner.modify_pod_hook = modify_pod_hook
+
+
 def camelCaseify(s):
     """convert snake_case to camelCase
 
