@@ -38,6 +38,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # ref: https://myst-parser.readthedocs.io/en/latest/configuration.html
 #
 myst_enable_extensions = [
+    "colon_fence",
     "substitution",
 ]
 
