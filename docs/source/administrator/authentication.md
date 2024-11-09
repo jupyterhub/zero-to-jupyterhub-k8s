@@ -425,7 +425,7 @@ documentation in this project also.
 [KeyCloak](https://www.keycloak.org) is an open source based provider of
 identity management that you can host yourself. Below is an example on how you
 can configure the GenericOAuthenticator class to authenticate against a KeyCloak
-server (version 17 or later).
+server (last tested with Keycloak 26).
 
 To configure an OpenID Connect client, see [KeyCloak's own
 documentation](https://www.keycloak.org/docs/latest/server_admin/index.html#_oidc_clients).
@@ -444,14 +444,30 @@ hub:
       username_claim: preferred_username
       userdata_params:
         state: state
-      # In order to use keycloak client's roles as authorization layer
-      claim_groups_key: roles
+      allowed_users:
+        - user
+      admin_users:
+        - admin
+    JupyterHub:
+      authenticator_class: generic-oauth
+```
+
+If you want to use Keycloak roles as JupyterHub groups for authorization you must create or modify a Keycloak scope mapper to return the roles, and ensure the mapper is returned in userinfo.
+For example, if you modify the default Keycloak Client scope called `roles`:
+
+```yaml
+hub:
+  config:
+    GenericOAuthenticator:
+      scope:
+        - openid
+        - roles
+      auth_state_groups_key: oauth_user.realm_access.roles
+      manage_groups: true
       allowed_groups:
         - user
       admin_groups:
         - admin
-    JupyterHub:
-      authenticator_class: generic-oauth
 ```
 
 ### LDAP and Active Directory
