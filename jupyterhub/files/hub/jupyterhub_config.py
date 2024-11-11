@@ -29,9 +29,12 @@ def modify_pod_hook(spawner, pod):
         if not values:
             return pod
 
+        user_id = values[0].split("_")[0]
         split_tenant_env = values[0].split("_")[1:]
         tenant_env = "_".join(split_tenant_env)
         _volume_mounts = containers[0].volume_mounts
+        if len(_volume_mounts) >= 2 and _volume_mounts[0].name == "jupyterhub-shared":
+            _volume_mounts[0].sub_path = f"{tenant_env}/{user_id}"
         if len(_volume_mounts) >= 2 and _volume_mounts[1].name == "jupyterhub-shared-tenant":
             _volume_mounts[1].sub_path = tenant_env
 
