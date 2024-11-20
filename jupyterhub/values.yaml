@@ -551,7 +551,7 @@ scheduling:
       # here. We aim to stay around 1 minor version behind the latest k8s
       # version.
       #
-      tag: "v1.30.6" # ref: https://github.com/kubernetes/kubernetes/tree/master/CHANGELOG
+      tag: "v1.30.7" # ref: https://github.com/kubernetes/kubernetes/tree/master/CHANGELOG
       pullPolicy:
       pullSecrets: []
     nodeSelector: {}
