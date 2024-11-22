@@ -15,3 +15,15 @@ updates:
       interval: monthly
       time: "05:00"
       timezone: Etc/UTC
+  - package-ecosystem: pip
+    directory: /images/hub/unfrozen
+    labels: [breaking]
+    groups:
+      major-versions:
+        update-types: [major]
+        exclude-patterns:
+          - jupyterhub # bumped by other automation
+    schedule:
+      interval: daily
+      time: "05:00"
+      timezone: Etc/UTC

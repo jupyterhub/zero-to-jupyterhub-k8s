@@ -256,7 +256,8 @@ if tolerations:
 storage_type = get_config("singleuser.storage.type")
 if storage_type == "dynamic":
     pvc_name_template = get_config("singleuser.storage.dynamic.pvcNameTemplate")
-    c.KubeSpawner.pvc_name_template = pvc_name_template
+    if pvc_name_template:
+        c.KubeSpawner.pvc_name_template = pvc_name_template
     volume_name_template = get_config("singleuser.storage.dynamic.volumeNameTemplate")
     c.KubeSpawner.storage_pvc_ensure = True
     set_config_if_not_none(
@@ -275,13 +276,14 @@ if storage_type == "dynamic":
     c.KubeSpawner.volumes = [
         {
             "name": volume_name_template,
-            "persistentVolumeClaim": {"claimName": pvc_name_template},
+            "persistentVolumeClaim": {"claimName": "{pvc_name}"},
         }
     ]
     c.KubeSpawner.volume_mounts = [
         {
             "mountPath": get_config("singleuser.storage.homeMountPath"),
             "name": volume_name_template,
+            "subPath": get_config("singleuser.storage.dynamic.subPath"),
         }
     ]
 elif storage_type == "static":

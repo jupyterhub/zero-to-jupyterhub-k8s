@@ -489,3 +489,44 @@ proxy:
 ```
 
 This would restrict the access to only two IP addresses: `111.111.111.111` and `222.222.222.222`.
+
+(jupyterhub_subdomains)=
+
+## Host user servers on a subdomain
+
+You can reduce the chance of cross-origin attacks by giving each user
+their own subdomain `<user>.jupyter.example.org`.
+This requires setting [`subdomain_host`](schema_hub.config.JupyterHub.subdomain_host), creating a wildcard DNS record `*.jupyter.example.org`, and creating a wildcard SSL certificate.
+
+```yaml
+hub:
+  config:
+    JupyterHub:
+      subdomain_host: jupyter.example.org
+```
+
+If you are using a Kubernetes ingress this must include hosts
+`jupyter.example.org` and `*.jupyter.example.org`.
+For example:
+
+```yaml
+ingress:
+  enabled: true
+  hosts:
+    - jupyter.example.org
+    - "*.jupyter.example.org"
+  tls:
+    - hosts:
+        - jupyter.example.org
+        - "*.jupyter.example.org"
+      secretName: example-tls
+```
+
+where `example-tls` is the name of a Kubernetes secret containing the wildcard certificate and key.
+
+The chart does not support the automatic creation of wildcard HTTPS certificates.
+You must obtain a certificate from an external source,
+for example by using an ACME client such as [cert-manager with the DNS-01 challenge](https://cert-manager.io/docs/configuration/acme/dns01/),
+and ensure the certificate and key are stored in the secret.
+
+See {ref}`jupyterhub:subdomains` in the JupyterHub documentation for more information.

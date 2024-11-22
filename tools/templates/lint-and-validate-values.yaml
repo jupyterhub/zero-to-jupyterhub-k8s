@@ -574,6 +574,21 @@ ingress:
     - mocked2.domain.name
   pathSuffix: dummy-pathSuffix
   pathType: ImplementationSpecific
+  extraPaths:
+    - pathType: Prefix
+      path: "/foo"
+      backend:
+        service:
+          name: foo
+          port:
+            number: 80
+    - pathType: Prefix
+      path: "/bar"
+      backend:
+        service:
+          name: bar
+          port:
+            name: barPort
   tls:
     - secretName: jupyterhub-tls
       hosts:

@@ -87,7 +87,7 @@ jobs:
       # Action reference: https://github.com/aquasecurity/trivy-action
       - name: Scan latest published image
         id: scan_1
-        uses: aquasecurity/trivy-action@fd25fed6972e341ff0007ddb61f77e88103953c2
+        uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8
         with:
           image-ref: ${{ steps.image.outputs.spec }}
           format: json # ref: https://github.com/aquasecurity/trivy#save-the-results-as-json
@@ -112,7 +112,7 @@ jobs:
       - name: Scan rebuilt image
         id: scan_2
         if: steps.rebuild.outcome == 'success'
-        uses: aquasecurity/trivy-action@fd25fed6972e341ff0007ddb61f77e88103953c2
+        uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8
         with:
           image-ref: rebuilt-image
           format: json # ref: https://github.com/aquasecurity/trivy#save-the-results-as-json
@@ -171,7 +171,7 @@ jobs:
 
       - name: Describe vulnerabilities
         if: steps.rebuild.outcome == 'success'
-        uses: aquasecurity/trivy-action@fd25fed6972e341ff0007ddb61f77e88103953c2
+        uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8
         with:
           image-ref: rebuilt-image
           format: table
@@ -205,7 +205,7 @@ jobs:
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create or update a PR
         if: steps.analyze.outputs.proceed == 'yes' && github.event_name != 'pull_request'
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           token: "${{ secrets.jupyterhub_bot_pat }}"
           author: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>

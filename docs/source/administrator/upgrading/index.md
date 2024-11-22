@@ -22,6 +22,8 @@ or the [Discourse forum](https://discourse.jupyter.org/).
 :maxdepth: 1
 :caption: Major releases guides
 
+upgrade-3-to-4
+upgrade-2-to-3
 upgrade-1-to-2
 ```
 

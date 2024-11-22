@@ -1,0 +1,33 @@
+# This file is the input to requirements.txt, which is a frozen version of this.
+#
+# To update:
+# - the jupyterhub version or the frozen requirements.txt file, use the
+#   "Run workflow" button at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/actions/workflows/watch-dependencies.yaml.
+# - the major version pins in this file, trigger dependabot to run via
+#   https://github.com/jupyterhub/zero-to-jupyterhub-k8s/network/updates
+#
+
+# JupyterHub itself
+jupyterhub==5.2.1
+
+# JupyterHub Spawner, kubernetes specific
+jupyterhub-kubespawner==7.*
+
+# JupyterHub Authenticator choices
+jupyterhub-firstuseauthenticator==1.*
+jupyterhub-hmacauthenticator==1.*
+jupyterhub-ldapauthenticator==2.*
+jupyterhub-ltiauthenticator==1.*
+jupyterhub-nativeauthenticator==1.*
+jupyterhub-tmpauthenticator==1.*
+oauthenticator[googlegroups,mediawiki]==17.*
+
+# JupyterHub service shutting servers after a period of inactivity
+jupyterhub-idle-culler==1.*
+
+# Other optional dependencies for additional features
+pymysql  # mysql
+psycopg2  # postgres
+pycurl  # internal http requests handle more load with pycurl
+sqlalchemy-cockroachdb # cocroachdb
+statsd  # statsd metrics collection (TODO: remove soon, since folks use prometheus)

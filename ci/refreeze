@@ -13,7 +13,7 @@ for img in ${IMAGES}; do
         --volume="$PWD:/io" \
         --workdir=/io \
         --user=root \
-        python:3.11-bullseye \
-        sh -c 'pip install pip-tools==6.* && pip-compile --resolver=backtracking --upgrade'
+        python:3.12-bookworm \
+        sh -c 'pip install pip-tools==7.* && pip-compile --allow-unsafe --strip-extras --upgrade --output-file=requirements.txt unfrozen/requirements.txt'
     popd
 done

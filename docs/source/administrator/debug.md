@@ -74,19 +74,6 @@ settings for the pod. The final section you'll see is a list of recent
 events. These can be particularly informative, as often an error will
 show up in this section.
 
-**Real world scenario:** In our case, one of the lines in the events page
-displays an error:
-
-```
-$ kubectl describe pod jupyter-choldgraf --namespace <k8s-namespace>
-...
-2m            52s             4       kubelet, gke-jhubtest-default-pool-52c36683-jv6r        spec.containers{notebook}       Warning         Failed           Failed to pull image "jupyter/scipy-notebook:v0.4": rpc error: code = 2 desc = Error response from daemon: {"message":"manifest for jupyter/scipy-notebook:v0.4 not found"}
-...
-```
-
-It seems there is indeed something wrong with the Docker image. Let's confirm
-this by getting another view on the events that have transpired in the pod.
-
 ### `kubectl logs`
 
 If you only want to see the latest logs for a pod, use the following command:
@@ -99,37 +86,7 @@ This will show you the logs from the pod, which often contain useful
 information about what is going wrong. Parse these logs
 to see if something is generating an error.
 
-**Real world scenario:** In our case, we get this line back:
-
-```
-$ kubectl logs jupyter-choldgraf --namespace <k8s-namespace>
-Error from server (BadRequest): container "notebook" in pod "jupyter-choldgraf" is waiting to start: trying and failing to pull image
-```
-
-Now we are sure that something is wrong with our Dockerfile. Let's check
-our `config.yaml` file for the section where we specify the user's
-Docker image. Here we see our problem:
-
-```yaml
-singleuser:
-  image:
-    name: jupyter/scipy-notebook
-```
-
-We haven't specified a `tag` for our Docker image! Not specifying a tag
-will cause it to default to `v0.4`, which isn't what we want and is causing
-the pod to fail.
-
-To fix this, let's add a tag to our `config.yaml` file:
-
-```yaml
-singleuser:
-  image:
-    name: jupyter/scipy-notebook
-    tag: ae885c0a6226
-```
-
-Then run a helm upgrade:
+When you have identified the error edit your `config.yaml` if necessary, then run a helm upgrade:
 
 ```
 helm upgrade --cleanup-on-fail jhub jupyterhub/jupyterhub --version=<chart-version> -f config.yaml

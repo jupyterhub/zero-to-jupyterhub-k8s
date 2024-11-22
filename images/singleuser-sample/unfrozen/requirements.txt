@@ -1,0 +1,17 @@
+# This file is the input to requirements.txt, which is a frozen version of this.
+#
+# To update:
+# - the jupyterhub version or the frozen requirements.txt file, use the
+#   "Run workflow" button at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/actions/workflows/watch-dependencies.yaml.
+#
+
+# JupyterHub itself, update this version pinning by running the workflow
+# mentioned above.
+jupyterhub==5.2.1
+
+# UI
+jupyterlab
+nbclassic
+
+# plugins
+nbgitpuller

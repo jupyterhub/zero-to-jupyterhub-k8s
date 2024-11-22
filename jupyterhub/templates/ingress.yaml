@@ -24,6 +24,9 @@ spec:
                 name: {{ include "jupyterhub.proxy-public.fullname" $ }}
                 port:
                   name: http
+          {{- with $.Values.ingress.extraPaths }}  
+          {{- . | toYaml | nindent 10 }}  
+          {{- end }}  
       {{- if $host }}
       host: {{ $host | quote }}
       {{- end }}

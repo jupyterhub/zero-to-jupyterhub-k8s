@@ -268,7 +268,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 
    **Both** `--min-count` and `--max-count` must be defined.
 
-   Read more about available options for the autoscaler [here](https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/aks/cluster-autoscaler.md).
+   Read more about available options for the autoscaler [here](https://learn.microsoft.com/en-us/azure/aks/cluster-autoscaler?tabs=azure-cli).
 
 8. If you're using the Azure CLI locally, install [kubectl](https://kubernetes.io/docs/reference/kubectl/), a tool
    for accessing the Kubernetes API from the commandline:

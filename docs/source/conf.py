@@ -38,6 +38,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # ref: https://myst-parser.readthedocs.io/en/latest/configuration.html
 #
 myst_enable_extensions = [
+    "colon_fence",
     "substitution",
 ]
 
@@ -203,6 +204,14 @@ html_context = {
     "github_version": "main",
     "doc_path": "docs/source",
 }
+
+
+# -- Readthedocs specific configuration -------------------------------------------
+# ref: https://about.readthedocs.com/blog/2024/07/addons-by-default/
+#
+html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "")
+if os.environ.get("READTHEDOCS", "") == "True":
+    html_context["READTHEDOCS"] = True
 
 
 # -- Options for linkcheck builder -------------------------------------------
