@@ -70,8 +70,10 @@ spec:
               {{- include "jupyterhub.userNodeAffinityRequired" . | nindent 14 }}
       {{- end }}
       terminationGracePeriodSeconds: 0
-      {{- with include "jupyterhub.hook-image-awaiter-serviceaccount.fullname" . }}
-      serviceAccountName: {{ . }}
+      {{- if .hook }}
+      serviceAccountName: "hook-image-puller-serviceaccount"
+      {{- else }}
+      serviceAccountName: "continuous-image-puller-serviceaccount"
       {{- end }}
       automountServiceAccountToken: false
       {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.singleuser.image) }}
