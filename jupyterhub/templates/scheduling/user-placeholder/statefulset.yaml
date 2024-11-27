@@ -47,7 +47,7 @@ spec:
       nodeSelector:
         {{- . | toYaml | nindent 8 }}
       {{- end }}
-      {{- with concat .Values.scheduling.userPods.tolerations .Values.singleuser.extraTolerations }}
+      {{- with concat .Values.scheduling.userPods.tolerations .Values.singleuser.extraTolerations .Values.prePuller.taintmanager.tolerations }}
       tolerations:
         {{- . | toYaml | nindent 8 }}
       {{- end }}
