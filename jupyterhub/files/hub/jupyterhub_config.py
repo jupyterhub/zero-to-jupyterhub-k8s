@@ -304,37 +304,31 @@ elif storage_type == "static":
 # the dedicated k8s Secret prepared to hold the extraFiles actual content.
 extra_files = get_config("singleuser.extraFiles", {})
 if extra_files:
-    volume = {
-        "name": "files",
-    }
-    items = []
     for file_key, file_details in extra_files.items():
-        # Each item is a mapping of a key in the k8s Secret to a path in this
-        # abstract volume, the goal is to enable us to set the mode /
-        # permissions only though so we don't change the mapping.
-        item = {
-            "key": file_key,
-            "path": file_key,
-        }
-        if "mode" in file_details:
-            item["mode"] = file_details["mode"]
-        items.append(item)
-    volume["secret"] = {
-        "secretName": get_name("singleuser"),
-        "items": items,
-    }
-    c.KubeSpawner.volumes.append(volume)
-
-    volume_mounts = []
-    for file_key, file_details in extra_files.items():
-        volume_mounts.append(
+        # Make the key RFC 1035 Label Naming compliant
+        file_key = file_key.lower().replace("_", "-").replace(".", "-")
+        c.KubeSpawner.volumes.append(
+            {
+                "name": file_key,
+                "secret": {
+                    "secretName": f"singleuser-{file_key}",
+                    "items": [
+                        {
+                            "key": file_key,
+                            "path": file_key,
+                            "mode": file_details.get("mode"),
+                        }
+                    ],
+                },
+            }
+        )
+        c.KubeSpawner.volume_mounts.append(
             {
                 "mountPath": file_details["mountPath"],
                 "subPath": file_key,
-                "name": "files",
+                "name": file_key,
             }
         )
-    c.KubeSpawner.volume_mounts.extend(volume_mounts)
 
 # Inject extraVolumes / extraVolumeMounts
 c.KubeSpawner.volumes.extend(get_config("singleuser.storage.extraVolumes", []))
