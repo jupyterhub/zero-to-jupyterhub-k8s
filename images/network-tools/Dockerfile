@@ -5,6 +5,6 @@
 #
 FROM alpine:3.18
 
-# VULN_SCAN_TIME=2024-09-16_05:05:41
+# VULN_SCAN_TIME=2024-12-02_05:05:21
 
 RUN apk add --no-cache iptables
