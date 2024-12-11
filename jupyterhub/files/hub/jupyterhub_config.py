@@ -154,6 +154,7 @@ for trait, cfg_key in (
     ("uid", None),
     ("fs_gid", None),
     ("service_account", "serviceAccountName"),
+    ("automount_service_account_token", "automountServiceAccountToken"),
     ("storage_extra_labels", "storage.extraLabels"),
     # ("tolerations", "extraTolerations"), # Managed manually below
     ("node_selector", None),
