@@ -600,6 +600,7 @@ scheduling:
       seccompProfile:
         type: "RuntimeDefault"
     resources: {}
+    extraPodSpec: {}
   corePods:
     tolerations:
       - key: hub.jupyter.org/dedicated

@@ -1526,6 +1526,7 @@ properties:
           2. proxy.chp.extraPodSpec
           3. proxy.traefik.extraPodSpec
           4. scheduling.userScheduler.extraPodSpec
+          5. scheduling.userPlaceholder.extraPodSpec
 
           One real-world use of these settings is to enable host networking. For
           example, to configure host networking for the hub pod, add the
@@ -2648,6 +2649,7 @@ properties:
               Unless specified here, the placeholder pods will request the same
               resources specified for the real singleuser pods.
           containerSecurityContext: *containerSecurityContext-spec
+          extraPodSpec: *extraPodSpec-spec
       corePods:
         type: object
         additionalProperties: false
