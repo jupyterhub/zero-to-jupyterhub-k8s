@@ -521,6 +521,14 @@ scheduling:
     revisionHistoryLimit: 1
     replicas: 1
     resources: *resources
+    extraPodSpec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              foo: bar
   corePods:
     tolerations:
       - key: mock-taint-key-corePods
