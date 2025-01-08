@@ -58,3 +58,7 @@ charts:
       # singleuser-sample, a primitive user container to start with.
       singleuser-sample:
         valuesPath: singleuser.image
+
+      # taint-manager, an initContainer to add/remove taint for a node
+      taint-manager:
+        valuesPath: prePuller.taintmanager.image

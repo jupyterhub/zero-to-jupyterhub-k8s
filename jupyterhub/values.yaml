@@ -611,6 +611,9 @@ scheduling:
         operator: Equal
         value: core
         effect: NoSchedule
+      - key: hub.jupyter.org/imagepulling
+        operator: Exists
+        effect: NoExecute
     nodeAffinity:
       matchNodePurpose: prefer
   userPods:
@@ -671,6 +674,17 @@ prePuller:
       annotations: {}
   continuous:
     enabled: true
+  taintmanager:
+    enabled: true
+    image:
+      name: quay.io/jupyterhub/k8s-taint-manager
+      tag: "set-by-chartpress"
+    # taint/tolerations used for preventing user pods being scheduled while user image is being pulled
+    # only first element in the list is being used
+    tolerations:
+      - key: hub.jupyter.org/imagepulling
+        operator: Exists
+        effect: NoExecute
   pullProfileListImages: true
   extraImages: {}
   pause:
