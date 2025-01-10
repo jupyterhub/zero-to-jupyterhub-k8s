@@ -563,8 +563,10 @@ prePuller:
         value: mock-taint-value-hook
         effect: NoSchedule
     serviceAccount: *serviceAccount
+    serviceAccountImagePuller: *serviceAccount
   continuous:
     enabled: true
+    serviceAccount: *serviceAccount
   extraImages:
     mockImage1:
       name: mock-user/mock-image1
