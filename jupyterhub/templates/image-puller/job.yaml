@@ -27,7 +27,7 @@ spec:
     metadata:
       labels:
         {{- /* Changes here will cause the Job to restart the pods. */}}
-        {{- include "jupyterhub.matchLabels" . | nindent 8 }}
+        {{- include "jupyterhub.labels" . | nindent 8 }}
         {{- with .Values.prePuller.labels }}
         {{- . | toYaml | nindent 8 }}
         {{- end }}

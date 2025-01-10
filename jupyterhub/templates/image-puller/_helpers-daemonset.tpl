@@ -40,7 +40,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "jupyterhub.matchLabels" . | nindent 8 }}
+        {{- include "jupyterhub.labels" . | nindent 8 }}
       {{- with .Values.prePuller.annotations }}
       annotations:
         {{- . | toYaml | nindent 8 }}
