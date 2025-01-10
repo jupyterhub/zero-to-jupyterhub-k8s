@@ -198,11 +198,7 @@
 
 {{- /* hook-image-puller ServiceAccount */}}
 {{- define "jupyterhub.hook-image-puller-serviceaccount.fullname" -}}
-    {{- if .Values.prePuller.hook.serviceAccountImagePuller.create }}
-        {{- .Values.prePuller.hook.serviceAccountImagePuller.name | default (include "jupyterhub.hook-image-puller.fullname" .) }}
-    {{- else }}
-        {{- .Values.prePuller.hook.serviceAccountImagePuller.name | default "default" }}
-    {{- end }}
+    {{- .Values.prePuller.hook.serviceAccountImagePuller.name | default (include "jupyterhub.hook-image-puller.fullname" .) }}
 {{- end }}
 
 {{- /* continuous-image-puller DaemonSet */}}
@@ -212,11 +208,7 @@
 
 {{- /* continuous-image-puller ServiceAccount */}}
 {{- define "jupyterhub.continuous-image-puller-serviceaccount.fullname" -}}
-    {{- if .Values.prePuller.continuous.serviceAccount.create }}
-        {{- .Values.prePuller.continuous.serviceAccount.name | default (include "jupyterhub.continuous-image-puller.fullname" .) }}
-    {{- else }}
-        {{- .Values.prePuller.continuous.serviceAccount.name | default "default" }}
-    {{- end }}
+    {{- .Values.prePuller.continuous.serviceAccount.name | default (include "jupyterhub.continuous-image-puller.fullname" .) }}
 {{- end }}
 
 {{- /* singleuser NetworkPolicy */}}
