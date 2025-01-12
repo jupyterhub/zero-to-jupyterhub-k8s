@@ -1150,6 +1150,16 @@ properties:
               A public IP address the hub Kubernetes service should be exposed
               on. To expose the hub directly is not recommended. Instead route
               traffic through the proxy-public service towards the hub.
+          ipFamilyPolicy: &ipFamilyPolicy-spec
+            type: [string]
+            description: |
+              See the [Kubernetes docs](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services)
+              for more info.
+          ipFamilies: &ipFamilies-spec
+            type: array
+            description: |
+              See the [Kubernetes docs](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services)
+              for more info.
 
       pdb: &pdb-spec
         type: object
@@ -1768,6 +1778,8 @@ properties:
             description: |
               A list of IP CIDR ranges that are allowed to access the load balancer service.
               Defaults to allowing everyone to access it.
+          ipFamilyPolicy: *ipFamilyPolicy-spec
+          ipFamilies: *ipFamilies-spec
       https:
         type: object
         additionalProperties: false
