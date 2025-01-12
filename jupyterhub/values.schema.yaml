@@ -3047,3 +3047,8 @@ properties:
           A flag that should only be set to true temporarily when experiencing a
           deprecation message that contain censored content that you wish to
           reveal.
+
+  extraObjects:
+    type: array
+    description: |
+      Any additional K8s manifests to deploy with the chart
