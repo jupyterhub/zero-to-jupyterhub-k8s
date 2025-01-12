@@ -196,9 +196,19 @@
     {{- include "jupyterhub.fullname.dash" . }}hook-image-puller
 {{- end }}
 
+{{- /* hook-image-puller ServiceAccount */}}
+{{- define "jupyterhub.hook-image-puller-serviceaccount.fullname" -}}
+    {{- .Values.prePuller.hook.serviceAccountImagePuller.name | default (include "jupyterhub.hook-image-puller.fullname" .) }}
+{{- end }}
+
 {{- /* continuous-image-puller DaemonSet */}}
 {{- define "jupyterhub.continuous-image-puller.fullname" -}}
     {{- include "jupyterhub.fullname.dash" . }}continuous-image-puller
+{{- end }}
+
+{{- /* continuous-image-puller ServiceAccount */}}
+{{- define "jupyterhub.continuous-image-puller-serviceaccount.fullname" -}}
+    {{- .Values.prePuller.continuous.serviceAccount.name | default (include "jupyterhub.continuous-image-puller.fullname" .) }}
 {{- end }}
 
 {{- /* singleuser NetworkPolicy */}}
@@ -298,7 +308,9 @@ image-puller-priority: {{ include "jupyterhub.image-puller-priority.fullname" . 
 hook-image-awaiter: {{ include "jupyterhub.hook-image-awaiter.fullname" . | quote }}
 hook-image-awaiter-serviceaccount: {{ include "jupyterhub.hook-image-awaiter-serviceaccount.fullname" . | quote }}
 hook-image-puller: {{ include "jupyterhub.hook-image-puller.fullname" . | quote }}
+hook-image-puller-serviceaccount: {{ include "jupyterhub.hook-image-puller-serviceaccount.fullname" . | quote }}
 continuous-image-puller: {{ include "jupyterhub.continuous-image-puller.fullname" . | quote }}
+continuous-image-puller-serviceaccount: {{ include "jupyterhub.continuous-image-puller-serviceaccount.fullname" . | quote }}
 singleuser: {{ include "jupyterhub.singleuser.fullname" . | quote }}
 image-pull-secret: {{ include "jupyterhub.image-pull-secret.fullname" . | quote }}
 ingress: {{ include "jupyterhub.ingress.fullname" . | quote }}

@@ -665,12 +665,22 @@ prePuller:
     nodeSelector: {}
     tolerations: []
     resources: {}
+    # Service Account for the hook-image-awaiter Job
     serviceAccount:
+      create: true
+      name:
+      annotations: {}
+    # Service Account for the hook-image-puller DaemonSet
+    serviceAccountImagePuller:
       create: true
       name:
       annotations: {}
   continuous:
     enabled: true
+    serviceAccount:
+      create: true
+      name:
+      annotations: {}
   pullProfileListImages: true
   extraImages: {}
   pause:
