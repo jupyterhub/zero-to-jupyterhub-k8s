@@ -15,6 +15,38 @@ changes in pull requests], this list should be updated.
 
 (changelog-4.0)=
 
+## 4.1
+
+### 4.1.0 - 2025-01-15
+
+#### New features added
+
+- Add dummy service accounts to hook-image-puller and continuous-image-puller pods [#3594](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3594) ([@samyuh](https://github.com/samyuh), [@consideRatio](https://github.com/consideRatio))
+- Support extra pod spec for user placeholder pods [#3590](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3590) ([@jshmchenxi](https://github.com/jshmchenxi), [@consideRatio](https://github.com/consideRatio))
+
+#### Bugs fixed
+
+- Add modern labels to pods controlled by deployments etc. [#3596](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3596) ([@samyuh](https://github.com/samyuh), [@consideRatio](https://github.com/consideRatio))
+
+#### Documentation improvements
+
+- Update Keycloak example (currently broken) [#3571](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3571) ([@manics](https://github.com/manics), [@minrk](https://github.com/minrk), [@consideRatio](https://github.com/consideRatio))
+
+#### Other merged PRs
+
+This changelog entry omits automated PRs, for example those updating
+dependencies in: images, github actions, pre-commit hooks. For a full list of
+changes, see the [full comparison](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/4.0.0...4.1.0).
+
+#### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2024-11-07&to=2025-01-12&type=c))
+
+@aychang95 ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aaychang95+updated%3A2024-11-07..2025-01-12&type=Issues)) | @consideRatio ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2024-11-07..2025-01-12&type=Issues)) | @jshmchenxi ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajshmchenxi+updated%3A2024-11-07..2025-01-12&type=Issues)) | @jupyterhub-bot ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajupyterhub-bot+updated%3A2024-11-07..2025-01-12&type=Issues)) | @manics ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2024-11-07..2025-01-12&type=Issues)) | @minrk ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aminrk+updated%3A2024-11-07..2025-01-12&type=Issues)) | @samyuh ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Asamyuh+updated%3A2024-11-07..2025-01-12&type=Issues))
+
 ## 4.0
 
 ### 4.0.0 - 2024-11-07
