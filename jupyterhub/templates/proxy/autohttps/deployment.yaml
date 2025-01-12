@@ -18,7 +18,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "jupyterhub.matchLabels" . | nindent 8 }}
+        {{- include "jupyterhub.matchLabelsLegacyAndModern" . | nindent 8 }}
         hub.jupyter.org/network-access-proxy-http: "true"
         {{- with .Values.proxy.traefik.labels }}
         {{- . | toYaml | nindent 8 }}

@@ -20,7 +20,7 @@ spec:
     metadata:
       labels:
         {{- /* Changes here will cause the Deployment to restart the pods. */}}
-        {{- include "jupyterhub.matchLabels" . | nindent 8 }}
+        {{- include "jupyterhub.matchLabelsLegacyAndModern" . | nindent 8 }}
         hub.jupyter.org/network-access-hub: "true"
         hub.jupyter.org/network-access-singleuser: "true"
         {{- with .Values.proxy.labels }}
