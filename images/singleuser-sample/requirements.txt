@@ -49,7 +49,7 @@ comm==0.2.2
     # via ipykernel
 cryptography==44.0.0
     # via certipy
-debugpy==1.8.11
+debugpy==1.8.12
     # via ipykernel
 decorator==5.1.1
     # via ipython
@@ -156,7 +156,7 @@ matplotlib-inline==0.1.7
     #   ipython
 mistune==3.1.0
     # via nbconvert
-nbclassic==1.1.0
+nbclassic==1.2.0
     # via -r unfrozen/requirements.txt
 nbclient==0.10.2
     # via nbconvert
@@ -237,7 +237,7 @@ pyzmq==26.2.0
     #   ipykernel
     #   jupyter-client
     #   jupyter-server
-referencing==0.35.1
+referencing==0.36.0
     # via
     #   jsonschema
     #   jsonschema-specifications
@@ -312,6 +312,7 @@ typing-extensions==4.12.2
     #   anyio
     #   pydantic
     #   pydantic-core
+    #   referencing
     #   sqlalchemy
 uri-template==1.3.0
     # via jsonschema
