@@ -181,7 +181,7 @@ pyyaml==6.0.2
     #   jupyter-events
     #   jupyterhub-kubespawner
     #   kubernetes-asyncio
-referencing==0.35.1
+referencing==0.36.0
     # via
     #   jsonschema
     #   jsonschema-specifications
@@ -251,6 +251,7 @@ typing-extensions==4.12.2
     #   alembic
     #   pydantic
     #   pydantic-core
+    #   referencing
     #   sqlalchemy
 uri-template==1.3.0
     # via jsonschema
