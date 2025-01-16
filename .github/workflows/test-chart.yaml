@@ -28,7 +28,7 @@ on:
 
 jobs:
   lint_shell_scripts:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -42,7 +42,7 @@ jobs:
         run: pre-commit run --all --hook-stage manual
 
   lint_and_validate_rendered_templates:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -60,7 +60,7 @@ jobs:
         continue-on-error: true
 
   lint_and_validate_templates_with_schema:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: false
@@ -114,7 +114,7 @@ jobs:
         continue-on-error: true
 
   test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
 
     strategy:

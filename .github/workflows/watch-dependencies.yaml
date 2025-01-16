@@ -32,7 +32,7 @@ jobs:
   update-image-dependencies:
     # Don't run this job on forks
     if: github.repository == 'jupyterhub/zero-to-jupyterhub-k8s'
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     environment: watch-dependencies
 
     strategy:
@@ -202,7 +202,7 @@ jobs:
     # these dependencies every day is too much noise.
     #
     if: github.repository == 'jupyterhub/zero-to-jupyterhub-k8s' && github.event_name != 'schedule'
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     environment: watch-dependencies
 
     steps:
