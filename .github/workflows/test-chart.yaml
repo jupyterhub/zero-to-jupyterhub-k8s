@@ -114,7 +114,6 @@ jobs:
         continue-on-error: true
 
   test:
-    runs-on: ubuntu-24.04
     timeout-minutes: 20
 
     strategy:
@@ -131,12 +130,15 @@ jobs:
         include:
           - k3s-channel: latest
             test: install
+            # Also test arm64
+            os: ubuntu-24.04-arm
           - k3s-channel: stable # also test hub-slim, and prePuller.hook
             test: install
             local-chart-extra-args: >-
               --set hub.image.name=quay.io/jupyterhub/k8s-hub-slim
               --set prePuller.hook.enabled=true
               --set prePuller.hook.pullOnlyOnChanges=true
+            os: ubuntu-24.04
           - k3s-channel: v1.31 # also test hub.existingSecret and subdomain_host
             test: install
             local-chart-extra-args: >-
@@ -146,6 +148,7 @@ jobs:
               --set hub.config.CryptKeeper.keys[0]=cccc3333
               --set hub.config.JupyterHub.subdomain_host=jupyterhub.example.org
             create-k8s-test-resources: true
+            os: ubuntu-24.04
 
           # We run three upgrade tests where we first install an already released
           # Helm chart version and then upgrade to the version we are now
@@ -174,6 +177,7 @@ jobs:
               --set hub.db.type=sqlite-pvc
               --set singleuser.storage.type=dynamic
             create-k8s-test-resources: true
+            os: ubuntu-24.04
           - k3s-channel: v1.29
             test: upgrade
             upgrade-from: dev
@@ -184,6 +188,7 @@ jobs:
             local-chart-extra-args: >-
               --set hub.db.type=sqlite-pvc
               --set singleuser.storage.type=dynamic
+            os: ubuntu-24.04
           - k3s-channel: v1.28
             test: upgrade
             # We're testing hub.db.upgrade with PostgreSQL so this version must be old
@@ -212,6 +217,9 @@ jobs:
               --set audit.logConnections=true
               --set audit.logDisconnections=true
               --set audit.clientMinMessages=debug
+            os: ubuntu-24.04
+
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v4
