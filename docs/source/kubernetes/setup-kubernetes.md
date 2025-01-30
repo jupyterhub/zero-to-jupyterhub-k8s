@@ -17,8 +17,8 @@ Choose one option and proceed.
 ```{toctree}
 :titlesonly:
 
-docker-desktop/step-zero-docker-desktop.md
 minikube/step-zero-minikube
+docker-desktop/step-zero-docker-desktop
 google/step-zero-gcp
 microsoft/step-zero-azure
 amazon/step-zero-aws
