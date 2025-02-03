@@ -38,12 +38,12 @@ hub:
   networkPolicy:
     ingress:
       - from:
-        - namespaceSelector:
-            matchLabels:
-              # namespace where your prometheus or vmagent is running
-              name: victoriametrics
-        - podSelector:
-            matchLabels:
-              # a valid selector for the pod that needs to reach jupyterhub
-              app.kubernetes.io/instance: vmagent
+          - namespaceSelector:
+              matchLabels:
+                # namespace where your prometheus or vmagent is running
+                name: victoriametrics
+          - podSelector:
+              matchLabels:
+                # a valid selector for the pod that needs to reach jupyterhub
+                app.kubernetes.io/instance: vmagent
 ```
