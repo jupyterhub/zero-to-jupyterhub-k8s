@@ -109,6 +109,16 @@ hub:
     minAvailable: 1
   networkPolicy:
     enabled: true
+    # To open for vmagent to scrape metrics from the hub pod, add the following
+    # to the ingress list:
+    # ingress:
+    # - from:
+    #   - namespaceSelector:
+    #       matchLabels:
+    #         name: victoriametrics
+    #   - podSelector:
+    #       matchLabels:
+    #         app.kubernetes.io/instance: vmagent
     ingress: []
     egress: []
     egressAllowRules:
