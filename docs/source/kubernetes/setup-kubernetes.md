@@ -18,6 +18,7 @@ Choose one option and proceed.
 :titlesonly:
 
 minikube/step-zero-minikube
+docker-desktop/step-zero-docker-desktop
 google/step-zero-gcp
 microsoft/step-zero-azure
 amazon/step-zero-aws

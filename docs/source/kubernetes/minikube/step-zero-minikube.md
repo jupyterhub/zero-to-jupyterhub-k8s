@@ -1,4 +1,4 @@
-(minikube-k8s)
+(minikube-k8s)=
 
 # Kubernetes on minikube (for learning and development only)
 
