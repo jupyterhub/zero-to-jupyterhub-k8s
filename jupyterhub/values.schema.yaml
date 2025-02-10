@@ -563,7 +563,7 @@ properties:
               v1.11.1
               zhy270a
               ```
-          pullPolicy:
+          pullPolicy: &imagePullPolicy
             enum: [null, "", IfNotPresent, Always, Never]
             description: |
               Configures the Pod's `spec.imagePullPolicy`.
@@ -2921,6 +2921,7 @@ properties:
                 type: string
               tag:
                 type: string
+              pullPolicy: *imagePullPolicy
       containerSecurityContext: *containerSecurityContext-spec
       pause:
         type: object
