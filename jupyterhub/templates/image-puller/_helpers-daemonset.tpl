@@ -196,6 +196,9 @@ spec:
         {{- range $k, $v := .Values.prePuller.extraImages }}
         - name: image-pull-{{ $k }}
           image: {{ $v.name }}:{{ $v.tag }}
+          {{- with $v.pullPolicy }}
+          imagePullPolicy: {{ . }}
+          {{- end }}
           command:
             - /bin/sh
             - -c

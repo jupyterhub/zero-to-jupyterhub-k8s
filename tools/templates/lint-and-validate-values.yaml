@@ -574,6 +574,7 @@ prePuller:
     mockImage2:
       name: mock-user/mock-image2
       tag: mock-tag
+      pullPolicy: Always
 
 ingress:
   enabled: true
