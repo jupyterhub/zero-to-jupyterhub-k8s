@@ -1,0 +1,23 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: jupyterhub
+  namespace: flux-system
+spec:
+  interval: 5m
+  releaseName: jupyterhub
+  targetNamespace: jupyter
+  chart:
+    spec:
+      chart: jupyterhub
+      version: '3.3.7'
+      sourceRef:
+        kind: HelmRepository
+        name: jupyterhub
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3  # Number of retries for installation failures
+  upgrade:
+    remediation:
+      remediateLastFailure: True  # Try to remediate upgrades that failed
