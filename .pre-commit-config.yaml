@@ -41,7 +41,7 @@ repos:
 
   # Autoformat: Python code
   - repo: https://github.com/pycqa/isort
-    rev: 6.0.0
+    rev: 6.0.1
     hooks:
       - id: isort
         args:
@@ -67,12 +67,12 @@ repos:
 
   # Linting: Python code (see the file .flake8)
   - repo: https://github.com/PyCQA/flake8
-    rev: "7.1.1"
+    rev: "7.1.2"
     hooks:
       - id: flake8
 
   - repo: https://github.com/gruntwork-io/pre-commit
-    rev: v0.1.25
+    rev: v0.1.26
     hooks:
       # This requires shellcheck to be installed manually so is disabled by default
       - id: shellcheck
