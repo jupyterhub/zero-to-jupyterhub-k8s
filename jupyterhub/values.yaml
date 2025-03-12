@@ -736,3 +736,26 @@ debug:
 
 global:
   safeToShowValues: false
+
+# -- Array of extra K8s manifests to deploy
+extraObjects: []
+  # example:
+  # - apiVersion: secrets-store.csi.x-k8s.io/v1
+  #   kind: SecretProviderClass
+  #   metadata:
+  #     name: singleuser-hub-secrets-store
+  #   spec:
+  #     provider: aws
+  #     parameters:
+  #       objects: |
+  #         - objectName: "singleuser-secret"
+  #           objectType: "secretsmanager"
+  #           jmesPath:
+  #               - path: "somevar"
+  #                 objectAlias: "somevalue"
+  #     secretObjects:
+  #     - data:
+  #       - key: somevalue
+  #         objectName: somevalue
+  #       secretName: singleuser-secret
+  #       type: Opaque
