@@ -32,5 +32,5 @@ Network policy needs to be modified in order for prometheus or vmagent to be abl
 ```yaml
 hub:
   networkPolicy:
-      interNamespaceAccessLabels: accept
+    interNamespaceAccessLabels: accept
 ```
