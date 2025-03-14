@@ -34,3 +34,21 @@ hub:
   networkPolicy:
     interNamespaceAccessLabels: accept
 ```
+And then set  [`prometheus.server.podLabels`](https://github.com/prometheus-community/helm-charts/blob/0c7bf42ac2265d13845ffe0c499d16e6b8cdedea/charts/prometheus/values.yaml#L554) to be `hub.jupyter.org/network-access-hub: "true"` to enable prometheus to reach the hub. 
+
+Alternatively you can also set an explicit ingress rule to allow the prometheus or vmagent pod to reach the hub pod to scrape metrics.
+
+```yaml
+hub:
+  networkPolicy:
+      ingress:
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  # namespace where your prometheus or vmagent is running
+                  name: <namespace>
+            - podSelector:
+                matchLabels:
+                  # a valid selector for the pod that needs to reach jupyterhub
+                  app.kubernetes.io/instance: vmagent
+```
