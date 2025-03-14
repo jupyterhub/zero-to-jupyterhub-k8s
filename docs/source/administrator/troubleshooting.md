@@ -27,7 +27,7 @@ for information about the versions of relevant software packages.
 
 ## Metrics scraping with prometheus or vmagent
 
-Network policy needs to be modified in order for prometheus or vmagent to be able to reach the metrics endpoint. Working example configuration is as follows:
+Network policy needs to be modified in order for prometheus or vmagent to be able to reach the metrics endpoint. The recommended way is by setting [interNamespaceAccessLabels=accept](https://z2jh.jupyter.org/en/stable/resources/reference.html#hub-networkpolicy-internamespaceaccesslabels). This makes the hub pod's associated NetworkPolicy accept ingress from pods in other namespaces that have specific access labels.```
 
 ```yaml
 hub:
