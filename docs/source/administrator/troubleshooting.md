@@ -31,19 +31,6 @@ Network policy needs to be modified in order for prometheus or vmagent to be abl
 
 ```yaml
 hub:
-  annotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/path: "/hub/metrics"
-    prometheus.io/port: "8081"
   networkPolicy:
-    ingress:
-      - from:
-          - namespaceSelector:
-              matchLabels:
-                # namespace where your prometheus or vmagent is running
-                name: victoriametrics
-          - podSelector:
-              matchLabels:
-                # a valid selector for the pod that needs to reach jupyterhub
-                app.kubernetes.io/instance: vmagent
+      interNamespaceAccessLabels: accept
 ```
