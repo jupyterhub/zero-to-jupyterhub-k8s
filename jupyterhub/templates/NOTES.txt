@@ -22,7 +22,7 @@
 
   - Documentation:  https://z2jh.jupyter.org
   - Help forum:     https://discourse.jupyter.org
-  - Social chat:    https://gitter.im/jupyterhub/jupyterhub
+  - Social chat:    https://jupyter.zulipchat.com/#narrow/channel/469744-jupyterhub
   - Issue tracking: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
 
 ### Post-installation checklist
