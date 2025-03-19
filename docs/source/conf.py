@@ -235,6 +235,8 @@ linkcheck_ignore = [
 linkcheck_anchors_ignore = [
     "/#!",
     "/#%21",
+    # https://jupyter.zulipchat.com/#narrow/channel/469744-jupyterhub
+    "^narrow/channel/469744-jupyterhub$",
 ]
 
 
