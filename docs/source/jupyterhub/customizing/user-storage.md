@@ -235,11 +235,13 @@ pods:
 singleuser:
   storage:
     extraVolumes:
-      - name: jupyterhub-shared
+      jupyterhub-shared:
+        name: jupyterhub-shared
         persistentVolumeClaim:
           claimName: jupyterhub-shared-volume
     extraVolumeMounts:
-      - name: jupyterhub-shared
+      jupyterhub-shared:
+        name: jupyterhub-shared
         mountPath: /home/shared
 ```
 

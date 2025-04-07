@@ -404,8 +404,8 @@ singleuser:
   storage:
     type: dynamic
     extraLabels: {}
-    extraVolumes: []
-    extraVolumeMounts: []
+    extraVolumes: {}
+    extraVolumeMounts: {}
     static:
       pvcName:
       subPath: "{username}"
