@@ -80,7 +80,7 @@ ipykernel==6.29.5
     # via
     #   jupyterlab
     #   nbclassic
-ipython==9.0.2
+ipython==9.1.0
     # via ipykernel
 ipython-genutils==0.2.0
     # via nbclassic
@@ -137,7 +137,7 @@ jupyter-server==2.15.0
     #   notebook-shim
 jupyter-server-terminals==0.5.3
     # via jupyter-server
-jupyterhub==5.2.1
+jupyterhub==5.3.0rc0
     # via -r unfrozen/requirements.txt
 jupyterlab==4.4.0
     # via -r unfrozen/requirements.txt
@@ -218,7 +218,7 @@ pure-eval==0.2.3
     # via stack-data
 pycparser==2.22
     # via cffi
-pydantic==2.11.2
+pydantic==2.11.3
     # via jupyterhub
 pydantic-core==2.33.1
     # via pydantic
