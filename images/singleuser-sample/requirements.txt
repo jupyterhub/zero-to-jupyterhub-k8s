@@ -137,7 +137,7 @@ jupyter-server==2.15.0
     #   notebook-shim
 jupyter-server-terminals==0.5.3
     # via jupyter-server
-jupyterhub==5.3.0rc0
+jupyterhub==5.3.0
     # via -r unfrozen/requirements.txt
 jupyterlab==4.4.0
     # via -r unfrozen/requirements.txt
@@ -206,7 +206,7 @@ prometheus-client==0.21.1
     # via
     #   jupyter-server
     #   jupyterhub
-prompt-toolkit==3.0.50
+prompt-toolkit==3.0.51
     # via ipython
 psutil==7.0.0
     # via ipykernel
