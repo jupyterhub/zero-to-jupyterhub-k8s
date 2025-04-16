@@ -134,7 +134,7 @@ This guide and the associated helm chart would not be possible without
 the amazing institutional support from the following organizations (and
 the organizations that support them!)
 
-- [UC Berkeley Data Science Division](https://data.berkeley.edu/)
+- [UC Berkeley Data Science Division](https://cdss.berkeley.edu/)
 - [Berkeley Institute for Data Science](https://bids.berkeley.edu/)
 - [Cal Poly, San Luis Obispo](https://www.calpoly.edu/)
 - [Simula Research Institute](https://www.simula.no/)

@@ -1980,7 +1980,7 @@ properties:
               TLS termination proxy.
 
               See [Mozilla's
-              documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
+              documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Strict-Transport-Security)
               for more information.
             properties:
               includeSubdomains:
