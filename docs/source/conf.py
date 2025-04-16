@@ -231,6 +231,8 @@ linkcheck_ignore = [
     "https://portal.azure.com",  # sign-in redirect noise
     "https://console.cloud.google.com",  # sign-in redirect noise
     "https://console.developers.google.com",  # sign-in redirect noise
+    "https://www.espncricinfo.com/cricketers/hamid-hassan-311427",  # CI: 403 Client Error: Forbidden for url
+    "https://kccncna17.sched.com/event/CU6z/hacking-and-hardening-kubernetes-clusters-by-example-i-brad-geesaman-symantec",  # CI: 500 Server Error: Internal Server Error for url
 ]
 linkcheck_anchors_ignore = [
     "/#!",
