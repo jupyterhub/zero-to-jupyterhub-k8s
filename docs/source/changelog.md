@@ -10,10 +10,50 @@ This Helm chart provides [development releases], and as we merge [breaking
 changes in pull requests], this list should be updated.
 
 [development releases]: https://hub.jupyter.org/helm-chart/#development-releases-jupyterhub
-
 [breaking changes in pull requests]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pulls?q=is%3Apr+is%3Aclosed+label%3Abreaking
 
-(changelog-4.0)=
+## 4.2
+
+### 4.2.0 - 2025-04-16
+
+With this smaller release, the JupyterHub version deployed is upgraded from
+v5.2.1 to v5.3.0. For details refer to the [JupyterHub changelog].
+
+#### Enhancements made
+
+- Add pullPolicy to pre-pulled extraImages [#3621](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3621) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+
+#### Maintenance and upkeep improvements
+
+- Replace deprecated `pipes.quote` with `shlex.quote` [#3655](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3655) ([@emmanuel-ferdman](https://github.com/emmanuel-ferdman), [@consideRatio](https://github.com/consideRatio))
+
+#### Documentation improvements
+
+- Linkcheck: update ignored and permanently redirected external URLs [#3654](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3654) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+- Replace gitter with zulip [#3637](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3637) ([@manics](https://github.com/manics), [@yuvipanda](https://github.com/yuvipanda))
+- docs(prometheus): Document how to set up scraping in kubernetes [#3616](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3616) ([@gardleopard](https://github.com/gardleopard), [@GeorgianaElena](https://github.com/GeorgianaElena), [@sgibson91](https://github.com/sgibson91))
+- Add page about Docker Desktop to documentation [#3611](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3611) ([@rgaiacs](https://github.com/rgaiacs), [@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+
+#### Continuous integration improvements
+
+- ci: update watch dependencies workflow to function again [#3651](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3651) ([@consideRatio](https://github.com/consideRatio))
+- Use GitHub hosted Ubuntu arm64 runners instead of CircleCI [#3605](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3605) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+- Switch GitHub CI and readthedocs to Ubuntu 24.04 [#3604](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3604) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+
+#### Other merged PRs
+
+This changelog entry omits automated PRs, for example those updating
+dependencies in: images, github actions, pre-commit hooks. For a full list of
+changes, see the [full comparison](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/4.1.0...4.2.0).
+
+#### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2025-01-15&to=2025-04-16&type=c))
+
+@benz0li ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Abenz0li+updated%3A2025-01-15..2025-04-16&type=Issues)) | @consideRatio ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2025-01-15..2025-04-16&type=Issues)) | @emmanuel-ferdman ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aemmanuel-ferdman+updated%3A2025-01-15..2025-04-16&type=Issues)) | @gardleopard ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Agardleopard+updated%3A2025-01-15..2025-04-16&type=Issues)) | @GeorgianaElena ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AGeorgianaElena+updated%3A2025-01-15..2025-04-16&type=Issues)) | @jupyterhub-bot ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajupyterhub-bot+updated%3A2025-01-15..2025-04-16&type=Issues)) | @Khoi16 ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AKhoi16+updated%3A2025-01-15..2025-04-16&type=Issues)) | @manics ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2025-01-15..2025-04-16&type=Issues)) | @minrk ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aminrk+updated%3A2025-01-15..2025-04-16&type=Issues)) | @rgaiacs ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Argaiacs+updated%3A2025-01-15..2025-04-16&type=Issues)) | @samyuh ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Asamyuh+updated%3A2025-01-15..2025-04-16&type=Issues)) | @sgibson91 ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Asgibson91+updated%3A2025-01-15..2025-04-16&type=Issues)) | @yuvipanda ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ayuvipanda+updated%3A2025-01-15..2025-04-16&type=Issues))
 
 ## 4.1
 
@@ -48,6 +88,8 @@ See [our definition of contributors](https://github-activity.readthedocs.io/en/l
 @aychang95 ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aaychang95+updated%3A2024-11-07..2025-01-12&type=Issues)) | @consideRatio ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2024-11-07..2025-01-12&type=Issues)) | @jshmchenxi ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajshmchenxi+updated%3A2024-11-07..2025-01-12&type=Issues)) | @jupyterhub-bot ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajupyterhub-bot+updated%3A2024-11-07..2025-01-12&type=Issues)) | @manics ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2024-11-07..2025-01-12&type=Issues)) | @minrk ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aminrk+updated%3A2024-11-07..2025-01-12&type=Issues)) | @samyuh ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Asamyuh+updated%3A2024-11-07..2025-01-12&type=Issues))
 
 ## 4.0
+
+(changelog-4.0)=
 
 ### 4.0.0 - 2024-11-07
 
