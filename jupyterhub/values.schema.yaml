@@ -408,11 +408,10 @@ properties:
 
           1. File size
 
-             The files in `hub.extraFiles` and `singleuser.extraFiles` are
-             respectively stored in their own k8s Secret resource. As k8s
-             Secret's are limited, typically to 1MB, you will be limited to a
-             total file size of less than 1MB as there is also base64 encoding
-             that takes place reducing available capacity to 75%.
+             The files in `hub.extraFiles` is stored within a k8s Secret
+             resource. As k8s Secret's are limited, typically to 1MB, you will
+             be limited to a total file size of less than 1MB as there is also
+             base64 encoding that takes place reducing available capacity to 75%.
 
           2. File updates
 
