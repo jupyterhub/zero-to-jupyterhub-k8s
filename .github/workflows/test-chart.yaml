@@ -407,6 +407,7 @@ jobs:
       matrix:
         ingress-type:
           - gateway
+          - ingress
 
     runs-on: ubuntu-24.04
 
@@ -449,7 +450,8 @@ jobs:
         env:
           DOCKER_BUILDKIT: "1"
 
-      - name: "Install local chart"
+      - name: Install local chart (gateway)
+        if: matrix.ingress-type == 'gateway'
         run: >-
           helm upgrade --install jupyterhub ./jupyterhub
           --set proxy.service.type=ClusterIP
@@ -457,20 +459,24 @@ jobs:
           --set httpRoute.gateway.name=traefik-gateway
           --set httpRoute.gateway.namespace=kube-system
 
+      # K3S traefik listens on host:80/443
+      - name: Install local chart (ingress)
+        if: matrix.ingress-type == 'ingress'
+        run: >-
+          helm upgrade --install jupyterhub ./jupyterhub
+          --set proxy.service.type=ClusterIP
+          --set ingress.enabled=true
+          --set ingress.hosts[0]=localhost
+
       - name: "Await local chart"
         uses: jupyterhub/action-k8s-await-workloads@v3
         with:
           timeout: 150
           max-restarts: 1
 
-      - name: Test gateway
-        if: matrix.ingress-type == 'gateway'
+      - name: Test ingress
         run: |
-          echo "*** kube-system/gateway ***"
-          kubectl -nkube-system get gateway -oyaml
-          echo "*** default/httproute ***"
-          echo "*** curl http://localhost/ ***"
-          curl -vkL http://localhost/
+          curl -vL http://localhost/
           curl -vL http://localhost/ | grep '<title>JupyterHub</title>'
 
       - name: Get traefik logs
