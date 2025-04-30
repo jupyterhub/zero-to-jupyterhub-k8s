@@ -132,13 +132,17 @@ jobs:
             test: install
             # Also test arm64
             os: ubuntu-24.04-arm
-          - k3s-channel: stable # also test hub-slim, and prePuller.hook
+          - k3s-channel: stable # also test hub-slim, prePuller.hook, gateway
             test: install
             local-chart-extra-args: >-
               --set hub.image.name=quay.io/jupyterhub/k8s-hub-slim
               --set prePuller.hook.enabled=true
               --set prePuller.hook.pullOnlyOnChanges=true
+              --set httpRoute.enabled=true
+              --set httpRoute.gateway.name=traefik-gateway
+              --set httpRoute.gateway.namespace=kube-system
             os: ubuntu-24.04
+            ingress-type: gateway
           - k3s-channel: v1.31 # also test hub.existingSecret and subdomain_host
             test: install
             local-chart-extra-args: >-
@@ -228,6 +232,15 @@ jobs:
           # correctly
           fetch-depth: 0
 
+      # Enable Gateway API in K3s
+      # https://github.com/k3s-io/k3s/issues/12183#issuecomment-2818989109
+      # This will create gateway.networking.k8s.io/v1 kube-system/traefik-gateway
+      - name: pre-configure k3s installation
+        if: matrix.ingress-type == 'gateway'
+        run: |
+          sudo mkdir -p /var/lib/rancher/k3s/server/manifests
+          sudo cp ci/traefik-config.yaml /var/lib/rancher/k3s/server/manifests/
+
       # Starts a k8s cluster with NetworkPolicy enforcement and installs both
       # kubectl and helm
       #
@@ -236,7 +249,7 @@ jobs:
         with:
           k3s-channel: ${{ matrix.k3s-channel }}
           metrics-enabled: false
-          traefik-enabled: false
+          traefik-enabled: ${{ matrix.ingress-type == 'gateway' }}
           docker-enabled: true
 
       - uses: actions/setup-python@v5
@@ -373,6 +386,21 @@ jobs:
           . ./ci/common
           await_autohttps_tls_cert_acquisition
 
+      - name: Test gateway
+        if: matrix.ingress-type == 'gateway'
+        run: |
+          echo "*** kube-system/gateway ***"
+          kubectl -nkube-system get gateway -oyaml
+          echo "*** default/httproute ***"
+          echo "*** curl http://localhost/ ***"
+          curl -vkL http://localhost/
+          curl -vkL http://localhost/ | grep '<title>JupyterHub</title>'
+
+      - name: Get traefik logs
+        if: matrix.ingress-type == 'gateway' && always()
+        run: |
+          kubectl -nkube-system logs deploy/traefik
+
       - name: Run tests
         continue-on-error: ${{ matrix.accept-failure == true }}
         run: |
@@ -389,6 +417,12 @@ jobs:
         if: always()
         with:
           important-workloads: deploy/hub deploy/proxy
+
+      - name: Kubernetes namespace report (kube-system)
+        if: always()
+        uses: jupyterhub/action-k8s-namespace-report@v1
+        with:
+          namespace: kube-system
 
       - name: Debug PostgreSQL logs on failure
         if: failure() && matrix.setup-postgresql-args
