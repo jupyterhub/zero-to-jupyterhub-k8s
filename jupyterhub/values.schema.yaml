@@ -2798,19 +2798,19 @@ properties:
       enabled:
         type: boolean
         description: |
-          Enable the creation of a Kubernetes HTTPRoute and HealthCheckPolicy to proxy-public service.
+          Enable the creation of a Kubernetes HTTPRoute to the proxy-public service.
 
-          HTTPRoute depends on Gateway API is enabled in your cluster.
+          Requires support for the [Gateway API](https://gateway-api.sigs.k8s.io/).
 
-          See [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/) for more details.
+          A Gateway must already exist.
       hostnames:
         type: array
         description: |
-          List of hosts to route requests to the proxy.
+          List of hosts to route requests to the proxy, if empty route all requests regardless of host.
       gateway:
         type: object
         additionalProperties: false
-        required: [name, namespace]
+        required: [name]
         properties:
           name:
             type: string

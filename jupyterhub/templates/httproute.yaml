@@ -1,6 +1,6 @@
 {{- if .Values.httpRoute.enabled -}}
 kind: HTTPRoute
-apiVersion: gateway.networking.k8s.io/v1beta1
+apiVersion: gateway.networking.k8s.io/v1
 metadata:
   name: {{ include "jupyterhub.httpRoute.fullname" . }}
   labels:
@@ -8,9 +8,11 @@ metadata:
 spec:
   parentRefs:
     - kind: Gateway
-      name: {{ .Values.httpRoute.Gateway.Name }}
-      namespace: {{ .Values.httpRoute.Gateway.Namespace }}
-  {{- with .Values.httpRoute.Hostnames }}
+      name: {{ .Values.httpRoute.gateway.name }}
+      {{- with .Values.httpRoute.gateway.namespace }}
+      namespace: {{ . }}
+      {{- end }}
+  {{- with .Values.httpRoute.hostnames }}
   hostnames:
     {{- . | toYaml | nindent 4 }}
   {{- end }}
@@ -18,22 +20,4 @@ spec:
     - backendRefs:
         - name: proxy-public
           port: 80
-
----
-apiVersion: networking.gke.io/v1
-kind: HealthCheckPolicy
-metadata:
-  name: {{ include "jupyterhub.httpRoute.fullname" . }}
-  labels:
-    {{- include "jupyterhub.labels" . | nindent 4 }}
-spec:
-  default:
-    config:
-      type: HTTP
-      httpHealthCheck:
-        requestPath: /hub/login
-  targetRef:
-    group: ""
-    kind: Service
-    name: proxy-public
 {{- end }}

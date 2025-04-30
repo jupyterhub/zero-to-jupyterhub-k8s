@@ -719,7 +719,7 @@ httpRoute:
   hostnames: []
   gateway:
     name: your-gateway
-    namespace: namespace-for-your-gateway
+    # namespace: if different from Z2JH
 
 # cull relates to the jupyterhub-idle-culler service, responsible for evicting
 # inactive singleuser pods.

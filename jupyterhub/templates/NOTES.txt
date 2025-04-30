@@ -62,8 +62,13 @@
     Try secure HTTPS access: https://{{ $host }}{{ $.Values.hub.baseUrl | trimSuffix "/" }}/
     {{- end }}
     {{- end }}
+  {{- else if .Values.httpRoute.enabled }}
+    {{- range $host := (.Values.httpRoute.hostnames | default (list "localhost")) }}
+    Try insecure HTTP access: http://{{ $host }}{{ $.Values.hub.baseUrl | trimSuffix "/" }}/
+    or secure HTTP access: https://{{ $host }}{{ $.Values.hub.baseUrl | trimSuffix "/" }}/ if supported by your Gateway
+    {{- end }}
   {{- else }}
-    You have not configured a k8s Ingress resource so you need to access the k8s
+    You have not configured a k8s Ingress or Gateway resource so you need to access the k8s
     Service {{ $proxy_service }} directly.
     {{- println }}
 
