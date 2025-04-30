@@ -716,6 +716,7 @@ ingress:
 
 httpRoute:
   enabled: false
+  annotations: {}
   hostnames: []
   gateway:
     name: your-gateway

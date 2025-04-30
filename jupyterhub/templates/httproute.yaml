@@ -5,6 +5,10 @@ metadata:
   name: {{ include "jupyterhub.httpRoute.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
+  {{- with .Values.httpRoute.annotations }}
+  annotations:
+    {{- . | toYaml | nindent 4 }}
+  {{- end }}
 spec:
   parentRefs:
     - kind: Gateway

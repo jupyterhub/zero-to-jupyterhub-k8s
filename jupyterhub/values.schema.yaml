@@ -2803,6 +2803,16 @@ properties:
           Requires support for the [Gateway API](https://gateway-api.sigs.k8s.io/).
 
           A Gateway must already exist.
+      annotations:
+        type: object
+        additionalProperties: false
+        patternProperties: *labels-and-annotations-patternProperties
+        description: |
+          Annotations to apply to the HTTPRoute resource.
+
+          See [the Kubernetes
+          documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+          for more details about annotations.
       hostnames:
         type: array
         description: |
