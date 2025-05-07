@@ -72,7 +72,7 @@ repos:
       - id: flake8
 
   - repo: https://github.com/gruntwork-io/pre-commit
-    rev: v0.1.28
+    rev: v0.1.29
     hooks:
       # This requires shellcheck to be installed manually so is disabled by default
       - id: shellcheck
