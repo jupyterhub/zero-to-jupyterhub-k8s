@@ -2790,6 +2790,47 @@ properties:
           See [the Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types)
           for more details about paths.
 
+  httpRoute:
+    type: object
+    additionalProperties: false
+    required: [enabled]
+    properties:
+      enabled:
+        type: boolean
+        description: |
+          Enable the creation of a Kubernetes HTTPRoute to the proxy-public service.
+
+          Requires support for the [Gateway API](https://gateway-api.sigs.k8s.io/).
+
+          A Gateway must already exist.
+      annotations:
+        type: object
+        additionalProperties: false
+        patternProperties: *labels-and-annotations-patternProperties
+        description: |
+          Annotations to apply to the HTTPRoute resource.
+
+          See [the Kubernetes
+          documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+          for more details about annotations.
+      hostnames:
+        type: array
+        description: |
+          List of hosts to route requests to the proxy, if empty route all requests regardless of host.
+      gateway:
+        type: object
+        additionalProperties: false
+        required: [name]
+        properties:
+          name:
+            type: string
+            description: |
+              The name of your Gateway for this route.
+          namespace:
+            type: string
+            description: |
+              The namespace the Gateway is running in.
+
   prePuller:
     type: object
     additionalProperties: false
