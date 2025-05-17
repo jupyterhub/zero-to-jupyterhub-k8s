@@ -14,7 +14,7 @@ spec:
     - kind: Gateway
       name: {{ .Values.httpRoute.gateway.name }}
       {{- with .Values.httpRoute.gateway.namespace }}
-      namespace: {{ . }}
+      namespace: "{{ . }}"
       {{- end }}
   {{- with .Values.httpRoute.hostnames }}
   hostnames:
