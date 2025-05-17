@@ -230,6 +230,14 @@
     {{- end }}
 {{- end }}
 
+{{- /* HTTPRoute */}}
+{{- define "jupyterhub.httpRoute.fullname" -}}
+    {{- if (include "jupyterhub.fullname" .) }}
+        {{- include "jupyterhub.fullname" . }}
+    {{- else -}}
+        jupyterhub
+    {{- end }}
+{{- end }}
 
 
 {{- /*

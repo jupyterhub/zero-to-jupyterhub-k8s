@@ -714,6 +714,14 @@ ingress:
   tls: []
   extraPaths: []
 
+httpRoute:
+  enabled: false
+  annotations: {}
+  hostnames: []
+  gateway:
+    name: your-gateway
+    namespace: "" # required for a gateway resource in another namespace
+
 # cull relates to the jupyterhub-idle-culler service, responsible for evicting
 # inactive singleuser pods.
 #

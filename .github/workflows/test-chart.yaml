@@ -394,3 +394,92 @@ jobs:
         if: failure() && matrix.setup-postgresql-args
         run: |
           kubectl logs statefulset/postgresql
+
+  test-gateway-ingress:
+    # The main test configures autohttps, but this conflicts with testing
+    # ingress/gateway which assume they can directly connect to proxy-public
+    # This is a minimal test that checks connections via a gateway is possible
+    timeout-minutes: 20
+
+    strategy:
+      # Keep running even if one variation of the job fail
+      fail-fast: false
+      matrix:
+        ingress-type:
+          - gateway
+          - ingress
+
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # chartpress requires git history to set chart version and image tags
+          # correctly
+          fetch-depth: 0
+
+      # Enable Gateway API in K3s
+      # https://github.com/k3s-io/k3s/issues/12183#issuecomment-2818989109
+      # This will create gateway.networking.k8s.io/v1 kube-system/traefik-gateway
+      - name: pre-configure k3s installation
+        if: matrix.ingress-type == 'gateway'
+        run: |
+          sudo mkdir -p /var/lib/rancher/k3s/server/manifests
+          sudo cp ci/traefik-config.yaml /var/lib/rancher/k3s/server/manifests/
+
+      # Starts a k8s cluster with NetworkPolicy enforcement and installs both
+      # kubectl and helm
+      #
+      # ref: https://github.com/jupyterhub/action-k3s-helm/
+      - uses: jupyterhub/action-k3s-helm@v4
+        with:
+          k3s-channel: stable
+          metrics-enabled: false
+          traefik-enabled: true
+          docker-enabled: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Build our images if needed and update values.yaml with the tags
+      - name: Install and run chartpress
+        run: |
+          pip3 install -r dev-requirements.txt
+          chartpress
+        env:
+          DOCKER_BUILDKIT: "1"
+
+      - name: Install local chart (gateway)
+        if: matrix.ingress-type == 'gateway'
+        run: >-
+          helm upgrade --install jupyterhub ./jupyterhub
+          --set proxy.service.type=ClusterIP
+          --set httpRoute.enabled=true
+          --set httpRoute.gateway.name=traefik-gateway
+          --set httpRoute.gateway.namespace=kube-system
+
+      # K3S traefik listens on host:80/443
+      - name: Install local chart (ingress)
+        if: matrix.ingress-type == 'ingress'
+        run: >-
+          helm upgrade --install jupyterhub ./jupyterhub
+          --set proxy.service.type=ClusterIP
+          --set ingress.enabled=true
+          --set ingress.hosts[0]=localhost
+
+      - name: "Await local chart"
+        uses: jupyterhub/action-k8s-await-workloads@v3
+        with:
+          timeout: 150
+          max-restarts: 1
+
+      - name: Test ingress
+        run: |
+          curl -vL http://localhost/
+          curl -vL http://localhost/ | grep '<title>JupyterHub</title>'
+
+      - name: Get traefik logs
+        if: always()
+        run: |
+          kubectl -nkube-system logs deploy/traefik

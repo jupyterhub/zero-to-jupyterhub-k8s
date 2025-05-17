@@ -1,0 +1,27 @@
+{{- if .Values.httpRoute.enabled -}}
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: {{ include "jupyterhub.httpRoute.fullname" . }}
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+  {{- with .Values.httpRoute.annotations }}
+  annotations:
+    {{- . | toYaml | nindent 4 }}
+  {{- end }}
+spec:
+  parentRefs:
+    - kind: Gateway
+      name: {{ .Values.httpRoute.gateway.name }}
+      {{- with .Values.httpRoute.gateway.namespace }}
+      namespace: "{{ . }}"
+      {{- end }}
+  {{- with .Values.httpRoute.hostnames }}
+  hostnames:
+    {{- . | toYaml | nindent 4 }}
+  {{- end }}
+  rules:
+    - backendRefs:
+        - name: proxy-public
+          port: 80
+{{- end }}
