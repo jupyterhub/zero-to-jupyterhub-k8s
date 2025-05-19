@@ -87,8 +87,9 @@ jobs:
       # Action reference: https://github.com/aquasecurity/trivy-action
       - name: Scan latest published image
         id: scan_1
-        uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8
+        uses: aquasecurity/trivy-action@0.30.0
         with:
+          version: v0.53.0
           image-ref: ${{ steps.image.outputs.spec }}
           format: json # ref: https://github.com/aquasecurity/trivy#save-the-results-as-json
           output: tmp/scan_1.json
@@ -112,12 +113,14 @@ jobs:
       - name: Scan rebuilt image
         id: scan_2
         if: steps.rebuild.outcome == 'success'
-        uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8
+        uses: aquasecurity/trivy-action@0.30.0
         with:
+          version: v0.53.0
           image-ref: rebuilt-image
           format: json # ref: https://github.com/aquasecurity/trivy#save-the-results-as-json
           output: tmp/scan_2.json
           ignore-unfixed: true
+          exit-code: "0"
 
       # Analyze the scan reports. If they differ, we want to proceed and create
       # or update a PR. We use a hash from the final scan report as an
@@ -171,8 +174,9 @@ jobs:
 
       - name: Describe vulnerabilities
         if: steps.rebuild.outcome == 'success'
-        uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8
+        uses: aquasecurity/trivy-action@0.30.0
         with:
+          version: v0.53.0
           image-ref: rebuilt-image
           format: table
           ignore-unfixed: true
