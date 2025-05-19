@@ -77,9 +77,6 @@ jobs:
           )
           echo "Identified image: $IMAGE_SPEC"
 
-          # FIXME: Remove this temp hardcoding to help test
-          IMAGE_SPEC=quay.io/jupyterhub/k8s-hub:4.2.1-0.dev.git.7014.hc8959795
-
           echo "spec=$IMAGE_SPEC" >> $GITHUB_OUTPUT
           echo "name=$(echo $IMAGE_SPEC | sed 's/\(.*\):.*/\1/')" >> $GITHUB_OUTPUT
           echo "tag=$(echo $IMAGE_SPEC | sed 's/.*:\(.*\)/\1/')" >> $GITHUB_OUTPUT
@@ -90,7 +87,7 @@ jobs:
       # Action reference: https://github.com/aquasecurity/trivy-action
       - name: Scan latest published image
         id: scan_1
-        uses: aquasecurity/trivy-action@0.30.0
+        uses: aquasecurity/trivy-action@26d71e622b84d103f86fb33a5a42c558e11f4ae0 # 0.30.0
         with:
           image-ref: ${{ steps.image.outputs.spec }}
           format: json # ref: https://github.com/aquasecurity/trivy#save-the-results-as-json
@@ -115,7 +112,7 @@ jobs:
       - name: Scan rebuilt image
         id: scan_2
         if: steps.rebuild.outcome == 'success'
-        uses: aquasecurity/trivy-action@0.30.0
+        uses: aquasecurity/trivy-action@26d71e622b84d103f86fb33a5a42c558e11f4ae0 # 0.30.0
         with:
           image-ref: rebuilt-image
           format: json # ref: https://github.com/aquasecurity/trivy#save-the-results-as-json
@@ -174,7 +171,7 @@ jobs:
 
       - name: Describe vulnerabilities
         if: steps.rebuild.outcome == 'success'
-        uses: aquasecurity/trivy-action@0.30.0
+        uses: aquasecurity/trivy-action@26d71e622b84d103f86fb33a5a42c558e11f4ae0 # 0.30.0
         with:
           image-ref: rebuilt-image
           format: table
