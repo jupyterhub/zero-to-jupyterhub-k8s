@@ -176,7 +176,7 @@ jobs:
         if: steps.rebuild.outcome == 'success'
         uses: aquasecurity/trivy-action@0.30.0
         with:
-          version: v0.54.0
+          version: v0.55.0
           image-ref: rebuilt-image
           format: table
           ignore-unfixed: true
