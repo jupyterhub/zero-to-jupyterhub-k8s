@@ -70,6 +70,9 @@ hub:
       - name: dummy-port-2
         port: 8182
         targetPort: string-named-target-port
+    ipFamilyPolicy: SingleStack
+    ipFamilies:
+      - IPv4
   baseUrl: /
   activeServerLimit: 3
   deploymentStrategy:
@@ -223,6 +226,10 @@ proxy:
     nodePorts:
       http:
       https:
+    ipFamilyPolicy: DualStack
+    ipFamilies:
+      - IPv4
+      - IPv6
   chp:
     revisionHistoryLimit: 1
     extraCommandLineFlags:
