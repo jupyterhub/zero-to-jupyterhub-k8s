@@ -1751,6 +1751,12 @@ properties:
               See [the Kubernetes
               documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#serviceport-v1-core)
               for the structure of the items in this list.
+          externalIPs:
+            type: array
+            description: |
+              A list of external IP addresses (unmanaged by Kubernetes) for which
+              nodes in the cluster will accept traffic for this service.
+              See [externalIPs](https://kubernetes.io/docs/concepts/services-networking/service/#external-ips) for more details.
           loadBalancerIP:
             type: [string, "null"]
             description: |
