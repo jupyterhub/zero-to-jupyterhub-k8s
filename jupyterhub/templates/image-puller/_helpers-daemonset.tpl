@@ -25,6 +25,14 @@ metadata:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
     "helm.sh/hook-weight": "-10"
+    {{- with .Values.prePuller.hook.daemonsetAnnotations }}
+    {{- . | toYaml | nindent 4 }}
+    {{- end }}
+  {{- else }}
+  {{- with .Values.prePuller.continuous.daemonsetAnnotations }}
+  annotations:
+    {{- . | toYaml | nindent 4 }}
+  {{- end }}
   {{- end }}
 spec:
   selector:

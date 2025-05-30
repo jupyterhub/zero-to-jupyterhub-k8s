@@ -675,12 +675,14 @@ prePuller:
       create: true
       name:
       annotations: {}
+    daemonsetAnnotations: {}
   continuous:
     enabled: true
     serviceAccount:
       create: true
       name:
       annotations: {}
+    daemonsetAnnotations: {}
   pullProfileListImages: true
   extraImages: {}
   pause:
