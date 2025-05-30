@@ -2906,6 +2906,12 @@ properties:
           resources: *resources-spec
           serviceAccount: *serviceAccount
           serviceAccountImagePuller: *serviceAccount
+          daemonsetAnnotations:
+            type: object
+            additionalProperties: false
+            patternProperties: *labels-and-annotations-patternProperties
+            description: |
+              Annotations to apply to the hook image puller DaemonSet.
       continuous:
         type: object
         additionalProperties: false
@@ -2923,6 +2929,12 @@ properties:
           enabled:
             type: boolean
           serviceAccount: *serviceAccount
+          daemonsetAnnotations:
+            type: object
+            additionalProperties: false
+            patternProperties: *labels-and-annotations-patternProperties
+            description: |
+              Annotations to apply to the continuous image puller DaemonSet.
       pullProfileListImages:
         type: boolean
         description: |

@@ -564,9 +564,11 @@ prePuller:
         effect: NoSchedule
     serviceAccount: *serviceAccount
     serviceAccountImagePuller: *serviceAccount
+    daemonsetAnnotations: *annotations
   continuous:
     enabled: true
     serviceAccount: *serviceAccount
+    daemonsetAnnotations: *annotations
   extraImages:
     mockImage1:
       name: mock-user/mock-image1
