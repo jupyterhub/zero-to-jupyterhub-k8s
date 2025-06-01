@@ -82,7 +82,6 @@ spec:
   {{- end }}
   {{- end }}
   {{- with .Values.proxy.service.externalIPs }}
-  externalIPs: {{- range . }}
-    - {{ . }}
-    {{- end }}
+  externalIPs:
+    {{- . | toYaml | nindent 4 }}
   {{- end }}
