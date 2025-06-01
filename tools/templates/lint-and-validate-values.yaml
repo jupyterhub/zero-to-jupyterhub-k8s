@@ -223,6 +223,9 @@ proxy:
     nodePorts:
       http:
       https:
+    externalIPs:
+      - 123.123.123.123
+      - 123.123.123.124
   chp:
     revisionHistoryLimit: 1
     extraCommandLineFlags:
