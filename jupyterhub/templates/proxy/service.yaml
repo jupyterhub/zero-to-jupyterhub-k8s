@@ -75,6 +75,13 @@ spec:
   {{- with .Values.proxy.service.loadBalancerIP }}
   loadBalancerIP: {{ . }}
   {{- end }}
+  {{- with .Values.proxy.service.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ . }}
+  {{- end }}
+  {{- with .Values.proxy.service.ipFamilies }}
+  ipFamilies:
+    {{- . | toYaml | nindent 4 }}
+  {{- end }}
   {{- if eq .Values.proxy.service.type "LoadBalancer" }}
   {{- with .Values.proxy.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
