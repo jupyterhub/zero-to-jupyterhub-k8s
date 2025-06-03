@@ -18,6 +18,13 @@ spec:
   ports:
     - port: 8001
       targetPort: api
+  {{- with .Values.proxy.service.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ . }}
+  {{- end }}
+  {{- with .Values.proxy.service.ipFamilies }}
+  ipFamilies:
+    {{- . | toYaml | nindent 4 }}
+  {{- end }}
 ---
 apiVersion: v1
 kind: Service
