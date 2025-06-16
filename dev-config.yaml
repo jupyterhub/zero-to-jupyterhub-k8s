@@ -159,6 +159,14 @@ singleuser:
     data-toml: *data-toml
   storage:
     type: none
+    extraVolumes:
+      test-volume:
+        name: test-volume
+        emptyDir: {}
+    extraVolumeMounts:
+      test-volume-mount:
+        name: test-volume
+        mountPath: /test-volume
   memory:
     guarantee: null
   networkPolicy:
