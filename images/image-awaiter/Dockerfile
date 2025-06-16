@@ -1,7 +1,7 @@
 # compile the code to an executable using an intermediary image
 FROM golang:1.23
 
-# VULN_SCAN_TIME=2025-04-14_05:06:04
+# VULN_SCAN_TIME=2025-06-16_05:07:17
 
 WORKDIR /build
 COPY *.mod \
