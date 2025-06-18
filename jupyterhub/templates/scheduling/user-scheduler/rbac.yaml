@@ -218,7 +218,7 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ include "jupyterhub.user-scheduler.fullname" . }}
+  name: {{ include "jupyterhub.user-scheduler.fullname" . }}{{- if .Values.hub.extraEnv.ENV_NAME }}-{{ .Values.hub.extraEnv.ENV_NAME | lower | replace "_" "-" }}{{- end }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 subjects:
