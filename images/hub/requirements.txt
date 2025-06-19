@@ -6,11 +6,11 @@
 #
 aiohappyeyeballs==2.6.1
     # via aiohttp
-aiohttp==3.12.1
+aiohttp==3.12.13
     # via kubernetes-asyncio
 aiosignal==1.3.2
     # via aiohttp
-alembic==1.16.1
+alembic==1.16.2
     # via jupyterhub
 annotated-types==0.7.0
     # via pydantic
@@ -27,7 +27,7 @@ bcrypt==4.3.0
     #   jupyterhub-nativeauthenticator
 cachetools==5.5.2
     # via google-auth
-certifi==2025.4.26
+certifi==2025.6.15
     # via
     #   kubernetes-asyncio
     #   requests
@@ -37,7 +37,7 @@ cffi==1.17.1
     # via cryptography
 charset-normalizer==3.4.2
     # via requests
-cryptography==45.0.3
+cryptography==45.0.4
     # via
     #   certipy
     #   pyjwt
@@ -47,15 +47,15 @@ escapism==1.0.1
     #   jupyterhub-ltiauthenticator
 fqdn==1.5.1
     # via jsonschema
-frozenlist==1.6.0
+frozenlist==1.7.0
     # via
     #   aiohttp
     #   aiosignal
-google-auth==2.40.2
+google-auth==2.40.3
     # via google-auth-oauthlib
 google-auth-oauthlib==1.2.2
     # via oauthenticator
-greenlet==3.2.2
+greenlet==3.2.3
     # via sqlalchemy
 idna==3.10
     # via
@@ -114,7 +114,7 @@ markupsafe==3.0.2
     # via
     #   jinja2
     #   mako
-multidict==6.4.4
+multidict==6.5.0
     # via
     #   aiohttp
     #   yarl
@@ -122,7 +122,7 @@ mwoauth==0.4.0
     # via oauthenticator
 oauthenticator==17.3.0
     # via -r unfrozen/requirements.txt
-oauthlib==3.2.2
+oauthlib==3.3.0
     # via
     #   jupyterhub
     #   jupyterhub-ltiauthenticator
@@ -137,9 +137,9 @@ packaging==25.0
     #   jupyterhub-idle-culler
 pamela==1.2.0
     # via jupyterhub
-prometheus-client==0.22.0
+prometheus-client==0.22.1
     # via jupyterhub
-propcache==0.3.1
+propcache==0.3.2
     # via
     #   aiohttp
     #   yarl
@@ -156,7 +156,7 @@ pycparser==2.22
     # via cffi
 pycurl==7.45.6
     # via -r unfrozen/requirements.txt
-pydantic==2.11.5
+pydantic==2.11.7
     # via jupyterhub
 pydantic-core==2.33.2
     # via pydantic
@@ -187,7 +187,7 @@ referencing==0.36.2
     #   jsonschema
     #   jsonschema-specifications
     #   jupyter-events
-requests==2.32.3
+requests==2.32.4
     # via
     #   jupyterhub
     #   mwoauth
@@ -211,7 +211,7 @@ rpds-py==0.25.1
     #   referencing
 rsa==4.9.1
     # via google-auth
-ruamel-yaml==0.18.11
+ruamel-yaml==0.18.14
     # via oauthenticator
 ruamel-yaml-clib==0.2.12
     # via ruamel-yaml
@@ -226,7 +226,7 @@ sqlalchemy==2.0.41
     #   alembic
     #   jupyterhub
     #   sqlalchemy-cockroachdb
-sqlalchemy-cockroachdb==2.0.2
+sqlalchemy-cockroachdb==2.0.3
     # via -r unfrozen/requirements.txt
 statsd==4.0.1
     # via -r unfrozen/requirements.txt
@@ -247,7 +247,7 @@ traitlets==5.14.3
     #   oauthenticator
 types-python-dateutil==2.9.0.20250516
     # via arrow
-typing-extensions==4.13.2
+typing-extensions==4.14.0
     # via
     #   alembic
     #   pydantic
@@ -266,5 +266,5 @@ urllib3==2.5.0
     #   requests
 webcolors==24.11.1
     # via jsonschema
-yarl==1.20.0
+yarl==1.20.1
     # via aiohttp
