@@ -8,3 +8,14 @@
 # include this config and then pass --set hub.some-option=null to null it out
 # when it must not be passed, but that still triggers schema validation errors.
 #
+
+singleuser:
+  storage:
+    extraVolumes:
+      test-volume:
+        name: test-volume
+        emptyDir: {}
+    extraVolumeMounts:
+      test-volume-mount:
+        name: test-volume
+        mountPath: /test-volume
