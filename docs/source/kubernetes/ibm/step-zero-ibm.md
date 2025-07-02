@@ -28,7 +28,6 @@ Procedure:
    Kubernetes Service delivers powerful tools by combining Docker and Kubernetes technologies, an intuitive user experience, and built-in security and isolation to automate the deployment, operation, scaling, and monitoring of containerized apps in a cluster of computing hosts.
 
    To set up the Kubernetes cluster:
-
    1. Create a Kubernetes cluster from the [IBM Cloud catalog](https://cloud.ibm.com/kubernetes/catalog/create)).
    2. When configuring the new cluster, select the **Cluster type** and click **Create Cluster** to provision a Kubernetes cluster.
       2.1 In the case of a free cluster you will see something similar to:
@@ -49,7 +48,6 @@ Procedure:
 
 2. Configure kubectl
    [kubectl](https://kubernetes.io/docs/reference/kubectl/) is a CLI tool to interact with a Kubernetes cluster. In this occasion, you will use it to point forward to the created Kubernetes cluster.
-
    1. Use `ibmcloud login` to log in interactively into the IBM Cloud. Provide the organization (org), location and space under which the cluster is created. You can reconfirm the details by running `ibmcloud target` command.
    2. When the cluster is ready, retrieve the cluster configuration by using the cluster's name:
       ```

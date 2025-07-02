@@ -17,7 +17,6 @@ template you will use to setup and shape your cluster.
    resources on AWS. Instructions for creating a role can be found
    [here](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html).
    The following policies are required:
-
    - AmazonEC2FullAccess
    - IAMFullAccess
    - AmazonS3FullAccess
@@ -41,7 +40,6 @@ template you will use to setup and shape your cluster.
    [here](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/connect-linux-inst-ssh.html).
 
 4. Install kops and kubectl on your CI host
-
    - Follow the instructions here: <https://github.com/kubernetes/kops/blob/HEAD/docs/install.md>
 
 5. Choose a cluster name:
@@ -172,7 +170,6 @@ template you will use to setup and shape your cluster.
     You should see a list of two nodes, each beginning with `ip`.
 
     If you want to use kubectl and helm locally:
-
     - run the following on CI host: `kops export kubecfg`
     - copy the contents of `~/.kube/config` to the same place on your local system
 
@@ -189,7 +186,6 @@ template you will use to setup and shape your cluster.
     Instead we need to follow this guide: <https://github.com/kubernetes/kops/blob/HEAD/docs/examples/kops-tests-private-net-bastion-host.md#adding-a-bastion-host-to-our-cluster>
 
     At this point there are a few public endpoints left open which need to be addressed
-
     - Bastion ELB security group defaults to access from 0.0.0.0
     - API ELB security group defaults to access from 0.0.0.0
 

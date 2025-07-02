@@ -8,7 +8,6 @@ This page describes the commands required to setup a Kubernetes cluster using th
 If you prefer to use the Digital Ocean portal see the [Digital Ocean Get Started](https://www.digitalocean.com/products/kubernetes).
 
 1. Prepare your Digital Ocean shell environment.
-
    1. **Install command-line tools locally**. You'll need at least v1.13.0.
 
    You can either follow the [installation instructions](https://github.com/digitalocean/doctl/blob/main/README.md) or use the commands below:

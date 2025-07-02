@@ -75,7 +75,6 @@ can try with `nano config.yaml`.
    ```
 
    where:
-
    - `<helm-release-name>` refers to a [Helm release name](https://helm.sh/docs/glossary/#release), an identifier used to
      differentiate chart installations. You need it when you are changing or
      deleting the configuration of this chart installation. If your Kubernetes

@@ -24,7 +24,6 @@ your google cloud account.
    command line interfaces on your own computer's terminal. We recommend
    starting out by using the web based terminal. Choose one set of instructions
    below.
-
    1. **Use a web based terminal:**
 
       Start _Google Cloud Shell_ from [console.cloud.google.com](https://console.cloud.google.com) by clicking the button shown below.
@@ -38,7 +37,6 @@ your google cloud account.
       ```
 
    2. **Use your own computer's terminal:**
-
       1. Download and install the `gcloud` command line tool at its [install
          page](https://cloud.google.com/sdk/docs/install). It will help you
          create and communicate with a Kubernetes cluster.
