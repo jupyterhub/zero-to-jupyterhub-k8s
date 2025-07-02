@@ -52,6 +52,12 @@ repos:
     rev: v6.2.1
     hooks:
       - id: beautysh
+        additional_dependencies:
+          # On recent Python versions beautysh fails with
+          #   ModuleNotFoundError: No module named 'pkg_resources'
+          # This can be removed if https://github.com/lovesegfault/beautysh/pull/251
+          # is released
+          - setuptools
 
   # Autoformat: markdown, yaml (but not helm templates)
   - repo: https://github.com/rbubley/mirrors-prettier
