@@ -12,7 +12,6 @@ This guide uses AWS to set up a cluster. This mirrors the steps found at [Gettin
    Instructions for creating a role can be found
    [here](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html).
    It should have the following policies:
-
    - AmazonEKSClusterPolicy
    - AmazonEKSServicePolicy
    - AmazonEC2ContainerRegistryReadOnly
