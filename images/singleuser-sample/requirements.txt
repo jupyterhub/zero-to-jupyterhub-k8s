@@ -4,7 +4,7 @@
 #
 #    Use the "Run workflow" button at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/actions/workflows/watch-dependencies.yaml
 #
-alembic==1.16.2
+alembic==1.16.4
     # via jupyterhub
 annotated-types==0.7.0
     # via pydantic
@@ -32,7 +32,7 @@ beautifulsoup4==4.13.4
     # via nbconvert
 bleach==6.2.0
     # via nbconvert
-certifi==2025.6.15
+certifi==2025.7.14
     # via
     #   httpcore
     #   httpx
@@ -47,7 +47,7 @@ charset-normalizer==3.4.2
     # via requests
 comm==0.2.2
     # via ipykernel
-cryptography==45.0.4
+cryptography==45.0.5
     # via certipy
 debugpy==1.8.14
     # via ipykernel
@@ -80,7 +80,7 @@ ipykernel==6.29.5
     # via
     #   jupyterlab
     #   nbclassic
-ipython==9.3.0
+ipython==9.4.0
     # via ipykernel
 ipython-genutils==0.2.0
     # via nbclassic
@@ -139,7 +139,7 @@ jupyter-server-terminals==0.5.3
     # via jupyter-server
 jupyterhub==5.3.0
     # via -r unfrozen/requirements.txt
-jupyterlab==4.4.3
+jupyterlab==4.4.4
     # via -r unfrozen/requirements.txt
 jupyterlab-pygments==0.3.0
     # via nbconvert
@@ -179,7 +179,7 @@ notebook-shim==0.2.4
     # via
     #   jupyterlab
     #   nbclassic
-oauthlib==3.3.0
+oauthlib==3.3.1
     # via jupyterhub
 overrides==7.7.0
     # via jupyter-server
@@ -222,7 +222,7 @@ pydantic==2.11.7
     # via jupyterhub
 pydantic-core==2.33.2
     # via pydantic
-pygments==2.19.1
+pygments==2.19.2
     # via
     #   ipython
     #   ipython-pygments-lexers
@@ -258,7 +258,7 @@ rfc3986-validator==0.1.1
     # via
     #   jsonschema
     #   jupyter-events
-rpds-py==0.25.1
+rpds-py==0.26.0
     # via
     #   jsonschema
     #   referencing
@@ -308,9 +308,9 @@ traitlets==5.14.3
     #   nbclient
     #   nbconvert
     #   nbformat
-types-python-dateutil==2.9.0.20250516
+types-python-dateutil==2.9.0.20250708
     # via arrow
-typing-extensions==4.14.0
+typing-extensions==4.14.1
     # via
     #   alembic
     #   anyio
