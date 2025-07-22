@@ -129,6 +129,22 @@ def test_spawn_basic(
         assert (
             c.returncode == 0
         ), "The singleuser.extraFiles configuration doesn't seem to have been honored!"
+
+        # check the extra volume and volume mount exists
+        c = subprocess.run(
+            [
+                "kubectl",
+                "exec",
+                pod_name,
+                "--",
+                "sh",
+                "-c",
+                "if [ ! -d /test-volume ]; then exit 1; fi",
+            ]
+        )
+        assert (
+            c.returncode == 0
+        ), "The singleuser.storage.extraVolumes and extraVolumeMounts configuration doesn't seem to have been honored!"
     finally:
         _delete_server(api_request, jupyter_user, request_data["test_timeout"])
 
