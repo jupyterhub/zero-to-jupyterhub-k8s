@@ -87,7 +87,7 @@ jobs:
       # Action reference: https://github.com/aquasecurity/trivy-action
       - name: Scan latest published image
         id: scan_1
-        uses: aquasecurity/trivy-action@76071ef0d7ec797419534a183b498b4d6366cf37 # 0.30.0
+        uses: aquasecurity/trivy-action@dc5a429b52fcf669ce959baa2c2dd26090d2a6c4 # 0.30.0
         with:
           image-ref: ${{ steps.image.outputs.spec }}
           format: json # ref: https://github.com/aquasecurity/trivy#save-the-results-as-json
@@ -112,7 +112,7 @@ jobs:
       - name: Scan rebuilt image
         id: scan_2
         if: steps.rebuild.outcome == 'success'
-        uses: aquasecurity/trivy-action@76071ef0d7ec797419534a183b498b4d6366cf37 # 0.30.0
+        uses: aquasecurity/trivy-action@dc5a429b52fcf669ce959baa2c2dd26090d2a6c4 # 0.30.0
         with:
           image-ref: rebuilt-image
           format: json # ref: https://github.com/aquasecurity/trivy#save-the-results-as-json
@@ -171,7 +171,7 @@ jobs:
 
       - name: Describe vulnerabilities
         if: steps.rebuild.outcome == 'success'
-        uses: aquasecurity/trivy-action@76071ef0d7ec797419534a183b498b4d6366cf37 # 0.30.0
+        uses: aquasecurity/trivy-action@dc5a429b52fcf669ce959baa2c2dd26090d2a6c4 # 0.30.0
         with:
           image-ref: rebuilt-image
           format: table
