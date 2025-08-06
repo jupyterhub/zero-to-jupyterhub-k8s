@@ -478,16 +478,33 @@ c.JupyterHub.cookie_secret = get_secret_value("hub.config.JupyterHub.cookie_secr
 c.CryptKeeper.keys = get_secret_value("hub.config.CryptKeeper.keys").split(";")
 
 # load hub.config values, except potentially seeded secrets already loaded
-for app, cfg in get_config("hub.config", {}).items():
-    if app == "JupyterHub":
+for section, cfg in get_config("hub.config", {}).items():
+    if section == "JupyterHub":
         cfg.pop("proxy_auth_token", None)
         cfg.pop("cookie_secret", None)
         cfg.pop("services", None)
-    elif app == "ConfigurableHTTPProxy":
+    elif section == "ConfigurableHTTPProxy":
         cfg.pop("auth_token", None)
-    elif app == "CryptKeeper":
+    elif section == "CryptKeeper":
         cfg.pop("keys", None)
-    c[app].update(cfg)
+
+    if not section[:1].isupper():
+        # traitlets config sections are Configurable class names
+        # that MUST start with upper-case
+        # if it starts with lowercase, it must be a mistake
+        # (e.g. putting `hub.loadRoles` under `hub.config.loadRoles`),
+        # and will have no effect, so warn or raise here
+        print(
+            f"FATAL: Invalid hub.config section name: {section}."
+            " hub.config sections must be Configurable class names (e.g. JupyterHub)."
+            " Maybe misplaced or misspelled config?",
+            file=sys.stderr,
+        )
+        # make this fatal:
+        sys.exit(1)
+
+    print(f"Loading pass-through config section hub.config.{section}")
+    c[section].update(cfg)
 
 # load /usr/local/etc/jupyterhub/jupyterhub_config.d config files
 config_dir = "/usr/local/etc/jupyterhub/jupyterhub_config.d"
