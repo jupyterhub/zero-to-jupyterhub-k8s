@@ -207,7 +207,7 @@ properties:
           for more info.
       config:
         type: object
-        additionalProperties: true
+        additionalProperties: false
         description: |
           JupyterHub and its components (authenticators, spawners, etc), are
           Python classes that expose its configuration through
@@ -271,6 +271,18 @@ properties:
           the `--values` or `-f` flag. During merging, lists are replaced while
           dictionaries are updated.
           ```
+        # check that the first character is Capital,
+        # which is required for valid section names
+        # can't know all possible Configurable class names in advance, though
+        patternProperties:
+          "^[A-Z].*$":
+            type: object
+            additionalProperties: true
+            description: |
+              Pass-through traitlets configuration of Configurable classes.
+              Keys must always be class names that start with capitals,
+              and values must be objects.
+
         properties:
           JupyterHub:
             type: object
