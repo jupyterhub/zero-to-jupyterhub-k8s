@@ -235,12 +235,14 @@ pods:
 singleuser:
   storage:
     extraVolumes:
-      jupyterhub-shared:
+      # Arbitrary key for identity & ordering
+      1-jupyterhub-shared:
         name: jupyterhub-shared
         persistentVolumeClaim:
           claimName: jupyterhub-shared-volume
     extraVolumeMounts:
-      jupyterhub-shared:
+      # Arbitrary key for identity & ordering
+      1-jupyterhub-shared:
         name: jupyterhub-shared
         mountPath: /home/shared
 ```
