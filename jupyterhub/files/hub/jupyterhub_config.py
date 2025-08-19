@@ -329,7 +329,7 @@ if extra_files:
         "secretName": get_name("singleuser"),
         "items": items,
     }
-    volumes.update({volume["name"]: volume})
+    volumes[volume["name"]] = volume
 
     for idx, (file_key, file_details) in enumerate(extra_files.items()):
         volume_mount = {
@@ -343,7 +343,7 @@ if extra_files:
 extra_volumes = get_config("singleuser.storage.extraVolumes", default={})
 if isinstance(extra_volumes, dict):
     for key, volume in extra_volumes.items():
-        volumes.update({key: volume})
+        volumes.update[key] = volume
 elif isinstance(extra_volumes, list):
     for volume in extra_volumes:
         volumes.update({volume["name"]: volume})
