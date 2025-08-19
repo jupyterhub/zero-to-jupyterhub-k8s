@@ -342,16 +342,14 @@ if extra_files:
 # Inject extraVolumes / extraVolumeMounts
 extra_volumes = get_config("singleuser.storage.extraVolumes", default={})
 if isinstance(extra_volumes, dict):
-    for key, volume in extra_volumes.items():
-        volumes.update[key] = volume
+    volumes.update(extra_volumes)
 elif isinstance(extra_volumes, list):
     for volume in extra_volumes:
         volumes[volume["name"]] = volume
 
 extra_volume_mounts = get_config("singleuser.storage.extraVolumeMounts", default={})
 if isinstance(extra_volume_mounts, dict):
-    for key, volume_mount in extra_volume_mounts.items():
-        volume_mounts[key] = volume_mount
+    volume_mounts.update(extra_volume_mounts)
 elif isinstance(extra_volume_mounts, list):
     # If extraVolumeMounts is a list, we need to add them to the volume_mounts
     # dictionary with a unique key.
