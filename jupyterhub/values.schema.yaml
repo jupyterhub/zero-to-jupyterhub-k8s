@@ -2448,8 +2448,29 @@ properties:
               Configures `KubeSpawner.storage_extra_labels`. Note that these
               labels are set on the PVC during creation only and won't be
               updated after creation.
-          extraVolumeMounts: *extraVolumeMounts-spec
-          extraVolumes: *extraVolumes-spec
+          extraVolumeMounts:
+            type: [object, array]
+            description: |
+              Injects extra volume mounts into `KubeSpawner.volume_mounts` dictionary.
+              Can be a dictionary or an array.
+              If it's an array, each item must be a volume mount configuration in k8s
+              native syntax. A combination of the volume name and its index is used as the key
+              in `KubeSpawner.volume_mounts` dictionary and the value is the volume mount
+              configuration.
+              If `extraVolumeMounts` is defined as a dictionary, the keys of the dictionary
+              can be any descriptive name for the volume mount and the value is the volume mount
+              configuration in k8s native syntax.
+          extraVolumes:
+            type: [object, array]
+            description: |
+              Injects extra volumes into `KubeSpawner.volumes` dictionary. Can be a dictionary
+              or an array.
+              If it's an array, each item must be volume configuration in k8s native
+              syntax. The name of the volume is used as the key in `KubeSpawner.volumes`
+              dictionary while the value is the volume configuration.
+              If `extraVolumes` is defined as a dictionary, the keys of the dictionary
+              can be any descriptive name for the volume and the value must be the volume
+              configuration in k8s native syntax.
           homeMountPath:
             type: string
             description: |

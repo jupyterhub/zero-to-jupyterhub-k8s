@@ -118,11 +118,15 @@ The following configuration will increase the SHM allocation by mounting a
 singleuser:
   storage:
     extraVolumes:
-      - name: shm-volume
+      # Arbitrary key for identity & ordering
+      1-shm-volume:
+        name: shm-volume
         emptyDir:
           medium: Memory
     extraVolumeMounts:
-      - name: shm-volume
+      # Arbitrary key for identity & ordering
+      1-shm-volume:
+        name: shm-volume
         mountPath: /dev/shm
 ```
 

@@ -214,7 +214,7 @@ only rebuild images if their dependent files in their respective directories or
 1. Use `helm` to upgrade (or install) your local JupyterHub Helm chart.
 
    ```shell
-   helm upgrade --install jupyterhub ./jupyterhub --cleanup-on-fail --values dev-config.yaml
+   helm upgrade --install jupyterhub ./jupyterhub --cleanup-on-fail --values dev-config.yaml --values dev-config-local-chart-extra-config.yaml
    ```
 
    Note that `--cleanup-on-fail` is a very good practice to avoid `<resource name> already exist` errors in future upgrades following a failed upgrade.
