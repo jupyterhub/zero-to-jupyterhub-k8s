@@ -10,7 +10,7 @@
 # NOTE: If the image version is updated, also update it in ci/refreeze and
 #       hub's Dockerfile!
 #
-FROM python:3.12-bookworm as build-stage
+FROM python:3.12-trixie as build-stage
 
 # Build wheels
 #
@@ -30,7 +30,7 @@ RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
 # The final stage
 # ---------------
 #
-FROM python:3.12-slim-bookworm
+FROM python:3.12-slim-trixie
 ENV DEBIAN_FRONTEND=noninteractive
 
 ENV NB_USER=jovyan \
