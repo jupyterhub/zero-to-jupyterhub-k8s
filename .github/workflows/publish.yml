@@ -36,7 +36,7 @@ jobs:
   publish:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           # chartpress requires git history to set chart version and image tags
           # correctly
