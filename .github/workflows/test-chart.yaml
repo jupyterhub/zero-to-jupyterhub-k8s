@@ -208,6 +208,7 @@ jobs:
               --set hub.db.upgrade=true
             create-k8s-test-resources: true
             # https://artifacthub.io/packages/helm/bitnami/postgresql
+            # TODO: Replace postgresql chart https://github.com/bitnami/containers/issues/83267
             setup-postgresql-args: >-
               --version=16.0.5
               --set auth.enablePostgresUser=true
@@ -217,6 +218,7 @@ jobs:
               --set audit.logConnections=true
               --set audit.logDisconnections=true
               --set audit.clientMinMessages=debug
+              --set image.repository=bitnamilegacy/postgresql
             os: ubuntu-24.04
 
     runs-on: ${{ matrix.os }}
