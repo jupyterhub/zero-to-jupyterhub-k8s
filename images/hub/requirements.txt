@@ -158,9 +158,9 @@ pycparser==2.23
     # via cffi
 pycurl==7.45.7
     # via -r unfrozen/requirements.txt
-pydantic==2.11.10
+pydantic==2.12.0
     # via jupyterhub
-pydantic-core==2.33.2
+pydantic-core==2.41.1
     # via pydantic
 pyjwt==2.10.1
     # via
