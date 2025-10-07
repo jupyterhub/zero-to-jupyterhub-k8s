@@ -14,7 +14,7 @@ changes in pull requests], this list should be updated.
 
 ## 4.3
 
-### 4.3.0 - 2025-10-08
+### 4.3.0 - 2025-10-07
 
 This release comes with some new chart configuration options and notable updated
 dependencies.
