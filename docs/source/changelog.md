@@ -12,6 +12,72 @@ changes in pull requests], this list should be updated.
 [development releases]: https://hub.jupyter.org/helm-chart/#development-releases-jupyterhub
 [breaking changes in pull requests]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pulls?q=is%3Apr+is%3Aclosed+label%3Abreaking
 
+## 4.3
+
+### 4.3.0 - 2025-10-07
+
+This release comes with some new chart configuration options and notable updated
+dependencies.
+
+#### Notable dependencies updated
+
+| Dependency                                                                       | Version in 4.2.0 | Version in 4.3.0 | Changelog link                                                                            | Note                               |
+| -------------------------------------------------------------------------------- | ---------------- | ---------------- | ----------------------------------------------------------------------------------------- | ---------------------------------- |
+| [jupyterhub](https://github.com/jupyterhub/jupyterhub)                           | 5.3.0            | 5.4.0            | [Changelog](https://jupyterhub.readthedocs.io/en/stable/reference/changelog.html)         | Run in the `hub` pod               |
+| [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy) | 4.6.3            | 5.1.0            | [Changelog](https://github.com/jupyterhub/configurable-http-proxy/blob/HEAD/CHANGELOG.md) | Run in the `proxy` pod             |
+| [traefik](https://github.com/traefik/traefik)                                    | v3.3.5           | v3.5.3           | [Changelog](https://github.com/traefik/traefik/blob/HEAD/CHANGELOG.md)                    | Run in the `autohttps` pod         |
+| [kube-scheduler](https://github.com/kubernetes/kube-scheduler)                   | v1.30.11         | v1.30.14         | [Changelog](https://github.com/kubernetes/kubernetes/tree/master/CHANGELOG)               | Run in the `user-scheduler` pod(s) |
+
+#### New features added
+
+- Support dict values for volumes, volume_mounts and other list based configs that support dict values [#3690](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3690) ([@sunu](https://github.com/sunu), [@GeorgianaElena](https://github.com/GeorgianaElena), [@agoose77](https://github.com/agoose77))
+- Add `proxy.service.externalIPs` config [#3683](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3683) ([@holzman](https://github.com/holzman), [@consideRatio](https://github.com/consideRatio), [@manics](https://github.com/manics))
+- Add `prePuller.[hook|continuous].daemonsetAnnotations` config [#3682](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3682) ([@consideRatio](https://github.com/consideRatio), [@manics](https://github.com/manics), [@paololazzari](https://github.com/paololazzari))
+- Add support for K8S Gateway API (`httpRoute` config) [#3661](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3661) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+- Add config for k8s Services' `ipFamilies` and `ipFamilyPolicy` [#3485](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3485) ([@mike-matera](https://github.com/mike-matera), [@consideRatio](https://github.com/consideRatio), [@manics](https://github.com/manics))
+
+#### Enhancements made
+
+- raise on invalid top-level keys in hub.config [#3721](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3721) ([@minrk](https://github.com/minrk), [@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio), [@agoose77](https://github.com/agoose77))
+- Declare k8s Services ipFamilyPolicy to PreferDualStack, previously implicit SingleStack [#3685](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3685) ([@consideRatio](https://github.com/consideRatio), [@manics](https://github.com/manics))
+- Update jupyterhub/configurable-http-proxy version from 4.6.3 to 5.0.0 [#3677](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3677) ([@jupyterhub-bot](https://github.com/jupyterhub-bot), [@consideRatio](https://github.com/consideRatio))
+
+#### Maintenance and upkeep improvements
+
+- Let `proxy.service.[ipFamilies|ipFamilyPolicy]` affect the `proxy-api` Service also [#3688](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3688) ([@consideRatio](https://github.com/consideRatio), [@manics](https://github.com/manics))
+
+#### Documentation improvements
+
+- Docs: Fix link formatting [#3717](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3717) ([@Paul2708](https://github.com/Paul2708), [@yuvipanda](https://github.com/yuvipanda), [@rgaiacs](https://github.com/rgaiacs))
+- documentation update on postStart hook use [#3573](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3573) ([@k-popov](https://github.com/k-popov), [@consideRatio](https://github.com/consideRatio))
+
+#### Continuous integration improvements
+
+- test-chart.yaml: use docker.io/bitnamilegacy/postgresql [#3747](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3747) ([@manics](https://github.com/manics), [@rgaiacs](https://github.com/rgaiacs))
+- Bump aquasecurity/trivy-action from 0.32.0 to 0.33.1 [#3742](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3742) ([@consideRatio](https://github.com/consideRatio))
+- Bump actions/github-script from 7 to 8 [#3741](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3741) ([@consideRatio](https://github.com/consideRatio))
+- Bump actions/checkout from 4 to 5 [#3740](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3740) ([@consideRatio](https://github.com/consideRatio))
+- Bump actions/setup-python from 5 to 6 [#3739](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3739) ([@consideRatio](https://github.com/consideRatio))
+- Bump aquasecurity/trivy-action from 0.31.0 to 0.32.0 [#3720](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3720) ([@consideRatio](https://github.com/consideRatio))
+- Pre commit fixes: switch to supported mirrors-prettier, workaround beautysh bug [#3705](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3705) ([@manics](https://github.com/manics), [@consideRatio](https://github.com/consideRatio))
+- Bump aquasecurity/trivy-action from 26d71e622b84d103f86fb33a5a42c558e11f4ae0 to 76071ef0d7ec797419534a183b498b4d6366cf37 [#3704](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3704) ([@manics](https://github.com/manics))
+- Bump aquasecurity/trivy-action from 0.24.0 to 0.30.0 [#3584](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3584) ([@consideRatio](https://github.com/consideRatio))
+
+#### Other merged PRs
+
+This changelog entry omits automated PRs, for example those updating
+dependencies in: images, github actions, pre-commit hooks. For a full list of
+changes, see the [full comparison](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/4.2.0...4.3.0).
+
+#### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2025-04-16&to=2025-10-07&type=c))
+
+@agoose77 ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aagoose77+updated%3A2025-04-16..2025-10-07&type=Issues)) | @consideRatio ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2025-04-16..2025-10-07&type=Issues)) | @GeorgianaElena ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AGeorgianaElena+updated%3A2025-04-16..2025-10-07&type=Issues)) | @holzman ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aholzman+updated%3A2025-04-16..2025-10-07&type=Issues)) | @jupyterhub-bot ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajupyterhub-bot+updated%3A2025-04-16..2025-10-07&type=Issues)) | @k-popov ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ak-popov+updated%3A2025-04-16..2025-10-07&type=Issues)) | @manics ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2025-04-16..2025-10-07&type=Issues)) | @mike-matera ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amike-matera+updated%3A2025-04-16..2025-10-07&type=Issues)) | @minrk ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aminrk+updated%3A2025-04-16..2025-10-07&type=Issues)) | @paololazzari ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Apaololazzari+updated%3A2025-04-16..2025-10-07&type=Issues)) | @Paul2708 ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3APaul2708+updated%3A2025-04-16..2025-10-07&type=Issues)) | @rgaiacs ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Argaiacs+updated%3A2025-04-16..2025-10-07&type=Issues)) | @sunu ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Asunu+updated%3A2025-04-16..2025-10-07&type=Issues)) | @tadeha ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Atadeha+updated%3A2025-04-16..2025-10-07&type=Issues)) | @yuvipanda ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ayuvipanda+updated%3A2025-04-16..2025-10-07&type=Issues))
+
 ## 4.2
 
 ### 4.2.0 - 2025-04-16
