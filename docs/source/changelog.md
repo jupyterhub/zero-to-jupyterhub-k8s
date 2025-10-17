@@ -14,6 +14,11 @@ changes in pull requests], this list should be updated.
 
 ## 4.3
 
+### 4.3.1 - 2025-10-17
+
+With this smaller release, the JupyterHub version deployed is upgraded from
+v5.4.0 to v5.4.1. For details refer to the [JupyterHub changelog].
+
 ### 4.3.0 - 2025-10-07
 
 This release comes with some new chart configuration options and notable updated
