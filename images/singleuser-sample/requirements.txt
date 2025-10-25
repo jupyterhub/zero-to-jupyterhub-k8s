@@ -16,7 +16,7 @@ argon2-cffi==25.1.0
     # via jupyter-server
 argon2-cffi-bindings==25.1.0
     # via argon2-cffi
-arrow==1.3.0
+arrow==1.4.0
     # via isoduration
 asttokens==3.0.0
     # via stack-data
@@ -137,13 +137,13 @@ jupyter-server==2.17.0
     #   notebook-shim
 jupyter-server-terminals==0.5.3
     # via jupyter-server
-jupyterhub==5.4.1
+jupyterhub==5.4.2
     # via -r unfrozen/requirements.txt
-jupyterlab==4.4.9
+jupyterlab==4.4.10
     # via -r unfrozen/requirements.txt
 jupyterlab-pygments==0.3.0
     # via nbconvert
-jupyterlab-server==2.27.3
+jupyterlab-server==2.28.0
     # via jupyterlab
 lark==1.3.0
     # via rfc3987-syntax
@@ -154,7 +154,7 @@ markupsafe==3.0.3
     #   jinja2
     #   mako
     #   nbconvert
-matplotlib-inline==0.1.7
+matplotlib-inline==0.2.1
     # via
     #   ipykernel
     #   ipython
@@ -208,7 +208,7 @@ prometheus-client==0.23.1
     #   jupyterhub
 prompt-toolkit==3.0.52
     # via ipython
-psutil==7.1.0
+psutil==7.1.1
     # via ipykernel
 ptyprocess==0.7.0
     # via
@@ -260,7 +260,7 @@ rfc3986-validator==0.1.1
     #   jupyter-events
 rfc3987-syntax==1.1.0
     # via jsonschema
-rpds-py==0.27.1
+rpds-py==0.28.0
     # via
     #   jsonschema
     #   referencing
@@ -309,8 +309,6 @@ traitlets==5.14.3
     #   nbclient
     #   nbconvert
     #   nbformat
-types-python-dateutil==2.9.0.20251008
-    # via arrow
 typing-extensions==4.15.0
     # via
     #   alembic
@@ -323,6 +321,8 @@ typing-extensions==4.15.0
     #   typing-inspection
 typing-inspection==0.4.2
     # via pydantic
+tzdata==2025.2
+    # via arrow
 uri-template==1.3.0
     # via jsonschema
 urllib3==2.5.0
