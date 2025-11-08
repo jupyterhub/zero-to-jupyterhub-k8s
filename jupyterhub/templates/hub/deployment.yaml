@@ -166,6 +166,7 @@ spec:
               {{- with .Values.hub.db.pvc.subPath }}
               subPath: {{ . | quote }}
               {{- end }}
+          workingDir: /srv/jupyterhub
             {{- end }}
           {{- with .Values.hub.resources }}
           resources:
