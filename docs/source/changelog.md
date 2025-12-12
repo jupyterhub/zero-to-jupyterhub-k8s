@@ -14,6 +14,28 @@ changes in pull requests], this list should be updated.
 
 ## 4.3
 
+### 4.3.2 - 2025-12-12
+
+4.3.2 only contains minor dependency updates, most notably:
+
+- JupyterHub upgraded from 5.4.1 to 5.4.3, fixing some regressions in 5.4
+- traefik upgraded from 3.5.3 to 3.6.4
+
+([full changelog](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/4.3.1...4.3.2))
+
+#### Documentation improvements
+
+- Add plausible stats tracking, consolidated with jupyter.org stats [#3767](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3767) ([@jasongrout](https://github.com/jasongrout), [@minrk](https://github.com/minrk))
+
+#### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2025-10-17&to=2025-12-12&type=c))
+
+@consideRatio ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2025-10-17..2025-12-12&type=Issues)) | @jasongrout ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajasongrout+updated%3A2025-10-17..2025-12-12&type=Issues)) | @jupyterhub-bot ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ajupyterhub-bot+updated%3A2025-10-17..2025-12-12&type=Issues)) | @manics ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2025-10-17..2025-12-12&type=Issues)) | @minrk ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aminrk+updated%3A2025-10-17..2025-12-12&type=Issues))
+
 ### 4.3.1 - 2025-10-17
 
 With this smaller release, the JupyterHub version deployed is upgraded from
