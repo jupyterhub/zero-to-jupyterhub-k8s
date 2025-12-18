@@ -49,6 +49,9 @@ spec:
     metadata:
       labels:
         {{- include "jupyterhub.matchLabelsLegacyAndModern" . | nindent 8 }}
+        {{- with .Values.prePuller.labels }}
+        {{- . | toYaml | nindent 8 }}
+        {{- end }}
       {{- with .Values.prePuller.annotations }}
       annotations:
         {{- . | toYaml | nindent 8 }}
