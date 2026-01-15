@@ -313,7 +313,11 @@ jobs:
       - name: "(Upgrade) Install helm diff"
         if: matrix.test == 'upgrade'
         run: |
-          helm plugin install https://github.com/databus23/helm-diff
+          if [[ $(helm version --short) == v4* ]]; fi
+            helm plugin install https://github.com/databus23/helm-diff --verify=false
+          else
+            helm plugin install https://github.com/databus23/helm-diff
+          fi
 
       - name: "(Upgrade) Helm diff ${{ matrix.upgrade-from }} chart with local chart"
         if: matrix.test == 'upgrade'
