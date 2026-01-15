@@ -234,12 +234,13 @@ jobs:
       # kubectl and helm
       #
       # ref: https://github.com/jupyterhub/action-k3s-helm/
-      - uses: jupyterhub/action-k3s-helm@v4
+      - uses: jupyterhub/action-k3s-helm@version-4
         with:
           k3s-channel: ${{ matrix.k3s-channel }}
           metrics-enabled: false
           traefik-enabled: false
           docker-enabled: true
+          helm-version: "v4.0.5"
 
       - uses: actions/setup-python@v6
         with:
@@ -433,12 +434,13 @@ jobs:
       # kubectl and helm
       #
       # ref: https://github.com/jupyterhub/action-k3s-helm/
-      - uses: jupyterhub/action-k3s-helm@v4
+      - uses: jupyterhub/action-k3s-helm@version-4
         with:
           k3s-channel: stable
           metrics-enabled: false
           traefik-enabled: true
           docker-enabled: true
+          helm-version: "v4.0.5"
 
       - uses: actions/setup-python@v6
         with:
