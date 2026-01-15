@@ -313,7 +313,7 @@ jobs:
       - name: "(Upgrade) Install helm diff"
         if: matrix.test == 'upgrade'
         run: |
-          if [[ $(helm version --short) == v4* ]]; fi
+          if [[ $(helm version --short) == v4* ]]; then
             helm plugin install https://github.com/databus23/helm-diff --verify=false
           else
             helm plugin install https://github.com/databus23/helm-diff
