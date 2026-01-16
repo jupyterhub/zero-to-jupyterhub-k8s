@@ -5,4 +5,4 @@ version: 0.1.0
 runtime: subprocess
 runtimeConfig:
   platformCommand:
-    - command: ./ci/string-replacer.sh
+    - command: ./ci/string-replacer/string-replacer.sh
