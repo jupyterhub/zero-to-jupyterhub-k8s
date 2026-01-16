@@ -234,7 +234,7 @@ jobs:
       # kubectl and helm
       #
       # ref: https://github.com/jupyterhub/action-k3s-helm/
-      - uses: jupyterhub/action-k3s-helm@version-4
+      - uses: jupyterhub/action-k3s-helm@main
         with:
           k3s-channel: ${{ matrix.k3s-channel }}
           metrics-enabled: false
@@ -438,7 +438,7 @@ jobs:
       # kubectl and helm
       #
       # ref: https://github.com/jupyterhub/action-k3s-helm/
-      - uses: jupyterhub/action-k3s-helm@version-4
+      - uses: jupyterhub/action-k3s-helm@main
         with:
           k3s-channel: stable
           metrics-enabled: false
