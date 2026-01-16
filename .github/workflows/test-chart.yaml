@@ -336,12 +336,19 @@ jobs:
           echo "      New version: $LOCAL_CHART_VERSION (replaced)"
           echo
 
+
+          if [[ $(helm version --short) == v4* ]]; then
+            helm plugin install ci/string-replacer/
+            HELM_DIFF_ARGS="--post-renderer=string-replacer"
+          else
+            HELM_DIFF_ARGS="--post-renderer=./ci/string-replacer/string-replacer.sh"
+          fi
           helm diff upgrade --install jupyterhub ./jupyterhub --values dev-config.yaml \
               --values dev-config-local-chart-extra-config.yaml \
               ${{ matrix.local-chart-extra-args }} \
               --show-secrets \
               --context=3 \
-              --post-renderer=ci/string-replacer.sh
+              ${HELM_DIFF_ARGS}
 
       - name: "(Upgrade) Await ${{ matrix.upgrade-from }} chart"
         if: matrix.test == 'upgrade'
