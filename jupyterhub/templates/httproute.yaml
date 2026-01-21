@@ -12,12 +12,8 @@ metadata:
 spec:
   parentRefs:
     - kind: Gateway
-      name: {{ .Values.httpRoute.gateway.name }}
-      {{- with .Values.httpRoute.gateway.namespace }}
-      namespace: "{{ . }}"
-      {{- end }}
-      {{- with .Values.httpRoute.gateway.sectionName }}
-      sectionName: "{{ . }}"
+      {{- with .Values.httpRoute.gateway }}
+      {{- . | toYaml | nindent 6 }}
       {{- end }}
   {{- with .Values.httpRoute.hostnames }}
   hostnames:
