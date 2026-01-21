@@ -2887,7 +2887,6 @@ properties:
               The name of the Gateway listener section to route traffic to.
               Common values are 'http', 'https', or custom listener names.
 
-
   prePuller:
     type: object
     additionalProperties: false
