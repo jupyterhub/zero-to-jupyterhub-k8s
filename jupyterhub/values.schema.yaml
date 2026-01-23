@@ -2449,7 +2449,7 @@ properties:
               labels are set on the PVC during creation only and won't be
               updated after creation.
           extraVolumeMounts:
-            type: [object, array]
+            type: [object, array, "null"]
             description: |
               Injects extra volume mounts into `KubeSpawner.volume_mounts` dictionary.
               Can be a dictionary or an array.
@@ -2461,7 +2461,7 @@ properties:
               can be any descriptive name for the volume mount and the value is the volume mount
               configuration in k8s native syntax.
           extraVolumes:
-            type: [object, array]
+            type: [object, array, "null"]
             description: |
               Injects extra volumes into `KubeSpawner.volumes` dictionary. Can be a dictionary
               or an array.
