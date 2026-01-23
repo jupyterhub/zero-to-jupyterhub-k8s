@@ -123,7 +123,7 @@ If you prefer to use the Azure portal see the [Azure Kubernetes Service quicksta
 
    To enable this in Azure, we must first create a [Virtual Network](https://learn.microsoft.com/en-gb/azure/virtual-network/virtual-networks-overview) with Azure's own network policies enabled.
 
-   This section of the documentation is following the Microsoft Azure tutorial on [creating an AKS cluster and enabling network policy](https://learn.microsoft.com/en-us/azure/aks/use-network-policies#create-an-aks-cluster-and-enable-network-policy), which includes information on using [Calico](https://docs.tigera.io/) network policies.
+   This section of the documentation is following the Microsoft Azure tutorial on [creating an AKS cluster and enabling network policy](https://learn.microsoft.com/en-us/azure/aks/use-network-policies#create-an-aks-cluster-with-azure-network-policy-manager-linux), which includes information on using [Calico](https://docs.tigera.io/) network policies.
 
    ```
    az network vnet create \
