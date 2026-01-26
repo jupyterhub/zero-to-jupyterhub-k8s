@@ -22,6 +22,6 @@ spec:
   {{- end }}
   rules:
     - backendRefs:
-        - name: proxy-public
+        - name: {{ include "jupyterhub.proxy-public.fullname" . }}
           port: 80
 {{- end }}
