@@ -728,6 +728,7 @@ httpRoute:
   gateway:
     name: your-gateway
     namespace: "" # required for a gateway resource in another namespace
+    # sectionName: https # optional: specify Gateway listener section (e.g., 'http', 'https')
 
 # cull relates to the jupyterhub-idle-culler service, responsible for evicting
 # inactive singleuser pods.

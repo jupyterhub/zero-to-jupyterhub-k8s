@@ -2881,6 +2881,11 @@ properties:
             type: string
             description: |
               The namespace the Gateway is running in.
+          sectionName:
+            type: string
+            description: |
+              The name of the Gateway listener section to route traffic to.
+              Common values are 'http', 'https', or custom listener names.
 
   prePuller:
     type: object
