@@ -3,6 +3,11 @@
 fullnameOverride: ""
 nameOverride:
 
+# namespaceOverride allows all resources to be deployed to a namespace different
+# from the Helm release namespace. Useful for multi-namespace deployments or when
+# integrating this chart as a subchart.
+namespaceOverride:
+
 # enabled is ignored by the jupyterhub chart itself, but a chart depending on
 # the jupyterhub chart conditionally can make use this config option as the
 # condition.

@@ -213,7 +213,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: {{ include "jupyterhub.user-scheduler-serviceaccount.fullname" . }}
-    namespace: "{{ .Release.Namespace }}"
+    namespace: {{ include "jupyterhub.namespace" . }}
 roleRef:
   kind: ClusterRole
   name: {{ include "jupyterhub.user-scheduler.fullname" . }}

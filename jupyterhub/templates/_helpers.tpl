@@ -491,3 +491,13 @@ limits:
 {{- define "jupyterhub.chart-version-to-git-ref" -}}
 {{- regexReplaceAll ".*[.-]n\\d+[.]h(.*)" . "${1}" }}
 {{- end }}
+
+
+{{- /*
+  jupyterhub.namespace:
+    Allow the release namespace to be overridden for multi-namespace deployments
+    in combined charts.
+*/}}
+{{- define "jupyterhub.namespace" -}}
+{{- default .Release.Namespace .Values.namespaceOverride | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
