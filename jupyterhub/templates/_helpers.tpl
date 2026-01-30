@@ -495,8 +495,8 @@ limits:
 
 {{- /*
   jupyterhub.namespace:
-    Allow the release namespace to be overridden for multi-namespace deployments
-    in combined charts.
+    Returns the namespace for chart resources. Uses .Values.namespaceOverride
+    if set, otherwise defaults to .Release.Namespace.
 */}}
 {{- define "jupyterhub.namespace" -}}
 {{- default .Release.Namespace .Values.namespaceOverride | trunc 63 | trimSuffix "-" -}}

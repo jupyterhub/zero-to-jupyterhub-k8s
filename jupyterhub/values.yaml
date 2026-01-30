@@ -3,9 +3,8 @@
 fullnameOverride: ""
 nameOverride:
 
-# namespaceOverride allows all resources to be deployed to a namespace different
-# from the Helm release namespace. Useful for multi-namespace deployments or when
-# integrating this chart as a subchart.
+# namespaceOverride sets the namespace for all chart resources.
+# If not set, defaults to the Helm release namespace (.Release.Namespace).
 namespaceOverride:
 
 # enabled is ignored by the jupyterhub chart itself, but a chart depending on
