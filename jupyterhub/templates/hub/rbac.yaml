@@ -3,6 +3,7 @@ kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: {{ include "jupyterhub.hub.fullname" . }}
+  namespace: {{ include "jupyterhub.namespace" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 rules:
@@ -17,12 +18,13 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: {{ include "jupyterhub.hub.fullname" . }}
+  namespace: {{ include "jupyterhub.namespace" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 subjects:
   - kind: ServiceAccount
     name: {{ include "jupyterhub.hub-serviceaccount.fullname" . }}
-    namespace: "{{ .Release.Namespace }}"
+    namespace: {{ include "jupyterhub.namespace" . }}
 roleRef:
   kind: Role
   name: {{ include "jupyterhub.hub.fullname" . }}
