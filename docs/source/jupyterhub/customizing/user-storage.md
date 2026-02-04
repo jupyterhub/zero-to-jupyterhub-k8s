@@ -280,6 +280,7 @@ singleuser:
 ```
 
 With this configuration:
+
 - The chart creates the `home` volume automatically (from `storage.static`)
 - Your `extraVolumes` configuration **adds** the `shared-data` volume
 - Both volumes are mounted in the user pod
@@ -314,11 +315,11 @@ volumes with your own configuration.
 
 ### When to use each method
 
-| Goal | Use | Why |
-|------|-----|-----|
-| Add volumes to user pods | `singleuser.storage.extraVolumes` | Preserves chart defaults like `home` volume |
-| Customize home directory storage | `singleuser.storage.type` and related options | Chart manages this automatically |
-| Completely replace all volumes | `hub.config.KubeSpawner.volumes` | Only needed for advanced custom setups |
+| Goal                             | Use                                           | Why                                         |
+| -------------------------------- | --------------------------------------------- | ------------------------------------------- |
+| Add volumes to user pods         | `singleuser.storage.extraVolumes`             | Preserves chart defaults like `home` volume |
+| Customize home directory storage | `singleuser.storage.type` and related options | Chart manages this automatically            |
+| Completely replace all volumes   | `hub.config.KubeSpawner.volumes`              | Only needed for advanced custom setups      |
 
 ### Combining both methods
 
