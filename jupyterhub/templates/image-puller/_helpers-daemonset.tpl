@@ -62,8 +62,6 @@ spec:
         per node limit all k8s clusters have and have a higher priority
         than user-placeholder pods that could block an entire node.
       */}}
-      serviceAccount: taintmanager
-      serviceAccountName: taintmanager
       {{- if .Values.scheduling.podPriority.enabled }}
       priorityClassName: {{ include "jupyterhub.image-puller-priority.fullname" . }}
       {{- end }}
