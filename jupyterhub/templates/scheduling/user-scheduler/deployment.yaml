@@ -16,7 +16,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "jupyterhub.matchLabels" . | nindent 8 }}
+        {{- include "jupyterhub.matchLabelsLegacyAndModern" . | nindent 8 }}
         {{- with .Values.scheduling.userScheduler.labels }}
         {{- . | toYaml | nindent 8 }}
         {{- end }}

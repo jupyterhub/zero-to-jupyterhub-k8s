@@ -231,10 +231,14 @@ linkcheck_ignore = [
     "https://portal.azure.com",  # sign-in redirect noise
     "https://console.cloud.google.com",  # sign-in redirect noise
     "https://console.developers.google.com",  # sign-in redirect noise
+    "https://www.espncricinfo.com/cricketers/hamid-hassan-311427",  # CI: 403 Client Error: Forbidden for url
+    "https://kccncna17.sched.com/event/CU6z/hacking-and-hardening-kubernetes-clusters-by-example-i-brad-geesaman-symantec",  # CI: 500 Server Error: Internal Server Error for url
 ]
 linkcheck_anchors_ignore = [
     "/#!",
     "/#%21",
+    # https://jupyter.zulipchat.com/#narrow/channel/469744-jupyterhub
+    "^narrow/channel/469744-jupyterhub$",
 ]
 
 
@@ -313,3 +317,14 @@ rediraffe_redirects = {
     "architecture": "administrator/architecture",
     "advanced": "administrator/advanced",
 }
+
+
+def setup(app):
+    # Enable Plausible.io stats for jupyter.org
+    app.add_js_file(
+        "https://plausible.io/js/pa-B75UO5--FNXYQSG7GBWkf.js", loading_method="async"
+    )
+    app.add_js_file(
+        filename=None,
+        body="window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init({hashBasedRouting:true})",
+    )

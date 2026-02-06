@@ -16,8 +16,8 @@ This project is under active development so information and tools may
 change. *You can be a part of this change!* If you see anything that is
 incorrect or have any questions, feel free to post on the community
 [Discourse forum](https://discourse.jupyter.org/) or reach out in the
-[Gitter chat](https://gitter.im/jupyterhub/jupyterhub) or create an
-issue at the [issues
+[Zulip chat](https://jupyter.zulipchat.com/#narrow/channel/469744-jupyterhub)
+or create an issue at the [issues
 page](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues). If
 you have tips or deployments that you would like to share, see the
 [Community Resources section](community-resources).
@@ -134,7 +134,7 @@ This guide and the associated helm chart would not be possible without
 the amazing institutional support from the following organizations (and
 the organizations that support them!)
 
-- [UC Berkeley Data Science Division](https://data.berkeley.edu/)
+- [UC Berkeley Data Science Division](https://cdss.berkeley.edu/)
 - [Berkeley Institute for Data Science](https://bids.berkeley.edu/)
 - [Cal Poly, San Luis Obispo](https://www.calpoly.edu/)
 - [Simula Research Institute](https://www.simula.no/)

@@ -70,6 +70,9 @@ hub:
       - name: dummy-port-2
         port: 8182
         targetPort: string-named-target-port
+    ipFamilyPolicy: SingleStack
+    ipFamilies:
+      - IPv4
   baseUrl: /
   activeServerLimit: 3
   deploymentStrategy:
@@ -223,6 +226,13 @@ proxy:
     nodePorts:
       http:
       https:
+    externalIPs:
+      - 123.123.123.123
+      - 123.123.123.124
+    ipFamilyPolicy: DualStack
+    ipFamilies:
+      - IPv4
+      - IPv6
   chp:
     revisionHistoryLimit: 1
     extraCommandLineFlags:
@@ -455,8 +465,8 @@ singleuser:
   storage:
     type: dynamic
     extraLabels: *labels
-    extraVolumes: []
-    extraVolumeMounts: []
+    extraVolumes: {}
+    extraVolumeMounts: {}
     static:
       pvcName:
       subPath: "{username}"
@@ -521,6 +531,14 @@ scheduling:
     revisionHistoryLimit: 1
     replicas: 1
     resources: *resources
+    extraPodSpec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              foo: bar
   corePods:
     tolerations:
       - key: mock-taint-key-corePods
@@ -555,8 +573,12 @@ prePuller:
         value: mock-taint-value-hook
         effect: NoSchedule
     serviceAccount: *serviceAccount
+    serviceAccountImagePuller: *serviceAccount
+    daemonsetAnnotations: *annotations
   continuous:
     enabled: true
+    serviceAccount: *serviceAccount
+    daemonsetAnnotations: *annotations
   extraImages:
     mockImage1:
       name: mock-user/mock-image1
@@ -564,12 +586,13 @@ prePuller:
     mockImage2:
       name: mock-user/mock-image2
       tag: mock-tag
+      pullPolicy: Always
 
 ingress:
   enabled: true
   annotations: *annotations
   ingressClassName: mock-ingress-class-name
-  hosts:
+  hosts: &ingress-hosts
     - mocked1.domain.name
     - mocked2.domain.name
   pathSuffix: dummy-pathSuffix
@@ -594,6 +617,16 @@ ingress:
       hosts:
         - mocked1.domain.name
         - mocked2.domain.name
+
+httpRoute:
+  # enabled set to false while awaiting HTTPRoute becoming available by default
+  # in our testing infra
+  enabled: false
+  annotations: *annotations
+  hostnames: *ingress-hosts
+  gateway:
+    name: gateway-name
+    namespace: gateway-namespace
 
 cull:
   enabled: true

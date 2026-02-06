@@ -3,7 +3,7 @@
 [![Documentation](https://img.shields.io/badge/Documentation-z2jh.jupyter.org-blue?logo=read-the-docs&logoColor=white)](https://z2jh.jupyter.org)
 [![GitHub](https://img.shields.io/badge/Source_code-github-blue?logo=github&logoColor=white)](https://github.com/jupyterhub/zero-to-jupyterhub-k8s)
 [![Discourse](https://img.shields.io/badge/Help_forum-discourse-blue?logo=discourse&logoColor=white)](https://discourse.jupyter.org/c/jupyterhub/z2jh-k8s)
-[![Gitter](https://img.shields.io/badge/Social_chat-gitter-blue?logo=gitter&logoColor=white)](https://gitter.im/jupyterhub/jupyterhub)
+[![Zulip](https://img.shields.io/badge/zulip-join_chat-blue.svg)](https://jupyter.zulipchat.com/#narrow/channel/469744-jupyterhub)
 <br>
 [![Latest stable release of the Helm chart](https://img.shields.io/badge/dynamic/json.svg?label=Latest%20stable%20release&url=https://hub.jupyter.org/helm-chart/info.json&query=$.jupyterhub.stable&logo=helm&logoColor=white)](https://jupyterhub.github.io/helm-chart#jupyterhub)
 [![Latest pre-release of the Helm chart](https://img.shields.io/badge/dynamic/json.svg?label=Latest%20pre-release&url=https://hub.jupyter.org/helm-chart/info.json&query=$.jupyterhub.pre&logo=helm&logoColor=white)](https://jupyterhub.github.io/helm-chart#development-releases-jupyterhub)

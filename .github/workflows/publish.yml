@@ -34,15 +34,15 @@ jobs:
   # ref: https://quay.io/organization/jupyterhub
 
   publish:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           # chartpress requires git history to set chart version and image tags
           # correctly
           fetch-depth: 0
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -144,7 +144,7 @@ jobs:
         run: helm package jupyterhub
 
       # ref: https://github.com/actions/upload-artifact
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: steps.publishing.outputs.publishing == ''
         with:
           name: jupyterhub-${{ github.sha }}

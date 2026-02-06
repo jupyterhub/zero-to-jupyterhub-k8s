@@ -16,7 +16,7 @@ yamllint: https://github.com/adrienverge/yamllint
 
 import argparse
 import os
-import pipes
+import shlex
 import subprocess
 import sys
 
@@ -30,7 +30,7 @@ def check_call(cmd, **kwargs):
     except subprocess.CalledProcessError as e:
         print(
             "`{}` exited with status {}".format(
-                " ".join(map(pipes.quote, cmd)),
+                " ".join(map(shlex.quote, cmd)),
                 e.returncode,
             ),
             file=sys.stderr,

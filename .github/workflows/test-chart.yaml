@@ -28,10 +28,10 @@ on:
 
 jobs:
   lint_shell_scripts:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -42,10 +42,10 @@ jobs:
         run: pre-commit run --all --hook-stage manual
 
   lint_and_validate_rendered_templates:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -60,7 +60,7 @@ jobs:
         continue-on-error: true
 
   lint_and_validate_templates_with_schema:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     strategy:
       fail-fast: false
@@ -77,8 +77,8 @@ jobs:
           - helm-version: v3.5.0 # minimal required version
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -114,7 +114,6 @@ jobs:
         continue-on-error: true
 
   test:
-    runs-on: ubuntu-22.04
     timeout-minutes: 20
 
     strategy:
@@ -131,12 +130,15 @@ jobs:
         include:
           - k3s-channel: latest
             test: install
+            # Also test arm64
+            os: ubuntu-24.04-arm
           - k3s-channel: stable # also test hub-slim, and prePuller.hook
             test: install
             local-chart-extra-args: >-
               --set hub.image.name=quay.io/jupyterhub/k8s-hub-slim
               --set prePuller.hook.enabled=true
               --set prePuller.hook.pullOnlyOnChanges=true
+            os: ubuntu-24.04
           - k3s-channel: v1.31 # also test hub.existingSecret and subdomain_host
             test: install
             local-chart-extra-args: >-
@@ -146,6 +148,7 @@ jobs:
               --set hub.config.CryptKeeper.keys[0]=cccc3333
               --set hub.config.JupyterHub.subdomain_host=jupyterhub.example.org
             create-k8s-test-resources: true
+            os: ubuntu-24.04
 
           # We run three upgrade tests where we first install an already released
           # Helm chart version and then upgrade to the version we are now
@@ -174,6 +177,7 @@ jobs:
               --set hub.db.type=sqlite-pvc
               --set singleuser.storage.type=dynamic
             create-k8s-test-resources: true
+            os: ubuntu-24.04
           - k3s-channel: v1.29
             test: upgrade
             upgrade-from: dev
@@ -184,6 +188,7 @@ jobs:
             local-chart-extra-args: >-
               --set hub.db.type=sqlite-pvc
               --set singleuser.storage.type=dynamic
+            os: ubuntu-24.04
           - k3s-channel: v1.28
             test: upgrade
             # We're testing hub.db.upgrade with PostgreSQL so this version must be old
@@ -203,6 +208,7 @@ jobs:
               --set hub.db.upgrade=true
             create-k8s-test-resources: true
             # https://artifacthub.io/packages/helm/bitnami/postgresql
+            # TODO: Replace postgresql chart https://github.com/bitnami/containers/issues/83267
             setup-postgresql-args: >-
               --version=16.0.5
               --set auth.enablePostgresUser=true
@@ -212,9 +218,13 @@ jobs:
               --set audit.logConnections=true
               --set audit.logDisconnections=true
               --set audit.clientMinMessages=debug
+              --set image.repository=bitnamilegacy/postgresql
+            os: ubuntu-24.04
+
+    runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           # chartpress requires git history to set chart version and image tags
           # correctly
@@ -231,7 +241,7 @@ jobs:
           traefik-enabled: false
           docker-enabled: true
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -386,3 +396,92 @@ jobs:
         if: failure() && matrix.setup-postgresql-args
         run: |
           kubectl logs statefulset/postgresql
+
+  test-gateway-ingress:
+    # The main test configures autohttps, but this conflicts with testing
+    # ingress/gateway which assume they can directly connect to proxy-public
+    # This is a minimal test that checks connections via a gateway is possible
+    timeout-minutes: 20
+
+    strategy:
+      # Keep running even if one variation of the job fail
+      fail-fast: false
+      matrix:
+        ingress-type:
+          - gateway
+          - ingress
+
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # chartpress requires git history to set chart version and image tags
+          # correctly
+          fetch-depth: 0
+
+      # Enable Gateway API in K3s
+      # https://github.com/k3s-io/k3s/issues/12183#issuecomment-2818989109
+      # This will create gateway.networking.k8s.io/v1 kube-system/traefik-gateway
+      - name: pre-configure k3s installation
+        if: matrix.ingress-type == 'gateway'
+        run: |
+          sudo mkdir -p /var/lib/rancher/k3s/server/manifests
+          sudo cp ci/traefik-config.yaml /var/lib/rancher/k3s/server/manifests/
+
+      # Starts a k8s cluster with NetworkPolicy enforcement and installs both
+      # kubectl and helm
+      #
+      # ref: https://github.com/jupyterhub/action-k3s-helm/
+      - uses: jupyterhub/action-k3s-helm@v4
+        with:
+          k3s-channel: stable
+          metrics-enabled: false
+          traefik-enabled: true
+          docker-enabled: true
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      # Build our images if needed and update values.yaml with the tags
+      - name: Install and run chartpress
+        run: |
+          pip3 install -r dev-requirements.txt
+          chartpress
+        env:
+          DOCKER_BUILDKIT: "1"
+
+      - name: Install local chart (gateway)
+        if: matrix.ingress-type == 'gateway'
+        run: >-
+          helm upgrade --install jupyterhub ./jupyterhub
+          --set proxy.service.type=ClusterIP
+          --set httpRoute.enabled=true
+          --set httpRoute.gateway.name=traefik-gateway
+          --set httpRoute.gateway.namespace=kube-system
+
+      # K3S traefik listens on host:80/443
+      - name: Install local chart (ingress)
+        if: matrix.ingress-type == 'ingress'
+        run: >-
+          helm upgrade --install jupyterhub ./jupyterhub
+          --set proxy.service.type=ClusterIP
+          --set ingress.enabled=true
+          --set ingress.hosts[0]=localhost
+
+      - name: "Await local chart"
+        uses: jupyterhub/action-k8s-await-workloads@v3
+        with:
+          timeout: 150
+          max-restarts: 1
+
+      - name: Test ingress
+        run: |
+          curl -vL http://localhost/
+          curl -vL http://localhost/ | grep '<title>JupyterHub</title>'
+
+      - name: Get traefik logs
+        if: always()
+        run: |
+          kubectl -nkube-system logs deploy/traefik

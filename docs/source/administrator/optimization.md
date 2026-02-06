@@ -270,7 +270,6 @@ following:
 
    If you need help on how to do this, please refer to your cloud providers
    documentation. A node pool may be called a node group.
-
    - The label: `hub.jupyter.org/node-purpose=user`
 
      **NOTE**: Cloud providers often have their own labels, separate from

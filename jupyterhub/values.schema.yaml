@@ -207,7 +207,7 @@ properties:
           for more info.
       config:
         type: object
-        additionalProperties: true
+        additionalProperties: false
         description: |
           JupyterHub and its components (authenticators, spawners, etc), are
           Python classes that expose its configuration through
@@ -271,6 +271,18 @@ properties:
           the `--values` or `-f` flag. During merging, lists are replaced while
           dictionaries are updated.
           ```
+        # check that the first character is Capital,
+        # which is required for valid section names
+        # can't know all possible Configurable class names in advance, though
+        patternProperties:
+          "^[A-Z].*$":
+            type: object
+            additionalProperties: true
+            description: |
+              Pass-through traitlets configuration of Configurable classes.
+              Keys must always be class names that start with capitals,
+              and values must be objects.
+
         properties:
           JupyterHub:
             type: object
@@ -563,7 +575,7 @@ properties:
               v1.11.1
               zhy270a
               ```
-          pullPolicy:
+          pullPolicy: &imagePullPolicy
             enum: [null, "", IfNotPresent, Always, Never]
             description: |
               Configures the Pod's `spec.imagePullPolicy`.
@@ -1150,6 +1162,16 @@ properties:
               A public IP address the hub Kubernetes service should be exposed
               on. To expose the hub directly is not recommended. Instead route
               traffic through the proxy-public service towards the hub.
+          ipFamilyPolicy: &ipFamilyPolicy-spec
+            type: [string]
+            description: |
+              See the [Kubernetes docs](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services)
+              for more info.
+          ipFamilies: &ipFamilies-spec
+            type: array
+            description: |
+              See the [Kubernetes docs](https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services)
+              for more info.
 
       pdb: &pdb-spec
         type: object
@@ -1526,6 +1548,7 @@ properties:
           2. proxy.chp.extraPodSpec
           3. proxy.traefik.extraPodSpec
           4. scheduling.userScheduler.extraPodSpec
+          5. scheduling.userPlaceholder.extraPodSpec
 
           One real-world use of these settings is to enable host networking. For
           example, to configure host networking for the hub pod, add the
@@ -1750,6 +1773,12 @@ properties:
               See [the Kubernetes
               documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#serviceport-v1-core)
               for the structure of the items in this list.
+          externalIPs:
+            type: array
+            description: |
+              A list of external IP addresses (unmanaged by Kubernetes) for which
+              nodes in the cluster will accept traffic for this service.
+              See [externalIPs](https://kubernetes.io/docs/concepts/services-networking/service/#external-ips) for more details.
           loadBalancerIP:
             type: [string, "null"]
             description: |
@@ -1767,6 +1796,8 @@ properties:
             description: |
               A list of IP CIDR ranges that are allowed to access the load balancer service.
               Defaults to allowing everyone to access it.
+          ipFamilyPolicy: *ipFamilyPolicy-spec
+          ipFamilies: *ipFamilies-spec
       https:
         type: object
         additionalProperties: false
@@ -1979,7 +2010,7 @@ properties:
               TLS termination proxy.
 
               See [Mozilla's
-              documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
+              documentation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Strict-Transport-Security)
               for more information.
             properties:
               includeSubdomains:
@@ -2417,8 +2448,29 @@ properties:
               Configures `KubeSpawner.storage_extra_labels`. Note that these
               labels are set on the PVC during creation only and won't be
               updated after creation.
-          extraVolumeMounts: *extraVolumeMounts-spec
-          extraVolumes: *extraVolumes-spec
+          extraVolumeMounts:
+            type: [object, array, "null"]
+            description: |
+              Injects extra volume mounts into `KubeSpawner.volume_mounts` dictionary.
+              Can be a dictionary or an array.
+              If it's an array, each item must be a volume mount configuration in k8s
+              native syntax. A combination of the volume name and its index is used as the key
+              in `KubeSpawner.volume_mounts` dictionary and the value is the volume mount
+              configuration.
+              If `extraVolumeMounts` is defined as a dictionary, the keys of the dictionary
+              can be any descriptive name for the volume mount and the value is the volume mount
+              configuration in k8s native syntax.
+          extraVolumes:
+            type: [object, array, "null"]
+            description: |
+              Injects extra volumes into `KubeSpawner.volumes` dictionary. Can be a dictionary
+              or an array.
+              If it's an array, each item must be volume configuration in k8s native
+              syntax. The name of the volume is used as the key in `KubeSpawner.volumes`
+              dictionary while the value is the volume configuration.
+              If `extraVolumes` is defined as a dictionary, the keys of the dictionary
+              can be any descriptive name for the volume and the value must be the volume
+              configuration in k8s native syntax.
           homeMountPath:
             type: string
             description: |
@@ -2648,6 +2700,7 @@ properties:
               Unless specified here, the placeholder pods will request the same
               resources specified for the real singleuser pods.
           containerSecurityContext: *containerSecurityContext-spec
+          extraPodSpec: *extraPodSpec-spec
       corePods:
         type: object
         additionalProperties: false
@@ -2788,6 +2841,52 @@ properties:
           See [the Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types)
           for more details about paths.
 
+  httpRoute:
+    type: object
+    additionalProperties: false
+    required: [enabled]
+    properties:
+      enabled:
+        type: boolean
+        description: |
+          Enable the creation of a Kubernetes HTTPRoute to the proxy-public service.
+
+          Requires support for the [Gateway API](https://gateway-api.sigs.k8s.io/).
+
+          A Gateway must already exist.
+      annotations:
+        type: object
+        additionalProperties: false
+        patternProperties: *labels-and-annotations-patternProperties
+        description: |
+          Annotations to apply to the HTTPRoute resource.
+
+          See [the Kubernetes
+          documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+          for more details about annotations.
+      hostnames:
+        type: array
+        description: |
+          List of hosts to route requests to the proxy, if empty route all requests regardless of host.
+      gateway:
+        type: object
+        additionalProperties: false
+        required: [name]
+        properties:
+          name:
+            type: string
+            description: |
+              The name of your Gateway for this route.
+          namespace:
+            type: string
+            description: |
+              The namespace the Gateway is running in.
+          sectionName:
+            type: string
+            description: |
+              The name of the Gateway listener section to route traffic to.
+              Common values are 'http', 'https', or custom listener names.
+
   prePuller:
     type: object
     additionalProperties: false
@@ -2862,6 +2961,13 @@ properties:
           image: *image-spec
           resources: *resources-spec
           serviceAccount: *serviceAccount
+          serviceAccountImagePuller: *serviceAccount
+          daemonsetAnnotations:
+            type: object
+            additionalProperties: false
+            patternProperties: *labels-and-annotations-patternProperties
+            description: |
+              Annotations to apply to the hook image puller DaemonSet.
       continuous:
         type: object
         additionalProperties: false
@@ -2878,6 +2984,13 @@ properties:
         properties:
           enabled:
             type: boolean
+          serviceAccount: *serviceAccount
+          daemonsetAnnotations:
+            type: object
+            additionalProperties: false
+            patternProperties: *labels-and-annotations-patternProperties
+            description: |
+              Annotations to apply to the continuous image puller DaemonSet.
       pullProfileListImages:
         type: boolean
         description: |
@@ -2917,6 +3030,7 @@ properties:
                 type: string
               tag:
                 type: string
+              pullPolicy: *imagePullPolicy
       containerSecurityContext: *containerSecurityContext-spec
       pause:
         type: object

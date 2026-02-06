@@ -32,7 +32,7 @@ spec:
       {{- end }}
       labels:
         {{- /* Changes here will cause the Deployment to restart the pods. */}}
-        {{- include "jupyterhub.matchLabels" . | nindent 8 }}
+        {{- include "jupyterhub.matchLabelsLegacyAndModern" . | nindent 8 }}
         {{- with .Values.scheduling.userPlaceholder.labels }}
         {{- . | toYaml | nindent 8 }}
         {{- end }}
@@ -77,4 +77,7 @@ spec:
           securityContext:
             {{- . | toYaml | nindent 12 }}
           {{- end }}
+      {{- with .Values.scheduling.userPlaceholder.extraPodSpec }}
+      {{- . | toYaml | nindent 6 }}
+      {{- end }}
 {{- end }}

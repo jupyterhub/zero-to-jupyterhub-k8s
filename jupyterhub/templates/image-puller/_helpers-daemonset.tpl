@@ -25,6 +25,14 @@ metadata:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
     "helm.sh/hook-weight": "-10"
+    {{- with .Values.prePuller.hook.daemonsetAnnotations }}
+    {{- . | toYaml | nindent 4 }}
+    {{- end }}
+  {{- else }}
+  {{- with .Values.prePuller.continuous.daemonsetAnnotations }}
+  annotations:
+    {{- . | toYaml | nindent 4 }}
+  {{- end }}
   {{- end }}
 spec:
   selector:
@@ -40,7 +48,10 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "jupyterhub.matchLabels" . | nindent 8 }}
+        {{- include "jupyterhub.matchLabelsLegacyAndModern" . | nindent 8 }}
+        {{- with .Values.prePuller.labels }}
+        {{- . | toYaml | nindent 8 }}
+        {{- end }}
       {{- with .Values.prePuller.annotations }}
       annotations:
         {{- . | toYaml | nindent 8 }}
@@ -72,6 +83,15 @@ spec:
               {{- include "jupyterhub.userNodeAffinityRequired" . | nindent 14 }}
       {{- end }}
       terminationGracePeriodSeconds: 0
+      {{- if .hook }}
+      {{- with include "jupyterhub.hook-image-puller-serviceaccount.fullname" . }}
+      serviceAccountName: {{ . }}
+      {{- end }}
+      {{- else }}
+      {{- with include "jupyterhub.continuous-image-puller-serviceaccount.fullname" . }}
+      serviceAccountName: {{ . }}
+      {{- end }}
+      {{- end }}
       automountServiceAccountToken: true
       {{- with include "jupyterhub.imagePullSecrets" (dict "root" . "image" .Values.singleuser.image) }}
       imagePullSecrets: {{ . }}
@@ -217,6 +237,9 @@ spec:
         {{- range $k, $v := .Values.prePuller.extraImages }}
         - name: image-pull-{{ $k }}
           image: {{ $v.name }}:{{ $v.tag }}
+          {{- with $v.pullPolicy }}
+          imagePullPolicy: {{ . }}
+          {{- end }}
           command:
             - /bin/sh
             - -c
