@@ -139,7 +139,7 @@ jobs:
               --set prePuller.hook.enabled=true
               --set prePuller.hook.pullOnlyOnChanges=true
             os: ubuntu-24.04
-          - k3s-channel: v1.31 # also test hub.existingSecret and subdomain_host
+          - k3s-channel: v1.35 # also test hub.existingSecret and subdomain_host
             test: install
             local-chart-extra-args: >-
               --set hub.existingSecret=test-hub-existing-secret
@@ -164,7 +164,7 @@ jobs:
           # information from
           # https://hub.jupyter.org/helm-chart/info.json
           #
-          - k3s-channel: v1.30
+          - k3s-channel: v1.34
             test: upgrade
             upgrade-from: stable
             upgrade-from-extra-args: >-
@@ -178,7 +178,7 @@ jobs:
               --set singleuser.storage.type=dynamic
             create-k8s-test-resources: true
             os: ubuntu-24.04
-          - k3s-channel: v1.29
+          - k3s-channel: v1.33
             test: upgrade
             upgrade-from: dev
             upgrade-from-extra-args: >-
@@ -189,7 +189,7 @@ jobs:
               --set hub.db.type=sqlite-pvc
               --set singleuser.storage.type=dynamic
             os: ubuntu-24.04
-          - k3s-channel: v1.28
+          - k3s-channel: v1.32
             test: upgrade
             # We're testing hub.db.upgrade with PostgreSQL so this version must be old
             # enough to require a DB upgrade
