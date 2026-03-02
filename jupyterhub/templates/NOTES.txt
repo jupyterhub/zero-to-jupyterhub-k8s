@@ -114,8 +114,25 @@
 {{- println }}
 {{- end }}
 
-
-
+{{- if .Values.httpRoute.enabled }}
+  {{- if hasKey .Values.httpRoute "gateway" }}
+    {{- /* deprecated httpRoute.gateway */}}
+    {{- if .Values.httpRoute.parentRefs }}
+      {{- /* both set, note gateway is ignored */}}
+##############################################################################
+###  WARNING: both httpRoute.parentRefs and deprecated httpRoute.gateway   ###
+###           httpRoute.gateway will be ignored.                           ###
+##############################################################################
+{{- println }}
+    {{- else }}
+      {{- /* only gateway set, warn and point to httpRoute.gateway */}}
+##############################################################################
+###  WARNING: httpRoute.gateway is deprecated. Use httpRoute.parentRefs    ###
+##############################################################################
+{{- println }}
+    {{- end }}
+  {{- end }}
+{{- end }}
 
 
 {{- /*
