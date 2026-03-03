@@ -23,9 +23,13 @@ rules:
   #       - changed in 1.28: permissions to get/update lock endpoint resource
   #                          removed
   #       - unchanged between 1.28 and 1.30
-  #       - (1.31 is known to bring some changes below)
+  #       - changed in 1.31 (about leases and leasecandidates)
+  #       - changed in 1.32 (about volumeattachments)
+  #       - unchanged in 1.33
+  #       - changed in 1.34 (about deviceclasses, resourceclaims, resourceclaims/status, pods/finalizers, resourceslices)
+  #       - unchanged in 1.35
   #
-  # ref: https://github.com/kubernetes/kubernetes/blob/v1.30.0/plugin/pkg/auth/authorizer/rbac/bootstrappolicy/testdata/cluster-roles.yaml#L721-L862
+  # ref: https://github.com/kubernetes/kubernetes/blob/v1.35.0/plugin/pkg/auth/authorizer/rbac/bootstrappolicy/testdata/cluster-roles.yaml#L740-L946
   - apiGroups:
     - ""
     - events.k8s.io
@@ -49,7 +53,22 @@ rules:
     - leases
     verbs:
     - get
+    - list
     - update
+    - watch
+  - apiGroups:
+    - coordination.k8s.io
+    resources:
+    - leasecandidates
+    verbs:
+    - create
+    - delete
+    - deletecollection
+    - get
+    - list
+    - patch
+    - update
+    - watch
   - apiGroups:
     - ""
     resources:
@@ -145,6 +164,14 @@ rules:
     - list
     - watch
   - apiGroups:
+    - storage.k8s.io
+    resources:
+    - volumeattachments
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
     - ""
     resources:
     - namespaces
@@ -168,13 +195,55 @@ rules:
     - get
     - list
     - watch
+  - apiGroups:
+    - resource.k8s.io
+    resources:
+    - deviceclasses
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - resource.k8s.io
+    resources:
+    - resourceclaims
+    verbs:
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups:
+    - resource.k8s.io
+    resources:
+    - resourceclaims/status
+    verbs:
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups:
+    - ""
+    resources:
+    - pods/finalizers
+    verbs:
+    - update
+  - apiGroups:
+    - resource.k8s.io
+    resources:
+    - resourceslices
+    verbs:
+    - get
+    - list
+    - watch
 
   # Copied from the system:volume-scheduler ClusterRole of the k8s version
   # matching the kube-scheduler binary we use.
   #
-  # NOTE: These rules have not changed between 1.12 and 1.29.
+  # NOTE: These rules have not changed between 1.12 and 1.35.
   #
-  # ref: https://github.com/kubernetes/kubernetes/blob/v1.29.0/plugin/pkg/auth/authorizer/rbac/bootstrappolicy/testdata/cluster-roles.yaml#L1283-L1310
+  # ref: https://github.com/kubernetes/kubernetes/blob/v1.35.0/plugin/pkg/auth/authorizer/rbac/bootstrappolicy/testdata/cluster-roles.yaml#L1397-L1424
   - apiGroups:
     - ""
     resources:
