@@ -522,7 +522,7 @@ scheduling:
         type: "RuntimeDefault"
     image:
       # IMPORTANT: Bumping the minor version of this binary should go hand in
-      #            hand with an inspection of the user-scheduelr's RBAC
+      #            hand with an inspection of the user-scheduler's RBAC
       #            resources that we have forked in
       #            templates/scheduling/user-scheduler/rbac.yaml.
       #
@@ -556,7 +556,7 @@ scheduling:
       # here. We aim to stay around 1 minor version behind the latest k8s
       # version.
       #
-      tag: "v1.30.14" # ref: https://github.com/kubernetes/kubernetes/tree/master/CHANGELOG
+      tag: "v1.35.2" # ref: https://github.com/kubernetes/kubernetes/tree/master/CHANGELOG
       pullPolicy:
       pullSecrets: []
     nodeSelector: {}

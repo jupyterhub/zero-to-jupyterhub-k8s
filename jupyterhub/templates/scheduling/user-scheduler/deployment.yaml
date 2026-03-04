@@ -50,7 +50,12 @@ spec:
       {{- end }}
       containers:
         - name: kube-scheduler
+          {{- if semverCompare "<1.34.0-0" .Capabilities.KubeVersion.Version }}
+          # kube-scheduler tag is held back for compatibilty with k8s 1.32 and 1.33
+          image: {{ .Values.scheduling.userScheduler.image.name }}:v1.33.9
+          {{- else }}
           image: {{ .Values.scheduling.userScheduler.image.name }}:{{ .Values.scheduling.userScheduler.image.tag }}
+          {{- end }}
           {{- with .Values.scheduling.userScheduler.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
