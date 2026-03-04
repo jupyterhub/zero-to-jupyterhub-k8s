@@ -222,7 +222,7 @@ six==1.17.0
     #   onetimepass
     #   python-dateutil
     #   rfc3339-validator
-sqlalchemy==2.0.47
+sqlalchemy==2.0.48
     # via
     #   alembic
     #   jupyterhub
