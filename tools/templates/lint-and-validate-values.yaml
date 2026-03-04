@@ -624,9 +624,10 @@ httpRoute:
   enabled: false
   annotations: *annotations
   hostnames: *ingress-hosts
-  gateway:
-    name: gateway-name
-    namespace: gateway-namespace
+  parentRefs:
+    - kind: Gateway
+      name: gateway-name
+      namespace: gateway-namespace
 
 cull:
   enabled: true

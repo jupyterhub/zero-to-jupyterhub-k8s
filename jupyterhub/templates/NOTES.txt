@@ -116,8 +116,6 @@
 
 
 
-
-
 {{- /*
   Breaking changes and failures for likely misconfigurations.
 */}}
@@ -155,6 +153,21 @@
 
 {{- if and .Values.singleuser.cloudMetadata.blockWithIptables (and .Values.singleuser.networkPolicy.enabled .Values.singleuser.networkPolicy.egressAllowRules.cloudMetadataServer) }}
 {{- $breaking = print $breaking "\n\nCHANGED: singleuser.cloudMetadata.blockWithIptables must as of version 3.0.0 not be configured together with singleuser.networkPolicy.egressAllowRules.cloudMetadataServer as it leads to an ambiguous configuration." }}
+{{- end }}
+
+
+{{- define "jupyterhub.httpRoute.gateway.removal" -}}
+httpRoute:
+  parentRefs:
+    - kind: Gateway
+      name: {{ .name }}
+      {{- with .namespace }}
+      namespace: {{ . }}
+      {{- end }}
+{{- end }}
+{{- if hasKey .Values.httpRoute "gateway" }}
+{{- $breaking = print $breaking "\n\nCHANGED: httpRoute.gateway must as of version 5.0.0 be configured with httpRoute.parentRefs, like this:\n\n" }}
+{{- $breaking = print $breaking (include "jupyterhub.httpRoute.gateway.removal" .Values.httpRoute.gateway) }}
 {{- end }}
 
 

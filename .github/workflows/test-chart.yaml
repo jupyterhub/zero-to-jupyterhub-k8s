@@ -458,8 +458,7 @@ jobs:
           helm upgrade --install jupyterhub ./jupyterhub
           --set proxy.service.type=ClusterIP
           --set httpRoute.enabled=true
-          --set httpRoute.gateway.name=traefik-gateway
-          --set httpRoute.gateway.namespace=kube-system
+          --set-json httpRoute.parentRefs='[{"kind": "Gateway", "name": "traefik-gateway", "namespace": "kube-system"}]'
 
       # K3S traefik listens on host:80/443
       - name: Install local chart (ingress)

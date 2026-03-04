@@ -2803,7 +2803,7 @@ properties:
       ingressClassName:
         type: [string, "null"]
         description: |
-          Maps directly to the Ingress resource's `spec.ingressClassName``.
+          Maps directly to the Ingress resource's `spec.ingressClassName`.
 
           See [the Kubernetes
           documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class)
@@ -2872,6 +2872,10 @@ properties:
         type: object
         additionalProperties: false
         required: [name]
+        description: |
+          ```{note}
+          Removed in version 5.0.0, use [`httpRoute.parentRefs`](schema_httpRoute.parentRefs) instead.
+          ```
         properties:
           name:
             type: string
@@ -2886,7 +2890,20 @@ properties:
             description: |
               The name of the Gateway listener section to route traffic to.
               Common values are 'http', 'https', or custom listener names.
+      parentRefs:
+        type: array
+        description: |
+          List of HTTPRoute parentRefs, identifying the Gateway to use.
 
+          Usually looks like:
+
+          ```yaml
+          - kind: Gateway
+            name: your-gateway
+            namespace: other-namespace # if gateway is in a separate namespace
+          ```
+
+          See [the Gateway API](https://gateway-api.sigs.k8s.io/reference/spec/#parentreference)
   prePuller:
     type: object
     additionalProperties: false

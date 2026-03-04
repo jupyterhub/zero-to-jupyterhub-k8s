@@ -10,11 +10,10 @@ metadata:
     {{- . | toYaml | nindent 4 }}
   {{- end }}
 spec:
+  {{- with .Values.httpRoute.parentRefs }}
   parentRefs:
-    - kind: Gateway
-      {{- with .Values.httpRoute.gateway }}
-      {{- . | toYaml | nindent 6 }}
-      {{- end }}
+    {{- . | toYaml | nindent 4 }}
+  {{- end }}
   {{- with .Values.httpRoute.hostnames }}
   hostnames:
     {{- . | toYaml | nindent 4 }}
