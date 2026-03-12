@@ -33,7 +33,7 @@ certipy==0.2.2
     # via jupyterhub
 cffi==2.0.0
     # via cryptography
-charset-normalizer==3.4.4
+charset-normalizer==3.4.5
     # via requests
 cryptography==46.0.5
     # via
@@ -50,7 +50,7 @@ frozenlist==1.8.0
     # via
     #   aiohttp
     #   aiosignal
-google-auth==2.48.0
+google-auth==2.49.0
     # via google-auth-oauthlib
 google-auth-oauthlib==1.3.0
     # via oauthenticator
@@ -233,7 +233,7 @@ statsd==4.0.1
     # via -r unfrozen/requirements.txt
 text-unidecode==1.3
     # via python-slugify
-tornado==6.5.4
+tornado==6.5.5
     # via
     #   jupyterhub
     #   jupyterhub-idle-culler

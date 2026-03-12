@@ -43,7 +43,7 @@ cffi==2.0.0
     # via
     #   argon2-cffi-bindings
     #   cryptography
-charset-normalizer==3.4.4
+charset-normalizer==3.4.5
     # via requests
 comm==0.2.3
     # via ipykernel
@@ -80,7 +80,7 @@ ipykernel==7.2.0
     # via
     #   jupyterlab
     #   nbclassic
-ipython==9.10.0
+ipython==9.11.0
     # via ipykernel
 ipython-genutils==0.2.0
     # via nbclassic
@@ -139,7 +139,7 @@ jupyter-server-terminals==0.5.4
     # via jupyter-server
 jupyterhub==5.4.3
     # via -r unfrozen/requirements.txt
-jupyterlab==4.5.5
+jupyterlab==4.5.6
     # via -r unfrozen/requirements.txt
 jupyterlab-pygments==0.3.0
     # via nbconvert
@@ -200,7 +200,7 @@ parso==0.8.6
     # via jedi
 pexpect==4.9.0
     # via ipython
-platformdirs==4.9.2
+platformdirs==4.9.4
     # via jupyter-core
 prometheus-client==0.24.1
     # via
@@ -284,7 +284,7 @@ terminado==0.18.1
     #   jupyter-server-terminals
 tinycss2==1.4.0
     # via bleach
-tornado==6.5.4
+tornado==6.5.5
     # via
     #   ipykernel
     #   jupyter-client
@@ -337,5 +337,5 @@ websocket-client==1.9.0
     # via jupyter-server
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==82.0.0
+setuptools==82.0.1
     # via jupyterlab
