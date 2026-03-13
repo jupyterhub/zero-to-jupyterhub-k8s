@@ -271,6 +271,24 @@ properties:
           the `--values` or `-f` flag. During merging, lists are replaced while
           dictionaries are updated.
           ```
+
+          ```{admonition} hub.config overrides chart defaults
+          :class: warning
+          Values set in `hub.config` **completely replace** (not merge with)
+          the chart's default configuration for that specific configuration class.
+
+          For example, if you set `hub.config.KubeSpawner.volumes`, it will
+          replace **all** volumes that the chart would normally configure
+          (such as the `home` volume from `singleuser.storage.static`),
+          not merge with them.
+
+          If you want to **add** volumes while preserving chart defaults,
+          use `singleuser.storage.extraVolumes` instead of
+          `hub.config.KubeSpawner.volumes`.
+
+          This applies to all dictionary-valued traitlets configuration,
+          including `volumes`, `volume_mounts`, `environment`, etc.
+          ```
         # check that the first character is Capital,
         # which is required for valid section names
         # can't know all possible Configurable class names in advance, though
@@ -2471,6 +2489,44 @@ properties:
               If `extraVolumes` is defined as a dictionary, the keys of the dictionary
               can be any descriptive name for the volume and the value must be the volume
               configuration in k8s native syntax.
+
+              ```{admonition} Understanding dict keys and volume shadowing
+              :class: note
+              When using the dictionary format, the keys are arbitrary identifiers
+              for ordering and identity - they don't need to match the volume name.
+
+              However, if you use a key that matches a chart-managed volume
+              (like `home` or `files`), your volume will **replace** the chart's
+              volume due to dictionary merging with `.update()`. This is by design
+              and allows intentional overriding.
+              ```
+
+              ```{admonition} Merging volumes across multiple values files
+              :class: tip
+              When passing multiple values files to Helm (e.g., `helm upgrade -f base.yaml -f prod.yaml`),
+              Helm will merge dictionaries but replace lists. To successfully merge volumes across
+              multiple files:
+
+              1. Use the **same configuration key** in all files (either `singleuser.storage.extraVolumes`
+                 in all files, OR `hub.config.KubeSpawner.volumes` in all files - but not both)
+              2. Use **dict format** (not list format) in all files
+
+              For example, if `base.yaml` has `singleuser.storage.extraVolumes: {vol1: {...}}` and
+              `prod.yaml` has `singleuser.storage.extraVolumes: {vol2: {...}}`, Helm will merge them
+              into `{vol1: {...}, vol2: {...}}`.
+              ```
+
+              ```{admonition} When to use extraVolumes vs hub.config.KubeSpawner.volumes
+              :class: tip
+              Use `singleuser.storage.extraVolumes` when you want to **add** volumes
+              while preserving the chart's default volumes (like the `home` volume
+              from `singleuser.storage.static`). Just avoid using dict keys that
+              match chart-managed volume keys (`home`, `files`, etc.) unless you
+              intentionally want to override them.
+
+              Only use `hub.config.KubeSpawner.volumes` if you want to **completely
+              replace** all chart-managed volumes with your own configuration.
+              ```
           homeMountPath:
             type: string
             description: |
