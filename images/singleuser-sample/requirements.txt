@@ -43,7 +43,7 @@ cffi==2.0.0
     # via
     #   argon2-cffi-bindings
     #   cryptography
-charset-normalizer==3.4.5
+charset-normalizer==3.4.6
     # via requests
 comm==0.2.3
     # via ipykernel
