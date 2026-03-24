@@ -34,6 +34,7 @@ Ideally, we would watch for changes to the file with inotify and update the
 secret object as needed. However, for now we just operate in a 30s loop. This is
 good enough, since traefik can always re-generate certs if needed.
 """
+
 import argparse
 import base64
 import json
