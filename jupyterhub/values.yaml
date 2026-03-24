@@ -522,7 +522,7 @@ scheduling:
         type: "RuntimeDefault"
     image:
       # IMPORTANT: Bumping the minor version of this binary should go hand in
-      #            hand with an inspection of the user-schedueler's RBAC
+      #            hand with an inspection of the user-scheduler's RBAC
       #            resources that we have forked in
       #            templates/scheduling/user-scheduler/rbac.yaml.
       #
