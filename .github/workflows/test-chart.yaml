@@ -180,7 +180,7 @@ jobs:
             os: ubuntu-24.04
           - k3s-channel: v1.29
             test: upgrade
-            upgrade-from: dev
+            upgrade-from: v4.3.2
             upgrade-from-extra-args: >-
               --set proxy.secretToken=aaaa1111
               --set hub.db.type=sqlite-pvc
