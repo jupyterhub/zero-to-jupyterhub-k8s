@@ -23,7 +23,7 @@ All jupyterhub deployments are encouraged to upgrade.
 
 This release fixes:
 
-- [CVE-2026-33709], an open redirect vulnerability in JupyterHub (jupyerhub 5.4.4)
+- [CVE-2026-33709], an open redirect vulnerability in JupyterHub (jupyterhub 5.4.4)
 - [CVE-2026-33175], fixing email verification in Auth0OAuthenticator (oauthenticator 17.4.0)
 - [CVE-2026-34052], a Denial-of-Service vulnerability in LTI11Authenticator (jupyterhub-ltiauthenticator 1.6.3)
 
