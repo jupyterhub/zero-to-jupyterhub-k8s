@@ -187,7 +187,7 @@ referencing==0.37.0
     #   jsonschema
     #   jsonschema-specifications
     #   jupyter-events
-requests==2.32.5
+requests==2.33.0
     # via
     #   jupyterhub
     #   mwoauth
