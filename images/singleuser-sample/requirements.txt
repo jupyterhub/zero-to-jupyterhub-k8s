@@ -8,7 +8,7 @@ alembic==1.18.4
     # via jupyterhub
 annotated-types==0.7.0
     # via pydantic
-anyio==4.12.1
+anyio==4.13.0
     # via
     #   httpx
     #   jupyter-server
@@ -20,9 +20,9 @@ arrow==1.4.0
     # via isoduration
 asttokens==3.0.1
     # via stack-data
-async-lru==2.2.0
+async-lru==2.3.0
     # via jupyterlab
-attrs==25.4.0
+attrs==26.1.0
     # via
     #   jsonschema
     #   referencing
@@ -47,7 +47,7 @@ charset-normalizer==3.4.6
     # via requests
 comm==0.2.3
     # via ipykernel
-cryptography==46.0.5
+cryptography==46.0.6
     # via certipy
 debugpy==1.8.20
     # via ipykernel
@@ -99,7 +99,7 @@ jinja2==3.1.6
     #   nbconvert
 json5==0.13.0
     # via jupyterlab-server
-jsonpointer==3.0.0
+jsonpointer==3.1.1
     # via jsonschema
 jsonschema==4.26.0
     # via
@@ -246,7 +246,7 @@ referencing==0.37.0
     #   jsonschema
     #   jsonschema-specifications
     #   jupyter-events
-requests==2.32.5
+requests==2.33.0
     # via
     #   jupyterhub
     #   jupyterlab-server
