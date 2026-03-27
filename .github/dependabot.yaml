@@ -11,6 +11,14 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     labels: [ci]
+    groups:
+      # group official actions updates
+      actions:
+        patterns:
+          - "actions/*"
+      docker:
+        patterns:
+          - "docker/*"
     schedule:
       interval: monthly
       time: "05:00"
