@@ -14,6 +14,56 @@ changes in pull requests], this list should be updated.
 
 ## 4.3
 
+### 4.3.3 - 2026-03-26
+
+```{important}
+4.3.3 is a security release fixing vulnerabilities in jupyterhub and 2 authenticators.
+All jupyterhub deployments are encouraged to upgrade.
+```
+
+This release fixes:
+
+- [CVE-2026-33709], an open redirect vulnerability in JupyterHub (jupyterhub 5.4.4)
+- [CVE-2026-33175], fixing email verification in Auth0OAuthenticator (oauthenticator 17.4.0)
+- [CVE-2026-34052], a Denial-of-Service vulnerability in LTI11Authenticator (jupyterhub-ltiauthenticator 1.6.3)
+
+The advisories at the above links will be published 7 days after release (2026-04-02).
+
+[CVE-2026-34052]: https://github.com/jupyterhub/ltiauthenticator/security/advisories/GHSA-8mxq-7xr7-2fxj
+[CVE-2026-33709]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-3vff-hjqv-m7h8
+
+[CVE-2026-33175]: https://github.com/jupyterhub/oauthenticator/security/advisories/GHSA-rrvg-cxh4-qhrv
+
+([full changelog](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/4.3.2...4.3.3))
+
+#### New features added
+
+- Support `httpRoute.gateway.sectionName` for Gateway listener selection [#3800](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3800) ([@groundsada](https://github.com/groundsada), [@consideRatio](https://github.com/consideRatio), [@manics](https://github.com/manics))
+
+#### Bugs fixed
+
+- Set service name in HTTPRoute to match the proxy-public service name [#3808](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3808) ([@davidkim83](https://github.com/davidkim83), [@consideRatio](https://github.com/consideRatio))
+- Default `singleuser.storage.extraVolumes` and `extraVolumeMounts` to null instead of empty dict [#3803](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3803) ([@GeorgianaElena](https://github.com/GeorgianaElena), [@minrk](https://github.com/minrk))
+- Add pod labels to image-puller daemonsets [#3785](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3785) ([@MatthiasRoels](https://github.com/MatthiasRoels), [@consideRatio](https://github.com/consideRatio))
+
+#### Maintenance and upkeep improvements
+
+- user-scheduler: update kube-scheduler binary from 1.30.14 to 1.35.2 [#3833](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3833) ([@consideRatio](https://github.com/consideRatio), [@manics](https://github.com/manics))
+
+#### Documentation improvements
+
+- Remove recommendation of ingress-nginx [#3827](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3827) ([@yuvipanda](https://github.com/yuvipanda), [@consideRatio](https://github.com/consideRatio))
+- Fix a couple of broken links [#3804](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3804) ([@GeorgianaElena](https://github.com/GeorgianaElena), [@consideRatio](https://github.com/consideRatio))
+
+#### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/use/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2025-12-13&to=2026-03-26&type=c))
+
+@alekseyolg ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aalekseyolg+updated%3A2025-12-13..2026-03-26&type=Issues)) | @consideRatio ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AconsideRatio+updated%3A2025-12-13..2026-03-26&type=Issues)) | @davidkim83 ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Adavidkim83+updated%3A2025-12-13..2026-03-26&type=Issues)) | @GeorgianaElena ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AGeorgianaElena+updated%3A2025-12-13..2026-03-26&type=Issues)) | @groundsada ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Agroundsada+updated%3A2025-12-13..2026-03-26&type=Issues)) | @lfreinag ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Alfreinag+updated%3A2025-12-13..2026-03-26&type=Issues)) | @manics ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2025-12-13..2026-03-26&type=Issues)) | @MatthiasRoels ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3AMatthiasRoels+updated%3A2025-12-13..2026-03-26&type=Issues)) | @minrk ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aminrk+updated%3A2025-12-13..2026-03-26&type=Issues)) | @yuvipanda ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Ayuvipanda+updated%3A2025-12-13..2026-03-26&type=Issues))
+
 ### 4.3.2 - 2025-12-12
 
 4.3.2 only contains minor dependency updates, most notably:
