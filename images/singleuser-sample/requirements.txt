@@ -222,7 +222,7 @@ pydantic==2.12.5
     # via jupyterhub
 pydantic-core==2.41.5
     # via pydantic
-pygments==2.19.2
+pygments==2.20.0
     # via
     #   ipython
     #   ipython-pygments-lexers
