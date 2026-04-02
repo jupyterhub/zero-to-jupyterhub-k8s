@@ -28,6 +28,7 @@ rules:
   #       - unchanged in 1.33
   #       - changed in 1.34 (about deviceclasses, resourceclaims, resourceclaims/status, pods/finalizers, resourceslices)
   #       - unchanged in 1.35
+  #       - changed in 1.36 (about resourceclaims/binding)
   #
   # ref: https://github.com/kubernetes/kubernetes/blob/v1.35.0/plugin/pkg/auth/authorizer/rbac/bootstrappolicy/testdata/cluster-roles.yaml#L740-L946
   - apiGroups:
@@ -223,6 +224,13 @@ rules:
     - patch
     - update
     - watch
+  - apiGroups:
+    - resource.k8s.io
+    resources:
+    - resourceclaims/binding
+    verbs:
+    - patch
+    - update
   - apiGroups:
     - ""
     resources:
