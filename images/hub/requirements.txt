@@ -6,7 +6,7 @@
 #
 aiohappyeyeballs==2.6.1
     # via aiohttp
-aiohttp==3.13.4
+aiohttp==3.13.5
     # via kubernetes-asyncio
 aiosignal==1.4.0
     # via aiohttp
@@ -35,9 +35,9 @@ certipy==0.2.2
     # via jupyterhub
 cffi==2.0.0
     # via cryptography
-charset-normalizer==3.4.6
+charset-normalizer==3.4.7
     # via requests
-cryptography==46.0.6
+cryptography==46.0.7
     # via
     #   certipy
     #   google-auth
@@ -54,9 +54,9 @@ frozenlist==1.8.0
     #   aiosignal
 google-auth==2.49.1
     # via google-auth-oauthlib
-google-auth-oauthlib==1.3.0
+google-auth-oauthlib==1.3.1
     # via oauthenticator
-greenlet==3.3.2
+greenlet==3.4.0
     # via sqlalchemy
 idna==3.11
     # via
@@ -175,7 +175,7 @@ python-dateutil==2.9.0.post0
     #   jupyterhub
     #   jupyterhub-idle-culler
     #   kubernetes-asyncio
-python-json-logger==4.0.0
+python-json-logger==4.1.0
     # via jupyter-events
 python-slugify==8.0.4
     # via jupyterhub-kubespawner
@@ -189,7 +189,7 @@ referencing==0.37.0
     #   jsonschema
     #   jsonschema-specifications
     #   jupyter-events
-requests==2.33.0
+requests==2.33.1
     # via
     #   jupyterhub
     #   mwoauth
@@ -221,7 +221,7 @@ six==1.17.0
     #   onetimepass
     #   python-dateutil
     #   rfc3339-validator
-sqlalchemy==2.0.48
+sqlalchemy==2.0.49
     # via
     #   alembic
     #   jupyterhub
@@ -256,7 +256,7 @@ typing-extensions==4.15.0
     #   typing-inspection
 typing-inspection==0.4.2
     # via pydantic
-tzdata==2025.3
+tzdata==2026.1
     # via arrow
 uri-template==1.3.0
     # via jsonschema
