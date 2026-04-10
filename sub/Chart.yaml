@@ -1,0 +1,10 @@
+apiVersion: v2
+name: jupyterhub-exposure-overlay
+description: Wrapper chart that enables per-singleuser Service/Route exposure on top of the packaged jupyterhub chart.
+type: application
+version: 0.1.0
+appVersion: 5.4.4
+dependencies:
+  - name: jupyterhub
+    version: 0.0.1-set.by.chartpress
+    repository: file://charts

@@ -1,0 +1,54 @@
+jupyterhub:
+  proxy:
+    service:
+      type: ClusterIP
+
+  hub:
+    image:
+      tag: "4.3.1"
+    extraVolumes:
+      - name: singleuser-exposure-files
+        configMap:
+          name: singleuser-exposure-files
+    extraVolumeMounts:
+      - name: singleuser-exposure-files
+        mountPath: /usr/local/etc/jupyterhub/singleuser-exposure
+        readOnly: true
+    extraConfig:
+      00-singleuser-exposure: |
+        import os
+        import sys
+
+        exposure_dir = "/usr/local/etc/jupyterhub/singleuser-exposure"
+        if exposure_dir not in sys.path:
+            sys.path.insert(0, exposure_dir)
+
+        from singleuser_exposure import configure_singleuser_exposure
+
+        configure_singleuser_exposure(c, get_config)
+
+  singleuser:
+    image:
+      tag: "4.3.1"
+    networkTools:
+      image:
+        tag: "4.3.1"
+    networkPolicy:
+      enabled: false
+
+    exposure:
+      enabled: true
+      type: route
+      hostTemplate: "{service_name}.apps.example.com"
+      ssh:
+        enabled: true
+        externalPort: 22
+        containerPort: 22
+      route:
+        wildcardPolicy: None
+
+  prePuller:
+    hook:
+      enabled: false
+    continuous:
+      enabled: false

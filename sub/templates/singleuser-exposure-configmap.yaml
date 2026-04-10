@@ -1,0 +1,17 @@
+{{- if .Values.jupyterhub.singleuser.exposure.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: singleuser-exposure-files
+  labels:
+    {{- include "jupyterhub.labels" . | nindent 4 }}
+data:
+  singleuser_exposure.py: |
+{{ .Files.Get "files/singleuser-exposure/singleuser_exposure.py" | nindent 4 }}
+  singleuser_exposure_common.py: |
+{{ .Files.Get "files/singleuser-exposure/singleuser_exposure_common.py" | nindent 4 }}
+  singleuser_exposure_hooks.py: |
+{{ .Files.Get "files/singleuser-exposure/singleuser_exposure_hooks.py" | nindent 4 }}
+  singleuser_exposure_k8s.py: |
+{{ .Files.Get "files/singleuser-exposure/singleuser_exposure_k8s.py" | nindent 4 }}
+{{- end }}
