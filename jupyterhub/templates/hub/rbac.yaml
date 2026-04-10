@@ -12,6 +12,16 @@ rules:
   - apiGroups: [""]       # "" indicates the core API group
     resources: ["events"]
     verbs: ["get", "watch", "list"]
+  {{- if and .Values.singleuser.exposure.enabled (or (eq .Values.singleuser.exposure.type "loadBalancer") (eq .Values.singleuser.exposure.type "route")) }}
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs: ["get", "update", "patch"]
+  {{- end }}
+  {{- if and .Values.singleuser.exposure.enabled (eq .Values.singleuser.exposure.type "route") }}
+  - apiGroups: ["route.openshift.io"]
+    resources: ["routes"]
+    verbs: ["get", "watch", "list", "create", "update", "patch", "delete"]
+  {{- end }}
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1

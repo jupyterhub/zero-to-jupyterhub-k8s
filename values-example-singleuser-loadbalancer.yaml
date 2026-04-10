@@ -1,0 +1,20 @@
+proxy:
+  service:
+    type: ClusterIP
+
+singleuser:
+  # If you keep NetworkPolicy enabled, make sure your cloud load balancer can
+  # reach single-user pods.
+  networkPolicy:
+    enabled: false
+
+  exposure:
+    enabled: true
+    type: loadBalancer
+    ssh:
+      enabled: true
+      externalPort: 22
+      containerPort: 22
+    service:
+      allocateLoadBalancerNodePorts: false
+      externalTrafficPolicy: Local

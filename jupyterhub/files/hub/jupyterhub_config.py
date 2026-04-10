@@ -10,9 +10,14 @@ from jupyterhub.utils import url_path_join
 from kubernetes_asyncio import client
 from tornado.httpclient import AsyncHTTPClient
 
-# Make sure that modules placed in the same directory as the jupyterhub config are added to the pythonpath
-configuration_directory = os.path.dirname(os.path.realpath(__file__))
-sys.path.insert(0, configuration_directory)
+# Make sure that modules placed alongside the config file, or injected via the
+# chart's config ConfigMap mount, are importable.
+for configuration_directory in (
+    os.path.dirname(os.path.realpath(__file__)),
+    "/usr/local/etc/jupyterhub/config",
+):
+    if os.path.isdir(configuration_directory) and configuration_directory not in sys.path:
+        sys.path.insert(0, configuration_directory)
 
 from z2jh import (
     get_config,
@@ -21,6 +26,7 @@ from z2jh import (
     get_secret_value,
     set_config_if_not_none,
 )
+from singleuser_exposure import configure_singleuser_exposure
 
 
 def camelCaseify(s):
@@ -540,3 +546,7 @@ if os.path.isdir(config_dir):
 for key, config_py in sorted(get_config("hub.extraConfig", {}).items()):
     print(f"Loading extra config: {key}")
     exec(config_py)
+
+# apply chart-managed hook composition after hub.extraConfig has had a chance to
+# register any custom hook functions of its own.
+configure_singleuser_exposure(c, get_config)

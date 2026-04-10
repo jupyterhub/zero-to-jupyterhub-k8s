@@ -1,0 +1,18 @@
+proxy:
+  service:
+    type: ClusterIP
+
+singleuser:
+  # For a quick working setup, disable the chart-managed NetworkPolicy.
+  # If you keep it enabled, make sure the OpenShift router can reach user pods.
+  networkPolicy:
+    enabled: false
+
+  exposure:
+    enabled: true
+    type: route
+    ssh:
+      enabled: true
+      externalPort: 22
+      containerPort: 22
+    hostTemplate: "{service_name}.apps.example.com"

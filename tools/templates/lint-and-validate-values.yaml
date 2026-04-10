@@ -491,6 +491,26 @@ singleuser:
       mock: 1
   cmd: jupyterhub-singleuser
   defaultUrl: /
+  exposure:
+    enabled: true
+    type: route
+    annotations: *annotations
+    labels: *labels
+    hostTemplate: "{service_name}.apps.example.com"
+    service:
+      allocateLoadBalancerNodePorts: false
+      externalTrafficPolicy: Cluster
+      ipFamilies: [IPv4]
+      ipFamilyPolicy: SingleStack
+      loadBalancerClass: mock-loadbalancer-class
+      loadBalancerIP: 203.0.113.10
+      loadBalancerSourceRanges: [203.0.113.0/24]
+    ssh:
+      enabled: true
+      externalPort: 2222
+      containerPort: 22
+    route:
+      wildcardPolicy: None
 
 scheduling:
   userScheduler:

@@ -2320,6 +2320,188 @@ properties:
         description: |
           Passthrough configuration for
           [KubeSpawner.extra_pod_config](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.extra_pod_config).
+      exposure:
+        type: object
+        additionalProperties: false
+        required: [enabled, type]
+        description: |
+          Create a dedicated external resource for each spawned single-user
+          server.
+
+          Enabling this also sets
+          [KubeSpawner.services_enabled](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.services_enabled)
+          so each user pod gets a dedicated k8s Service with a stable name.
+          When `type=loadBalancer`, that Service is patched to
+          `spec.type=LoadBalancer`. When `type=route`, that Service is kept as
+          `spec.type=ClusterIP` and an OpenShift `Route` is created on top of
+          it.
+
+          Service ports are configured via `singleuser.exposure.ssh`. By
+          default, the per-user Service is exposed on port `22`, and you can
+          override both the externally exposed service port and the in-pod
+          target port.
+
+          The generated Service or Route keeps the same name as the single-user
+          pod for the lifetime of that server and is deleted again when the
+          server stops.
+
+          Template placeholders available in `hostTemplate`, `annotations`, and
+          `labels` are:
+          `{username}`, `{escaped_username}`, `{servername}`,
+          `{service_name}`, `{pod_name}`, `{namespace}`, `{base_url}`, and
+          `{user_server}`.
+
+          If [`singleuser.networkPolicy.enabled`](schema_singleuser.networkPolicy.enabled)
+          is true, you may also need to allow ingress from your router or
+          load balancer implementation via
+          [`singleuser.networkPolicy.ingress`](schema_singleuser.networkPolicy.ingress).
+        properties:
+          enabled:
+            type: boolean
+            description: |
+              Whether to create a per-user external resource alongside each
+              spawned single-user server.
+          type:
+            enum: [loadBalancer, route]
+            description: |
+              The exposure type to create per single-user server.
+
+              Use `loadBalancer` to expose the per-user Service directly, or
+              `route` on OpenShift clusters with the Route API.
+          hostTemplate:
+            type: [string, "null"]
+            description: |
+              Optional template for the generated hostname when `type=route`.
+
+              When unset, the OpenShift router assigns a host automatically.
+
+              Example:
+
+              ```yaml
+              singleuser:
+                exposure:
+                  hostTemplate: "{service_name}.apps.example.com"
+              ```
+          annotations:
+            type: object
+            additionalProperties: false
+            patternProperties: *labels-and-annotations-patternProperties
+            description: |
+              Annotations to apply to the generated Service when
+              `type=loadBalancer`, or to the generated Route when `type=route`.
+          labels:
+            type: object
+            additionalProperties: false
+            patternProperties: *labels-and-annotations-patternProperties
+            description: |
+              Labels to apply to the generated Service when
+              `type=loadBalancer`, or to the generated Route when `type=route`.
+          service:
+            type: object
+            additionalProperties: false
+            description: |
+              LoadBalancer Service specific options, used when
+              `type=loadBalancer`.
+            properties:
+              allocateLoadBalancerNodePorts:
+                type: [boolean, "null"]
+                description: |
+                  Maps to the Service's
+                  `spec.allocateLoadBalancerNodePorts`.
+              externalTrafficPolicy:
+                enum: [null, Cluster, Local]
+                description: |
+                  Maps to the Service's `spec.externalTrafficPolicy`.
+              ipFamilies:
+                type: [array, "null"]
+                items:
+                  type: string
+                description: |
+                  Maps to the Service's `spec.ipFamilies`.
+              ipFamilyPolicy:
+                enum: [null, SingleStack, PreferDualStack, RequireDualStack]
+                description: |
+                  Maps to the Service's `spec.ipFamilyPolicy`.
+              loadBalancerClass:
+                type: [string, "null"]
+                description: |
+                  Maps to the Service's `spec.loadBalancerClass`.
+              loadBalancerIP:
+                type: [string, "null"]
+                description: |
+                  Maps to the Service's `spec.loadBalancerIP`.
+              loadBalancerSourceRanges:
+                type: [array, "null"]
+                items:
+                  type: string
+                description: |
+                  Maps to the Service's `spec.loadBalancerSourceRanges`.
+          ssh:
+            type: object
+            additionalProperties: false
+            description: |
+              SSH port configuration for per-user Service exposure.
+
+              This applies to both `type=loadBalancer` and `type=route`.
+              Requires a custom singleuser image with an SSH server listening
+              on `containerPort`.
+            properties:
+              enabled:
+                type: boolean
+                description: |
+                  Whether to use SSH port mapping for per-user Service exposure.
+
+                  If set to false, the Service keeps its existing port mapping.
+
+                  Example Dockerfile:
+                  ```dockerfile
+                  FROM quay.io/jupyterhub/k8s-singleuser-sample:latest
+                  RUN apt-get update && apt-get install -y openssh-server
+                  ```
+              externalPort:
+                type: [integer, "null"]
+                minimum: 1
+                maximum: 65535
+                description: |
+                  Service port exposed per single-user server.
+                  Default: 22
+              containerPort:
+                type: [integer, "null"]
+                minimum: 1
+                maximum: 65535
+                description: |
+                  In-pod target port for the per-user Service.
+                  Default: same as `externalPort` (or 22 if unset).
+          route:
+            type: object
+            additionalProperties: false
+            description: |
+              OpenShift Route specific options, used when `type=route`.
+            properties:
+              wildcardPolicy:
+                enum: [null, None, Subdomain]
+                description: |
+                  Route wildcard policy, if needed.
+              tls:
+                type: object
+                additionalProperties: false
+                description: |
+                  Optional TLS configuration for the generated OpenShift Route.
+
+                  Leave unset to avoid adding a `spec.tls` block to the Route.
+                properties:
+                  termination:
+                    enum: [null, edge, passthrough, reencrypt]
+                  insecureEdgeTerminationPolicy:
+                    enum: [null, None, Allow, Redirect]
+                  certificate:
+                    type: [string, "null"]
+                  key:
+                    type: [string, "null"]
+                  caCertificate:
+                    type: [string, "null"]
+                  destinationCACertificate:
+                    type: [string, "null"]
       extraResource:
         type: object
         additionalProperties: false

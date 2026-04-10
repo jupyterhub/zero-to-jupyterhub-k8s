@@ -440,6 +440,39 @@ singleuser:
   cmd: jupyterhub-singleuser
   defaultUrl:
   extraPodConfig: {}
+  exposure:
+    enabled: false
+    type: loadBalancer
+    annotations: {}
+    labels: {}
+    # Applies only when type=route. If left empty, the OpenShift router will
+    # assign a host automatically.
+    hostTemplate:
+    service:
+      allocateLoadBalancerNodePorts:
+      externalTrafficPolicy:
+      ipFamilies:
+      ipFamilyPolicy:
+      loadBalancerClass:
+      loadBalancerIP:
+      loadBalancerSourceRanges:
+    # SSH service port configuration used for both loadBalancer and route
+    # exposure types. By default, single-user services are exposed on port 22.
+    ssh:
+      enabled: true
+      externalPort: 22
+      containerPort: 22
+    route:
+      wildcardPolicy:
+      # Optional TLS settings for the generated OpenShift Route. Leave unset to
+      # avoid adding a tls block to the Route spec.
+      tls:
+        termination:
+        insecureEdgeTerminationPolicy:
+        certificate:
+        key:
+        caCertificate:
+        destinationCACertificate:
   profileList: []
 
 # scheduling relates to the user-scheduler pods and user-placeholder pods.
