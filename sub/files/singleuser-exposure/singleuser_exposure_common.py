@@ -67,4 +67,3 @@ def validate_exposure_config(exposure_config):
             "singleuser.exposure.type must be one of: "
             + ", ".join(sorted(EXPOSURE_TYPES))
         )
-

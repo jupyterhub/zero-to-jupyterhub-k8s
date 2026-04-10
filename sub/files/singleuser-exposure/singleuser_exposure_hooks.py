@@ -1,7 +1,6 @@
 import copy
 
 from jupyterhub.utils import maybe_future
-
 from singleuser_exposure_common import validate_exposure_config
 from singleuser_exposure_k8s import apply_exposure, cleanup_exposure
 
@@ -39,4 +38,3 @@ def configure_singleuser_exposure(c, get_config):
         existing_after_hook, after_pod_created
     )
     c.KubeSpawner.post_stop_hook = chain_hooks(existing_post_stop_hook, post_stop)
-

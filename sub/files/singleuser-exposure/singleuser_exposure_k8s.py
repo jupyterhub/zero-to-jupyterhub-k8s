@@ -1,7 +1,6 @@
 import copy
 
 from jupyterhub.utils import exponential_backoff
-
 from singleuser_exposure_common import (
     DEFAULT_SSH_PORT,
     DEFAULT_SSH_PORT_NAME,
@@ -99,7 +98,9 @@ def build_service_metadata_patch(spawner, service, exposure_config):
     labels.update(expand_templates(exposure_config.get("labels", {}), context))
 
     annotations = dict(service["metadata"].get("annotations") or {})
-    annotations.update(expand_templates(exposure_config.get("annotations", {}), context))
+    annotations.update(
+        expand_templates(exposure_config.get("annotations", {}), context)
+    )
 
     metadata = {"labels": labels}
     if annotations:
@@ -338,7 +339,9 @@ async def apply_exposure(spawner, exposure_config, pod):
         )
 
         if exposure_config["type"] == "loadBalancer":
-            await apply_loadbalancer_service(core_api, spawner, service, exposure_config)
+            await apply_loadbalancer_service(
+                core_api, spawner, service, exposure_config
+            )
         elif exposure_config["type"] == "route":
             service = await apply_clusterip_service(
                 core_api, spawner, service, exposure_config
@@ -360,4 +363,3 @@ async def cleanup_exposure(spawner, exposure_config):
 
         core_api = client.CoreV1Api(api_client)
         await delete_service(core_api, spawner)
-
