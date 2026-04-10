@@ -16,9 +16,13 @@ for configuration_directory in (
     os.path.dirname(os.path.realpath(__file__)),
     "/usr/local/etc/jupyterhub/config",
 ):
-    if os.path.isdir(configuration_directory) and configuration_directory not in sys.path:
+    if (
+        os.path.isdir(configuration_directory)
+        and configuration_directory not in sys.path
+    ):
         sys.path.insert(0, configuration_directory)
 
+from singleuser_exposure import configure_singleuser_exposure
 from z2jh import (
     get_config,
     get_name,
@@ -26,7 +30,6 @@ from z2jh import (
     get_secret_value,
     set_config_if_not_none,
 )
-from singleuser_exposure import configure_singleuser_exposure
 
 
 def camelCaseify(s):

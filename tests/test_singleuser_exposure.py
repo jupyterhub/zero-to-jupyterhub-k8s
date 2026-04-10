@@ -5,7 +5,6 @@ from types import SimpleNamespace
 
 import pytest
 
-
 MODULE_PATH = (
     Path(__file__).resolve().parents[1]
     / "jupyterhub"
@@ -112,7 +111,10 @@ def test_build_loadbalancer_service_patch_uses_custom_ssh_ports():
     spawner = make_spawner()
     service = {
         "metadata": {"name": "jupyter-alice"},
-        "spec": {"type": "ClusterIP", "ports": [{"name": "notebook-port", "port": 8888}]},
+        "spec": {
+            "type": "ClusterIP",
+            "ports": [{"name": "notebook-port", "port": 8888}],
+        },
     }
     exposure_config = {
         "enabled": True,
@@ -138,7 +140,10 @@ def test_build_clusterip_service_patch_for_route_sets_ssh_port():
     spawner = make_spawner()
     service = {
         "metadata": {"name": "jupyter-alice", "labels": {"existing": "label"}},
-        "spec": {"type": "ClusterIP", "ports": [{"name": "notebook-port", "port": 8888}]},
+        "spec": {
+            "type": "ClusterIP",
+            "ports": [{"name": "notebook-port", "port": 8888}],
+        },
     }
     exposure_config = {
         "enabled": True,
@@ -254,7 +259,9 @@ def test_configure_singleuser_exposure_enables_services_and_registers_hooks(
     cleaned = []
 
     async def fake_apply(spawner, exposure_config, pod):
-        applied.append((spawner.pod_name, exposure_config["type"], pod["metadata"]["uid"]))
+        applied.append(
+            (spawner.pod_name, exposure_config["type"], pod["metadata"]["uid"])
+        )
 
     async def fake_cleanup(spawner, exposure_config):
         cleaned.append((spawner.pod_name, exposure_config["type"]))
