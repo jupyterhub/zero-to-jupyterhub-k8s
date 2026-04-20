@@ -4,6 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "jupyterhub.proxy.fullname" . }}
+  namespace: {{ include "jupyterhub.namespace" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 spec:
