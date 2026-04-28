@@ -14,6 +14,19 @@ changes in pull requests], this list should be updated.
 
 ## 4.3
 
+### 4.3.4 - 2026-04-28
+
+```{important}
+4.3.4 is a security release fixing a moderate CSRF vulnerability in jupyterhub.
+All jupyterhub deployments are encouraged to upgrade.
+```
+
+This release fixes:
+
+- [CVE-2026-40864], a CSRF vulnerability in JupyterHub (jupyterhub 5.4.5)
+
+[CVE-2026-40864]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-m68r-v472-jgq9
+
 ### 4.3.3 - 2026-03-26
 
 ```{important}
