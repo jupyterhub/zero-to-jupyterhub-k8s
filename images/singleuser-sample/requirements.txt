@@ -32,7 +32,7 @@ beautifulsoup4==4.14.3
     # via nbconvert
 bleach==6.3.0
     # via nbconvert
-certifi==2026.2.25
+certifi==2026.4.22
     # via
     #   httpcore
     #   httpx
@@ -47,7 +47,7 @@ charset-normalizer==3.4.7
     # via requests
 comm==0.2.3
     # via ipykernel
-cryptography==46.0.7
+cryptography==47.0.0
     # via certipy
 debugpy==1.8.20
     # via ipykernel
@@ -61,7 +61,7 @@ fastjsonschema==2.21.2
     # via nbformat
 fqdn==1.5.1
     # via jsonschema
-greenlet==3.4.0
+greenlet==3.5.0
     # via sqlalchemy
 h11==0.16.0
     # via httpcore
@@ -69,7 +69,7 @@ httpcore==1.0.9
     # via httpx
 httpx==0.28.1
     # via jupyterlab
-idna==3.11
+idna==3.13
     # via
     #   anyio
     #   httpx
@@ -80,7 +80,7 @@ ipykernel==7.2.0
     # via
     #   jupyterlab
     #   nbclassic
-ipython==9.12.0
+ipython==9.13.0
     # via ipykernel
 ipython-genutils==0.2.0
     # via nbclassic
@@ -122,7 +122,7 @@ jupyter-core==5.9.1
     #   nbclient
     #   nbconvert
     #   nbformat
-jupyter-events==0.12.0
+jupyter-events==0.12.1
     # via
     #   jupyter-server
     #   jupyterhub
@@ -137,7 +137,7 @@ jupyter-server==2.17.0
     #   notebook-shim
 jupyter-server-terminals==0.5.4
     # via jupyter-server
-jupyterhub==5.4.4
+jupyterhub==5.4.5
     # via -r unfrozen/requirements.txt
 jupyterlab==4.5.6
     # via -r unfrozen/requirements.txt
@@ -147,7 +147,7 @@ jupyterlab-server==2.28.0
     # via jupyterlab
 lark==1.3.1
     # via rfc3987-syntax
-mako==1.3.11
+mako==1.3.12
     # via alembic
 markupsafe==3.0.3
     # via
@@ -183,7 +183,7 @@ notebook-shim==0.2.4
     #   nbclassic
 oauthlib==3.3.1
     # via jupyterhub
-packaging==26.0
+packaging==26.2
     # via
     #   ipykernel
     #   jupyter-events
@@ -202,14 +202,16 @@ pexpect==4.9.0
     # via ipython
 platformdirs==4.9.6
     # via jupyter-core
-prometheus-client==0.24.1
+prometheus-client==0.25.0
     # via
     #   jupyter-server
     #   jupyterhub
 prompt-toolkit==3.0.52
     # via ipython
 psutil==7.2.2
-    # via ipykernel
+    # via
+    #   ipykernel
+    #   ipython
 ptyprocess==0.7.0
     # via
     #   pexpect
@@ -218,9 +220,9 @@ pure-eval==0.2.3
     # via stack-data
 pycparser==3.0
     # via cffi
-pydantic==2.12.5
+pydantic==2.13.3
     # via jupyterhub
-pydantic-core==2.41.5
+pydantic-core==2.46.3
     # via pydantic
 pygments==2.20.0
     # via
@@ -319,7 +321,7 @@ typing-extensions==4.15.0
     #   typing-inspection
 typing-inspection==0.4.2
     # via pydantic
-tzdata==2026.1
+tzdata==2026.2
     # via arrow
 uri-template==1.3.0
     # via jsonschema

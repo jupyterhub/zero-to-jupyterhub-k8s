@@ -8,7 +8,7 @@
 #
 
 # JupyterHub itself
-jupyterhub==5.4.4
+jupyterhub==5.4.5
 
 # JupyterHub Spawner, kubernetes specific
 jupyterhub-kubespawner==7.*
@@ -24,6 +24,9 @@ oauthenticator[googlegroups,mediawiki]==17.*
 
 # JupyterHub service shutting servers after a period of inactivity
 jupyterhub-idle-culler==1.*
+
+# temporary: pin down cryptography until certipy 0.2.3
+cryptography==46.*
 
 # Other optional dependencies for additional features
 pymysql  # mysql
