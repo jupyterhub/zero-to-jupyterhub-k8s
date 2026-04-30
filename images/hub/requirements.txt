@@ -31,7 +31,7 @@ certifi==2026.4.22
     # via
     #   kubernetes-asyncio
     #   requests
-certipy==0.2.2
+certipy==0.2.3
     # via jupyterhub
 cffi==2.0.0
     # via cryptography
@@ -157,7 +157,7 @@ pyasn1-modules==0.4.2
     # via google-auth
 pycparser==3.0
     # via cffi
-pycurl==7.45.7
+pycurl==7.46.0
     # via -r unfrozen/requirements.txt
 pydantic==2.13.3
     # via jupyterhub
