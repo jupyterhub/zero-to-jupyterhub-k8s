@@ -26,7 +26,7 @@ oauthenticator[googlegroups,mediawiki]==17.*
 jupyterhub-idle-culler==1.*
 
 # temporary: pin down cryptography until certipy 0.2.3
-cryptography==46.*
+cryptography==47.*
 
 # Other optional dependencies for additional features
 pymysql  # mysql
