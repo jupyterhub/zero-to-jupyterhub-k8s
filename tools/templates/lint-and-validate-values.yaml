@@ -275,6 +275,8 @@ proxy:
       minAvailable: 1
     extraPodSpec: *extraPodSpec
   traefik:
+    command: ["hello"]
+    args: ["there"]
     revisionHistoryLimit: 1
     labels: *labels
     resources: *resources
