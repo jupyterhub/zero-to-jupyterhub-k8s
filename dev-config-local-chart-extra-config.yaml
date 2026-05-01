@@ -19,3 +19,14 @@ singleuser:
       test-volume-mount:
         name: test-volume
         mountPath: /test-volume
+
+proxy:
+  traefik:
+    # This startup delay can help the k8s container network interface setup
+    # network routing of traffic to the pod, which is essential for the ACME
+    # challenge submitted by Traefik on startup to acquire a TLS certificate.
+    #
+    # This change is also applied by a kubectl patch in test-chart.yaml for
+    # already released charts when command wasn't configurable (<=4.3.4).
+    #
+    command: ["sh", "-c", "sleep 10 && /entrypoint.sh traefik"]
