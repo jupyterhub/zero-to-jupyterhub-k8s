@@ -25,7 +25,7 @@ bcrypt==5.0.0
     # via
     #   jupyterhub-firstuseauthenticator
     #   jupyterhub-nativeauthenticator
-cachetools==7.0.6
+cachetools==7.1.1
     # via jupyterhub-ltiauthenticator
 certifi==2026.4.22
     # via
@@ -37,7 +37,7 @@ cffi==2.0.0
     # via cryptography
 charset-normalizer==3.4.7
     # via requests
-cryptography==47.0.0
+cryptography==48.0.0
     # via
     #   -r unfrozen/requirements.txt
     #   certipy
@@ -53,7 +53,7 @@ frozenlist==1.8.0
     # via
     #   aiohttp
     #   aiosignal
-google-auth==2.49.2
+google-auth==2.50.0
     # via google-auth-oauthlib
 google-auth-oauthlib==1.3.1
     # via oauthenticator
@@ -168,7 +168,7 @@ pyjwt==2.12.1
     #   jupyterhub-ltiauthenticator
     #   mwoauth
     #   oauthenticator
-pymysql==1.1.2
+pymysql==1.1.3
     # via -r unfrozen/requirements.txt
 python-dateutil==2.9.0.post0
     # via
