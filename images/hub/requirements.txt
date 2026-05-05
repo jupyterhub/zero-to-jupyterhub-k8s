@@ -81,7 +81,7 @@ jsonschema-specifications==2025.9.1
     # via jsonschema
 jupyter-events==0.12.1
     # via jupyterhub
-jupyterhub==5.4.5
+jupyterhub==5.4.6
     # via
     #   -r unfrozen/requirements.txt
     #   jupyterhub-firstuseauthenticator
