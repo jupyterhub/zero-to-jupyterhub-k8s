@@ -26,7 +26,8 @@ proxy:
     # network routing of traffic to the pod, which is essential for the ACME
     # challenge submitted by Traefik on startup to acquire a TLS certificate.
     #
-    # This change is also applied by a kubectl patch in test-chart.yaml for
-    # already released charts when command wasn't configurable (<=4.3.4).
+    # FIXME: move this configuration to dev-config.yaml when we only upgrade
+    #        test from versions >4.3.4, and then also cleanup the `kubectl patch
+    #        deployment autohttps ...` step in test-chart.yaml.
     #
     command: ["sh", "-c", "sleep 10 && /entrypoint.sh traefik"]
