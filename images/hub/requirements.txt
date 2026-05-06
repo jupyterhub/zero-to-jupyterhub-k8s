@@ -25,21 +25,20 @@ bcrypt==5.0.0
     # via
     #   jupyterhub-firstuseauthenticator
     #   jupyterhub-nativeauthenticator
-cachetools==7.0.6
+cachetools==7.1.1
     # via jupyterhub-ltiauthenticator
 certifi==2026.4.22
     # via
     #   kubernetes-asyncio
     #   requests
-certipy==0.2.2
+certipy==0.2.3
     # via jupyterhub
 cffi==2.0.0
     # via cryptography
 charset-normalizer==3.4.7
     # via requests
-cryptography==46.0.7
+cryptography==48.0.0
     # via
-    #   -r unfrozen/requirements.txt
     #   certipy
     #   google-auth
     #   pyjwt
@@ -53,7 +52,7 @@ frozenlist==1.8.0
     # via
     #   aiohttp
     #   aiosignal
-google-auth==2.49.2
+google-auth==2.50.0
     # via google-auth-oauthlib
 google-auth-oauthlib==1.3.1
     # via oauthenticator
@@ -81,7 +80,7 @@ jsonschema-specifications==2025.9.1
     # via jsonschema
 jupyter-events==0.12.1
     # via jupyterhub
-jupyterhub==5.4.5
+jupyterhub==5.4.6
     # via
     #   -r unfrozen/requirements.txt
     #   jupyterhub-firstuseauthenticator
@@ -157,18 +156,18 @@ pyasn1-modules==0.4.2
     # via google-auth
 pycparser==3.0
     # via cffi
-pycurl==7.45.7
+pycurl==7.46.0
     # via -r unfrozen/requirements.txt
-pydantic==2.13.3
+pydantic==2.13.4
     # via jupyterhub
-pydantic-core==2.46.3
+pydantic-core==2.46.4
     # via pydantic
 pyjwt==2.12.1
     # via
     #   jupyterhub-ltiauthenticator
     #   mwoauth
     #   oauthenticator
-pymysql==1.1.2
+pymysql==1.1.3
     # via -r unfrozen/requirements.txt
 python-dateutil==2.9.0.post0
     # via
@@ -238,7 +237,7 @@ tornado==6.5.5
     #   jupyterhub
     #   jupyterhub-idle-culler
     #   oauthenticator
-traitlets==5.14.3
+traitlets==5.15.0
     # via
     #   jupyter-events
     #   jupyterhub
