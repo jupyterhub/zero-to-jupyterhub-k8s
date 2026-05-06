@@ -128,7 +128,7 @@ jupyter-events==0.12.1
     #   jupyterhub
 jupyter-lsp==2.3.1
     # via jupyterlab
-jupyter-server==2.18.0
+jupyter-server==2.18.1
     # via
     #   jupyter-lsp
     #   jupyterlab
@@ -137,7 +137,7 @@ jupyter-server==2.18.0
     #   notebook-shim
 jupyter-server-terminals==0.5.4
     # via jupyter-server
-jupyterhub==5.4.5
+jupyterhub==5.4.6
     # via -r unfrozen/requirements.txt
 jupyterlab==4.5.7
     # via -r unfrozen/requirements.txt
