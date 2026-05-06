@@ -128,7 +128,7 @@ jupyter-events==0.12.1
     #   jupyterhub
 jupyter-lsp==2.3.1
     # via jupyterlab
-jupyter-server==2.18.1
+jupyter-server==2.18.2
     # via
     #   jupyter-lsp
     #   jupyterlab
@@ -220,9 +220,9 @@ pure-eval==0.2.3
     # via stack-data
 pycparser==3.0
     # via cffi
-pydantic==2.13.3
+pydantic==2.13.4
     # via jupyterhub
-pydantic-core==2.46.3
+pydantic-core==2.46.4
     # via pydantic
 pygments==2.20.0
     # via
@@ -295,7 +295,7 @@ tornado==6.5.5
     #   jupyterlab
     #   nbgitpuller
     #   terminado
-traitlets==5.14.3
+traitlets==5.15.0
     # via
     #   ipykernel
     #   ipython
