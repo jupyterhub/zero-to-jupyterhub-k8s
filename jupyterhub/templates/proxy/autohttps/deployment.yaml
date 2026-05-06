@@ -91,6 +91,14 @@ spec:
           {{- with .Values.proxy.traefik.image.pullPolicy }}
           imagePullPolicy: {{ . }}
           {{- end }}
+          {{- with .Values.proxy.traefik.command }}
+          command:
+            {{- . | toYaml | nindent 12 }}
+          {{- end }}
+          {{- with .Values.proxy.traefik.args }}
+          args:
+            {{- . | toYaml | nindent 12 }}
+          {{- end }}
           {{- with .Values.proxy.traefik.resources }}
           resources:
             {{- . | toYaml | nindent 12 }}

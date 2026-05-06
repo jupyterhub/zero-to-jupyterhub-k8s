@@ -309,6 +309,14 @@ jobs:
 
           helm install jupyterhub --repo https://hub.jupyter.org/helm-chart/ jupyterhub --values ../dev-config.yaml --version=$UPGRADE_FROM_VERSION ${{ matrix.upgrade-from-extra-args }}
 
+      # FIXME: cleanup this workaround when we only upgrade test from versions
+      #        >4.3.4, and move the sleep command modification in
+      #        dev-config-local-chart-extra-config.yaml to dev-config.yaml.
+      - name: "(Upgrade) Patch autohttps/traefik to sleep a bit for ACME challenge reliability"
+        if: matrix.test == 'upgrade'
+        run: |
+          kubectl patch deployment autohttps --type=strategic -p='{"spec":{"template":{"spec":{"containers":[{"name":"traefik","command":["sh","-c","sleep 10 && /entrypoint.sh traefik"]}]}}}}'
+
       - name: "(Upgrade) Install helm diff"
         if: matrix.test == 'upgrade'
         run: |

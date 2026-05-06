@@ -1899,6 +1899,38 @@ properties:
         description: |
           Configure the traefik proxy used to terminate TLS when 'autohttps' is enabled
         properties:
+          command:
+            type: array
+            description: |
+              Overrides the traefik image's ENTRYPOINT, and makes its CMD
+              ignored. traefik 3.7's ENTRYPOINT is `["/entrypoint.sh"]`, and
+              traefik's CMD is `["trafik"]`.
+
+              Configuring this can be relevant to workaround a slow network
+              initialization which can make ACME challenges fail. You could then
+              configure
+
+              ```yaml
+              proxy:
+                traefik:
+                  # This startup delay can help the k8s container network
+                  # interface setup network routing of traffic to the pod, which
+                  # is essential for the ACME challenge submitted by Traefik on
+                  # startup to acquire a TLS certificate.
+                  #
+                  command: ["sh", "-c", "sleep 10 && /entrypoint.sh traefik"]
+              ```
+
+              For more information, see the [Kubernetes Container
+              specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#container-v1-core).
+          args:
+            type: array
+            description: |
+              Overrides the traefik image's CMD, which for traefik as of 3.7 is
+              `["traefik"]`.
+
+              For more information, see the [Kubernetes Container
+              specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#container-v1-core).
           revisionHistoryLimit: *revisionHistoryLimit
           labels:
             type: object
