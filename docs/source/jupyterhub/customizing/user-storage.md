@@ -249,3 +249,83 @@ singleuser:
 
 Note that if you want to mount a volume into multiple pods the volume must
 support a suitable [access mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes).
+
+## Understanding volume configuration methods
+
+There are two ways to configure volumes for user pods, and it's important to
+understand the difference:
+
+### Method 1: Through `singleuser.storage` (preferred in most cases)
+
+Extra volumes can be added to user pods via the `singleuser.storage.extraVolumes`
+and `singleuser.storage.extraVolumeMounts` configuration options like so:
+
+```yaml
+singleuser:
+  storage:
+    # Chart automatically creates 'home' volume
+    type: static
+    static:
+      pvcName: my-shared-storage
+    # Add additional volumes - these MERGE with chart defaults
+    extraVolumes:
+      shared-data:
+        name: shared-data
+        persistentVolumeClaim:
+          claimName: shared-data-pvc
+    extraVolumeMounts:
+      shared-data:
+        name: shared-data
+        mountPath: /home/shared
+```
+
+With this configuration:
+
+- The chart creates the `home` volume automatically (from `storage.static`)
+- Your `extraVolumes` configuration **adds** the `shared-data` volume
+- Both volumes are mounted in the user pod
+- The final `KubeSpawner.volumes` dictionary contains both `home` and `shared-data`
+
+### Method 2: Direct KubeSpawner configuration through `hub.config` (Advanced)
+
+Alternatively, you can configure volumes directly via `hub.config`:
+
+```yaml
+hub:
+  config:
+    KubeSpawner:
+      volumes:
+        # This REPLACES all chart-managed volumes
+        shared-data:
+          name: shared-data
+          persistentVolumeClaim:
+            claimName: shared-data-pvc
+      volume_mounts:
+        shared-data:
+          name: shared-data
+          mountPath: /home/shared
+```
+
+```{warning}
+This approach **completely replaces** the chart's default volume configuration.
+
+Only use this method if you are sure that you intentionally want to replace all chart-managed
+volumes with your own configuration.
+```
+
+### When to use each method
+
+| Goal                             | Use                                           | Why                                         |
+| -------------------------------- | --------------------------------------------- | ------------------------------------------- |
+| Add volumes to user pods         | `singleuser.storage.extraVolumes`             | Preserves chart defaults like `home` volume |
+| Customize home directory storage | `singleuser.storage.type` and related options | Chart manages this automatically            |
+| Completely replace all volumes   | `hub.config.KubeSpawner.volumes`              | Only needed for advanced custom setups      |
+
+### Combining both methods
+
+```{warning}
+Do not use both `singleuser.storage.extraVolumes` and
+`hub.config.KubeSpawner.volumes` in the same configuration. The
+`hub.config` setting will override the chart configuration, making
+`extraVolumes` ineffective.
+```
