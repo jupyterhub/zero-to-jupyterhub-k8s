@@ -30,7 +30,7 @@
 {{- define "jupyterhub.networkPolicy.renderEgressRules" -}}
 {{- $root := index . 0 }}
 {{- $netpol := index . 1 }}
-{{- if or (or $netpol.egressAllowRules.dnsPortsCloudMetadataServer $netpol.egressAllowRules.dnsPortsKubeSystemNamespace) $netpol.egressAllowRules.dnsPortsPrivateIPs }}
+{{- if or $netpol.egressAllowRules.dnsPortsCloudMetadataServer $netpol.egressAllowRules.dnsPortsKubeSystemNamespace $netpol.egressAllowRules.dnsPortsPrivateIPs $netpol.egressAllowRules.dnsPortsLinkLocalIPs }}
 - ports:
     - port: 53
       protocol: UDP
@@ -58,6 +58,12 @@
         cidr: 172.16.0.0/12
     - ipBlock:
         cidr: 192.168.0.0/16
+  {{- end }}
+  {{- if $netpol.egressAllowRules.dnsPortsLinkLocalIPs }}
+    # Allow outbound connections to DNS ports on link local destinations
+    # ranges
+    - ipBlock:
+        cidr: 169.254.0.0/16
   {{- end }}
 {{- end }}
 

@@ -118,6 +118,7 @@ hub:
       dnsPortsCloudMetadataServer: true
       dnsPortsKubeSystemNamespace: true
       dnsPortsPrivateIPs: true
+      dnsPortsLinkLocalIPs: true
       nonPrivateIPs: true
       privateIPs: true
     interNamespaceAccessLabels: ignore
@@ -252,6 +253,7 @@ proxy:
         dnsPortsCloudMetadataServer: true
         dnsPortsKubeSystemNamespace: true
         dnsPortsPrivateIPs: true
+        dnsPortsLinkLocalIPs: true
         nonPrivateIPs: true
         privateIPs: true
       interNamespaceAccessLabels: ignore
@@ -306,6 +308,7 @@ proxy:
         dnsPortsCloudMetadataServer: true
         dnsPortsKubeSystemNamespace: true
         dnsPortsPrivateIPs: true
+        dnsPortsLinkLocalIPs: true
         nonPrivateIPs: true
         privateIPs: true
       interNamespaceAccessLabels: ignore
@@ -389,6 +392,7 @@ singleuser:
       dnsPortsCloudMetadataServer: true
       dnsPortsKubeSystemNamespace: true
       dnsPortsPrivateIPs: true
+      dnsPortsLinkLocalIPs: true
       nonPrivateIPs: true
       privateIPs: false
     interNamespaceAccessLabels: ignore
