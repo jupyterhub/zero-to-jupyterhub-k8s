@@ -183,7 +183,6 @@ hub:
       dnsPortsCloudMetadataServer: true
       dnsPortsKubeSystemNamespace: true
       dnsPortsPrivateIPs: true
-      dnsPortsLinkLocalIPs: true
       nonPrivateIPs: true
       privateIPs: false
     egress:
@@ -262,7 +261,6 @@ proxy:
       egressAllowRules:
         cloudMetadataServer: false
         dnsPortsPrivateIPs: false
-        dnsPortsLinkLocalIPs: false
         nonPrivateIPs: false
         privateIPs: true
       egress:
@@ -295,7 +293,6 @@ proxy:
       egressAllowRules:
         cloudMetadataServer: false
         dnsPortsPrivateIPs: false
-        dnsPortsLinkLocalIPs: false
         nonPrivateIPs: true
         privateIPs: true
       egress:
@@ -441,7 +438,6 @@ singleuser:
     egressAllowRules:
       cloudMetadataServer: false
       dnsPortsPrivateIPs: true
-      dnsPortsLinkLocalIPs: true
       nonPrivateIPs: false
       privateIPs: false
     egress:

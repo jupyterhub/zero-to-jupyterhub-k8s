@@ -780,25 +780,6 @@ properties:
                   clusters with Dataplane v2), this is due to a [known
                   limitation](https://github.com/cilium/cilium/issues/9209).
                   ```
-              dnsPortsLinkLocalIPs:
-                type: boolean
-                description: |
-                  Defaults to `true` for all network policies.
-
-                  When enabled this rule allows the respective pod(s) to
-                  establish outbound connections to link local addresses via port 53.
-
-                  Known situations when this rule can be relevant:
-
-                  - Clusters using [NodeLocal DNSCache](https://kubernetes.io/docs/tasks/administer-cluster/nodelocaldns/)
-
-                  ```{note}
-                  This chart doesn't know how to identify the DNS server that
-                  pods will rely on due to variations between how k8s clusters
-                  have been setup. Due to that, multiple rules are enabled by
-                  default to ensure DNS connectivity.
-
-                  ```
               nonPrivateIPs:
                 type: boolean
                 description: |
