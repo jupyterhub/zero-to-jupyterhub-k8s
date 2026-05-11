@@ -52,13 +52,13 @@ frozenlist==1.8.0
     # via
     #   aiohttp
     #   aiosignal
-google-auth==2.50.0
+google-auth==2.52.0
     # via google-auth-oauthlib
-google-auth-oauthlib==1.3.1
+google-auth-oauthlib==1.4.0
     # via oauthenticator
 greenlet==3.5.0
     # via sqlalchemy
-idna==3.13
+idna==3.14
     # via
     #   jsonschema
     #   jupyterhub
@@ -142,7 +142,7 @@ pamela==1.2.0
     # via jupyterhub
 prometheus-client==0.25.0
     # via jupyterhub
-propcache==0.4.1
+propcache==0.5.2
     # via
     #   aiohttp
     #   yarl
@@ -260,7 +260,7 @@ tzdata==2026.2
     # via arrow
 uri-template==1.3.0
     # via jsonschema
-urllib3==2.6.3
+urllib3==2.7.0
     # via
     #   jupyterhub-kubespawner
     #   kubernetes-asyncio
