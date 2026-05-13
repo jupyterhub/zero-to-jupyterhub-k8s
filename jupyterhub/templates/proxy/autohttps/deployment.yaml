@@ -7,6 +7,9 @@ metadata:
   name: {{ include "jupyterhub.autohttps.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
+    {{- with .Values.proxy.traefik.labels }}
+    {{- . | toYaml | nindent 4 }}
+    {{- end }}
 spec:
   {{- if not (typeIs "<nil>" .Values.proxy.traefik.revisionHistoryLimit) }}
   revisionHistoryLimit: {{ .Values.proxy.traefik.revisionHistoryLimit }}
