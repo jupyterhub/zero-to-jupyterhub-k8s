@@ -4,7 +4,7 @@
 #
 #    Use the "Run workflow" button at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/actions/workflows/watch-dependencies.yaml
 #
-aiohappyeyeballs==2.6.1
+aiohappyeyeballs==2.6.2
     # via aiohttp
 aiohttp==3.13.5
     # via kubernetes-asyncio
@@ -25,9 +25,9 @@ bcrypt==5.0.0
     # via
     #   jupyterhub-firstuseauthenticator
     #   jupyterhub-nativeauthenticator
-cachetools==7.1.1
+cachetools==7.1.3
     # via jupyterhub-ltiauthenticator
-certifi==2026.4.22
+certifi==2026.5.20
     # via
     #   kubernetes-asyncio
     #   requests
@@ -52,13 +52,13 @@ frozenlist==1.8.0
     # via
     #   aiohttp
     #   aiosignal
-google-auth==2.52.0
+google-auth==2.53.0
     # via google-auth-oauthlib
 google-auth-oauthlib==1.4.0
     # via oauthenticator
-greenlet==3.5.0
+greenlet==3.5.1
     # via sqlalchemy
-idna==3.14
+idna==3.15
     # via
     #   jsonschema
     #   jupyterhub
@@ -167,7 +167,7 @@ pyjwt==2.12.1
     #   jupyterhub-ltiauthenticator
     #   mwoauth
     #   oauthenticator
-pymysql==1.1.3
+pymysql==1.2.0
     # via -r unfrozen/requirements.txt
 python-dateutil==2.9.0.post0
     # via
@@ -189,7 +189,7 @@ referencing==0.37.0
     #   jsonschema
     #   jsonschema-specifications
     #   jupyter-events
-requests==2.33.1
+requests==2.34.2
     # via
     #   jupyterhub
     #   mwoauth
@@ -267,5 +267,5 @@ urllib3==2.7.0
     #   requests
 webcolors==25.10.0
     # via jsonschema
-yarl==1.23.0
+yarl==1.24.2
     # via aiohttp
