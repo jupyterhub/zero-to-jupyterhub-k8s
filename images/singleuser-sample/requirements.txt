@@ -32,7 +32,7 @@ beautifulsoup4==4.14.3
     # via nbconvert
 bleach==6.3.0
     # via nbconvert
-certifi==2026.4.22
+certifi==2026.5.20
     # via
     #   httpcore
     #   httpx
@@ -51,7 +51,7 @@ cryptography==48.0.0
     # via certipy
 debugpy==1.8.20
     # via ipykernel
-decorator==5.2.1
+decorator==5.3.1
     # via ipython
 defusedxml==0.7.1
     # via nbconvert
@@ -61,7 +61,7 @@ fastjsonschema==2.21.2
     # via nbformat
 fqdn==1.5.1
     # via jsonschema
-greenlet==3.5.0
+greenlet==3.5.1
     # via sqlalchemy
 h11==0.16.0
     # via httpcore
@@ -69,7 +69,7 @@ httpcore==1.0.9
     # via httpx
 httpx==0.28.1
     # via jupyterlab
-idna==3.14
+idna==3.15
     # via
     #   anyio
     #   httpx
@@ -248,7 +248,7 @@ referencing==0.37.0
     #   jsonschema
     #   jsonschema-specifications
     #   jupyter-events
-requests==2.33.1
+requests==2.34.2
     # via
     #   jupyterhub
     #   jupyterlab-server
