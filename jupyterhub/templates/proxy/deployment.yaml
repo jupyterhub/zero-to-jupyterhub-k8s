@@ -37,7 +37,9 @@ spec:
         # the k8s Secret template. This will cause this annotation to change to
         # match the k8s Secret during the first upgrade following an auth_token
         # was generated.
+        {{- if not (include "jupyterhub.hub-existing-secret.fullname" .) }}
         checksum/auth-token: {{ include "jupyterhub.hub.config.ConfigurableHTTPProxy.auth_token" . | sha256sum | trunc 4 | quote }}
+        {{- end }}
         checksum/proxy-secret: {{ include (print $.Template.BasePath "/proxy/secret.yaml") . | sha256sum | quote }}
         {{- with .Values.proxy.annotations }}
         {{- . | toYaml | nindent 8 }}
