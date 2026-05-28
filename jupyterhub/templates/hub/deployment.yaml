@@ -53,7 +53,7 @@ spec:
             name: {{ include "jupyterhub.hub.fullname" . }}
         - name: secret
           secret:
-            secretName: {{ include "jupyterhub.hub.fullname" . }}
+            secretName: {{ include "jupyterhub.hub-existing-secret-or-default.fullname" . }}
         {{- with (include "jupyterhub.hub-existing-secret.fullname" .) }}
         - name: existing-secret
           secret:
