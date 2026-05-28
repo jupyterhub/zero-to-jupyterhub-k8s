@@ -28,7 +28,9 @@ spec:
       annotations:
         {{- /* This lets us autorestart when the secret changes! */}}
         checksum/config-map: {{ include (print .Template.BasePath "/hub/configmap.yaml") . | sha256sum }}
+        {{- if not (include "jupyterhub.hub-existing-secret.fullname" .) }}
         checksum/secret: {{ include (print .Template.BasePath "/hub/secret.yaml") . | sha256sum }}
+        {{- end }}
         {{- with .Values.hub.annotations }}
         {{- . | toYaml | nindent 8 }}
         {{- end }}
@@ -194,13 +196,7 @@ spec:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
-                  {{- /* NOTE:
-                    References the chart managed k8s Secret even if
-                    hub.existingSecret is specified to avoid using the lookup
-                    function on the user managed k8s Secret which is assumed to
-                    not be possible.
-                  */}}
-                  name: {{ include "jupyterhub.hub.fullname" . }}
+                  name: {{ include "jupyterhub.hub-existing-secret-or-default.fullname" . }}
                   key: hub.config.ConfigurableHTTPProxy.auth_token
             {{- with .Values.hub.extraEnv }}
             {{- include "jupyterhub.extraEnv" . | nindent 12 }}
