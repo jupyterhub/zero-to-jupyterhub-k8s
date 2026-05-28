@@ -28,9 +28,7 @@ spec:
       annotations:
         {{- /* This lets us autorestart when the secret changes! */}}
         checksum/config-map: {{ include (print .Template.BasePath "/hub/configmap.yaml") . | sha256sum }}
-        {{- if not (include "jupyterhub.hub-existing-secret.fullname" .) }}
         checksum/secret: {{ include (print .Template.BasePath "/hub/secret.yaml") . | sha256sum }}
-        {{- end }}
         {{- with .Values.hub.annotations }}
         {{- . | toYaml | nindent 8 }}
         {{- end }}
@@ -53,7 +51,7 @@ spec:
             name: {{ include "jupyterhub.hub.fullname" . }}
         - name: secret
           secret:
-            secretName: {{ include "jupyterhub.hub-existing-secret-or-default.fullname" . }}
+            secretName: {{ include "jupyterhub.hub.fullname" . }}
         {{- with (include "jupyterhub.hub-existing-secret.fullname" .) }}
         - name: existing-secret
           secret:
