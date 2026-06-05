@@ -6,7 +6,7 @@
 #
 aiohappyeyeballs==2.6.2
     # via aiohttp
-aiohttp==3.13.5
+aiohttp==3.14.0
     # via kubernetes-asyncio
 aiosignal==1.4.0
     # via aiohttp
@@ -25,7 +25,7 @@ bcrypt==5.0.0
     # via
     #   jupyterhub-firstuseauthenticator
     #   jupyterhub-nativeauthenticator
-cachetools==7.1.3
+cachetools==7.1.4
     # via jupyterhub-ltiauthenticator
 certifi==2026.5.20
     # via
@@ -58,7 +58,7 @@ google-auth-oauthlib==1.4.0
     # via oauthenticator
 greenlet==3.5.1
     # via sqlalchemy
-idna==3.15
+idna==3.18
     # via
     #   jsonschema
     #   jupyterhub
@@ -105,7 +105,7 @@ jupyterhub-nativeauthenticator==1.3.0
     # via -r unfrozen/requirements.txt
 jupyterhub-tmpauthenticator==1.0.0
     # via -r unfrozen/requirements.txt
-kubernetes-asyncio==35.0.1
+kubernetes-asyncio==36.1.0
     # via jupyterhub-kubespawner
 lark==1.3.1
     # via rfc3987-syntax
@@ -162,7 +162,7 @@ pydantic==2.13.4
     # via jupyterhub
 pydantic-core==2.46.4
     # via pydantic
-pyjwt==2.12.1
+pyjwt==2.13.0
     # via
     #   jupyterhub-ltiauthenticator
     #   mwoauth
@@ -209,7 +209,7 @@ rfc3986-validator==0.1.1
     #   jupyter-events
 rfc3987-syntax==1.1.0
     # via jsonschema
-rpds-py==0.30.0
+rpds-py==2026.5.1
     # via
     #   jsonschema
     #   referencing
@@ -221,7 +221,7 @@ six==1.17.0
     #   onetimepass
     #   python-dateutil
     #   rfc3339-validator
-sqlalchemy==2.0.49
+sqlalchemy==2.0.50
     # via
     #   alembic
     #   jupyterhub
@@ -232,12 +232,12 @@ statsd==4.0.1
     # via -r unfrozen/requirements.txt
 text-unidecode==1.3
     # via python-slugify
-tornado==6.5.5
+tornado==6.5.6
     # via
     #   jupyterhub
     #   jupyterhub-idle-culler
     #   oauthenticator
-traitlets==5.15.0
+traitlets==5.15.1
     # via
     #   jupyter-events
     #   jupyterhub
@@ -247,6 +247,7 @@ traitlets==5.15.0
     #   oauthenticator
 typing-extensions==4.15.0
     # via
+    #   aiohttp
     #   aiosignal
     #   alembic
     #   pydantic

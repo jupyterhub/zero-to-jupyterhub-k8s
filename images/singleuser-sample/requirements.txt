@@ -30,7 +30,7 @@ babel==2.18.0
     # via jupyterlab-server
 beautifulsoup4==4.14.3
     # via nbconvert
-bleach==6.3.0
+bleach==6.4.0
     # via nbconvert
 certifi==2026.5.20
     # via
@@ -49,7 +49,7 @@ comm==0.2.3
     # via ipykernel
 cryptography==48.0.0
     # via certipy
-debugpy==1.8.20
+debugpy==1.8.21
     # via ipykernel
 decorator==5.3.1
     # via ipython
@@ -69,7 +69,7 @@ httpcore==1.0.9
     # via httpx
 httpx==0.28.1
     # via jupyterlab
-idna==3.15
+idna==3.18
     # via
     #   anyio
     #   httpx
@@ -80,7 +80,7 @@ ipykernel==7.2.0
     # via
     #   jupyterlab
     #   nbclassic
-ipython==9.13.0
+ipython==9.14.1
     # via ipykernel
 ipython-genutils==0.2.0
     # via nbclassic
@@ -108,7 +108,7 @@ jsonschema==4.26.0
     #   nbformat
 jsonschema-specifications==2025.9.1
     # via jsonschema
-jupyter-client==8.8.0
+jupyter-client==8.9.0
     # via
     #   ipykernel
     #   jupyter-server
@@ -128,7 +128,7 @@ jupyter-events==0.12.1
     #   jupyterhub
 jupyter-lsp==2.3.1
     # via jupyterlab
-jupyter-server==2.18.2
+jupyter-server==2.19.0
     # via
     #   jupyter-lsp
     #   jupyterlab
@@ -139,7 +139,7 @@ jupyter-server-terminals==0.5.4
     # via jupyter-server
 jupyterhub==5.4.6
     # via -r unfrozen/requirements.txt
-jupyterlab==4.5.7
+jupyterlab==4.5.8
     # via -r unfrozen/requirements.txt
 jupyterlab-pygments==0.3.0
     # via nbconvert
@@ -162,7 +162,7 @@ mistune==3.2.1
     # via nbconvert
 nbclassic==1.3.3
     # via -r unfrozen/requirements.txt
-nbclient==0.10.4
+nbclient==0.11.0
     # via nbconvert
 nbconvert==7.17.1
     # via jupyter-server
@@ -200,7 +200,7 @@ parso==0.8.7
     # via jedi
 pexpect==4.9.0
     # via ipython
-platformdirs==4.9.6
+platformdirs==4.10.0
     # via jupyter-core
 prometheus-client==0.25.0
     # via
@@ -262,7 +262,7 @@ rfc3986-validator==0.1.1
     #   jupyter-events
 rfc3987-syntax==1.1.0
     # via jsonschema
-rpds-py==0.30.0
+rpds-py==2026.5.1
     # via
     #   jsonschema
     #   referencing
@@ -272,9 +272,9 @@ six==1.17.0
     # via
     #   python-dateutil
     #   rfc3339-validator
-soupsieve==2.8.3
+soupsieve==2.8.4
     # via beautifulsoup4
-sqlalchemy==2.0.49
+sqlalchemy==2.0.50
     # via
     #   alembic
     #   jupyterhub
@@ -284,9 +284,9 @@ terminado==0.18.1
     # via
     #   jupyter-server
     #   jupyter-server-terminals
-tinycss2==1.4.0
+tinycss2==1.5.1
     # via bleach
-tornado==6.5.5
+tornado==6.5.6
     # via
     #   ipykernel
     #   jupyter-client
@@ -295,7 +295,7 @@ tornado==6.5.5
     #   jupyterlab
     #   nbgitpuller
     #   terminado
-traitlets==5.15.0
+traitlets==5.15.1
     # via
     #   ipykernel
     #   ipython
@@ -314,6 +314,7 @@ typing-extensions==4.15.0
     #   alembic
     #   anyio
     #   beautifulsoup4
+    #   jupyter-client
     #   pydantic
     #   pydantic-core
     #   referencing
