@@ -12,6 +12,23 @@ changes in pull requests], this list should be updated.
 [development releases]: https://hub.jupyter.org/helm-chart/#development-releases-jupyterhub
 [breaking changes in pull requests]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pulls?q=is%3Apr+is%3Aclosed+label%3Abreaking
 
+## 4.4
+
+### 4.4.0 - 2026-06-10
+
+4.4.0 upgrades JupyterHub to 5.5.0.
+
+```{important}
+4.4.0 is a security release fixing a moderate-severity denial of service vulnerability in jupyterhub.
+All jupyterhub deployments are encouraged to upgrade.
+```
+
+This release fixes:
+
+- [GHSA-p43p-whwx-q52h] (CVE pending): Denial of service vulnerability in JupyterHub
+
+[GHSA-p43p-whwx-q52h]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-p43p-whwx-q52h
+
 ## 4.3
 
 ### 4.3.5 - 2026-05-06
