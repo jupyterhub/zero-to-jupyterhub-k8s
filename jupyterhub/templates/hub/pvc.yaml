@@ -3,6 +3,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "jupyterhub.hub-pvc.fullname" . }}
+  namespace: {{ include "jupyterhub.namespace" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
   {{- with .Values.hub.db.pvc.annotations }}
