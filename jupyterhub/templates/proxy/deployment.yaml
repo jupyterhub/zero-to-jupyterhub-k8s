@@ -37,7 +37,9 @@ spec:
         # the k8s Secret template. This will cause this annotation to change to
         # match the k8s Secret during the first upgrade following an auth_token
         # was generated.
+        {{- if not (include "jupyterhub.hub-existing-secret.fullname" .) }}
         checksum/auth-token: {{ include "jupyterhub.hub.config.ConfigurableHTTPProxy.auth_token" . | sha256sum | trunc 4 | quote }}
+        {{- end }}
         checksum/proxy-secret: {{ include (print $.Template.BasePath "/proxy/secret.yaml") . | sha256sum | quote }}
         {{- with .Values.proxy.annotations }}
         {{- . | toYaml | nindent 8 }}
@@ -120,10 +122,7 @@ spec:
             - name: CONFIGPROXY_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
-                  # NOTE: References the chart managed k8s Secret even if
-                  #       hub.existingSecret is specified to avoid using the
-                  #       lookup function on the user managed k8s Secret.
-                  name: {{ include "jupyterhub.hub.fullname" . }}
+                  name: {{ include "jupyterhub.hub-existing-secret-or-default.fullname" . }}
                   key: hub.config.ConfigurableHTTPProxy.auth_token
             {{- with .Values.proxy.chp.extraEnv }}
             {{- include "jupyterhub.extraEnv" . | nindent 12 }}
