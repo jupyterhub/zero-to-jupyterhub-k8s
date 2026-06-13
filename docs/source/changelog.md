@@ -12,7 +12,59 @@ changes in pull requests], this list should be updated.
 [development releases]: https://hub.jupyter.org/helm-chart/#development-releases-jupyterhub
 [breaking changes in pull requests]: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pulls?q=is%3Apr+is%3Aclosed+label%3Abreaking
 
+## 4.4
+
+### 4.4.0 - 2026-06-10
+
+4.4.0 upgrades JupyterHub to 5.5.0.
+
+```{important}
+4.4.0 is a security release fixing a moderate-severity denial of service vulnerability in jupyterhub.
+All jupyterhub deployments are encouraged to upgrade.
+```
+
+This release fixes:
+
+- [GHSA-p43p-whwx-q52h] (CVE pending): Denial of service vulnerability in JupyterHub
+
+[GHSA-p43p-whwx-q52h]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-p43p-whwx-q52h
+
 ## 4.3
+
+### 4.3.5 - 2026-05-06
+
+4.3.5 upgrades JupyterHub to 5.4.6, which fixes a regression in
+5.4.5 (chart version 4.3.4).
+
+([full changelog](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/4.3.4...4.3.5))
+
+#### Maintenance and upkeep improvements
+
+- 4.x: jupyterhub 5.4.6 [#3891](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/3891) ([@minrk])
+
+#### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/use/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2026-04-28&to=2026-05-08&type=c))
+
+@minrk ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aminrk+updated%3A2026-04-28..2026-05-06&type=Issues))
+
+### 4.3.4 - 2026-04-28
+
+```{important}
+4.3.4 is a security release fixing a moderate CSRF vulnerability in jupyterhub.
+All jupyterhub deployments are encouraged to upgrade.
+```
+
+This release fixes:
+
+- [CVE-2026-40864], a CSRF vulnerability in JupyterHub (jupyterhub 5.4.5)
+
+[CVE-2026-40864]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-m68r-v472-jgq9
+
+([full changelog](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/4.3.3...4.3.4))
 
 ### 4.3.3 - 2026-03-26
 
