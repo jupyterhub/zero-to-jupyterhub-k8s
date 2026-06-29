@@ -10,7 +10,7 @@ aiohttp==3.14.1
     # via kubernetes-asyncio
 aiosignal==1.4.0
     # via aiohttp
-alembic==1.18.4
+alembic==1.18.5
     # via jupyterhub
 annotated-types==0.7.0
     # via pydantic
@@ -27,7 +27,7 @@ bcrypt==5.0.0
     #   jupyterhub-nativeauthenticator
 cachetools==7.1.4
     # via jupyterhub-ltiauthenticator
-certifi==2026.5.20
+certifi==2026.6.17
     # via
     #   kubernetes-asyncio
     #   requests
@@ -37,7 +37,7 @@ cffi==2.0.0
     # via cryptography
 charset-normalizer==3.4.7
     # via requests
-cryptography==48.0.1
+cryptography==49.0.0
     # via
     #   certipy
     #   google-auth
@@ -52,11 +52,11 @@ frozenlist==1.8.0
     # via
     #   aiohttp
     #   aiosignal
-google-auth==2.53.0
+google-auth==2.55.1
     # via google-auth-oauthlib
 google-auth-oauthlib==1.4.0
     # via oauthenticator
-greenlet==3.5.1
+greenlet==3.5.3
     # via sqlalchemy
 idna==3.18
     # via
@@ -221,7 +221,7 @@ six==1.17.0
     #   onetimepass
     #   python-dateutil
     #   rfc3339-validator
-sqlalchemy==2.0.50
+sqlalchemy==2.0.51
     # via
     #   alembic
     #   jupyterhub
