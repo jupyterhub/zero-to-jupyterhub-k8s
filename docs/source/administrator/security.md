@@ -319,6 +319,54 @@ to avoid an ambiguous configuration.
 
 (netpol)=
 
+## Runtime tokens for external data services
+
+Some deployments need notebooks to access external data systems such as catalogs, databases, or object stores with short-lived credentials. Prefer a design where the single-user server reads a runtime token from a file written by a sidecar, instead of putting long-lived credentials, identity-provider refresh tokens, or client secrets in the user image or notebooks.
+
+A common pattern is:
+
+1. Configure a trusted JupyterHub service with the minimum Hub API scopes it needs. If the service needs authentication state from an OAuth or OIDC authenticator, enable encrypted `auth_state` and grant the service an appropriate `admin:auth_state`-derived scope only for that purpose.
+2. The trusted service exchanges the user's authenticated identity, or another deployment-specific identity proof, with the external data authorization service.
+3. Add a sidecar container to the single-user pod with [`singleuser.extraContainers`](schema_singleuser.extraContainers). The sidecar obtains short-lived runtime tokens from the trusted service and writes them to an in-memory shared volume.
+4. Mount the same volume into the notebook container with [`singleuser.storage.extraVolumes`](schema_singleuser.storage.extraVolumes) and [`singleuser.storage.extraVolumeMounts`](schema_singleuser.storage.extraVolumeMounts). Notebook code and data clients read only the short-lived token file.
+
+For example:
+
+```yaml
+singleuser:
+  storage:
+    extraVolumes:
+      - name: runtime-token
+        emptyDir:
+          medium: Memory
+    extraVolumeMounts:
+      - name: runtime-token
+        mountPath: /run/jupyterhub/runtime-token
+        readOnly: true
+
+  extraContainers:
+    - name: runtime-token-sidecar
+      image: my-registry.example.org/runtime-token-sidecar:1.0.0
+      env:
+        - name: JUPYTERHUB_USER
+          value: "{username}"
+        - name: RUNTIME_TOKEN_PATH
+          value: /run/jupyterhub/runtime-token/token
+      volumeMounts:
+        - name: runtime-token
+          mountPath: /run/jupyterhub/runtime-token
+```
+
+The sidecar image and trusted service are deployment-specific. The important security boundary is that JupyterHub should identify the user and manage the notebook server lifecycle, while the external data system remains responsible for validating identity and enforcing data permissions.
+
+Avoid these designs:
+
+- Do not pass identity-provider refresh tokens or client secrets into the user container.
+- Do not rely only on a username supplied by notebook code or by a user-controlled process.
+- Do not store long-lived personal tokens in shared notebooks, images, or persistent home directories.
+
+Stopping the single-user server on logout is optional. Some deployments want logout to stop the server and destroy sidecar state immediately. Others intentionally keep background work running after browser logout, and should rely on idle culling, maximum runtime, and short token lifetimes.
+
 ## Kubernetes Network Policies
 
 ```{warning}
