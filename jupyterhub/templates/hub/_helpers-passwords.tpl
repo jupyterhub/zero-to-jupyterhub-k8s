@@ -37,7 +37,7 @@
     {{- else if .Values.proxy.secretToken }}
         {{- .Values.proxy.secretToken }}
     {{- else }}
-        {{- $k8s_state := lookup "v1" "Secret" .Release.Namespace (include "jupyterhub.hub.fullname" .) | default (dict "data" (dict)) }}
+        {{- $k8s_state := lookup "v1" "Secret" (include "jupyterhub.namespace" .) (include "jupyterhub.hub.fullname" .) | default (dict "data" (dict)) }}
         {{- if hasKey $k8s_state.data "hub.config.ConfigurableHTTPProxy.auth_token" }}
             {{- index $k8s_state.data "hub.config.ConfigurableHTTPProxy.auth_token" | b64dec }}
         {{- else }}
@@ -52,7 +52,7 @@
     {{- else if .Values.hub.cookieSecret }}
         {{- .Values.hub.cookieSecret }}
     {{- else }}
-        {{- $k8s_state := lookup "v1" "Secret" .Release.Namespace (include "jupyterhub.hub.fullname" .) | default (dict "data" (dict)) }}
+        {{- $k8s_state := lookup "v1" "Secret" (include "jupyterhub.namespace" .) (include "jupyterhub.hub.fullname" .) | default (dict "data" (dict)) }}
         {{- if hasKey $k8s_state.data "hub.config.JupyterHub.cookie_secret" }}
             {{- index $k8s_state.data "hub.config.JupyterHub.cookie_secret" | b64dec }}
         {{- else }}
@@ -65,7 +65,7 @@
     {{- if (.Values.hub.config | dig "CryptKeeper" "keys" "") }}
         {{- .Values.hub.config.CryptKeeper.keys | join ";" }}
     {{- else }}
-        {{- $k8s_state := lookup "v1" "Secret" .Release.Namespace (include "jupyterhub.hub.fullname" .) | default (dict "data" (dict)) }}
+        {{- $k8s_state := lookup "v1" "Secret" (include "jupyterhub.namespace" .) (include "jupyterhub.hub.fullname" .) | default (dict "data" (dict)) }}
         {{- if hasKey $k8s_state.data "hub.config.CryptKeeper.keys" }}
             {{- index $k8s_state.data "hub.config.CryptKeeper.keys" | b64dec }}
         {{- else }}
@@ -81,7 +81,7 @@
     {{- if $explicitly_set_api_token }}
         {{- $explicitly_set_api_token }}
     {{- else }}
-        {{- $k8s_state := lookup "v1" "Secret" $_.Release.Namespace (include "jupyterhub.hub.fullname" $_) | default (dict "data" (dict)) }}
+        {{- $k8s_state := lookup "v1" "Secret" (include "jupyterhub.namespace" $_) (include "jupyterhub.hub.fullname" $_) | default (dict "data" (dict)) }}
         {{- $k8s_secret_key := print "hub.services." $service_key ".apiToken" }}
         {{- if hasKey $k8s_state.data $k8s_secret_key }}
             {{- index $k8s_state.data $k8s_secret_key | b64dec }}
