@@ -224,6 +224,7 @@ proxy:
       tag: "5.3.0" # https://github.com/jupyterhub/configurable-http-proxy/tags
       pullPolicy:
       pullSecrets: []
+      command: ["configurable-http-proxy"]
     extraCommandLineFlags: []
     livenessProbe:
       enabled: true
