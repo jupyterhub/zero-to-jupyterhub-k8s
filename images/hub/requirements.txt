@@ -4,7 +4,7 @@
 #
 #    Use the "Run workflow" button at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/actions/workflows/watch-dependencies.yaml
 #
-aiohappyeyeballs==2.6.2
+aiohappyeyeballs==2.7.1
     # via aiohttp
 aiohttp==3.14.1
     # via kubernetes-asyncio
@@ -33,9 +33,9 @@ certifi==2026.6.17
     #   requests
 certipy==0.2.3
     # via jupyterhub
-cffi==2.0.0
+cffi==2.1.0
     # via cryptography
-charset-normalizer==3.4.7
+charset-normalizer==3.4.9
     # via requests
 cryptography==49.0.0
     # via
@@ -52,7 +52,7 @@ frozenlist==1.8.0
     # via
     #   aiohttp
     #   aiosignal
-google-auth==2.55.1
+google-auth==2.56.0
     # via google-auth-oauthlib
 google-auth-oauthlib==1.4.0
     # via oauthenticator
@@ -95,7 +95,7 @@ jupyterhub-hmacauthenticator==1.0
     # via -r unfrozen/requirements.txt
 jupyterhub-idle-culler==1.4.0
     # via -r unfrozen/requirements.txt
-jupyterhub-kubespawner==7.0.0
+jupyterhub-kubespawner==7.1.0
     # via -r unfrozen/requirements.txt
 jupyterhub-ldapauthenticator==2.0.2
     # via -r unfrozen/requirements.txt
@@ -148,7 +148,7 @@ propcache==0.5.2
     #   yarl
 psycopg2==2.9.12
     # via -r unfrozen/requirements.txt
-pyasn1==0.6.3
+pyasn1==0.6.4
     # via
     #   ldap3
     #   pyasn1-modules
@@ -156,7 +156,7 @@ pyasn1-modules==0.4.2
     # via google-auth
 pycparser==3.0
     # via cffi
-pycurl==7.46.0
+pycurl==7.47.0
     # via -r unfrozen/requirements.txt
 pydantic==2.13.4
     # via jupyterhub
@@ -209,7 +209,7 @@ rfc3986-validator==0.1.1
     #   jupyter-events
 rfc3987-syntax==1.1.0
     # via jsonschema
-rpds-py==2026.5.1
+rpds-py==2026.6.3
     # via
     #   jsonschema
     #   referencing
@@ -245,7 +245,7 @@ traitlets==5.15.1
     #   jupyterhub-ldapauthenticator
     #   jupyterhub-ltiauthenticator
     #   oauthenticator
-typing-extensions==4.15.0
+typing-extensions==4.16.0
     # via
     #   aiohttp
     #   aiosignal
@@ -257,7 +257,7 @@ typing-extensions==4.15.0
     #   typing-inspection
 typing-inspection==0.4.2
     # via pydantic
-tzdata==2026.2
+tzdata==2026.3
     # via arrow
 uri-template==1.3.0
     # via jsonschema
