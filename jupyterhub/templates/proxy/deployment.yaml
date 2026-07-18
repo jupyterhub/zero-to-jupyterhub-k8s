@@ -75,7 +75,8 @@ spec:
           image: {{ .Values.proxy.chp.image.name }}:{{ .Values.proxy.chp.image.tag }}
           {{- $hubNameAsEnv := include "jupyterhub.hub.fullname" . | upper | replace "-" "_" }}
           {{- $hubHost := printf "http://%s:$(%s_SERVICE_PORT)" (include "jupyterhub.hub.fullname" .) $hubNameAsEnv }}
-          command: {{ .Values.proxy.chp.image.command }}
+          command:
+            {{- .Values.proxy.chp.image.command | toYaml | nindent 12 }}
           args:
             - "--ip="
             - "--api-ip="
