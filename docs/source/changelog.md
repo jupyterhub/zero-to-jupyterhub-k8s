@@ -83,7 +83,6 @@ The advisories at the above links will be published 7 days after release (2026-0
 
 [CVE-2026-34052]: https://github.com/jupyterhub/ltiauthenticator/security/advisories/GHSA-8mxq-7xr7-2fxj
 [CVE-2026-33709]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-3vff-hjqv-m7h8
-
 [CVE-2026-33175]: https://github.com/jupyterhub/oauthenticator/security/advisories/GHSA-rrvg-cxh4-qhrv
 
 ([full changelog](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/4.3.2...4.3.3))
@@ -474,7 +473,6 @@ This release updates JupyterHub from 4.0.2 to 4.1.0 and OAuthenticator from
 see [JupyterHub's changelog] and [OAuthenticator's changelog].
 
 [JupyterHub's changelog]: https://jupyterhub.readthedocs.io/en/stable/reference/changelog.html
-
 [OAuthenticator's changelog]: https://oauthenticator.readthedocs.io/en/latest/reference/changelog.html
 
 ([full changelog](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/3.2.1...3.3.0))
