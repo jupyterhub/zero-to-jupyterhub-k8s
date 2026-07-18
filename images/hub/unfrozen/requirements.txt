@@ -23,7 +23,7 @@ jupyterhub-tmpauthenticator==1.*
 oauthenticator[googlegroups,mediawiki]==17.*
 
 # JupyterHub service shutting servers after a period of inactivity
-jupyterhub-idle-culler==1.*
+jupyterhub-idle-culler==2.*
 
 # Other optional dependencies for additional features
 pymysql  # mysql
