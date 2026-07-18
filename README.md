@@ -48,7 +48,7 @@ For more information, please visit
 
 Much of the initial groundwork for this documentation is information learned
 from the successful use of JupyterHub and Kubernetes at UC Berkeley in their
-[Data 8](http://data8.org/) program.
+[Data 8](https://data8.org/) program.
 
 ![](docs/source/_static/images/data8_massive_audience.jpg)
 
