@@ -1596,26 +1596,14 @@ properties:
             description: |
               A list of strings to be added as the command.
               In general, it needs to start with
-              [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy)
-              that will be expanded with Helm's template function `tpl` which
-              can render Helm template logic inside curly braces (`{{ ... }}`).
-
+              [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy).
               ```yaml
               proxy:
                 chp:
                   command:
                     - "configurable-http-proxy"
               ```
-
-              Note that this is added so that docker hardened image can also be used,
-              where the expectation is:
-              ```yaml
-              proxy:
-                chp:
-                  command:
-                    - "node"
-                    - "/srv/configurable-http-proxy/bin/configurable-http-proxy"
-              ```
+              Note that this is added so that docker hardened image can also be used.
           extraCommandLineFlags:
             type: array
             description: |
