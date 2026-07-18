@@ -76,7 +76,7 @@ spec:
           {{- $hubNameAsEnv := include "jupyterhub.hub.fullname" . | upper | replace "-" "_" }}
           {{- $hubHost := printf "http://%s:$(%s_SERVICE_PORT)" (include "jupyterhub.hub.fullname" .) $hubNameAsEnv }}
           command:
-            {{- .Values.proxy.chp.image.command | toYaml | nindent 12 }}
+            {{- .Values.proxy.chp.command | toYaml | nindent 12 }}
           args:
             - "--ip="
             - "--api-ip="
