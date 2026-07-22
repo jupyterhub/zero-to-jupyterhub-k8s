@@ -441,7 +441,7 @@ singleuser:
   cmd: jupyterhub-singleuser
   defaultUrl:
   extraPodConfig: {}
-  profileList: []
+  profileList:
 
 # scheduling relates to the user-scheduler pods and user-placeholder pods.
 scheduling:
