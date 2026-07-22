@@ -154,10 +154,12 @@ singleuser:
     name: jupyter/minimal-notebook
     tag: 2343e33dec46
   profileList:
-    - display_name: "Minimal environment"
+    minimal:
+      display_name: "Minimal environment"
       description: "To avoid too much bells and whistles: Python."
       default: true
-    - display_name: "Datascience environment"
+    datascience:
+      display_name: "Datascience environment"
       description: "If you want the additional bells and whistles: Python, R, and Julia."
       kubespawner_override:
         image: jupyter/datascience-notebook:2343e33dec46
