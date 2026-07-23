@@ -93,7 +93,7 @@ jupyterhub-firstuseauthenticator==1.1.1
     # via -r unfrozen/requirements.txt
 jupyterhub-hmacauthenticator==1.0
     # via -r unfrozen/requirements.txt
-jupyterhub-idle-culler==1.4.0
+jupyterhub-idle-culler==2.0.0
     # via -r unfrozen/requirements.txt
 jupyterhub-kubespawner==7.1.0
     # via -r unfrozen/requirements.txt
@@ -241,6 +241,7 @@ traitlets==5.15.1
     # via
     #   jupyter-events
     #   jupyterhub
+    #   jupyterhub-idle-culler
     #   jupyterhub-kubespawner
     #   jupyterhub-ldapauthenticator
     #   jupyterhub-ltiauthenticator
