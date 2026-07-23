@@ -19,7 +19,14 @@ singleuser:
       test-volume-mount:
         name: test-volume
         mountPath: /test-volume
-
+  profileList:
+    default:
+      display_name: "Default environment"
+      description: "Here just for testing"
+      default: true
+      kubespawner_override:
+        environment:
+          AM_I_HERE: "yes"
 proxy:
   traefik:
     # This startup delay can help the k8s container network interface setup
