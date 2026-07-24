@@ -2948,7 +2948,7 @@ properties:
             namespace: other-namespace # if gateway is in a separate namespace
           ```
 
-          See [the Gateway API](https://gateway-api.sigs.k8s.io/reference/spec/#parentreference)
+          See [the Gateway API](https://gateway-api.sigs.k8s.io/reference/api-spec/main/spec/#parentreference)
   prePuller:
     type: object
     additionalProperties: false

@@ -4293,7 +4293,7 @@ installation.
   display a nicer error page.
 - The version of KubeSpawner uses the official Kubernetes
   [python client](https://github.com/kubernetes-client/python) rather
-  than [pycurl](http://pycurl.io/). This helps with scalability a little.
+  than [pycurl](https://pycurl.github.io/). This helps with scalability a little.
 
 #### Removed
 
