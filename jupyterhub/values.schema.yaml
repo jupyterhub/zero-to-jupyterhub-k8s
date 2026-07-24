@@ -2179,7 +2179,7 @@ properties:
                 command: ['sh', '-c', 'command2']
           ```
       profileList:
-        type: array
+        type: [object, array, "null"]
         description: |
           For more information about the profile list, see [KubeSpawner's
           documentation](https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner)
@@ -2191,6 +2191,7 @@ properties:
           JupyterHub's configuration of '`c.KubeSpawner.profile_list`.
           ```
 
+          List example:
           ```yaml
           singleuser:
             profileList:
@@ -2203,6 +2204,23 @@ properties:
                   extra_resource_limits:
                     nvidia.com/gpu: "1"
           ```
+
+          Dict example:
+          ```yaml
+          singleuser:
+            profileList:
+              default:
+                display_name: "Default: Shared, 8 CPU cores"
+                description: "Your code will run on a shared machine with CPU only."
+                default: True
+              gpu:
+                display_name: "Personal, 4 CPU cores & 26GB RAM, 1 NVIDIA Tesla K80 GPU"
+                description: "Your code will run a personal machine with a GPU."
+                kubespawner_override:
+                  extra_resource_limits:
+                    nvidia.com/gpu: "1"
+          ```
+
       extraFiles: *extraFiles
       extraEnv:
         type: [object, array]

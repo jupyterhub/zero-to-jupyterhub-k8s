@@ -347,16 +347,19 @@ proxy:
 
 singleuser:
   profileList:
-    - display_name: "mock display name 1"
+    display1:
+      display_name: "mock display name 1"
       description: |
         mock description 1
       default: True
-    - display_name: "mock display name 2"
+    display2:
+      display_name: "mock display name 2"
       description: |
         mock description 2
       kubespawner_override:
         image: XYZ:XYZ
-    - display_name: "mock display name 3"
+    display3:
+      display_name: "mock display name 3"
       description: |
         mock description 3
       profile_options:

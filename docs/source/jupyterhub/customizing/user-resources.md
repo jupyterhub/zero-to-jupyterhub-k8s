@@ -82,7 +82,8 @@ For example, to create a profile that allocates one NVIDIA GPU:
 ```yaml
 singleuser:
   profileList:
-    - display_name: "GPU Server"
+    gpu:
+      display_name: "GPU Server"
       description: "Spawns a notebook server with access to a GPU"
       kubespawner_override:
         extra_resource_limits:

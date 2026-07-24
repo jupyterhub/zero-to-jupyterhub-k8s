@@ -453,7 +453,8 @@ a list of profiles with specific configuration options each. Here's an example:
 ```yaml
 singleuser:
   profileList:
-    - display_name: "Name to be displayed to users"
+    default:
+      display_name: "Name to be displayed to users"
       description: "Longer description for users."
       # Configuration unique to this profile
       kubespawner_override:
@@ -475,18 +476,22 @@ singleuser:
     name: jupyter/minimal-notebook
     tag: 2343e33dec46
   profileList:
-    - display_name: "Minimal environment"
+    minimal:
+      display_name: "Minimal environment"
       description: "To avoid too much bells and whistles: Python."
       default: true
-    - display_name: "Datascience environment"
+    datascience:
+      display_name: "Datascience environment"
       description: "If you want the additional bells and whistles: Python, R, and Julia."
       kubespawner_override:
         image: jupyter/datascience-notebook:2343e33dec46
-    - display_name: "Spark environment"
+    spark:
+      display_name: "Spark environment"
       description: "The Jupyter Stacks spark image!"
       kubespawner_override:
         image: jupyter/all-spark-notebook:2343e33dec46
-    - display_name: "Learning Data Science"
+    learning:
+      display_name: "Learning Data Science"
       description: "Datascience Environment with Sample Notebooks"
       kubespawner_override:
         image: jupyter/datascience-notebook:2343e33dec46

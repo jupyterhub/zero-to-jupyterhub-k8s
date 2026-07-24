@@ -145,6 +145,23 @@ def test_spawn_basic(
         assert (
             c.returncode == 0
         ), "The singleuser.storage.extraVolumes and extraVolumeMounts configuration doesn't seem to have been honored!"
+
+        # check user pod's environment variable set from the default user profile via singleuser.profileList[].kubespawner_override.environment
+        c = subprocess.run(
+            [
+                "kubectl",
+                "exec",
+                pod_name,
+                "--",
+                "sh",
+                "-c",
+                "if [ -z $AM_I_HERE ]; then exit 1; fi",
+            ]
+        )
+        assert (
+            c.returncode == 0
+        ), "singleuser.profileList[].kubespawner_override.environment didn't lead to a mounted environment variable!"
+
     finally:
         _delete_server(api_request, jupyter_user, request_data["test_timeout"])
 
@@ -162,7 +179,7 @@ def test_spawn_netpol(api_request, jupyter_user, request_data):
     r = api_request.post("/users/" + jupyter_user + "/server")
     assert r.status_code in (201, 202)
     try:
-        # check successfull spawn
+        # check successful spawn
         server_model = _wait_for_user_to_spawn(
             api_request, jupyter_user, request_data["test_timeout"]
         )
