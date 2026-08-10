@@ -14,6 +14,20 @@ changes in pull requests], this list should be updated.
 
 ## 4.4
 
+### 4.4.1 - 2026-08-10
+
+4.4.1 upgrades JupyterHub to 5.5.1.
+
+This release fixes:
+
+- [GHSA-c4gm-pwx9-9w8j](https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-c4gm-pwx9-9w8j) (CVE pending) high-level vulnerability in user-initiated sharing (no effect on deployments without user-initiated sharing)
+- [GHSA-69wv-m5fw-2fhp](https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-69wv-m5fw-2fhp) (CVE pending) low-level vulnerability in enforcing partial admin-level restrictions (no effect unless you have _filtered_ admin roles: `admin:users!group=...` or `admin:groups!group=...`)
+
+```{important}
+4.4.1 is a security release fixing a moderate-severity denial of service vulnerability in jupyterhub.
+All jupyterhub deployments are encouraged to upgrade.
+```
+
 ### 4.4.0 - 2026-06-10
 
 4.4.0 upgrades JupyterHub to 5.5.0.
