@@ -43,7 +43,7 @@ cffi==2.1.1
     # via
     #   argon2-cffi-bindings
     #   cryptography
-charset-normalizer==3.4.9
+charset-normalizer==3.5.0
     # via requests
 comm==0.2.3
     # via ipykernel
@@ -275,7 +275,7 @@ six==1.17.0
     #   rfc3339-validator
 soupsieve==2.9.2
     # via beautifulsoup4
-sqlalchemy==2.0.51
+sqlalchemy==2.0.52
     # via
     #   alembic
     #   jupyterhub
@@ -322,7 +322,7 @@ typing-extensions==4.16.0
     #   referencing
     #   sqlalchemy
     #   typing-inspection
-typing-inspection==0.4.3
+typing-inspection==0.4.4
     # via pydantic
 tzdata==2026.3
     # via arrow
