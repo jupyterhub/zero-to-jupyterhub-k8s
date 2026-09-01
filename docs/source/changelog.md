@@ -14,6 +14,14 @@ changes in pull requests], this list should be updated.
 
 ## 4.4
 
+### 4.4.2 - 2026-09-01
+
+4.4.2 upgrades JupyterHub to 5.5.2
+
+This release fixes one low-severity vulnerability in user-initiated sharing:
+
+- [GHSA-mj6q-mp44-53v8](https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-mj6q-mp44-53v8) (CVE pending)
+
 ### 4.4.1 - 2026-08-10
 
 4.4.1 upgrades JupyterHub to 5.5.1.
