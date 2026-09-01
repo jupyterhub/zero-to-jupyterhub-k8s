@@ -14,7 +14,7 @@ anyio==4.14.2
     #   jupyter-server
 argon2-cffi==25.1.0
     # via jupyter-server
-argon2-cffi-bindings==25.1.0
+argon2-cffi-bindings==26.1.0
     # via argon2-cffi
 arrow==1.4.0
     # via isoduration
@@ -43,11 +43,11 @@ cffi==2.1.1
     # via
     #   argon2-cffi-bindings
     #   cryptography
-charset-normalizer==3.4.9
+charset-normalizer==3.5.1
     # via requests
 comm==0.2.3
     # via ipykernel
-cryptography==50.0.0
+cryptography==50.0.1
     # via certipy
 debugpy==1.8.21
     # via ipykernel
@@ -55,7 +55,7 @@ defusedxml==0.7.1
     # via nbconvert
 executing==2.2.1
     # via stack-data
-fastjsonschema==2.22.1
+fastjsonschema==2.22.2
     # via nbformat
 fqdn==1.5.1
     # via jsonschema
@@ -67,7 +67,7 @@ httpcore==1.0.9
     # via httpx
 httpx==0.28.1
     # via jupyterlab
-idna==3.18
+idna==3.19
     # via
     #   anyio
     #   httpx
@@ -78,7 +78,7 @@ ipykernel==7.3.0
     # via
     #   jupyterlab
     #   nbclassic
-ipython==9.16.1
+ipython==9.17.1
     # via ipykernel
 ipython-genutils==0.2.0
     # via nbclassic
@@ -108,7 +108,7 @@ jsonschema-specifications==2025.9.1
     # via jsonschema
 jupyter-builder==1.2.2
     # via jupyterlab
-jupyter-client==8.9.1
+jupyter-client==8.10.0
     # via
     #   ipykernel
     #   jupyter-server
@@ -129,7 +129,7 @@ jupyter-events==0.12.1
     #   jupyterhub
 jupyter-lsp==2.3.1
     # via jupyterlab
-jupyter-server==2.20.0
+jupyter-server==2.21.0
     # via
     #   jupyter-lsp
     #   jupyterlab
@@ -138,7 +138,7 @@ jupyter-server==2.20.0
     #   notebook-shim
 jupyter-server-terminals==0.5.4
     # via jupyter-server
-jupyterhub==5.5.1
+jupyterhub==5.5.2
     # via -r unfrozen/requirements.txt
 jupyterlab==4.6.3
     # via -r unfrozen/requirements.txt
@@ -167,7 +167,7 @@ nbclient==0.11.0
     # via nbconvert
 nbconvert==7.17.1
     # via jupyter-server
-nbformat==5.11.0
+nbformat==5.11.1
     # via
     #   jupyter-server
     #   nbclient
@@ -201,7 +201,7 @@ parso==0.8.7
     # via jedi
 pexpect==4.9.0
     # via ipython
-platformdirs==4.11.2
+platformdirs==4.11.7
     # via jupyter-core
 prometheus-client==0.26.0
     # via
@@ -221,11 +221,11 @@ pure-eval==0.2.3
     # via stack-data
 pycparser==3.0
     # via cffi
-pydantic==2.13.4
+pydantic==2.13.5
     # via jupyterhub
-pydantic-core==2.46.4
+pydantic-core==2.46.5
     # via pydantic
-pygments==2.20.0
+pygments==2.21.0
     # via
     #   ipython
     #   ipython-pygments-lexers
@@ -235,11 +235,11 @@ python-dateutil==2.9.0.post0
     #   arrow
     #   jupyter-client
     #   jupyterhub
-python-json-logger==4.1.0
+python-json-logger==4.2.0
     # via jupyter-events
 pyyaml==6.0.3
     # via jupyter-events
-pyzmq==27.1.0
+pyzmq==27.2.0
     # via
     #   ipykernel
     #   jupyter-client
@@ -275,7 +275,7 @@ six==1.17.0
     #   rfc3339-validator
 soupsieve==2.9.2
     # via beautifulsoup4
-sqlalchemy==2.0.51
+sqlalchemy==2.0.52
     # via
     #   alembic
     #   jupyterhub
@@ -322,7 +322,7 @@ typing-extensions==4.16.0
     #   referencing
     #   sqlalchemy
     #   typing-inspection
-typing-inspection==0.4.3
+typing-inspection==0.4.4
     # via pydantic
 tzdata==2026.3
     # via arrow
@@ -330,13 +330,13 @@ uri-template==1.3.0
     # via jsonschema
 urllib3==2.7.0
     # via requests
-wcwidth==0.8.2
+wcwidth==0.8.3
     # via prompt-toolkit
 webcolors==25.10.0
     # via jsonschema
-webencodings==0.5.1
+webencodings==0.6.1
     # via
     #   bleach
     #   tinycss2
-websocket-client==1.9.0
+websocket-client==1.9.2
     # via jupyter-server
