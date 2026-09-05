@@ -1,4 +1,4 @@
-{{- if .Values.proxy.chp.pdb.enabled -}}
+{{- if and .Values.proxy.chp.enabled .Values.proxy.chp.pdb.enabled -}}
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
