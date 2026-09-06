@@ -84,6 +84,29 @@ properties:
     description: |
       See the documentation under [`fullnameOverride`](schema_fullnameOverride).
 
+  namespaceOverride:
+    type: [string, "null"]
+    description: |
+      `namespaceOverride` allows you to deploy all chart resources to a
+      namespace different from the Helm release namespace.
+
+      This is useful for:
+      - Parent charts that need to control which namespace child chart
+        resources are deployed to
+      - ArgoCD deployments that require explicit namespace declarations
+
+      Example:
+      ```yaml
+      # Deploy resources to 'jupyterhub-prod' namespace
+      namespaceOverride: jupyterhub-prod
+      ```
+
+      ```{admonition} Note
+      :class: note
+      If not set, resources will be deployed to the Helm release namespace
+      (`.Release.Namespace`).
+      ```
+
   imagePullSecret:
     type: object
     required: [create]

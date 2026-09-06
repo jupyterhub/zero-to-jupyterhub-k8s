@@ -10,6 +10,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ include "jupyterhub.hook-image-awaiter.fullname" . }}
+  namespace: {{ include "jupyterhub.namespace" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
     hub.jupyter.org/deletable: "true"
@@ -62,7 +63,7 @@ spec:
             - -ca-path=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
             - -auth-token-path=/var/run/secrets/kubernetes.io/serviceaccount/token
             - -api-server-address=https://kubernetes.default.svc:$(KUBERNETES_SERVICE_PORT)
-            - -namespace={{ .Release.Namespace }}
+            - -namespace={{ include "jupyterhub.namespace" . }}
             - -daemonset={{ include "jupyterhub.hook-image-puller.fullname" . }}
             - -pod-scheduling-wait-duration={{ .Values.prePuller.hook.podSchedulingWaitDuration }}
           {{- with .Values.prePuller.hook.containerSecurityContext }}
