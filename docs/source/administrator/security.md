@@ -10,10 +10,8 @@ Brad Geesamen gave a wonderful talk titled [Hacking and Hardening Kubernetes by 
 
 If you find a security vulnerability in JupyterHub, either a failure of the
 code to properly implement the model described here, or a failure of the
-model itself, please report it to [security@ipython.org](mailto:security@ipython.org).
-
-If you prefer to encrypt your security reports, you can use
-[this PGP public key](https://ipython.org/ipython-doc/2/_downloads/ipython_security.asc).
+model itself, please follow the
+[Jupyter security guide to reporting vulnerabilities](https://jupyter.org/security).
 
 (https)=
 
