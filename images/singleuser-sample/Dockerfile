@@ -12,6 +12,12 @@
 #
 FROM python:3.14-trixie as build-stage
 
+# Install uv (static binary, pinned via the official distroless image) to
+# speed up dependency installation compared to pip. Note: uv's `pip`
+# interface has no `wheel` subcommand, so wheel-building below still goes
+# through plain pip; uv is used for the (much more common) install path.
+COPY --from=ghcr.io/astral-sh/uv:0.12.11 /uv /uvx /usr/local/bin/
+
 # Build wheels
 #
 # We set pip's cache directory and expose it across build stages via an
@@ -20,9 +26,11 @@ FROM python:3.14-trixie as build-stage
 #
 COPY requirements.txt requirements.txt
 ARG PIP_CACHE_DIR=/tmp/pip-cache
+ARG UV_CACHE_DIR=/tmp/uv-cache
 RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
-    pip install build \
- && pip wheel \
+    --mount=type=cache,target=${UV_CACHE_DIR} \
+    uv pip install --system build \
+    && pip wheel \
         --wheel-dir=/tmp/wheels \
         -r requirements.txt
 
@@ -31,8 +39,11 @@ RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
 # ---------------
 #
 FROM python:3.14-slim-trixie
-ENV DEBIAN_FRONTEND=noninteractive
 
+# Install uv here too, so the final image can install wheels with it as well.
+COPY --from=ghcr.io/astral-sh/uv:0.12.11 /uv /uvx /usr/local/bin/
+
+ENV DEBIAN_FRONTEND=noninteractive
 ENV NB_USER=jovyan \
     NB_UID=1000 \
     HOME=/home/jovyan
@@ -57,10 +68,10 @@ RUN apt-get update \
 
 # install wheels built in the build-stage
 COPY requirements.txt /tmp/requirements.txt
-ARG PIP_CACHE_DIR=/tmp/pip-cache
-RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
+ARG UV_CACHE_DIR=/tmp/uv-cache
+RUN --mount=type=cache,target=${UV_CACHE_DIR} \
     --mount=type=cache,from=build-stage,source=/tmp/wheels,target=/tmp/wheels \
-    pip install \
+    uv pip install --system \
         --find-links=/tmp/wheels/ \
         -r /tmp/requirements.txt
 

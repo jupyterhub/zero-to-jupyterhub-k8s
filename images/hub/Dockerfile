@@ -18,6 +18,12 @@ FROM python:3.14-trixie as build-stage
 # ephemeral docker cache (--mount=type=cache,target=${PIP_CACHE_DIR}). We use
 # the same technique for the directory /tmp/wheels.
 #
+# NOTE: wheel-building stays on plain pip -- uv's `pip` interface has no
+#       `wheel` subcommand, so there's nothing to speed up here with uv.
+#       The install steps below (which run far more often, on every rebuild
+#       that touches requirements.txt) are where uv pays off, so uv is
+#       installed and used only in the later stages.
+#
 COPY requirements.txt requirements.txt
 ARG PIP_CACHE_DIR=/tmp/pip-cache
 RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
@@ -39,8 +45,12 @@ RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
 # provide no non-essential packages.
 #
 FROM python:3.14-slim-trixie as slim-stage
-ENV DEBIAN_FRONTEND=noninteractive
 
+# Install uv (static binary, pinned via the official distroless image) to
+# speed up installing the wheels built in build-stage compared to pip.
+COPY --from=ghcr.io/astral-sh/uv:0.12.11 /uv /uvx /usr/local/bin/
+
+ENV DEBIAN_FRONTEND=noninteractive
 ARG NB_USER=jovyan \
     NB_UID=1000 \
     HOME=/home/jovyan
@@ -67,10 +77,10 @@ RUN apt-get update \
 # install wheels built in the build stage
 # --no-index ensures _only_ wheels from the build stage are installed
 COPY requirements.txt /tmp/requirements.txt
-ARG PIP_CACHE_DIR=/tmp/pip-cache
-RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
+ARG UV_CACHE_DIR=/tmp/uv-cache
+RUN --mount=type=cache,target=${UV_CACHE_DIR} \
     --mount=type=cache,from=build-stage,source=/tmp/wheels,target=/tmp/wheels \
-    pip install \
+    uv pip install --system \
         --no-index \
         --find-links=/tmp/wheels/ \
         -r /tmp/requirements.txt
@@ -93,10 +103,11 @@ FROM slim-stage as default-stage
 
 USER root
 
-ARG PIP_CACHE_DIR=/tmp/pip-cache
-RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
+# uv is already present here, inherited from slim-stage.
+ARG UV_CACHE_DIR=/tmp/uv-cache
+RUN --mount=type=cache,target=${UV_CACHE_DIR} \
     --mount=type=cache,from=build-stage,source=/tmp/wheels,target=/tmp/wheels \
-    pip install \
+    uv pip install --system \
         --no-index \
         --find-links=/tmp/wheels/ \
         # Updates below should be repeated in build-stage.
