@@ -1594,10 +1594,7 @@ properties:
             description: |
               Default `true`.
 
-              Whether to deploy the `proxy` pod running
-              [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy),
-              along with its associated k8s resources (PodDisruptionBudget,
-              NetworkPolicy).
+              Whether to deploy configurable-http-proxy.
 
               Disable this only if you are providing your own proxy
               implementation for JupyterHub to manage instead of chp.
