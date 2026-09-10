@@ -1589,6 +1589,15 @@ properties:
           Configure the configurable-http-proxy (chp) pod managed by jupyterhub to route traffic
           both to itself and to user pods.
         properties:
+          enabled:
+            type: boolean
+            description: |
+              Default `true`.
+
+              Whether to deploy configurable-http-proxy.
+
+              Disable this only if you are providing your own proxy
+              implementation for JupyterHub to manage instead of chp.
           revisionHistoryLimit: *revisionHistoryLimit
           networkPolicy: *networkPolicy-spec
           command:
