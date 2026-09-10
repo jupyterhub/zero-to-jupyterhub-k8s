@@ -798,7 +798,7 @@ properties:
                   all other network policies.
 
                   Private IPs refer to the IP ranges `10.0.0.0/8`,
-                  `172.16.0.0/12`, `192.168.0.0/16`.
+                  `169.254.0.0/16`, `172.16.0.0/12`, `192.168.0.0/16`.
 
                   When enabled this rule allows the respective pod(s) to
                   establish outbound connections to the internal k8s cluster.

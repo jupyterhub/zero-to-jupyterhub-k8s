@@ -55,6 +55,8 @@
     - ipBlock:
         cidr: 10.0.0.0/8
     - ipBlock:
+        cidr: 169.254.0.0/16
+    - ipBlock:
         cidr: 172.16.0.0/12
     - ipBlock:
         cidr: 192.168.0.0/16
@@ -70,6 +72,7 @@
           # As part of this rule:
           # - don't allow outbound connections to private IPs
           - 10.0.0.0/8
+          - 169.254.0.0/16
           - 172.16.0.0/12
           - 192.168.0.0/16
           # - don't allow outbound connections to the cloud metadata server
@@ -81,6 +84,8 @@
 - to:
     - ipBlock:
         cidr: 10.0.0.0/8
+    - ipBlock:
+        cidr: 169.254.0.0/16
     - ipBlock:
         cidr: 172.16.0.0/12
     - ipBlock:
