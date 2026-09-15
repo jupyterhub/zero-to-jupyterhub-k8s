@@ -12,11 +12,11 @@ aiohttp==3.14.3
     # via jupyterhub
 aiosignal==1.4.0
     # via aiohttp
-alembic==1.19.1
+alembic==1.20.0
     # via jupyterhub
 annotated-types==0.8.0
     # via pydantic
-anyio==4.14.2
+anyio==4.15.1
     # via
     #   httpx
     #   jupyter-server
@@ -73,7 +73,7 @@ frozenlist==1.8.0
     # via
     #   aiohttp
     #   aiosignal
-greenlet==3.5.5
+greenlet==3.5.6
     # via sqlalchemy
 h11==0.16.0
     # via httpcore
@@ -121,7 +121,7 @@ jsonschema==4.26.0
     #   nbformat
 jsonschema-specifications==2025.9.1
     # via jsonschema
-jupyter-builder==1.2.2
+jupyter-builder==1.2.3
     # via jupyterlab
 jupyter-client==8.10.0
     # via
@@ -153,7 +153,7 @@ jupyter-server==2.21.0
     #   notebook-shim
 jupyter-server-terminals==0.5.4
     # via jupyter-server
-jupyterhub==6.0.0
+jupyterhub==6.0.1
     # via -r unfrozen/requirements.txt
 jupyterlab==4.6.3
     # via -r unfrozen/requirements.txt
@@ -176,7 +176,7 @@ matplotlib-inline==0.2.2
     #   ipython
 mistune==3.3.4
     # via nbconvert
-multidict==6.7.1
+multidict==6.8.0
     # via
     #   aiohttp
     #   yarl
@@ -220,7 +220,7 @@ parso==0.8.7
     # via jedi
 pexpect==4.9.0
     # via ipython
-platformdirs==4.11.7
+platformdirs==4.11.8
     # via jupyter-core
 prometheus-client==0.26.0
     # via
@@ -240,7 +240,7 @@ ptyprocess==0.7.0
     # via
     #   pexpect
     #   terminado
-pure-eval==0.2.3
+pure-eval==0.2.4
     # via stack-data
 pycares==5.0.1
     # via aiodns
@@ -300,7 +300,7 @@ six==1.17.0
     #   rfc3339-validator
 soupsieve==2.9.2
     # via beautifulsoup4
-sqlalchemy==2.0.52
+sqlalchemy==2.0.53
     # via
     #   alembic
     #   jupyterhub
@@ -312,7 +312,7 @@ terminado==0.18.1
     #   jupyter-server-terminals
 tinycss2==1.5.1
     # via bleach
-tornado==6.5.8
+tornado==6.5.9
     # via
     #   ipykernel
     #   jupyter-client
@@ -351,7 +351,7 @@ typing-extensions==4.16.0
     #   typing-inspection
 typing-inspection==0.4.4
     # via pydantic
-tzdata==2026.3
+tzdata==2026.4
     # via arrow
 uri-template==1.3.0
     # via jsonschema
