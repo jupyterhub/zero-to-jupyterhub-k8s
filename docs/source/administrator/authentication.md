@@ -268,6 +268,34 @@ hub:
       authenticator_class: google
 ```
 
+For security reasons `client_id` and `client_secret` parameters could be ommited from config
+and passed via Extra environment variables `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` directly
+as they are respected by all oauthenticator based Authenticator classes.
+Assuming that the secret have already been created it could look like this.
+
+```yaml
+hub:
+  config:
+    GoogleOAuthenticator:
+      oauth_callback_url: https://your-jupyterhub-domain/hub/oauth_callback
+      hosted_domain:
+        - your-university.edu
+      login_service: Your university
+    JupyterHub:
+      authenticator_class: google
+  extraEnv:
+    OAUTH_CLIENT_ID:
+      valueFrom:
+        secretKeyRef:
+          name: jupyterhub-google-oauth
+          key: client-id
+    OAUTH_CLIENT_SECRET:
+      valueFrom:
+        secretKeyRef:
+          name: jupyterhub-google-oauth
+          key: client-secret
+```
+
 The `oauth_callback_url` key is set to the authorized redirect URI you specified
 earlier. Set `hosted_domain` to your institution's domain name. The value of
 `login_service` is a descriptive term for your institution that reminds your
