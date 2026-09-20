@@ -206,6 +206,7 @@ proxy:
   # chp relates to the proxy pod, which is responsible for routing traffic based
   # on dynamic configuration sent from JupyterHub to CHP's REST API.
   chp:
+    enabled: true
     revisionHistoryLimit:
     containerSecurityContext:
       runAsNonRoot: true
