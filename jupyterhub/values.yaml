@@ -147,6 +147,19 @@ hub:
     periodSeconds: 2
     failureThreshold: 1000
     timeoutSeconds: 1
+  # existingSecret can be set to the name of a k8s Secret that fully replaces
+  # the chart managed k8s Secret. When set, the chart managed Secret is not
+  # rendered and the hub and proxy pods read all tokens directly from the user
+  # managed Secret. The Secret must contain the following keys:
+  #
+  #   hub.config.ConfigurableHTTPProxy.auth_token  (hex string, min 64 chars)
+  #   hub.config.JupyterHub.cookie_secret          (hex string, min 64 chars)
+  #   hub.config.CryptKeeper.keys                  (hex string, min 64 chars)
+  #   hub.services.<name>.apiToken                 (one entry per service)
+  #
+  # This approach is well suited for GitOps workflows where Helm rendering
+  # without cluster access (e.g. ArgoCD) would otherwise produce non-deterministic
+  # output due to the random token fallback in the chart's lookup logic.
   existingSecret:
   serviceAccount:
     create: true
