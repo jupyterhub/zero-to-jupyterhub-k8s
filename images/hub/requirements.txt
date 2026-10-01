@@ -270,7 +270,7 @@ tzdata==2026.4
     # via arrow
 uri-template==1.3.0
     # via jsonschema
-urllib3==2.7.0
+urllib3==2.8.0
     # via
     #   jupyterhub-kubespawner
     #   kubernetes-asyncio
