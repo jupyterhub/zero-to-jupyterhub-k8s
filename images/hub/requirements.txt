@@ -170,7 +170,7 @@ pydantic==2.13.5
     # via jupyterhub
 pydantic-core==2.46.5
     # via pydantic
-pyjwt==2.14.0
+pyjwt==2.15.0
     # via
     #   jupyterhub-ltiauthenticator
     #   mwoauth
