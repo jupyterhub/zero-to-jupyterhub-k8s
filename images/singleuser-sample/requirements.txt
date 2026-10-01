@@ -201,7 +201,7 @@ notebook-shim==0.2.4
     # via
     #   jupyterlab
     #   nbclassic
-oauthlib==3.3.1
+oauthlib==4.0.0
     # via jupyterhub
 packaging==26.3
     # via
