@@ -3,6 +3,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: {{ include "jupyterhub.user-scheduler-deploy.fullname" . }}
+  namespace: {{ include "jupyterhub.namespace" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 data:
@@ -19,7 +20,7 @@ data:
     leaderElection:
       resourceLock: leases
       resourceName: {{ include "jupyterhub.user-scheduler-lock.fullname" . }}
-      resourceNamespace: "{{ .Release.Namespace }}"
+      resourceNamespace: {{ include "jupyterhub.namespace" . | quote }}
     profiles:
       - schedulerName: {{ include "jupyterhub.user-scheduler.fullname" . }}
         {{- with .Values.scheduling.userScheduler.plugins }}
