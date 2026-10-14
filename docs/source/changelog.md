@@ -14,6 +14,35 @@ changes in pull requests], this list should be updated.
 
 ## 4.4
 
+### 4.4.3 - 2026-10-14
+
+4.4.3 upgrades JupyterHub to 5.5.3
+
+This release fixes six moderate-severity vulnerabilities,
+most of which do not affect the vast majority of deployments:
+
+Only this one affects most deployments:
+
+- [GHSA-hx46-2cv3-mh6g] - denial of service via invalid spawner options
+
+Others affect a small minority of deployments:
+
+- [GHSA-5jhc-4h3c-q97h] - Incomplete privilege drop in LocalProcessSpawner when `setgroups()` fails (rare)
+- [GHSA-93gc-h923-mp36] - Insufficient validation of user and service names in URL components (requires admin permissions OR unconstrained user-selected usernames)
+- [GHSA-r764-xgvf-jrfj] - SharedPasswordAuthenticator: missing username normalization (only affects deployments using SharedPasswordAuthenticator with `admin_users`)
+- [GHSA-pvm9-48cg-w76j] - `token_expires_in_max_seconds` not properly enforced when set (not default)
+
+And one is only exploitable by users who already have admin-level permissions:
+
+- [GHSA-x7xh-7hc7-9436] - missing validation on user rename API, leading to XSS
+
+[GHSA-hx46-2cv3-mh6g]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-hx46-2cv3-mh6g
+[GHSA-5jhc-4h3c-q97h]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-5jhc-4h3c-q97h
+[GHSA-93gc-h923-mp36]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-93gc-h923-mp36
+[GHSA-r764-xgvf-jrfj]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-r764-xgvf-jrfj
+[GHSA-pvm9-48cg-w76j]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-pvm9-48cg-w76j
+[GHSA-x7xh-7hc7-9436]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-x7xh-7hc7-9436
+
 ### 4.4.2 - 2026-09-01
 
 4.4.2 upgrades JupyterHub to 5.5.2
