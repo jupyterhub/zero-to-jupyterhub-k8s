@@ -221,6 +221,7 @@ linkcheck_ignore = [
     r"(.*)github\.com(.*)#",  # javascript based anchors
     r"(.*)/#%21(.*)/(.*)",  # /#!forum/jupyter - encoded anchor edge case
     r"https://github.com/[^/]*$",  # too many github usernames / searches in changelog
+    r"https://github.com/.*/security/.*",  # vulnerabilities are often linked before publishing
     "https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/",  # too many PRs in changelog
     "https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/",  # too many comparisons in changelog
     "https://your-domain.com",  # example

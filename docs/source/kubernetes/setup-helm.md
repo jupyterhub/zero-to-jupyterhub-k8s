@@ -16,7 +16,7 @@ the package.
 ```{note}
 If you previously installed Z2JH using Helm 2, it is worth noting that
 Helm 3 includes several major **breaking changes**. See the
-[Helm 3 FAQ](https://helm.sh/docs/faq/) for more information.
+[Helm 3 FAQ](https://helm.sh/docs/v3/faq/) for more information.
 
 For **migrating from Helm v2 to v3**, checkout the official
 [Helm guide](https://helm.sh/docs/topics/v2_v3_migration/).
