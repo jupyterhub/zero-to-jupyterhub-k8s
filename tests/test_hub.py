@@ -283,8 +283,7 @@ def test_image_puller_honors_singleuser_image_pull_policy():
         completed = subprocess.run(
             cmd,
             text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
         )
         assert completed.returncode == 0, completed.stderr
         daemonsets = [doc for doc in yaml.safe_load_all(completed.stdout) if doc]
