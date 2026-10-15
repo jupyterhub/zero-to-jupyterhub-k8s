@@ -256,3 +256,53 @@ def test_load_existing_secret():
     assert "CryptKeeper.keys=ffff9999" in hub_logs
     assert "singleuser.extraLabels.test-chart-managed-secret=ok" in hub_logs
     assert "singleuser.extraLabels.test-self-managed-secret=ok" in hub_logs
+
+
+def test_image_puller_honors_singleuser_image_pull_policy():
+    """
+    The image-puller DaemonSets pre-pull the configured single-user image.
+    image-pull-singleuser must receive singleuser.image.pullPolicy, and an
+    unset policy must stay omitted so Kubernetes keeps its default behavior.
+    """
+    here = os.path.dirname(os.path.abspath(__file__))
+    chart = os.path.join(here, os.pardir, "jupyterhub")
+
+    def render(pull_policy=None):
+        cmd = [
+            "helm",
+            "template",
+            "jupyterhub",
+            chart,
+            "--show-only",
+            "templates/image-puller/daemonset-hook.yaml",
+            "--show-only",
+            "templates/image-puller/daemonset-continuous.yaml",
+        ]
+        if pull_policy is not None:
+            cmd.extend(["--set", f"singleuser.image.pullPolicy={pull_policy}"])
+        completed = subprocess.run(
+            cmd,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        assert completed.returncode == 0, completed.stderr
+        daemonsets = [doc for doc in yaml.safe_load_all(completed.stdout) if doc]
+        containers = {}
+        for daemonset in daemonsets:
+            name = daemonset["metadata"]["name"]
+            for container in daemonset["spec"]["template"]["spec"]["initContainers"]:
+                if container["name"] == "image-pull-singleuser":
+                    containers[name] = container
+        return containers
+
+    for policy in ("Never", "IfNotPresent"):
+        containers = render(policy)
+        assert any(name.endswith("hook-image-puller") for name in containers)
+        assert any(name.endswith("continuous-image-puller") for name in containers)
+        assert {c["imagePullPolicy"] for c in containers.values()} == {policy}
+
+    containers = render()
+    assert any(name.endswith("hook-image-puller") for name in containers)
+    assert any(name.endswith("continuous-image-puller") for name in containers)
+    assert all("imagePullPolicy" not in container for container in containers.values())
