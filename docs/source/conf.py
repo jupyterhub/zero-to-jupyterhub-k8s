@@ -224,7 +224,7 @@ linkcheck_ignore = [
     r"https://github.com/.*/security/.*",  # vulnerabilities are often linked before publishing
     "https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/",  # too many PRs in changelog
     "https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/",  # too many comparisons in changelog
-    r"https://medium.com/[^/]*$",  # medium blocks bot requests now
+    r"https://medium.com/.*$",  # medium blocks bot requests now
     "https://your-domain.com",  # example
     "https://your-domain-name.com",  # example
     "https://kubernetes.io/docs/tutorials/kubernetes-basics/",  # works
