@@ -25,9 +25,9 @@ bcrypt==5.0.0
     # via
     #   jupyterhub-firstuseauthenticator
     #   jupyterhub-nativeauthenticator
-cachetools==7.2.1
+cachetools==7.2.4
     # via jupyterhub-ltiauthenticator
-certifi==2026.7.22
+certifi==2026.10.19
     # via
     #   kubernetes-asyncio
     #   requests
@@ -70,7 +70,7 @@ jinja2==3.1.6
     # via
     #   jupyterhub
     #   jupyterhub-kubespawner
-jsonpointer==3.2.1
+jsonpointer==3.4
     # via jsonschema
 jsonschema==4.26.0
     # via
@@ -80,7 +80,7 @@ jsonschema-specifications==2025.9.1
     # via jsonschema
 jupyter-events==0.12.1
     # via jupyterhub
-jupyterhub==5.5.3
+jupyterhub==5.5.4
     # via
     #   -r unfrozen/requirements.txt
     #   jupyterhub-firstuseauthenticator
@@ -221,7 +221,7 @@ six==1.17.0
     #   onetimepass
     #   python-dateutil
     #   rfc3339-validator
-sqlalchemy==2.0.54
+sqlalchemy==2.0.55
     # via
     #   alembic
     #   jupyterhub
