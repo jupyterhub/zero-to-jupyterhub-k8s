@@ -14,6 +14,10 @@ changes in pull requests], this list should be updated.
 
 ## 4.4
 
+### 4.4.4 - 2026-10-20
+
+4.4.4 upgrades JupyterHub to 5.5.4, fixing a minor regression in 5.4.3 which rejected tokens with a length of exactly 64 characters.
+
 ### 4.4.3 - 2026-10-14
 
 4.4.3 upgrades JupyterHub to 5.5.3
