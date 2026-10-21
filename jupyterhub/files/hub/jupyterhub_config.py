@@ -398,14 +398,14 @@ if get_config("cull.enabled", False):
         cull_cmd.append(f"--concurrency={cull_concurrency}")
 
     if get_config("cull.users"):
-        cull_cmd.append("--cull-users")
+        cull_cmd.append("--cull-users=true")
         jupyterhub_idle_culler_role["scopes"].append("admin:users")
 
     if not get_config("cull.adminUsers"):
         cull_cmd.append("--cull-admin-users=false")
 
     if get_config("cull.removeNamedServers"):
-        cull_cmd.append("--remove-named-servers")
+        cull_cmd.append("--remove-named-servers=true")
 
     cull_max_age = get_config("cull.maxAge")
     if cull_max_age:
