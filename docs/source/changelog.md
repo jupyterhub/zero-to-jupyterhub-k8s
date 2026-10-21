@@ -14,6 +14,61 @@ changes in pull requests], this list should be updated.
 
 ## 4.4
 
+### 4.4.4 - 2026-10-20
+
+4.4.4 upgrades JupyterHub to 5.5.4, fixing a minor regression in 5.4.3 which rejected tokens with a length of exactly 64 characters.
+
+### 4.4.3 - 2026-10-14
+
+4.4.3 upgrades JupyterHub to 5.5.3
+
+This release fixes six moderate-severity vulnerabilities,
+most of which do not affect the vast majority of deployments:
+
+Only this one affects most deployments:
+
+- [GHSA-hx46-2cv3-mh6g] - denial of service via invalid spawner options
+
+Others affect a small minority of deployments:
+
+- [GHSA-5jhc-4h3c-q97h] - Incomplete privilege drop in LocalProcessSpawner when `setgroups()` fails (rare)
+- [GHSA-93gc-h923-mp36] - Insufficient validation of user and service names in URL components (requires admin permissions OR unconstrained user-selected usernames)
+- [GHSA-r764-xgvf-jrfj] - SharedPasswordAuthenticator: missing username normalization (only affects deployments using SharedPasswordAuthenticator with `admin_users`)
+- [GHSA-pvm9-48cg-w76j] - `token_expires_in_max_seconds` not properly enforced when set (not default)
+
+And one is only exploitable by users who already have admin-level permissions:
+
+- [GHSA-x7xh-7hc7-9436] - missing validation on user rename API, leading to XSS
+
+[GHSA-hx46-2cv3-mh6g]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-hx46-2cv3-mh6g
+[GHSA-5jhc-4h3c-q97h]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-5jhc-4h3c-q97h
+[GHSA-93gc-h923-mp36]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-93gc-h923-mp36
+[GHSA-r764-xgvf-jrfj]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-r764-xgvf-jrfj
+[GHSA-pvm9-48cg-w76j]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-pvm9-48cg-w76j
+[GHSA-x7xh-7hc7-9436]: https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-x7xh-7hc7-9436
+
+### 4.4.2 - 2026-09-01
+
+4.4.2 upgrades JupyterHub to 5.5.2
+
+This release fixes one low-severity vulnerability in user-initiated sharing:
+
+- [GHSA-mj6q-mp44-53v8](https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-mj6q-mp44-53v8) (CVE pending)
+
+### 4.4.1 - 2026-08-10
+
+4.4.1 upgrades JupyterHub to 5.5.1.
+
+This release fixes:
+
+- [GHSA-c4gm-pwx9-9w8j](https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-c4gm-pwx9-9w8j) (CVE pending) high-level vulnerability in user-initiated sharing (no effect on deployments without user-initiated sharing)
+- [GHSA-69wv-m5fw-2fhp](https://github.com/jupyterhub/jupyterhub/security/advisories/GHSA-69wv-m5fw-2fhp) (CVE pending) low-level vulnerability in enforcing partial admin-level restrictions (no effect unless you have _filtered_ admin roles: `admin:users!group=...` or `admin:groups!group=...`)
+
+```{important}
+4.4.1 is a security release fixing a moderate-severity denial of service vulnerability in jupyterhub.
+All jupyterhub deployments are encouraged to upgrade.
+```
+
 ### 4.4.0 - 2026-06-10
 
 4.4.0 upgrades JupyterHub to 5.5.0.
