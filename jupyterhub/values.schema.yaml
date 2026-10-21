@@ -1220,13 +1220,24 @@ properties:
           Secret will be merged with the chart managed k8s Secret, giving
           priority to the self-managed k8s Secret.
 
-          ```{warning}
-          1. The self managed k8s Secret must mirror the structure in the chart
+          The self managed k8s Secret must mirror the structure in the chart
              managed secret.
-          2. [`proxy.secretToken`](schema_proxy.secretToken) (aka.
-             `hub.config.ConfigurableHTTPProxy.auth_token`) is only read from
-             the chart managed k8s Secret.
+
+          If defined, JupyterHub will not generate any default tokens,
+          so this secret must contain at least the following fields:
+
           ```
+          hub.config.ConfigurableHTTPProxy.auth_token  (any token string)
+          hub.config.JupyterHub.cookie_secret          (hex string, 64 chars)
+          hub.config.CryptKeeper.keys                  (hex string, 64 chars)
+          hub.services.<name>.apiToken                 (one entry per service)
+          ```
+
+          ```{versionchanged} 5.0.0
+          setting existingSecret prevents all default secret generation,
+          so the above fields are required.
+          ```
+
       nodeSelector: &nodeSelector-spec
         type: object
         additionalProperties: true

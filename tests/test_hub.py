@@ -242,8 +242,10 @@ def test_load_existing_secret():
                 pytest.skip(f"k8s Secret '{k8s_secret}' not found")
 
     # NOTE:  ffff9999 are values from ci/test-hub-existing-secret.yaml that
-    #        hub.existingSecret will reference, while aaaa1111-dddd4444 come from
-    #        the chart managed k8s Secret.
+    #        hub.existingSecret will reference. When hub.existingSecret is set
+    #        the chart managed k8s Secret is not rendered and all token reads,
+    #        including CONFIGPROXY_AUTH_TOKEN, are satisfied from the user
+    #        managed k8s Secret.
     #
     # FIXME: It would be good to test use against custom databases, then we
     #        would also test hub.db.password here and that the environment
@@ -251,7 +253,7 @@ def test_load_existing_secret():
     #        configuring that would make the hub fail to startup without an
     #        actual database.
     assert "hub.services.test-hub-existing-secret.apiToken=ffff9999" in hub_logs
-    assert "CONFIGPROXY_AUTH_TOKEN=aaaa1111" in hub_logs
+    assert "CONFIGPROXY_AUTH_TOKEN=ffff9999" in hub_logs
     assert "JupyterHub.cookie_secret=ffff9999" in hub_logs
     assert "CryptKeeper.keys=ffff9999" in hub_logs
     assert "singleuser.extraLabels.test-chart-managed-secret=ok" in hub_logs
