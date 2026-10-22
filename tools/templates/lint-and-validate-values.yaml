@@ -213,6 +213,10 @@ hub:
 
 rbac:
   create: true
+  extraRules:
+    - apiGroups: [""]
+      resources: ["configmaps"]
+      verbs: ["get", "list", "watch"]
 
 proxy:
   service:
