@@ -3246,6 +3246,24 @@ properties:
         description: |
           Decides if (Cluster)Role and (Cluster)RoleBinding resources are
           created and bound to the configured serviceAccounts.
+      extraRules:
+        type: array
+        description: |
+          A list of extra Kubernetes RBAC policy rules to append to the Role
+          granted to the hub's service account. Use the k8s native syntax for a
+          [rbac.authorization.k8s.io/v1 PolicyRule](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#policyrule-v1-rbac-authorization-k8s-io),
+          for example:
+
+          ```yaml
+          rbac:
+            extraRules:
+              - apiGroups: [""]
+                resources: ["configmaps"]
+                verbs: ["get", "list", "watch"]
+          ```
+
+          These rules are added in addition to the minimal set of rules the Helm
+          chart grants to the hub's service account by default.
 
   global:
     type: object

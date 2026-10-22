@@ -169,6 +169,9 @@ hub:
 
 rbac:
   create: true
+  # extraRules is a list of extra Kubernetes RBAC policy rules that will be
+  # appended to the Role granted to the hub's serviceAccount.
+  extraRules: []
 
 # proxy relates to the proxy pod, the proxy-public service, and the autohttps
 # pod and proxy-http service.
