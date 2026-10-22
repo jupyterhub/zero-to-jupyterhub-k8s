@@ -242,8 +242,10 @@ def test_load_existing_secret():
                 pytest.skip(f"k8s Secret '{k8s_secret}' not found")
 
     # NOTE:  ffff9999 are values from ci/test-hub-existing-secret.yaml that
-    #        hub.existingSecret will reference, while aaaa1111-dddd4444 come from
-    #        the chart managed k8s Secret.
+    #        hub.existingSecret will reference. When hub.existingSecret is set
+    #        the chart managed k8s Secret is not rendered and all token reads,
+    #        including CONFIGPROXY_AUTH_TOKEN, are satisfied from the user
+    #        managed k8s Secret.
     #
     # FIXME: It would be good to test use against custom databases, then we
     #        would also test hub.db.password here and that the environment
@@ -251,8 +253,57 @@ def test_load_existing_secret():
     #        configuring that would make the hub fail to startup without an
     #        actual database.
     assert "hub.services.test-hub-existing-secret.apiToken=ffff9999" in hub_logs
-    assert "CONFIGPROXY_AUTH_TOKEN=aaaa1111" in hub_logs
+    assert "CONFIGPROXY_AUTH_TOKEN=ffff9999" in hub_logs
     assert "JupyterHub.cookie_secret=ffff9999" in hub_logs
     assert "CryptKeeper.keys=ffff9999" in hub_logs
     assert "singleuser.extraLabels.test-chart-managed-secret=ok" in hub_logs
     assert "singleuser.extraLabels.test-self-managed-secret=ok" in hub_logs
+
+
+def test_image_puller_honors_singleuser_image_pull_policy():
+    """
+    The image-puller DaemonSets pre-pull the configured single-user image.
+    image-pull-singleuser must receive singleuser.image.pullPolicy, and an
+    unset policy must stay omitted so Kubernetes keeps its default behavior.
+    """
+    here = os.path.dirname(os.path.abspath(__file__))
+    chart = os.path.join(here, os.pardir, "jupyterhub")
+
+    def render(pull_policy=None):
+        cmd = [
+            "helm",
+            "template",
+            "jupyterhub",
+            chart,
+            "--show-only",
+            "templates/image-puller/daemonset-hook.yaml",
+            "--show-only",
+            "templates/image-puller/daemonset-continuous.yaml",
+        ]
+        if pull_policy is not None:
+            cmd.extend(["--set", f"singleuser.image.pullPolicy={pull_policy}"])
+        completed = subprocess.run(
+            cmd,
+            text=True,
+            capture_output=True,
+        )
+        assert completed.returncode == 0, completed.stderr
+        daemonsets = [doc for doc in yaml.safe_load_all(completed.stdout) if doc]
+        containers = {}
+        for daemonset in daemonsets:
+            name = daemonset["metadata"]["name"]
+            for container in daemonset["spec"]["template"]["spec"]["initContainers"]:
+                if container["name"] == "image-pull-singleuser":
+                    containers[name] = container
+        return containers
+
+    for policy in ("Never", "IfNotPresent"):
+        containers = render(policy)
+        assert any(name.endswith("hook-image-puller") for name in containers)
+        assert any(name.endswith("continuous-image-puller") for name in containers)
+        assert {c["imagePullPolicy"] for c in containers.values()} == {policy}
+
+    containers = render()
+    assert any(name.endswith("hook-image-puller") for name in containers)
+    assert any(name.endswith("continuous-image-puller") for name in containers)
+    assert all("imagePullPolicy" not in container for container in containers.values())
