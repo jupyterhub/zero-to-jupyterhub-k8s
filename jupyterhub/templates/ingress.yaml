@@ -14,10 +14,11 @@ spec:
   ingressClassName: "{{ . }}"
   {{- end }}
   rules:
+    {{- $base := $.Values.hub.baseUrl | trimSuffix "/" }}
     {{- range $host := .Values.ingress.hosts | default (list "") }}
     - http:
         paths:
-          - path: {{ $.Values.hub.baseUrl | trimSuffix "/" }}/{{ $.Values.ingress.pathSuffix }}
+          - path: {{ if $base }}{{ $base }}{{ else }}/{{ end }}{{ if $.Values.ingress.pathSuffix }}{{ if $base }}/{{ end }}{{ $.Values.ingress.pathSuffix }}{{ end }}
             pathType: {{ $.Values.ingress.pathType }}
             backend:
               service:
