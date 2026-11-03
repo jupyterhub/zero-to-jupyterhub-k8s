@@ -75,6 +75,8 @@ spec:
             matchLabels:
               {{- $_ := merge (dict "componentLabel" "singleuser-server") . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
+          namespaceSelector:
+            matchLabels: {}   # singleuser servers may run in other namespaces
       ports:
         - port: 8888
 
