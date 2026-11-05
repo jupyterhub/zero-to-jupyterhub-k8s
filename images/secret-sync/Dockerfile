@@ -12,7 +12,8 @@ RUN ARCH=`uname -m`; \
 # Ensures written logs are made available directly
 ENV PYTHONUNBUFFERED=1
 
-RUN pip install --no-cache kubernetes
+RUN PIP_CERT=/etc/ssl/certs/ca-certificates.crt pip install --no-cache --upgrade pip \
+ && pip install --no-cache kubernetes
 COPY acme-secret-sync.py /usr/local/bin/
 
 ENTRYPOINT [ "/tini", "--", "/usr/local/bin/acme-secret-sync.py" ]
