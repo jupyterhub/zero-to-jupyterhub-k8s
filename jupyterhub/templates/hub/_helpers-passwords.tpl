@@ -31,6 +31,32 @@
     {{- $result }}
 {{- end }}
 
+{{- /*
+    Returns a value generated for the given key, generating it only once per
+    render. The hub Secret is also rendered again for the checksum annotations
+    of the hub and proxy pods, and without this each render drew its own random
+    values. On install that made the annotations differ from the values stored
+    in the Secret, so the first upgrade with unchanged values restarted the hub
+    and proxy pods. The generated values are kept on the root context rather
+    than on .Values, as .Values is passed through to the hub Secret.
+*/}}
+{{- define "jupyterhub.generateOnce" -}}
+    {{- $root := index . 0 }}
+    {{- $key := index . 1 }}
+    {{- if not (hasKey $root "jupyterhubGenerated") }}
+        {{- $_ := set $root "jupyterhubGenerated" (dict) }}
+    {{- end }}
+    {{- $generated := index $root "jupyterhubGenerated" }}
+    {{- if not (hasKey $generated $key) }}
+        {{- if eq $key "hub.config.ConfigurableHTTPProxy.auth_token" }}
+            {{- $_ := set $generated $key (randAlphaNum 64) }}
+        {{- else }}
+            {{- $_ := set $generated $key (include "jupyterhub.randHex" 64) }}
+        {{- end }}
+    {{- end }}
+    {{- index $generated $key }}
+{{- end }}
+
 {{- define "jupyterhub.hub.config.ConfigurableHTTPProxy.auth_token" -}}
     {{- if (.Values.hub.config | dig "ConfigurableHTTPProxy" "auth_token" "") }}
         {{- .Values.hub.config.ConfigurableHTTPProxy.auth_token }}
@@ -41,7 +67,7 @@
         {{- if hasKey $k8s_state.data "hub.config.ConfigurableHTTPProxy.auth_token" }}
             {{- index $k8s_state.data "hub.config.ConfigurableHTTPProxy.auth_token" | b64dec }}
         {{- else }}
-            {{- randAlphaNum 64 }}
+            {{- include "jupyterhub.generateOnce" (list . "hub.config.ConfigurableHTTPProxy.auth_token") }}
         {{- end }}
     {{- end }}
 {{- end }}
@@ -56,7 +82,7 @@
         {{- if hasKey $k8s_state.data "hub.config.JupyterHub.cookie_secret" }}
             {{- index $k8s_state.data "hub.config.JupyterHub.cookie_secret" | b64dec }}
         {{- else }}
-            {{- include "jupyterhub.randHex" 64 }}
+            {{- include "jupyterhub.generateOnce" (list . "hub.config.JupyterHub.cookie_secret") }}
         {{- end }}
     {{- end }}
 {{- end }}
@@ -69,7 +95,7 @@
         {{- if hasKey $k8s_state.data "hub.config.CryptKeeper.keys" }}
             {{- index $k8s_state.data "hub.config.CryptKeeper.keys" | b64dec }}
         {{- else }}
-            {{- include "jupyterhub.randHex" 64 }}
+            {{- include "jupyterhub.generateOnce" (list . "hub.config.CryptKeeper.keys") }}
         {{- end }}
     {{- end }}
 {{- end }}
@@ -86,7 +112,7 @@
         {{- if hasKey $k8s_state.data $k8s_secret_key }}
             {{- index $k8s_state.data $k8s_secret_key | b64dec }}
         {{- else }}
-            {{- include "jupyterhub.randHex" 64 }}
+            {{- include "jupyterhub.generateOnce" (list $_ $k8s_secret_key) }}
         {{- end }}
     {{- end }}
 {{- end }}
