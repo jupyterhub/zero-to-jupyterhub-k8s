@@ -70,6 +70,7 @@ COPY requirements.txt /tmp/requirements.txt
 ARG PIP_CACHE_DIR=/tmp/pip-cache
 RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
     --mount=type=cache,from=build-stage,source=/tmp/wheels,target=/tmp/wheels \
+    PIP_CERT=/etc/ssl/certs/ca-certificates.crt pip install --upgrade pip && \
     pip install \
         --no-index \
         --find-links=/tmp/wheels/ \
