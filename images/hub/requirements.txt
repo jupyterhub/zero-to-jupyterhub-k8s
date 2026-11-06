@@ -76,7 +76,7 @@ jinja2==3.1.6
     # via
     #   jupyterhub
     #   jupyterhub-kubespawner
-jsonpointer==3.9
+jsonpointer==3.10
     # via jsonschema
 jsonschema==4.26.0
     # via
