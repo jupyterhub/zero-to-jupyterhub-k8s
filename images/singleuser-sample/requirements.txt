@@ -110,7 +110,7 @@ jinja2==3.1.6
     #   nbconvert
 json5==0.17.3
     # via jupyterlab-server
-jsonpointer==3.8
+jsonpointer==3.9
     # via jsonschema
 jsonschema==4.26.0
     # via
@@ -151,7 +151,7 @@ jupyter-server==2.21.1
     #   notebook-shim
 jupyter-server-terminals==0.5.4
     # via jupyter-server
-jupyterhub==6.1.1
+jupyterhub==6.2.0
     # via -r unfrozen/requirements.txt
 jupyterlab==4.6.5
     # via -r unfrozen/requirements.txt
