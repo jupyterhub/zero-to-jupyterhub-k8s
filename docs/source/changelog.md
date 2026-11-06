@@ -14,6 +14,27 @@ changes in pull requests], this list should be updated.
 
 ## 4.4
 
+### 4.4.5 - 2026-11-06
+
+4.4.5 updates JupyterHub to 5.5.5, fixing more small regressions in recent security fixes.
+Configurable HTTP Proxy is updated to 5.4.0 and other images have mitigations for the eMudhra TLS vulnerability.
+
+([full changelog](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/4.4.4...4.4.5))
+
+#### Maintenance and upkeep improvements
+
+- 4.x: jupyterhub 5.5.5 [#4022](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/4022) ([@minrk](https://github.com/minrk), [@manics](https://github.com/manics))
+- 4.x: update configurable-http-proxy (5.4.0), pip (26.2.2) to mitigate eMudhra SSL vulnerability [#4023](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/4023) ([@minrk](https://github.com/minrk), [@manics](https://github.com/manics))
+
+#### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/use/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2026-10-20&to=2026-11-06&type=c))
+
+@manics ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2026-10-20..2026-11-06&type=Issues)) | @minrk ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aminrk+updated%3A2026-10-20..2026-11-06&type=Issues))
+
 ### 4.4.4 - 2026-10-20
 
 4.4.4 upgrades JupyterHub to 5.5.4, fixing a minor regression in 5.4.3 which rejected tokens with a length of exactly 64 characters.
