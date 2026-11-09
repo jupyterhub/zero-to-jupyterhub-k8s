@@ -97,6 +97,27 @@ See [our definition of contributors](https://github-activity.readthedocs.io/en/l
 
 ## 4.4
 
+### 4.4.5 - 2026-11-06
+
+4.4.5 updates JupyterHub to 5.5.5, fixing more small regressions in recent security fixes.
+Configurable HTTP Proxy is updated to 5.4.0 and other images have mitigations for the eMudhra TLS vulnerability.
+
+([full changelog](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/4.4.4...4.4.5))
+
+#### Maintenance and upkeep improvements
+
+- 4.x: jupyterhub 5.5.5 [#4022](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/4022) ([@minrk](https://github.com/minrk), [@manics](https://github.com/manics))
+- 4.x: update configurable-http-proxy (5.4.0), pip (26.2.2) to mitigate eMudhra SSL vulnerability [#4023](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/4023) ([@minrk](https://github.com/minrk), [@manics](https://github.com/manics))
+
+#### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/use/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/graphs/contributors?from=2026-10-20&to=2026-11-06&type=c))
+
+@manics ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Amanics+updated%3A2026-10-20..2026-11-06&type=Issues)) | @minrk ([activity](https://github.com/search?q=repo%3Ajupyterhub%2Fzero-to-jupyterhub-k8s+involves%3Aminrk+updated%3A2026-10-20..2026-11-06&type=Issues))
+
 ### 4.4.4 - 2026-10-20
 
 4.4.4 upgrades JupyterHub to 5.5.4, fixing a minor regression in 5.4.3 which rejected tokens with a length of exactly 64 characters.
@@ -468,7 +489,7 @@ major version.
 | [kubespawner](https://github.com/jupyterhub/kubespawner)                         | 6.2.0            | 7.0.0            | [Changelog](https://jupyterhub-kubespawner.readthedocs.io/en/stable/changelog.html)       | Run in the `hub` pod               |
 | [oauthenticator](https://github.com/jupyterhub/oauthenticator)                   | 16.3.1           | 17.1.0           | [Changelog](https://oauthenticator.readthedocs.io/en/stable/reference/changelog.html)     | Run in the `hub` pod               |
 | [ldapauthenticator](https://github.com/jupyterhub/ldapauthenticator)             | 1.3.2            | 2.0.2            | [Changelog](https://github.com/jupyterhub/ldapauthenticator/blob/HEAD/CHANGELOG.md)       | Run in the `hub` pod               |
-| [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 1.2.0            | 1.3.0            | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/HEAD/CHANGELOG.md)     | Run in the `hub` pod               |
+| [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 1.2.0            | 1.3.0            | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/1.3.0/CHANGELOG.md)    | Run in the `hub` pod               |
 | [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler)   | 1.3.1            | 1.4.0            | [Changelog](https://github.com/jupyterhub/jupyterhub-idle-culler/blob/main/CHANGELOG.md)  | Run in the `hub` pod               |
 | [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy) | 4.6.1            | 4.6.2            | [Changelog](https://github.com/jupyterhub/configurable-http-proxy/blob/HEAD/CHANGELOG.md) | Run in the `proxy` pod             |
 | [traefik](https://github.com/traefik/traefik)                                    | v2.11.0          | v3.2.0           | [Changelog](https://github.com/traefik/traefik/blob/HEAD/CHANGELOG.md)                    | Run in the `autohttps` pod         |
@@ -856,7 +877,7 @@ slightly.
 | [oauthenticator](https://github.com/jupyterhub/oauthenticator)                   | 15.1.0           | 16.0.4           | [Changelog](https://oauthenticator.readthedocs.io/en/stable/reference/changelog.html)     | Run in the `hub` pod               |
 | [ldapauthenticator](https://github.com/jupyterhub/ldapauthenticator)             | 1.3.2            | 1.3.2            | [Changelog](https://github.com/jupyterhub/ldapauthenticator/blob/HEAD/CHANGELOG.md)       | Run in the `hub` pod               |
 | [ltiauthenticator](https://github.com/jupyterhub/ltiauthenticator)               | 1.2.0            | 1.6.1            | [Changelog](https://github.com/jupyterhub/ltiauthenticator/blob/HEAD/CHANGELOG.md)        | Run in the `hub` pod               |
-| [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 1.1.0            | 1.2.0            | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/HEAD/CHANGELOG.md)     | Run in the `hub` pod               |
+| [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 1.1.0            | 1.2.0            | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/1.2.0/CHANGELOG.md)    | Run in the `hub` pod               |
 | [tmpauthenticator](https://github.com/jupyterhub/tmpauthenticator)               | 0.6              | 1.0.0            | [Changelog](https://github.com/jupyterhub/tmpauthenticator/blob/HEAD/CHANGELOG.md)        | Run in the `hub` pod               |
 | [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler)   | 1.2.1            | 1.2.1            | [Changelog](https://github.com/jupyterhub/jupyterhub-idle-culler/blob/main/CHANGELOG.md)  | Run in the `hub` pod               |
 | [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy) | 4.5.3            | 4.5.6            | [Changelog](https://github.com/jupyterhub/configurable-http-proxy/blob/HEAD/CHANGELOG.md) | Run in the `proxy` pod             |
@@ -1014,7 +1035,7 @@ For information on how to update your configuration see the [](administrator/upg
 | [oauthenticator](https://github.com/jupyterhub/oauthenticator)                   | 14.2.0           | 15.1.0           | [Changelog](https://oauthenticator.readthedocs.io/en/latest/changelog.html)               | Run in the `hub` pod               |
 | [ldapauthenticator](https://github.com/jupyterhub/ldapauthenticator)             | 1.3.2            | 1.3.2            | [Changelog](https://github.com/jupyterhub/ldapauthenticator/blob/HEAD/CHANGELOG.md)       | Run in the `hub` pod               |
 | [ltiauthenticator](https://github.com/jupyterhub/ltiauthenticator)               | 1.0.0            | 1.2.0            | [Changelog](https://github.com/jupyterhub/ltiauthenticator/blob/HEAD/CHANGELOG.md)        | Run in the `hub` pod               |
-| [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 0.0.7            | 1.1.0            | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/HEAD/CHANGELOG.md)     | Run in the `hub` pod               |
+| [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 0.0.7            | 1.1.0            | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/1.1.0/CHANGELOG.md)    | Run in the `hub` pod               |
 | [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler)   | 1.1              | 1.2.1            | [Changelog](https://github.com/jupyterhub/jupyterhub-idle-culler/blob/main/CHANGELOG.md)  | Run in the `hub` pod               |
 | [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy) | 4.5.0            | 4.5.3            | [Changelog](https://github.com/jupyterhub/configurable-http-proxy/blob/HEAD/CHANGELOG.md) | Run in the `proxy` pod             |
 | [traefik](https://github.com/traefik/traefik)                                    | v2.4.11          | v2.8.4           | [Changelog](https://github.com/traefik/traefik/blob/HEAD/CHANGELOG.md)                    | Run in the `autohttps` pod         |
@@ -1283,7 +1304,7 @@ instead of `hub.services.<some-name>.apiToken`.
 | [oauthenticator](https://github.com/jupyterhub/oauthenticator)                   | 14.0.0           | 14.1.0           | [Changelog](https://oauthenticator.readthedocs.io/en/latest/changelog.html)               | Run in the `hub` pod               |
 | [ldapauthenticator](https://github.com/jupyterhub/ldapauthenticator)             | 1.3.2            | 1.3.2            | [Changelog](https://github.com/jupyterhub/ldapauthenticator/blob/HEAD/CHANGELOG.md)       | Run in the `hub` pod               |
 | [ltiauthenticator](https://github.com/jupyterhub/ltiauthenticator)               | 1.0.0            | 1.0.0            | [Changelog](https://github.com/jupyterhub/ltiauthenticator/blob/HEAD/CHANGELOG.md)        | Run in the `hub` pod               |
-| [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 0.0.7            | 0.0.7            | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/HEAD/CHANGELOG.md)     | Run in the `hub` pod               |
+| [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 0.0.7            | 0.0.7            | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/0.0.7/CHANGELOG.md)    | Run in the `hub` pod               |
 | [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler)   | 1.1              | 1.1              | -                                                                                         | Run in the `hub` pod               |
 | [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy) | 4.4.0            | 4.5.0            | [Changelog](https://github.com/jupyterhub/configurable-http-proxy/blob/HEAD/CHANGELOG.md) | Run in the `proxy` pod             |
 | [traefik](https://github.com/traefik/traefik)                                    | v2.4.8           | v2.4.11          | [Changelog](https://github.com/traefik/traefik/blob/HEAD/CHANGELOG.md)                    | Run in the `autohttps` pod         |
@@ -1573,7 +1594,7 @@ followed these instructions between `0.7.0-beta.1` and `0.11.1`, please see the
 | [oauthenticator](https://github.com/jupyterhub/oauthenticator)                   | 0.12.3            | 14.0.0           | [Changelog](https://oauthenticator.readthedocs.io/en/latest/changelog.html)               | Run in the `hub` pod               |
 | [ldapauthenticator](https://github.com/jupyterhub/ldapauthenticator)             | 1.3.2             | 1.3.2            | [Changelog](https://github.com/jupyterhub/ldapauthenticator/blob/HEAD/CHANGELOG.md)       | Run in the `hub` pod               |
 | [ltiauthenticator](https://github.com/jupyterhub/ltiauthenticator)               | 1.0.0             | 1.0.0            | [Changelog](https://github.com/jupyterhub/ltiauthenticator/blob/HEAD/CHANGELOG.md)        | Run in the `hub` pod               |
-| [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 0.0.6             | 0.0.7            | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/HEAD/CHANGELOG.md)     | Run in the `hub` pod               |
+| [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 0.0.6             | 0.0.7            | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/0.0.7/CHANGELOG.md)    | Run in the `hub` pod               |
 | [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler)   | 1.0               | 1.1              | -                                                                                         | Run in the `hub` pod               |
 | [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy) | 4.2.2             | 4.4.0            | [Changelog](https://github.com/jupyterhub/configurable-http-proxy/blob/HEAD/CHANGELOG.md) | Run in the `proxy` pod             |
 | [traefik](https://github.com/traefik/traefik)                                    | v2.3.7            | v2.4.8           | [Changelog](https://github.com/traefik/traefik/blob/HEAD/CHANGELOG.md)                    | Run in the `autohttps` pod         |
@@ -1770,7 +1791,7 @@ to share insights that can be useful to others.
 | [oauthenticator](https://github.com/jupyterhub/oauthenticator)                   | 0.12.1            | 0.12.3            | [Changelog](https://oauthenticator.readthedocs.io/en/latest/changelog.html)               | Run in the `hub` pod               |
 | [ldapauthenticator](https://github.com/jupyterhub/ldapauthenticator)             | 1.3.2             | 1.3.2             | [Changelog](https://github.com/jupyterhub/ldapauthenticator/blob/HEAD/CHANGELOG.md)       | Run in the `hub` pod               |
 | [ltiauthenticator](https://github.com/jupyterhub/ltiauthenticator)               | 0.4.0             | 1.0.0             | [Changelog](https://github.com/jupyterhub/ltiauthenticator/blob/HEAD/CHANGELOG.md)        | Run in the `hub` pod               |
-| [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 0.0.6             | 0.0.6             | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/HEAD/CHANGELOG.md)     | Run in the `hub` pod               |
+| [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 0.0.6             | 0.0.6             | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/0.0.6/CHANGELOG.md)    | Run in the `hub` pod               |
 | [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler)   | 1.0               | 1.0               | -                                                                                         | Run in the `hub` pod               |
 | [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy) | 4.2.2             | 4.2.2             | [Changelog](https://github.com/jupyterhub/configurable-http-proxy/blob/HEAD/CHANGELOG.md) | Run in the `proxy` pod             |
 | [traefik](https://github.com/traefik/traefik)                                    | v2.3.2            | v2.3.7            | [Changelog](https://github.com/traefik/traefik/blob/HEAD/CHANGELOG.md)                    | Run in the `autohttps` pod         |
@@ -2061,7 +2082,7 @@ the Helm chart to easier comply with PodSecurityPolicies by default.
 | [oauthenticator](https://github.com/jupyterhub/oauthenticator)                   | 0.11.0                      | 0.12.0                  | [Changelog](https://oauthenticator.readthedocs.io/en/latest/changelog.html)               | Run in the `hub` pod               |
 | [ldapauthenticator](https://github.com/jupyterhub/ldapauthenticator)             | 1.3.0                       | 1.3.2                   | [Changelog](https://github.com/jupyterhub/ldapauthenticator/blob/HEAD/CHANGELOG.md)       | Run in the `hub` pod               |
 | [ltiauthenticator](https://github.com/jupyterhub/ltiauthenticator)               | 0.4.0                       | 0.4.0                   | [Changelog](https://github.com/jupyterhub/ltiauthenticator/blob/HEAD/CHANGELOG.md)        | Run in the `hub` pod               |
-| [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 0.0.5                       | 0.0.5                   | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/HEAD/CHANGELOG.md)     | Run in the `hub` pod               |
+| [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)         | 0.0.5                       | 0.0.5                   | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/0.0.5/CHANGELOG.md)    | Run in the `hub` pod               |
 | [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler)   | -                           | v1.0                    | -                                                                                         | Run in the `hub` pod               |
 | [configurable-http-proxy](https://github.com/jupyterhub/configurable-http-proxy) | 4.2.1                       | 4.2.2                   | [Changelog](https://github.com/jupyterhub/configurable-http-proxy/blob/HEAD/CHANGELOG.md) | Run in the `proxy` pod             |
 | [traefik](https://github.com/traefik/traefik)                                    | v2.1                        | v2.3.2                  | [Changelog](https://github.com/traefik/traefik/blob/HEAD/CHANGELOG.md)                    | Run in the `autohttps` pod         |
