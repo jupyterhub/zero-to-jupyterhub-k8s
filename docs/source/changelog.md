@@ -24,15 +24,15 @@ changes in pull requests], this list should be updated.
 
 Highlighting some package updates from chart 4.4.5 to 5.0.0:
 
-| Dependency                                                                     | Version in 4.4.5 | Version in 5.0.0 | Changelog link                                                                           | Note                               |
-| ------------------------------------------------------------------------------ | ---------------- | ---------------- | ---------------------------------------------------------------------------------------- | ---------------------------------- |
-| [jupyterhub](https://github.com/jupyterhub/jupyterhub)                         | 5.5.5            | 6.2.0            | [Changelog](https://jupyterhub.readthedocs.io/en/stable/reference/changelog.html)        | Run in the `hub` pod               |
-| [kubespawner](https://github.com/jupyterhub/kubespawner)                       | 7.1.0            | 7.2.0            | [Changelog](https://jupyterhub-kubespawner.readthedocs.io/en/stable/changelog.html)      | Run in the `hub` pod               |
-| [oauthenticator](https://github.com/jupyterhub/oauthenticator)                 | 17.4.0           | 17.5.0           | [Changelog](https://oauthenticator.readthedocs.io/en/stable/reference/changelog.html)    | Run in the `hub` pod               |
-| [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)       | 1.3.0            | 1.4.0            | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/HEAD/CHANGELOG.md)    | Run in the `hub` pod               |
-| [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler) | 1.4.0            | 2.0.0            | [Changelog](https://github.com/jupyterhub/jupyterhub-idle-culler/blob/main/CHANGELOG.md) | Run in the `hub` pod               |
-| [traefik](https://github.com/traefik/traefik)                                  | v3.6.12          | v3.7.17          | [Changelog](https://github.com/traefik/traefik/blob/HEAD/CHANGELOG.md)                   | Run in the `autohttps` pod         |
-| [kube-scheduler](https://github.com/kubernetes/kube-scheduler)                 | v1.30.14         | v1.35.10         | [Changelog](https://github.com/kubernetes/kubernetes/tree/master/CHANGELOG)              | Run in the `user-scheduler` pod(s) |
+| Dependency                                                                     | Version in 4.4.5 | Version in 5.0.0 | Changelog link                                                                                    | Note                               |
+| ------------------------------------------------------------------------------ | ---------------- | ---------------- | ------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| [jupyterhub](https://github.com/jupyterhub/jupyterhub)                         | 5.5.5            | 6.2.0            | [Changelog](https://jupyterhub.readthedocs.io/en/stable/reference/changelog.html)                 | Run in the `hub` pod               |
+| [kubespawner](https://github.com/jupyterhub/kubespawner)                       | 7.1.0            | 7.2.0            | [Changelog](https://jupyterhub-kubespawner.readthedocs.io/en/stable/changelog.html)               | Run in the `hub` pod               |
+| [oauthenticator](https://github.com/jupyterhub/oauthenticator)                 | 17.4.0           | 17.5.0           | [Changelog](https://oauthenticator.readthedocs.io/en/stable/reference/changelog.html)             | Run in the `hub` pod               |
+| [nativeauthenticator](https://github.com/jupyterhub/nativeauthenticator)       | 1.3.0            | 1.4.0            | [Changelog](https://github.com/jupyterhub/nativeauthenticator/blob/HEAD/docs/source/changelog.md) | Run in the `hub` pod               |
+| [jupyterhub-idle-culler](https://github.com/jupyterhub/jupyterhub-idle-culler) | 1.4.0            | 2.0.0            | [Changelog](https://github.com/jupyterhub/jupyterhub-idle-culler/blob/main/CHANGELOG.md)          | Run in the `hub` pod               |
+| [traefik](https://github.com/traefik/traefik)                                  | v3.6.12          | v3.7.17          | [Changelog](https://github.com/traefik/traefik/blob/HEAD/CHANGELOG.md)                            | Run in the `autohttps` pod         |
+| [kube-scheduler](https://github.com/kubernetes/kube-scheduler)                 | v1.30.14         | v1.35.10         | [Changelog](https://github.com/kubernetes/kubernetes/tree/master/CHANGELOG)                       | Run in the `user-scheduler` pod(s) |
 
 For a detailed list of Python dependencies in the `hub` Pod's Docker image,
 inspect the [images/hub/requirements.txt] file and use its git history to see
