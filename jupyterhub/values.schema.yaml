@@ -2173,6 +2173,11 @@ properties:
         description: |
           Set Memory limits & guarantees that are enforced for each user.
 
+          Specify a number of bytes, or a string ending in `K`, `M`, `G`, or `T`.
+          These suffixes follow JupyterHub's binary units: `1M` means 1048576
+          bytes, not 1000000 bytes. User placeholders use the same byte amounts
+          unless `scheduling.userPlaceholder.resources` is explicitly configured.
+
           See the [Kubernetes docs](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
           for more info.
         properties:
