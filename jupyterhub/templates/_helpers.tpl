@@ -319,16 +319,51 @@ app.kubernetes.io/component: {{ include "jupyterhub.componentLabel" . }}
 {{- end }}
 
 {{- /*
+  jupyterhub.singleuser.memory:
+    Convert JupyterHub's ByteSpecification to bytes for Kubernetes. JupyterHub
+    interprets K, M, G, and T as powers of 1024 and truncates fractional bytes.
+*/}}
+{{- define "jupyterhub.singleuser.memory" -}}
+{{- $bytes := 0 -}}
+{{- if . -}}
+    {{- $value := . -}}
+    {{- if kindIs "string" $value -}}
+        {{- $suffix := regexFind "[KMGT]$" $value -}}
+        {{- $number := trim (trimSuffix $suffix $value) -}}
+        {{- if or (not $suffix) (not (regexMatch `^[+-]?([0-9](_?[0-9])*(\.([0-9](_?[0-9])*)?)?|\.[0-9](_?[0-9])*)([eE][+-]?[0-9](_?[0-9])*)?$` $number)) -}}
+            {{- fail (printf "invalid singleuser memory specification %q: use bytes as a number or a string with suffix K, M, G, or T" $value) -}}
+        {{- end -}}
+        {{- /* Normalize Python float syntax for JSON's checked numeric parser. */ -}}
+        {{- $number = trimPrefix "+" (replace "_" "" $number) -}}
+        {{- $number = regexReplaceAll `^(-?)\.` $number "${1}0." -}}
+        {{- $number = regexReplaceAll `\.([eE]|$)` $number ".0${1}" -}}
+        {{- $number = regexReplaceAll `^(-?)0+([0-9])` $number "${1}${2}" -}}
+        {{- $factor := index (dict "K" 1024 "M" 1048576 "G" 1073741824 "T" 1099511627776.0) $suffix -}}
+        {{- $value = mulf (mustFromJson $number) $factor -}}
+    {{- end -}}
+    {{- if kindIs "float64" $value -}}
+        {{- /* Reject non-finite values and overflow instead of reserving zero. */ -}}
+        {{- $_ := mustToJson $value -}}
+        {{- if or (ge $value 9223372036854775808.0) (lt $value -9223372036854775808.0) -}}
+            {{- fail "singleuser memory specification exceeds the supported byte range" -}}
+        {{- end -}}
+    {{- end -}}
+    {{- $bytes = int64 $value -}}
+{{- end -}}
+{{- $bytes -}}
+{{- end -}}
+
+{{- /*
   jupyterhub.singleuser.resources:
     The resource request of a singleuser.
 */}}
 {{- define "jupyterhub.singleuser.resources" -}}
 {{- $r1 := .Values.singleuser.cpu.guarantee -}}
-{{- $r2 := .Values.singleuser.memory.guarantee -}}
+{{- $r2 := include "jupyterhub.singleuser.memory" .Values.singleuser.memory.guarantee | int64 -}}
 {{- $r3 := .Values.singleuser.extraResource.guarantees -}}
 {{- $r := or $r1 $r2 $r3 -}}
 {{- $l1 := .Values.singleuser.cpu.limit -}}
-{{- $l2 := .Values.singleuser.memory.limit -}}
+{{- $l2 := include "jupyterhub.singleuser.memory" .Values.singleuser.memory.limit | int64 -}}
 {{- $l3 := .Values.singleuser.extraResource.limits -}}
 {{- $l := or $l1 $l2 $l3 -}}
 {{- if $r -}}
@@ -337,7 +372,7 @@ requests:
   cpu: {{ .Values.singleuser.cpu.guarantee }}
   {{- end }}
   {{- if $r2 }}
-  memory: {{ .Values.singleuser.memory.guarantee }}
+  memory: {{ $r2 }}
   {{- end }}
   {{- if $r3 }}
   {{- range $key, $value := .Values.singleuser.extraResource.guarantees }}
@@ -352,7 +387,7 @@ limits:
   cpu: {{ .Values.singleuser.cpu.limit }}
   {{- end }}
   {{- if $l2 }}
-  memory: {{ .Values.singleuser.memory.limit }}
+  memory: {{ $l2 }}
   {{- end }}
   {{- if $l3 }}
   {{- range $key, $value := .Values.singleuser.extraResource.limits }}
