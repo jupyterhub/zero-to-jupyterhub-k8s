@@ -1223,6 +1223,10 @@ properties:
           The self managed k8s Secret must mirror the structure in the chart
              managed secret.
 
+          If it contains a `values.yaml` key, the decoded YAML must be a mapping.
+          To provide no configuration overrides, omit this key or use `{}`;
+          an empty or scalar YAML document is invalid.
+
           If defined, JupyterHub will not generate any default tokens,
           so this secret must contain at least the following fields:
 

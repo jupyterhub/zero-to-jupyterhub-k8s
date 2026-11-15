@@ -25,6 +25,10 @@ def _load_config():
             print(f"Loading {path}")
             with open(path) as f:
                 values = yaml.safe_load(f)
+            if not isinstance(values, Mapping):
+                raise ValueError(
+                    f"Expected a YAML mapping in {path}, got {type(values).__name__}"
+                )
             cfg = _merge_dictionaries(cfg, values)
         else:
             print(f"No config at {path}")
