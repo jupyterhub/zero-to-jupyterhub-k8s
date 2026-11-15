@@ -60,9 +60,22 @@ hub:
       - ports:
           - port: 8181
         from:
+          # The Hub checks that the managed service is reachable on startup.
+          - podSelector:
+              matchLabels:
+                app.kubernetes.io/name: jupyterhub
+                app.kubernetes.io/component: hub
           - podSelector:
               matchLabels:
                 hub.jupyter.org/network-access-hub: "true"
+      # The service also calls the Hub API, for example during OAuth login.
+      - ports:
+          - port: 8081
+        from:
+          - podSelector:
+              matchLabels:
+                app.kubernetes.io/name: jupyterhub
+                app.kubernetes.io/component: hub
 
   service:
     extraPorts:
