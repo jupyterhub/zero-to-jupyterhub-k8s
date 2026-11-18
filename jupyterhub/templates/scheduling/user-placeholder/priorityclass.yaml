@@ -6,7 +6,7 @@ metadata:
   name: {{ include "jupyterhub.user-placeholder-priority.fullname" . }}
   annotations:
     meta.helm.sh/release-name: "{{ .Release.Name }}"
-    meta.helm.sh/release-namespace: "{{ .Release.Namespace }}"
+    meta.helm.sh/release-namespace: {{ include "jupyterhub.namespace" . | quote }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 value: {{ .Values.scheduling.podPriority.userPlaceholderPriority }}
