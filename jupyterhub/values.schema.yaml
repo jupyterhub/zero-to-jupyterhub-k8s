@@ -2951,6 +2951,16 @@ properties:
         type: array
         description: |
           List of hosts to route requests to the proxy, if empty route all requests regardless of host.
+      timeouts:
+        type: object
+        description: |
+          Pass through HTTPRoute timeouts configuration.
+          Default is `request: 0s` which is required
+          for streaming endpoints like the spawn progress handler.
+
+          ee [the Kubernetes Gateway
+          documentation](https://gateway-api.sigs.k8s.io/reference/api-types/httproute/#timeouts-optional)
+          for more details about timeouts.
       gateway:
         type: object
         additionalProperties: false
