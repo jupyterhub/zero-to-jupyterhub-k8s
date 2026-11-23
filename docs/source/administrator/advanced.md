@@ -134,6 +134,66 @@ hub:
 For more information about this configuration, see [the configuration reference
 entry about `hub.extraConfig`](schema_hub.extraConfig).
 
+### Understanding `hub.config` override behavior
+
+When you set configuration via `hub.config`, it's important to understand that
+these values **completely replace** (not merge with) the chart's default
+configuration for that specific JupyterHub component.
+
+This is different from Helm's value merging behavior. When you pass multiple
+YAML files to Helm (with `-f`), Helm merges dictionaries together. However,
+once those values reach the JupyterHub configuration in `jupyterhub_config.py`,
+`hub.config` settings override the chart's defaults entirely.
+
+#### Example: Defining extra volumes
+
+A common source of confusion is configuring volumes. The chart automatically
+sets up volumes based on your `singleuser.storage` configuration. For example:
+
+```yaml
+singleuser:
+  storage:
+    type: static
+    static:
+      pvcName: my-shared-storage
+```
+
+The chart automatically creates a `home` volume in `KubeSpawner.volumes`.
+However, if you then add:
+
+```yaml
+hub:
+  config:
+    KubeSpawner:
+      volumes:
+        my-data:
+          name: my-data
+          persistentVolumeClaim:
+            claimName: my-data-pvc
+```
+
+This will **completely replace** `KubeSpawner.volumes`, removing the `home` volume!
+
+To avoid this, you should use the chart's built-in support for adding extra volumes
+via `singleuser.storage.extraVolumes` and `singleuser.storage.extraVolumeMounts`:
+
+```yaml
+singleuser:
+  storage:
+    type: static
+    static:
+      pvcName: my-shared-storage
+    extraVolumes:
+      my-data:
+        name: my-data
+        persistentVolumeClaim:
+          claimName: my-data-pvc
+    extraVolumeMounts:
+      my-data:
+        name: my-data
+        mountPath: /data
+```
+
 ### `custom` configuration
 
 The contents of `values.yaml` is passed through to the Hub image.
