@@ -5,7 +5,7 @@ metadata:
   name: {{ include "jupyterhub.priority.fullname" . }}
   annotations:
     meta.helm.sh/release-name: "{{ .Release.Name }}"
-    meta.helm.sh/release-namespace: "{{ .Release.Namespace }}"
+    meta.helm.sh/release-namespace: {{ include "jupyterhub.namespace" . | quote }}
   labels:
     {{- $_ := merge (dict "componentLabel" "default-priority") . }}
     {{- include "jupyterhub.labels" $_ | nindent 4 }}

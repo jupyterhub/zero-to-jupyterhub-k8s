@@ -6,6 +6,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: {{ include "jupyterhub.autohttps.fullname" . }}
+  namespace: {{ include "jupyterhub.namespace" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
   {{- with .Values.proxy.traefik.serviceAccount.annotations }}
@@ -21,11 +22,13 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: {{ include "jupyterhub.autohttps.fullname" . }}
+  namespace: {{ include "jupyterhub.namespace" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
 subjects:
 - kind: ServiceAccount
   name: {{ include "jupyterhub.autohttps-serviceaccount.fullname" . }}
+  namespace: {{ include "jupyterhub.namespace" . }}
   apiGroup:
 roleRef:
   kind: Role

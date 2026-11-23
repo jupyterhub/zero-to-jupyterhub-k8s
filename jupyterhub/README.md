@@ -11,6 +11,20 @@
 
 The JupyterHub Helm chart is accompanied with an installation guide at [z2jh.jupyter.org](https://z2jh.jupyter.org). Together they enable you to deploy [JupyterHub](https://jupyterhub.readthedocs.io) in a Kubernetes cluster that can make Jupyter environments available to several thousands of simultaneous users.
 
+## Configuration
+
+For detailed configuration options, see the [official documentation](https://z2jh.jupyter.org).
+
+### Namespace Override
+
+The chart supports deploying resources to a custom namespace via `namespaceOverride`:
+
+```yaml
+namespaceOverride: my-custom-namespace
+```
+
+This is particularly useful for ArgoCD deployments or when using this chart as a subchart. See the [configuration reference](https://z2jh.jupyter.org/en/stable/resources/reference.html) for more details.
+
 ## History
 
 Much of the initial groundwork for this documentation is information learned from the successful use of JupyterHub and Kubernetes at UC Berkeley in their [Data 8](http://data8.org/) program.
