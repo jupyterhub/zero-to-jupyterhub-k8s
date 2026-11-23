@@ -4,6 +4,9 @@ metadata:
   name: {{ include "jupyterhub.hub.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
+    {{- with .Values.hub.labels }}
+    {{- . | toYaml | nindent 4 }}
+    {{- end }}
 spec:
   {{- if not (typeIs "<nil>" .Values.hub.revisionHistoryLimit) }}
   revisionHistoryLimit: {{ .Values.hub.revisionHistoryLimit }}

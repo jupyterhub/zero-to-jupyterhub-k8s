@@ -5,6 +5,9 @@ metadata:
   name: {{ include "jupyterhub.user-scheduler-deploy.fullname" . }}
   labels:
     {{- include "jupyterhub.labels" . | nindent 4 }}
+    {{- with .Values.scheduling.userScheduler.labels }}
+    {{- . | toYaml | nindent 4 }}
+    {{- end }}
 spec:
   {{- if not (typeIs "<nil>" .Values.scheduling.userScheduler.revisionHistoryLimit) }}
   revisionHistoryLimit: {{ .Values.scheduling.userScheduler.revisionHistoryLimit }}
