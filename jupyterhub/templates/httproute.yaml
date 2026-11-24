@@ -19,7 +19,29 @@ spec:
     {{- . | toYaml | nindent 4 }}
   {{- end }}
   rules:
+    {{- with .Values.httpRoute.extraRules }}
+    {{- . | toYaml | nindent 4 }}
+    {{- end }}
     - backendRefs:
         - name: {{ include "jupyterhub.proxy-public.fullname" . }}
           port: 80
+      {{- with .Values.httpRoute.filters }}
+      filters:
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
+      matches:
+      {{- if .Values.httpRoute.matches }}
+        {{- with .Values.httpRoute.matches }}
+        {{- . | toYaml | nindent 8 }}
+        {{- end }}
+      {{- else }}
+      {{- /* default: match base URL */}}
+        - path:
+            type: PathPrefix
+            value: {{ .Values.hub.baseUrl | quote }}
+      {{- end }}
+      {{- with .Values.httpRoute.timeouts }}
+      timeouts:
+        {{- . | toYaml | nindent 8 }}
+      {{- end }}
 {{- end }}
