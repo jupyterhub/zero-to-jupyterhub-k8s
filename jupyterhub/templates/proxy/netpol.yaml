@@ -1,3 +1,4 @@
+{{- $singleuserNamespace := .Values.singleuser.networkPolicy.namespace | default "" | toString -}}
 {{- $HTTPS := .Values.proxy.https.enabled -}}
 {{- $autoHTTPS := and $HTTPS (and (eq .Values.proxy.https.type "letsencrypt") .Values.proxy.https.hosts) -}}
 {{- $manualHTTPS := and $HTTPS (eq .Values.proxy.https.type "manual") -}}
@@ -99,10 +100,10 @@ spec:
             matchLabels:
               {{- $_ := merge (dict "componentLabel" "singleuser-server") . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
-          {{- if and .Values.singleuser.networkPolicy.namespace (ne .Values.singleuser.networkPolicy.namespace .Release.Namespace) }}
+          {{- if and $singleuserNamespace (ne $singleuserNamespace .Release.Namespace) }}
           namespaceSelector:
             matchLabels:
-              kubernetes.io/metadata.name: {{ .Values.singleuser.networkPolicy.namespace | quote }}
+              kubernetes.io/metadata.name: {{ $singleuserNamespace | quote }}
           {{- end }}
       ports:
         - port: 8888
