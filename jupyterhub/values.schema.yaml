@@ -615,7 +615,7 @@ properties:
         description: |
           This configuration regards the creation and configuration of a k8s
           _NetworkPolicy resource_.
-        properties:
+        properties: &networkPolicy-properties
           enabled:
             type: boolean
             description: |
@@ -2148,7 +2148,27 @@ properties:
     description: |
       Options for customizing the environment that is provided to the users after they log in.
     properties:
-      networkPolicy: *networkPolicy-spec
+      networkPolicy:
+        type: object
+        additionalProperties: false
+        description: |
+          This configuration regards the creation and configuration of a k8s
+          _NetworkPolicy resource_.
+        properties:
+          <<: *networkPolicy-properties
+          namespace:
+            type: [string, "null"]
+            description: |
+              The Kubernetes namespace where the singleuser NetworkPolicy
+              resource should be created. When unset (`null`) or empty, the
+              NetworkPolicy is created in the Helm release namespace.
+
+              Set this to match `KubeSpawner.namespace` when spawning singleuser
+              pods into a different namespace than the Helm release namespace.
+              When configured to a different namespace than the Helm release
+              namespace, cross-namespace `namespaceSelector` rules are added so
+              core hub, proxy, and singleuser pods can communicate across
+              namespaces.
       podNameTemplate:
         type: [string, "null"]
         description: |
