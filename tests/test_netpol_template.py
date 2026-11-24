@@ -54,11 +54,7 @@ def test_singleuser_netpol_default_namespace():
             singleuser, component
         )
     assert hub["spec"]["ingress"][0]["from"] == [
-        {
-            "podSelector": {
-                "matchLabels": {"hub.jupyter.org/network-access-hub": "true"}
-            }
-        }
+        {"podSelector": {"matchLabels": {"hub.jupyter.org/network-access-hub": "true"}}}
     ]
     assert "namespaceSelector" not in _egress_peer_for_component(
         hub, "singleuser-server"
@@ -164,11 +160,7 @@ def test_singleuser_netpol_same_namespace():
             singleuser, component
         )
     assert hub["spec"]["ingress"][0]["from"] == [
-        {
-            "podSelector": {
-                "matchLabels": {"hub.jupyter.org/network-access-hub": "true"}
-            }
-        }
+        {"podSelector": {"matchLabels": {"hub.jupyter.org/network-access-hub": "true"}}}
     ]
     assert "namespaceSelector" not in _egress_peer_for_component(
         hub, "singleuser-server"
