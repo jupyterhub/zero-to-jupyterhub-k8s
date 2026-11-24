@@ -744,9 +744,13 @@ httpRoute:
   annotations: {}
   hostnames: []
   parentRefs: []
+  # default rule, needs
+  filters: []
+  matches: []
   timeouts:
     # default: no timeout, required for streaming requests
     request: 0s
+  extraRules: []
 
 # cull relates to the jupyterhub-idle-culler service, responsible for evicting
 # inactive singleuser pods.
