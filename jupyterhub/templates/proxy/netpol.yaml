@@ -99,6 +99,11 @@ spec:
             matchLabels:
               {{- $_ := merge (dict "componentLabel" "singleuser-server") . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
+          {{- if and .Values.singleuser.networkPolicy.namespace (ne .Values.singleuser.networkPolicy.namespace .Release.Namespace) }}
+          namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ .Values.singleuser.networkPolicy.namespace | quote }}
+          {{- end }}
       ports:
         - port: 8888
 

@@ -400,6 +400,7 @@ singleuser:
     ip: 169.254.169.254
   networkPolicy:
     enabled: true
+    namespace:
     ingress: []
     egress: []
     egressAllowRules:

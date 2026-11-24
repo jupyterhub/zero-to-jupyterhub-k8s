@@ -1,4 +1,6 @@
 {{- if .Values.hub.networkPolicy.enabled -}}
+{{- $singleuserNamespace := .Values.singleuser.networkPolicy.namespace -}}
+{{- $crossNamespace := and $singleuserNamespace (ne $singleuserNamespace .Release.Namespace) -}}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -52,6 +54,14 @@ spec:
         - namespaceSelector:
             matchLabels:
               hub.jupyter.org/network-access-hub: "true"
+        {{- else if $crossNamespace }}
+        # source 2 - labeled pods in the singleuser namespace
+        - podSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-hub: "true"
+          namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ $singleuserNamespace | quote }}
         {{- end }}
 
     {{- with .Values.hub.networkPolicy.ingress }}
@@ -75,6 +85,11 @@ spec:
             matchLabels:
               {{- $_ := merge (dict "componentLabel" "singleuser-server") . }}
               {{- include "jupyterhub.matchLabels" $_ | nindent 14 }}
+          {{- if $crossNamespace }}
+          namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ $singleuserNamespace | quote }}
+          {{- end }}
       ports:
         - port: 8888
 

@@ -442,6 +442,7 @@ singleuser:
     ip: 169.254.169.254
   networkPolicy:
     enabled: true
+    namespace: mock-singleuser-namespace
     egressAllowRules:
       cloudMetadataServer: false
       dnsPortsPrivateIPs: true
